@@ -1,0 +1,68 @@
+# ─────────────────────────────────────────────────────────────────────
+#  보안 — 비밀정보는 절대 커밋/푸시하지 않는다 (저장소가 비공개여도 마찬가지)
+#  로그인이 필요한 사이트 자료를 만들 때 .env 등에 자격증명을 둘 수 있다.
+#  그런 정보가 GitHub에 동기화되면 안 된다. 배포 전 §12.5 시크릿 스캔도 함께 통과할 것.
+# ─────────────────────────────────────────────────────────────────────
+
+# 환경변수 / 자격증명
+.env
+.env.*
+*.env
+!.env.example          # 값이 없는 예시 템플릿은 허용(키만, 실제 값 금지)
+.envrc
+secrets.*
+*.secret
+*.secrets
+credentials*
+*credentials*
+.netrc
+.htpasswd
+
+# 키 / 인증서 / 토큰
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.crt
+*.cer
+id_rsa*
+id_ed25519*
+*.ppk
+*_token
+*.token
+*token*.json
+service-account*.json
+gha-creds-*.json
+*-key.json
+
+# 클라우드/프로바이더 자격증명
+.aws/
+.gcloud/
+.azure/
+.npmrc                 # 인증 토큰이 들어갈 수 있음
+.pypirc
+*.tfvars
+.terraform/
+
+# 로컬 설정/캐시 (공개 불필요)
+.vscode/
+.idea/
+node_modules/
+__pycache__/
+*.log
+
+# Obsidian vault metadata
+.obsidian/
+
+# macOS
+.DS_Store
+
+# claude-mem 등이 폴더마다 자동 생성 — docs/ 게시·추적에서 제외(공개 사이트에 노출 금지)
+CLAUDE.md
+**/CLAUDE.md
+
+# docs/setup/ 복사 과정에서 원본 프로젝트의 내부 메타데이터가 함께 들어온 경우 게시·추적에서 제외
+docs/setup/_stray_git_metadata_ignore/
+docs/setup/_stray_zcode_metadata_ignore/

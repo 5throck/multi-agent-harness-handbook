@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  Manual(레퍼런스)/Examples(실습)과 달리 버전 박스·코드 강조가 아니라 본문 흐름 중심이다.
+  수정할 곳: (1) <title>/장 번호/제목/리드  (2) nav(이 장의 절 + 다른 장)  (3) '이 장의 요점'
+            (4) <h2 id>/<h3> 절과 본문  (5) 이전/다음 장 링크
+  {{이중중괄호}}·[설명: ...] 를 실제 내용으로 채운다. 링크는 모두 상대경로.
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5장 · ai-workspace-standards 소개</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 260px; min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+      padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-dim); padding: 0 16px 8px;
+    }
+    nav a {
+      display: block; padding: 6px 16px; color: var(--text-dim);
+      text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section {
+      margin-top: 12px; padding: 6px 16px 4px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+    }
+    main { flex: 1; display: flex; justify-content: center; padding: 56px 48px 96px; overflow-x: hidden; }
+    .reading { width: 100%; max-width: 720px; }
+    .chapter-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 1.12rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+    .source-line { font-size: 13px; color: var(--text-dim); margin-bottom: 30px; }
+    .source-line a { color: var(--accent); text-decoration: none; }
+    .keypoints {
+      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 18px 22px; margin: 0 0 40px;
+    }
+    .keypoints .kp-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+    .keypoints ul { margin: 0 0 0 18px; font-size: 14.5px; line-height: 1.85; }
+    h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      margin: 52px 0 14px; scroll-margin-top: 20px; line-height: 1.35;
+    }
+    h3 { font-size: 1.12rem; font-weight: 700; color: var(--accent6); margin: 30px 0 8px; scroll-margin-top: 20px; }
+    p { margin: 14px 0; }
+    p + p { margin-top: 16px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin: 6px 0; }
+    .pullquote {
+      border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 28px 0;
+      font-size: 1.22rem; line-height: 1.6; color: #2b3138; font-weight: 600;
+    }
+    .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .variant-list { margin: 16px 0 24px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .variant-row { display: flex; gap: 14px; padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .variant-row:last-child { border-bottom: none; }
+    .variant-row:nth-child(even) { background: var(--bg2); }
+    .variant-name { min-width: 130px; font-family: 'SFMono-Regular','Consolas',monospace; font-weight: 700; color: var(--accent6); flex-shrink: 0; }
+    .chapter-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .chapter-nav a {
+      display: block; flex: 1; padding: 14px 18px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text); transition: border-color .15s;
+    }
+    .chapter-nav a:hover { border-color: var(--accent); text-decoration: none; }
+    .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
+    .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
+    .chapter-nav .next { text-align: right; }
+    @media (max-width: 640px) {
+      main { padding: 40px 18px 60px; }
+      .chapter-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">5장 · ai-workspace-standards 소개</div>
+  <a href="#s1">저장소가 무엇인가</a>
+  <a href="#s2">핵심 파일 네 가지</a>
+  <a href="#s3">templates와 variant 7종</a>
+  <a href="#s4">세션 시작 체크리스트와 스캐폴딩</a>
+  <div class="nav-section">다른 장</div>
+  <a href="../enterprise/03_Enterprise_Chapter.html">4장 · 두 모델 비교</a>
+  <a href="../variant-practice/04_VariantPractice_Manual.html">6장 · Variant 실습 레퍼런스</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">5장</div>
+  <h1>ai-workspace-standards 소개</h1>
+  <p class="lead">4장에서 살펴본 "개발 도구 + variant" 모델을 실제로 구현한 저장소가 ai-workspace-standards다. 이 장에서는 이 저장소가 정확히 무엇이고, 어떤 파일들로 구성되어 있으며, 어떤 프로젝트 템플릿들을 제공하는지 차근차근 소개한다.</p>
+  <p class="source-line">출처: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 장에서 다루는 것</div>
+    <ul>
+      <li>ai-workspace-standards가 무엇이고, 왜 "워크스페이스 루트"로 클론해야 하는지</li>
+      <li>CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md 네 핵심 파일의 역할</li>
+      <li>templates/ 아래에 있는 7개 variant 각각이 어떤 도메인을 위한 것인지</li>
+      <li>세션 시작 체크리스트와 new-project.ts 스캐폴딩 흐름의 개념적 그림</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">저장소가 무엇인가</h2>
+  <p>ai-workspace-standards는 스스로를 "Vibe Coding과 Harness Engineering을 위한 마스터 설정"이라고 소개한다. 여러 AI 코딩 도구(Claude Code/App, Antigravity CLI/Desktop 등)에 걸쳐 동일한 동작·워크플로우·품질 기준을 적용하기 위한 저장소다.</p>
+  <p>이 저장소를 쓰는 방식이 조금 독특하다. 보통의 라이브러리처럼 프로젝트 하나에 종속시키는 게 아니라, 저장소 자체를 워크스페이스의 루트로 클론해서 쓴다. Windows에서는 <code>C:\git</code>, macOS/Linux에서는 <code>~/git</code> 같은 위치가 그 예다. 이렇게 해두면 그 아래에서 새로 만드는 모든 프로젝트가 워크스페이스의 공유 규칙을 자동으로 물려받는다.</p>
+
+  <div class="pullquote">ai-workspace-standards는 "완성된 프로젝트"가 아니라 "프로젝트를 만드는 방법"을 배포하는 저장소다.
+    <span class="by">— 워크스페이스 루트로 클론하는 이유</span></div>
+
+  <h2 id="s2">핵심 파일 네 가지</h2>
+  <p>워크스페이스 루트에는 모든 프로젝트가 공통으로 참조하는 네 개의 핵심 파일이 있다.</p>
+  <p><code>CONSTITUTION.md</code>는 마스터 공유 표준으로, 세션을 시작할 때 가장 먼저 읽어야 하는 문서다. 워크스페이스 전체의 거버넌스 규칙, PR 워크플로우, 멀티 에이전트 아키텍처 원칙이 여기에 정의되어 있다. <code>CLAUDE.md</code>는 Claude Code/App에서의 구체적 동작 방식(훅, 슬래시 커맨드, 에이전트 디스패치 규칙)을 담고, <code>GEMINI.md</code>는 Antigravity CLI/Desktop에서의 동등한 동작을 정의한다. <code>AGENTS.md</code>는 워크스페이스 전체에서 사용 가능한 에이전트들의 정본 목록(roster) 역할을 한다 — 3장에서 소개한, Claude Code를 비롯한 30개 이상의 도구가 공통으로 읽는 개방형 AGENTS.md 표준과 같은 파일명을 쓰지만, 이 저장소에서는 "에이전트 레지스트리 및 오케스트레이션 레퍼런스"라는 더 구체적인 역할까지 겸한다 — 파일 맨 위에 "이 파일은 AI 도구를 향한 지시문이 아니라 사람이 정의한 여러 역할의 등록부"라고 명시해 둘 정도다.</p>
+  <p>이 네 파일의 관계를 한 문장으로 요약하면, CONSTITUTION.md가 "무엇을 지켜야 하는가"를 정의하고 CLAUDE.md/GEMINI.md는 "그것을 각 플랫폼에서 어떻게 실행하는가"를, AGENTS.md는 "누가 그 일을 하는가"를 정의한다.</p>
+  <p>네 파일 아래에는 실행 가능한 자산을 담는 폴더가 있다. 커맨드·스킬은 세 곳에 나뉘어 있는데, <code>.claude/</code>는 Claude Code/App 전용, <code>.gemini/</code>는 Antigravity CLI/Desktop 전용, 그리고 <code>.agents/</code>는 어느 한 도구에 묶이지 않는 <strong>도구-불가지론적(engine-agnostic)</strong> 커맨드·스킬을 담는다. 예를 들어 <code>/sync</code>·<code>/meeting</code> 같은 슬래시 커맨드나 <code>create-variant</code>·<code>audit-workspace</code> 같은 스킬은 세 폴더 모두에 같은 이름으로 존재하되, 각자 자기 플랫폼의 도구 규칙(Claude Code의 <code>Agent</code> 도구 문법, Antigravity의 서브에이전트 방식 등)에 맞춰 구현이 조금씩 다르다. AGENTS.md 표준을 지원하는 외부 도구(Codex, Cursor 등)가 이 저장소를 열면 <code>.agents/</code> 폴더를 참조하게 된다.</p>
+
+  <h2 id="s3">templates와 variant 7종</h2>
+  <p><code>templates/</code> 디렉터리는 버전이 관리되는 프로젝트 템플릿 "variant"들의 모음이다. 각 variant는 특정 도메인을 위한 완결된 멀티 에이전트팀 구성 — PM, 전문 에이전트들, 단계별 거버넌스 파이프라인 — 을 담고 있다. 저장소가 제공하는 variant는 다음과 같다.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">co-develop</span><span>소프트웨어 개발용. PM·Architect·Designer·Code Writer·Test Runner·Security Monitor로 구성된 6단계 거버넌스 파이프라인.</span></div>
+    <div class="variant-row"><span class="variant-name">co-design</span><span>UI/UX용. Design Lead·UX Researcher·Visual Designer·Prototype Engineer 등 5단계 반복 워크플로우.</span></div>
+    <div class="variant-row"><span class="variant-name">co-work</span><span>일반 협업/문서 작업용. Analyst·Technical Writer·Content Writer 등 6단계 비동기 워크플로우.</span></div>
+    <div class="variant-row"><span class="variant-name">co-security</span><span>레드팀/침투 테스트용. Red Team Lead·Pentester·Threat Modeler 등 6단계 파이프라인.</span></div>
+    <div class="variant-row"><span class="variant-name">co-consult</span><span>전략 컨설팅용. 7단계 워크플로우.</span></div>
+    <div class="variant-row"><span class="variant-name">co-deck <span class="badge" style="font-size:10px;background:#fff8c5;color:#953800;border:1px solid #f5c518;border-radius:10px;padding:1px 6px;">beta</span></span><span>강의·발표 자료 제작용. 11단계 워크플로우.</span></div>
+    <div class="variant-row"><span class="variant-name">co-game <span class="badge" style="font-size:10px;background:#fff8c5;color:#953800;border:1px solid #f5c518;border-radius:10px;padding:1px 6px;">beta</span></span><span>HTML5 Canvas 게임 개발용.</span></div>
+  </div>
+
+  <p>각 variant는 git 태그 <code>template-vX.Y.Z</code>로 버전이 관리되며, <code>bun scripts/validate-templates.ts</code>가 에이전트 frontmatter의 완결성, 필수 섹션, AGENTS.md 로스터와의 정합성, <code>.claude/</code>·<code>.gemini/</code> 간 플랫폼 패리티 등 구조적 규정 준수를 검사한다.</p>
+
+  <h2 id="s4">세션 시작 체크리스트와 스캐폴딩</h2>
+  <p>CONSTITUTION.md는 모든 세션이 시작할 때 따라야 할 순서를 정의한다. 먼저 <code>git config core.hooksPath .githooks</code>로 git 훅 경로를 설정하고, CONSTITUTION.md 자체를 읽은 뒤, 작업 중인 프로젝트의 <code>docs/context.md</code>를 읽는다. 이어서 AGENTS.md로 사용 가능한 에이전트를 확인하고, <code>memory/MEMORY.md</code>에 이전 세션의 맥락이 남아 있는지 점검한 다음, docs/context.md가 지정한 스킬들을 로드한다.</p>
+  <p>새 프로젝트를 만드는 흐름은 개념적으로 단순하다. <code>bun scripts/new-project.ts</code> 스크립트에 프로젝트 이름과 원하는 variant를 지정해 실행하면, 그 variant의 전체 구성이 복제되어 완전히 독립된 git 저장소가 된다. 이 저장소는 워크스페이스 루트와 분리되어 있지만, 태어날 때부터 CONSTITUTION.md의 공유 표준을 상속한 상태로 시작한다 — 팀은 그 안에서 프로젝트 고유의 <code>docs/context.md</code>와 프로젝트 레벨 CLAUDE.md/GEMINI.md 오버라이드를 채워나가며 팀을 발전시킨다. 이 명령의 정확한 문법과 옵션은 6장에서 직접 실습한다.</p>
+
+  <div class="note">workspace 루트의 파일(CONSTITUTION.md, CLAUDE.md 등)과 스캐폴딩된 개별 프로젝트의 파일은 서로 다른 git 저장소에 속한다 — 둘을 같은 작업에서 함께 수정하지 않는 것이 저장소의 기본 원칙이다.</div>
+
+  <div class="chapter-nav">
+    <a href="../enterprise/03_Enterprise_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">4장 · 두 모델 비교</div></a>
+    <a href="../variant-practice/04_VariantPractice_Manual.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">6장 · Variant 실습 레퍼런스</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

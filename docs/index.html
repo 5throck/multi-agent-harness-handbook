@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+    header { margin-bottom: 8px; }
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: var(--text-dim);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .subtitle a { color: var(--accent); text-decoration: none; }
+    .subtitle a:hover { text-decoration: underline; }
+
+    .meta {
+      background: #f0f7ff;
+      border: 1px solid #a5d5f7;
+      border-left: 4px solid var(--accent);
+      border-radius: 6px;
+      padding: 12px 18px;
+      margin: 28px 0 40px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .meta strong { color: var(--accent6); }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-dim);
+      margin: 0 0 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .grid.single { grid-template-columns: 1fr; }
+    .card {
+      display: block;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 24px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px rgba(9,105,218,.10);
+      transform: translateY(-2px);
+    }
+    .card .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 20px;
+      letter-spacing: .04em;
+      margin-bottom: 12px;
+    }
+    .tag-ref { background: #ddf4ff; color: var(--accent6); border: 1px solid #a5d5f7; }
+    .tag-ex  { background: #dafbe1; color: var(--accent2); border: 1px solid #a2d9b1; }
+    .tag-ch  { background: #f1e8fd; color: var(--accent4); border: 1px solid #d4bdf5; }
+    .card h2 {
+      font-size: 1.06rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .card .go {
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .group { margin-bottom: 40px; }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 40px 18px 60px; }
+      h1 { font-size: 1.7rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>멀티 에이전트팀 하네스 엔지니어링 핸드북</h1>
+      <p class="subtitle">개념 이해부터 Claude Code 실습, 기업 내 운영 전략, ai-workspace-standards로 직접 variant 만들어보기까지</p>
+    </header>
+
+    <div class="meta">
+      대상 <strong>Claude Code 2026-07 / ai-workspace-standards main (2026-07-08 기준)</strong> &nbsp;|&nbsp; 공식 자료:
+      <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code Subagents 문서</a>,
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards 저장소</a>
+      &nbsp;|&nbsp; 각 문서는 <strong>레퍼런스</strong>(빠른 참조)·<strong>실습 예시</strong>(시나리오 학습)·<strong>서술형 챕터</strong>(개념 읽기)로 나뉩니다.
+      <br>최종 업데이트 <strong>2026년 7월 14일</strong>
+    </div>
+
+    <div class="group">
+      <p class="section-label">① 개념 이해</p>
+      <div class="grid single">
+        <a class="card" href="concepts/01_Concepts_Chapter.html">
+          <span class="tag tag-ch">챕터</span>
+          <h2>1장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</h2>
+          <p>하네스 엔지니어링이 왜 필요한지, 단일 에이전트의 한계, 오케스트레이터·스페셜리스트·핸드오프 계약이라는 멀티 에이전트팀의 뼈대를 읽고 이해합니다.</p>
+          <div class="go">1장 읽기 →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="section-label">② 하네스 기반 멀티 에이전트 팀 활용</p>
+      <div class="grid">
+        <a class="card" href="practice/02_Practice_Manual.html">
+          <span class="tag tag-ref">레퍼런스</span>
+          <h2>2장 · 멀티 에이전트 도구 매뉴얼 (Claude Code/App + Antigravity CLI/Desktop)</h2>
+          <p>서브에이전트 정의·호출·병렬 실행·자동화를 Claude Code, Claude App, Antigravity CLI, Antigravity Desktop 네 도구로 나란히 참조합니다.</p>
+          <div class="go">매뉴얼 열기 →</div>
+        </a>
+        <a class="card" href="practice/02_Practice_Examples.html">
+          <span class="tag tag-ex">실습 예시</span>
+          <h2>2장 · 멀티 에이전트 팀 실습 (Claude Code/App + Antigravity CLI/Desktop)</h2>
+          <p>필요한 프로그램 설치부터 리뷰어·작성자 서브에이전트, 파이프라인, 네 도구 각각의 병렬 실행까지 직접 해봅니다.</p>
+          <div class="go">실습 시작 →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="section-label">③ 도구 비교</p>
+      <div class="grid single">
+        <a class="card" href="tools/03_Tools_Manual.html">
+          <span class="tag tag-ref">레퍼런스</span>
+          <h2>3장 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity</h2>
+          <p>같은 멀티 에이전트팀 개념이 네 도구에서 각각 어떻게 다르게 구현되는지, 훅·병렬 실행·격리 방식 차이를 비교합니다.</p>
+          <div class="go">비교표 보기 →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="section-label">④ 기업 운영 전략 비교</p>
+      <div class="grid single">
+        <a class="card" href="enterprise/03_Enterprise_Chapter.html">
+          <span class="tag tag-ch">챕터</span>
+          <h2>4장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</h2>
+          <p>전사 서비스 티켓형 운영과 variant 개발도구형 운영을 나란히 비교하며 각각의 강점과 한계를 읽어봅니다.</p>
+          <div class="go">4장 읽기 →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="section-label">⑤ ai-workspace-standards 소개</p>
+      <div class="grid single">
+        <a class="card" href="intro/04_Intro_Chapter.html">
+          <span class="tag tag-ch">챕터</span>
+          <h2>5장 · ai-workspace-standards 소개</h2>
+          <p>variant 개발도구형 모델을 실제로 구현하는 ai-workspace-standards 저장소의 구조, 핵심 문서, 7개 variant, 세션 시작 체크리스트를 살펴봅니다.</p>
+          <div class="go">5장 읽기 →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="section-label">⑥ variant 실습</p>
+      <div class="grid">
+        <a class="card" href="variant-practice/04_VariantPractice_Manual.html">
+          <span class="tag tag-ref">레퍼런스</span>
+          <h2>6장 · ai-workspace-standards 매뉴얼</h2>
+          <p>워크스페이스 클론, bun 설치, new-project.ts 사용법, 세션 시작 체크리스트를 빠르게 참조합니다.</p>
+          <div class="go">매뉴얼 열기 →</div>
+        </a>
+        <a class="card" href="variant-practice/04_VariantPractice_Examples.html">
+          <span class="tag tag-ex">실습 예시</span>
+          <h2>6장 · 새 variant 하나 만들어보기</h2>
+          <p>기존 variant로 프로젝트를 만들어본 뒤, co-teachme라는 새 variant 프로토타입을 직접 스캐폴딩합니다.</p>
+          <div class="go">실습 시작 →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="section-label">⑦ variant 심화</p>
+      <div class="grid">
+        <a class="card" href="variant-advanced/05_VariantAdvanced_Chapter.html">
+          <span class="tag tag-ch">챕터</span>
+          <h2>7장 · 새 variant 만들기 vs 기존 프로젝트를 variant로 승격하기</h2>
+          <p>처음부터 만드는 것과 이미 있는 프로젝트를 승격(promote)하는 것의 차이를 개념적으로 정리합니다.</p>
+          <div class="go">7장 읽기 →</div>
+        </a>
+        <a class="card" href="variant-advanced/05_VariantAdvanced_Examples.html">
+          <span class="tag tag-ex">실습 예시</span>
+          <h2>7장 · 승격 절차 따라가 보기</h2>
+          <p>co-teachme 프로토타입 구조를 기존 템플릿과 비교하고, PROMOTION_CHECKLIST와 승격 파이프라인 명령을 단계별로 살펴봅니다.</p>
+          <div class="go">실습 시작 →</div>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      Claude Code 2026-07 / ai-workspace-standards main (2026-07-08) 기준 · 한국어 교육 자료<br>
+      공식 자료: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> ·
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a><br>
+      Built with the Teach Me skill for Claude Code.
+    </footer>
+  </div>
+  <script src="assets/site-search.js" defer></script>
+</body>
+</html>

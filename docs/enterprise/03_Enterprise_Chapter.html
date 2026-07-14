@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  Manual(레퍼런스)/Examples(실습)과 달리 버전 박스·코드 강조가 아니라 본문 흐름 중심이다.
+  수정할 곳: (1) <title>/장 번호/제목/리드  (2) nav(이 장의 절 + 다른 장)  (3) '이 장의 요점'
+            (4) <h2 id>/<h3> 절과 본문  (5) 이전/다음 장 링크
+  {{이중중괄호}}·[설명: ...] 를 실제 내용으로 채운다. 링크는 모두 상대경로.
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    /* ── 사이드바: 장 목차 ── */
+    nav {
+      width: 260px; min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+      padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-dim); padding: 0 16px 8px;
+    }
+    nav a {
+      display: block; padding: 6px 16px; color: var(--text-dim);
+      text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section {
+      margin-top: 12px; padding: 6px 16px 4px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+    }
+    /* ── 본문: 읽기 폭으로 좁힘 ── */
+    main { flex: 1; display: flex; justify-content: center; padding: 56px 48px 96px; overflow-x: hidden; }
+    .reading { width: 100%; max-width: 720px; }
+    .chapter-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 1.12rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+    .source-line { font-size: 13px; color: var(--text-dim); margin-bottom: 30px; }
+    .source-line a { color: var(--accent); text-decoration: none; }
+    /* ── 이 장의 요점 박스 ── */
+    .keypoints {
+      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 18px 22px; margin: 0 0 40px;
+    }
+    .keypoints .kp-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+    .keypoints ul { margin: 0 0 0 18px; font-size: 14.5px; line-height: 1.85; }
+    /* ── 본문 타이포 ── */
+    h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      margin: 52px 0 14px; scroll-margin-top: 20px; line-height: 1.35;
+    }
+    h3 { font-size: 1.12rem; font-weight: 700; color: var(--accent6); margin: 30px 0 8px; scroll-margin-top: 20px; }
+    p { margin: 14px 0; }
+    p + p { margin-top: 16px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin: 6px 0; }
+    /* ── 핵심 인용(풀쿼트) ── */
+    .pullquote {
+      border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 28px 0;
+      font-size: 1.22rem; line-height: 1.6; color: #2b3138; font-weight: 600;
+    }
+    .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
+    /* ── 강조 한 줄 ── */
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    /* ── 인라인 코드(서술 중 식별자) ── */
+    code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    /* ── 비교 리스트 ── */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0 28px; }
+    .compare-col { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+    .compare-col h4 { font-size: 14px; color: var(--accent6); margin-bottom: 10px; }
+    .compare-col ul { margin: 0 0 0 18px; font-size: 13.5px; line-height: 1.75; }
+    @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+    /* ── 장 이동 ── */
+    .chapter-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .chapter-nav a {
+      display: block; flex: 1; padding: 14px 18px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text); transition: border-color .15s;
+    }
+    .chapter-nav a:hover { border-color: var(--accent); text-decoration: none; }
+    .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
+    .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
+    .chapter-nav .next { text-align: right; }
+    @media (max-width: 640px) {
+      main { padding: 40px 18px 60px; }
+      .chapter-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">4장 · 두 모델 비교</div>
+  <a href="#s1">서비스 티켓 모델</a>
+  <a href="#s2">개발 도구 + variant 모델</a>
+  <a href="#s3">나란히 놓고 비교하기</a>
+  <div class="nav-section">다른 장</div>
+  <a href="../tools/03_Tools_Manual.html">3장 · Harness 도구 레퍼런스</a>
+  <a href="../intro/04_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">4장</div>
+  <h1>기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</h1>
+  <p class="lead">회사 전체에 멀티 에이전트 개발 환경을 도입하려는 조직은 대체로 두 갈래 길 중 하나를 고르게 된다. 하나는 중앙에서 하나의 팀을 운영하고 요청을 티켓으로 받는 방식이고, 다른 하나는 팀마다 자기 팀을 스스로 만들 수 있는 도구를 나눠주는 방식이다. 이 장에서는 두 모델을 나란히 놓고 무엇이 다른지만 짚는다.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 장에서 다루는 것</div>
+    <ul>
+      <li>서비스 티켓 모델이 무엇이고 어떻게 작동하는지 — 간단히</li>
+      <li>개발 도구 + variant 모델이 무엇이고 어떻게 작동하는지 — 간단히</li>
+      <li>중앙화, 맥락 연속성, 셋업 비용, 거버넌스 부담, 적합한 사용 사례 기준으로 두 모델을 나란히 비교</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">서비스 티켓 모델</h2>
+  <p>회사 전체가 멀티 에이전트팀을 하나 두고 상시 가동한다. PM 역할의 에이전트가 창구가 되어 Slack이나 사내 티켓팅 시스템으로 요청을 받고, 요청 성격에 맞는 전문 에이전트에게 작업을 나눠준 뒤 결과를 돌려준다. 사용자는 자기 컴퓨터에 아무것도 설치하지 않고 익숙한 사내 도구에 메시지만 남기면 된다.</p>
+
+  <h2 id="s2">개발 도구 + variant 모델</h2>
+  <p>회사가 모든 요청을 대신 처리해주는 대신, 각 팀에게 "자기 팀 전용 멀티 에이전트팀을 스스로 만들 수 있는 개발 도구"를 나눠준다. 팀은 준비된 프로젝트 템플릿(variant) 중 하나를 골라 자기 프로젝트를 스캐폴딩하고, 그렇게 만들어진 프로젝트는 독립된 저장소로 그 팀이 계속 소유하고 운영한다. ai-workspace-standards가 실제로 어떻게 이 모델을 구현하는지는 5장에서 자세히 다룬다.</p>
+
+  <h2 id="s3">나란히 놓고 비교하기</h2>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>서비스 티켓 모델</h4>
+      <ul>
+        <li><strong>중앙화:</strong> 단일 팀, 단일 창구, 회사 전체가 공유</li>
+        <li><strong>맥락 연속성:</strong> 요청 간 맥락이 자주 끊김, 무관한 프로젝트가 같은 큐를 통과</li>
+        <li><strong>셋업 비용:</strong> 낮음 — 새 팀도 곧바로 같은 창구 사용</li>
+        <li><strong>거버넌스 부담:</strong> 낮음 — 운영이 한곳에 집중돼 있어 통제가 쉬움</li>
+        <li><strong>적합한 사례:</strong> 좁고 반복적인 요청(사내 헬프데스크형)</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>개발 도구 + variant 모델</h4>
+      <ul>
+        <li><strong>중앙화:</strong> 분산 — 팀마다 자기 에이전트팀 소유</li>
+        <li><strong>맥락 연속성:</strong> 프로젝트 저장소·메모리 로그를 계속 참조해 우수함</li>
+        <li><strong>셋업 비용:</strong> 팀마다 초기 스캐폴딩·구성 비용 발생</li>
+        <li><strong>거버넌스 부담:</strong> 높음 — 공유 표준(CONSTITUTION.md류)이 없으면 팀 간 표류</li>
+        <li><strong>적합한 사례:</strong> 팀이 자기 프로젝트를 장기간 깊이 있게 운영해야 하는 경우</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pullquote">두 모델을 가르는 진짜 기준은 요청이 얼마나 반복적인가가 아니라, 그 요청이 프로젝트 맥락을 얼마나 깊이 필요로 하는가다.
+    <span class="by">— 중앙 집중형과 분산형 운영의 근본적 차이</span></div>
+
+  <p>요청이 좁고 반복적이며 깊은 도메인 맥락이 필요 없다면 티켓 모델이 효율적이다. 반대로 각 팀이 자기 프로젝트를 오래 깊이 있게 운영해야 한다면, 초기 비용을 감수하더라도 팀별로 에이전트팀을 소유하는 쪽이 지속 가능하다. ai-workspace-standards가 실제로 어떻게 이 모델을 구현하는지는 5장에서 자세히 다룬다.</p>
+  <div class="note">두 모델은 상호 배타적이지 않다 — 조직 안에서도 헬프데스크성 업무는 티켓 모델로, 제품 개발 팀은 variant 모델로 병행 운영하는 것도 가능하다.</div>
+
+  <div class="chapter-nav">
+    <a href="../tools/03_Tools_Manual.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">3장 · Harness 도구 레퍼런스</div></a>
+    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">5장 · ai-workspace-standards 소개</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

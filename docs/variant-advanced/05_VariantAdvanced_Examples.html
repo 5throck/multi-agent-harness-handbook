@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7장 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent-g: #1a7f37;
+      --accent-o: #953800;
+      --accent-p: #6639ba;
+      --accent-r: #cf222e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+    .layout { display: flex; min-height: 100vh; }
+
+    nav {
+      width: 270px; min-width: 270px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--text-dim);
+      padding: 0 16px 10px;
+    }
+    nav a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 16px;
+      color: var(--text-dim); text-decoration: none;
+      font-size: 13px; border-left: 2px solid transparent;
+      transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-group {
+      margin-top: 10px; padding: 7px 16px 4px;
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--text-dim);
+      border-top: 1px solid var(--border);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-g { background: #1a7f37; }
+    .dot-b { background: #0969da; }
+    .dot-p { background: #6639ba; }
+
+    main { flex: 1; max-width: 880px; padding: 40px 52px; }
+    h1 { font-size: 1.9rem; font-weight: 700; color: #1f2328; margin-bottom: 6px; }
+    .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
+    .subtitle a { color: var(--accent); text-decoration: none; }
+
+    .version-box {
+      background: #f0f7ff; border: 1px solid #a5d5f7;
+      border-left: 4px solid #0969da; border-radius: 6px;
+      padding: 14px 18px; margin-bottom: 36px; font-size: 13px;
+    }
+    .version-row { display: flex; gap: 12px; padding: 3px 0; border-bottom: 1px solid #d0e8ff; }
+    .version-row:last-child { border-bottom: none; }
+    .vlabel { min-width: 160px; font-weight: 600; color: #0550ae; flex-shrink: 0; }
+
+    .level-header {
+      display: flex; align-items: center; gap: 12px;
+      margin: 48px 0 20px; padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+    .level-title { font-size: 1.3rem; font-weight: 700; }
+    .level-title-g { color: #1a7f37; }
+    .level-title-b { color: #0969da; }
+    .level-title-p { color: #6639ba; }
+    .level-desc { font-size: 13px; color: var(--text-dim); }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10.5px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .badge-g { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
+    .badge-b { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
+    .badge-p { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
+
+    .scenario-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 22px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+    .card-id {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 11px; font-weight: 700;
+      color: var(--text-dim); min-width: 34px;
+    }
+    .card-title { font-size: 1.05rem; font-weight: 700; color: #1f2328; }
+    .card-body { padding: 22px 26px; }
+
+    .situation {
+      background: #fffbf0; border-left: 3px solid #d4a72c;
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px; margin-bottom: 20px;
+      font-size: 14px; line-height: 1.7;
+    }
+    .situation::before {
+      content: '📌 상황'; display: block;
+      font-weight: 700; color: #7d4e00; margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    .cmd-list { margin-bottom: 20px; }
+    .cmd-list-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 8px;
+    }
+    .cmd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cmd-chip {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 12px; font-weight: 600;
+      background: #f6f8fa; border: 1px solid #d0d7de;
+      border-radius: 6px; padding: 4px 10px;
+      color: #cf222e; text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: #ddf4ff; border-color: #a5d5f7; color: #0550ae; }
+
+    .steps-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 12px;
+    }
+    .step-list { list-style: none; counter-reset: step-counter; margin-bottom: 20px; }
+    .step-list li {
+      counter-increment: step-counter;
+      display: flex; gap: 14px;
+      margin-bottom: 18px; align-items: flex-start;
+    }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: #0969da; color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; }
+    .step-content strong { display: block; margin-bottom: 6px; color: #1f2328; font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+
+    pre.code-block {
+      background: #f6f8fa; border: 1px solid #d0d7de;
+      border-radius: 6px; padding: 12px 16px; overflow-x: auto;
+      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+      font-size: 13px; line-height: 1.55; color: #116329;
+      margin: 6px 0 0; position: relative;
+    }
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+
+    .flow-box {
+      background: #f0f7ff; border: 1px solid #a5d5f7;
+      border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px;
+    }
+    .flow-box::before {
+      content: '⚙️ 내부 동작'; display: block;
+      font-weight: 700; color: #0550ae; margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    .tip-box {
+      background: #dafbe1; border: 1px solid #a2d9b1; border-radius: 6px;
+      padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; color: #0a3622;
+    }
+    .tip-box::before {
+      content: '💡 팁'; display: block; font-weight: 700; color: #116329;
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    .warning-box {
+      background: #fff8c5; border: 1px solid #d4a72c;
+      border-radius: 6px; padding: 12px 16px; margin-bottom: 14px;
+      font-size: 13.5px; color: #5c3900;
+    }
+    .warning-box::before {
+      content: '⚠️ 주의'; display: block; font-weight: 700; color: #7d4e00;
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    .related-cmds {
+      border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px;
+      font-size: 13px; color: var(--text-dim);
+    }
+    .related-cmds strong { color: #1f2328; }
+
+    code {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 12px; background: #f6f8fa;
+      border: 1px solid #d0d7de; border-radius: 4px;
+      padding: 2px 6px; color: #cf222e;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">7장 · 새 variant vs 승격 실습</div>
+  <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
+
+  <div class="nav-group">초급 시나리오</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 템플릿 구조 vs 프로토타입 구조 비교</a>
+
+  <div class="nav-group">중급 시나리오</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 승격 체크리스트 채워보기</a>
+
+  <div class="nav-group">고급 시나리오</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 승격 파이프라인 실행과 검증</a>
+
+  <div class="nav-group">바로가기</div>
+  <a href="05_VariantAdvanced_Chapter.html">📖 7장 레퍼런스 — 새 variant vs 승격 →</a>
+</nav>
+
+<main>
+  <h1>새 variant vs 승격 실습 예시</h1>
+  <p class="subtitle">co-teachme 프로토타입을 기준으로 두 경로를 손으로 비교해보는 실습 가이드 &nbsp;|&nbsp; <a href="05_VariantAdvanced_Chapter.html">← 레퍼런스 문서로 돌아가기</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>7장 레퍼런스에서 설명한 승격(Phase B) 개념을 6장에서 만든 co-teachme 프로토타입에 적용해보는 실습</span></div>
+    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="05_VariantAdvanced_Chapter.html">05_VariantAdvanced_Chapter.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
+    <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
+  </div>
+
+  <!-- ══════════════════════════════ 초급 ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● 초급</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">정식 템플릿과 아직 승격되지 않은 프로토타입이 구조적으로 무엇이 다른지 직접 눈으로 비교</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">초급</span>
+      <strong class="card-title">템플릿 구조 vs 프로토타입 구조 비교</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        6장에서 <code>templates/co-work/</code>로 프로젝트를 스캐폴딩했고, <code>Projects/co-teachme/</code>에 Phase A 프로토타입도 만들었다. 두 디렉터리를 나란히 놓고 어떤 파일이 정식 템플릿에는 있는데 프로토타입에는 없는지 직접 확인해보려 한다. 연습용 워크스페이스(<code>~/harness-lab/ai-workspace-standards-demo</code>) 안에서 이어서 진행한다고 전제한다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <span class="cmd-chip" style="cursor:default">variant.json</span>
+          <span class="cmd-chip" style="cursor:default">README_ko.md</span>
+          <span class="cmd-chip" style="cursor:default">docs/adr/</span>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>두 디렉터리 목록 나란히 비교</strong>
+            <p>정식 variant인 co-work과 아직 프로토타입 단계인 co-teachme의 최상위 파일 목록을 비교한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-teachme/)</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>정식 템플릿에만 있는 항목 확인</strong>
+            <p>보통 <code>variant.json</code>, <code>README.md</code>/<code>README_ko.md</code>, <code>docs/adr/</code>는 정식 템플릿에는 있지만 Phase A 프로토타입 단계에서는 아직 없거나 비어 있다.</p>
+            <div style="position:relative">
+              <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/
+ls Projects/co-teachme/ 2>/dev/null</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="flow-box">
+        <code>variant.json</code>은 정식 variant가 스캐폴딩 대상으로 등록되기 위한 메타데이터(버전, skill_manifest, script_manifest)를 담는다. Phase A 프로토타입 단계에서는 아직 이 파일이 없거나 최소한으로만 존재하는 게 정상이다 — 이 차이 자체가 "아직 승격되지 않았다"는 신호다.
+      </div>
+
+      <div class="tip-box">
+        이 비교를 미리 해두면, 다음 D-1 시나리오에서 <code>PROMOTION_CHECKLIST.md</code>를 채울 때 무엇이 빠져 있는지 바로 알 수 있다.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 중급 ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● 중급</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">co-teachme를 승격 가능한 상태로 만들기 위해 체크리스트와 매니페스트를 채워보기</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">중급</span>
+      <strong class="card-title">승격 체크리스트 채워보기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        G-1에서 확인한 빈틈들을 실제로 메워보려는 실무자의 상황이다. co-teachme 프로토타입을 정식 승격 대상으로 만들려면 <code>PROMOTION_CHECKLIST.md</code>의 조건들과 <code>variant.json</code>의 <code>skill_manifest</code>/<code>script_manifest</code>를 채워야 한다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="05_VariantAdvanced_Chapter.html#s3">PROMOTION_CHECKLIST.md</a>
+          <span class="cmd-chip" style="cursor:default">skill_manifest</span>
+          <span class="cmd-chip" style="cursor:default">script_manifest</span>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>PROMOTION_CHECKLIST.md 항목 점검</strong>
+            <p>체크리스트에는 대체로 "필수 검증 스크립트 통과", "플랫폼 패리티 확보", "에이전트 frontmatter 완결성" 같은 항목이 들어간다. co-teachme의 경우 6장에서 만든 <code>researcher.md</code>, <code>writer.md</code>가 필수 필드를 모두 갖췄는지부터 다시 확인한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun run agent:verify
+bun scripts/validate-skills.ts</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>variant.json에 manifest 정의</strong>
+            <p>co-teachme가 사용하는 스킬(예: research-analysis, documentation-writing)과 변형 전용 스크립트가 있다면 <code>skill_manifest.variant_specific</code>과 <code>script_manifest</code>에 각각 등록한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">{
+  "name": "co-teachme",
+  "inherits_common": "1.0.0",
+  "skill_manifest": {
+    "variant_specific": ["research-analysis", "documentation-writing"]
+  },
+  "script_manifest": []
+}</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="flow-box">
+        <code>skill_manifest.variant_specific</code>은 이 variant가 공통 스킬 외에 추가로 필요로 하는 스킬을 선언하는 자리다. 여기 등록되지 않은 스킬은 승격 파이프라인의 reconcile 단계에서 누락될 위험이 있다.
+      </div>
+
+      <div class="warning-box">
+        체크리스트 항목은 실제 저장소의 <code>PROMOTION_CHECKLIST.md</code> 템플릿을 기준으로 채워야 한다 — 여기 예시는 일반적인 흐름을 보여주는 것이지 항목의 전체 목록이 아니다.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 고급 ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● 고급</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">실제 승격 파이프라인 명령과 사후 검증 절차</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">고급</span>
+      <strong class="card-title">승격 파이프라인 실행과 검증</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        D-1까지 마쳐 승격 준비가 끝났다고 판단한 숙련자가, 실제로 <code>l2-to-variant-pipeline.ts</code>를 실행해 co-teachme를 정식 <code>templates/co-teachme/</code>로 전환하려 한다. 이 단계부터는 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다.
+      </div>
+
+      <div class="warning-box">
+        이 시나리오는 실제 git 추적 워크스페이스에 실질적인 변화를 일으키는 작업이다. 정말로 variant를 공개(publish)할 의도가 있을 때만 실행하고, 단순히 흐름을 구경하려는 목적이라면 명령을 직접 실행하지 말고 읽기만 하라.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="05_VariantAdvanced_Chapter.html#s3">l2-to-variant-pipeline.ts</a>
+          <a class="cmd-chip" href="../variant-practice/04_VariantPractice_Manual.html#section-2">validate-templates.ts</a>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>승격 파이프라인 실행</strong>
+            <p><code>--source</code>는 Phase A 프로토타입 경로, <code>--variant</code>는 최종 variant 이름, <code>--variantType</code>은 도메인 유형이다.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/l2-to-variant-pipeline.ts --source Projects/co-teachme --variant co-teachme --variantType collaboration</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>플랫폼 패리티 수동 확인</strong>
+            <p><code>.claude/</code>와 <code>.gemini/</code>의 commands·skills 디렉터리 목록이 서로 대응하는지 diff로 확인한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">diff <(ls templates/co-teachme/.claude/commands/) <(ls templates/co-teachme/.gemini/commands/)
+diff <(ls templates/co-teachme/.claude/skills/) <(ls templates/co-teachme/.gemini/skills/)</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>최종 게이트 — validate-templates.ts</strong>
+            <p>모든 절차가 끝난 뒤 마지막으로 구조 검증을 한 번 더 돌려, 새 variant가 워크스페이스 전체 규정을 만족하는지 확인한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/validate-templates.ts</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="flow-box">
+        파이프라인의 reconcile 단계는 <code>Projects/co-teachme/</code>에 있던 파일 중 공통 파일(L0/common)과 동일한 것은 제거해 중복을 없앤다. 다만 스킬 디렉터리는 이 reconcile 대상에서 의도적으로 제외되므로, 승격 후 <code>.claude/skills/</code>와 <code>.gemini/skills/</code>에 스킬이 그대로 남아 있는지 별도로 확인해야 한다.
+      </div>
+
+      <div class="tip-box">
+        <code>_ORIGIN.md</code>의 "Manual Phase B Steps" 절이 있다면, 파이프라인이 자동으로 옮기지 못한 도메인 전용 디렉터리 목록이 거기 적혀 있다 — 이 목록을 빠짐없이 수동으로 옮겼는지 마지막으로 대조한다.
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">7장 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 실습</a>에서 다뤘다.
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+    ai-workspace-standards main 브랜치 기준 | 2026년 7월 14일 작성<br>
+    <a href="../index.html">← 핸드북 홈으로</a>
+  </p>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

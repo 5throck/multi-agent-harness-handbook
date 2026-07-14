@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 260px; min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+      padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-dim); padding: 0 16px 8px;
+    }
+    nav a {
+      display: block; padding: 6px 16px; color: var(--text-dim);
+      text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section {
+      margin-top: 12px; padding: 6px 16px 4px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+    }
+    main { flex: 1; display: flex; justify-content: center; padding: 56px 48px 96px; overflow-x: hidden; }
+    .reading { width: 100%; max-width: 720px; }
+    .chapter-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 1.12rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+    .source-line { font-size: 13px; color: var(--text-dim); margin-bottom: 30px; }
+    .source-line a { color: var(--accent); text-decoration: none; }
+    .keypoints {
+      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 18px 22px; margin: 0 0 40px;
+    }
+    .keypoints .kp-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+    .keypoints ul { margin: 0 0 0 18px; font-size: 14.5px; line-height: 1.85; }
+    h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      margin: 52px 0 14px; scroll-margin-top: 20px; line-height: 1.35;
+    }
+    h3 { font-size: 1.12rem; font-weight: 700; color: var(--accent6); margin: 30px 0 8px; scroll-margin-top: 20px; }
+    p { margin: 14px 0; }
+    p + p { margin-top: 16px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin: 6px 0; }
+    .pullquote {
+      border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 28px 0;
+      font-size: 1.22rem; line-height: 1.6; color: #2b3138; font-weight: 600;
+    }
+    .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .chapter-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .chapter-nav a {
+      display: block; flex: 1; padding: 14px 18px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text); transition: border-color .15s;
+    }
+    .chapter-nav a:hover { border-color: var(--accent); text-decoration: none; }
+    .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
+    .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
+    .chapter-nav .next { text-align: right; }
+    @media (max-width: 640px) {
+      main { padding: 40px 18px 60px; }
+      .chapter-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">1장 · 개념 이해</div>
+  <a href="#s1">하네스 엔지니어링이란</a>
+  <a href="#s2">단일 에이전트의 한계</a>
+  <a href="#s3">멀티 에이전트팀의 구성요소</a>
+  <a href="#s4">오케스트레이션 패턴</a>
+  <a href="#s5">도구를 넘나드는 하네스 — AGENTS.md</a>
+  <div class="nav-section">다른 장</div>
+  <a href="../practice/02_Practice_Manual.html">2장 · Claude Code 실습</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">1장</div>
+  <h1>하네스 엔지니어링과 멀티 에이전트팀 개념</h1>
+  <p class="lead">AI 에이전트가 실제 업무에서 신뢰할 수 있게 동작하려면 "무엇을 시킬지"보다 "어떤 틀 안에서 움직이게 할지"가 더 중요해진다. 이 장에서는 하네스 엔지니어링이라는 관점과, 하나의 에이전트가 아니라 여러 에이전트가 팀으로 협업하는 멀티 에이전트팀의 기본 구조를 살펴본다.</p>
+  <p class="source-line">출처: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code 공식 문서 — Subagents</a>, <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards 저장소</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 장에서 다루는 것</div>
+    <ul>
+      <li>하네스 엔지니어링이 무엇이고, 왜 프롬프트 엔지니어링만으로는 부족한지</li>
+      <li>단일 에이전트로 복잡한 작업을 시킬 때 생기는 구조적 한계</li>
+      <li>멀티 에이전트팀을 이루는 3가지 구성요소 — 오케스트레이터·스페셜리스트·핸드오프 계약</li>
+      <li>병렬 팬아웃, 파이프라인, 검증-후-적용 같은 대표적인 오케스트레이션 패턴</li>
+      <li>Claude Code/App, Antigravity CLI/Desktop처럼 서로 다른 도구가 같은 하네스를 공유하게 해 주는 AGENTS.md 표준</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">하네스 엔지니어링이란</h2>
+  <p>프롬프트 엔지니어링이 "모델에게 어떤 말을 건넬 것인가"에 집중한다면, 하네스 엔지니어링은 한 걸음 물러나 "모델이 어떤 도구·규칙·검증 장치를 통해 일하게 할 것인가"를 설계하는 일이다. 여기서 하네스(harness)는 승마에서 말에게 씌우는 마구에서 온 표현으로, AI가 마음대로 아무 방향으로나 달리지 않고 정해진 절차·도구·권한 범위 안에서 예측 가능하게 움직이도록 잡아 주는 틀을 뜻한다.</p>
+  <p>실제로 이 틀은 몇 가지 구체적인 장치로 나타난다. 에이전트가 호출할 수 있는 도구의 목록과 각 도구의 위험도에 따른 승인 정책, 특정 이벤트(파일 저장 직후, 작업 완료 시점 등)에 자동으로 실행되는 훅(hook), 반복되는 작업 절차를 표준화해 재사용하는 스킬(skill), 그리고 이 모든 것을 조합해 여러 에이전트를 정해진 순서·조건으로 실행시키는 오케스트레이션 스크립트가 그것이다. 이런 장치들이 쌓이면, 같은 요청을 몇 번을 반복해도 결과의 품질과 형식이 흔들리지 않는 "재현 가능한 AI 워크플로"가 만들어진다.</p>
+
+  <div class="pullquote">좋은 프롬프트는 한 번 잘 대답하게 만들지만, 좋은 하네스는 매번 잘 대답하게 만든다.</div>
+
+  <h2 id="s2">단일 에이전트의 한계</h2>
+  <p>하나의 에이전트에게 모든 역할을 맡기면 초기에는 편리하지만, 작업이 커질수록 세 가지 문제가 뚜렷해진다. 첫째, 컨텍스트 과부하다. 설계 검토, 코드 작성, 테스트, 문서화를 한 세션 안에서 순서대로 처리하다 보면 앞선 단계의 세부 사항이 뒤로 갈수록 희미해지고, 결과의 일관성이 떨어진다. 둘째, 역할 충돌이다. 코드를 작성한 에이전트가 자기 코드를 스스로 검토하면 놓치는 결함이 많아진다 — 작성자와 검토자가 같은 사람이면 생기는 것과 똑같은 문제다. 셋째, 병렬성의 부재다. 서로 독립적인 하위 작업(예: 여러 파일의 리팩터링, 여러 관점의 코드 리뷰)도 단일 에이전트는 순서대로 처리할 수밖에 없어 시간이 선형으로 늘어난다.</p>
+  <p>멀티 에이전트팀은 이 세 가지를 구조적으로 해결한다. 역할별로 컨텍스트를 분리해 각 에이전트가 자기 역할에 집중하게 하고, 작성자와 검증자를 분리해 독립적인 시각을 확보하며, 서로 의존하지 않는 작업은 동시에 실행해 시간을 단축한다.</p>
+
+  <h2 id="s3">멀티 에이전트팀의 구성요소</h2>
+  <p>멀티 에이전트팀은 크게 세 가지 요소로 이루어진다.</p>
+  <h3>오케스트레이터(Orchestrator)</h3>
+  <p>전체 작업을 단계로 나누고, 각 단계에 맞는 스페셜리스트 에이전트를 호출하며, 사용자와의 확인이 필요한 지점(게이트)에서 진행을 멈추는 역할이다. 흔히 "PM 에이전트"로 불리며, 스스로 코드를 작성하지 않고 조율에 집중한다.</p>
+  <h3>스페셜리스트(Specialist)</h3>
+  <p>설계, 구현, 테스트, 보안 검토처럼 좁고 명확한 책임을 가진 에이전트다. 각 스페셜리스트는 자신이 받은 입력과 산출해야 할 출력이 분명하게 정의돼 있어, 오케스트레이터가 "무엇을 맡길 수 있는 에이전트인지" 쉽게 판단할 수 있다.</p>
+  <h3>핸드오프 계약(Handoff Contract)</h3>
+  <p>에이전트 사이에 작업을 넘길 때 주고받는 정보의 형식이다. 자연어로만 넘기면 다음 에이전트가 맥락을 다시 추측해야 하지만, 구조화된 입력(예: JSON)으로 "이 작업의 목적·범위·이전 단계 산출물"을 명시하면 다음 에이전트가 바로 작업에 들어갈 수 있다.</p>
+  <div class="note">세 요소 중 어느 하나라도 빠지면 팀이 아니라 "각자 따로 일하는 에이전트 여러 개"가 된다 — 조율(오케스트레이터)과 계약(핸드오프)이 팀을 팀답게 만든다.</div>
+
+  <h2 id="s4">오케스트레이션 패턴</h2>
+  <p>실무에서 반복적으로 쓰이는 패턴은 크게 세 가지다.</p>
+  <ul>
+    <li><strong>병렬 팬아웃(Parallel Fan-out)</strong> — 서로 독립적인 여러 하위 작업(예: 4가지 관점의 코드 리뷰)을 동시에 여러 에이전트에게 맡기고, 결과를 한데 모은다. 소요 시간은 가장 느린 하나의 작업 시간에 수렴한다.</li>
+    <li><strong>파이프라인(Pipeline)</strong> — 여러 항목이 각각 여러 단계를 순서대로 통과하되, 항목 간에는 서로 기다리지 않는다. 항목 A가 3단계에 있는 동안 항목 B는 아직 1단계에 있을 수 있어, 전체 처리량이 늘어난다.</li>
+    <li><strong>검증-후-적용(Verify then Apply)</strong> — 한 에이전트가 초안을 만들면, 독립된 다른 에이전트(또는 여러 에이전트의 합의)가 그 초안을 반박·검증한 뒤에만 실제 반영한다. 그럴듯하지만 틀린 결과가 그대로 통과되는 것을 막는 장치다.</li>
+  </ul>
+  <h2 id="s5">도구를 넘나드는 하네스 — AGENTS.md</h2>
+  <p>지금까지 설명한 오케스트레이터·스페셜리스트·핸드오프는 특정 도구에 종속된 개념이 아니다. 문제는 그동안 도구마다 이 하네스를 설정하는 방식이 제각각이었다는 점이다 — Claude Code는 <code>CLAUDE.md</code>를, Cursor는 <code>.cursorrules</code>를, GitHub Copilot은 <code>.github/copilot-instructions.md</code>를 읽는 식이어서, 여러 도구를 함께 쓰는 팀은 같은 내용을 파일마다 중복해서 유지해야 했다.</p>
+  <p><strong>AGENTS.md</strong>는 이 문제를 풀기 위해 2025년 8월 OpenAI 주도로 Google·Cursor·Factory 등이 참여해 만든 개방형 표준이고, 2025년 12월 리눅스 재단 산하 Agentic AI Foundation에 기증됐다. 저장소 루트에 AGENTS.md 하나만 두면 Codex, Claude Code(가져오기 방식), GitHub Copilot, Cursor, Google Jules, Antigravity 계열을 포함해 30개가 넘는 도구가 세션 시작 시 이를 읽어 빌드·테스트 명령, 코드 스타일, 손대면 안 되는 영역 같은 공통 규칙을 공유한다.</p>
+  <p>이 핸드북이 계속 강조하는 "네 도구 모두 지원"이라는 원칙도 결국 같은 문제의식에서 나온다 — 팀이 Claude App을 쓰든 Antigravity Desktop을 쓰든, 저장소 루트의 공유 규칙(AGENTS.md)과 도구별 세부 설정(<code>CLAUDE.md</code>, <code>GEMINI.md</code> 등)을 나눠 두면 도구를 바꾸거나 섞어 써도 하네스 자체는 흔들리지 않는다. 5장에서 살펴볼 ai-workspace-standards 저장소는 이 원칙을 실제로 구현한 사례다 — 루트의 <code>AGENTS.md</code> 파일이 워크스페이스 전체 에이전트의 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적(engine-agnostic) 커맨드·스킬을 담는다.</p>
+  <div class="note">AGENTS.md는 "무엇을 지켜야 하는가"를 도구 중립적으로 정의하고, CLAUDE.md/GEMINI.md 같은 도구별 파일은 "그것을 이 도구에서 어떻게 실행하는가"만 추가로 정의한다 — 중복을 줄이는 계층 분리다.</div>
+
+  <p>2장에서는 이 개념들을 실제로 Claude App/Antigravity Desktop을 중심으로 만들어 보면서(Claude Code·Antigravity CLI 절차도 함께), 오케스트레이터·스페셜리스트·핸드오프가 도구마다 어떻게 표현되는지 확인한다.</p>
+
+  <div class="chapter-nav">
+    <a href="../practice/02_Practice_Manual.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">2장 · Claude Code 멀티 에이전트팀 실습</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

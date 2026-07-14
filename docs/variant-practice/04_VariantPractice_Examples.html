@@ -236,7 +236,7 @@
   <a href="#scenario-1"><span class="dot dot-g"></span>G-1 기존 variant로 프로젝트 스캐폴딩하기</a>
 
   <div class="nav-group">중급 시나리오</div>
-  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 co-teachme Phase A 프로토타입 만들기</a>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 co-marketing Phase A 프로토타입 만들기</a>
 
   <div class="nav-group">고급 시나리오</div>
   <a href="#scenario-3"><span class="dot dot-p"></span>P-1 프로토타입 검증과 승격 준비 점검</a>
@@ -274,7 +274,7 @@
     <div class="card-body">
 
       <div class="situation">
-        처음 ai-workspace-standards를 접해보는 개발자가, 실제 워크스페이스를 건드리지 않고 별도의 연습용 폴더(예: <code>~/harness-lab/ai-workspace-standards-demo</code>)에 저장소를 받아 어떤 variant들이 있는지 확인하고, 그중 하나로 프로젝트를 스캐폴딩해서 결과물이 어떻게 생겼는지 직접 확인해보려 한다.
+        처음 ai-workspace-standards를 접해보는 개발자가, 실제 워크스페이스를 건드리지 않고 별도의 연습용 폴더(예: <code>~/harness-lab/ai-workspace-standards-demo</code>)에 저장소를 받아 어떤 variant들이 있는지 확인하고, 성격이 다른 두 variant(정식 variant인 co-consult, beta variant인 co-deck)로 각각 프로젝트를 스캐폴딩해서 결과물의 구조가 어떻게 다른지 직접 비교해보려 한다.
       </div>
 
       <div class="cmd-list">
@@ -313,10 +313,20 @@ bun scripts/list-template-versions.ts</pre>
         </li>
         <li>
           <div class="step-content">
-            <strong>기존 variant(co-work)로 데모 프로젝트 스캐폴딩</strong>
-            <p>일반 협업/문서 작업용 variant인 co-work로 데모 프로젝트를 만들어본다.</p>
+            <strong>기존 variant(co-consult)로 데모 프로젝트 스캐폴딩</strong>
+            <p>전략 컨설팅용 variant인 co-consult로 데모 프로젝트를 만들어본다.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/new-project.ts "demo-project" --variant co-work</pre>
+              <pre class="code-block">bun scripts/new-project.ts "demo-project" --variant co-consult</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>beta variant(co-deck)로 두 번째 데모 프로젝트 스캐폴딩</strong>
+            <p>이번에는 강의·발표 자료 제작용 <code>co-deck</code>으로 별도의 데모 프로젝트를 하나 더 만든다. <code>co-deck</code>은 아직 <code>beta</code> 배지가 붙은 variant이지만 스캐폴딩 명령은 다른 variant와 동일하다 — <code>--variant</code> 값만 바꾸면 된다.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/new-project.ts "demo-project-deck" --variant co-deck</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
@@ -324,11 +334,14 @@ bun scripts/list-template-versions.ts</pre>
       </ol>
 
       <div class="flow-box">
-        <code>new-project.ts</code>는 <code>templates/co-work/</code>의 전체 구성(에이전트 정의, 스킬, 거버넌스 파이프라인)을 그대로 복제해 <code>demo-project/</code>라는 새 독립 git 저장소를 만든다. 이 저장소는 워크스페이스 데모 폴더와는 별개이지만 CONSTITUTION.md의 공유 규칙을 상속한 상태로 시작한다.
+        <code>new-project.ts</code>는 <code>templates/co-consult/</code> 또는 <code>templates/co-deck/</code>의 전체 구성(에이전트 정의, 스킬, 거버넌스 파이프라인)을 그대로 복제해 각각 <code>demo-project/</code>, <code>demo-project-deck/</code>이라는 새 독립 git 저장소를 만든다. 두 저장소 모두 워크스페이스 데모 폴더와는 별개이지만 CONSTITUTION.md의 공유 규칙을 상속한 상태로 시작한다.
       </div>
 
       <div class="tip-box">
-        생성된 <code>demo-project/agents/</code>와 <code>demo-project/docs/context.md</code>를 열어보면, 그 variant가 실제로 어떤 에이전트 구성을 가지는지 눈으로 직접 확인할 수 있다.
+        <code>demo-project/agents/</code>와 <code>demo-project-deck/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 7단계 워크플로우, co-deck은 11단계 워크플로우라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. variant 이름과 <code>beta</code> 배지만으로는 짐작하기 어려운 "실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
+      </div>
+      <div class="warning-box">
+        co-deck은 아직 <code>beta</code> variant다 — 5장 §3(templates와 variant 7종)에서 다뤘듯, 정식 variant보다 구조가 자주 바뀔 수 있으므로 실무 프로젝트보다는 이런 학습·실험 용도로 먼저 접해보는 것을 권장한다.
       </div>
 
     </div>
@@ -338,19 +351,19 @@ bun scripts/list-template-versions.ts</pre>
   <div class="level-header" id="intermediate">
     <span class="badge badge-b">● 중급</span>
     <span class="level-title level-title-b">Daily Workflow</span>
-    <span class="level-desc">handbook 저술을 돕는 새 variant, co-teachme의 Phase A 프로토타입 만들기</span>
+    <span class="level-desc">마케팅 캠페인 콘텐츠 제작을 돕는 새 variant, co-marketing의 Phase A 프로토타입 만들기</span>
   </div>
 
   <div class="scenario-card" id="scenario-2">
     <div class="card-header">
       <span class="card-id">D-1</span>
       <span class="badge badge-b">중급</span>
-      <strong class="card-title">co-teachme Phase A 프로토타입 만들기</strong>
+      <strong class="card-title">co-marketing Phase A 프로토타입 만들기</strong>
     </div>
     <div class="card-body">
 
       <div class="situation">
-        기본 사용법은 익힌 실무자가, 기존 variant 어디에도 딱 맞지 않는 "핸드북 저술 전용 에이전트팀"을 새로 만들어보려 한다. 처음부터 정식 <code>templates/</code> variant로 만들지 않고, <code>Projects/</code> 아래에서 독립적으로 발전시킬 수 있는 Phase A 프로토타입으로 먼저 시작한다. G-1에서 클론한 연습용 워크스페이스 안에서 이어서 진행한다는 것을 전제로 한다.
+        기본 사용법은 익힌 실무자가, 기존 variant 어디에도 딱 맞지 않는 "마케팅 캠페인 콘텐츠 제작 전용 에이전트팀"을 새로 만들어보려 한다. 처음부터 정식 <code>templates/</code> variant로 만들지 않고, <code>Projects/</code> 아래에서 독립적으로 발전시킬 수 있는 Phase A 프로토타입으로 먼저 시작한다. G-1에서 클론한 연습용 워크스페이스 안에서 이어서 진행한다는 것을 전제로 한다.
       </div>
 
       <div class="cmd-list">
@@ -365,22 +378,22 @@ bun scripts/list-template-versions.ts</pre>
       <ol class="step-list">
         <li>
           <div class="step-content">
-            <strong>co-teachme Phase A 스캐폴드 생성</strong>
-            <p>variant 이름은 <code>^co-[a-z][a-z0-9-]{1,30}$</code> 규칙을 만족해야 한다. <code>co-teachme</code>는 이 규칙에 맞는 이름이다.</p>
+            <strong>co-marketing Phase A 스캐폴드 생성</strong>
+            <p>variant 이름은 <code>^co-[a-z][a-z0-9-]{1,30}$</code> 규칙을 만족해야 한다. <code>co-marketing</code>은 이 규칙에 맞는 이름이다.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/create-l2-scaffold.ts co-teachme --domain collaboration</pre>
+              <pre class="code-block">bun scripts/create-l2-scaffold.ts co-marketing --domain marketing</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
         </li>
         <li>
           <div class="step-content">
-            <strong>도메인 에이전트 정의 작성</strong>
-            <p><code>Projects/co-teachme/agents/</code> 아래에 <code>researcher.md</code>, <code>writer.md</code> 두 개의 에이전트를 정의한다. 각 파일은 name, role, status, tier(플랫폼별), model: inherit, color, description, phases, handoff_to, handoff_from, required_skills를 포함한 YAML frontmatter를 갖춰야 한다.</p>
+            <strong>도메인 에이전트 정의 작성 — ① researcher.md</strong>
+            <p><code>Projects/co-marketing/agents/researcher.md</code> 파일을 아래 내용 그대로 만든다. name, role, status, tier(플랫폼별), model: inherit, color, description, phases, handoff_to, handoff_from, required_skills를 포함한 YAML frontmatter가 필수 형식이다.</p>
             <div style="position:relative">
               <pre class="code-block">---
 name: researcher
-role: 주제 리서치 및 근거 수집
+role: 캠페인 타겟 오디언스 리서치 및 근거 수집
 status: active
 tier:
   claude: medium
@@ -389,11 +402,37 @@ tier:
   gemini-cli: medium
 model: inherit
 color: blue
-description: 핸드북 주제에 대한 자료를 조사하고 근거를 정리한다. 새 챕터 초안 작성 전에 호출한다.
+description: 캠페인 주제에 대한 시장·오디언스 자료를 조사하고 근거를 정리한다. 새 캠페인 카피 초안 작성 전에 호출한다.
 phases: [1, 2]
 handoff_to: [writer]
 handoff_from: [pm]
-required_skills: [research-analysis]
+required_skills: [campaign-research]
+---</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>도메인 에이전트 정의 작성 — ② writer.md</strong>
+            <p>같은 방식으로 <code>Projects/co-marketing/agents/writer.md</code>를 만든다. <code>handoff_from</code>이 방금 만든 <code>researcher</code>를 가리켜, researcher → writer로 이어지는 핸드오프 계약이 완성된다.</p>
+            <div style="position:relative">
+              <pre class="code-block">---
+name: writer
+role: 캠페인 카피 초안 작성
+status: active
+tier:
+  claude: medium
+  gemini: medium
+  antigravity: medium
+  gemini-cli: medium
+model: inherit
+color: green
+description: researcher가 정리한 근거를 바탕으로 캠페인 카피 초안을 작성한다.
+phases: [2, 3]
+handoff_to: [pm]
+handoff_from: [researcher]
+required_skills: [copywriting]
 ---</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
@@ -402,18 +441,20 @@ required_skills: [research-analysis]
         <li>
           <div class="step-content">
             <strong><code>AGENTS.md</code> 로스터 갱신</strong>
-            <p><code>create-l2-scaffold.ts</code>가 만든 <code>Projects/co-teachme/AGENTS.md</code>는 워크스페이스 루트에서 그대로 복사되어 온 상태라 auditor·lifecycle-manager 같은 워크스페이스 전용 에이전트 항목이 남아 있다. 이 프로젝트에는 존재하지 않는 에이전트이므로 표에서 지우고, 방금 만든 <code>researcher</code>·<code>writer</code> 항목으로 채운 "co-teachme Agents" 섹션을 새로 추가한다 — <a href="../intro/04_Intro_Chapter.html#s2">5장에서 설명한 대로</a> AGENTS.md는 "이 프로젝트에서 누가 그 일을 하는가"를 정의하는 정본 목록이므로, 실제 존재하는 에이전트와 어긋나 있으면 안 된다.</p>
+            <p><code>create-l2-scaffold.ts</code>가 만든 <code>Projects/co-marketing/AGENTS.md</code>는 워크스페이스 루트에서 그대로 복사되어 온 상태라 auditor·lifecycle-manager 같은 워크스페이스 전용 에이전트 항목이 남아 있다. 이 프로젝트에는 존재하지 않는 에이전트이므로 표에서 지우고, 방금 만든 <code>researcher</code>·<code>writer</code> 항목으로 채운 "co-marketing Agents" 섹션을 새로 추가한다 — <a href="../intro/04_Intro_Chapter.html#s2">5장에서 설명한 대로</a> AGENTS.md는 "이 프로젝트에서 누가 그 일을 하는가"를 정의하는 정본 목록이므로, 실제 존재하는 에이전트와 어긋나 있으면 안 된다.</p>
             <div style="position:relative">
-              <pre class="code-block">cd Projects/co-teachme && bun run agent:verify
-# 이 시점에는 "Documented agents: 2" (researcher, writer)로 나와야 한다</pre>
+              <pre class="code-block">cd Projects/co-marketing && bun run agent:verify</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+            <div class="flow-box">
+              이 시점에는 <code>Documented agents: 2</code> (researcher, writer)로 나와야 한다. 다른 숫자가 나오면 AGENTS.md 표와 실제 <code>agents/*.md</code> 파일 목록이 어긋난 것이므로, 표를 다시 확인한다.
             </div>
           </div>
         </li>
       </ol>
 
       <div class="flow-box">
-        Phase A 프로토타입은 <code>templates/</code>가 아니라 <code>Projects/co-teachme/</code>에 독립적으로 존재한다. 이 상태에서는 아직 다른 사람이 <code>new-project.ts --variant co-teachme</code>로 스캐폴딩할 수 없다 — 그러려면 나중에 Phase B 승격을 거쳐야 한다(7장에서 다룸).
+        Phase A 프로토타입은 <code>templates/</code>가 아니라 <code>Projects/co-marketing/</code>에 독립적으로 존재한다. 이 상태에서는 아직 다른 사람이 <code>new-project.ts --variant co-marketing</code>로 스캐폴딩할 수 없다 — 그러려면 나중에 Phase B 승격을 거쳐야 한다(7장에서 다룸).
       </div>
 
       <div class="warning-box">
@@ -439,7 +480,7 @@ required_skills: [research-analysis]
     <div class="card-body">
 
       <div class="situation">
-        co-teachme 프로토타입이 구조적으로 문제가 없는지 확인하고, 다음 단계인 정식 승격(promote-variant)에 앞서 무엇이 co-work 같은 기존 variant와 다른지, 무엇이 정말 새로 만든 부분인지 정리해보려는 숙련자의 상황이다.
+        co-marketing 프로토타입이 구조적으로 문제가 없는지 확인하고, 다음 단계인 정식 승격(promote-variant)에 앞서 무엇이 co-work 같은 기존 variant와 다른지, 무엇이 정말 새로 만든 부분인지 정리해보려는 숙련자의 상황이다.
       </div>
 
       <div class="cmd-list">
@@ -466,9 +507,14 @@ bun run agent:verify</pre>
         <li>
           <div class="step-content">
             <strong>co-work과의 차이 정리</strong>
-            <p>기존 co-work variant의 에이전트 로스터와 co-teachme의 로스터를 나란히 비교해, 무엇을 그대로 가져왔고 무엇을 새로 정의했는지 메모로 남긴다.</p>
+            <p>기존 co-work variant의 에이전트 로스터와 co-marketing의 로스터를 나란히 비교해, 무엇을 그대로 가져왔고 무엇을 새로 정의했는지 메모로 남긴다. Git Bash/macOS/Linux에서는 아래 명령을 그대로 쓴다.</p>
             <div style="position:relative">
-              <pre class="code-block">diff <(ls templates/co-work/agents/) <(ls Projects/co-teachme/agents/)</pre>
+              <pre class="code-block">diff <(ls templates/co-work/agents/) <(ls Projects/co-marketing/agents/)</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> 프로세스 치환(<code>&lt;(...)</code>) 문법이 없으므로 <code>Compare-Object</code>로 대체한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">Compare-Object (ls templates/co-work/agents/).Name (ls Projects/co-marketing/agents/).Name</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>

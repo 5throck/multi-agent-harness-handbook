@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>용어집 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <style>
+    :root {
+      --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f4; --border: #d0d7de;
+      --text: #1f2328; --text-dim: #636c76; --accent: #0969da;
+      --accent2: #1a7f37; --accent4: #6639ba; --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.8; font-size: 15.5px;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 240px; min-width: 240px; background: var(--bg2); border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 20px 0;
+    }
+    nav a { display: block; padding: 5px 16px; color: var(--text-dim); text-decoration: none; font-size: 12.5px; border-left: 2px solid transparent; }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); padding: 0 16px 8px; }
+    main { flex: 1; max-width: 860px; padding: 48px 52px 96px; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+    .lead { color: var(--text-dim); font-size: 1.02rem; margin-bottom: 30px; }
+    h2 { font-size: 1.2rem; font-weight: 700; margin: 40px 0 12px; color: var(--accent6); scroll-margin-top: 20px; }
+    dl { margin: 0 0 8px; }
+    dt { font-weight: 700; font-family: 'SFMono-Regular','Consolas',monospace; font-size: 14.5px; margin-top: 18px; color: var(--text); }
+    dt .en { color: var(--text-dim); font-weight: 400; font-size: 12.5px; }
+    dd { margin: 4px 0 0 0; color: var(--text); font-size: 14.5px; }
+    dd .see { display: block; margin-top: 4px; font-size: 12.5px; color: var(--text-dim); }
+    code { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+    .jump a { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 13px; font-weight: 700; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;display:block;">← 핸드북 홈</a>
+  <div class="nav-title">용어집</div>
+  <a href="#core">핵심 개념</a>
+  <a href="#team">멀티 에이전트팀 구성요소</a>
+  <a href="#workspace">ai-workspace-standards 구조</a>
+  <a href="#tools">도구·플랫폼</a>
+</nav>
+
+<main>
+  <h1>용어집</h1>
+  <p class="lead">이 핸드북 전체에서 반복적으로 쓰이는 용어를 한곳에 모았습니다. 각 항목의 "자세히"는 그 용어를 처음 자세히 설명한 장으로 연결됩니다.</p>
+
+  <div class="jump">
+    <a href="#core">핵심 개념</a>
+    <a href="#team">팀 구성요소</a>
+    <a href="#workspace">워크스페이스 구조</a>
+    <a href="#tools">도구·플랫폼</a>
+  </div>
+
+  <h2 id="core">핵심 개념</h2>
+  <dl>
+    <dt>하네스 엔지니어링 <span class="en">Harness Engineering</span></dt>
+    <dd>모델이 어떤 도구·규칙·검증 장치를 통해 일하게 할지 설계하는 일. 프롬프트 엔지니어링(무엇을 말할지) → 컨텍스트 엔지니어링(무엇을 알게 할지)에 이어지는 세 번째 단계.
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s1">1장 §하네스 엔지니어링이란</a></span></dd>
+
+    <dt>서브에이전트 <span class="en">Subagent</span></dt>
+    <dd>메인 세션과 독립된 컨텍스트 창을 가지고 좁은 작업을 처리한 뒤 요약만 돌려주는 보조 에이전트. 스페셜리스트 개념을 실제 도구에서 구현하는 메커니즘.
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3b">1장 §서브에이전트란 무엇인가</a></span></dd>
+
+    <dt>핸드오프 계약 <span class="en">Handoff Contract</span></dt>
+    <dd>에이전트 사이에 작업을 넘길 때 주고받는 정보의 형식. 목적·범위·이전 단계 산출물을 구조화해 명시하면 다음 에이전트가 다시 물어볼 필요 없이 바로 시작할 수 있다.
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3">1장 §멀티 에이전트팀의 구성요소</a></span></dd>
+
+    <dt>동적 팀 구성 <span class="en">Dynamic Team Composition</span></dt>
+    <dd>오케스트레이터가 매 요청마다 실제로 어떤 서브에이전트를 몇 번, 어떤 순서로 투입할지 새로 판단하는 것. 정의된 팀 명단은 고정이어도 실제 투입 구성은 작업마다 달라진다.
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4b">1장 §동적 팀 구성과 다양한 워크플로우</a> · 실습: <a href="../practice/02_Practice_Examples.html#scenario-2b">2.1 D-2</a></span></dd>
+
+    <dt>오케스트레이션 패턴 <span class="en">Orchestration Pattern</span></dt>
+    <dd>병렬 팬아웃(동시 실행)·파이프라인(단계별 순차, 항목 간 비동기)·검증-후-적용(초안을 독립 검증한 뒤에만 반영) 세 가지가 대표적이며, 한 워크플로우 안에서 조합해 쓸 수 있다.
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4">1장 §오케스트레이션 패턴</a></span></dd>
+  </dl>
+
+  <h2 id="team">멀티 에이전트팀 구성요소</h2>
+  <dl>
+    <dt>오케스트레이터 <span class="en">Orchestrator</span></dt>
+    <dd>전체 작업을 단계로 나누고 스페셜리스트를 호출하며, 사용자 확인이 필요한 지점에서 멈추는 역할. 흔히 "PM 에이전트"라고 부른다.</dd>
+
+    <dt>스페셜리스트 <span class="en">Specialist</span></dt>
+    <dd>설계·구현·테스트·보안 검토처럼 좁고 명확한 책임을 가진 에이전트. 입력과 출력이 분명히 정의돼 있다.</dd>
+
+    <dt>모델 티어 <span class="en">Model Tier</span></dt>
+    <dd>에이전트 역할별로 배정하는 모델 비용 등급(<code>high</code>/<code>medium</code>/<code>low</code>). 판단이 무거운 역할에는 high, 정형화된 반복 작업에는 low를 배정해 비용과 품질의 균형을 맞춘다. <code>agents/*.md</code> frontmatter의 <code>tier</code> 필드로 지정하며, 실제 모델명은 <code>model: inherit</code>로 플랫폼이 번역한다.
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §templates와 variant</a> — L0→L1→L2의 "3-tier"와는 다른 개념이니 혼동 주의</span></dd>
+  </dl>
+
+  <h2 id="workspace">ai-workspace-standards 구조</h2>
+  <dl>
+    <dt>SSOT <span class="en">Single Source of Truth</span></dt>
+    <dd>어떤 정보의 원본이 오직 한 곳에만 존재한다는 원칙. 예: CONSTITUTION.md는 워크스페이스 전체 규칙의 SSOT, context.md는 개별 프로젝트의 SSOT.
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s4">5장 §세션 시작 체크리스트와 스캐폴딩</a></span></dd>
+
+    <dt>L0 / L1 / L2</dt>
+    <dd>워크스페이스 루트(L0, 유일한 원본) → 공통 템플릿 스냅샷(L1, <code>templates/common/</code>) → variant/프로젝트(L2, <code>templates/co-*/</code> 또는 <code>Projects/*/</code>)로 이어지는 3단 계층. 흐름은 항상 위에서 아래로만 가고, L1→L2는 스캐폴딩 시점에 딱 한 번만 전달되는 "포크"다.
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s5">5장 §L0 → L1 → L2 계층 구조</a></span></dd>
+
+    <dt>포크 모델 <span class="en">Fork Model</span></dt>
+    <dd>L1에서 L2가 갈라져 나온 뒤에는 자동 역동기화 없이 독립적으로 진화하는 방식. 공식 템플릿으로 승격하려면 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다.</dd>
+
+    <dt>variant</dt>
+    <dd><code>templates/</code> 아래에 있는, 특정 도메인을 위한 완결된 멀티 에이전트팀 구성(PM·전문 에이전트·거버넌스 파이프라인 묶음). co-develop, co-design, co-work 등이 예시다.
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §templates와 variant 7종</a></span></dd>
+
+    <dt>Phase A / Phase B</dt>
+    <dd>새 variant를 만드는 두 단계. Phase A는 <code>Projects/</code> 아래 독립 프로토타입으로 자유롭게 실험하는 단계, Phase B는 <code>promote-variant</code>로 정식 <code>templates/</code> variant로 승격하는 단계.
+      <span class="see">자세히: <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7.0 · 새 variant 만들기 vs 승격</a></span></dd>
+
+    <dt>보일러플레이트 <span class="en">Boilerplate</span></dt>
+    <dd>매 프로젝트마다 처음부터 다시 작성해야 할 PM 역할 정의·거버넌스 파이프라인·커맨드/스킬 배선을 미리 갖춰 둔 출발점. ai-workspace-standards가 배포하는 것의 본질.</dd>
+  </dl>
+
+  <h2 id="tools">도구·플랫폼</h2>
+  <dl>
+    <dt>AGENTS.md</dt>
+    <dd>30개 이상의 AI 코딩 도구가 공통으로 읽는 개방형 표준 파일. 빌드·테스트 명령, 코드 스타일 등 도구 중립적 규칙을 정의한다. 이 저장소에서는 추가로 "에이전트 로스터" 역할도 겸한다.
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s5">1장 §도구를 넘나드는 하네스 — AGENTS.md</a></span></dd>
+
+    <dt>teammateMode</dt>
+    <dd>Agent Teams(실험적 기능)의 병렬 실행 모드. Claude App(Desktop)은 <code>in-process</code>만 지원하고, Claude Code(CLI)는 <code>tmux</code> 분할 창 모드도 추가로 지원한다.
+      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">3장 §1</a></span></dd>
+
+    <dt>Agent Manager</dt>
+    <dd>Antigravity(Desktop)에서 여러 워크스페이스를 한 화면에서 감독하는 상위 인터페이스. Workspace마다 에이전트 하나씩 배정하는 것이 원칙이다.</dd>
+
+    <dt><code>/goal</code> / <code>/agent</code> / <code>/agents</code></dt>
+    <dd>Antigravity CLI(<code>agy</code>)의 핵심 명령. <code>/goal</code>은 목표를 끝까지 실행, <code>/agent</code>는 백그라운드 장기 작업 위임, <code>/agents</code>는 지금까지 생성된 서브에이전트 상태 목록 확인.
+      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">3장 §2</a></span></dd>
+  </dl>
+
+</main>
+</div>
+</body>
+</html>

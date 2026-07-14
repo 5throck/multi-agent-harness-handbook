@@ -139,6 +139,9 @@
   <a href="#section-5">5. 네 도구를 묶어 주는 AGENTS.md</a>
   <div class="nav-section">참고</div>
   <a href="#refs">참고 링크</a>
+  <div class="nav-section">다른 장</div>
+  <a href="../practice/02_Practice_Manual.html">2.0 · Claude Code 실습</a>
+  <a href="../enterprise/03_Enterprise_Chapter.html">4장 · 두 모델 비교</a>
 </nav>
 
 <main>
@@ -173,6 +176,7 @@ Google 계열
 
   <h3>Claude App(또는 Claude Code) — <code>.claude/agents/*.md</code> 서브에이전트</h3>
   <p>Claude App은 Claude Code와 동일하게 <code>.claude/agents/*.md</code> 파일로 커스텀 서브에이전트를 정의하고 <code>Agent</code>/<code>Task</code> 도구로 호출한다. 다만 <code>.claude/settings.json</code>에 정의한 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅은 Claude App에서는 발화하지 않는다 — CLI 세션에서만 파일 저장·작업 완료 같은 이벤트에 맞춰 자동 실행된다. Claude App을 쓰는 팀은 훅이 하던 일(예: 감사 스크립트 실행)을 세션이 끝난 뒤 수동으로 실행해야 한다.</p>
+  <p>이 차이가 실제로 어떤 사고로 이어지는지 예를 들어보자. 팀이 CLI에서는 <code>PostToolUse</code> 훅으로 "파일을 저장할 때마다 <code>bun scripts/audit.ts</code>를 자동 실행해 시크릿 유출이나 규칙 위반을 잡는다"고 설정해 뒀다고 하자. 같은 팀원이 Claude App(Desktop)에서 똑같이 파일을 수정하면 훅이 전혀 발화하지 않는데, 화면상으로는 CLI와 똑같이 "파일이 저장됐다"는 결과만 보이므로 훅이 안 돌았다는 사실 자체를 알아차리기 어렵다. 그 상태로 커밋까지 이어지면, 원래는 훅이 잡아냈어야 할 문제가 조용히 통과된다 — "감사를 돌리지 않았다"가 아니라 "감사가 도는 줄 알았는데 안 돌았다"는 게 실제 위험 지점이다.</p>
 
   <h3><code>teammateMode</code> — Claude App은 <code>in-process</code>만, Claude Code는 <code>tmux</code>도 가능</h3>
   <p>실험적 기능인 Agent Teams는 여러 Claude 인스턴스를 병렬로 띄우는데, Claude App은 같은 프로세스 안에서 병렬 처리하는 <code>in-process</code> 모드만 쓸 수 있고 일부 키보드 내비게이션(Shift+Down 등)이 제한된다. 터미널 분할(tmux split-pane)을 쓰는 <code>tmux</code> 모드는 Claude Code(CLI)에서만 추가로 지원된다.</p>
@@ -221,11 +225,30 @@ Google 계열
   <div class="warning-box">같은 워크스페이스(같은 폴더)에 에이전트 여러 개를 동시에 배정할 수는 있지만, 서로 다른 에이전트가 같은 코드베이스의 맥락을 섞어 착각하는 문제("cognitive overlap")가 실제로 보고돼 있다. 병렬 작업은 워크스페이스나 git worktree 단위로 분리하는 것이 안전하다.</div>
 
   <h3>Antigravity CLI(<code>agy</code>)에서도 — 동적 서브에이전트를 오케스트레이터가 알아서 생성</h3>
-  <p>Claude Code/App처럼 <code>.claude/agents/*.md</code> 같은 파일로 서브에이전트를 미리 정의해 두는 방식과 달리, Antigravity CLI는 목표(goal)를 받으면 오케스트레이터 에이전트가 작업을 어떻게 쪼갤지 스스로 판단하고 그때그때 서브에이전트를 만들어 병렬로 실행한다. 각 서브에이전트는 독립된 컨텍스트 창을 가져 메인 세션의 맥락이 흐려지는 것을 막는다. <code>/goal</code>로 중간 확인 없이 끝까지 실행하게 하거나, <code>/agent</code>로 백그라운드 에이전트에 장기 작업을 맡기고 계속 다른 프롬프트를 이어갈 수 있다. <code>/agents</code>로 실행 중/완료/막힌 서브에이전트 목록을 확인한다.</p>
-  <pre class="code-block">agy                      # TUI 세션 시작
-/goal 이 폴더의 모든 텍스트 파일에 요약을 달아줘   # 중간 확인 없이 끝까지 실행
-/agents                  # 실행 중/완료된 서브에이전트 목록
-agy -p "커밋 메시지 초안 작성"   # 비대화형 — 한 번 실행하고 종료(CI/자동화용)</pre>
+  <p>Claude Code/App처럼 <code>.claude/agents/*.md</code> 같은 파일로 서브에이전트를 미리 정의해 두는 방식과 달리, Antigravity CLI는 목표(goal)를 받으면 오케스트레이터 에이전트가 작업을 어떻게 쪼갤지 스스로 판단하고 그때그때 서브에이전트를 만들어 병렬로 실행한다. 각 서브에이전트는 독립된 컨텍스트 창을 가져 메인 세션의 맥락이 흐려지는 것을 막는다.</p>
+  <p>비유하면 Claude Code/App은 "미리 뽑아 둔 정규직 팀원 명단"을 갖고 일하는 쪽이고, Antigravity CLI는 "일이 생길 때마다 그 일에 맞는 프리랜서를 그 자리에서 섭외하는" 쪽에 가깝다. 전자는 팀원이 누구인지 항상 알 수 있어 권한 통제가 쉽고, 후자는 매번 새 인력을 구하는 유연함이 있지만 "이번엔 누가 투입됐는지" 사후에 확인할 방법이 필요하다 — 그 확인 창구가 아래 <code>/agents</code>다.</p>
+  <p>다음은 <code>agy</code>를 실제로 쓸 때 자주 쓰는 네 가지 명령이다.</p>
+  <table>
+    <thead><tr><th>명령</th><th>동작</th></tr></thead>
+    <tbody>
+      <tr><td><code>agy</code></td><td>TUI 세션을 시작한다.</td></tr>
+      <tr><td><code>/goal &lt;목표&gt;</code></td><td>중간 확인 없이 목표를 끝까지 실행한다. 오케스트레이터가 하위 작업을 스스로 쪼갠다.</td></tr>
+      <tr><td><code>/agent &lt;작업&gt;</code></td><td>백그라운드 에이전트에 장기 작업을 맡기고, 완료를 기다리지 않고 바로 다른 프롬프트를 이어갈 수 있다.</td></tr>
+      <tr><td><code>/agents</code></td><td>지금까지 생성된 서브에이전트의 실행 중/완료/막힘 상태 목록을 보여준다.</td></tr>
+    </tbody>
+  </table>
+  <p>세션을 시작하고 목표를 실행하는 실제 흐름은 다음과 같다.</p>
+  <div style="position:relative">
+    <pre class="code-block">agy</pre>
+  </div>
+  <p style="font-size:13.5px;color:var(--text-dim);margin:10px 0 6px;">세션 안에서(대화형):</p>
+  <div style="position:relative">
+    <pre class="code-block">/goal 이 폴더의 모든 텍스트 파일에 요약을 달아줘</pre>
+  </div>
+  <p style="font-size:13.5px;color:var(--text-dim);margin:10px 0 6px;">CI·자동화처럼 대화 없이 한 번만 실행하고 끝내고 싶다면(비대화형):</p>
+  <div style="position:relative">
+    <pre class="code-block">agy -p "커밋 메시지 초안 작성"</pre>
+  </div>
   <p>CLI 쪽에서도 세션을 분리해야 안전하다 — 한 <code>agy</code> 세션이 API 레이어를 리팩터링하는 동안 다른 세션이 테스트를 작성해도, 같은 파일을 건드리지 않는 한 충돌하지 않는다.</p>
 
   <hr>

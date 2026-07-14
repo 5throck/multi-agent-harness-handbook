@@ -274,9 +274,11 @@
 
   <div class="nav-group">중급 시나리오</div>
   <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer 2단계 파이프라인</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 요청에 따라 팀 구성과 워크플로우가 달라지는 것 관찰하기</a>
 
   <div class="nav-group">고급 시나리오</div>
   <a href="#scenario-3"><span class="dot dot-p"></span>P-1 독립 작업 병렬 실행 — Agent Manager vs Agent Teams</a>
+  <a href="#scenario-4"><span class="dot dot-p"></span>P-2 모델 티어 비교로 비용 감각 익히기</a>
 
   <div class="nav-group">바로가기</div>
   <a href="02_Practice_Manual.html">📖 2.0 멀티 에이전트 팀 활용 레퍼런스 →</a>
@@ -289,7 +291,7 @@
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 버전/범위</span><span>Claude Code/App 2026-07 릴리스, Antigravity CLI (agy) 1.1.0+, Antigravity 2.0 — 모두 CLI/앱 기준</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>서브에이전트 정의·호출, 순차 파이프라인, 병렬 실행을 네 도구에서 각각 손으로 따라해보는 3단계 실습 제공</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>서브에이전트 정의·호출, 순차 파이프라인, 동적 팀 구성·워크플로우 조합, 병렬 실행을 네 도구에서 각각 손으로 따라해보는 4단계 실습 제공</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="02_Practice_Manual.html">02_Practice_Manual.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
@@ -383,48 +385,83 @@ cd ~/harness-lab</pre>
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span></div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;"><code>.claude/agents</code> 디렉터리를 만들고 그 안에 <code>reviewer.md</code> 파일을 저장한다. YAML frontmatter의 <code>name</code>이 나중에 <code>subagent_type</code>으로 참조하는 식별자가 된다.</p>
-        <div style="position:relative">
-          <pre class="code-block">mkdir -p .claude/agents
-cat > .claude/agents/reviewer.md << 'EOF'
----
-name: reviewer
-description: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
-tools: Read, Grep
-model: sonnet
----
-
-너는 리뷰어 역할이다. 주어진 텍스트 파일을 읽고 오탈자,
-논리적 허점, 개선하면 좋을 부분을 목록으로 정리해서 보고한다.
-EOF</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">검토 대상 파일을 만들고 Claude App을 실행한 뒤, 채팅창에 자연어로 검토를 요청한다.</p>
-        <div style="position:relative">
-          <pre class="code-block">echo "이 프로젝트는 매우 좋다. 이것은 아주 좋다." > notes.txt
-# Claude App을 열고 채팅창에 입력:
-# "notes.txt를 reviewer 서브에이전트로 검토해줘"</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
-        <div class="flow-box">
-          Claude App은 요청을 해석해 <code>Agent</code>(Task) 툴을 <code>description="notes.txt 검토"</code>, <code>subagent_type="reviewer"</code>로 호출한다. 화면에는 서브에이전트가 스폰되는 과정과, 작업을 마친 뒤 메인 세션으로 돌아오는 요약 결과가 순서대로 표시된다.
-        </div>
-        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>.claude/agents/reviewer.md</code> 파일을 그대로 인식한다. 터미널에서 <code>claude</code>를 실행하고 같은 문장을 입력하면 똑같이 동작한다. CLI에는 추가로 <code>PostToolUse</code> 등 자동화 훅이 발화한다는 차이가 있다(App에서는 훅이 발화하지 않는다).</p>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">터미널이나 별도 에디터에서 미리 파일을 만들지 않는다. 아래 네 단계를 그대로 따라간다 — 회색 코드 상자는 전부 "복사" 버튼으로 그대로 복사해서 붙여넣으면 되는 내용이다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Claude App에서 프로젝트 열기</strong>
+              <p>Claude App(Desktop)을 실행하고, 방금 만든 <code>~/harness-lab/</code> 폴더를 프로젝트로 연다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 서브에이전트 생성 요청 — 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">reviewer라는 이름의 서브에이전트를 .claude/agents/reviewer.md에 만들어줘. 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토하는 역할이고 tools는 Read, Grep만 허용하고 model은 sonnet으로 설정해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                Claude App이 요청을 해석해 Write 도구로 <code>.claude/agents/reviewer.md</code>를 직접 생성한다. YAML frontmatter의 <code>name</code>이 나중에 <code>subagent_type</code>으로 참조하는 식별자가 된다 — 생성이 끝나면 채팅에 표시된 파일 내용을 확인한다.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ 검토 대상 파일 생성 요청 — 같은 채팅창에 이어서 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">notes.txt 파일을 만들고 "이 프로젝트는 매우 좋다. 이것은 아주 좋다."라고 써넣어줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ 서브에이전트 호출 요청 — 같은 채팅창에 이어서 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">notes.txt를 reviewer 서브에이전트로 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                Claude App이 <code>Agent</code>(Task) 툴을 <code>description="notes.txt 검토"</code>, <code>subagent_type="reviewer"</code>로 호출한다. 화면에는 서브에이전트가 스폰되는 과정과, 작업을 마친 뒤 메인 세션으로 돌아오는 요약 결과가 순서대로 표시된다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 터미널에서 <code>claude</code>를 실행한 뒤 ②③④의 문장을 그대로 채팅으로 붙여넣으면, CLI가 똑같이 <code>.claude/agents/reviewer.md</code>를 직접 생성하고 호출한다. CLI에는 추가로 <code>PostToolUse</code> 등 자동화 훅이 발화한다는 차이가 있다(App에서는 훅이 발화하지 않는다).</p>
       </div>
 
       <div class="platform-block antigravity">
         <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span></div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 <code>.claude/agents</code> 같은 사전 정의 파일 개념이 없다. Agent Manager에서 <code>~/harness-lab/</code>을 가리키는 Workspace를 하나 만들고, 파일을 미리 준비하는 대신 목표를 자연어로 곧바로 준다.</p>
-        <div style="position:relative">
-          <pre class="code-block">echo "이 프로젝트는 매우 좋다. 이것은 아주 좋다." > notes.txt
-# Antigravity Agent Manager에서 ~/harness-lab/ Workspace를 만들고
-# 에이전트에게 지시:
-# "notes.txt 파일을 검토하고 개선점을 요약해줘"</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
-        <div class="flow-box">
-          Workspace를 맡은 에이전트가 목표를 받아 스스로 필요한 작업(파일 읽기, 개선점 정리)을 판단해 수행한다. "reviewer라는 이름의 서브에이전트를 호출했다"기보다는, 에이전트가 그 순간 검토에 필요한 역할을 즉석에서 구성해 처리한 것에 가깝다.
-        </div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 <code>.claude/agents</code> 같은 사전 정의 파일 개념이 없다. 파일을 미리 준비하는 대신 목표를 자연어로 곧바로 준다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 검토 대상 파일 미리 준비 (터미널)</strong>
+              <div style="position:relative">
+                <pre class="code-block">echo "이 프로젝트는 매우 좋다. 이것은 아주 좋다." > notes.txt</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Antigravity Agent Manager에서 Workspace 생성</strong>
+              <p>Agent Manager를 열고 <code>~/harness-lab/</code> 폴더를 가리키는 새 Workspace를 하나 만든다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ 목표 지시 — Workspace 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">notes.txt 파일을 검토하고 개선점을 요약해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                Workspace를 맡은 에이전트가 목표를 받아 스스로 필요한 작업(파일 읽기, 개선점 정리)을 판단해 수행한다. "reviewer라는 이름의 서브에이전트를 호출했다"기보다는, 에이전트가 그 순간 검토에 필요한 역할을 즉석에서 구성해 처리한 것에 가깝다.
+              </div>
+            </div>
+          </li>
+        </ol>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)에서도</strong> 같은 개념으로 실습할 수 있다 — 사전 정의 파일 없이 <code>/goal</code>로 목표만 준다.</p>
         <div style="position:relative">
           <pre class="code-block">cd ~/harness-lab && agy
@@ -469,51 +506,56 @@ EOF</pre>
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 메인 세션이 Agent 호출을 순차 디스패치</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1의 <code>reviewer.md</code>와 같은 폴더에 <code>writer.md</code>를 추가한다. 이 에이전트는 파일을 쓸 수 있어야 하므로 <code>tools</code>에 <code>Write</code>를 포함한다.</p>
-        <div style="position:relative">
-          <pre class="code-block">cat > .claude/agents/writer.md << 'EOF'
----
-name: writer
-description: 주어진 주제로 짧은 초안 텍스트 파일을 작성한다.
-tools: Write, Read
-model: sonnet
----
-
-너는 작가 역할이다. 요청받은 주제로 3~5문장 분량의
-간결한 초안을 작성해 지정된 파일에 저장한다.
-EOF</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">Claude App 채팅창에서 writer와 reviewer를 순서대로 쓰라고 자연어로 명시적으로 요청한다. 메인 세션이 두 Agent 호출을 순차적으로(writer 완료 후 reviewer 시작) 디스패치하도록 지시하는 것이 핵심이다.</p>
-        <div style="position:relative">
-          <pre class="code-block"># 채팅창에 입력:
-# "writer 서브에이전트로 draft.txt에 '원격 근무의 장점'
-#  주제 초안을 쓰게 하고, 완료되면 reviewer 서브에이전트로
-#  draft.txt를 검토해줘. 두 단계를 순서대로 진행해."</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
-        <div class="flow-box">
-          메인 세션은 먼저 <code>subagent_type="writer"</code>로 <code>Agent</code>를 호출해 <code>draft.txt</code>를 생성시키고, 그 결과가 돌아온 뒤에야 <code>subagent_type="reviewer"</code> 호출을 보낸다. 두 전문가 사이의 의존 관계를 조율하는 것은 서브에이전트가 아니라 메인 세션의 몫이다.
-        </div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>~/harness-lab/</code> 채팅에서 이어서 진행한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① writer 서브에이전트 생성 요청 — 채팅창에 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">writer라는 이름의 서브에이전트를 .claude/agents/writer.md에 만들어줘. 주어진 주제로 3~5문장 분량의 짧은 초안을 작성해 지정된 파일에 저장하는 역할이고, tools는 Write, Read를 허용하고 model은 sonnet으로 설정해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                Claude App이 Write 도구로 <code>.claude/agents/writer.md</code>를 직접 생성한다. G-1에서 이미 만들어 둔 <code>reviewer.md</code>와 같은 <code>.claude/agents/</code> 폴더 안에 나란히 놓인다.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② writer → reviewer 순차 파이프라인 실행 요청 — 같은 채팅창에 이어서 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">writer 서브에이전트로 draft.txt에 '원격 근무의 장점' 주제 초안을 쓰게 하고, 완료되면 reviewer 서브에이전트로 draft.txt를 검토해줘. 두 단계를 순서대로 진행해.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                메인 세션은 먼저 <code>subagent_type="writer"</code>로 <code>Agent</code>를 호출해 <code>draft.txt</code>를 생성시키고, 그 결과가 돌아온 뒤에야 <code>subagent_type="reviewer"</code> 호출을 보낸다. 두 전문가 사이의 의존 관계를 조율하는 것은 서브에이전트가 아니라 메인 세션의 몫이다.
+              </div>
+            </div>
+          </li>
+        </ol>
         <div class="warning-box">
-          writer와 reviewer를 병렬(한 메시지에 동시)로 호출하면 reviewer가 아직 존재하지 않는 draft.txt를 검토하려 시도해 실패할 수 있다 — 의존 관계가 있는 작업은 반드시 순차 호출로 요청해야 한다.
+          writer와 reviewer를 병렬(한 메시지에 동시)로 호출하면 reviewer가 아직 존재하지 않는 draft.txt를 검토하려 시도해 실패할 수 있다 — 의존 관계가 있는 작업은 반드시 순차 호출로 요청해야 한다(위 ②처럼 "두 단계를 순서대로 진행해"라고 명시하는 것이 핵심이다).
         </div>
-        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 같은 순차 지시 문장을 입력하면 동일하게 순차 디스패치된다.</p>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 순차 디스패치된다.</p>
       </div>
 
       <div class="platform-block antigravity">
         <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 한 목표로 오케스트레이터가 파이프라인을 스스로 분해</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 사전에 <code>writer</code>/<code>reviewer</code> 파일을 나눠 정의하지 않는다. Agent Manager에서 같은 Workspace의 에이전트에게 두 단계를 모두 포함한 목표 하나를 자연어로 준다.</p>
-        <div style="position:relative">
-          <pre class="code-block"># Antigravity Agent Manager에서 에이전트에게 지시:
-# "draft.txt에 '원격 근무의 장점' 주제로 3~5문장 초안을
-#  먼저 작성하고, 작성이 끝나면 그 초안을 검토해서
-#  개선점을 요약해줘. 두 단계를 순서대로 진행해."</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
-        <div class="flow-box">
-          오케스트레이터가 목표를 "초안 작성 → 검토"의 두 하위 작업으로 스스로 쪼개고, 초안 작성이 끝난 뒤에야 검토 작업을 시작한다. 순서 조율의 책임이 사용자가 아니라 오케스트레이터 내부에 있다는 점이 Claude 계열과 다르다.
-        </div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 사전에 <code>writer</code>/<code>reviewer</code> 파일을 나눠 정의하지 않는다. G-1에서 만든 같은 Workspace의 채팅에서 이어서 진행한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 2단계 목표 지시 — Workspace 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txt에 '원격 근무의 장점' 주제로 3~5문장 초안을 먼저 작성하고, 작성이 끝나면 그 초안을 검토해서 개선점을 요약해줘. 두 단계를 순서대로 진행해.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                오케스트레이터가 목표를 "초안 작성 → 검토"의 두 하위 작업으로 스스로 쪼개고, 초안 작성이 끝난 뒤에야 검토 작업을 시작한다. 순서 조율의 책임이 사용자가 아니라 오케스트레이터 내부에 있다는 점이 Claude 계열과 다르다.
+              </div>
+            </div>
+          </li>
+        </ol>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)에서도</strong> 같은 목표를 한 번에 줄 수 있다. <code>/goal</code>로 전체 파이프라인을 한 문장에 담으면 오케스트레이터가 알아서 분해하고, 필요하면 <code>/agent</code>로 검토 단계를 백그라운드에 맡긴 채 다른 작업을 이어갈 수도 있다.</p>
         <div style="position:relative">
           <pre class="code-block">agy
@@ -521,6 +563,95 @@ EOF</pre>
 완료되면 그 초안을 검토해서 개선점을 요약해줘</pre>
           <button class="copy-btn" onclick="copyCode(this)">복사</button>
         </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">중급</span>
+      <strong class="card-title">요청에 따라 팀 구성과 워크플로우가 달라지는 것 관찰하기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        1장 §4b에서 다룬 "동적 팀 구성"과 "다양한 워크플로우 조합"을 직접 눈으로 확인하는 시나리오다. D-1에서 만든 <code>writer</code>·<code>reviewer</code> 두 서브에이전트는 그대로 두고, 요청의 성격만 바꿔가며 오케스트레이터가 실제로 누구를, 몇 번, 어떤 순서로 호출하는지 관찰한다 — 서브에이전트 정의는 한 번도 새로 만들지 않는다는 점이 핵심이다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s4b">동적 팀 구성과 다양한 워크플로우</a>
+        </div>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 같은 팀, 다른 요청 세 번</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">D-1을 마친 같은 채팅에서 이어서 진행한다. 매번 어떤 서브에이전트가 몇 번 호출되는지 화면에 표시되는 과정을 눈여겨본다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 단순 요청 — reviewer 하나만 필요한 경우</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txt의 오탈자만 훑어봐줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                오케스트레이터는 이번 요청에 <code>writer</code>가 필요 없다고 판단해 <code>reviewer</code> 하나만 호출한다. 같은 팀(writer+reviewer)이 정의돼 있어도, 실제로 투입되는 인원은 요청마다 오케스트레이터가 그때그때 결정한다는 것을 보여주는 가장 단순한 예다.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 복합 요청 — writer와 reviewer를 두 관점으로 조합</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft2.txt에 '4일 근무제' 주제로 새 초안을 써줘. 초안이 완료되면, 그 초안을 문법 관점과 논리 관점 두 가지로 각각 독립적으로 동시에 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                이번에는 <code>writer</code> 한 번(파이프라인의 첫 단계) 이후에 <code>reviewer</code>가 "문법 관점"과 "논리 관점"이라는 서로 다른 지시를 받아 두 번 동시에(팬아웃) 호출된다. 파이프라인(writer → reviewer)과 팬아웃(reviewer ×2 동시 실행)이라는 두 오케스트레이션 패턴이 한 요청 안에서 조합되는 것을 확인할 수 있다 — 같은 두 서브에이전트로 ①과는 완전히 다른 모양의 워크플로우가 만들어졌다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          ①과 ②를 나란히 비교하면 "팀 명단(어떤 서브에이전트를 정의해 뒀는가)"과 "이번 작업에 실제로 투입되는 구성(누가 몇 번, 어떤 순서로 호출되는가)"이 서로 다른 층위라는 게 뚜렷해진다. 전자는 <code>.claude/agents/</code>에 미리 고정돼 있지만, 후자는 매 요청마다 새로 결정된다.
+        </div>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 동작한다.</p>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 목표 자연어만으로도 같은 유연성이 드러난다</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 애초에 서브에이전트를 동적으로 생성하는 방식이므로, 이 유연성이 더 직접적으로 드러난다. D-1에서 쓰던 같은 Workspace 채팅에서 이어서 진행한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 단순 목표 지시</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txt의 오탈자만 훑어봐줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 복합 목표 지시</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft2.txt에 '4일 근무제' 주제로 새 초안을 먼저 쓰고, 완료되면 그 초안을 문법 관점과 논리 관점 두 가지로 각각 독립적으로 동시에 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                오케스트레이터가 ①에서는 검토 역할 하나만 즉석에서 구성하고, ②에서는 작성 역할 하나와 검토 역할 둘(서로 다른 관점)을 새로 구성한다. 사전에 정의된 서브에이전트 파일이 아예 없으므로, "이번 작업에 맞는 팀을 매번 새로 짠다"는 원칙이 Claude 계열보다도 더 선명하게 드러난다.
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> <a href="../concepts/01_Concepts_Chapter.html#s4b">1장 §4b — 동적 팀 구성과 다양한 워크플로우</a>, <a href="02_Practice_Manual.html#section-3">2.0 레퍼런스 — 병렬 실행</a>
       </div>
 
     </div>
@@ -556,28 +687,44 @@ EOF</pre>
       <div class="platform-block antigravity">
         <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — Agent Manager, Workspace별 에이전트 1개</div>
         <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity를 열고 Agent Manager에서 <code>~/harness-lab/</code>을 가리키는 Project를 하나 준비한다. 이번에는 하나의 Workspace에 두 에이전트를 몰아넣지 않고, <strong>서로 다른 Workspace 두 개</strong>를 만들어 각각 에이전트를 하나씩 배정한다.</p>
-        <div class="step-list" style="margin-bottom:0;">
-          <ol class="step-list">
-            <li>
-              <div class="step-content">
-                <strong>Workspace A 생성 — topic-a.txt 작성</strong>
-                <p>New Worktree Mode로 Workspace를 하나 만들고, "topic-a.txt에 '재택근무' 주제로 3~5문장 초안을 작성해줘"라고 에이전트에게 지시한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Workspace A 생성</strong>
+              <p>New Worktree Mode로 Workspace를 하나 만든다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Workspace A 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">topic-a.txt에 '재택근무' 주제로 3~5문장 초안을 작성해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
               </div>
-            </li>
-            <li>
-              <div class="step-content">
-                <strong>Workspace B 생성 — topic-b.txt 작성</strong>
-                <p>별도의 Workspace를 하나 더 만들고(New Worktree Mode 권장), "topic-b.txt에 '4일 근무제' 주제로 3~5문장 초안을 작성해줘"라고 지시한다. Workspace A의 에이전트와는 완전히 분리된 인스턴스다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Workspace B 생성</strong>
+              <p>별도의 Workspace를 하나 더 만든다(New Worktree Mode 권장). Workspace A의 에이전트와는 완전히 분리된 인스턴스다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ Workspace B 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">topic-b.txt에 '4일 근무제' 주제로 3~5문장 초안을 작성해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
               </div>
-            </li>
-            <li>
-              <div class="step-content">
-                <strong>Inbox에서 두 에이전트 진행 상황 확인</strong>
-                <p>두 에이전트가 각자의 Workspace에서 동시에 작업하는 동안, Inbox에서 승인이나 피드백이 필요한 메시지가 오는지 확인하고 필요하면 응답한다.</p>
-              </div>
-            </li>
-          </ol>
-        </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>⑤ Inbox에서 두 에이전트 진행 상황 확인</strong>
+              <p>두 에이전트가 각자의 Workspace에서 동시에 작업하는 동안, Inbox에서 승인이나 피드백이 필요한 메시지가 오는지 확인하고 필요하면 응답한다.</p>
+            </div>
+          </li>
+        </ol>
         <div class="warning-box">
           두 에이전트를 <strong>같은 Workspace</strong>에 함께 배정하지 않는다 — 같은 폴더를 공유하면 한 에이전트가 다른 에이전트의 작업 맥락을 자기 것으로 착각하는 "인지적 중첩(cognitive overlap)"이 발생할 수 있다. Workspace 또는 worktree로 반드시 분리하는 것이 Antigravity의 권장 관행이다.
         </div>
@@ -586,9 +733,13 @@ EOF</pre>
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams, teammateMode: in-process</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">같은 <code>~/harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. <code>.claude/settings.json</code>이 없다면 새로 만들고, 있다면 아래 두 키를 병합한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
-        <div style="position:relative">
-          <pre class="code-block">cat > .claude/settings.json << 'EOF'
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">같은 <code>~/harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 설정 파일 작성 (터미널) — <code>.claude/settings.json</code>이 없다면 새로 만들고, 있다면 아래 두 키를 병합</strong>
+              <div style="position:relative">
+                <pre class="code-block">cat > .claude/settings.json << 'EOF'
 {
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
@@ -596,17 +747,26 @@ EOF</pre>
   "teammateMode": "in-process"
 }
 EOF</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">설정을 적용하려면 Claude App을 재시작한다. writer 두 명을 서로 다른 파일에 대해 동시에 스폰하도록 요청한다.</p>
-        <div style="position:relative">
-          <pre class="code-block"># Claude App 채팅창에 입력:
-# "writer 팀메이트 두 명을 병렬로 스폰해서 하나는
-#  topic-a.txt에 '재택근무', 다른 하나는 topic-b.txt에
-#  '4일 근무제' 초안을 동시에 쓰게 해줘. 각 파일이 완료되면
-#  reviewer 팀메이트가 검토하게 하고, 공유 작업 목록도 보여줘."</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
-        </div>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Claude App 재시작</strong>
+              <p>설정을 적용하려면 Claude App을 완전히 종료했다가 다시 연다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ 팀메이트 병렬 스폰 요청 — 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">writer 팀메이트 두 명을 병렬로 스폰해서 하나는 topic-a.txt에 '재택근무', 다른 하나는 topic-b.txt에 '4일 근무제' 초안을 동시에 쓰게 해줘. 각 파일이 완료되면 reviewer 팀메이트가 검토하게 하고, 공유 작업 목록도 보여줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+        </ol>
         <div class="flow-box">
           Agent Teams가 켜진 상태에서는 여러 Claude 인스턴스가 팀메이트로 병렬 실행되며, 공유 작업 목록에 각 팀메이트의 할 일이 등록되고 상태가 갱신된다. 두 writer 팀메이트는 <code>topic-a.txt</code>/<code>topic-b.txt</code> 사이에 의존성이 없으므로 동시에 진행되고, 팀메이트 간에는 <code>SendMessage</code>로 직접 메시지를 주고받을 수도 있다. 다만 Desktop App에서는 일부 키보드 내비게이션(Shift+Down 등)이 제한된다.
         </div>
@@ -618,6 +778,76 @@ EOF</pre>
 
       <div class="related-cmds">
         <strong>함께 보기:</strong> <a href="02_Practice_Manual.html#section-3">2.0 레퍼런스 — 병렬 실행 (4가지 도구 비교)</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-4">
+    <div class="card-header">
+      <span class="card-id">P-2</span>
+      <span class="badge badge-p">고급</span>
+      <strong class="card-title">모델 티어 비교로 비용 감각 익히기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        5장에서 다룰 모델 티어(high/medium/low)가 실제로 어떤 체감 차이를 만드는지, 숫자로 설명 듣기 전에 직접 겪어보는 시나리오다. 같은 reviewer 서브에이전트를 모델만 바꿔가며 세 번 호출하고, 응답 속도와 결과 품질을 눈으로 비교한다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../intro/04_Intro_Chapter.html#s3">모델 티어 (5장)</a>
+        </div>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 같은 파일, 세 가지 모델로 검토 요청</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1의 <code>notes.txt</code>보다 조금 더 복잡한, 논리적 허점이 있는 글을 준비한다. 채팅창에 아래 문장을 그대로 붙여넣는다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 검토 대상 파일 준비</strong>
+              <div style="position:relative">
+                <pre class="code-block">argument.txt 파일을 만들고 다음 내용을 써줘: "재택근무는 항상 사무실 근무보다 생산적이다. 왜냐하면 재택근무를 하는 사람들이 재택근무가 좋다고 말하기 때문이다. 따라서 모든 회사는 재택근무만 해야 한다."</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② haiku 티어로 검토</strong>
+              <p>reviewer 서브에이전트 정의(<code>.claude/agents/reviewer.md</code>)의 <code>model</code> 필드를 <code>haiku</code>로 바꾼 뒤 요청한다.</p>
+              <div style="position:relative">
+                <pre class="code-block">argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ sonnet 티어로 같은 요청 반복</strong>
+              <p><code>model</code> 필드를 <code>sonnet</code>으로 바꾼 뒤, 같은 검토 요청 문장을 다시 붙여넣는다. 순환 논증(circular reasoning) 같은 논리적 허점을 정확히 짚어내는지 haiku 결과와 비교한다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ opus 티어로 같은 요청 반복</strong>
+              <p><code>model</code> 필드를 <code>opus</code>로 바꾼 뒤 다시 요청한다. 응답 시간과 지적의 깊이가 ②③과 어떻게 다른지 기록한다.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          간단한 오탈자 검토라면 세 모델의 결과 차이가 거의 없지만, 이번처럼 "논증 구조의 허점을 짚어야 하는" 작업에서는 티어가 낮을수록 순환 논증을 순환 논증이라고 정확히 짚지 못하고 표면적인 문장만 지적하는 경향이 뚜렷해진다. 반대로 haiku는 셋 중 가장 빠르게 응답한다 — 5장에서 설명하는 "판단이 무거운 역할일수록 높은 티어, 정형화된 작업일수록 낮은 티어"라는 원칙이 왜 존재하는지, 속도와 깊이의 트레이드오프를 직접 겪어보면 훨씬 분명해진다.
+        </div>
+        <div class="tip-box">
+          매번 <code>.claude/agents/reviewer.md</code>를 열어 <code>model</code> 줄만 고치고 저장한 뒤 같은 요청을 반복하면 된다 — 정의 파일을 다시 만들 필요는 없다.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> <a href="../intro/04_Intro_Chapter.html#s3">5장 §templates와 variant — 모델 티어링</a>
       </div>
 
     </div>

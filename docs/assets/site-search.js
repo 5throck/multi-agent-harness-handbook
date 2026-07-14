@@ -9,15 +9,15 @@
   'use strict';
   var DOCS = [
     { path: 'concepts/01_Concepts_Chapter.html', title: '1장 · 하네스 엔지니어링과 멀티 에이전트팀 개념' },
-    { path: 'practice/02_Practice_Manual.html', title: '2장 · 하네스 기반 멀티 에이전트 팀 활용' },
-    { path: 'practice/02_Practice_Examples.html', title: '2장 · 멀티 에이전트 팀 실습 — 시나리오별 학습 가이드' },
-    { path: 'tools/03_Tools_Manual.html', title: '3장 · 도구 비교 — Claude Code / Claude App / Gemini CLI / Antigravity' },
+    { path: 'practice/02_Practice_Manual.html', title: '2.0 · 하네스 기반 멀티 에이전트 팀 활용' },
+    { path: 'practice/02_Practice_Examples.html', title: '2.1 · 멀티 에이전트 팀 실습 — 시나리오별 학습 가이드' },
+    { path: 'tools/03_Tools_Manual.html', title: '3장 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity' },
     { path: 'enterprise/03_Enterprise_Chapter.html', title: '4장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교' },
     { path: 'intro/04_Intro_Chapter.html', title: '5장 · ai-workspace-standards 소개' },
-    { path: 'variant-practice/04_VariantPractice_Manual.html', title: '6장 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩' },
-    { path: 'variant-practice/04_VariantPractice_Examples.html', title: '6장 · Variant 실습 예시 — 시나리오별 학습 가이드' },
-    { path: 'variant-advanced/05_VariantAdvanced_Chapter.html', title: '7장 · 새 variant 만들기 vs 기존 프로젝트를 variant로 승격하기' },
-    { path: 'variant-advanced/05_VariantAdvanced_Examples.html', title: '7장 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드' }
+    { path: 'variant-practice/04_VariantPractice_Manual.html', title: '6.0 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩' },
+    { path: 'variant-practice/04_VariantPractice_Examples.html', title: '6.1 · Variant 실습 예시 — 시나리오별 학습 가이드' },
+    { path: 'variant-advanced/05_VariantAdvanced_Chapter.html', title: '7.0 · 새 variant 만들기 vs 기존 프로젝트를 variant로 승격하기' },
+    { path: 'variant-advanced/05_VariantAdvanced_Examples.html', title: '7.1 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드' }
   ];
   function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   function strip(s){ return (s || '').replace(/\s+/g, ' ').trim(); }

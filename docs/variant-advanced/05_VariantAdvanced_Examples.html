@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>7장 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드</title>
+  <title>7.1 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -229,7 +229,7 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">7장 · 새 variant vs 승격 실습</div>
+  <div class="nav-title">7.1 · 새 variant vs 승격 실습</div>
   <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
 
   <div class="nav-group">초급 시나리오</div>
@@ -242,7 +242,7 @@
   <a href="#scenario-3"><span class="dot dot-p"></span>P-1 승격 파이프라인 실행과 검증</a>
 
   <div class="nav-group">바로가기</div>
-  <a href="05_VariantAdvanced_Chapter.html">📖 7장 레퍼런스 — 새 variant vs 승격 →</a>
+  <a href="05_VariantAdvanced_Chapter.html">📖 7.0 레퍼런스 — 새 variant vs 승격 →</a>
 </nav>
 
 <main>
@@ -251,7 +251,7 @@
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>7장 레퍼런스에서 설명한 승격(Phase B) 개념을 6장에서 만든 co-teachme 프로토타입에 적용해보는 실습</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>7.0 레퍼런스에서 설명한 승격(Phase B) 개념을 6.1에서 만든 co-teachme 프로토타입에 적용해보는 실습</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="05_VariantAdvanced_Chapter.html">05_VariantAdvanced_Chapter.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
@@ -272,7 +272,7 @@
     <div class="card-body">
 
       <div class="situation">
-        6장에서 <code>templates/co-work/</code>로 프로젝트를 스캐폴딩했고, <code>Projects/co-teachme/</code>에 Phase A 프로토타입도 만들었다. 두 디렉터리를 나란히 놓고 어떤 파일이 정식 템플릿에는 있는데 프로토타입에는 없는지 직접 확인해보려 한다. 연습용 워크스페이스(<code>~/harness-lab/ai-workspace-standards-demo</code>) 안에서 이어서 진행한다고 전제한다.
+        6.1에서 <code>templates/co-work/</code>로 프로젝트를 스캐폴딩했고, <code>Projects/co-teachme/</code>에 Phase A 프로토타입도 만들었다. 두 디렉터리를 나란히 놓고 어떤 파일이 정식 템플릿에는 있는데 프로토타입에는 없는지 직접 확인해보려 한다. 연습용 워크스페이스(<code>~/harness-lab/ai-workspace-standards-demo</code>) 안에서 이어서 진행한다고 전제한다.
       </div>
 
       <div class="cmd-list">
@@ -353,7 +353,7 @@ ls Projects/co-teachme/ 2>/dev/null</pre>
         <li>
           <div class="step-content">
             <strong>PROMOTION_CHECKLIST.md 항목 점검</strong>
-            <p>체크리스트에는 대체로 "필수 검증 스크립트 통과", "플랫폼 패리티 확보", "에이전트 frontmatter 완결성" 같은 항목이 들어간다. co-teachme의 경우 6장에서 만든 <code>researcher.md</code>, <code>writer.md</code>가 필수 필드를 모두 갖췄는지부터 다시 확인한다.</p>
+            <p>체크리스트에는 대체로 "필수 검증 스크립트 통과", "플랫폼 패리티 확보", "에이전트 frontmatter 완결성" 같은 항목이 들어간다. co-teachme의 경우 6.1에서 만든 <code>researcher.md</code>, <code>writer.md</code>가 필수 필드를 모두 갖췄는지부터 다시 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify
 bun scripts/validate-skills.ts</pre>
@@ -466,7 +466,7 @@ diff <(ls templates/co-teachme/.claude/skills/) <(ls templates/co-teachme/.gemin
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">7장 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 실습</a>에서 다뤘다.
+        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">7.0 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6.1 실습</a>에서 다뤘다.
       </div>
 
     </div>

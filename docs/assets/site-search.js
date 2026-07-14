@@ -9,6 +9,7 @@
   'use strict';
   var DOCS = [
     { path: 'concepts/01_Concepts_Chapter.html', title: '1장 · 하네스 엔지니어링과 멀티 에이전트팀 개념' },
+    { path: 'guardrails/00_Guardrails_Chapter.html', title: '1.5장 · 가드레일과 권한 모델' },
     { path: 'practice/02_Practice_Manual.html', title: '2.0 · 하네스 기반 멀티 에이전트 팀 활용' },
     { path: 'practice/02_Practice_Examples.html', title: '2.1 · 멀티 에이전트 팀 실습 — 시나리오별 학습 가이드' },
     { path: 'tools/03_Tools_Manual.html', title: '3장 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity' },
@@ -17,7 +18,11 @@
     { path: 'variant-practice/04_VariantPractice_Manual.html', title: '6.0 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩' },
     { path: 'variant-practice/04_VariantPractice_Examples.html', title: '6.1 · Variant 실습 예시 — 시나리오별 학습 가이드' },
     { path: 'variant-advanced/05_VariantAdvanced_Chapter.html', title: '7.0 · 새 variant 만들기 vs 기존 프로젝트를 variant로 승격하기' },
-    { path: 'variant-advanced/05_VariantAdvanced_Examples.html', title: '7.1 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드' }
+    { path: 'variant-advanced/05_VariantAdvanced_Examples.html', title: '7.1 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드' },
+    { path: 'capstone/00_Capstone.html', title: '8장 · 캡스톤 실습 — 나만의 워크플로우 설계하기' },
+    { path: 'glossary/00_Glossary.html', title: '용어집' },
+    { path: 'faq/00_FAQ.html', title: 'FAQ · 자주 나는 오류와 해결법' },
+    { path: 'lecture-guide/00_Lecture_Guide.html', title: '강의 진행 가이드' }
   ];
   function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   function strip(s){ return (s || '').replace(/\s+/g, ' ').trim(); }

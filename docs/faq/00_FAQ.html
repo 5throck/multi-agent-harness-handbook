@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ · 자주 나는 오류와 해결법 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <style>
+    :root {
+      --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f4; --border: #d0d7de;
+      --text: #1f2328; --text-dim: #636c76; --accent: #0969da;
+      --accent2: #1a7f37; --accent4: #6639ba; --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.8; font-size: 15.5px;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 260px; min-width: 260px; background: var(--bg2); border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 20px 0;
+    }
+    nav a { display: block; padding: 5px 16px; color: var(--text-dim); text-decoration: none; font-size: 13px; border-left: 2px solid transparent; }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); padding: 0 16px 8px; }
+    nav .nav-section { margin-top: 10px; padding: 6px 16px 4px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--text-dim); border-top: 1px solid var(--border); }
+    main { flex: 1; max-width: 860px; padding: 48px 52px 96px; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+    .lead { color: var(--text-dim); font-size: 1.02rem; margin-bottom: 30px; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin: 44px 0 8px; color: var(--accent6); scroll-margin-top: 20px; }
+    .q { font-weight: 700; margin: 22px 0 6px; font-size: 15.5px; }
+    .q::before { content: 'Q. '; color: var(--accent); }
+    .a { margin: 0 0 4px 0; }
+    .a::before { content: 'A. '; color: var(--accent2); font-weight: 700; }
+    code { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .see { display: block; margin: 4px 0 0 18px; font-size: 12.5px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;display:block;">← 핸드북 홈</a>
+  <div class="nav-title">FAQ · 트러블슈팅</div>
+  <a href="#setup">설치·환경</a>
+  <a href="#subagent">서브에이전트 실행</a>
+  <a href="#parallel">병렬·팀 협업</a>
+  <a href="#workspace">workspace/variant</a>
+</nav>
+
+<main>
+  <h1>FAQ · 자주 나는 오류와 해결법</h1>
+  <p class="lead">각 장에 흩어져 있는 경고·팁 박스를 실습 중 자주 나는 순서대로 한곳에 모았습니다. 증상으로 먼저 찾고, 필요하면 "자세히" 링크로 원래 설명을 확인하세요.</p>
+
+  <h2 id="setup">설치·환경</h2>
+
+  <div class="q">2.1 실습 준비 스크립트를 돌렸는데 일부 항목이 ❌로 나온다.</div>
+  <p class="a">운영체제와 무관하게 <code>setup-common.ts</code>가 체크리스트를 다시 검증해준다. Windows는 스크립트를 <strong>관리자 권한</strong>으로 실행했는지, macOS/Linux는 <code>--wezterm</code>/<code>--docker</code> 같은 선택 플래그를 빠뜨리지 않았는지 먼저 확인한다. 설치 로그는 Windows 기준 <code>%USERPROFILE%\workshop-setup-logs\</code>에 남는다.</p>
+  <span class="see">자세히: <a href="../practice/02_Practice_Examples.html#setup">2.1 실습 §준비</a></span>
+
+  <div class="q">Antigravity CLI를 npm으로 전역 설치하려는데 안 된다.</div>
+  <p class="a">2026-06-18부로 Gemini CLI 서비스가 종료되고 Antigravity CLI(<code>agy</code>)로 대체됐다. <code>agy</code>는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리로, 압축 해제 후 PATH에 넣기만 하면 된다 — npm 설치 안내는 옛 자료다.</p>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html">3장 §도구 비교</a></span>
+
+  <h2 id="subagent">서브에이전트 실행</h2>
+
+  <div class="q">writer 서브에이전트로 파일을 쓰게 했는데, reviewer가 "파일이 없다"고 한다.</div>
+  <p class="a">writer와 reviewer를 한 메시지에서 동시에(병렬로) 호출했을 가능성이 높다. writer가 파일을 만들기도 전에 reviewer가 검토를 시도해 실패한 것이다. 의존 관계가 있는 작업은 "두 단계를 순서대로 진행해"처럼 순차 실행을 명시적으로 요청해야 한다.</p>
+  <span class="see">자세히: <a href="../practice/02_Practice_Examples.html#scenario-2">2.1 D-1</a></span>
+
+  <div class="q">Claude App에서 파일 저장 후 감사 스크립트가 자동으로 안 돈다.</div>
+  <p class="a">정상이다. <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 같은 훅은 Claude App(Desktop)에서는 발화하지 않고 Claude Code(CLI) 세션에서만 자동 실행된다. Desktop App을 쓰는 팀은 훅이 하던 작업을 세션이 끝난 뒤 수동으로 실행해야 한다 — 이걸 모르고 지나가면 "감사가 도는 줄 알았는데 안 돌았다"는 사고로 이어질 수 있다.</p>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">3장 §1</a>, <a href="../guardrails/00_Guardrails_Chapter.html#s6">1.5장 §감사 로그와 관측성</a></span>
+
+  <div class="q">reviewer가 검토만 해달라고 했는데 파일을 수정해버렸다.</div>
+  <p class="a"><code>tools</code> 필드에 <code>Write</code>가 포함돼 있지 않은지 확인한다. reviewer 같은 읽기 전용 역할은 애초에 <code>tools: Read, Grep</code>처럼 필요한 최소 권한만 부여해, 프롬프트 해석이 애매해도 수정 자체가 불가능하게 막아야 한다.</p>
+  <span class="see">자세히: <a href="../guardrails/00_Guardrails_Chapter.html#s3">1.5장 §최소 권한 원칙</a></span>
+
+  <h2 id="parallel">병렬·팀 협업</h2>
+
+  <div class="q">Antigravity Agent Manager에서 에이전트 두 개가 서로 다른 파일을 수정 중인데 결과가 뒤섞인다.</div>
+  <p class="a">두 에이전트를 같은 Workspace(같은 폴더)에 배정했을 가능성이 높다. 같은 코드베이스를 공유하면 한 에이전트가 다른 에이전트의 작업 맥락을 자기 것으로 착각하는 "인지적 중첩(cognitive overlap)"이 생길 수 있다. Workspace 또는 git worktree 단위로 반드시 분리한다.</p>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">3장 §2</a>, <a href="../guardrails/00_Guardrails_Chapter.html#s5">1.5장 §격리</a></span>
+
+  <div class="q">Claude App에서 Agent Teams를 켰는데 <code>tmux</code> 옵션이 안 보인다.</div>
+  <p class="a">정상이다. Desktop App은 <code>teammateMode: in-process</code>만 지원하며, tmux 분할 창 모드는 Claude Code(CLI)에서만 추가로 지원된다.</p>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">3장 §1</a></span>
+
+  <h2 id="workspace">workspace/variant</h2>
+
+  <div class="q"><code>new-project.ts</code>를 실행했는데 스캐폴딩이 거부되거나 경로가 이상하게 잡힌다.</div>
+  <p class="a">워크스페이스 루트가 아닌 다른 프로젝트 폴더 안에서 실행했을 가능성이 높다. ai-workspace-standards는 반드시 워크스페이스 자체의 루트로 클론해서 써야 하며(Windows <code>C:\git</code>, macOS/Linux <code>~/git</code>), 다른 프로젝트 폴더 안에 서브모듈처럼 넣으면 경로 계산이 어긋난다.</p>
+  <span class="see">자세히: <a href="../variant-practice/04_VariantPractice_Manual.html#section-1">6.0 §1</a></span>
+
+  <div class="q"><code>bun run agent:verify</code> 결과의 "Documented agents" 숫자가 예상과 다르다.</div>
+  <p class="a">AGENTS.md 표와 실제 <code>agents/*.md</code> 파일 목록이 어긋난 것이다. 워크스페이스 전용 에이전트(auditor, lifecycle-manager 등)가 표에 남아 있진 않은지, 새로 만든 에이전트가 표에 빠지진 않았는지 다시 확인한다.</p>
+  <span class="see">자세히: <a href="../variant-practice/04_VariantPractice_Examples.html#scenario-2">6.1 D-1</a></span>
+
+  <div class="q">승격 파이프라인(<code>l2-to-variant-pipeline.ts</code>)을 실행해도 되는지 확신이 안 선다.</div>
+  <p class="a">이 명령은 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다. 강의·워크숍 환경이라면 참가자 전원이 실행하지 말고 강사가 한 번 시연하는 것으로 충분하다 — <a href="../lecture-guide/00_Lecture_Guide.html#per-section">강의 진행 가이드</a>에 안내가 있다.</p>
+  <span class="see">자세히: <a href="../variant-advanced/05_VariantAdvanced_Examples.html">7.1 실습</a></span>
+
+</main>
+</div>
+</body>
+</html>

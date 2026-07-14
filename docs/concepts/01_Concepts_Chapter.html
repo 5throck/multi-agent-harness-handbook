@@ -102,6 +102,7 @@
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
   <div class="nav-title">1장 · 개념 이해</div>
+  <a href="#s0">Prompt → Context → Harness</a>
   <a href="#s1">하네스 엔지니어링이란</a>
   <a href="#s2">단일 에이전트의 한계</a>
   <a href="#s3">멀티 에이전트팀의 구성요소</a>
@@ -116,11 +117,12 @@
   <div class="chapter-eyebrow">1장</div>
   <h1>하네스 엔지니어링과 멀티 에이전트팀 개념</h1>
   <p class="lead">AI 에이전트가 실제 업무에서 신뢰할 수 있게 동작하려면 "무엇을 시킬지"보다 "어떤 틀 안에서 움직이게 할지"가 더 중요해진다. 이 장에서는 하네스 엔지니어링이라는 관점과, 하나의 에이전트가 아니라 여러 에이전트가 팀으로 협업하는 멀티 에이전트팀의 기본 구조를 살펴본다.</p>
-  <p class="source-line">출처: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code 공식 문서 — Subagents</a>, <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards 저장소</a></p>
+  <p class="source-line">출처: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code 공식 문서 — Subagents</a>, <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards 저장소</a>, <a href="https://www.faros.ai/blog/harness-engineering" target="_blank">Faros AI — Harness Engineering</a></p>
 
   <div class="keypoints">
     <div class="kp-title">이 장에서 다루는 것</div>
     <ul>
+      <li>Prompt Engineering → Context Engineering → Harness Engineering으로 이어진 흐름</li>
       <li>하네스 엔지니어링이 무엇이고, 왜 프롬프트 엔지니어링만으로는 부족한지</li>
       <li>단일 에이전트로 복잡한 작업을 시킬 때 생기는 구조적 한계</li>
       <li>멀티 에이전트팀을 이루는 3가지 구성요소 — 오케스트레이터·스페셜리스트·핸드오프 계약</li>
@@ -128,6 +130,16 @@
       <li>Claude Code/App, Antigravity CLI/Desktop처럼 서로 다른 도구가 같은 하네스를 공유하게 해 주는 AGENTS.md 표준</li>
     </ul>
   </div>
+
+  <h2 id="s0">Prompt → Context → Harness — 여기까지 오게 된 흐름</h2>
+  <p>하네스 엔지니어링은 어느 날 갑자기 등장한 개념이 아니라, AI를 다루는 방식이 세 단계를 거치며 쌓아 올린 결과다. 각 단계는 이전 단계를 대체한 것이 아니라, "이전 단계만으로는 부족하다"는 걸 드러내며 그 위에 새로운 층을 얹었다.</p>
+  <h3>1단계 — 프롬프트 엔지니어링 (2022~2024년)</h3>
+  <p>초기 관심은 순전히 언어에 있었다. 같은 요청이라도 어떻게 표현하느냐에 따라 결과 품질이 크게 달라진다는 사실이 알려지면서, "더 나은 프롬프트를 쓰는 법"이 핵심 기술로 취급됐다. 이 시기의 AI는 정교한 자동완성에 가까웠고, 사람이 매 단계 방향을 잡아 줘야 했다.</p>
+  <h3>2단계 — 컨텍스트 엔지니어링 (2024~2025년)</h3>
+  <p>모델 성능이 좋아지면서 병목은 "표현"에서 "정보 공급"으로 옮겨갔다. 관련 파일, 프로젝트 규칙, 아키텍처 제약처럼 모델의 컨텍스트 창에 무엇을 채워 넣을지 큐레이션하는 일이 중요해졌고, RAG나 MCP 같은 도구가 이 과정을 체계화했다. Anthropic은 2025년 9월 이를 "추론 과정에서 최적의 토큰 집합을 큐레이션하고 유지하는 기술"이라고 공식 정의했다.</p>
+  <h3>3단계 — 하네스 엔지니어링 (2026년)</h3>
+  <p>2026년 현재 지배적인 패러다임이다. 모델 자체는 원재료에 가까운 지능을 담고 있을 뿐이고, 그 지능을 실제로 신뢰할 수 있는 자율적 행동으로 바꿔주는 것이 하네스다. 도구 오케스트레이션, 검증 루프, 컨텍스트·메모리 관리, 가드레일, 관측성(observability) — 이 다섯 층이 갖춰졌을 때 비로소 에이전트가 "일을 맡길 만한" 수준이 된다. "에이전트 자체는 어렵지 않다. 어려운 건 하네스다"라는 말이 이 시기를 요약한다.</p>
+  <div class="note">세 단계는 각각 <strong>행동(모델이 무엇을 하게 만들 것인가) → 이해(모델이 무엇을 알게 할 것인가) → 신뢰성(그 결과를 어떻게 반복 가능하고 검증 가능하게 만들 것인가)</strong>으로 초점이 옮겨간 것이다. 이 핸드북이 다루는 멀티 에이전트팀은 세 번째 단계, 하네스 엔지니어링의 산물이다.</div>
 
   <h2 id="s1">하네스 엔지니어링이란</h2>
   <p>프롬프트 엔지니어링이 "모델에게 어떤 말을 건넬 것인가"에 집중한다면, 하네스 엔지니어링은 한 걸음 물러나 "모델이 어떤 도구·규칙·검증 장치를 통해 일하게 할 것인가"를 설계하는 일이다. 여기서 하네스(harness)는 승마에서 말에게 씌우는 마구에서 온 표현으로, AI가 마음대로 아무 방향으로나 달리지 않고 정해진 절차·도구·권한 범위 안에서 예측 가능하게 움직이도록 잡아 주는 틀을 뜻한다.</p>

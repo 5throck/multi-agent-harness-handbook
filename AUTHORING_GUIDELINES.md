@@ -143,8 +143,9 @@
   - **표현의 정확성**: "PowerShell은 `cat`을 못 쓴다"가 아니라 **"`cat`은 쓸 수 있지만
     `<< 'EOF'` heredoc 문법이 없다"**로 적는다. 무엇이 안 되는지(명령 vs 문법)를 구분한다.
   - **경로 표기**: `~`(홈 디렉터리)는 macOS/Linux에서는 셸이 자동으로 확장하지만, Windows
-    PowerShell에서는 **지원되지 않는다**. 경로에는 `~/` 대신 **`./`**(현재 폴더)를 쓴다.
-    예: `mkdir ~/harness-lab`이 아니라 `mkdir ./harness-lab`.
+    CMD에서는 **지원되지 않는다**. `./` 접두사 역시 CMD에서는 `mkdir` 구문 오류를 유발한다.
+    가장 안전한 방법은 접두사 없이 **폴더 이름만** 쓰는 것이다.
+    예: `mkdir ~/harness-lab`이 아니라 `mkdir harness-lab`(macOS/Linux, PowerShell, CMD 모두 동작).
 
 ---
 

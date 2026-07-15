@@ -332,7 +332,7 @@
   </div>
 
   <h3>Windows에서 설치하기</h3>
-  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>을 내려받아 실습 전용 폴더(예: <code>./harness-lab/setup/</code>)에 두고, PowerShell을 <strong>관리자 권한으로</strong> 실행한 뒤 아래 명령을 돌린다.</p>
+  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>을 내려받아 실습 전용 폴더(예: <code>harness-lab/setup/</code>)에 두고, PowerShell을 <strong>관리자 권한으로</strong> 실행한 뒤 아래 명령을 돌린다.</p>
   <div class="tip-box">
     <strong>PowerShell을 관리자 권한으로 여는 법</strong><br>
     ① 시작 메뉴를 열고 <code>PowerShell</code>을 검색한다.<br>
@@ -384,7 +384,7 @@ cd ./setup && bash setup-linux.sh</pre>
     <div class="card-body">
 
       <div class="situation">
-        하네스를 처음 써보는 개발자가 실습 전용 빈 폴더 <code>./harness-lab/</code>를 새로 만들고, <code>reviewer</code> 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 먼저 적어 둔 뒤, 그 <em>같은 명세</em>를 Claude App(Desktop)에서는 사전 정의 서브에이전트로, Antigravity(Desktop)에서는 자연어 목표로 각각 "구현"해 호출해본다. 이 폴더는 실습 전용이므로 다른 프로젝트 파일과 섞이지 않는다.
+        하네스를 처음 써보는 개발자가 실습 전용 빈 폴더 <code>harness-lab/</code>를 새로 만들고, <code>reviewer</code> 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 먼저 적어 둔 뒤, 그 <em>같은 명세</em>를 Claude App(Desktop)에서는 사전 정의 서브에이전트로, Antigravity(Desktop)에서는 자연어 목표로 각각 "구현"해 호출해본다. 이 폴더는 실습 전용이므로 다른 프로젝트 파일과 섞이지 않는다.
       </div>
 
       <div class="cmd-list">
@@ -403,8 +403,8 @@ cd ./setup && bash setup-linux.sh</pre>
             <strong>① 실습 폴더 생성 및 진입</strong>
             <p>현재 폴더 아래 <code>harness-lab</code> 폴더를 새로 만들고 그 안으로 이동한다. 이후 모든 명령은 이 폴더 안에서 실행한다.</p>
             <div style="position:relative">
-              <pre class="code-block">mkdir ./harness-lab
-cd ./harness-lab</pre>
+              <pre class="code-block">mkdir harness-lab
+cd harness-lab</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
@@ -447,7 +447,7 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>① Claude App에서 프로젝트 열기</strong>
-              <p>Claude App(Desktop)을 실행하고, 방금 만든 <code>./harness-lab/</code> 폴더를 프로젝트로 연다.</p>
+              <p>Claude App(Desktop)을 실행하고, 방금 만든 <code>harness-lab/</code> 폴더를 프로젝트로 연다.</p>
             </div>
           </li>
           <li>
@@ -494,7 +494,7 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>② Antigravity Agent Manager에서 Workspace 생성</strong>
-              <p>Agent Manager를 열고 <code>./harness-lab/</code> 폴더(AGENTS.md가 이미 들어있는 폴더)를 가리키는 새 Workspace를 하나 만든다.</p>
+              <p>Agent Manager를 열고 <code>harness-lab/</code> 폴더(AGENTS.md가 이미 들어있는 폴더)를 가리키는 새 Workspace를 하나 만든다.</p>
             </div>
           </li>
           <li>
@@ -512,7 +512,7 @@ EOF</pre>
         </ol>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)에서도</strong> 같은 개념으로 실습할 수 있다 — 사전 정의 파일 없이 <code>/goal</code>로 목표만 준다.</p>
         <div style="position:relative">
-          <pre class="code-block">cd ./harness-lab && agy
+          <pre class="code-block">cd harness-lab && agy
 /goal notes.txt 파일을 검토하고 개선점을 요약해줘</pre>
           <button class="copy-btn" onclick="copyCode(this)">복사</button>
         </div>
@@ -541,7 +541,7 @@ EOF</pre>
     <div class="card-body">
 
       <div class="situation">
-        G-1을 마친 실무자가 같은 <code>./harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>에 먼저 명세한 뒤, Claude App에는 사전 정의 서브에이전트로, Antigravity(Desktop)에는 자연어 목표로 각각 구현한다. writer가 먼저 초안을 쓰고 reviewer가 그 결과를 비평하는 파이프라인을 네 도구 모두에서 순서를 지켜 지휘하게 한다.
+        G-1을 마친 실무자가 같은 <code>harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>에 먼저 명세한 뒤, Claude App에는 사전 정의 서브에이전트로, Antigravity(Desktop)에는 자연어 목표로 각각 구현한다. writer가 먼저 초안을 쓰고 reviewer가 그 결과를 비평하는 파이프라인을 네 도구 모두에서 순서를 지켜 지휘하게 한다.
       </div>
 
       <div class="cmd-list">
@@ -592,7 +592,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 메인 세션이 Agent 호출을 순차 디스패치</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>./harness-lab/</code> 채팅에서 이어서 진행한다.</p>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>harness-lab/</code> 채팅에서 이어서 진행한다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -772,7 +772,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block antigravity">
         <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — Agent Manager, Workspace별 에이전트 1개</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity를 열고 Agent Manager에서 <code>./harness-lab/</code>을 가리키는 Project를 하나 준비한다. 이번에는 하나의 Workspace에 두 에이전트를 몰아넣지 않고, <strong>서로 다른 Workspace 두 개</strong>를 만들어 각각 에이전트를 하나씩 배정한다.</p>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity를 열고 Agent Manager에서 <code>harness-lab/</code>을 가리키는 Project를 하나 준비한다. 이번에는 하나의 Workspace에 두 에이전트를 몰아넣지 않고, <strong>서로 다른 Workspace 두 개</strong>를 만들어 각각 에이전트를 하나씩 배정한다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -819,7 +819,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams, teammateMode: in-process</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">같은 <code>./harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">같은 <code>harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
         <ol class="step-list">
           <li>
             <div class="step-content">

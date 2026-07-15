@@ -160,14 +160,44 @@
 
 ## 11. 마크업 디테일
 
-**원칙**: 문장 중간의 단일 단어 강조로 인한 불필요한 줄바꿈을 피한다.
+**원칙**: 문장 중간의 단일 단어 강조로 인한 불필요한 줄바꿈을 피하고, 중첩 flex 레이아웃에서
+글상자가 부모 테두리 밖으로 삐져나가지 않게 한다.
 
 - **왜**: 검토 피드백 — *"불필요하게 줄이 바뀌어져 있어."* (한국어 문장 중간의 한 단어만
-  `<strong>`으로 감싸 렌더링 시 단어가 따로 떨어져 보인 사례)
+  `<strong>`으로 감싸 렌더링 시 단어가 따로 떨어져 보인 사례) / *"글상자가 외부 테두리 밖으로
+  나간 뒤 최종 테두리에 의해 잘리고 있어."* (`.flow-box` 등이 `.platform-block` 경계를 벗어나
+  `.scenario-card`의 `overflow: hidden`에 잘린 사례)
 - **어떻게 적용**:
   - 강조는 **자연스러운 어구 단위**로 묶는다(예: `heredoc <strong>문법</strong>`이 아니라
     의미가 통하는 구절 전체, 또는 강조 제거).
   - 비교 글상자/그리드는 `min-width: 0`을 주어 긴 줄이 박스를 밀어내지 않게 한다.
+
+### 11-1. flex 레이아웃에서 글상자 오버플로우 방지
+
+실습 페이지의 구조는 `.scenario-card` > `.card-body` > `.platform-block` > `ol.step-list` >
+`li` > `.step-content` > (`.flow-box` / `.tip-box` / `.warning-box`)로 깊이 중첩된다.
+여기서 `.step-list li`는 flex 컨테이너이고 `.step-content`는 `flex: 1` 자식이다.
+
+CSS flex에서 **flex 자식의 기본 `min-width`는 `auto`**이므로, 내부 콘텐츠의 고유 너비보다
+줄어들지 않는다. 글상자 안의 긴 `<code>` 인라인 요소(예: `<code>subagent_type="writer"</code>`)
+가 `.step-content`를 밀어내어 `.platform-block`의 테두리 밖으로 삐져나가고, 최종적으로
+`.scenario-card`의 `overflow: hidden`이 잘라버린다.
+
+**필수 CSS 수칙** (새 HTML 파일에 `step-list` 구조를 쓸 때 반드시 포함):
+
+| 선택자 | 속성 | 효과 |
+|---|---|---|
+| `.step-content` | `min-width: 0` | flex 자식이 콘텐츠 고유 너비 이하로 줄어들 수 있게 허용 |
+| `.flow-box`, `.tip-box`, `.warning-box` | `overflow-wrap: break-word` | 긴 인라인 요소가 박스 경계에서 줄바꿈 |
+
+적용 예:
+```css
+.step-content { flex: 1; min-width: 0; }
+.flow-box {
+  /* ... 기존 속성 ... */
+  overflow-wrap: break-word;
+}
+```
 
 ---
 
@@ -222,6 +252,7 @@
 - [ ] §9 비호환 안내가 "명령 vs 문법"을 정확히 구분하는가?
 - [ ] §10 복잡한 개념에 SVG/다이어그램이 있는가?
 - [ ] §11 문장 중간 단어 강조로 줄이 잘리는 곳은 없는가?
+- [ ] §11-1 flex 자식 `.step-content`에 `min-width: 0`이 있고, 글상자에 `overflow-wrap: break-word`가 있는가?
 - [ ] §12 도구 비교가 오해 없이, 항목 누락 없이, 균형 있게 있는가?
 - [ ] §13 각 장이 다음 장과 연결되고, 보조 문서가 빠짐없는가?
 - [ ] §14 본문은 한국어, 코드/식별자/커밋은 영어인가?

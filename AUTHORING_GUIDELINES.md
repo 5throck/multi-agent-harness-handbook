@@ -142,6 +142,9 @@
     - 경로 표기 관례(`~/git` vs `C:\git`)
   - **표현의 정확성**: "PowerShell은 `cat`을 못 쓴다"가 아니라 **"`cat`은 쓸 수 있지만
     `<< 'EOF'` heredoc 문법이 없다"**로 적는다. 무엇이 안 되는지(명령 vs 문법)를 구분한다.
+  - **경로 표기**: `~`(홈 디렉터리)는 macOS/Linux에서는 셸이 자동으로 확장하지만, Windows
+    PowerShell에서는 **지원되지 않는다**. 경로에는 `~/` 대신 **`./`**(현재 폴더)를 쓴다.
+    예: `mkdir ~/harness-lab`이 아니라 `mkdir ./harness-lab`.
 
 ---
 

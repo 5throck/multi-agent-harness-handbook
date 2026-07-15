@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강의 소개 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <style>
+    :root {
+      --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f4; --border: #d0d7de;
+      --text: #1f2328; --text-dim: #636c76; --accent: #0969da;
+      --accent2: #1a7f37; --accent4: #6639ba; --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; overflow-x: hidden; }
+
+    /* ── 헤더 ── */
+    header { margin-bottom: 6px; }
+    h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 10px; }
+    .subtitle { color: var(--text-dim); font-size: 15px; margin-bottom: 10px; }
+    .subtitle a { color: var(--accent); text-decoration: none; }
+    .subtitle a:hover { text-decoration: underline; }
+    .hero {
+      background: linear-gradient(135deg, #eaf3ff 0%, #f0f0ff 100%);
+      border: 1px solid #c8daf5; border-radius: 12px;
+      padding: 28px 32px; margin: 24px 0 36px;
+    }
+    .hero p { font-size: 15.5px; line-height: 1.85; margin: 0; }
+
+    /* ── 뱃지·태그 ── */
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px; letter-spacing: .04em;
+      margin-right: 6px; margin-bottom: 6px;
+    }
+    .tag-lecture { background: #f1e8fd; color: var(--accent4); border: 1px solid #d4bdf5; }
+    .tag-lab { background: #dafbe1; color: var(--accent2); border: 1px solid #a2d9b1; }
+    .tag-discuss { background: #fff8c5; color: #7a5c00; border: 1px solid #f0dc5e; }
+    .tag-demo { background: #ffebe9; color: #cf222e; border: 1px solid #ffc1bc; }
+
+    /* ── 섹션 ── */
+    h2 {
+      font-size: 1.4rem; font-weight: 700; margin: 44px 0 14px;
+      scroll-margin-top: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2 .icon { font-size: 1.2rem; }
+    h3 { font-size: 1.08rem; font-weight: 700; color: var(--accent6); margin: 24px 0 8px; }
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 14px 22px; }
+    li { margin: 5px 0; }
+    code { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
+
+    /* ── 강조 박스 ── */
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 12px 18px; border-radius: 4px; margin: 18px 0; font-size: 14px; }
+    .warn { background: #fff8c5; border-left: 3px solid #d4a72c; padding: 12px 18px; border-radius: 4px; margin: 18px 0; font-size: 14px; }
+    .highlight {
+      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 18px 22px; margin: 18px 0;
+    }
+    .highlight .hl-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+
+    /* ── 표 ── */
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 13.8px; }
+    th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+    th { background: #eef1f4; color: var(--accent6); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+    tr.total td { font-weight: 700; background: #f6f8fa; }
+
+    /* ── 학습 목표 카드 ── */
+    .obj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0 22px; }
+    .obj-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 18px; font-size: 14px; line-height: 1.65;
+    }
+    .obj-card .obj-num {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: #ddf4ff; border-radius: 10px; padding: 2px 8px; margin-bottom: 8px; display: inline-block;
+    }
+    .obj-card strong { color: var(--accent6); }
+
+    /* ── 사전 준비물 체크리스트 ── */
+    .chk { margin: 5px 0; font-size: 14px; }
+
+    /* ── Takeaway ── */
+    .takeaway-list { list-style: none; padding: 0; margin: 14px 0 22px; }
+    .takeaway-list li {
+      padding: 10px 16px 10px 42px; position: relative; margin-bottom: 8px;
+      background: #f6fff6; border: 1px solid #a2d9b1; border-radius: 8px; font-size: 14px;
+    }
+    .takeaway-list li::before {
+      content: "✓"; position: absolute; left: 14px; top: 10px;
+      color: var(--accent2); font-weight: 700; font-size: 15px;
+    }
+
+    /* ── 강사 정보 ── */
+    .instructor-box {
+      border: 2px dashed var(--border); border-radius: 12px; padding: 24px; margin: 18px 0;
+      color: var(--text-dim); text-align: center;
+    }
+    .instructor-box p { margin: 6px 0; font-size: 14px; }
+    .instructor-box .placeholder { font-style: italic; }
+
+    /* ── 일정 블록 ── */
+    .schedule-block {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 14px 0; border-bottom: 1px solid var(--bg3);
+    }
+    .schedule-block:last-child { border-bottom: none; }
+    .schedule-time {
+      min-width: 70px; font-weight: 700; font-size: 13px; color: var(--accent6);
+      text-align: right; padding-top: 2px;
+    }
+    .schedule-body { flex: 1; }
+    .schedule-body h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .schedule-body p { font-size: 13px; color: var(--text-dim); margin: 2px 0; }
+    .schedule-break {
+      background: var(--bg3); border-radius: 6px; padding: 8px 16px;
+      text-align: center; font-size: 13px; color: var(--text-dim); margin: 4px 0;
+    }
+
+    /* ── 푸터 ── */
+    footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+      color: var(--text-dim); font-size: 12px; line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 32px 18px 60px; }
+      h1 { font-size: 1.7rem; }
+      .obj-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>멀티 에이전트팀 하네스 엔지니어링 워크숍</h1>
+  <p class="subtitle">프롬프트 엔지니어링에서 하네스 엔지니어링으로. Claude Code · Claude App · Antigravity · Antigravity CLI 네 도구를 넘나들며 멀티 에이전트팀을 직접 설계하고 운영하는 실전 워크숍.</p>
+</header>
+
+<!-- ── 한 줄 요약 ── -->
+<div class="hero">
+  <p><strong>이 워크숍은 무엇인가?</strong> "프롬프트 엔지니어링만으로는 부족하다"는 문제의식에서 출발해, AI 에이전트에게 <strong>좁은 역할을 부여</strong>하고 <strong>오케스트레이터가 조율</strong>하는 멀티 에이전트팀의 설계 방법론을 배우고, Claude Code·Claude App·Antigravity·Antigravity CLI 네 도구에서 실제로 서브에이전트를 만들고 파이프라인을 구축해보는 <strong>약 7시간 30분 실전 워크숍</strong>이다.</p>
+</div>
+
+<!-- ────────────────── 1. 학습 목표 ────────────────── -->
+<h2 id="objectives"><span class="icon">🎯</span>학습 목표</h2>
+<p>이 워크숍을 수료한 참가자는 다음을 할 수 있다.</p>
+<div class="obj-grid">
+  <div class="obj-card">
+    <div class="obj-num">LO-1</div>
+    <strong>설명</strong>하네스 엔지니어링의 정의를 프롬프트·컨텍스트 엔지니어링과 비교하여 설명하고, 단일 에이전트의 세 가지 구조적 한계(컨텍스트 과부하·역할 충돌·병렬성 부재)를 든다.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-2</div>
+    <strong>설계</strong>오케스트레이터·스페셜리스트·핸드오프 계약으로 이루어진 멀티 에이전트팀을 구성하고, Anthropic의 다섯 가지 오케스트레이션 패턴(체이닝·라우팅·병렬화·오케스트레이터-워커·평가자-최적화) 중 상황에 맞는 패턴을 선택한다.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-3</div>
+    <strong>적용</strong>위험 작업 3단계 분류(읽기/쓰기/파괴적)와 최소 권한 원칙, 사람 승인 게이트, 격리, 감사 로그를 포함한 가드레일 체계를 서브에이전트에 설계한다.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-4</div>
+    <strong>실행</strong>Claude Code·Claude App·Antigravity·Antigravity CLI 네 도구에서 서브에이전트를 정의하고 호출하며, 순차 파이프라인과 병렬 실행을 직접 구현한다.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-5</div>
+    <strong>비교</strong>네 도구의 서브에이전트 정의 방식, teammateMode, 훅 지원, Agent Manager 차이를 실습 경험에 바탕으로 설명한다.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-6</div>
+    <strong>판단</strong>기업 내 멀티 에이전트팀 운영의 두 가지 모델(서비스 티켓 모델 vs 개발 도구+variant 모델)을 비교하고, 자신의 조직에 적합한 모델과 그 이유를 설명한다.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-7</div>
+    <strong>구현</strong>ai-workspace-standards 저장소의 L0→L1→L2 계층 구조와 핵심 파일 4종을 이해하고, 새로운 variant(co-marketing)를 프로토타입으로 만들어 승격 체크리스트를 작성한다.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-8</div>
+    <strong>종합</strong>본인의 실제 반복 작업을 문제로 재정의하여, 문제 정의→가드레일 설계→서브에이전트 구현→검증·회고의 전체 사이클을 직접 설계하고 실행한다.
+  </div>
+</div>
+
+<!-- ────────────────── 2. 대상자 ────────────────── -->
+<h2 id="audience"><span class="icon">👥</span>대상자</h2>
+<p>다음에 해당하는 분이라면 이 워크숍에서 가장 큰 성과를 얻을 수 있다.</p>
+<ul>
+  <li><strong>AI 코딩 도구를 일상적으로 사용하는 소프트웨어 엔지니어</strong>. Claude Code, GitHub Copilot, Cursor 등을 쓰고 있지만 단일 프롬프트로 한계를 느끼는 분</li>
+  <li><strong>AI 에이전트 도입을 고민하는 팀 리더·Tech Lead</strong>. 팀 전체에 어떻게 에이전트를 배치하고, 안전하게 운영할지 설계 책임이 있는 분</li>
+  <li><strong>DevOps·플랫폼 엔지니어</strong>. 조직 단위 AI 워크스페이스 구축과 variant 관리가 업무에 포함된 분</li>
+  <li><strong>AI 도구 교육을 담당하는 강사·컨설턴트</strong>. Claude Code와 Antigravity를 교육 자료로 다루는 분</li>
+</ul>
+<div class="note">
+  <strong>참고:</strong> 이 워크숍은 Claude Code와 Antigravity 계열 도구에 초점을 맞추고 있으며, 네 가지 도구의 설치와 CLI 기본 조작에 익숙한 것을 전제로 한다. CLI 경험이 없는 초보자는 <a href="../setup/SETUP_ko.html">설치 가이드</a>의 사전 준비 단계를 충분히 연습하고 오는 것을 권장한다.
+</div>
+
+<!-- ────────────────── 3. 사전 요구사항 ────────────────── -->
+<h2 id="prerequisites"><span class="icon">📋</span>사전 요구사항</h2>
+
+<h3>구독·계정</h3>
+<div class="chk">☐ 활성 상태의 Claude Pro/Max 구독(API 키가 아니라 구독제 계정)</div>
+<div class="chk">☐ Antigravity 사용을 위한 Google 계정</div>
+<div class="chk">☐ <code>gh auth login</code>이 가능한 GitHub 계정</div>
+
+<h3>시스템 요구사항</h3>
+<div class="chk">☐ 최소 5GB 여유 디스크 공간, 관리자/sudo 권한</div>
+<div class="chk">☐ Claude App(Desktop), Claude Code(CLI), Antigravity(Desktop), Antigravity CLI(<code>agy</code>) 설치 완료</div>
+<div class="chk">☐ <code>bun --version</code>, <code>git --version</code> 정상 출력 확인</div>
+<div class="chk">☐ <code>git clone https://github.com/5throck/ai-workspace-standards.git</code>을 워크스페이스 루트 위치에 미리 클론</div>
+
+<div class="warn">
+  <strong>⚠️ 사전 설치 필수.</strong> 워크숍 당일에 설치 문제로 시간을 낭비하지 않도록, 강의 시작 최소 하루 전에 <a href="SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>의 모든 항목을 완료해 주세요. OS별 자동 설치 스크립트가 <a href="SETUP_ko.html">설치 가이드</a>에 준비되어 있습니다.
+</div>
+
+<!-- ────────────────── 4. 강의 형태 ────────────────── -->
+<h2 id="format"><span class="icon">📖</span>강의 형태</h2>
+<table>
+  <thead><tr><th>형태</th><th>내용</th><th>비율</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tag tag-lecture">강의</span></td><td>개념 설명, 패턴 소개, 도구 비교, 모델 비교</td><td>약 45%</td></tr>
+    <tr><td><span class="tag tag-lab">실습</span></td><td>참가자 직접 서브에이전트 정의·호출·파이프라인·variant 스캐폴딩</td><td>약 40%</td></tr>
+    <tr><td><span class="tag tag-discuss">토론</span></td><td>소그룹 토론, 확인 질문, 전체 회고</td><td>약 10%</td></tr>
+    <tr><td><span class="tag tag-demo">시연</span></td><td>강사 화면 공유(승격 파이프라인 등 비가역적 작업만)</td><td>약 5%</td></tr>
+  </tbody>
+</table>
+<div class="highlight">
+  <div class="hl-title">실습 환경</div>
+  <p>네 도구(Claude App, Claude Code, Antigravity Desktop, Antigravity CLI)를 모두 설치한 뒤 참가자를 4개 그룹으로 나누어 각자 다른 도구로 같은 시나리오를 진행합니다. 마지막에 결과를 비교하며 "도구 비교" 챕터 내용이 직접 체감됩니다.</p>
+</div>
+
+<!-- ────────────────── 5. 강의 일정 ────────────────── -->
+<h2 id="agenda"><span class="icon">🕐</span>강의 일정</h2>
+<p>총 소요 시간 <strong>약 6시간 25분</strong> (휴식 제외). 휴식 3회(각 10~15분)를 포함하면 <strong>약 7시간 15분~7시간 45분</strong>입니다.</p>
+
+<h3>오전 블록</h3>
+<div class="schedule-block">
+  <div class="schedule-time">10분</div>
+  <div class="schedule-body">
+    <h4>도입</h4>
+    <p>강의 목표·전체 로드맵 소개, 사전 준비물 확인</p>
+    <p><span class="tag tag-lecture">강의</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">45분</div>
+  <div class="schedule-body">
+    <h4>1장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</h4>
+    <p>Prompt→Context→Harness 흐름, 단일 에이전트 한계, 오케스트레이터·스페셜리스트·핸드오프 계약, 오케스트레이션 패턴 5종, 동적 팀 구성, AGENTS.md 표준</p>
+    <p><span class="tag tag-lecture">강의</span> <span class="tag tag-discuss">확인질문</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">20분</div>
+  <div class="schedule-body">
+    <h4>1.5장 · 가드레일과 권한 모델</h4>
+    <p>위험 작업 3단계 분류, 최소 권한 원칙, 사람 승인 게이트, 격리, 감사 로그</p>
+    <p><span class="tag tag-lecture">강의</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">70분</div>
+  <div class="schedule-body">
+    <h4>2.0 + 2.1 · 멀티 에이전트 팀 실습</h4>
+    <p>네 도구에서 서브에이전트 정의·호출·순차 파이프라인·동적 팀 구성·병렬 실행·모델 티어 비교 (G-1/D-1/D-2/P-1/P-2)</p>
+    <p><span class="tag tag-lab">실습(참가자 직접)</span></p>
+  </div>
+</div>
+<div class="schedule-break">☕ 휴식 1 (10~15분)</div>
+
+<h3>오후 전반 블록</h3>
+<div class="schedule-block">
+  <div class="schedule-time">25분</div>
+  <div class="schedule-body">
+    <h4>3장 · 도구 비교</h4>
+    <p>네 도구 구조 한눈에 보기, Claude App vs Code, Antigravity vs agy, 멀티 에이전트 지원 범위 비교표, 도구 선택 가이드, AGENTS.md 통합</p>
+    <p><span class="tag tag-lecture">강의</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">30분</div>
+  <div class="schedule-body">
+    <h4>4장 · 기업 내 운영 전략 비교</h4>
+    <p>서비스 티켓 모델 vs 개발 도구+variant 모델, 칸반 기반 운영, 두 모델 장단점 비교</p>
+    <p><span class="tag tag-lecture">강의</span> <span class="tag tag-discuss">토론</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">40분</div>
+  <div class="schedule-body">
+    <h4>5장 · ai-workspace-standards 소개</h4>
+    <p>저장소 아키텍처, 핵심 파일 4종, templates·variant 7종, L0→L1→L2 계층 구조, 현재 상태와 고도화 방향</p>
+    <p><span class="tag tag-lecture">강의</span></p>
+  </div>
+</div>
+<div class="schedule-break">☕ 휴식 2 (10~15분)</div>
+
+<h3>오후 후반 블록</h3>
+<div class="schedule-block">
+  <div class="schedule-time">55분</div>
+  <div class="schedule-body">
+    <h4>6.0 + 6.1 · variant 실습</h4>
+    <p>워크스페이스 클론·환경 준비, 프로젝트 스캐폴딩, co-consult/co-deck 스캐폴딩, co-marketing 프로토타입 직접 만들기</p>
+    <p><span class="tag tag-lab">실습(참가자 직접)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15분</div>
+  <div class="schedule-body">
+    <h4>7.0 · 새 variant vs 승격</h4>
+    <p>처음부터 만들기 vs 기존 프로젝트 승격, 두 경로의 차이와 선택 기준</p>
+    <p><span class="tag tag-lecture">강의</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">25분</div>
+  <div class="schedule-body">
+    <h4>7.1 · 승격 실습</h4>
+    <p>승격 체크리스트/매니페스트 작성(참가자 실습), 승격 파이프라인 실행(강사 시연)</p>
+    <p><span class="tag tag-lab">실습</span> <span class="tag tag-demo">시연</span></p>
+  </div>
+</div>
+<div class="schedule-break">☕ 휴식 3 (10~15분)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">35분</div>
+  <div class="schedule-body">
+    <h4>8장 · 캡스톤 실습</h4>
+    <p>본인의 반복 작업을 골라 4단계(문제 정의·가드레일 설계·서브에이전트 구현·검증 회고) 직접 설계</p>
+    <p><span class="tag tag-lab">실습(참가자 직접)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15분</div>
+  <div class="schedule-body">
+    <h4>마무리</h4>
+    <p>전체 회고, Q&A, 용어집/FAQ 안내, 다음 단계 안내</p>
+    <p><span class="tag tag-discuss">토론</span></p>
+  </div>
+</div>
+
+<!-- ────────────────── 6. 다루는 주제 ────────────────── -->
+<h2 id="topics"><span class="icon">📚</span>다루는 주제</h2>
+<table>
+  <thead><tr><th>블록</th><th>주제</th><th>관련 장</th></tr></thead>
+  <tbody>
+    <tr><td>개념</td><td>하네스 엔지니어링 패러다임, 오케스트레이션 패턴, AGENTS.md 표준</td><td>1장</td></tr>
+    <tr><td>안전</td><td>가드레일 설계, 위험 작업 분류, 최소 권한, 승인 게이트, 격리</td><td>1.5장</td></tr>
+    <tr><td>실습</td><td>서브에이전트 정의·호출·파이프라인·병렬 실행·모델 티어 비교</td><td>2.0, 2.1</td></tr>
+    <tr><td>도구</td><td>Claude Code, Claude App, Antigravity, Antigravity CLI 비교 분석</td><td>3장</td></tr>
+    <tr><td>운영</td><td>서비스 티켓 모델 vs variant 모델, 칸반 기반 운영</td><td>4장</td></tr>
+    <tr><td>설계</td><td>ai-workspace-standards, L0→L1→L2, 핵심 파일, variant 템플릿</td><td>5장</td></tr>
+    <tr><td>구현</td><td>variant 스캐폴딩, 프로토타입, 승격 파이프라인</td><td>6장, 7장</td></tr>
+    <tr><td>종합</td><td>캡스톤: 본인 업무에 멀티 에이전트팀 적용하기</td><td>8장</td></tr>
+  </tbody>
+</table>
+
+<!-- ────────────────── 7. 워크숍 후 얻게 되는 것 ────────────────── -->
+<h2 id="takeaways"><span class="icon">✅</span>워크숍 후 얻게 되는 것</h2>
+<ul class="takeaway-list">
+  <li><strong>멀티 에이전트팀 설계 역량.</strong> 단일 에이전트에서 팀 구조로 전환하는 설계 방법론을 체득하여, 실제 업무에 즉시 적용할 수 있다.</li>
+  <li><strong>네 도구 실전 경험.</strong> Claude Code·Claude App·Antigravity·Antigravity CLI에서 같은 시나리오를 직접 실행해보며 각 도구의 장단점을 체감한다.</li>
+  <li><strong>가드레일 설계 체크리스트.</strong> 위험 작업 분류, 최소 권한, 승인 게이트를 포함한 실무용 가드레일 설계 템플릿을 가지고 간다.</li>
+  <li><strong>variant 프로토타입.</strong> ai-workspace-standards 기반으로 co-marketing 프로토타입을 직접 만들어, 조직 내 variant 도입의 구체적인 시작점을 확보한다.</li>
+  <li><strong>운영 모델 판단 기준.</strong> 서비스 티켓 모델과 variant 모델의 장단점을 비교하여, 자신의 조직에 맞는 운영 전략을 세울 수 있다.</li>
+  <li><strong>나만의 워크플로우.</strong> 캡스톤 실습에서 본인의 실제 반복 작업을 멀티 에이전트팀 문제로 재정의하고, 문제 정의부터 검증까지 전체 사이클을 경험한다.</li>
+</ul>
+
+<!-- ────────────────── 8. 강사 정보 ────────────────── -->
+<h2 id="instructor"><span class="icon">🎤</span>강사 정보</h2>
+<div class="instructor-box">
+  <p class="placeholder">[강사 이름 · 소속 · 직함]</p>
+  <p class="placeholder">[강사 프로필: AI 에이전트 도입/운영 경험, 주요 관심 분야, 연락처]</p>
+  <p style="margin-top:12px;font-size:12px;color:var(--text-dim);">이 섹션은 강사가 직접 채워 넣도록 비워둔 영역입니다.</p>
+</div>
+
+<!-- ────────────────── 9. 참고 자료 ────────────────── -->
+<h2 id="resources"><span class="icon">🔗</span>참고 자료</h2>
+<ul>
+  <li><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code Subagents 공식 문서</a></li>
+  <li><a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity Agent Manager 공식 문서</a></li>
+  <li><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards GitHub 저장소</a></li>
+  <li><a href="../setup/SETUP_ko.html">워크숍 환경 설치 가이드</a></li>
+  <li><a href="SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a></li>
+  <li><a href="../glossary/00_Glossary.html">용어집</a></li>
+  <li><a href="../faq/00_FAQ.html">FAQ · 자주 나는 오류와 해결법</a></li>
+</ul>
+
+<footer>
+  Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08) 기준 · 한국어 교육 자료<br>
+  공식 자료: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> ·
+  <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google</a> ·
+  <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a>
+</footer>
+
+</div>
+</body>
+</html>

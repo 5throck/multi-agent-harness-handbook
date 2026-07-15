@@ -189,12 +189,16 @@ CSS flex에서 **flex 자식의 기본 `min-width`는 `auto`**이므로, 내부 
 가 `.step-content`를 밀어내어 `.platform-block`의 테두리 밖으로 삐져나가고, 최종적으로
 `.scenario-card`의 `overflow: hidden`이 잘라버린다.
 
+또한 `.platform-block`은 자체 padding(20px 양쪽)을 가지므로, 그 안에 있는 글상자는
+`.card-body`에 직접 있는 글상자보다 40px 더 좁게 보인다. 이를 보정하기 위해 음수 마진을 준다.
+
 **필수 CSS 수칙** (새 HTML 파일에 `step-list` 구조를 쓸 때 반드시 포함):
 
 | 선택자 | 속성 | 효과 |
 |---|---|---|
 | `.step-content` | `min-width: 0` | flex 자식이 콘텐츠 고유 너비 이하로 줄어들 수 있게 허용 |
 | `.flow-box`, `.tip-box`, `.warning-box` | `overflow-wrap: break-word` | 긴 인라인 요소가 박스 경계에서 줄바꿈 |
+| `.platform-block .flow-box` 등 | `margin-left/right: -10px` | padding 누적으로 좁아지는 글상자 너비 보정 |
 
 적용 예:
 ```css
@@ -203,6 +207,26 @@ CSS flex에서 **flex 자식의 기본 `min-width`는 `auto`**이므로, 내부 
   /* ... 기존 속성 ... */
   overflow-wrap: break-word;
 }
+.platform-block .flow-box,
+.platform-block .tip-box,
+.platform-block .warning-box {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+```
+
+### 11-2. flex 컨테이너 안의 고정 요소 줄바꿈 방지
+
+`.level-header`(`display: flex`) 안에 배지, 타이틀, 설명문을 나란히 배치할 때,
+기본 `flex-shrink: 1` 때문에 창이 좁아지면 배지·타이틀이 줄바꿈되어 2줄로 보일 수 있다.
+
+**수칙**: flex 컨테이너 안에서 **절대 줄바꿈되면 안 되는 요소**에는 `flex-shrink: 0`을 주고,
+**나머지 공간을 채우는 요소**에는 `flex: 1`을 준다.
+
+```css
+.level-header .badge    { flex-shrink: 0; }
+.level-header .level-title { flex-shrink: 0; }
+.level-header .level-desc  { flex: 1; }
 ```
 
 ---
@@ -259,6 +283,8 @@ CSS flex에서 **flex 자식의 기본 `min-width`는 `auto`**이므로, 내부 
 - [ ] §10 복잡한 개념에 SVG/다이어그램이 있는가?
 - [ ] §11 문장 중간 단어 강조로 줄이 잘리는 곳은 없는가?
 - [ ] §11-1 flex 자식 `.step-content`에 `min-width: 0`이 있고, 글상자에 `overflow-wrap: break-word`가 있는가?
+- [ ] §11-1 `.platform-block` 안 글상자에 음수 마진 보정이 있는가?
+- [ ] §11-2 flex 컨테이너 안 고정 요소(배지·타이틀)에 `flex-shrink: 0`이 있는가?
 - [ ] §12 도구 비교가 오해 없이, 항목 누락 없이, 균형 있게 있는가?
 - [ ] §13 각 장이 다음 장과 연결되고, 보조 문서가 빠짐없는가?
 - [ ] §14 본문은 한국어, 코드/식별자/커밋은 영어인가?

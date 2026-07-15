@@ -66,23 +66,23 @@
   <dl>
     <dt>하네스 엔지니어링 <span class="en">Harness Engineering</span></dt>
     <dd>모델이 어떤 도구·규칙·검증 장치를 통해 일하게 할지 설계하는 일. 프롬프트 엔지니어링(무엇을 말할지) → 컨텍스트 엔지니어링(무엇을 알게 할지)에 이어지는 세 번째 단계.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s1">1장 §하네스 엔지니어링이란</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s1">1장 §1</a></span></dd>
 
     <dt>서브에이전트 <span class="en">Subagent</span></dt>
     <dd>메인 세션과 독립된 컨텍스트 창을 가지고 좁은 작업을 처리한 뒤 요약만 돌려주는 보조 에이전트. 스페셜리스트 개념을 실제 도구에서 구현하는 메커니즘.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3b">1장 §서브에이전트란 무엇인가</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3b">1장 §3b</a></span></dd>
 
     <dt>핸드오프 계약 <span class="en">Handoff Contract</span></dt>
     <dd>에이전트 사이에 작업을 넘길 때 주고받는 정보의 형식. 목적·범위·이전 단계 산출물을 구조화해 명시하면 다음 에이전트가 다시 물어볼 필요 없이 바로 시작할 수 있다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3">1장 §멀티 에이전트팀의 구성요소</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3">1장 §3</a></span></dd>
 
     <dt>동적 팀 구성 <span class="en">Dynamic Team Composition</span></dt>
     <dd>오케스트레이터가 매 요청마다 실제로 어떤 서브에이전트를 몇 번, 어떤 순서로 투입할지 새로 판단하는 것. 정의된 팀 명단은 고정이어도 실제 투입 구성은 작업마다 달라진다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4b">1장 §동적 팀 구성과 다양한 워크플로우</a> · 실습: <a href="../practice/02_Practice_Examples.html#scenario-2b">2.1 D-2</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4b">1장 §4b</a> · 실습: <a href="../practice/02_Practice_Examples.html#scenario-2b">2장 D-2</a></span></dd>
 
     <dt>오케스트레이션 패턴 <span class="en">Orchestration Pattern</span></dt>
-    <dd>Anthropic이 정리한 다섯 가지가 대표적이다 — 프롬프트 체이닝(단계별 순차 처리), 라우팅(요청을 분류해 적합한 에이전트/모델로 분배), 병렬화(팬아웃으로 독립 작업 동시 실행, 또는 투표로 같은 작업을 반복해 다수결), 오케스트레이터-워커(하위 작업을 미리 정하지 않고 동적으로 분해), 평가자-최적화(초안을 독립 검증한 뒤에만 반영, 검증-후-적용). 한 워크플로우 안에서 자유롭게 조합해 쓸 수 있다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4">1장 §오케스트레이션 패턴</a></span></dd>
+    <dd>Anthropic이 정리한 다섯 가지가 대표적이다. 프롬프트 체이닝(단계별 순차 처리), 라우팅(요청을 분류해 적합한 에이전트/모델로 분배), 병렬화(팬아웃으로 독립 작업 동시 실행, 또는 투표로 같은 작업을 반복해 다수결), 오케스트레이터-워커(하위 작업을 미리 정하지 않고 동적으로 분해), 평가자-최적화(초안을 독립 검증한 뒤에만 반영, 검증-후-적용). 한 워크플로우 안에서 자유롭게 조합해 쓸 수 있다.
+      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4">1장 §4</a></span></dd>
   </dl>
 
   <h2 id="team">멀티 에이전트팀 구성요소</h2>
@@ -95,40 +95,40 @@
 
     <dt>모델 티어 <span class="en">Model Tier</span></dt>
     <dd>에이전트 역할별로 배정하는 모델 비용 등급(<code>high</code>/<code>medium</code>/<code>low</code>). 판단이 무거운 역할에는 high, 정형화된 반복 작업에는 low를 배정해 비용과 품질의 균형을 맞춘다. <code>agents/*.md</code> frontmatter의 <code>tier</code> 필드로 지정하며, 실제 모델명은 <code>model: inherit</code>로 플랫폼이 번역한다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §templates와 variant</a> — L0→L1→L2의 "3-tier"와는 다른 개념이니 혼동 주의</span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §3</a>. L0→L1→L2의 "3-tier"와는 다른 개념이니 혼동 주의</span></dd>
   </dl>
 
   <h2 id="workspace">ai-workspace-standards 구조</h2>
   <dl>
     <dt>SSOT <span class="en">Single Source of Truth</span></dt>
     <dd>어떤 정보의 원본이 오직 한 곳에만 존재한다는 원칙. 예: CONSTITUTION.md는 워크스페이스 전체 규칙의 SSOT, context.md는 개별 프로젝트의 SSOT.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s4">5장 §세션 시작 체크리스트와 스캐폴딩</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s4">5장 §4</a></span></dd>
 
     <dt>L0 / L1 / L2</dt>
     <dd>워크스페이스 루트(L0, 유일한 원본) → 공통 템플릿 스냅샷(L1, <code>templates/common/</code>) → variant/프로젝트(L2, <code>templates/co-*/</code> 또는 <code>Projects/*/</code>)로 이어지는 3단 계층. 흐름은 항상 위에서 아래로만 가고, L1→L2는 스캐폴딩 시점에 딱 한 번만 전달되는 "포크"다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s5">5장 §L0 → L1 → L2 계층 구조</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s5">5장 §5</a></span></dd>
 
     <dt>포크 모델 <span class="en">Fork Model</span></dt>
     <dd>L1에서 L2가 갈라져 나온 뒤에는 자동 역동기화 없이 독립적으로 진화하는 방식. 공식 템플릿으로 승격하려면 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다.</dd>
 
     <dt>variant</dt>
     <dd><code>templates/</code> 아래에 있는, 특정 도메인을 위한 완결된 멀티 에이전트팀 구성(PM·전문 에이전트·거버넌스 파이프라인 묶음). co-develop, co-design, co-work 등이 예시다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §templates와 variant 7종</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §3</a></span></dd>
 
     <dt>Phase A / Phase B</dt>
     <dd>새 variant를 만드는 두 단계. Phase A는 <code>Projects/</code> 아래 독립 프로토타입으로 자유롭게 실험하는 단계, Phase B는 <code>promote-variant</code>로 정식 <code>templates/</code> variant로 승격하는 단계.
-      <span class="see">자세히: <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7.0 · 새 variant 만들기 vs 승격</a></span></dd>
+      <span class="see">자세히: <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7장 · 새 variant 만들기 vs 승격</a></span></dd>
 
     <dt>보일러플레이트 <span class="en">Boilerplate</span></dt>
     <dd>매 프로젝트마다 처음부터 다시 작성해야 할 PM 역할 정의·거버넌스 파이프라인·커맨드/스킬 배선을 미리 갖춰 둔 출발점. ai-workspace-standards가 배포하는 것의 본질.</dd>
 
     <dt>컨테이너 연계 <span class="en">Container Integration</span></dt>
     <dd>ai-workspace-standards의 고도화 방향 중 하나. 스캐폴딩된 프로젝트가 Docker/Kubernetes 환경에서 Open WebUI 같은 서비스와 연계되어 개인 단위로 지원될 수 있어야 한다는 요구. 현재는 로컬 AI 코딩 도구와 직접 연동되는 방식만 지원된다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s6">5장 §현재 상태와 고도화 방향</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s6">5장 §6</a></span></dd>
 
     <dt>메모리 취합 <span class="en">Memory Consolidation</span></dt>
     <dd>ai-workspace-standards의 고도화 방향 중 하나. 개별 프로젝트 단위로 흩어져 있는 <code>memory/MEMORY.md</code> 파일들을 워크스페이스 수준에서 취합·정리하여 전체 트렌드를 파악할 수 있는 기능.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s6">5장 §현재 상태와 고도화 방향</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s6">5장 §6</a></span></dd>
   </dl>
 
   <h2 id="tools">도구·플랫폼</h2>

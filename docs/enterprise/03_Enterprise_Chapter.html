@@ -129,6 +129,7 @@
   <a href="#s1">↳ 왜 칸반 기반인가</a>
   <a href="#s2">개발 도구 + variant 모델</a>
   <a href="#s3">나란히 놓고 비교하기</a>
+  <a href="#s3b">두 모델의 장단점</a>
   <div class="nav-section">다른 장</div>
   <a href="../tools/03_Tools_Manual.html">3장 · Harness 도구 레퍼런스</a>
   <a href="../intro/04_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
@@ -138,7 +139,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">4장</div>
   <h1>기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</h1>
-  <p class="lead">회사 전체에 멀티 에이전트 개발 환경을 도입하려는 조직은 대체로 두 갈래 길 중 하나를 고르게 된다. 하나는 중앙에서 하나의 팀을 운영하고 요청을 티켓으로 받는 방식이고, 다른 하나는 팀마다 자기 팀을 스스로 만들 수 있는 도구를 나눠주는 방식이다. 이 장에서는 두 모델을 나란히 놓고 무엇이 다른지만 짚는다.</p>
+  <p class="lead">멀티 에이전트 개발 환경을 도입하려는 조직은 대체로 두 갈래 길 중 하나를 고르게 된다. 하나는 중앙화된 하나의 팀이 요청을 티켓으로 받는 방식이고, 다른 하나는 팀마다 자기 팀을 스스로 만들 수 있는 도구를 나눠주는 방식이다. 이 장에서는 두 모델을 나란히 놓고 무엇이 다른지만 짚는다.</p>
 
   <div class="keypoints">
     <div class="kp-title">이 장에서 다루는 것</div>
@@ -151,24 +152,80 @@
   </div>
 
   <h2 id="s1">서비스 티켓 모델</h2>
-  <p>회사 전체가 멀티 에이전트팀을 하나 두고 상시 가동한다. PM 역할의 에이전트가 창구가 되어 Slack이나 사내 티켓팅 시스템으로 요청을 받고, 요청 성격에 맞는 전문 에이전트에게 작업을 나눠준 뒤 결과를 돌려준다. 사용자는 자기 컴퓨터에 아무것도 설치하지 않고 익숙한 사내 도구에 메시지만 남기면 된다.</p>
-  <p>구체적으로 그려보면 이렇다. 마케팅팀 A가 "이번 캠페인 랜딩페이지 문구를 다듬어줘"라고 요청하고, 같은 시각 재무팀 B가 "지난달 지출 데이터를 정리해줘"라고 요청한다. 두 요청 모두 같은 하나의 PM 에이전트/티켓 창구로 들어오고, PM은 각각을 문서 작성 에이전트와 데이터 분석 에이전트에게 나눠 배정한다. 요청자는 서로의 존재를 몰라도 되고, 회사 입장에서는 에이전트팀을 딱 하나만 운영·관리하면 된다는 게 이 모델의 매력이다.</p>
+  <p>하나의 멀티 에이전트팀이 정해진 범위 안의 요청을 티켓으로 상시 받는다. PM 역할의 에이전트가 창구가 되어 Slack이나 사내 티켓팅 시스템으로 요청을 받고, 요청 성격에 맞는 전문 에이전트에게 작업을 나눠준 뒤 결과를 돌려준다. 사용자는 자기 컴퓨터에 아무것도 설치하지 않고 익숙한 사내 도구에 메시지만 남기면 된다.</p>
+  <p>여기서 "정해진 범위"가 항상 회사 전체를 뜻하지는 않는다. 조직 규모가 작다면 회사 전체가 이 팀 하나를 공유해도 무리가 없지만, 조직이 커지면 본부·사업부 단위로 각자의 티켓 창구를 따로 운영하는 편이 현실적이다 — 마케팅본부는 마케팅본부 전용 에이전트팀을, 재무본부는 재무본부 전용 에이전트팀을 따로 두는 식이다. 어느 쪽이든 이 모델의 본질은 같다 — <strong>그 범위 안에서는</strong> 요청이 여러 개의 팀이 아니라 하나의 창구로 모인다는 것이다.</p>
+  <p>구체적으로 그려보면 이렇다. 소규모 조직이라면 마케팅팀 A의 "이번 캠페인 랜딩페이지 문구를 다듬어줘"와 재무팀 B의 "지난달 지출 데이터를 정리해줘"가 같은 하나의 PM 에이전트/티켓 창구로 들어와, PM이 각각을 문서 작성 에이전트와 데이터 분석 에이전트에게 나눠 배정한다. 대규모 조직이라면 마케팅본부 소속 팀들의 요청은 마케팅본부 전용 창구로, 재무본부 소속 팀들의 요청은 재무본부 전용 창구로 각각 모인다 — 본부마다 별도의 에이전트팀을 운영하되, 각 본부 내부에서는 여전히 "하나의 창구로 모은다"는 원칙을 지킨다. 요청자는 같은 창구를 쓰는 다른 요청자의 존재를 몰라도 되고, 그 범위 안에서는 에이전트팀을 하나만 운영·관리하면 된다는 게 이 모델의 매력이다.</p>
 
   <h3>왜 칸반(Kanban) 기반으로 운영해야 하는가</h3>
-  <p>문제는 바로 그 "하나의 창구로 회사 전체 요청이 몰린다"는 특성에서 생긴다. 요청이 서로 다른 팀·다른 성격으로 동시에 쏟아지는데 이를 순서 없이 받는 대로 처리하면, 급하지 않은 요청이 급한 요청을 밀어내고, 처리 중이던 작업이 새 요청에 밀려 중간에 끊기고, 지금 무엇이 처리되고 있고 무엇이 밀려 있는지 아무도 파악할 수 없는 상태가 된다. 사람이 운영하는 헬프데스크가 티켓 수가 늘어나면 무너지는 것과 똑같은 이유다.</p>
+  <p>문제는 바로 그 "하나의 창구로 그 범위 안의 요청이 모두 몰린다"는 특성에서 생긴다. 요청이 서로 다른 팀·다른 성격으로 동시에 쏟아지는데 이를 순서 없이 받는 대로 처리하면, 급하지 않은 요청이 급한 요청을 밀어내고, 처리 중이던 작업이 새 요청에 밀려 중간에 끊기고, 지금 무엇이 처리되고 있고 무엇이 밀려 있는지 아무도 파악할 수 없는 상태가 된다. 사람이 운영하는 헬프데스크가 티켓 수가 늘어나면 무너지는 것과 똑같은 이유다.</p>
   <p>칸반은 이 문제를 세 가지 장치로 해결한다. 첫째, <strong>가시화된 큐(대기열)</strong>다 — 모든 요청을 "대기 → 진행 중 → 검토 → 완료" 같은 열로 나눠 보드에 올려 두면, 지금 몇 건이 밀려 있고 무엇이 오래 정체돼 있는지 누구나 한눈에 본다. 둘째, <strong>진행 중 작업 수 제한(WIP limit)</strong>이다 — PM 에이전트(또는 그 뒤의 스페셜리스트 에이전트)가 동시에 처리하는 작업 수를 의도적으로 제한하면, §2에서 다룬 "컨텍스트 과부하" 문제가 조직 차원에서도 똑같이 재현되는 것을 막는다. 제한 없이 요청을 다 받아주면 에이전트가 여러 요청의 맥락을 오가며 뒤섞다가 품질이 떨어진다. 셋째, <strong>우선순위 기반 인출(pull)</strong>이다 — 새 요청이 들어온 순서가 아니라 우선순위가 높은 항목부터 다음 작업으로 끌어오게 하면, 급한 재무 마감 요청이 급하지 않은 문구 다듬기 요청 뒤에 묻혀 며칠씩 방치되는 사고를 막는다.</p>
-  <p>결국 서비스 티켓 모델은 "단일 창구"라는 장점과 "모든 팀의 요청이 한곳에 몰린다"는 위험을 동시에 갖고 있고, 칸반은 후자를 통제 가능한 상태로 유지해 주는 최소한의 운영 규율이다. 칸반 없이 티켓 모델만 도입하면, 초반에는 편리해 보여도 요청량이 늘어나는 순간 처리 지연·우선순위 뒤바뀜·컨텍스트 뒤섞임이라는 세 가지 실패 양상이 거의 필연적으로 나타난다.</p>
+  <p>결국 서비스 티켓 모델은 "단일 창구"라는 장점과 "그 범위 안 모든 팀의 요청이 한곳에 몰린다"는 위험을 동시에 갖고 있고, 칸반은 후자를 통제 가능한 상태로 유지해 주는 최소한의 운영 규율이다. 칸반 없이 티켓 모델만 도입하면, 초반에는 편리해 보여도 요청량이 늘어나는 순간 처리 지연·우선순위 뒤바뀜·컨텍스트 뒤섞임이라는 세 가지 실패 양상이 거의 필연적으로 나타난다.</p>
 
   <h2 id="s2">개발 도구 + variant 모델</h2>
   <p>회사가 모든 요청을 대신 처리해주는 대신, 각 팀에게 "자기 팀 전용 멀티 에이전트팀을 스스로 만들 수 있는 개발 도구"를 나눠준다. 팀은 준비된 프로젝트 템플릿(variant) 중 하나를 골라 자기 프로젝트를 스캐폴딩하고, 그렇게 만들어진 프로젝트는 독립된 저장소로 그 팀이 계속 소유하고 운영한다. ai-workspace-standards가 실제로 어떻게 이 모델을 구현하는지는 5장에서 자세히 다룬다.</p>
   <p>같은 예로 비교하면 차이가 뚜렷하다. 마케팅팀은 <code>co-work</code> variant로 자기 팀 전용 프로젝트를 스캐폴딩해 그 안에서 캠페인 문구를 계속 다듬어 나가고, 재무팀은 <code>co-develop</code>이나 <code>co-consult</code> variant로 자기 팀 전용 데이터 분석 파이프라인을 갖춘다. 두 팀 다 서로의 요청 큐를 공유하지 않고, 각자의 저장소·메모리 로그·에이전트 구성을 독립적으로 소유한다 — 티켓 모델의 "단일 창구 대기열" 문제 자체가 애초에 발생하지 않는 대신, 팀마다 초기 셋업과 운영 부담을 스스로 져야 한다.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowE" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="150" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">서비스 티켓 모델 — 중앙 집중</text>
+        <circle cx="150" cy="110" r="42" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="150" y="106" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">PM /</text>
+        <text x="150" y="120" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">에이전트팀</text>
+
+        <rect x="18" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="54" text-anchor="middle" font-size="10" fill="#116329">마케팅팀</text>
+        <line x1="70" y1="65" x2="115" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="18" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="169" text-anchor="middle" font-size="10" fill="#116329">재무팀</text>
+        <line x1="70" y1="150" x2="115" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="54" text-anchor="middle" font-size="10" fill="#116329">영업팀</text>
+        <line x1="230" y1="65" x2="185" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="169" text-anchor="middle" font-size="10" fill="#116329">HR팀</text>
+        <line x1="230" y1="150" x2="185" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <text x="150" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">모든 요청이 하나의 창구로</text>
+
+        <rect x="328" y="10" width="1" height="210" fill="#d0d7de"/>
+
+        <text x="480" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">개발 도구 + variant 모델 — 분산</text>
+
+        <rect x="345" y="60" width="90" height="70" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="390" y="88" text-anchor="middle" font-size="10.5" fill="#116329" font-weight="700">마케팅팀</text>
+        <text x="390" y="104" text-anchor="middle" font-size="9.5" fill="#116329">co-work</text>
+        <text x="390" y="118" text-anchor="middle" font-size="9.5" fill="#116329">전용 에이전트팀</text>
+
+        <rect x="450" y="60" width="90" height="70" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="495" y="88" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">재무팀</text>
+        <text x="495" y="104" text-anchor="middle" font-size="9.5" fill="#0550ae">co-consult</text>
+        <text x="495" y="118" text-anchor="middle" font-size="9.5" fill="#0550ae">전용 에이전트팀</text>
+
+        <rect x="555" y="60" width="70" height="70" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="590" y="88" text-anchor="middle" font-size="10.5" fill="#6639ba" font-weight="700">HR팀</text>
+        <text x="590" y="104" text-anchor="middle" font-size="9.5" fill="#6639ba">co-work</text>
+        <text x="590" y="118" text-anchor="middle" font-size="9.5" fill="#6639ba">전용 에이전트팀</text>
+
+        <text x="480" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">팀마다 독립된 저장소·큐·구성</text>
+      </g>
+    </svg>
+  </div>
 
   <h2 id="s3">나란히 놓고 비교하기</h2>
   <div class="compare-grid">
     <div class="compare-col">
       <h4>서비스 티켓 모델</h4>
       <ul>
-        <li><strong>중앙화:</strong> 단일 팀, 단일 창구, 회사 전체가 공유</li>
+        <li><strong>중앙화:</strong> 단일 팀, 단일 창구 — 소규모 조직은 회사 전체가, 대규모 조직은 본부/사업부 단위가 공유</li>
         <li><strong>맥락 연속성:</strong> 요청 간 맥락이 자주 끊김, 무관한 프로젝트가 같은 큐를 통과</li>
         <li><strong>셋업 비용:</strong> 낮음 — 새 팀도 곧바로 같은 창구 사용</li>
         <li><strong>거버넌스 부담:</strong> 낮음 — 운영이 한곳에 집중돼 있어 통제가 쉬움</li>
@@ -192,6 +249,55 @@
 
   <p>요청이 좁고 반복적이며 깊은 도메인 맥락이 필요 없다면 티켓 모델이 효율적이다. 반대로 각 팀이 자기 프로젝트를 오래 깊이 있게 운영해야 한다면, 초기 비용을 감수하더라도 팀별로 에이전트팀을 소유하는 쪽이 지속 가능하다. ai-workspace-standards가 실제로 어떻게 이 모델을 구현하는지는 5장에서 자세히 다룬다.</p>
   <div class="note">두 모델은 상호 배타적이지 않다 — 조직 안에서도 헬프데스크성 업무는 티켓 모델로, 제품 개발 팀은 variant 모델로 병행 운영하는 것도 가능하다.</div>
+
+  <h2 id="s3b">두 모델의 장단점</h2>
+  <p>§3의 표가 "무엇이 다른가"를 속성별로 나열했다면, 여기서는 그 차이가 실제 운영에서 어떤 이득과 대가로 이어지는지를 장점/단점으로 정리한다.</p>
+
+  <h3>서비스 티켓 모델</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 style="color:#1a7f37;">장점</h4>
+      <ul>
+        <li><strong>진입 장벽이 낮다</strong> — 새 팀도 별도 셋업 없이 곧바로 같은 창구를 쓸 수 있다.</li>
+        <li><strong>거버넌스가 단순하다</strong> — 운영이 한 팀에 집중돼 있어 규칙 위반 여부를 한곳에서만 통제·감사하면 된다(1.5장의 감사 로그 원칙이 적용될 지점도 하나뿐이다).</li>
+        <li><strong>응답 품질이 표준화된다</strong> — 모든 요청이 같은 PM/에이전트팀을 거치므로 결과물의 형식과 수준이 균일하다.</li>
+        <li><strong>초기 도입 비용이 최소화된다</strong> — 적용 범위(회사 전체 또는 본부 단위) 안에 에이전트팀을 하나만 구축·운영하면 된다.</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 style="color:#cf222e;">단점</h4>
+      <ul>
+        <li><strong>맥락이 매번 끊긴다</strong> — 요청자가 매번 배경을 다시 설명해야 하고, 깊은 도메인 지식이 쌓이지 않는다.</li>
+        <li><strong>병목이 구조적이다</strong> — 그 범위(회사 전체 또는 본부)가 커질수록 단일 창구가 처리 속도를 좌우한다. 본부 단위로 창구를 쪼개면 회사 전체가 하나의 창구를 쓸 때보다는 병목이 완화되지만, 각 본부 안에서는 여전히 같은 문제가 재현된다 — §1b의 칸반 없이는 이 병목이 훨씬 빨리, 훨씬 심하게 온다.</li>
+        <li><strong>팀의 소유권이 없다</strong> — 요청 팀이 워크플로우를 직접 다듬을 수 없고, 결과물에 대한 책임 소재도 흐려지기 쉽다.</li>
+        <li><strong>확장에 한계가 있다</strong> — 요청량이 팀원 수를 늘리는 속도보다 빠르게 늘면 큐가 감당하지 못한다.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>개발 도구 + variant 모델</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 style="color:#1a7f37;">장점</h4>
+      <ul>
+        <li><strong>맥락이 깊게 유지된다</strong> — 프로젝트 저장소·메모리 로그를 계속 참조하므로 반복될수록 결과 품질이 오히려 좋아진다.</li>
+        <li><strong>팀 자율성이 높다</strong> — 자기 도메인에 맞는 워크플로우를 variant로 직접 설계·커스터마이징할 수 있다.</li>
+        <li><strong>확장성이 좋다</strong> — 팀이 늘어나도 서로의 큐를 공유하지 않으므로 조직 전체의 병목이 되지 않는다.</li>
+        <li><strong>재사용이 쉽다</strong> — 한 번 만든 variant를 다른 팀도 그대로 복제해 시작할 수 있다(5장의 보일러플레이트 개념).</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 style="color:#cf222e;">단점</h4>
+      <ul>
+        <li><strong>초기 셋업 비용이 든다</strong> — 팀마다 스캐폴딩·에이전트 정의·거버넌스 파이프라인을 갖춰야 한다.</li>
+        <li><strong>거버넌스가 파편화될 위험이 있다</strong> — 공유 표준(CONSTITUTION.md)이 없거나 지켜지지 않으면 팀마다 다른 규칙으로 표류한다 — 포크 모델(5장)이 주는 자유의 대가다.</li>
+        <li><strong>인프라가 중복된다</strong> — 유사한 구성을 여러 프로젝트가 각자 유지해야 한다. L0→L1→L2 구조가 이를 완화하지만 완전히 없애지는 못한다.</li>
+        <li><strong>숙련도를 요구한다</strong> — 팀원이 하네스 구성 자체(1장·1.5장의 개념)를 어느 정도 이해하고 있어야 제대로 활용할 수 있다.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">결국 트레이드오프는 한 문장으로 압축된다 — <strong>티켓 모델은 "낮은 진입 장벽과 단순한 통제"를 사고, 그 대가로 "맥락 단절과 확장 한계"를 지불한다. variant 모델은 "깊은 맥락과 확장성"을 사고, 그 대가로 "초기 비용과 숙련도 요구"를 지불한다.</strong> 어느 쪽이 "더 나은" 모델이 아니라, 조직이 지금 어떤 대가를 감당할 수 있는지의 문제다.</div>
 
   <div class="chapter-nav">
     <a href="../tools/03_Tools_Manual.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">3장 · Harness 도구 레퍼런스</div></a>

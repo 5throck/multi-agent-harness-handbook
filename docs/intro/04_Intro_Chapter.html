@@ -251,6 +251,48 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
      └─ 공식 템플릿으로 승격하려면 명시적으로 l2-to-variant-pipeline.ts 실행</pre>
   </div>
 
+  <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:0 0 28px;">
+    <svg viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="20" y="80" width="110" height="50" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="102" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">L0</text>
+        <text x="75" y="118" text-anchor="middle" font-size="10" fill="#6639ba">워크스페이스 루트</text>
+
+        <line x1="130" y1="105" x2="185" y2="105" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowL)"/>
+        <text x="157" y="96" text-anchor="middle" font-size="9" fill="#636c76">자동·지속</text>
+
+        <rect x="190" y="80" width="130" height="50" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="255" y="102" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">L1</text>
+        <text x="255" y="118" text-anchor="middle" font-size="10" fill="#0550ae">templates/common/</text>
+
+        <line x1="320" y1="90" x2="400" y2="35" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <line x1="320" y1="105" x2="400" y2="105" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <line x1="320" y1="120" x2="400" y2="175" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <text x="355" y="55" text-anchor="middle" font-size="9" fill="#636c76">스캐폴딩 시 1회</text>
+
+        <rect x="405" y="10" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="30" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-develop</text>
+        <text x="500" y="46" text-anchor="middle" font-size="9.5" fill="#116329">포크 이후 독립 진화</text>
+
+        <rect x="405" y="80" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — Projects/my-app</text>
+        <text x="500" y="116" text-anchor="middle" font-size="9.5" fill="#116329">포크 이후 독립 진화</text>
+
+        <rect x="405" y="150" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="170" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-marketing</text>
+        <text x="500" y="186" text-anchor="middle" font-size="9.5" fill="#116329">포크 이후 독립 진화</text>
+
+        <path d="M500,60 C440,60 440,70 500,80" fill="none" stroke="#cf222e" stroke-width="1.1" stroke-dasharray="3,2"/>
+        <text x="360" y="200" font-size="9.5" fill="#cf222e">✕ 자동 역동기화 없음 — L2→L1 방향 화살표는 존재하지 않는다</text>
+      </g>
+    </svg>
+  </div>
+
   <h3>L1 → L2가 "포크"로 끝나는 이유</h3>
   <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 variant에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. variant가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 새 variant를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다 — L1은 variant를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(7장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다.</p>
 

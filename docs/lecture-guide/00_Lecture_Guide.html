@@ -62,15 +62,15 @@
 
 <main>
   <h1>강의 진행 가이드</h1>
-  <p class="lead">이 핸드북 전체(1~7장)를 사용해 강의를 진행할 강사를 위한 자료입니다. 시간은 <strong>3시간을 넘어도 무방합니다</strong> — 아래 배분표는 각 절을 충분히 다뤘을 때의 현실적인 소요 시간이며, 억지로 압축하지 않았습니다.</p>
+  <p class="lead">이 핸드북 전체(1~7장)를 사용해 강의를 진행할 강사를 위한 자료입니다.</p>
 
   <div class="note">이 문서는 핸드북 본문이 아니라 강사 전용 운영 자료입니다. 학습자에게는 공유하지 않아도 됩니다.</div>
 
   <h2 id="prereq">사전 준비물 통합 체크리스트</h2>
-  <p>각 장의 setup 문서(<a href="../setup/SETUP_CHECKLIST_ko.md">SETUP_CHECKLIST_ko.md</a>)에 흩어져 있던 항목을 강의 시작 전 한 번에 확인할 수 있도록 모았습니다. 강의 시작 <strong>최소 하루 전</strong>에 참가자에게 이 목록을 공지해 현장에서 설치 문제로 시간을 낭비하지 않도록 합니다.</p>
+  <p>각 장의 setup 문서(<a href="../setup/SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>)에 흩어져 있던 항목을 강의 시작 전 한 번에 확인할 수 있도록 모았습니다. 강의 시작 <strong>최소 하루 전</strong>에 참가자에게 이 목록을 공지해 현장에서 설치 문제로 시간을 낭비하지 않도록 합니다.</p>
   <div class="chk">☐ 활성 상태의 Claude Pro/Max 구독 (API 키가 아니라 구독제 계정)</div>
   <div class="chk">☐ Antigravity 사용을 위한 Google 계정</div>
-  <div class="chk">☐ <code>gh auth login</code>이 가능한 GitHub 계정</div>
+  <div class="chk">☐ <code>gh auth login</code>이 가능한 GitHub 계정 — 계정이 없는 참가자는 <a href="../practice/02_Practice_Examples.html#setup">2.1 실습 준비 절</a>의 가입 안내를 미리 따라오도록 공지</div>
   <div class="chk">☐ 최소 5GB 여유 디스크 공간, 관리자/sudo 권한</div>
   <div class="chk">☐ Claude App(Desktop), Claude Code(CLI), Antigravity(Desktop), Antigravity CLI(<code>agy</code>) 설치 완료 — <a href="../practice/02_Practice_Examples.html#setup">2.1 실습 준비 절</a>의 OS별 스크립트로 검증</div>
   <div class="chk">☐ <code>bun --version</code>, <code>git --version</code> 정상 출력 확인</div>
@@ -83,19 +83,21 @@
     <thead><tr><th>구분</th><th>내용</th><th>형태</th><th>예상 시간</th></tr></thead>
     <tbody>
       <tr><td>도입</td><td>강의 목표·전체 로드맵 소개, 사전 준비물 확인</td><td>강의</td><td>10분</td></tr>
-      <tr><td>1장</td><td>하네스 엔지니어링과 멀티 에이전트팀 개념 (Prompt→Context→Harness, 단일 에이전트 한계, 구성요소, 서브에이전트, 오케스트레이션 패턴, AGENTS.md)</td><td>강의 + 확인질문</td><td>35분</td></tr>
-      <tr><td>2.0 + 2.1</td><td>Claude App/Code, Antigravity Desktop/CLI 서브에이전트 정의·호출·순차 파이프라인·병렬 실행 실습 (G-1/D-1/P-1)</td><td>실습(참가자 직접)</td><td>50분</td></tr>
+      <tr><td>1장</td><td>하네스 엔지니어링과 멀티 에이전트팀 개념 (Prompt→Context→Harness, 단일 에이전트 한계, 구성요소, 서브에이전트, 동적 팀 구성·워크플로우 조합, 오케스트레이션 패턴 및 재시도·롤백·에스컬레이션, AGENTS.md)</td><td>강의 + 확인질문</td><td>45분</td></tr>
+      <tr><td>1.5장</td><td>가드레일과 권한 모델 — 위험 작업 3단계 분류, 최소 권한 원칙, 승인 게이트, 격리, 감사 로그</td><td>강의</td><td>20분</td></tr>
+      <tr><td>2.0 + 2.1</td><td>Claude App/Code, Antigravity Desktop/CLI 서브에이전트 정의·호출·순차 파이프라인·동적 팀 구성·병렬 실행·모델 티어 비교 실습 (G-1/D-1/D-2/P-1/P-2)</td><td>실습(참가자 직접)</td><td>70분</td></tr>
       <tr><td>3장</td><td>네 도구 비교 — 훅, teammateMode, Agent Manager vs agy</td><td>강의</td><td>20분</td></tr>
-      <tr><td>4장</td><td>서비스 티켓 모델 vs 개발도구+variant 모델, 칸반 기반 운영이 필요한 이유</td><td>강의 + 토론</td><td>20분</td></tr>
-      <tr><td>5장</td><td>ai-workspace-standards 구조, 4대 핵심 파일, 7개 variant, L0→L1→L2, 모델 티어링</td><td>강의</td><td>25분</td></tr>
-      <tr><td>6.0 + 6.1</td><td>워크스페이스 클론, 세션 체크리스트, 기존 variant로 co-consult 스캐폴딩, co-marketing 프로토타입 직접 만들기</td><td>실습(참가자 직접)</td><td>45분</td></tr>
+      <tr><td>4장</td><td>서비스 티켓 모델 vs 개발도구+variant 모델, 칸반 기반 운영이 필요한 이유, 두 모델의 장단점 비교</td><td>강의 + 토론</td><td>30분</td></tr>
+      <tr><td>5장</td><td>저장소 전체 아키텍처 조감도, 4대 핵심 파일, 7개 variant, L0→L1→L2, 모델 티어링</td><td>강의</td><td>35분</td></tr>
+      <tr><td>6.0 + 6.1</td><td>워크스페이스 클론, 세션 체크리스트, 기존 variant(co-consult)와 beta variant(co-deck) 스캐폴딩, co-marketing 프로토타입 직접 만들기</td><td>실습(참가자 직접)</td><td>55분</td></tr>
       <tr><td>7.0</td><td>처음부터 만들기 vs 기존 프로젝트 승격 — 두 경로의 차이</td><td>강의</td><td>15분</td></tr>
       <tr><td>7.1</td><td>승격 체크리스트/매니페스트 작성(참가자 실습), 실제 승격 파이프라인 실행(강사 시연만)</td><td>실습+시연 혼합</td><td>25분</td></tr>
-      <tr><td>마무리</td><td>전체 회고, Q&A, 다음 단계 안내</td><td>토론</td><td>15분</td></tr>
-      <tr class="total"><td colspan="3">합계</td><td>약 4시간 20분 (휴식 제외)</td></tr>
+      <tr><td>8장</td><td>캡스톤 실습 — 본인의 반복 작업을 골라 문제 정의부터 가드레일·서브에이전트 구현·검증까지 직접 설계</td><td>실습(참가자 직접)</td><td>35분</td></tr>
+      <tr><td>마무리</td><td>전체 회고, Q&A, 용어집/FAQ 안내, 다음 단계 안내</td><td>토론</td><td>15분</td></tr>
+      <tr class="total"><td colspan="3">합계</td><td>약 6시간 15분 (휴식 제외)</td></tr>
     </tbody>
   </table>
-  <div class="note">3시간 안에 마쳐야 한다는 제약이 없으므로, 위 배분표를 그대로 따르면 <strong>휴식 2회(각 10~15분) 포함 약 4시간 40분~5시간</strong> 세션이 됩니다. 하루 종일 진행하는 워크숍이라면 오전(1장~2.1), 점심, 오후(3~7장) 두 블록으로 나누는 것을 권장합니다.</div>
+  <div class="note">휴식 3회(각 10~15분)를 포함하면 <strong>약 7시간~7시간 30분</strong> 세션이 됩니다. 하루 종일 진행하는 워크숍이라면 오전(도입~2.1), 점심, 오후 전반(3~5장), 오후 후반(6~8장) 세 블록으로 나누는 것을 권장합니다. 여러 세션에 걸쳐 나눠 진행한다면 1일차(도입~4장), 2일차(5~8장)로 쪼개는 것도 자연스럽습니다.</div>
 
   <h2 id="per-section">장별 강사 노트</h2>
 
@@ -103,9 +105,12 @@
   <p>이 장은 이후 모든 장에서 쓰는 용어(오케스트레이터, 스페셜리스트, 핸드오프, 서브에이전트)의 기준점이므로 속도를 늦춰도 좋습니다. 비유(요리, 신입사원, 택배 송장)를 화이트보드에 옮겨 그리면서 설명하면 이해도가 확 올라갑니다.</p>
   <span class="badge badge-do">참가자 활동</span> §4의 세 패턴(팬아웃/파이프라인/검증-후-적용) 중 하나를 골라 "우리 팀 업무에 적용한다면?"을 1분씩 옆 사람과 이야기하게 하는 것을 권장합니다.
 
+  <h3>1.5장 — 가드레일과 권한 모델</h3>
+  <p>2.1 실습 직전에 배치돼 있어야 하는 이유가 있습니다 — 서브에이전트를 직접 만들기 전에 "무엇을 허용하고 무엇을 막을지"를 먼저 정하는 습관을 들이기 위함입니다. 위험 작업 3단계 분류표를 보여주면서 "여러분이 방금 만들 예정인 reviewer는 어느 단계에 해당할까요?"라고 미리 물어보면 2.1 실습으로 자연스럽게 이어집니다.</p>
+
   <h3>2.0 / 2.1 — 실습</h3>
   <p>참가자를 4개 그룹(Claude App / Claude Code / Antigravity Desktop / Antigravity CLI)으로 나눠 각자 다른 도구로 같은 시나리오를 진행하게 하면, 마지막에 결과를 비교하며 3장의 "도구 비교" 내용이 훨씬 잘 와닿습니다.</p>
-  <span class="badge badge-do">참가자 활동</span> G-1, D-1은 전원 실습. P-1(병렬 실행)은 시간이 부족하면 강사 화면 시연으로 대체 가능 — Agent Teams 설정(`.claude/settings.json`)은 그룹당 한 명만 해봐도 개념은 전달됩니다.
+  <span class="badge badge-do">참가자 활동</span> G-1, D-1, D-2(동적 팀 구성 관찰)는 전원 실습. P-1(병렬 실행)·P-2(모델 티어 비교)는 시간이 부족하면 강사 화면 시연으로 대체 가능 — Agent Teams 설정(`.claude/settings.json`)이나 <code>model</code> 필드 교체는 그룹당 한 명만 해봐도 개념은 전달됩니다.
 
   <h3>3장 — 도구 비교</h3>
   <p>2.1 실습 직후에 배치돼 있으므로, "방금 여러분이 쓴 도구에서 이게 왜 이렇게 동작했는지" 형태로 복기하면서 진행하면 순수 강의보다 훨씬 몰입도가 높습니다.</p>
@@ -125,6 +130,10 @@
   <span class="badge badge-demo">강사 시연 전용</span> P-1(실제 <code>l2-to-variant-pipeline.ts</code> 실행)은 실제 git 이력에 영향을 주는 비가역적 작업입니다. 참가자 전원이 따라 하게 하지 말고, 강사가 화면 공유로 한 번 실행하는 것을 보여주는 것으로 충분합니다. 참가자가 직접 해보고 싶다면 강의 종료 후 개인 환경(워크숍 전용 클론 폴더)에서 해보도록 안내하세요.
   <span class="badge badge-do">참가자 활동</span> PROMOTION_CHECKLIST.md 항목 확인과 <code>variant.json</code> manifest 작성까지는 전원 실습 가능합니다.
 
+  <h3>8장 — 캡스톤 실습</h3>
+  <p>이 장은 정답이 없다는 점을 먼저 분명히 하세요. 참가자가 "무엇을 만들어야 하나" 막막해하면, 강사가 자기 예시(예: "매주 회의록 액션 아이템 정리")를 먼저 시연해 질문 흐름을 보여주는 것이 효과적입니다. 시간이 촉박하면 4단계 전체를 다 실행하기보다, 최소한 1~2단계(문제 정의·가드레일 결정)까지는 전원이 끝내고 3~4단계는 숙제로 남겨도 좋습니다.</p>
+  <span class="badge badge-do">참가자 활동</span> 완료 체크리스트를 활용해 각자 어디까지 마쳤는지 스스로 표시하게 하고, 마무리 시간에 1~2명이 자기 워크플로우를 짧게 공유하도록 합니다.
+
   <h2 id="recap">장별 요약·확인 질문</h2>
   <p>각 장을 마칠 때 아래 질문을 던져 이해도를 확인하세요. 정답을 맞히는 것이 목적이 아니라, 참가자가 스스로 설명해보게 하는 것이 목적입니다.</p>
 
@@ -138,10 +147,19 @@
   </div>
 
   <div class="quiz">
+    <div class="quiz-title">1.5장 확인 질문</div>
+    <ol>
+      <li>위험 작업 3단계(읽기/쓰기/파괴적) 중, reviewer 서브에이전트와 파일 삭제 작업은 각각 어디에 해당하나요?</li>
+      <li>재시도·롤백·에스컬레이션 중 무엇을 선택할지는 어떤 기준으로 판단하나요?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
     <div class="quiz-title">2.0/2.1 확인 질문</div>
     <ol>
       <li>writer와 reviewer를 병렬로 호출하면 왜 실패할 수 있나요?</li>
       <li>Claude App에서 훅이 발화하지 않는다는 사실을 몰랐다면 어떤 사고가 날 수 있나요?</li>
+      <li>D-2에서 같은 서브에이전트 팀인데 요청에 따라 투입 구성이 달라진 이유는 무엇인가요?</li>
     </ol>
   </div>
 
@@ -167,6 +185,14 @@
     <ol>
       <li>처음부터 만드는 경로와 승격 경로 중, "설계가 사용에 앞선다"는 표현은 어느 쪽에 해당하나요?</li>
       <li>reconcile 단계와 <code>_ORIGIN.md</code> 수동 이관은 각각 무엇을 처리하나요?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">8장 확인 질문</div>
+    <ol>
+      <li>본인이 고른 반복 작업이 §2의 세 가지 한계(컨텍스트 과부하/역할 충돌/병렬성 부재) 중 무엇 때문에 팀이 필요했나요?</li>
+      <li>서브에이전트를 만들기 전에 가드레일부터 정한 이유는 무엇인가요?</li>
     </ol>
   </div>
 

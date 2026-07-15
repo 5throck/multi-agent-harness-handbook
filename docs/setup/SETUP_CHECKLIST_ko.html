@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>워크숍 사전 설치 체크리스트 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <style>
+    :root {
+      --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f4; --border: #d0d7de;
+      --text: #1f2328; --text-dim: #636c76; --accent: #0969da;
+      --accent2: #1a7f37; --accent3: #953800; --accent4: #6639ba; --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 250px; min-width: 250px; background: var(--bg2); border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 20px 0;
+    }
+    nav .nav-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); padding: 0 16px 8px; }
+    nav a { display: block; padding: 5px 16px; color: var(--text-dim); text-decoration: none; font-size: 12.5px; border-left: 2px solid transparent; }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section { margin-top: 10px; padding: 6px 16px 4px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--text-dim); border-top: 1px solid var(--border); }
+    main { flex: 1; max-width: 860px; padding: 40px 48px 96px; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { color: var(--text-dim); font-size: 13.5px; margin-bottom: 28px; }
+    h2 { font-size: 1.25rem; font-weight: 700; color: var(--accent6); margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); scroll-margin-top: 20px; }
+    p { margin: 10px 0; }
+    code { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 12.5px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; color: #cf222e; }
+    pre.code-block { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 12px 16px; overflow-x: auto; font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; line-height: 1.55; color: #116329; margin: 8px 0 16px; position: relative; max-width: 100%; }
+    .copy-btn { position: absolute; top: 8px; right: 10px; background: #fff; border: 1px solid #d0d7de; border-radius: 5px; padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76; }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0 20px; font-size: 13.5px; }
+    th { background: var(--bg3); color: var(--accent6); text-align: left; padding: 8px 12px; font-weight: 600; border: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+    td { padding: 8px 12px; border: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: #f6f8fa; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 13.5px; margin: 14px 0; }
+    .warn { background: #fff8c5; border-left: 3px solid #d4a72c; padding: 10px 16px; border-radius: 4px; font-size: 13.5px; margin: 14px 0; color: #5c3900; }
+    .chk-list { list-style: none; margin: 10px 0 18px; }
+    .chk-list li { display: flex; align-items: flex-start; gap: 8px; margin: 8px 0; font-size: 14px; }
+    .chk-list li::before { content: '☐'; color: var(--accent); font-size: 15px; flex-shrink: 0; }
+    .chk-list li.sub { margin-left: 22px; font-size: 13px; color: var(--text-dim); }
+    .chk-list li.sub::before { content: '—'; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;display:block;">← 핸드북 홈</a>
+  <div class="nav-title">사전 설치 체크리스트</div>
+  <a href="#s1">1. 구독 확인</a>
+  <a href="#s2">2. 계정 준비</a>
+  <a href="#s3">3. 시스템 요구사항</a>
+  <a href="#s4">4. Git 사용자 설정</a>
+  <a href="#s5">5. GitHub 인증</a>
+  <a href="#s6">6. 프로젝트 환경 설정</a>
+  <a href="#s7">7. 최종 환경 확인</a>
+  <div class="nav-section">다른 문서</div>
+  <a href="SETUP_ko.html">워크숍 환경 설치 가이드</a>
+  <a href="../practice/02_Practice_Examples.html#setup">2.1 실습 준비 절</a>
+</nav>
+
+<main>
+  <h1>워크숍 사전 설치 체크리스트</h1>
+  <p class="subtitle">설치 스크립트를 실행하기 <strong>전에</strong> 이 체크리스트를 완료하세요. 아래 항목들은 자동화가 불가능하며 직접 처리가 필요합니다.</p>
+
+  <h2 id="s1">1. 구독 확인 (최우선)</h2>
+  <p>워크숍 실습에 사용하는 도구들은 유효한 구독이 필요합니다.</p>
+  <table>
+    <thead><tr><th>도구</th><th>필요 플랜</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Claude Code CLI</strong> (<code>claude</code>)</td><td>Claude Pro 또는 Max</td></tr>
+      <tr><td><strong>Claude 데스크탑 앱</strong></td><td>Claude Pro 이상</td></tr>
+      <tr><td><strong>Antigravity CLI</strong> (<code>agy</code>)</td><td>Gemini Advanced</td></tr>
+      <tr><td><strong>Antigravity 데스크탑 앱</strong></td><td>Gemini Advanced</td></tr>
+    </tbody>
+  </table>
+  <div class="warn"><strong>API Key 관련</strong>: API Key는 구독 플랜 외부에서 별도 연동이 필요한 경우에만 사용합니다. 워크숍 실습은 구독 모델로 충분하며, API Key 발급은 꼭 필요한 경우에만 진행하세요.</div>
+
+  <h2 id="s2">2. 계정 준비</h2>
+  <ul class="chk-list">
+    <li><strong>Google 계정</strong> — Antigravity / Gemini Advanced 사용에 필요</li>
+    <li><strong>GitHub 계정</strong> — <code>gh auth login</code> 및 PR 실습에 필요</li>
+    <li class="sub">계정이 없으면 <a href="../practice/02_Practice_Examples.html#setup">2.1 실습 준비 절</a>의 가입 안내를 따라 <a href="https://github.com/signup" target="_blank">github.com/signup</a>에서 미리 가입하세요</li>
+  </ul>
+
+  <h2 id="s3">3. 시스템 요구사항</h2>
+  <ul class="chk-list">
+    <li>OS: Windows 11 (Intel) / macOS Sequoia 15 이상 Apple Silicon (M 시리즈) / Ubuntu 24.04 이상</li>
+    <li>여유 디스크 공간: <strong>5 GB 이상</strong></li>
+    <li>관리자 / sudo 권한 보유</li>
+    <li class="sub"><strong>Windows</strong>: 시작 → "PowerShell" 검색 → 우클릭 → "관리자 권한으로 실행" (또는 <code>Win + X</code> → "터미널(관리자)"), UAC 확인 창에서 "예" 클릭</li>
+    <li class="sub"><strong>macOS / Linux</strong>: 명령어 앞에 <code>sudo</code>를 붙여서 실행</li>
+    <li>안정적인 인터넷 연결 (총 다운로드 용량 약 1–2 GB)</li>
+  </ul>
+
+  <h2 id="s4">4. Git 사용자 설정</h2>
+  <p>git 설치 후 아래 명령어로 사용자 정보를 등록하세요.</p>
+  <div style="position:relative">
+    <pre class="code-block">git config --global user.name  "홍길동"
+git config --global user.email "you@example.com"</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>git config --global user.name</code> 설정 완료</li>
+    <li><code>git config --global user.email</code> 설정 완료</li>
+  </ul>
+
+  <h2 id="s5">5. GitHub 인증</h2>
+  <div style="position:relative">
+    <pre class="code-block">gh auth login</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+  <p>안내에 따라 브라우저에서 인증을 완료하세요.</p>
+  <ul class="chk-list">
+    <li><code>gh auth status</code> 실행 시 "Logged in" 표시 확인</li>
+  </ul>
+
+  <h2 id="s6">6. 프로젝트 환경 설정 (저장소 클론 후)</h2>
+  <p><strong>co-develop</strong> 및 <strong>co-consult</strong> variant 사용 시:</p>
+  <div style="position:relative">
+    <pre class="code-block">cp .env.sample .env
+# .env 파일을 열어 필요한 값을 채워 넣으세요</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>.env.sample</code>에서 <code>.env</code> 파일 생성 완료</li>
+    <li>필요한 API Key / 설정값 입력 완료</li>
+  </ul>
+
+  <p><strong>co-develop</strong> Python 프로젝트 — <strong>uv</strong> 사용 (필수):</p>
+  <div style="position:relative">
+    <pre class="code-block">uv sync          # pyproject.toml 기반 의존성 설치
+# 또는 requirements.txt를 사용하는 경우:
+uv pip install -r requirements.txt</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>uv</code> 설치 및 사용 가능 확인 (<code>uv --version</code>)</li>
+    <li><code>uv</code>로 Python 의존성 설치 완료</li>
+  </ul>
+
+  <div class="note"><strong>Docker</strong>는 선택 사항입니다. 운영자가 별도로 안내하는 경우에만 설치하세요. macOS/Linux는 설치 스크립트에 <code>--docker</code> 플래그, Windows는 <code>-Docker</code> 플래그를 추가합니다.
+  <ul class="chk-list" style="margin-top:8px;"><li><em>(선택)</em> Docker 설치 및 데몬 실행 확인</li></ul></div>
+
+  <h2 id="s7">7. 최종 환경 확인 (워크숍 전 반드시 실행)</h2>
+  <p>프로젝트 루트 폴더에서 아래 명령어를 실행하세요.</p>
+  <div style="position:relative">
+    <pre class="code-block">bun setup-common.ts</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+  <p>출력 표의 모든 항목이 ✅로 표시되면 준비 완료입니다.</p>
+
+  <hr>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">문의사항은 워크숍 시작 전에 운영자에게 연락하세요.</p>
+</main>
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    setTimeout(() => { btn.textContent = '복사'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

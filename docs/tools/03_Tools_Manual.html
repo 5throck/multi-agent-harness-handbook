@@ -146,7 +146,7 @@
 
 <main>
   <h1>3장 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity</h1>
-  <p class="subtitle">같은 "멀티 에이전트팀"이라도 어떤 도구로 만드느냐에 따라 실행 방식과 제약이 달라집니다 &nbsp;|&nbsp; 공식 문서: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code Subagents</a>, <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI</a>, <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity Agent Manager</a></p>
+  <p class="subtitle">같은 "멀티 에이전트팀"이라도 어떤 도구로 만드느냐에 따라 실행 방식과 제약이 달라진다 &nbsp;|&nbsp; 공식 문서: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code Subagents</a>, <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI</a>, <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity Agent Manager</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 버전</span><span class="vvalue">Claude Code 2026-07 / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
@@ -156,7 +156,7 @@
     <div class="version-row"><span class="vlabel">개정 시 확인 사항</span><span class="vvalue">각 도구의 실험적(experimental) 기능 표시가 정식 기능으로 바뀌었는지, Desktop App의 훅 미지원 범위가 좁아졌는지 재확인</span></div>
   </div>
 
-  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 <strong>Gemini CLI 서비스를 종료</strong>했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 핸드북은 그 이전에는 Gemini CLI를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI로 전면 갱신했다 — 오래된 자료에서 <code>gemini</code> 명령이나 <code>.gemini/agents/</code> 경로를 보게 되면 이미 지나간 버전임을 감안한다.</div>
+  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 <strong>Gemini CLI 서비스를 종료</strong>했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 핸드북은 그 이전에는 Gemini CLI를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI로 전면 갱신했다. 오래된 자료에서 <code>gemini</code> 명령이나 <code>.gemini/agents/</code> 경로를 보게 되면 이미 지나간 버전임을 감안한다.</div>
 
   <h2 id="tree">한눈에 보는 4가지 도구 (Desktop 우선, CLI 병행)</h2>
   <div class="tree-box"><pre>
@@ -172,11 +172,11 @@ Google 계열
   <hr>
 
   <h2 id="section-1">1. Claude App (Desktop) vs Claude Code (CLI)</h2>
-  <p>이 핸드북은 <strong>Claude App(Desktop)</strong>을 기본 실습 도구로 삼는다 — GUI로 서브에이전트를 만들고 호출하는 흐름이 같으므로, Claude Code(CLI)로도 아래 내용을 그대로 따라 할 수 있다. 두 도구는 같은 Claude 엔진을 쓰지만 실행 환경이 다르기 때문에, 멀티 에이전트 하네스를 이루는 장치 중 일부는 CLI에서만 동작한다. 가장 큰 차이는 <strong>자동화 훅(hook)</strong>과 <strong>Agent Teams의 실행 모드</strong>다.</p>
+  <p>이 핸드북은 <strong>Claude App(Desktop)</strong>을 기본 실습 도구로 삼는다. GUI로 서브에이전트를 만들고 호출하는 흐름이 같으므로, Claude Code(CLI)로도 아래 내용을 그대로 따라 할 수 있다. 두 도구는 같은 Claude 엔진을 쓰지만 실행 환경이 다르기 때문에, 멀티 에이전트 하네스를 이루는 장치 중 일부는 CLI에서만 동작한다. 가장 큰 차이는 <strong>자동화 훅(hook)</strong>과 <strong>Agent Teams의 실행 모드</strong>다.</p>
 
   <h3>Claude App(또는 Claude Code) — <code>.claude/agents/*.md</code> 서브에이전트</h3>
-  <p>Claude App은 Claude Code와 동일하게 <code>.claude/agents/*.md</code> 파일로 커스텀 서브에이전트를 정의하고 <code>Agent</code>/<code>Task</code> 도구로 호출한다. 다만 <code>.claude/settings.json</code>에 정의한 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅은 Claude App에서는 발화하지 않는다 — CLI 세션에서만 파일 저장·작업 완료 같은 이벤트에 맞춰 자동 실행된다. Claude App을 쓰는 팀은 훅이 하던 일(예: 감사 스크립트 실행)을 세션이 끝난 뒤 수동으로 실행해야 한다.</p>
-  <p>이 차이가 실제로 어떤 사고로 이어지는지 예를 들어보자. 팀이 CLI에서는 <code>PostToolUse</code> 훅으로 "파일을 저장할 때마다 <code>bun scripts/audit.ts</code>를 자동 실행해 시크릿 유출이나 규칙 위반을 잡는다"고 설정해 뒀다고 하자. 같은 팀원이 Claude App(Desktop)에서 똑같이 파일을 수정하면 훅이 전혀 발화하지 않는데, 화면상으로는 CLI와 똑같이 "파일이 저장됐다"는 결과만 보이므로 훅이 안 돌았다는 사실 자체를 알아차리기 어렵다. 그 상태로 커밋까지 이어지면, 원래는 훅이 잡아냈어야 할 문제가 조용히 통과된다 — "감사를 돌리지 않았다"가 아니라 "감사가 도는 줄 알았는데 안 돌았다"는 게 실제 위험 지점이다.</p>
+  <p>Claude App은 Claude Code와 동일하게 <code>.claude/agents/*.md</code> 파일로 커스텀 서브에이전트를 정의하고 <code>Agent</code>/<code>Task</code> 도구로 호출한다. 다만 <code>.claude/settings.json</code>에 정의한 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅은 Claude App에서는 발화하지 않는다. CLI 세션에서만 파일 저장·작업 완료 같은 이벤트에 맞춰 자동 실행된다. Claude App을 쓰는 팀은 훅이 하던 일(예: 감사 스크립트 실행)을 세션이 끝난 뒤 수동으로 실행해야 한다.</p>
+  <p>이 차이가 실제로 어떤 사고로 이어지는지 예를 들어보자. 팀이 CLI에서는 <code>PostToolUse</code> 훅으로 "파일을 저장할 때마다 <code>bun scripts/audit.ts</code>를 자동 실행해 시크릿 유출이나 규칙 위반을 잡는다"고 설정해 뒀다고 하자. 같은 팀원이 Claude App(Desktop)에서 똑같이 파일을 수정하면 훅이 전혀 발화하지 않는데, 화면상으로는 CLI와 똑같이 "파일이 저장됐다"는 결과만 보이므로 훅이 안 돌았다는 사실 자체를 알아차리기 어렵다. 그 상태로 커밋까지 이어지면, 원래는 훅이 잡아냈어야 할 문제가 조용히 통과된다. "감사를 돌리지 않았다"가 아니라 "감사가 도는 줄 알았는데 안 돌았다"는 게 실제 위험 지점이다.</p>
 
   <h3><code>teammateMode</code> — Claude App은 <code>in-process</code>만, Claude Code는 <code>tmux</code>도 가능</h3>
   <p>실험적 기능인 Agent Teams는 여러 Claude 인스턴스를 병렬로 띄우는데, Claude App은 같은 프로세스 안에서 병렬 처리하는 <code>in-process</code> 모드만 쓸 수 있고 일부 키보드 내비게이션(Shift+Down 등)이 제한된다. 터미널 분할(tmux split-pane)을 쓰는 <code>tmux</code> 모드는 Claude Code(CLI)에서만 추가로 지원된다.</p>
@@ -212,12 +212,12 @@ Google 계열
     </tbody>
   </table>
 
-  <div class="warning-box">Desktop App에서 Agent Teams를 쓰려면 <code>teammateMode</code>를 명시적으로 <code>in-process</code>로 지정해야 한다. 훅이 발화하지 않는다는 점도 팀 규칙에 반영해야 한다 — 자동 감사가 조용히 건너뛰어지는 것을 "통과"로 착각하지 않도록 주의한다.</div>
+  <div class="warning-box">Desktop App에서 Agent Teams를 쓰려면 <code>teammateMode</code>를 명시적으로 <code>in-process</code>로 지정해야 한다. 훅이 발화하지 않는다는 점도 팀 규칙에 반영해야 한다. 자동 감사가 조용히 건너뛰어지는 것을 "통과"로 착각하지 않도록 주의한다.</div>
 
   <hr>
 
   <h2 id="section-2">2. Antigravity (Desktop) vs Antigravity CLI (agy)</h2>
-  <p>Google 진영도 이 핸드북은 <strong>Antigravity(Desktop)</strong>를 기본 실습 도구로 삼는다 — 애초에 여러 워크스페이스에 걸쳐 여러 에이전트를 동시에 감독하도록 설계된 독립 데스크톱 앱이다. <strong>Antigravity CLI(<code>agy</code>)</strong>는 터미널에서 하나의 세션이 목표를 받아 스스로 하위 작업을 쪼개는 구조로, 같은 플랫폼의 CLI 면이다. 두 도구는 설정 폴더(<code>~/.gemini</code> 하위 <code>antigravity-cli/</code>)도 공유한다.</p>
+  <p>Google 진영도 이 핸드북은 <strong>Antigravity(Desktop)</strong>를 기본 실습 도구로 삼는다. 애초에 여러 워크스페이스에 걸쳐 여러 에이전트를 동시에 감독하도록 설계된 독립 데스크톱 앱이다. <strong>Antigravity CLI(<code>agy</code>)</strong>는 터미널에서 하나의 세션이 목표를 받아 스스로 하위 작업을 쪼개는 구조로, 같은 플랫폼의 CLI 면이다. 두 도구는 설정 폴더(<code>~/.gemini</code> 하위 <code>antigravity-cli/</code>)도 공유한다.</p>
 
   <h3>Workspaces · Inbox · Playground — Antigravity(Desktop) Agent Manager</h3>
   <p>Antigravity의 Agent Manager는 여러 워크스페이스를 한 화면에서 감독하는 상위 인터페이스다. 워크스페이스마다 에이전트 하나씩 배정하는 것이 원칙이고, 승인·피드백이 필요한 메시지는 Inbox에 모인다. 정식 워크스페이스에 편입하기 전에 가볍게 시도해 볼 공간은 Playground다. 에이전트를 띄울 때 활성 폴더에서 바로 작업하는 Local Mode와, 격리된 git worktree에서 작업하는 New Worktree Mode 중 하나를 고른다.</p>
@@ -226,9 +226,9 @@ Google 계열
 
   <h3>Antigravity CLI(<code>agy</code>)의 슬래시 커맨드 — <code>/goal</code>, <code>/agent</code>, <code>/agents</code></h3>
   <p>Claude Code/App처럼 <code>.claude/agents/*.md</code> 같은 파일로 서브에이전트를 미리 정의해 두는 방식과 달리, Antigravity CLI는 목표(goal)를 받으면 오케스트레이터 에이전트가 작업을 어떻게 쪼갤지 스스로 판단하고 그때그때 서브에이전트를 만들어 병렬로 실행한다. 각 서브에이전트는 독립된 컨텍스트 창을 가져 메인 세션의 맥락이 흐려지는 것을 막는다.</p>
-  <p>비유하면 Claude Code/App은 "미리 뽑아 둔 정규직 팀원 명단"을 갖고 일하는 쪽이고, Antigravity CLI는 "일이 생길 때마다 그 일에 맞는 프리랜서를 그 자리에서 섭외하는" 쪽에 가깝다. 전자는 팀원이 누구인지 항상 알 수 있어 권한 통제가 쉽고, 후자는 매번 새 인력을 구하는 유연함이 있지만 "이번엔 누가 투입됐는지" 사후에 확인할 방법이 필요하다 — 그 확인 창구가 아래 <code>/agents</code>다.</p>
-  <div class="note">여기서 유의할 점: <strong>동적으로 서브에이전트를 만드는 능력 자체는 Antigravity CLI만의 것이 아니다.</strong> Claude Code/App도 자연어 요청만으로 <code>Agent</code>(Task) 툴이 그때그때 필요한 작업을 판단해 서브에이전트를 스폰하며(1장 §3b), Antigravity(Desktop)도 Agent Manager에서 사전 정의 파일 없이 목표를 자연어로 주는 방식은 동일하다(§1). 이 절에서 소개하는 <code>/goal</code>·<code>/agent</code>·<code>/agents</code>는 그 <em>같은 동적 오케스트레이션 능력</em>을 <strong>CLI 화면에서 슬래시 커맨드로 다루기 위한 문법</strong>일 뿐이다 — Claude Code/App은 이 문법 대신 채팅 문장으로, Antigravity Desktop은 이 문법 대신 GUI 버튼(Inbox 승인, Playground 등)으로 같은 일을 한다.</div>
-  <p>다음은 <code>agy</code>를 실제로 쓸 때 자주 쓰는 CLI 전용 슬래시 커맨드 네 가지다 — 아래 표는 "Antigravity CLI에만 있는 기능 목록"이 아니라 "같은 기능을 CLI에서 부르는 이름"으로 읽는다.</p>
+  <p>비유하면 Claude Code/App은 "미리 뽑아 둔 정규직 팀원 명단"을 갖고 일하는 쪽이고, Antigravity CLI는 "일이 생길 때마다 그 일에 맞는 프리랜서를 그 자리에서 섭외하는" 쪽에 가깝다. 전자는 팀원이 누구인지 항상 알 수 있어 권한 통제가 쉽고, 후자는 매번 새 인력을 구하는 유연함이 있지만 "이번엔 누가 투입됐는지" 사후에 확인할 방법이 필요하다. 그 확인 창구가 아래 <code>/agents</code>다.</p>
+  <div class="note">여기서 유의할 점: <strong>동적으로 서브에이전트를 만드는 능력 자체는 Antigravity CLI만의 것이 아니다.</strong> Claude Code/App도 자연어 요청만으로 <code>Agent</code>(Task) 툴이 그때그때 필요한 작업을 판단해 서브에이전트를 스폰하며(1장 §3b), Antigravity(Desktop)도 Agent Manager에서 사전 정의 파일 없이 목표를 자연어로 주는 방식은 동일하다(§1). 이 절에서 소개하는 <code>/goal</code>·<code>/agent</code>·<code>/agents</code>는 그 <em>같은 동적 오케스트레이션 능력</em>을 <strong>CLI 화면에서 슬래시 커맨드로 다루기 위한 문법</strong>일 뿐이다. Claude Code/App은 이 문법 대신 채팅 문장으로, Antigravity Desktop은 이 문법 대신 GUI 버튼(Inbox 승인, Playground 등)으로 같은 일을 한다.</div>
+  <p>다음은 <code>agy</code>를 실제로 쓸 때 자주 쓰는 CLI 전용 슬래시 커맨드 네 가지다. 아래 표는 "Antigravity CLI에만 있는 기능 목록"이 아니라 "같은 기능을 CLI에서 부르는 이름"으로 읽는다.</p>
   <table>
     <thead><tr><th>명령</th><th>동작</th></tr></thead>
     <tbody>
@@ -250,7 +250,7 @@ Google 계열
   <div style="position:relative">
     <pre class="code-block">agy -p "커밋 메시지 초안 작성"</pre>
   </div>
-  <p>CLI 쪽에서도 세션을 분리해야 안전하다 — 한 <code>agy</code> 세션이 API 레이어를 리팩터링하는 동안 다른 세션이 테스트를 작성해도, 같은 파일을 건드리지 않는 한 충돌하지 않는다.</p>
+  <p>CLI 쪽에서도 세션을 분리해야 안전하다. 한 <code>agy</code> 세션이 API 레이어를 리팩터링하는 동안 다른 세션이 테스트를 작성해도, 같은 파일을 건드리지 않는 한 충돌하지 않는다.</p>
 
   <hr>
 
@@ -268,7 +268,7 @@ Google 계열
       <tr>
         <td>서브에이전트 정의 방식</td>
         <td><code>.claude/agents/*.md</code> (사전 정의)</td>
-        <td>(Agent Manager는 워크스페이스 단위 — 별도 에이전트 정의 파일 개념보다 워크스페이스/프로젝트 단위 격리)</td>
+        <td>(Agent Manager는 워크스페이스 단위. 별도 에이전트 정의 파일 개념보다 워크스페이스/프로젝트 단위 격리)</td>
         <td><code>.claude/agents/*.md</code> (사전 정의)</td>
         <td>오케스트레이터가 목표를 보고 동적으로 생성 (사전 정의 불필요)</td>
       </tr>
@@ -289,9 +289,9 @@ Google 계열
       <tr>
         <td>비대화형/자동화 실행</td>
         <td>미지원</td>
-        <td>(해당 없음 — GUI 중심)</td>
+        <td>(해당 없음. GUI 중심)</td>
         <td>(스크립트 훅으로 대응)</td>
-        <td><code>agy -p "프롬프트"</code> — 한 번 실행 후 종료, CI에 적합</td>
+        <td><code>agy -p "프롬프트"</code>. 한 번 실행 후 종료, CI에 적합</td>
       </tr>
       <tr>
         <td>자동화 훅</td>
@@ -303,16 +303,16 @@ Google 계열
       <tr>
         <td>실행 중인 서브에이전트에 추가 메시지 전달</td>
         <td>단일 <code>Agent</code> 호출: 불가(완료까지 대기) / Agent Teams: 가능(<code>SendMessage</code>)</td>
-        <td>가능 — Inbox에서 승인·피드백 메시지를 주고받으며 진행 중 에이전트에 개입</td>
-        <td>Claude App과 동일 — 단일 <code>Agent</code> 호출은 불가, Agent Teams는 <code>SendMessage</code></td>
+        <td>가능. Inbox에서 승인·피드백 메시지를 주고받으며 진행 중 에이전트에 개입</td>
+        <td>Claude App과 동일. 단일 <code>Agent</code> 호출은 불가, Agent Teams는 <code>SendMessage</code></td>
         <td><code>/agent</code>로 위임한 백그라운드 작업에 상태 확인(<code>/agents</code>)은 되지만, 실행 중 작업 자체에 끼어들어 지시를 바꾸는 경로는 제한적</td>
       </tr>
       <tr>
         <td>서브에이전트 간 직접 소통</td>
         <td>단일 <code>Agent</code> 호출: 불가(메인 세션을 거쳐야 함) / Agent Teams: 가능(팀메이트끼리 <code>SendMessage</code>)</td>
-        <td>불가 — Workspace(에이전트) 사이는 의도적으로 격리(§2의 "인지적 중첩" 경고 참고), 소통은 항상 사람을 거침</td>
+        <td>불가. Workspace(에이전트) 사이는 의도적으로 격리(§2의 "인지적 중첩" 경고 참고), 소통은 항상 사람을 거침</td>
         <td>Claude App과 동일</td>
-        <td>불가 — 동적으로 생성된 서브에이전트들은 오케스트레이터를 통해서만 결과가 취합됨, 서브에이전트끼리 직접 통신하지 않음</td>
+        <td>불가. 동적으로 생성된 서브에이전트들은 오케스트레이터를 통해서만 결과가 취합됨, 서브에이전트끼리 직접 통신하지 않음</td>
       </tr>
     </tbody>
   </table>
@@ -321,16 +321,16 @@ Google 계열
     <span class="badge badge-alias">CLI 완전 병행 지원</span>
     <span class="badge badge-new">실험적 기능 다수</span>
   </p>
-  <div class="note">위 두 행에서 갈리는 기준은 하나다 — <strong>서브에이전트가 "한 번 위임하면 결과만 돌아오는 일회성 호출"인가, "팀메이트처럼 계속 살아있는 존재"인가</strong>다. Claude Code/App의 단일 <code>Agent</code>(Task) 호출과 Antigravity CLI의 동적 서브에이전트는 전자에 가깝다 — 스폰되면 끝까지 혼자 처리하고 요약만 반환하므로, 중간에 새 지시를 주거나 다른 서브에이전트와 대화하게 만들 방법이 없다. 반면 Claude Code/App의 Agent Teams는 각 팀메이트가 <code>SendMessage</code>로 서로 직접 메시지를 주고받을 수 있는 후자다(2.1의 P-1 실습에서 이미 다뤘다). Antigravity(Desktop)는 에이전트 간 통신 자체를 지원하지 않는 대신, 사람이 Inbox를 통해 진행 중인 에이전트 각각과 개별적으로 대화할 수 있다는 점이 다른 세 도구와 구분되는 지점이다.</div>
+  <div class="note">위 두 행에서 갈리는 기준은 하나다. <strong>서브에이전트가 "한 번 위임하면 결과만 돌아오는 일회성 호출"인가, "팀메이트처럼 계속 살아있는 존재"인가</strong>다. Claude Code/App의 단일 <code>Agent</code>(Task) 호출과 Antigravity CLI의 동적 서브에이전트는 전자에 가깝다. 스폰되면 끝까지 혼자 처리하고 요약만 반환하므로, 중간에 새 지시를 주거나 다른 서브에이전트와 대화하게 만들 방법이 없다. 반면 Claude Code/App의 Agent Teams는 각 팀메이트가 <code>SendMessage</code>로 서로 직접 메시지를 주고받을 수 있는 후자다(2장 §1의 P-1 실습에서 이미 다룬다). Antigravity(Desktop)는 에이전트 간 통신 자체를 지원하지 않는 대신, 사람이 Inbox를 통해 진행 중인 에이전트 각각과 개별적으로 대화할 수 있다는 점이 다른 세 도구와 구분되는 지점이다.</div>
 
   <hr>
 
   <h2 id="section-4">4. 이 핸드북에서 어떤 도구를 골라 실습할지</h2>
-  <p>이 핸드북은 <strong>Claude App</strong>과 <strong>Antigravity(Desktop)</strong>를 기본 실습 도구로 안내한다 — GUI로 시작하는 편이 진입 장벽이 낮기 때문이다. 이후 실습 장(2장)도 이 두 Desktop 도구를 먼저 보여주고, 바로 이어서 Claude Code(CLI)·Antigravity CLI(<code>agy</code>) 절차를 병기한다. 어떤 도구든 하나만 골라 따라가도 되고, 네 도구를 비교하며 같이 실습해도 된다. 다음 기준을 참고하면 선택이 쉬워진다.</p>
+  <p>이 핸드북은 <strong>Claude App</strong>과 <strong>Antigravity(Desktop)</strong>를 기본 실습 도구로 안내한다. GUI로 시작하는 편이 진입 장벽이 낮기 때문이다. 이후 2장에서도 이 두 Desktop 도구를 먼저 보여주고, 바로 이어서 Claude Code(CLI)·Antigravity CLI(<code>agy</code>) 절차를 병기한다. 어떤 도구든 하나만 골라 따라가도 되고, 네 도구를 비교하며 같이 실습해도 된다. 다음 기준을 참고하면 선택이 쉬워진다.</p>
   <ol style="margin:0 0 16px 20px;line-height:2;">
-    <li><strong>일단 GUI로 감을 잡고 싶다면:</strong> Claude App 또는 Antigravity(Desktop)로 시작한다 — 이 핸드북의 기본 경로다.</li>
+    <li><strong>일단 GUI로 감을 잡고 싶다면.</strong> Claude App 또는 Antigravity(Desktop)로 시작한다. 이 핸드북의 기본 경로다.</li>
     <li><strong>여러 서로 다른 프로젝트를 동시에 감독하고 싶다면:</strong> Antigravity(Desktop)의 Agent Manager(워크스페이스 단위 격리)가 이런 시나리오에 맞춰 설계돼 있다.</li>
-    <li><strong>훅 기반 자동화(감사·QA 게이트)가 필요하다면:</strong> Claude Code(CLI)로 넘어간다 — Claude App과 Antigravity 계열에는 이에 대응하는 자동 훅이 없다.</li>
+    <li><strong>훅 기반 자동화(감사·QA 게이트)가 필요하다면.</strong> Claude Code(CLI)로 넘어간다. Claude App과 Antigravity 계열에는 이에 대응하는 자동 훅이 없다.</li>
     <li><strong>서브에이전트를 일일이 정의하지 않고 오케스트레이터가 알아서 쪼개 주길 원한다면:</strong> Antigravity CLI(<code>agy</code>)가 목표만 주면 동적으로 서브에이전트를 만들어 준다 — 대신 세부 제어는 상대적으로 덜하다.</li>
   </ol>
   <p style="background:#e8f4fd;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">💡 <strong>핵심 한 줄:</strong> 네 도구 모두 "서브에이전트에게 좁은 역할을 맡기고 오케스트레이터가 조율한다"는 하네스 엔지니어링의 기본 구조는 같다 — 달라지는 것은 그 구조를 어떤 실행 환경(CLI/GUI, 훅 유무, 서브에이전트를 미리 정의하는지 즉석에서 생성하는지)에 얹느냐이다.</p>
@@ -360,7 +360,7 @@ Google 계열
       </tr>
     </tbody>
   </table>
-  <p style="background:#e8f4fd;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">💡 <strong>핵심 한 줄:</strong> 5장에서 다루는 ai-workspace-standards 저장소는 이 구조를 그대로 구현한다 — 루트 <code>AGENTS.md</code>가 에이전트 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적 커맨드·스킬을 담아 둔다.</p>
+  <p style="background:#e8f4fd;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">💡 <strong>핵심 한 줄:</strong> 5장 §0에서 다루는 ai-workspace-standards 저장소는 이 구조를 그대로 구현한다 — 루트 <code>AGENTS.md</code>가 에이전트 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적 커맨드·스킬을 담아 둔다.</p>
 
   <hr>
 

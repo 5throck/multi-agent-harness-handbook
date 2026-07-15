@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>6.0 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩</title>
+  <title>6장 §1 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -257,7 +257,7 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">6.0 · Variant 실습 레퍼런스</div>
+  <div class="nav-title">6장 §1 · Variant 실습 레퍼런스</div>
   <a href="#tree">전체 구조 개요</a>
   <div class="nav-section">설치 및 확인</div>
   <a href="#section-1">1. 로컬 환경 준비</a>
@@ -266,8 +266,8 @@
   <a href="#session-checklist">3. 세션 시작 체크리스트</a>
   <a href="#section-3">참고 링크</a>
   <div class="nav-section">다른 장</div>
-  <a href="../intro/04_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
-  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7.0 · 새 variant 만들기 vs 승격</a>
+  <a href="../intro/04_Intro_Chapter.html">5장 §1 · ai-workspace-standards 소개</a>
+  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7장 §1 · 새 variant 만들기 vs 승격</a>
 </nav>
 
 <main>
@@ -301,13 +301,13 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
 
   <h2 id="section-1">1. 로컬 환경 준비</h2>
 
-  <h3><code>git clone</code> — 워크스페이스 루트로 클론</h3>
+  <h3><code>git clone</code>. 워크스페이스 루트로 클론</h3>
   <p>ai-workspace-standards는 일반적인 라이브러리처럼 프로젝트 안에 넣는 게 아니라, 워크스페이스 자체의 루트로 클론해서 쓰도록 설계되어 있다. 예를 들어 Windows에서는 <code>C:\git</code>, macOS/Linux에서는 <code>~/git</code> 같은 위치에 이 저장소를 클론하면, 그 아래에서 만드는 모든 프로젝트가 <code>CONSTITUTION.md</code>의 공유 규칙을 자동으로 물려받는다.</p>
   <p>만약 이 규칙을 무시하고 특정 프로젝트 폴더 안에(예: <code>my-project/ai-workspace-standards/</code>처럼) 서브모듈처럼 넣어버리면 어떻게 될까? <code>new-project.ts</code> 같은 스크립트는 "워크스페이스 루트에서 실행됐는가"를 스스로 확인하는데, 이 조건이 깨지므로 스캐폴딩 자체가 거부되거나, 경로 계산이 어긋나 엉뚱한 위치에 프로젝트가 생성된다. 게다가 그 프로젝트 하나만 공유 규칙을 물려받고 나중에 만들 다른 프로젝트들은 규칙을 전혀 공유하지 못해, 애초에 "워크스페이스 전체가 같은 표준을 쓴다"는 이 저장소의 존재 이유 자체가 무너진다.</p>
   <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
 cd C:\git</pre>
 
-  <h3><code>bun</code> — 런타임 설치</h3>
+  <h3><code>bun</code>. 런타임 설치</h3>
   <p>워크스페이스의 모든 운영 스크립트(<code>scripts/*.ts</code>)는 TypeScript로 작성되어 있고 <code>bun</code>으로 실행한다. 별도의 <code>.sh</code>/<code>.ps1</code> 버전은 존재하지 않으므로, bun 설치가 선행되어야 스크립트를 돌릴 수 있다.</p>
   <pre class="code-block">bun --version
 git --version</pre>
@@ -328,11 +328,11 @@ git --version</pre>
 
   <h2 id="section-2">2. 프로젝트 스캐폴딩 명령</h2>
 
-  <h3><code>bun scripts/list-template-versions.ts</code> — 사용 가능한 variant 확인</h3>
+  <h3><code>bun scripts/list-template-versions.ts</code>. 사용 가능한 variant 확인</h3>
   <p>새 프로젝트를 만들기 전에, 워크스페이스에 어떤 variant들이 있고 각각 어떤 버전이 태그되어 있는지 먼저 확인한다.</p>
   <pre class="code-block">bun scripts/list-template-versions.ts</pre>
 
-  <h3><code>bun scripts/new-project.ts</code> — 기존 variant로 프로젝트 생성</h3>
+  <h3><code>bun scripts/new-project.ts</code>. 기존 variant로 프로젝트 생성</h3>
   <p>가장 자주 쓰는 명령이다. variant 하나를 골라 프로젝트 이름과 함께 실행하면, <code>templates/&lt;variant&gt;/</code>의 전체 구성(에이전트 정의, 스킬, 커맨드, 거버넌스 파이프라인)이 새 독립 저장소로 복제된다.</p>
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
   <p>특정 버전을 고정해서 스캐폴딩하고 싶다면 <code>--version</code>을 함께 지정한다.</p>
@@ -363,15 +363,15 @@ git --version</pre>
   <div class="warning-box">스캐폴딩된 프로젝트는 워크스페이스 루트와는 별개의 독립 git 저장소로 생성된다. 워크스페이스 루트 파일과 새 프로젝트 파일을 같은 작업/커밋에서 섞어 수정하지 않도록 주의한다.</div>
 
   <h3>새 variant를 직접 만들고 싶다면</h3>
-  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> variant로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 6.1 실습과 7장에서 각각 다룬다.</p>
+  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> variant로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 6장 §2 실습과 7장 §1에서 각각 다룬다.</p>
 
   <hr>
 
   <h2 id="section-3">3. 참고 링크</h2>
   <ul style="list-style: none; padding: 0; line-height: 2.2;">
     <li>📖 <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></li>
-    <li>⚙️ <a href="../variant-practice/04_VariantPractice_Examples.html">6.1 실습 — co-marketing variant 만들어보기</a></li>
-    <li>⚙️ <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7.0 — 새 variant 만들기 vs 기존 프로젝트 승격하기</a></li>
+    <li>⚙️ <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습. co-marketing variant 만들어보기</a></li>
+    <li>⚙️ <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7장 §1. 새 variant 만들기 vs 기존 프로젝트 승격하기</a></li>
   </ul>
 
   <hr>

@@ -146,6 +146,8 @@
     CMD에서는 **지원되지 않는다**. `./` 접두사 역시 CMD에서는 `mkdir` 구문 오류를 유발한다.
     가장 안전한 방법은 접두사 없이 **폴더 이름만** 쓰는 것이다.
     예: `mkdir ~/harness-lab`이 아니라 `mkdir harness-lab`(macOS/Linux, PowerShell, CMD 모두 동작).
+  - **mkdir -p 권장**: `mkdir -p`는 대상 폴더가 이미 존재해도 에러 없이 넘어가므로,
+    사용자가 실습 단계를 재실행할 때 안전하다. 폴더 생성 명령은 항상 `mkdir -p`로 적는다.
 
 ---
 

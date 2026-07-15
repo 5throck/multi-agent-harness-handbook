@@ -82,6 +82,9 @@
       margin: 48px 0 20px; padding-bottom: 10px;
       border-bottom: 2px solid var(--border);
     }
+    .level-header .badge { flex-shrink: 0; }
+    .level-header .level-title { flex-shrink: 0; }
+    .level-header .level-desc { flex: 1; }
     .level-title { font-size: 1.3rem; font-weight: 700; }
     .level-title-g { color: #1a7f37; }
     .level-title-b { color: #0969da; }
@@ -129,6 +132,12 @@
       border-radius: 8px;
       padding: 16px 20px;
       margin-bottom: 20px;
+    }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box {
+      margin-left: -10px;
+      margin-right: -10px;
     }
     .platform-block.claude { border-top: 3px solid #1a7f37; }
     .platform-block.claudeapp { border-top: 3px dashed #1a7f37; }

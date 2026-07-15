@@ -10,6 +10,10 @@ param(
 
 $OutputEncoding = [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
+# ── TLS 1.2 enforcement (required for irm/Invoke-WebRequest on PS 5.1) ─────
+[Net.ServicePointManager]::SecurityProtocol =
+    [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+
 # ── Execution policy guard ────────────────────────────────────────────────────
 $currentPolicy = Get-ExecutionPolicy -Scope CurrentUser
 if ($currentPolicy -ne 'RemoteSigned' -and $currentPolicy -ne 'Unrestricted') {
@@ -293,20 +297,65 @@ if ($WSL2) {
 
 # ── 5. Runtime: bun ───────────────────────────────────────────────────────────
 Section 5 $TOTAL "Runtime: bun"
+$bunBinPath = "$env:USERPROFILE\.bun\bin"
+
+# Detect whether current session is Windows PowerShell 5.1 (not PowerShell 7+)
+$isLegacyPS = ($PSVersionTable.PSVersion.Major -lt 7)
+
 if ((-not $Force) -and (Installed bun)) {
-    Write-Host "✅  bun $(bun --version) (already installed)" -ForegroundColor Green
-} else {
-    $bunInstallScript = irm bun.sh/install.ps1
-    Invoke-Expression $bunInstallScript
+    # bun already present — ensure it is up-to-date
+    if ($isLegacyPS -or $Force) {
+        Write-Host "  ℹ️  Updating bun to latest version..." -ForegroundColor DarkGray
+        $updateOk = RunStep "Update bun" { & bun upgrade }
+        if (-not $updateOk) {
+            Write-Host "  ⚠️  bun update failed — will retry full install" -ForegroundColor Yellow
+            $Force = $true  # fall through to full install below
+        }
+    }
+    if ((-not $Force) -and (Installed bun)) {
+        Write-Host "✅  bun $(bun --version) (already installed & up-to-date)" -ForegroundColor Green
+    }
+}
+if ((-not (Installed bun)) -or $Force) {
+    # Full install: use npm fallback when PS 5.1 cannot download bun.sh/install.ps1
+    $bunInstallOk = $false
+    try {
+        $bunInstallScript = irm bun.sh/install.ps1 -UseBasicParsing -ErrorAction Stop
+        Invoke-Expression $bunInstallScript
+        $bunInstallOk = $true
+    } catch {
+        Write-Host "  ⚠️  bun.sh/install.ps1 download failed: $_" -ForegroundColor Yellow
+        Write-Host "     Falling back to npm-based install..." -ForegroundColor Yellow
+    }
+    if (-not $bunInstallOk) {
+        # npm fallback: install bun globally via npm
+        if (Installed npm) {
+            $npmOk = RunStep "Install bun (npm fallback)" { npm install -g bun }
+            if ($npmOk) {
+                # npm installs bun to the global npm prefix; resolve the actual binary path
+                $npmPrefix = & npm prefix -g 2>$null
+                if ($npmPrefix -and (Test-Path "$npmPrefix\bun.exe" -ErrorAction SilentlyContinue)) {
+                    $bunBinPath = "$npmPrefix"
+                }
+                $bunInstallOk = $true
+            }
+        } else {
+            Write-Host "  ❌  Neither bun.sh installer nor npm available — cannot install bun" -ForegroundColor Red
+            $Errors.Add("Install bun")
+        }
+    }
     # Permanent PATH registration (User scope)
-    $bunBinPath = "$env:USERPROFILE\.bun\bin"
     $existingUserPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
     if ($existingUserPath -notlike "*$bunBinPath*") {
         [System.Environment]::SetEnvironmentVariable("PATH", "$existingUserPath;$bunBinPath", "User")
     }
     RefreshEnv
+    # Second pass: if bun binary still not on PATH, try direct PATH merge
+    if (-not (Installed bun)) {
+        $env:PATH = "$bunBinPath;$env:PATH"
+    }
     if (Installed bun) {
-        Write-Host "✅  bun installed" -ForegroundColor Green
+        Write-Host "✅  bun $(bun --version) installed" -ForegroundColor Green
     } else {
         Write-Host "❌  bun install failed" -ForegroundColor Red
         $Errors.Add("Install bun")
@@ -346,9 +395,18 @@ Section 8 $TOTAL "CLI tools"
 if ((-not $Force) -and (Installed claude)) {
     Write-Host "✅  claude (already installed)" -ForegroundColor Green
 } else {
-    $claudeInstalled = RunStep "Install Claude Code CLI" { bun install -g @anthropic-ai/claude-code }
+    # On PS 5.1, 'bun install -g' may fail; fall back to npm automatically
+    $claudeInstalled = $false
+    if (Installed bun) {
+        $claudeInstalled = RunStep "Install Claude Code CLI" { bun install -g @anthropic-ai/claude-code }
+    }
     if (-not $claudeInstalled) {
-        RunStep "Install Claude Code CLI (npm fallback)" { npm install -g @anthropic-ai/claude-code }
+        if (-not (Installed bun)) {
+            Write-Host "  ⚠️  bun not available — using npm directly" -ForegroundColor Yellow
+        } else {
+            Write-Host "  ⚠️  bun install failed — falling back to npm" -ForegroundColor Yellow
+        }
+        $claudeInstalled = RunStep "Install Claude Code CLI (npm fallback)" { npm install -g @anthropic-ai/claude-code }
         RefreshEnv
     }
 }

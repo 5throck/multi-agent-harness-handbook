@@ -73,6 +73,25 @@
     .version-row:last-child { border-bottom: none; }
     .vlabel { min-width: 160px; font-weight: 600; color: #0550ae; flex-shrink: 0; }
 
+    .area-header {
+      display: flex; align-items: center; gap: 14px;
+      margin: 52px 0 24px; padding: 16px 22px;
+      border-radius: 10px;
+    }
+    .area-header.area-existing {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 1px solid #86efac;
+    }
+    .area-header.area-new {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 1px solid #93c5fd;
+    }
+    .area-icon { font-size: 1.6rem; }
+    .area-title { font-size: 1.35rem; font-weight: 700; }
+    .area-title-existing { color: #15803d; }
+    .area-title-new { color: #1d4ed8; }
+    .area-desc { font-size: 13px; color: var(--text-dim); flex: 1; }
+
     .level-header {
       display: flex; align-items: center; gap: 12px;
       margin: 48px 0 20px; padding-bottom: 10px;
@@ -236,16 +255,19 @@
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
   <div class="nav-title">6.1 · Variant 실습 예시</div>
-  <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
 
-  <div class="nav-group">초급 시나리오</div>
-  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 기존 variant로 프로젝트 스캐폴딩하기</a>
+  <div class="nav-group">영역 1 — 기존 variant 활용</div>
+  <a href="#area-existing"><span class="dot dot-g"></span>기존 variant 활용 (초급)</a>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 co-consult: Physical AI 시장조사</a>
+  <a href="#scenario-2"><span class="dot dot-g"></span>G-2 co-deck: 한식 세계화 발표자료</a>
 
-  <div class="nav-group">중급 시나리오</div>
-  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 co-marketing Phase A 프로토타입 만들기</a>
+  <div class="nav-group">영역 2 — 신규 variant 생성</div>
+  <a href="#area-new"><span class="dot dot-b"></span>신규 variant 생성 (중급)</a>
+  <a href="#scenario-3"><span class="dot dot-b"></span>D-1 co-marketing Phase A 프로토타입</a>
 
   <div class="nav-group">고급 시나리오</div>
-  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 프로토타입 검증과 승격 준비 점검</a>
+  <a href="#advanced"><span class="dot dot-p"></span>검증·승격 준비 (고급)</a>
+  <a href="#scenario-4"><span class="dot dot-p"></span>P-1 프로토타입 검증과 승격 준비 점검</a>
 
   <div class="nav-group">바로가기</div>
   <a href="04_VariantPractice_Manual.html">📖 6장 §1 — Variant 실습 레퍼런스 →</a>
@@ -253,34 +275,45 @@
 
 <main>
   <h1>Variant 실습 예시</h1>
-  <p class="subtitle">ai-workspace-standards로 처음부터 새 variant를 만들어보는 실습 가이드 &nbsp;|&nbsp; <a href="04_VariantPractice_Manual.html">← 레퍼런스 문서로 돌아가기</a></p>
+  <p class="subtitle">기존 variant로 실무 프로젝트를 진행해보고, 새 variant를 직접 만들어보는 실습 가이드 &nbsp;|&nbsp; <a href="04_VariantPractice_Manual.html">← 레퍼런스 문서로 돌아가기</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
     <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>6장 §1에서 설명한 명령들을 실제 시나리오 순서로 따라 해볼 수 있게 구성</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="04_VariantPractice_Manual.html">04_VariantPractice_Manual.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
-    <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
+    <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 16일</span></div>
   </div>
 
-  <div class="warning-box">고급 시나리오 이후의 실제 승격(Phase B) 작업은 GitHub 접근 권한과 실제 개발 환경이 필요하다. 이 문서는 그 전 단계까지, 즉 로컬에서 안전하게 따라 할 수 있는 범위까지만 다룬다.</div>
+  <div class="warning-box">이 문서는 크게 두 영역으로 나뉩니다. <strong>영역 1(기존 variant 활용)</strong>에서는 이미 만들어진 variant를 프로젝트로 스캐폴딩해 실제 주제를 가지고 실습합니다. <strong>영역 2(신규 variant 생성)</strong>에서는 기존 variant와 다른 새로운 도메인에 맞는 variant를 Phase A 프로토타입으로 직접 만들어봅니다. 순서대로 진행하면 variant의 구조를 가장 자연스럽게 이해할 수 있습니다.</div>
 
-  <!-- ══════════════════════════════ 초급 ══════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════════════════════════
+       영역 1: 기존 variant 활용
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="area-header area-existing" id="area-existing">
+    <span class="area-icon">🏗️</span>
+    <div>
+      <span class="area-title area-title-existing">영역 1 · 기존 variant 활용</span>
+      <p class="area-desc">이미 만들어진 variant를 프로젝트로 스캐폴딩하고, 실제 주제를 가지고 에이전트팀을 가동해보는 실습입니다. variant가 어떻게 구성되어 있는지, 에이전트들이 어떻게 협업하는지 직접 체감하는 것이 목표입니다.</p>
+    </div>
+  </div>
+
   <div class="level-header" id="beginner">
     <span class="badge badge-g">● 초급</span>
     <span class="level-title level-title-g">Getting Started</span>
-    <span class="level-desc">저장소를 안전한 임시 위치에 받아, 기존 variant로 프로젝트를 하나 만들어보는 첫 단계</span>
+    <span class="level-desc">기존 variant로 프로젝트를 스캐폴딩하고, 실제 주제를 가지고 에이전트팀을 가동해보는 첫 단계</span>
   </div>
 
+  <!-- ── G-1: co-consult Physical AI ── -->
   <div class="scenario-card" id="scenario-1">
     <div class="card-header">
       <span class="card-id">G-1</span>
       <span class="badge badge-g">초급</span>
-      <strong class="card-title">기존 variant로 프로젝트 스캐폴딩하기</strong>
+      <strong class="card-title">co-consult — Physical AI 시장조사 프로젝트</strong>
     </div>
     <div class="card-body">
 
       <div class="situation">
-        처음 ai-workspace-standards를 접해보는 개발자가, 실제 워크스페이스를 건드리지 않고 별도의 연습용 폴더(<code>ai-workspace-standards-demo</code>)에 저장소를 받아 어떤 variant들이 있는지 확인하고, 성격이 다른 두 variant(정식 variant인 co-consult, beta variant인 co-deck)로 각각 프로젝트를 스캐폴딩해서 결과물의 구조가 어떻게 다른지 직접 비교해보려 한다.
+        전략 컨설팅용 variant인 <code>co-consult</code>를 활용해, "Physical AI(로봇·자율주행·스마트 팩토리 등 물리적 환경에서 동작하는 AI)" 시장의 진입 가능성과 경쟁 현황을 분석하는 컨설팅 프로젝트를 실제로 진행해본다. PM(Engagement Leader)이 10명의 전문 에이전트(Strategy Analyst, Industry Expert, SME, Change Management Partner 등)를 단계별로 디스패치하는 7단계 컨설팅 워크플로우가 어떻게 실제 프로젝트에서 가동되는지 경험하는 것이 목표다.
       </div>
 
       <div class="cmd-list">
@@ -318,32 +351,176 @@ bun scripts/list-template-versions.ts</pre>
         </li>
         <li>
           <div class="step-content">
-            <strong>기존 variant(co-consult)로 데모 프로젝트 스캐폴딩</strong>
-            <p>전략 컨설팅용 variant인 co-consult로 데모 프로젝트를 만들어본다. co-consult는 PM(Engagement Leader)이 10명의 전문 에이전트(Strategy Analyst, Change Management Partner, Industry Expert, SME 등)를 단계별로 디스패치하는 7단계 컨설팅 워크플로우를 갖춘다.</p>
+            <strong>co-consult로 Physical AI 시장조사 프로젝트 스캐폴딩</strong>
+            <p>전략 컨설팅용 variant인 <code>co-consult</code>로 프로젝트를 만든다. 프로젝트 이름에 실습 주제를 반영한다.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/new-project.ts "demo-project" --variant co-consult</pre>
+              <pre class="code-block">bun scripts/new-project.ts "physical-ai-market-research" --variant co-consult</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
         </li>
         <li>
           <div class="step-content">
-            <strong>beta variant(co-deck)로 두 번째 데모 프로젝트 스캐폴딩</strong>
-            <p>강의·발표 자료 제작용 <code>co-deck</code>으로 별도의 데모 프로젝트를 하나 더 만든다. co-deck은 연구 → 스토리라인 → 디자인 → 이미지/다이어그램 생성(병렬) → HTML 빌드 → 레이아웃 측정 → PDF 출력까지 11단계 파이프라인을 자동화한다. 5종 테마와 5종 스타일을 지원하며, <code>beta</code> 배지가 붙어 있지만 스캐폴딩 명령은 다른 variant와 동일하다.</p>
+            <strong>스캐폴딩된 프로젝트 구조 살펴보기</strong>
+            <p>생성된 프로젝트 디렉토리의 전체 구조를 확인한다. 에이전트 정의 파일, <code>docs/context.md</code>의 Phase 구성, <code>AGENTS.md</code>의 로스터를 중심으로 co-consult가 어떻게 7단계 컨설팅 워크플로우를 구성하는지 파악한다.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/new-project.ts "demo-project-deck" --variant co-deck</pre>
+              <pre class="code-block">cd physical-ai-market-research
+find . -maxdepth 3 -type f | head -40</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>컨설팅 과제 정의 — 4단계 설계 프레임워크 적용</strong>
+            <p>에이전트팀 가동 전에, <strong>목표·입력·출력·검증 기준</strong>을 먼저 명확히 정의한다. 이 4가지가 구체적일수록 에이전트팀이 산출하는 결과물의 품질이 크게 올라간다.</p>
+            <div class="flow-box">
+              <strong>Step 1 — 목표 정의:</strong> "Physical AI(로봇·자율주행·스마트 팩토리) 시장의 2030년까지 진입 전략과 경쟁 현황 분석"<br>
+              <strong>Step 2 — 입력 정의:</strong> 대상 산업(로봇 공학, 자율주행, 스마트 팩토리), 조사 기간(2020~2025 + 2030 예측), 중점 키워드(규제, 기술, 시장 규모)<br>
+              <strong>Step 3 — 출력 정의:</strong> 마크다운 형식 보고서 — 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료 5개 섹션 구조<br>
+              <strong>Step 4 — 검증 기준:</strong> 각 항목에 출처 URL 포함, 시사점 5개 이상 번호 목록, 2,000자 이상 분량
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Physical AI 시장조사 주제로 에이전트팀 가동</strong>
+            <p>프로젝트 내에서 PM 세션을 시작하고, 정의한 컨설팅 과제를 PM에게 전달하여 에이전트팀을 가동한다. 각 Phase에서 어떤 에이전트가 활동하는지, 어떤 결과물이 산출되는지 관찰하면서 진행한다.</p>
+            <div class="flow-box">
+              co-consult의 7단계 워크플로우가 실제 컨설팅 프로젝트처럼 가동된다.<br><br>
+              <strong>Phase 0 (킥오프):</strong> PM이 과제를 받아 프로젝트 범위와 일정을 정의<br>
+              <strong>Phase 1 (시장 분석·조직 진단):</strong> Strategy Analyst가 Physical AI 시장 규모 추정·경쟁사 매핑, Industry Expert가 로봇/자율주행 도메인 기술 트렌드 제공, SME가 스마트 팩토리 구축 사례 기반 실무 관점 보강<br>
+              <strong>Phase 1.5 (교차 검증):</strong> 복수 에이전트가 서로 산출물을 교차 검토하여 정보의 신뢰성 확보<br>
+              <strong>Phase 2 (제안 승정 게이트):</strong> PM이 Phase 1 결과를 검토, 클라이언트 제출 수준인지 승인 판단<br>
+              <strong>Phase 3 (실무 솔루션 설계):</strong> Change Management Partner가 도입 로드맵과 변화 관리 계획 수립<br>
+              <strong>Phase 4 (납품):</strong> 최종 보고서(마크다운) 작성 — 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료<br>
+              <strong>Phase 5 (PR/인도):</strong> 고객 전달용 결과물 정리
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>결과물 검토 — 에이전트 핸드오프 추적</strong>
+            <p>가동이 완료되면 산출된 결과물을 확인한다. Phase 1에서 Strategy Analyst가 산출한 시장 분석 결과가 Phase 1.5에서 교차 검증을 거쳐 Phase 4의 최종 보고서로 어떻게 연결되었는지 추적해본다.</p>
+            <div style="position:relative">
+              <pre class="code-block">find . -name "*.md" -not -path "*/node_modules/*" | head -20
+cat docs/reports/*.md   # 산출된 보고서 확인</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
         </li>
       </ol>
 
-      <div class="flow-box">
-        <code>new-project.ts</code>는 <code>templates/co-consult/</code> 또는 <code>templates/co-deck/</code>의 전체 구성(에이전트 정의, 스킬, 거버넌스 파이프라인)을 그대로 복제해 각각 <code>demo-project/</code>, <code>demo-project-deck/</code>이라는 새 독립 git 저장소를 만든다. 두 저장소 모두 워크스페이스 데모 폴더와는 별개이지만 CONSTITUTION.md의 공유 규칙을 상속한 상태로 시작한다.
+      <div class="tip-box">
+        <code>physical-ai-market-research/agents/</code>를 열어 에이전트 정의 파일들을 살펴보면, 각 에이전트의 <code>phases</code>, <code>handoff_to</code>, <code>handoff_from</code> 필드가 어떻게 구성되어 있는지 확인할 수 있다. 이 실습에서는 네 가지 에이전트 유형 — <strong>리서치 에이전트</strong>(Strategy Analyst: 시장·경쟁사·규제 조사), <strong>분석 에이전트</strong>(Industry Expert: 패턴·인사이트 도출), <strong>작성 에이전트</strong>(PM: 보고서·제안서 초안 구조화), <strong>조율 에이전트</strong>(Change Management Partner: 전체 품질 검토·통합) — 이 실제 컨설팅 파이프라인에서 어떻게 협력하는지를 경험할 수 있다.
       </div>
 
+    </div>
+  </div>
+
+  <!-- ── G-2: co-deck 한식 세계화 ── -->
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">G-2</span>
+      <span class="badge badge-g">초급</span>
+      <strong class="card-title">co-deck — 한식 세계화(Korean Cuisine Globalization) 발표자료</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        강의·발표 자료 제작용 variant인 <code>co-deck</code>를 활용해, "한식 세계화 전략"을 주제로 발표용 슬라이드 덱을 자동 생성해본다. <code>co-deck</code>는 Research → Source Verifier(신뢰도 검증) → Storyline → Design → Image Curation + Diagram Generation(병렬) → HTML Build → Layout Measure → PDF Export까지 11단계 파이프라인을 자동화하는 beta variant다. G-1의 co-consult와는 완전히 다른 구조를 가진 variant가 어떻게 다른 형태의 결과물을 만들어내는지 비교해보는 것이 목표다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="04_VariantPractice_Manual.html#section-2">new-project.ts</a>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>co-deck로 한식 세계화 발표자료 프로젝트 스캐폴딩</strong>
+            <p>G-1에서 사용한 것과 동일한 워크스페이스에서, 이번에는 <code>co-deck</code> variant로 발표자료 프로젝트를 생성한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/new-project.ts "korean-cuisine-globalization" --variant co-deck</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>스캐폴딩된 프로젝트 구조 살펴보기</strong>
+            <p>co-consult 프로젝트(<code>physical-ai-market-research/</code>)와 나란히 열어 구조를 비교한다. 에이전트 수, Phase(Stage) 구성, 전문 스킬 목록이 어떻게 다른지 확인한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">cd korean-cuisine-globalization
+find . -maxdepth 3 -type f | head -40</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>발표 주제 프레임 설정</strong>
+            <p>파이프라인 가동 전에 발표의 방향을 세 가지로 명확히 정한다. 청중과 목적이 명확할수록 AI가 구성하는 스토리라인과 슬라이드의 품질이 크게 올라간다.</p>
+            <div class="flow-box">
+              <strong>청중:</strong> 글로벌 식음료 기업의 진출 전략 담당자 및 한국 정부의 한식 진흥 정책 관계자<br>
+              <strong>목적:</strong> 한국 음식 문화의 글로벌 확산 방안과 성공 사례를 소개하고, 진출 기회를 제안하는 설득형 발표<br>
+              <strong>시간:</strong> 15~20분 (약 12~15장 슬라이드)
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>한식 세계화 주제로 발표자료 파이프라인 가동</strong>
+            <p>프로젝트 내에서 PM 세션을 시작하고, 정의한 프레임과 함께 "한식 세계화 전략 — 글로벌 시장에서 한국 음식 문화의 확산 방안과 성공 사례 분석"이라는 발표 주제를 부여한다.</p>
+            <div class="flow-box">
+              co-deck의 11단계 파이프라인이 발표자료 제작 워크플로우로 가동된다.<br><br>
+              <strong>Stage 0 (킥오프·주제 설정):</strong> PM이 청중·목적·시간을 바탕으로 발표 방향 정의<br>
+              <strong>Research:</strong> 한식 세계화 관련 자료 조사 — 글로벌 한식 시장 규모, 주요 진출 국가별 현황, 정부 한식 진흥 정책<br>
+              <strong>Source Verifier:</strong> 통계·사례 자료의 신뢰도 검증 — 출처 URL 확인, 수치의 일관성 점검<br>
+              <strong>Storyline:</strong> 발표 스토리라인 구성 — 문제 제기→현황 분석→성공 사례→진출 전략→결론·제언의 흐름으로 챕터 구성<br>
+              <strong>Design:</strong> 슬라이드 디자인 방향 설정 — 테마·스타일 선택에 따른 시각 일관성 확립<br>
+              <strong>Image Curation + Diagram Generation (병렬):</strong> 한식 관련 이미지 큐레이션 및 시장 구조·진출 로드맵 다이어그램 자동 생성<br>
+              <strong>HTML Build → Layout Measure → PDF Export:</strong> 슬라이드 HTML 생성 후 레이아웃 측정·보정, 최종 PDF 출력
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>완성된 발표자료 리뷰 및 개선</strong>
+            <p>빌드된 HTML 발표자료를 브라우저에서 열어 확인한다. 슬라이드 순서, 내용, 시각 자료를 검토하고 필요한 부분을 수정 요청한다.</p>
+            <div class="flow-box">
+              <strong>검토 포인트:</strong><br>
+              · 슬라이드 순서가 스토리라인에 맞는가 (문제 제기→현황→사례→전략→제언)<br>
+              · 각 슬라이드의 핵심 내용이 3~4줄 이내로 간결한가<br>
+              · 불필요한 슬라이드 삭제, 누락된 내용 추가<br>
+              · 수정 요청 예시: "3번 슬라이드 제목을 더 강렬하게", "불릿 4개를 3개로 줄여줘"<br><br>
+              <strong>원칙:</strong> 처음 완성본이 최종본일 필요 없다 — 반복 개선이 완성도를 만든다
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>TTS 및 자동 슬라이드 설정 (선택)</strong>
+            <p>co-deck의 기능을 추가로 체험해본다. 발표자 노트(Script)에 읽어줄 내용을 입력하면 브라우저 TTS 엔진이 한국어 음성으로 자동 낭독한다. Footer의 Manual/Auto 버튼으로 무인 프레젠테이션 모드를 설정할 수도 있다.</p>
+            <div class="flow-box">
+              <strong>TTS 설정:</strong> 각 슬라이드의 발표자 노트 칸에 짧고 명확한 문장으로 내용 작성<br>
+              <strong>자동 슬라이드:</strong> Footer의 'Manual' 버튼 → 'Auto'로 전환 (1초 간격 기본값)<br>
+              <strong>활용 시나리오:</strong> 온라인 클라이언트 배포(HTML 파일 링크 공유), 키오스크·전시회 부스 홍보, 사내 교육 자동 진행<br><br>
+              <strong>단축키:</strong> ←→ 슬라이드 이동, P(TTS 재생/정지), A(자동/수동 전환), S(발표자 노트 표시)
+            </div>
+          </div>
+        </li>
+      </ol>
+
       <div class="tip-box">
-        <code>demo-project/agents/</code>와 <code>demo-project-deck/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 10명의 전문 에이전트로 구성된 7단계 컨설팅 워크플로우, co-deck은 Research·Design·HTML Build·PDF Export 등을 담당하는 전문 에이전트들로 구성된 11단계 파이프라인이라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. variant 이름과 <code>beta</code> 배지만으로는 짐작하기 어려운 "실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
+        <code>physical-ai-market-research/agents/</code>와 <code>korean-cuisine-globalization/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 10명의 전문 에이전트로 구성된 7단계 컨설팅 워크플로우, co-deck은 Research·Design·HTML Build·PDF Export 등을 담당하는 전문 에이전트들로 구성된 11단계 파이프라인이라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. "variant 이름과 배지만으로는 짐작하기 어려운 실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
+      </div>
+      <div class="tip-box">
+        <strong>G-1의 co-consult 산출물을 G-2의 co-deck 입력으로 연결하는 것도 가능하다.</strong> Physical AI 시장조사에서 완성된 마크다운 보고서를 그대로 co-deck에 넘기면, 동일한 내용의 발표자료를 자동 생성할 수 있다. 이것이 컨설팅 파이프라인(co-consult) + 프레젠테이션 파이프라인(co-deck)의 <strong>풀 파이프라인</strong> 연동 방식이다 — 주제 입력 후 약 30~45분이면 발표 가능한 HTML 완성물이 나온다.
       </div>
       <div class="warning-box">
         co-deck은 아직 <code>beta</code> variant다 — 5장 §3에서 다룬 바와 같이, 정식 variant보다 구조가 자주 바뀔 수 있으므로 실무 프로젝트보다는 이런 학습·실험 용도로 먼저 접해보는 것을 권장한다.
@@ -352,14 +529,25 @@ bun scripts/list-template-versions.ts</pre>
     </div>
   </div>
 
-  <!-- ══════════════════════════════ 중급 ══════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════════════════════════
+       영역 2: 신규 variant 생성
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="area-header area-new" id="area-new">
+    <span class="area-icon">🛠️</span>
+    <div>
+      <span class="area-title area-title-new">영역 2 · 신규 variant 생성</span>
+      <p class="area-desc">기존 variant 어디에도 딱 맞지 않는 새로운 도메인에 맞는 variant를 Phase A 프로토타입으로 직접 만들어보는 실습입니다. 영역 1에서 기존 variant의 구조를 경험한 뒤, 그 경험을 바탕으로 자신만의 variant를 설계해봅니다.</p>
+    </div>
+  </div>
+
   <div class="level-header" id="intermediate">
     <span class="badge badge-b">● 중급</span>
     <span class="level-title level-title-b">Daily Workflow</span>
-    <span class="level-desc">마케팅 캠페인 콘텐츠 제작을 돕는 새 variant, co-marketing의 Phase A 프로토타입 만들기</span>
+    <span class="level-desc">영역 1에서 익힌 기존 variant 구조를 바탕으로, 마케팅 캠페인 콘텐츠 제작 전용 variant를 새로 만들어보기</span>
   </div>
 
-  <div class="scenario-card" id="scenario-2">
+  <!-- ── D-1: co-marketing Phase A ── -->
+  <div class="scenario-card" id="scenario-3">
     <div class="card-header">
       <span class="card-id">D-1</span>
       <span class="badge badge-b">중급</span>
@@ -368,7 +556,7 @@ bun scripts/list-template-versions.ts</pre>
     <div class="card-body">
 
       <div class="situation">
-        기본 사용법은 익힌 실무자가, 기존 variant 어디에도 딱 맞지 않는 "마케팅 캠페인 콘텐츠 제작 전용 에이전트팀"을 새로 만들어보려 한다. 처음부터 정식 <code>templates/</code> variant로 만들지 않고, <code>Projects/</code> 아래에서 독립적으로 발전시킬 수 있는 Phase A 프로토타입으로 먼저 시작한다. G-1에서 클론한 연습용 워크스페이스 안에서 이어서 진행한다는 것을 전제로 한다.
+        영역 1에서 기존 variant(co-consult, co-deck)의 구조와 에이전트 협업 방식을 경험한 실무자가, 기존 variant 어디에도 딱 맞지 않는 "마케팅 캠페인 콘텐츠 제작 전용 에이전트팀"을 새로 만들어보려 한다. 처음부터 정식 <code>templates/</code> variant로 만들지 않고, <code>Projects/</code> 아래에서 독립적으로 발전시킬 수 있는 Phase A 프로토타입으로 먼저 시작한다. G-1에서 클론한 연습용 워크스페이스 안에서 이어서 진행한다는 것을 전제로 한다.
       </div>
 
       <div class="cmd-list">
@@ -394,7 +582,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>도메인 에이전트 정의 작성 — ① researcher.md</strong>
-            <p><code>Projects/co-marketing/agents/researcher.md</code> 파일을 아래 내용 그대로 만든다. name, role, status, tier(플랫폼별), model: inherit, color, description, phases, handoff_to, handoff_from, required_skills를 포함한 YAML frontmatter가 필수 형식이다. 2장 §1 실습에서 <code>AGENTS.md</code>로 역할을 도구 중립적으로 먼저 적었던 것과 같은 원칙이 여기서는 프로젝트 규모로 나타난다 — 이 frontmatter가 곧 "역할 명세"이고, 다음 단계에서 <code>AGENTS.md</code> 로스터에 등록해야 실제로 팀의 정본으로 인정된다.</p>
+            <p><code>Projects/co-marketing/agents/researcher.md</code> 파일을 아래 내용 그대로 만든다. name, role, status, tier(플랫폼별), model: inherit, color, description, phases, handoff_to, handoff_from, required_skills를 포함한 YAML frontmatter가 필수 형식이다. 영역 1에서 <code>physical-ai-market-research/agents/</code>의 에이전트 정의를 살펴본 경험이 있으므로, 그 구조를 참고하면서 작성한다.</p>
             <div style="position:relative">
               <pre class="code-block">---
 name: researcher
@@ -469,14 +657,16 @@ required_skills: [copywriting]
     </div>
   </div>
 
-  <!-- ══════════════════════════════ 고급 ══════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════════════════════════
+       고급: 검증·승격 준비
+       ═══════════════════════════════════════════════════════════════════ -->
   <div class="level-header" id="advanced">
     <span class="badge badge-p">● 고급</span>
     <span class="level-title level-title-p">Power User</span>
     <span class="level-desc">프로토타입을 검증하고, 기존 variant와 비교해 무엇이 새로 만들어졌는지 점검</span>
   </div>
 
-  <div class="scenario-card" id="scenario-3">
+  <div class="scenario-card" id="scenario-4">
     <div class="card-header">
       <span class="card-id">P-1</span>
       <span class="badge badge-p">고급</span>
@@ -543,7 +733,7 @@ bun run agent:verify</pre>
 
   <hr>
   <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
-    ai-workspace-standards main 브랜치 기준 | 2026년 7월 14일 작성<br>
+    ai-workspace-standards main 브랜치 기준 | 2026년 7월 16일 작성<br>
     <a href="04_VariantPractice_Manual.html">← 6장 §1 레퍼런스로 돌아가기</a>
   </p>
 </main>

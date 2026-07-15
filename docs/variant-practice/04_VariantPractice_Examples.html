@@ -319,7 +319,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>기존 variant(co-consult)로 데모 프로젝트 스캐폴딩</strong>
-            <p>전략 컨설팅용 variant인 co-consult로 데모 프로젝트를 만들어본다.</p>
+            <p>전략 컨설팅용 variant인 co-consult로 데모 프로젝트를 만들어본다. co-consult는 PM(Engagement Leader)이 10명의 전문 에이전트(Strategy Analyst, Change Management Partner, Industry Expert, SME 등)를 단계별로 디스패치하는 7단계 컨설팅 워크플로우를 갖춘다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/new-project.ts "demo-project" --variant co-consult</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
@@ -329,7 +329,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>beta variant(co-deck)로 두 번째 데모 프로젝트 스캐폴딩</strong>
-            <p>이번에는 강의·발표 자료 제작용 <code>co-deck</code>으로 별도의 데모 프로젝트를 하나 더 만든다. <code>co-deck</code>은 아직 <code>beta</code> 배지가 붙은 variant이지만 스캐폴딩 명령은 다른 variant와 동일하다 — <code>--variant</code> 값만 바꾸면 된다.</p>
+            <p>강의·발표 자료 제작용 <code>co-deck</code>으로 별도의 데모 프로젝트를 하나 더 만든다. co-deck은 연구 → 스토리라인 → 디자인 → 이미지/다이어그램 생성(병렬) → HTML 빌드 → 레이아웃 측정 → PDF 출력까지 11단계 파이프라인을 자동화한다. 5종 테마와 5종 스타일을 지원하며, <code>beta</code> 배지가 붙어 있지만 스캐폴딩 명령은 다른 variant와 동일하다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/new-project.ts "demo-project-deck" --variant co-deck</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
@@ -343,7 +343,7 @@ bun scripts/list-template-versions.ts</pre>
       </div>
 
       <div class="tip-box">
-        <code>demo-project/agents/</code>와 <code>demo-project-deck/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 7단계 워크플로우, co-deck은 11단계 워크플로우라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. variant 이름과 <code>beta</code> 배지만으로는 짐작하기 어려운 "실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
+        <code>demo-project/agents/</code>와 <code>demo-project-deck/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 10명의 전문 에이전트로 구성된 7단계 컨설팅 워크플로우, co-deck은 Research·Design·HTML Build·PDF Export 등을 담당하는 전문 에이전트들로 구성된 11단계 파이프라인이라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. variant 이름과 <code>beta</code> 배지만으로는 짐작하기 어려운 "실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
       </div>
       <div class="warning-box">
         co-deck은 아직 <code>beta</code> variant다 — 5장 §3(templates와 variant 7종)에서 다뤘듯, 정식 variant보다 구조가 자주 바뀔 수 있으므로 실무 프로젝트보다는 이런 학습·실험 용도로 먼저 접해보는 것을 권장한다.

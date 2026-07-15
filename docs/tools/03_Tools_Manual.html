@@ -224,10 +224,11 @@ Google 계열
 
   <div class="warning-box">같은 워크스페이스(같은 폴더)에 에이전트 여러 개를 동시에 배정할 수는 있지만, 서로 다른 에이전트가 같은 코드베이스의 맥락을 섞어 착각하는 문제("cognitive overlap")가 실제로 보고돼 있다. 병렬 작업은 워크스페이스나 git worktree 단위로 분리하는 것이 안전하다.</div>
 
-  <h3>Antigravity CLI(<code>agy</code>)에서도 — 동적 서브에이전트를 오케스트레이터가 알아서 생성</h3>
+  <h3>Antigravity CLI(<code>agy</code>)의 슬래시 커맨드 — <code>/goal</code>, <code>/agent</code>, <code>/agents</code></h3>
   <p>Claude Code/App처럼 <code>.claude/agents/*.md</code> 같은 파일로 서브에이전트를 미리 정의해 두는 방식과 달리, Antigravity CLI는 목표(goal)를 받으면 오케스트레이터 에이전트가 작업을 어떻게 쪼갤지 스스로 판단하고 그때그때 서브에이전트를 만들어 병렬로 실행한다. 각 서브에이전트는 독립된 컨텍스트 창을 가져 메인 세션의 맥락이 흐려지는 것을 막는다.</p>
   <p>비유하면 Claude Code/App은 "미리 뽑아 둔 정규직 팀원 명단"을 갖고 일하는 쪽이고, Antigravity CLI는 "일이 생길 때마다 그 일에 맞는 프리랜서를 그 자리에서 섭외하는" 쪽에 가깝다. 전자는 팀원이 누구인지 항상 알 수 있어 권한 통제가 쉽고, 후자는 매번 새 인력을 구하는 유연함이 있지만 "이번엔 누가 투입됐는지" 사후에 확인할 방법이 필요하다 — 그 확인 창구가 아래 <code>/agents</code>다.</p>
-  <p>다음은 <code>agy</code>를 실제로 쓸 때 자주 쓰는 네 가지 명령이다.</p>
+  <div class="note">여기서 유의할 점: <strong>동적으로 서브에이전트를 만드는 능력 자체는 Antigravity CLI만의 것이 아니다.</strong> Claude Code/App도 자연어 요청만으로 <code>Agent</code>(Task) 툴이 그때그때 필요한 작업을 판단해 서브에이전트를 스폰하며(1장 §3b), Antigravity(Desktop)도 Agent Manager에서 사전 정의 파일 없이 목표를 자연어로 주는 방식은 동일하다(§1). 이 절에서 소개하는 <code>/goal</code>·<code>/agent</code>·<code>/agents</code>는 그 <em>같은 동적 오케스트레이션 능력</em>을 <strong>CLI 화면에서 슬래시 커맨드로 다루기 위한 문법</strong>일 뿐이다 — Claude Code/App은 이 문법 대신 채팅 문장으로, Antigravity Desktop은 이 문법 대신 GUI 버튼(Inbox 승인, Playground 등)으로 같은 일을 한다.</div>
+  <p>다음은 <code>agy</code>를 실제로 쓸 때 자주 쓰는 CLI 전용 슬래시 커맨드 네 가지다 — 아래 표는 "Antigravity CLI에만 있는 기능 목록"이 아니라 "같은 기능을 CLI에서 부르는 이름"으로 읽는다.</p>
   <table>
     <thead><tr><th>명령</th><th>동작</th></tr></thead>
     <tbody>
@@ -299,6 +300,20 @@ Google 계열
         <td>지원</td>
         <td>(훅 대신 서브에이전트별 실행 로그를 <code>agy inspect</code>로 확인)</td>
       </tr>
+      <tr>
+        <td>실행 중인 서브에이전트에 추가 메시지 전달</td>
+        <td>단일 <code>Agent</code> 호출: 불가(완료까지 대기) / Agent Teams: 가능(<code>SendMessage</code>)</td>
+        <td>가능 — Inbox에서 승인·피드백 메시지를 주고받으며 진행 중 에이전트에 개입</td>
+        <td>Claude App과 동일 — 단일 <code>Agent</code> 호출은 불가, Agent Teams는 <code>SendMessage</code></td>
+        <td><code>/agent</code>로 위임한 백그라운드 작업에 상태 확인(<code>/agents</code>)은 되지만, 실행 중 작업 자체에 끼어들어 지시를 바꾸는 경로는 제한적</td>
+      </tr>
+      <tr>
+        <td>서브에이전트 간 직접 소통</td>
+        <td>단일 <code>Agent</code> 호출: 불가(메인 세션을 거쳐야 함) / Agent Teams: 가능(팀메이트끼리 <code>SendMessage</code>)</td>
+        <td>불가 — Workspace(에이전트) 사이는 의도적으로 격리(§2의 "인지적 중첩" 경고 참고), 소통은 항상 사람을 거침</td>
+        <td>Claude App과 동일</td>
+        <td>불가 — 동적으로 생성된 서브에이전트들은 오케스트레이터를 통해서만 결과가 취합됨, 서브에이전트끼리 직접 통신하지 않음</td>
+      </tr>
     </tbody>
   </table>
   <p>
@@ -306,6 +321,7 @@ Google 계열
     <span class="badge badge-alias">CLI 완전 병행 지원</span>
     <span class="badge badge-new">실험적 기능 다수</span>
   </p>
+  <div class="note">위 두 행에서 갈리는 기준은 하나다 — <strong>서브에이전트가 "한 번 위임하면 결과만 돌아오는 일회성 호출"인가, "팀메이트처럼 계속 살아있는 존재"인가</strong>다. Claude Code/App의 단일 <code>Agent</code>(Task) 호출과 Antigravity CLI의 동적 서브에이전트는 전자에 가깝다 — 스폰되면 끝까지 혼자 처리하고 요약만 반환하므로, 중간에 새 지시를 주거나 다른 서브에이전트와 대화하게 만들 방법이 없다. 반면 Claude Code/App의 Agent Teams는 각 팀메이트가 <code>SendMessage</code>로 서로 직접 메시지를 주고받을 수 있는 후자다(2.1의 P-1 실습에서 이미 다뤘다). Antigravity(Desktop)는 에이전트 간 통신 자체를 지원하지 않는 대신, 사람이 Inbox를 통해 진행 중인 에이전트 각각과 개별적으로 대화할 수 있다는 점이 다른 세 도구와 구분되는 지점이다.</div>
 
   <hr>
 

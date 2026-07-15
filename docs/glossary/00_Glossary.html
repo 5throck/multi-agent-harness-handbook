@@ -81,7 +81,7 @@
       <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4b">1장 §동적 팀 구성과 다양한 워크플로우</a> · 실습: <a href="../practice/02_Practice_Examples.html#scenario-2b">2.1 D-2</a></span></dd>
 
     <dt>오케스트레이션 패턴 <span class="en">Orchestration Pattern</span></dt>
-    <dd>병렬 팬아웃(동시 실행)·파이프라인(단계별 순차, 항목 간 비동기)·검증-후-적용(초안을 독립 검증한 뒤에만 반영) 세 가지가 대표적이며, 한 워크플로우 안에서 조합해 쓸 수 있다.
+    <dd>Anthropic이 정리한 다섯 가지가 대표적이다 — 프롬프트 체이닝(단계별 순차 처리), 라우팅(요청을 분류해 적합한 에이전트/모델로 분배), 병렬화(팬아웃으로 독립 작업 동시 실행, 또는 투표로 같은 작업을 반복해 다수결), 오케스트레이터-워커(하위 작업을 미리 정하지 않고 동적으로 분해), 평가자-최적화(초안을 독립 검증한 뒤에만 반영, 검증-후-적용). 한 워크플로우 안에서 자유롭게 조합해 쓸 수 있다.
       <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4">1장 §오케스트레이션 패턴</a></span></dd>
   </dl>
 
@@ -137,7 +137,7 @@
     <dd>Antigravity(Desktop)에서 여러 워크스페이스를 한 화면에서 감독하는 상위 인터페이스. Workspace마다 에이전트 하나씩 배정하는 것이 원칙이다.</dd>
 
     <dt><code>/goal</code> / <code>/agent</code> / <code>/agents</code></dt>
-    <dd>Antigravity CLI(<code>agy</code>)의 핵심 명령. <code>/goal</code>은 목표를 끝까지 실행, <code>/agent</code>는 백그라운드 장기 작업 위임, <code>/agents</code>는 지금까지 생성된 서브에이전트 상태 목록 확인.
+    <dd>Antigravity CLI(<code>agy</code>)에서 동적 서브에이전트 오케스트레이션을 부르는 슬래시 커맨드. <code>/goal</code>은 목표를 끝까지 실행, <code>/agent</code>는 백그라운드 장기 작업 위임, <code>/agents</code>는 지금까지 생성된 서브에이전트 상태 목록 확인. 이 능력 자체는 agy만의 것이 아니다 — Claude Code/App은 같은 동적 오케스트레이션을 <code>Agent</code>(Task) 툴과 자연어 요청으로, Antigravity(Desktop)는 Agent Manager GUI로 수행한다. 이 세 명령은 그 동작을 CLI 화면에서 부르는 이름일 뿐이다.
       <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">3장 §2</a></span></dd>
   </dl>
 

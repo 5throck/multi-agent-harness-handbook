@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>워크숍 환경 설치 가이드 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <style>
+    :root {
+      --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f4; --border: #d0d7de;
+      --text: #1f2328; --text-dim: #636c76; --accent: #0969da;
+      --accent2: #1a7f37; --accent3: #953800; --accent4: #6639ba; --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 250px; min-width: 250px; background: var(--bg2); border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 20px 0;
+    }
+    nav .nav-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); padding: 0 16px 8px; }
+    nav a { display: block; padding: 5px 16px; color: var(--text-dim); text-decoration: none; font-size: 12.5px; border-left: 2px solid transparent; }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section { margin-top: 10px; padding: 6px 16px 4px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--text-dim); border-top: 1px solid var(--border); }
+    main { flex: 1; max-width: 900px; padding: 40px 48px 96px; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { color: var(--text-dim); font-size: 13.5px; margin-bottom: 28px; }
+    h2 { font-size: 1.25rem; font-weight: 700; color: var(--accent6); margin: 44px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); scroll-margin-top: 20px; }
+    h3 { font-size: 1.02rem; font-weight: 700; color: var(--accent3); margin: 26px 0 8px; }
+    p { margin: 10px 0; }
+    ul, ol { margin: 8px 0 14px 22px; }
+    li { margin: 4px 0; }
+    code { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 12.5px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; color: #cf222e; }
+    pre.code-block { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 12px 16px; overflow-x: auto; font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; line-height: 1.55; color: #116329; margin: 8px 0 16px; position: relative; max-width: 100%; }
+    .copy-btn { position: absolute; top: 8px; right: 10px; background: #fff; border: 1px solid #d0d7de; border-radius: 5px; padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76; }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0 20px; font-size: 13px; }
+    th { background: var(--bg3); color: var(--accent6); text-align: left; padding: 8px 12px; font-weight: 600; border: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+    td { padding: 7px 12px; border: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: #f6f8fa; }
+    td code { font-size: 11.5px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 13.5px; margin: 14px 0; }
+    .warn { background: #fff8c5; border-left: 3px solid #d4a72c; padding: 10px 16px; border-radius: 4px; font-size: 13.5px; margin: 14px 0; color: #5c3900; }
+    .flow-box { background: #f6f8fa; border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 16px 0; overflow-x: auto; }
+    .flow-box pre { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 12.5px; line-height: 1.7; color: #1f2328; white-space: pre; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;display:block;">← 핸드북 홈</a>
+  <div class="nav-title">워크숍 환경 설치 가이드</div>
+  <a href="#flow">설치 흐름</a>
+  <a href="#step1">Step 1 — 체크리스트</a>
+  <a href="#step2">Step 2 — OS별 스크립트</a>
+  <a href="#step3">Step 3 — 설치 확인</a>
+  <a href="#tools">설치 도구 목록</a>
+  <a href="#terminal">터미널 앱 추천</a>
+  <a href="#trouble">문제 해결</a>
+  <div class="nav-section">다른 문서</div>
+  <a href="SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>
+  <a href="../practice/02_Practice_Examples.html#setup">2.1 실습 준비 절</a>
+</nav>
+
+<main>
+  <h1>워크숍 환경 설치 가이드</h1>
+  <p class="subtitle">워크숍 <strong>시작 전</strong>에 설치를 완료하세요 — 세션이 시작될 때 별도의 환경 설정 없이 바로 실습에 진입할 수 있는 상태를 만드는 것이 목표입니다.</p>
+
+  <h2 id="flow">설치 흐름</h2>
+  <div class="flow-box"><pre>1. OS 업데이트
+   └─ Windows: winget upgrade --all
+   └─ macOS:   brew update &amp;&amp; brew upgrade
+   └─ Linux:   apt update &amp;&amp; apt upgrade
+
+2. 기반 도구
+   └─ Windows: PowerShell 7+, Windows Terminal, Git (+ Git Bash)
+   └─ macOS / Linux: curl, git
+
+3. 런타임
+   └─ bun  (기본 런타임 &amp; 패키지 매니저)
+   └─ python3
+   └─ uv   (Python 패키지 매니저)
+
+4. CLI 도구
+   └─ gh  (GitHub CLI)
+   └─ claude  (Claude Code CLI)
+   └─ agy  (Antigravity CLI)
+
+5. 데스크탑 앱
+   └─ Google Chrome
+   └─ Claude 데스크탑 앱
+   └─ Antigravity 데스크탑 앱
+   └─ Mark  (Markdown 뷰어)
+
+6. 최종 확인 ✅
+   └─ bun setup-common.ts</pre></div>
+
+  <h2 id="step1">Step 1 — 체크리스트 완료</h2>
+  <p>스크립트 실행 전 <a href="SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>를 먼저 읽고 완료하세요.</p>
+  <p><strong>주요 확인 사항</strong></p>
+  <ul>
+    <li><strong>Claude Pro/Max</strong> 및 <strong>Gemini Advanced</strong> 구독 완료 (API Key가 아닌 구독 플랜)</li>
+    <li><strong>GitHub 계정</strong> 생성 및 <code>gh auth login</code> 준비</li>
+    <li>여유 디스크 공간 <strong>5 GB 이상</strong>, <strong>관리자/sudo 권한</strong> 보유 확인</li>
+  </ul>
+
+  <h2 id="step2">Step 2 — OS별 스크립트 실행</h2>
+  <p>터미널을 관리자 / sudo 권한으로 열고 본인 OS에 맞는 스크립트를 실행하세요.</p>
+
+  <h3>macOS</h3>
+  <div style="position:relative">
+    <pre class="code-block">bash setup-mac.sh
+# 선택: WezTerm (GPU 가속 터미널) 함께 설치
+bash setup-mac.sh --wezterm
+# 선택: Docker Desktop 함께 설치
+bash setup-mac.sh --docker
+# 둘 다:
+bash setup-mac.sh --wezterm --docker</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+
+  <h3>Linux (Ubuntu / Debian)</h3>
+  <div style="position:relative">
+    <pre class="code-block">bash setup-linux.sh
+# 선택: WezTerm 함께 설치
+bash setup-linux.sh --wezterm
+# 선택: Docker 함께 설치
+bash setup-linux.sh --docker
+# 둘 다:
+bash setup-linux.sh --wezterm --docker</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+
+  <h3>Windows</h3>
+  <p><strong>PowerShell을 관리자 권한으로 실행</strong>한 뒤 아래 명령어를 입력하세요.</p>
+  <div style="position:relative">
+    <pre class="code-block"># 기본 실행 (Execution Policy는 스크립트가 자동으로 설정합니다)
+.\setup-windows.ps1
+
+# 옵션:
+.\setup-windows.ps1 -WSL2             # WSL2 함께 설치 (재시작 필요)
+.\setup-windows.ps1 -WezTerm          # WezTerm 함께 설치
+.\setup-windows.ps1 -Docker           # Docker Desktop 함께 설치
+.\setup-windows.ps1 -Force            # 이미 설치된 도구도 모두 재설치
+.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # 선택 옵션 전부 설치</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+  <div class="note"><strong>실행 후</strong>: 터미널을 닫고 다시 열어 PATH 변경 사항을 반영하세요.</div>
+
+  <h2 id="step3">Step 3 — 설치 확인</h2>
+  <div style="position:relative">
+    <pre class="code-block">bun setup-common.ts</pre>
+    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  </div>
+  <p>설치된 도구의 검증 표를 출력합니다. <strong>모든 항목이 ✅로 표시되면 준비 완료입니다.</strong></p>
+
+  <h2 id="tools">설치 도구 목록</h2>
+  <table>
+    <thead><tr><th>도구</th><th>용도</th><th>macOS</th><th>Linux</th><th>Windows</th></tr></thead>
+    <tbody>
+      <tr><td><strong>bun</strong></td><td>런타임 &amp; 패키지 매니저</td><td><code>bun.sh/install</code></td><td><code>bun.sh/install</code></td><td><code>bun.sh/install.ps1</code></td></tr>
+      <tr><td><strong>git</strong></td><td>버전 관리</td><td><code>brew install git</code></td><td><code>apt install git</code></td><td><code>winget Git.Git</code></td></tr>
+      <tr><td><strong>gh</strong></td><td>GitHub CLI</td><td><code>brew install gh</code></td><td>apt (공식 저장소)</td><td><code>winget GitHub.cli</code></td></tr>
+      <tr><td><strong>python3</strong></td><td>Python 런타임</td><td><code>brew install python3</code></td><td><code>apt install python3</code></td><td><code>winget Python.Python.3.13</code></td></tr>
+      <tr><td><strong>uv</strong></td><td>Python 패키지 매니저</td><td><code>brew install uv</code></td><td><code>astral.sh/uv/install.sh</code></td><td><code>winget astral-sh.uv</code></td></tr>
+      <tr><td><strong>claude</strong></td><td>Claude Code CLI</td><td colspan="3"><code>bun install -g @anthropic-ai/claude-code</code></td></tr>
+      <tr><td><strong>agy</strong></td><td>Antigravity CLI</td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.ps1</code></td></tr>
+      <tr><td><strong>Google Chrome</strong></td><td>브라우저</td><td><code>brew install --cask google-chrome</code></td><td>.deb 직접 다운로드</td><td><code>winget Google.Chrome</code></td></tr>
+      <tr><td><strong>Claude Desktop</strong></td><td>Claude 데스크탑 앱</td><td><code>brew install --cask claude</code></td><td>⚠️ 수동 설치</td><td><code>winget Anthropic.Claude</code></td></tr>
+      <tr><td><strong>Antigravity Desktop</strong></td><td>Antigravity 데스크탑 앱</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td></tr>
+      <tr><td><strong>Mark</strong></td><td>Markdown 뷰어</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td></tr>
+      <tr><td><strong>PowerShell 7+</strong></td><td>셸</td><td>—</td><td>—</td><td><code>winget Microsoft.PowerShell</code></td></tr>
+      <tr><td><strong>Windows Terminal</strong></td><td>터미널</td><td>—</td><td>—</td><td><code>winget Microsoft.WindowsTerminal</code></td></tr>
+      <tr><td><strong>unzip</strong></td><td>압축 해제</td><td>— (기본 내장)</td><td><code>apt install unzip</code></td><td>— (기본 내장)</td></tr>
+      <tr><td><strong>curl</strong></td><td>HTTP 클라이언트</td><td>— (기본 내장)</td><td><code>apt install curl</code></td><td>— (기본 내장)</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12.5px;color:var(--text-dim);">⚠️ 항목은 직접 다운로드 및 수동 설치가 필요합니다.</p>
+
+  <h3>선택 도구 (<code>--wezterm</code>, <code>--docker</code>)</h3>
+  <table>
+    <thead><tr><th>도구</th><th>macOS</th><th>Linux</th><th>Windows</th></tr></thead>
+    <tbody>
+      <tr><td><strong>WezTerm</strong> (<code>--wezterm</code>)</td><td><code>brew install --cask wezterm</code></td><td>apt (fury.io 저장소)</td><td><code>winget wez.wezterm</code></td></tr>
+      <tr><td><strong>Docker</strong> (<code>--docker</code>)</td><td><code>brew install --cask docker</code></td><td><code>get.docker.com</code> 스크립트</td><td><code>winget Docker.DockerDesktop</code></td></tr>
+      <tr><td><strong>WSL2</strong> (<code>-WSL2</code>, Windows 전용)</td><td>—</td><td>—</td><td><code>wsl --install</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="terminal">터미널 앱 추천 (Windows)</h2>
+  <table>
+    <thead><tr><th>앱</th><th>설명</th><th>설치</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Windows Terminal</strong> ⭐</td><td>Microsoft 공식, 탭·WSL 통합 — 기본 권장</td><td><code>winget install Microsoft.WindowsTerminal</code></td></tr>
+      <tr><td><strong>WezTerm</strong></td><td>GPU 가속·멀티플렉서 내장·크로스플랫폼 — 파워유저 추천</td><td><code>winget install wez.wezterm</code></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;color:var(--text-dim);">WezTerm 자동 설치: <code>.\setup-windows.ps1 -WezTerm</code></p>
+
+  <h2 id="trouble">문제 해결</h2>
+
+  <p><strong>설치 후 <code>bun: command not found</code></strong></p>
+  <p>터미널을 재시작하세요. Windows에서는 bun이 User 환경변수에 자동으로 등록됩니다. macOS/Linux:</p>
+  <pre class="code-block">export PATH="$HOME/.bun/bin:$PATH"</pre>
+
+  <p><strong><code>bun install -g</code> 후 <code>claude: command not found</code></strong></p>
+  <p>스크립트가 bun 실패 시 npm fallback으로 자동 재시도합니다. 여전히 문제가 있다면 <code>bun pm ls -g</code>로 경로를 확인한 뒤 PATH에 추가하세요.</p>
+
+  <p><strong>설치 후 <code>agy: command not found</code></strong></p>
+  <p>Antigravity CLI 설치 스크립트는 바이너리를 <code>~/.local/bin</code> 또는 <code>/usr/local/bin</code>에 저장합니다. <code>source ~/.bashrc</code>를 실행하거나 터미널을 재시작하세요.</p>
+
+  <p><strong>Windows: "스크립트 실행이 비활성화되어 있습니다"</strong></p>
+  <p>스크립트가 자동으로 <code>RemoteSigned</code>로 설정합니다. 수동으로 변경하려면:</p>
+  <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
+
+  <div class="warn"><strong>Windows: 관리자 권한 없이 실행한 경우</strong> — 스크립트가 경고를 표시하지만 계속 진행됩니다. winget 등 일부 설치에서 오류가 발생할 수 있으므로, PowerShell을 관리자 권한으로 재실행하는 것을 권장합니다.</div>
+
+  <p><strong>설치 로그 확인</strong></p>
+  <p>Windows 스크립트 실행 로그는 <code>%USERPROFILE%\workshop-setup-logs\</code>에 자동 저장됩니다.</p>
+
+  <hr>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun setup-common.ts</code>를 실행해서 모든 항목이 ✅로 표시되면 워크숍 준비 완료입니다.</p>
+</main>
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    setTimeout(() => { btn.textContent = '복사'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

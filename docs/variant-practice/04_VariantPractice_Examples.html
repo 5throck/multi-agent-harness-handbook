@@ -59,7 +59,7 @@
     .dot-b { background: #0969da; }
     .dot-p { background: #6639ba; }
 
-    main { flex: 1; max-width: 880px; padding: 40px 52px; }
+    main { flex: 1; max-width: 880px; padding: 40px 52px; overflow-x: hidden; }
     h1 { font-size: 1.9rem; font-weight: 700; color: #1f2328; margin-bottom: 6px; }
     .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
     .subtitle a { color: var(--accent); text-decoration: none; }
@@ -78,6 +78,9 @@
       margin: 48px 0 20px; padding-bottom: 10px;
       border-bottom: 2px solid var(--border);
     }
+    .level-header .badge { flex-shrink: 0; }
+    .level-header .level-title { flex-shrink: 0; }
+    .level-header .level-desc { flex: 1; }
     .level-title { font-size: 1.3rem; font-weight: 700; }
     .level-title-g { color: #1a7f37; }
     .level-title-b { color: #0969da; }
@@ -158,7 +161,7 @@
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
     }
-    .step-content { flex: 1; }
+    .step-content { flex: 1; min-width: 0; }
     .step-content strong { display: block; margin-bottom: 6px; color: #1f2328; font-size: 14px; }
     .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
 
@@ -180,6 +183,7 @@
     .flow-box {
       background: #f0f7ff; border: 1px solid #a5d5f7;
       border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px;
+      overflow-wrap: break-word;
     }
     .flow-box::before {
       content: '⚙️ 내부 동작'; display: block;
@@ -190,6 +194,7 @@
     .tip-box {
       background: #dafbe1; border: 1px solid #a2d9b1; border-radius: 6px;
       padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; color: #0a3622;
+      overflow-wrap: break-word;
     }
     .tip-box::before {
       content: '💡 팁'; display: block; font-weight: 700; color: #116329;
@@ -200,6 +205,7 @@
       background: #fff8c5; border: 1px solid #d4a72c;
       border-radius: 6px; padding: 12px 16px; margin-bottom: 14px;
       font-size: 13.5px; color: #5c3900;
+      overflow-wrap: break-word;
     }
     .warning-box::before {
       content: '⚠️ 주의'; display: block; font-weight: 700; color: #7d4e00;
@@ -274,7 +280,7 @@
     <div class="card-body">
 
       <div class="situation">
-        처음 ai-workspace-standards를 접해보는 개발자가, 실제 워크스페이스를 건드리지 않고 별도의 연습용 폴더(예: <code>~/harness-lab/ai-workspace-standards-demo</code>)에 저장소를 받아 어떤 variant들이 있는지 확인하고, 성격이 다른 두 variant(정식 variant인 co-consult, beta variant인 co-deck)로 각각 프로젝트를 스캐폴딩해서 결과물의 구조가 어떻게 다른지 직접 비교해보려 한다.
+        처음 ai-workspace-standards를 접해보는 개발자가, 실제 워크스페이스를 건드리지 않고 별도의 연습용 폴더(<code>ai-workspace-standards-demo</code>)에 저장소를 받아 어떤 variant들이 있는지 확인하고, 성격이 다른 두 variant(정식 variant인 co-consult, beta variant인 co-deck)로 각각 프로젝트를 스캐폴딩해서 결과물의 구조가 어떻게 다른지 직접 비교해보려 한다.
       </div>
 
       <div class="cmd-list">
@@ -290,12 +296,11 @@
       <ol class="step-list">
         <li>
           <div class="step-content">
-            <strong>연습용 폴더에 저장소 클론</strong>
-            <p>실제 작업 중인 워크스페이스와 절대 겹치지 않는 새 폴더를 만들어 그 안에 클론한다.</p>
+            <strong>연습용 저장소 클론</strong>
+            <p>실제 작업 중인 워크스페이스와 절대 겹치지 않는 별도 폴더에 클론한다.</p>
             <div style="position:relative">
-              <pre class="code-block">mkdir -p ~/harness-lab
-git clone https://github.com/5throck/ai-workspace-standards.git ~/harness-lab/ai-workspace-standards-demo
-cd ~/harness-lab/ai-workspace-standards-demo</pre>
+              <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git ai-workspace-standards-demo
+cd ai-workspace-standards-demo</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>

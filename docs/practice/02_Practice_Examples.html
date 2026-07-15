@@ -61,7 +61,7 @@
     .dot-p { background: #6639ba; }
 
     /* ── 본문 ── */
-    main { flex: 1; max-width: 880px; padding: 40px 52px; }
+    main { flex: 1; max-width: 880px; padding: 40px 52px; overflow-x: hidden; }
     h1 { font-size: 1.9rem; font-weight: 700; color: #1f2328; margin-bottom: 6px; }
     .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
     .subtitle a { color: var(--accent); text-decoration: none; }
@@ -82,6 +82,9 @@
       margin: 48px 0 20px; padding-bottom: 10px;
       border-bottom: 2px solid var(--border);
     }
+    .level-header .badge { flex-shrink: 0; }
+    .level-header .level-title { flex-shrink: 0; }
+    .level-header .level-desc { flex: 1; }
     .level-title { font-size: 1.3rem; font-weight: 700; }
     .level-title-g { color: #1a7f37; }
     .level-title-b { color: #0969da; }
@@ -129,6 +132,12 @@
       border-radius: 8px;
       padding: 16px 20px;
       margin-bottom: 20px;
+    }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box {
+      margin-left: -10px;
+      margin-right: -10px;
     }
     .platform-block.claude { border-top: 3px solid #1a7f37; }
     .platform-block.claudeapp { border-top: 3px dashed #1a7f37; }
@@ -187,7 +196,7 @@
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
     }
-    .step-content { flex: 1; }
+    .step-content { flex: 1; min-width: 0; }
     .step-content strong { display: block; margin-bottom: 6px; color: #1f2328; font-size: 14px; }
     .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
 
@@ -211,6 +220,7 @@
     .flow-box {
       background: #f0f7ff; border: 1px solid #a5d5f7;
       border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px;
+      overflow-wrap: break-word;
     }
     .flow-box::before {
       content: '⚙️ 내부 동작'; display: block;
@@ -222,6 +232,7 @@
     .tip-box {
       background: #dafbe1; border: 1px solid #a2d9b1; border-radius: 6px;
       padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; color: #0a3622;
+      overflow-wrap: break-word;
     }
     .tip-box::before {
       content: '💡 팁'; display: block; font-weight: 700; color: #116329;
@@ -233,6 +244,7 @@
       background: #fff8c5; border: 1px solid #d4a72c;
       border-radius: 6px; padding: 12px 16px; margin-bottom: 14px;
       font-size: 13.5px; color: #5c3900;
+      overflow-wrap: break-word;
     }
     .warning-box::before {
       content: '⚠️ 주의'; display: block; font-weight: 700; color: #7d4e00;
@@ -329,7 +341,7 @@
   </div>
 
   <h3>Windows에서 설치하기</h3>
-  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>을 내려받아 실습 전용 폴더(예: <code>~/harness-lab/setup/</code>)에 두고, PowerShell을 <strong>관리자 권한으로</strong> 실행한 뒤 아래 명령을 돌린다.</p>
+  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>을 내려받아 실습 전용 폴더(예: <code>harness-lab/setup/</code>)에 두고, PowerShell을 <strong>관리자 권한으로</strong> 실행한 뒤 아래 명령을 돌린다.</p>
   <div class="tip-box">
     <strong>PowerShell을 관리자 권한으로 여는 법</strong><br>
     ① 시작 메뉴를 열고 <code>PowerShell</code>을 검색한다.<br>
@@ -381,7 +393,7 @@ cd ./setup && bash setup-linux.sh</pre>
     <div class="card-body">
 
       <div class="situation">
-        하네스를 처음 써보는 개발자가 실습 전용 빈 폴더 <code>~/harness-lab/</code>를 새로 만들고, <code>reviewer</code> 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 먼저 적어 둔 뒤, 그 <em>같은 명세</em>를 Claude App(Desktop)에서는 사전 정의 서브에이전트로, Antigravity(Desktop)에서는 자연어 목표로 각각 "구현"해 호출해본다. 이 폴더는 실습 전용이므로 다른 프로젝트 파일과 섞이지 않는다.
+        하네스를 처음 써보는 개발자가 실습 전용 빈 폴더 <code>harness-lab/</code>를 새로 만들고, <code>reviewer</code> 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 먼저 적어 둔 뒤, 그 <em>같은 명세</em>를 Claude App(Desktop)에서는 사전 정의 서브에이전트로, Antigravity(Desktop)에서는 자연어 목표로 각각 "구현"해 호출해본다. 이 폴더는 실습 전용이므로 다른 프로젝트 파일과 섞이지 않는다.
       </div>
 
       <div class="cmd-list">
@@ -398,10 +410,10 @@ cd ./setup && bash setup-linux.sh</pre>
         <li>
           <div class="step-content">
             <strong>① 실습 폴더 생성 및 진입</strong>
-            <p>홈 디렉터리 아래 <code>harness-lab</code> 폴더를 새로 만들고 그 안으로 이동한다. 이후 모든 명령은 이 폴더 안에서 실행한다.</p>
+            <p>현재 폴더 아래 <code>harness-lab</code> 폴더를 새로 만들고 그 안으로 이동한다. 이후 모든 명령은 이 폴더 안에서 실행한다.</p>
             <div style="position:relative">
-              <pre class="code-block">mkdir ~/harness-lab
-cd ~/harness-lab</pre>
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
@@ -444,7 +456,7 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>① Claude App에서 프로젝트 열기</strong>
-              <p>Claude App(Desktop)을 실행하고, 방금 만든 <code>~/harness-lab/</code> 폴더를 프로젝트로 연다.</p>
+              <p>Claude App(Desktop)을 실행하고, 방금 만든 <code>harness-lab/</code> 폴더를 프로젝트로 연다.</p>
             </div>
           </li>
           <li>
@@ -491,7 +503,7 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>② Antigravity Agent Manager에서 Workspace 생성</strong>
-              <p>Agent Manager를 열고 <code>~/harness-lab/</code> 폴더(AGENTS.md가 이미 들어있는 폴더)를 가리키는 새 Workspace를 하나 만든다.</p>
+              <p>Agent Manager를 열고 <code>harness-lab/</code> 폴더(AGENTS.md가 이미 들어있는 폴더)를 가리키는 새 Workspace를 하나 만든다.</p>
             </div>
           </li>
           <li>
@@ -509,7 +521,7 @@ EOF</pre>
         </ol>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)에서도</strong> 같은 개념으로 실습할 수 있다 — 사전 정의 파일 없이 <code>/goal</code>로 목표만 준다.</p>
         <div style="position:relative">
-          <pre class="code-block">cd ~/harness-lab && agy
+          <pre class="code-block">cd harness-lab && agy
 /goal notes.txt 파일을 검토하고 개선점을 요약해줘</pre>
           <button class="copy-btn" onclick="copyCode(this)">복사</button>
         </div>
@@ -538,7 +550,7 @@ EOF</pre>
     <div class="card-body">
 
       <div class="situation">
-        G-1을 마친 실무자가 같은 <code>~/harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>에 먼저 명세한 뒤, Claude App에는 사전 정의 서브에이전트로, Antigravity(Desktop)에는 자연어 목표로 각각 구현한다. writer가 먼저 초안을 쓰고 reviewer가 그 결과를 비평하는 파이프라인을 네 도구 모두에서 순서를 지켜 지휘하게 한다.
+        G-1을 마친 실무자가 같은 <code>harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>에 먼저 명세한 뒤, Claude App에는 사전 정의 서브에이전트로, Antigravity(Desktop)에는 자연어 목표로 각각 구현한다. writer가 먼저 초안을 쓰고 reviewer가 그 결과를 비평하는 파이프라인을 네 도구 모두에서 순서를 지켜 지휘하게 한다.
       </div>
 
       <div class="cmd-list">
@@ -589,7 +601,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 메인 세션이 Agent 호출을 순차 디스패치</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>~/harness-lab/</code> 채팅에서 이어서 진행한다.</p>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>harness-lab/</code> 채팅에서 이어서 진행한다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -769,7 +781,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block antigravity">
         <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — Agent Manager, Workspace별 에이전트 1개</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity를 열고 Agent Manager에서 <code>~/harness-lab/</code>을 가리키는 Project를 하나 준비한다. 이번에는 하나의 Workspace에 두 에이전트를 몰아넣지 않고, <strong>서로 다른 Workspace 두 개</strong>를 만들어 각각 에이전트를 하나씩 배정한다.</p>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity를 열고 Agent Manager에서 <code>harness-lab/</code>을 가리키는 Project를 하나 준비한다. 이번에는 하나의 Workspace에 두 에이전트를 몰아넣지 않고, <strong>서로 다른 Workspace 두 개</strong>를 만들어 각각 에이전트를 하나씩 배정한다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -816,7 +828,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams, teammateMode: in-process</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">같은 <code>~/harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">같은 <code>harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -914,9 +926,9 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>② haiku 티어로 검토</strong>
-              <p>reviewer 서브에이전트 정의(<code>.claude/agents/reviewer.md</code>)의 <code>model</code> 필드를 <code>haiku</code>로 바꾼 뒤 요청한다.</p>
+              <p>채팅창에 아래 문장을 그대로 붙여넣는다. Claude App이 <code>reviewer.md</code>의 <code>model</code> 필드를 <code>haiku</code>로 바꾼 뒤 검토를 수행한다.</p>
               <div style="position:relative">
-                <pre class="code-block">argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
+                <pre class="code-block">.claude/agents/reviewer.md의 model 필드를 haiku로 바꿔줘. 그리고 argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
                 <button class="copy-btn" onclick="copyCode(this)">복사</button>
               </div>
             </div>
@@ -924,13 +936,21 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>③ sonnet 티어로 같은 요청 반복</strong>
-              <p><code>model</code> 필드를 <code>sonnet</code>으로 바꾼 뒤, 같은 검토 요청 문장을 다시 붙여넣는다. 순환 논증(circular reasoning) 같은 논리적 허점을 정확히 짚어내는지 haiku 결과와 비교한다.</p>
+              <p>같은 방식으로 <code>model</code>을 <code>sonnet</code>으로 바꾼 뒤 검토한다. 순환 논증(circular reasoning) 같은 논리적 허점을 정확히 짚어내는지 haiku 결과와 비교한다.</p>
+              <div style="position:relative">
+                <pre class="code-block">.claude/agents/reviewer.md의 model 필드를 sonnet으로 바꿔줘. 그리고 argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
             </div>
           </li>
           <li>
             <div class="step-content">
               <strong>④ opus 티어로 같은 요청 반복</strong>
-              <p><code>model</code> 필드를 <code>opus</code>로 바꾼 뒤 다시 요청한다. 응답 시간과 지적의 깊이가 ②③과 어떻게 다른지 기록한다.</p>
+              <p>같은 방식으로 <code>model</code>을 <code>opus</code>로 바꾼 뒤 검토한다. 응답 시간과 지적의 깊이가 ②③과 어떻게 다른지 기록한다.</p>
+              <div style="position:relative">
+                <pre class="code-block">.claude/agents/reviewer.md의 model 필드를 opus로 바꿔줘. 그리고 argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
             </div>
           </li>
         </ol>
@@ -938,7 +958,7 @@ EOF</pre>
           간단한 오탈자 검토라면 세 모델의 결과 차이가 거의 없지만, 이번처럼 "논증 구조의 허점을 짚어야 하는" 작업에서는 티어가 낮을수록 순환 논증을 순환 논증이라고 정확히 짚지 못하고 표면적인 문장만 지적하는 경향이 뚜렷해진다. 반대로 haiku는 셋 중 가장 빠르게 응답한다 — 5장에서 설명하는 "판단이 무거운 역할일수록 높은 티어, 정형화된 작업일수록 낮은 티어"라는 원칙이 왜 존재하는지, 속도와 깊이의 트레이드오프를 직접 겪어보면 훨씬 분명해진다.
         </div>
         <div class="tip-box">
-          매번 <code>.claude/agents/reviewer.md</code>를 열어 <code>model</code> 줄만 고치고 저장한 뒤 같은 요청을 반복하면 된다 — 정의 파일을 다시 만들 필요는 없다.
+          매번 Claude App에 "model 필드를 바꿔줘"라고 요청하면 된다 — 정의 파일을 직접 열 필요 없고, Claude App이 알아서 수정 후 검토를 수행한다.
         </div>
       </div>
 

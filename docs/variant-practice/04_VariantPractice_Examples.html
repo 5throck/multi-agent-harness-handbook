@@ -248,7 +248,7 @@
   <a href="#scenario-3"><span class="dot dot-p"></span>P-1 프로토타입 검증과 승격 준비 점검</a>
 
   <div class="nav-group">바로가기</div>
-  <a href="04_VariantPractice_Manual.html">📖 6.0 레퍼런스 — Variant 실습 레퍼런스 →</a>
+  <a href="04_VariantPractice_Manual.html">📖 6장 §1 — Variant 실습 레퍼런스 →</a>
 </nav>
 
 <main>
@@ -257,7 +257,7 @@
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>6.0 레퍼런스에서 설명한 명령들을 실제 시나리오 순서로 따라 해볼 수 있게 구성</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>6장 §1에서 설명한 명령들을 실제 시나리오 순서로 따라 해볼 수 있게 구성</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="04_VariantPractice_Manual.html">04_VariantPractice_Manual.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
@@ -346,7 +346,7 @@ bun scripts/list-template-versions.ts</pre>
         <code>demo-project/agents/</code>와 <code>demo-project-deck/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 10명의 전문 에이전트로 구성된 7단계 컨설팅 워크플로우, co-deck은 Research·Design·HTML Build·PDF Export 등을 담당하는 전문 에이전트들로 구성된 11단계 파이프라인이라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. variant 이름과 <code>beta</code> 배지만으로는 짐작하기 어려운 "실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
       </div>
       <div class="warning-box">
-        co-deck은 아직 <code>beta</code> variant다 — 5장 §3(templates와 variant 7종)에서 다뤘듯, 정식 variant보다 구조가 자주 바뀔 수 있으므로 실무 프로젝트보다는 이런 학습·실험 용도로 먼저 접해보는 것을 권장한다.
+        co-deck은 아직 <code>beta</code> variant다 — 5장 §3에서 다룬 바와 같이, 정식 variant보다 구조가 자주 바뀔 수 있으므로 실무 프로젝트보다는 이런 학습·실험 용도로 먼저 접해보는 것을 권장한다.
       </div>
 
     </div>
@@ -394,7 +394,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>도메인 에이전트 정의 작성 — ① researcher.md</strong>
-            <p><code>Projects/co-marketing/agents/researcher.md</code> 파일을 아래 내용 그대로 만든다. name, role, status, tier(플랫폼별), model: inherit, color, description, phases, handoff_to, handoff_from, required_skills를 포함한 YAML frontmatter가 필수 형식이다. 2.1 실습에서 <code>AGENTS.md</code>로 역할을 도구 중립적으로 먼저 적었던 것과 같은 원칙이 여기서는 프로젝트 규모로 나타난다 — 이 frontmatter가 곧 "역할 명세"이고, 다음 단계에서 <code>AGENTS.md</code> 로스터에 등록해야 실제로 팀의 정본으로 인정된다.</p>
+            <p><code>Projects/co-marketing/agents/researcher.md</code> 파일을 아래 내용 그대로 만든다. name, role, status, tier(플랫폼별), model: inherit, color, description, phases, handoff_to, handoff_from, required_skills를 포함한 YAML frontmatter가 필수 형식이다. 2장 §1 실습에서 <code>AGENTS.md</code>로 역할을 도구 중립적으로 먼저 적었던 것과 같은 원칙이 여기서는 프로젝트 규모로 나타난다 — 이 frontmatter가 곧 "역할 명세"이고, 다음 단계에서 <code>AGENTS.md</code> 로스터에 등록해야 실제로 팀의 정본으로 인정된다.</p>
             <div style="position:relative">
               <pre class="code-block">---
 name: researcher
@@ -446,7 +446,7 @@ required_skills: [copywriting]
         <li>
           <div class="step-content">
             <strong><code>AGENTS.md</code> 로스터 갱신</strong>
-            <p><code>create-l2-scaffold.ts</code>가 만든 <code>Projects/co-marketing/AGENTS.md</code>는 워크스페이스 루트에서 그대로 복사되어 온 상태라 auditor·lifecycle-manager 같은 워크스페이스 전용 에이전트 항목이 남아 있다. 이 프로젝트에는 존재하지 않는 에이전트이므로 표에서 지우고, 방금 만든 <code>researcher</code>·<code>writer</code> 항목으로 채운 "co-marketing Agents" 섹션을 새로 추가한다 — <a href="../intro/04_Intro_Chapter.html#s2">5장에서 설명한 대로</a> AGENTS.md는 "이 프로젝트에서 누가 그 일을 하는가"를 정의하는 정본 목록이므로, 실제 존재하는 에이전트와 어긋나 있으면 안 된다.</p>
+            <p><code>create-l2-scaffold.ts</code>가 만든 <code>Projects/co-marketing/AGENTS.md</code>는 워크스페이스 루트에서 그대로 복사되어 온 상태라 auditor·lifecycle-manager 같은 워크스페이스 전용 에이전트 항목이 남아 있다. 이 프로젝트에는 존재하지 않는 에이전트이므로 표에서 지우고, 방금 만든 <code>researcher</code>·<code>writer</code> 항목으로 채운 "co-marketing Agents" 섹션을 새로 추가한다 — <a href="../intro/04_Intro_Chapter.html#s2">5장 §2에서 설명한 대로</a> AGENTS.md는 "이 프로젝트에서 누가 그 일을 하는가"를 정의하는 정본 목록이므로, 실제 존재하는 에이전트와 어긋나 있으면 안 된다.</p>
             <div style="position:relative">
               <pre class="code-block">cd Projects/co-marketing && bun run agent:verify</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
@@ -459,7 +459,7 @@ required_skills: [copywriting]
       </ol>
 
       <div class="flow-box">
-        Phase A 프로토타입은 <code>templates/</code>가 아니라 <code>Projects/co-marketing/</code>에 독립적으로 존재한다. 이 상태에서는 아직 다른 사람이 <code>new-project.ts --variant co-marketing</code>로 스캐폴딩할 수 없다 — 그러려면 나중에 Phase B 승격을 거쳐야 한다(7장에서 다룸).
+        Phase A 프로토타입은 <code>templates/</code>가 아니라 <code>Projects/co-marketing/</code>에 독립적으로 존재한다. 이 상태에서는 아직 다른 사람이 <code>new-project.ts --variant co-marketing</code>로 스캐폴딩할 수 없다 — 그러려면 나중에 Phase B 승격을 거쳐야 한다(7장 §1에서 다룸).
       </div>
 
       <div class="warning-box">
@@ -531,11 +531,11 @@ bun run agent:verify</pre>
       </div>
 
       <div class="tip-box">
-        Phase A에서 이미 구조를 깨끗하게 맞춰두면, 7장에서 다룰 Phase B 승격 파이프라인이 훨씬 매끄럽게 진행된다.
+        Phase A에서 이미 구조를 깨끗하게 맞춰두면, 7장 §1에서 다룰 Phase B 승격 파이프라인이 훨씬 매끄럽게 진행된다.
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> 정식 승격(Phase B) 절차와 <code>l2-to-variant-pipeline.ts</code>는 <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7.0</a>과 그 실습 파일에서 이어서 다룬다.
+        <strong>함께 보기:</strong> 정식 승격(Phase B) 절차와 <code>l2-to-variant-pipeline.ts</code>는 <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7장 §1</a>과 그 실습 파일에서 이어서 다룬다.
       </div>
 
     </div>
@@ -544,7 +544,7 @@ bun run agent:verify</pre>
   <hr>
   <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
     ai-workspace-standards main 브랜치 기준 | 2026년 7월 14일 작성<br>
-    <a href="04_VariantPractice_Manual.html">← 6.0 레퍼런스로 돌아가기</a>
+    <a href="04_VariantPractice_Manual.html">← 6장 §1 레퍼런스로 돌아가기</a>
   </p>
 </main>
 

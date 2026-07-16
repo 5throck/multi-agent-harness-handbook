@@ -90,7 +90,7 @@
 
     <dt>프론트매터 <span class="en">Frontmatter</span></dt>
     <dd>에이전트 정의 파일(<code>agents/*.md</code>) 맨 위에 YAML 형식으로 작성하는 메타데이터 블록. 에이전트 이름·역할·허용 도구(<code>tools</code>)·모델 티어(<code>tier</code>) 등을 기계적으로 파싱할 수 있도록 정의한다. <code>extends</code> 필드로 다른 에이전트 파일을 상속받을 수도 있다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s5">7장 §L0→L1→L2 계층 구조</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s5">9장 §L0→L1→L2 계층 구조</a></span></dd>
 
     <dt>스캐폴딩 <span class="en">Scaffolding</span></dt>
     <dd><code>bun scripts/new-project.ts</code>로 variant 템플릿의 전체 구성(에이전트·스킬·커맨드·거버넌스 파이프라인)을 독립 git 저장소로 복제하는 작업. "프로젝트를 처음부터 만드는 게 아니라, 미리 설계된 뼈대 위에서 시작한다"는 의미.
@@ -106,7 +106,7 @@
 
     <dt>서비스 티켓 모델 <span class="en">Service Ticket Model</span></dt>
     <dd>AI를 "요청을 받으면 처리해 주는 서비스"로만 사용하는 운영 방식. 기존 IT 조직의 티켓 시스템과 유사하다. 사용자가 일일이 요청 형태로 지시해야 하며, 에이전트 팀의 자율성이 제한된다. 이 핸드북이 제안하는 "개발 도구 + variant 모델"과 대비되는 접근법.
-      <span class="see">자세히: <a href="../enterprise/03_Enterprise_Chapter.html">9장 · 기업 내 운영 전략 비교</a></span></dd>
+      <span class="see">자세히: <a href="../enterprise/03_Enterprise_Chapter.html">8장 · 기업 내 운영 전략 비교</a></span></dd>
   </dl>
 
   <h2 id="team">멀티 에이전트팀 구성요소</h2>
@@ -119,7 +119,7 @@
 
     <dt>모델 티어 <span class="en">Model Tier</span></dt>
     <dd>에이전트 역할별로 배정하는 모델 비용 등급(<code>high</code>/<code>medium</code>/<code>low</code>). 판단이 무거운 역할에는 high, 정형화된 반복 작업에는 low를 배정해 비용과 품질의 균형을 맞춘다. <code>agents/*.md</code> frontmatter의 <code>tier</code> 필드로 지정하며, 실제 모델명은 <code>model: inherit</code>로 플랫폼이 번역한다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §3</a>. L0→L1→L2의 "3-tier"와는 다른 개념이니 혼동 주의</span></dd></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §3</a>. L0→L1→L2의 "3-tier"와는 다른 개념이니 혼동 주의</span></dd>
   </dl>
 
   <h2 id="workspace">ai-workspace-standards 구조</h2>
@@ -130,7 +130,7 @@
 
     <dt>L0 / L1 / L2</dt>
     <dd>워크스페이스 루트(L0, 유일한 원본) → 공통 템플릿 스냅샷(L1, <code>templates/common/</code>) → variant/프로젝트(L2, <code>templates/co-*/</code> 또는 <code>Projects/*/</code>)로 이어지는 3단 계층. 흐름은 항상 위에서 아래로만 가고, L1→L2는 스캐폴딩 시점에 딱 한 번만 전달되는 "포크"다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s5">7장 §L0→L1→L2 계층 구조</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s5">9장 §L0→L1→L2 계층 구조</a></span></dd>
 
     <dt>포크 모델 <span class="en">Fork Model</span></dt>
     <dd>L1에서 L2가 갈라져 나온 뒤에는 자동 역동기화 없이 독립적으로 진화하는 방식. 공식 템플릿으로 승격하려면 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다.</dd>
@@ -148,11 +148,11 @@
 
     <dt>컨테이너 연계 <span class="en">Container Integration</span></dt>
     <dd>ai-workspace-standards의 고도화 방향 중 하나. 스캐폴딩된 프로젝트가 Docker/Kubernetes 환경에서 Open WebUI 같은 서비스와 연계되어 개인 단위로 지원될 수 있어야 한다는 요구. 현재는 로컬 AI 코딩 도구와 직접 연동되는 방식만 지원된다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">7장 §현재 상태와 고도화 방향</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">9장 §현재 상태와 고도화 방향</a></span></dd>
 
     <dt>메모리 취합 <span class="en">Memory Consolidation</span></dt>
     <dd>ai-workspace-standards의 고도화 방향 중 하나. 개별 프로젝트 단위로 흩어져 있는 <code>memory/MEMORY.md</code> 파일들을 워크스페이스 수준에서 취합·정리하여 전체 트렌드를 파악할 수 있는 기능.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">7장 §현재 상태와 고도화 방향</a></span></dd>
+      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">9장 §현재 상태와 고도화 방향</a></span></dd>
   </dl>
 
   <h2 id="tools">도구·플랫폼</h2>
@@ -163,14 +163,14 @@
 
     <dt>teammateMode</dt>
     <dd>Agent Teams(실험적 기능)의 병렬 실행 모드. Claude App(Desktop)은 <code>in-process</code>만 지원하고, Claude Code(CLI)는 <code>tmux</code> 분할 창 모드도 추가로 지원한다.
-      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">8장 §1</a></span></dd>
+      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">7장 §1</a></span></dd>
 
     <dt>Agent Manager</dt>
     <dd>Antigravity(Desktop)에서 여러 워크스페이스를 한 화면에서 감독하는 상위 인터페이스. Workspace마다 에이전트 하나씩 배정하는 것이 원칙이다.</dd>
 
     <dt><code>/goal</code> / <code>/agent</code> / <code>/agents</code></dt>
     <dd>Antigravity CLI(<code>agy</code>)에서 동적 서브에이전트 오케스트레이션을 부르는 슬래시 커맨드. <code>/goal</code>은 목표를 끝까지 실행, <code>/agent</code>는 백그라운드 장기 작업 위임, <code>/agents</code>는 지금까지 생성된 서브에이전트 상태 목록 확인. 이 능력 자체는 agy만의 것이 아니다 — Claude Code/App은 같은 동적 오케스트레이션을 <code>Agent</code>(Task) 툴과 자연어 요청으로, Antigravity(Desktop)는 Agent Manager GUI로 수행한다. 이 세 명령은 그 동작을 CLI 화면에서 부르는 이름일 뿐이다.
-      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">8장 §2</a></span></dd>
+      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">7장 §2</a></span></dd>
   </dl>
 
 </main>

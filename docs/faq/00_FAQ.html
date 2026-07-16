@@ -64,7 +64,7 @@
 
   <div class="q">Antigravity CLI를 npm으로 전역 설치하려는데 안 된다.</div>
   <p class="a">2026-06-18부로 Gemini CLI 서비스가 종료되고 Antigravity CLI(<code>agy</code>)로 대체됐다. <code>agy</code>는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리로, 압축 해제 후 PATH에 넣기만 하면 된다. npm 설치 안내는 옛 자료다.</p>
-  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html">8장 §도구 비교</a></span>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html">7장 §도구 비교</a></span>
 
   <h2 id="subagent">서브에이전트 실행</h2>
 
@@ -74,7 +74,7 @@
 
   <div class="q">Claude App에서 파일 저장 후 감사 스크립트가 자동으로 안 돈다.</div>
   <p class="a">정상이다. <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 같은 훅은 Claude App(Desktop)에서는 발화하지 않고 Claude Code(CLI) 세션에서만 자동 실행된다. Desktop App을 쓰는 팀은 훅이 하던 작업을 세션이 끝난 뒤 수동으로 실행해야 한다. 이걸 모르고 지나가면 "감사가 도는 줄 알았는데 안 돌았다"는 사고로 이어질 수 있다.</p>
-  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">8장 §1</a>, <a href="../guardrails/00_Guardrails_Chapter.html#s6">3장 §감사 로그와 관측성</a></span>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">7장 §1</a>, <a href="../guardrails/00_Guardrails_Chapter.html#s6">3장 §감사 로그와 관측성</a></span>
 
   <div class="q">reviewer가 검토만 해달라고 했는데 파일을 수정해버렸다.</div>
   <p class="a"><code>tools</code> 필드에 <code>Write</code>가 포함돼 있지 않은지 확인한다. reviewer 같은 읽기 전용 역할은 애초에 <code>tools: Read, Grep</code>처럼 필요한 최소 권한만 부여해, 프롬프트 해석이 애매해도 수정 자체가 불가능하게 막아야 한다.</p>
@@ -84,11 +84,11 @@
 
   <div class="q">Antigravity Agent Manager에서 에이전트 두 개가 서로 다른 파일을 수정 중인데 결과가 뒤섞인다.</div>
   <p class="a">두 에이전트를 같은 Workspace(같은 폴더)에 배정했을 가능성이 높다. 같은 코드베이스를 공유하면 한 에이전트가 다른 에이전트의 작업 맥락을 자기 것으로 착각하는 "인지적 중첩(cognitive overlap)"이 생길 수 있다. Workspace 또는 git worktree 단위로 반드시 분리한다.</p>
-  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">8장 §2</a>, <a href="../guardrails/00_Guardrails_Chapter.html#s5">3장 §격리</a></span>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">7장 §2</a>, <a href="../guardrails/00_Guardrails_Chapter.html#s5">3장 §격리</a></span>
 
   <div class="q">Claude App에서 Agent Teams를 켰는데 <code>tmux</code> 옵션이 안 보인다.</div>
   <p class="a">정상이다. Desktop App은 <code>teammateMode: in-process</code>만 지원하며, tmux 분할 창 모드는 Claude Code(CLI)에서만 추가로 지원된다.</p>
-  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">8장 §1</a></span>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">7장 §1</a></span>
 
   <h2 id="workspace">workspace/variant</h2>
 
@@ -106,15 +106,15 @@
 
   <div class="q">ai-workspace-standards를 실제 서비스 환경(Docker/Kubernetes)에서 쓰려면?</div>
   <p class="a">현재 ai-workspace-standards는 로컬 AI 코딩 도구(Claude Code/App, Antigravity 등)와 직접 연동되는 방식으로만 동작한다. Docker 또는 Kubernetes 환경에서 Open WebUI 같은 프론트엔드 서비스와 연계하여 개인 단위로 에이전트 팀을 지원하는 형태는 <strong>고도화 방향</strong>으로 논의 중이며, 아직 구현되지 않았다.
-    <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">7장 §현재 상태와 고도화 방향</a></span></p>
+    <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">9장 §현재 상태와 고도화 방향</a></span></p>
 
   <div class="q">여러 프로젝트의 memory/MEMORY.md를 한 곳에서 모아볼 수 있는가?</div>
   <p class="a">현재는 개별 프로젝트마다 독립적인 <code>memory/MEMORY.md</code>를 유지하는 구조이며, 워크스페이스 수준에서 메모리를 취합·정리하는 기능은 <strong>고도화 방향</strong>으로 계획 중이다. 프로젝트가 늘어날수록 개별 메모리 파일에서 전체 트렌드를 파악하기 어려워지는 점을 개선할 예정이다.
-    <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">7장 §현재 상태와 고도화 방향</a></span></p>
+    <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">9장 §현재 상태와 고도화 방향</a></span></p>
 
   <div class="q">variant 템플릿이 업데이트되면 기존 프로젝트에도 자동으로 반영되는가?</div>
   <p class="a">아니다. ai-workspace-standards는 <strong>포크 모델(Fork Model)</strong>을 사용한다. L1(공통 템플릿)의 변경은 이미 스캐폴딩된 L2 프로젝트에 자동으로 전파되지 않는다. 이는 의도한 차이를 보존하기 위한 설계이지만, 보안 패치나 버그 수정이 수동 반영되어야 한다는 운영 부담을 만든다. 동의 기반(consent-based) 선택적 수신 모델과 비동기 배포 파이프라인이 고도화 방향으로 거론되고 있다.
-    <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">7장 §현재 상태와 고도화 방향</a></span></p>
+    <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Chapter.html#s6">9장 §현재 상태와 고도화 방향</a></span></p>
 
   <h2 id="cost">비용·성능</h2>
 
@@ -123,8 +123,8 @@
   <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §templates와 variant 7종</a></span>
 
   <div class="q">에이전트 응답이 갑자기 느려지거나 타임아웃된다.</div>
-  <p class="a">컨텍스트 윈도우가 가득 차면 모델 처리 속도가 급격히 느려진다. 8장에서 설명하는 것처럼 Claude Code는 <code>compact</code> 명령으로 대화 길이를 압축할 수 있다. 또한 병렬로 에이전트 여러 개를 투입할 때 API 요청이 큐에 쌓여 지연되는 현상도 흔하다 — 이 경우 순차 실행으로 전환하거나 WIP 한계를 낮춰 동시 실행 수를 줄이면 된다.</p>
-  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">8장 §1</a></span>
+  <p class="a">컨텍스트 윈도우가 가득 차면 모델 처리 속도가 급격히 느려진다. Claude Code는 <code>/compact</code> 명령으로 대화 길이를 압축할 수 있다. 또한 병렬로 에이전트 여러 개를 투입할 때 API 요청이 큐에 쌓여 지연되는 현상도 흔하다 — 이 경우 순차 실행으로 전환하거나 WIP 한계를 낮춰 동시 실행 수를 줄이면 된다.</p>
+  <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">7장 §1</a></span>
 
   <h2 id="platform">플랫폼별 문제</h2>
 

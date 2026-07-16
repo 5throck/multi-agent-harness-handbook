@@ -100,7 +100,15 @@
       main { padding: 40px 18px 60px; }
       .chapter-nav { flex-direction: column; }
     }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -143,11 +151,17 @@
 
   <h2 id="usage">upgrade-project.ts 사용법</h2>
   <p>가장 먼저 <code>--dry-run</code>으로 무엇이 바뀔지 미리 확인한다. 실제로 파일을 건드리지 않고 콘솔에 계획만 출력한다.</p>
+  <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>출력 내용에 문제가 없으면 <code>--dry-run</code>을 빼고 다시 실행한다.</p>
+  <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # 선택 플래그: --variant &lt;variant&gt;  --platform claude|antigravity|both
 #            --prune-removed  --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p><code>--variant</code>는 프로젝트의 <code>.claude/template-version.txt</code>에 기록된 값을 자동으로 읽어오므로 대부분 생략해도 된다. 이 파일이 없는 오래된 프로젝트라면 실행 시 확인 프롬프트가 뜨고, <code>--variant</code>를 직접 지정해야 한다.</p>
 
   <h2 id="categories">파일 처리 5분류</h2>
@@ -166,7 +180,10 @@
 
   <h2 id="safety">안전장치 — 스냅샷과 롤백</h2>
   <p>실행 전(<code>--dry-run</code>이 아닐 때) 스크립트는 자동으로 <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code>를 실행해 현재 작업 트리 상태를 스냅샷으로 남긴다. 업그레이드 결과가 마음에 들지 않으면 다음 명령으로 즉시 되돌릴 수 있다.</p>
+  <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>이 명령은 방금 만든 <code>pre-upgrade-snapshot-*</code> 스태시를 찾아 <code>git stash pop</code>으로 복원한다. 업그레이드 자체는 커밋을 만들지 않으므로, 결과를 확인한 뒤에는 평소처럼 <code>git diff</code>로 변경 내용을 검토하고 직접 커밋해야 한다.</p>
   <p>마무리 단계로 <code>.claude/template-version.txt</code>가 새 버전으로 갱신되고, <code>.gitleaks.toml</code>·pre-commit 훅·<code>.gitattributes</code>(eol=lf)·<code>.gitignore</code>(.env 패턴)·<code>git core.hooksPath</code> 같은 보안 부트스트랩 항목이 자동으로 점검된다(3장 가드레일 원칙과 동일한 항목들이다). <code>core.hooksPath</code>가 잘못돼 있으면 스크립트가 스스로 고쳐준다.</p>
 
@@ -191,5 +208,17 @@
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

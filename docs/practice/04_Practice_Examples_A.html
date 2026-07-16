@@ -362,9 +362,12 @@
     ④ 가입 시 입력한 이메일로 온 인증 메일을 열어 <strong>이메일 인증</strong>을 완료한다 — 이 단계를 건너뛰면 이후 <code>gh auth login</code>이나 저장소 생성이 막힐 수 있다.<br>
     ⑤ 무료(Free) 플랜으로 가입하면 충분하다 — 이 핸드북의 실습·PR 연습에는 유료 플랜이 필요 없다.<br>
     가입이 끝나면 <a href="https://cli.github.com/" target="_blank">GitHub CLI(<code>gh</code>)</a>가 위 설치 스크립트에 포함돼 함께 설치되고, 아래 <code>gh auth login</code> 명령으로 터미널을 그 계정과 연결한다.
-    <pre class="code-block" style="margin-top:10px;">gh auth login
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
 # 안내에 따라: GitHub.com 선택 → HTTPS 선택 → 브라우저로 로그인(권장) 선택
 # 브라우저가 열리면 방금 만든 계정으로 로그인하고 인증 코드를 확인한다</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <h3>Windows에서 설치하기</h3>
@@ -377,22 +380,31 @@
     ④ 사용자 계정 컨트롤(UAC) 창이 뜨면 <strong>"예"</strong>를 눌러 승인한다.<br>
     창 제목 표시줄에 <code>관리자: Windows PowerShell</code>처럼 "관리자"가 붙어 있으면 제대로 연 것이다. winget 설치 등 일부 단계는 관리자 권한 없이 실행하면 오류가 나거나 조용히 건너뛰어질 수 있다.
   </div>
+  <div style="position:relative">
   <pre class="code-block">cd ./setup
 .\setup-windows.ps1
 # 선택 옵션: -WSL2, -WezTerm, -Docker, -Force (이미 설치된 도구도 재설치)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>스크립트가 끝나면 터미널을 완전히 닫았다가 다시 열어야 PATH 변경 사항이 적용된다.</p>
 
   <h3>macOS / Linux에서 설치하기</h3>
   <p>macOS는 <a href="../setup/setup-mac.sh">setup-mac.sh</a>, Linux는 <a href="../setup/setup-linux.sh">setup-linux.sh</a>를 내려받아 사용한다. 둘 다 <code>--wezterm</code>, <code>--docker</code> 선택 플래그를 지원한다.</p>
+  <div style="position:relative">
   <pre class="code-block"># macOS
 cd ./setup && bash setup-mac.sh
 
 # Linux
 cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <h3>설치 검증하기</h3>
   <p>운영체제와 무관하게 <a href="../setup/setup-common.ts">setup-common.ts</a>를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
+  <div style="position:relative">
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <p>이 프로젝트가 설치하는 도구 중 이 장의 4도구 실습과 직접 관련된 것은 다음과 같다. Claude App(Desktop), <code>claude</code>(Claude Code CLI), Antigravity(Desktop), <code>agy</code>(Antigravity CLI), 그리고 <code>.claude/agents/*.md</code> 기반 서브에이전트 실행에 필요한 <code>bun</code>, 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
 

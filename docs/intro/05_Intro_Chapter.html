@@ -109,7 +109,15 @@
       main { padding: 40px 18px 60px; }
       .chapter-nav { flex-direction: column; }
     }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -156,7 +164,8 @@
   <p>이후 절에서 4대 핵심 파일, variant, L0→L1→L2를 하나씩 뜯어보기 전에, 이 조각들이 실제로 저장소 안 어디에 어떤 이름으로 앉아 있는지부터 통째로 보고 시작하는 게 방향을 잃지 않는 데 도움이 된다. 워크스페이스 루트를 클론하면 아래와 같은 최상위 구조가 나온다.</p>
 
   <div class="tree-box" style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
-    <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">C:\git\  (워크스페이스 루트 = L0)
+    <div style="position:relative">
+  <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">C:\git\  (워크스페이스 루트 = L0)
 ├── CONSTITUTION.md          ← §2: 무엇을 지켜야 하는가 (마스터 표준, L0 원본)
 ├── CLAUDE.md                ← §2: Claude Code/App에서 어떻게 실행하는가
 ├── GEMINI.md                ← §2: Antigravity CLI/Desktop에서 어떻게 실행하는가
@@ -184,6 +193,8 @@
 │       └── (독립된 git 저장소 — 워크스페이스 루트와 별개)
 └── memory/
     └── MEMORY.md            ← §4: 세션 간 이어지는 컨텍스트 기록</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <p>이 트리에서 눈여겨볼 것은 세 가지 층이 실제 디렉터리 구조로 그대로 드러난다는 점이다. 루트 바로 아래(CONSTITUTION.md·CLAUDE.md·GEMINI.md·AGENTS.md·<code>agents/</code>·<code>scripts/</code>)가 L0이고, <code>templates/common/</code>이 L1이며, <code>templates/co-*/</code>와 <code>Projects/*/</code>가 L2다. 즉 "L0→L1→L2"는 추상적인 개념도가 아니라, 클론한 폴더를 <code>ls</code> 한 번만 쳐도 바로 눈에 보이는 물리적 배치다.</p>
@@ -284,5 +295,17 @@
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

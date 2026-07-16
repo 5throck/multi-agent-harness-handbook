@@ -115,7 +115,15 @@
       main { padding: 40px 18px 60px; }
       .chapter-nav { flex-direction: column; }
     }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -157,16 +165,22 @@
   <ol>
     <li><strong>강사 시연(1분)</strong>: claude.ai(또는 Claude Code)에 다음 프롬프트를 입력한다.</li>
   </ol>
+  <div style="position:relative">
   <pre class="code-block">HTML Canvas로 테트리스 게임을 만들어줘</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>10~20초 안에 조작 가능한 테트리스가 나온다.</p>
 
   <ol start="2">
     <li><strong>참가자 따라하기(5분)</strong>: 각자 같은 프롬프트를 입력해 자신의 테트리스를 만든다.</li>
     <li><strong>수정 요청(4분)</strong>: 완성된 테트리스에 자유롭게 수정을 요청해 본다.</li>
   </ol>
+  <div style="position:relative">
   <pre class="code-block">배경색을 어두운 색으로 바꿔줘
 점수판을 크게 만들어줘
 다음 블록 미리보기를 추가해줘</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <div class="note">
     <strong>핵심 메시지:</strong> 테트리스는 ~200줄 수준의 코드로 완성되는 비교적 단순한 게임이다. 이 정도 복잡도에서는 하네스 없이도 바이브코딩 단일 프롬프트로 충분히 작동하는 결과물을 얻을 수 있고, 수정 요청도 문제없이 반영된다.
@@ -179,7 +193,10 @@
   <h3>1단계: 실패 체험 (2~3분)</h3>
 
   <p>먼저 테트리스와 똑같은 방식으로 시도해 본다.</p>
+  <div style="position:relative">
   <pre class="code-block">HTML Canvas로 팩맨 게임을 만들어줘</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>캐릭터 이동·유_ghost AI·충돌 감지·맵 설계가 동시에 하나의 프롬프트에 들어가면, 코드가 뒤엉켜 의도대로 작동하지 않는다. 이 "실패"가 이 워밍업의 핵심 체험이다.</p>
 
   <div class="note">
@@ -193,28 +210,37 @@
   <div class="step">
     <div class="step-label">Step 1 — 기획 에이전트</div>
     <p>팩맨의 기능 목록과 맵 구조를 명세서로 작성한다. 어떤 캐릭터가 있고, 맵이 어떻게 생겼으며, 게임 규칙이 무엇인지를 정의하는 단계다.</p>
-    <pre class="code-block">팩맨 게임의 기능 목록과 맵 구조를 명세서로 작성해줘. 다음 항목을 포함해:
+    <div style="position:relative">
+  <pre class="code-block">팩맨 게임의 기능 목록과 맵 구조를 명세서로 작성해줘. 다음 항목을 포함해:
 - 캐릭터(팩맨, 유령 4종)의 동작 방식
 - 맵 구조(벽, 점, 파워업 위치)
 - 게임 규칙(점수, 생명, 레벨)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <div class="step">
     <div class="step-label">Step 2 — 개발 에이전트</div>
     <p>Step 1에서 만든 명세서를 바탕으로 실제 HTML 팩맨 코드를 작성한다. 기획이 명확하니, 개발 에이전트는 "무엇을 만들지" 고민할 필요 없이 구현에만 집중한다.</p>
-    <pre class="code-block">아래 명세서를 기반으로 HTML Canvas로 팩맨 게임 코드를 작성해줘:
+    <div style="position:relative">
+  <pre class="code-block">아래 명세서를 기반으로 HTML Canvas로 팩맨 게임 코드를 작성해줘:
 [Step 1 결과를 여기에 붙여넣기]</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <div class="step">
     <div class="step-label">Step 3 — QA 에이전트</div>
     <p>완성된 코드에서 버그를 찾고 수정한다. 실제로 게임을 실행해 보며, 캐릭터가 벽을 통과하는지, 유_ghost AI가 정상 동작하는지, 점수가 올바르게 계산되는지 검증한다.</p>
-    <pre class="code-block">이 팩맨 게임 코드의 버그를 찾아 수정해줘:
+    <div style="position:relative">
+  <pre class="code-block">이 팩맨 게임 코드의 버그를 찾아 수정해줘:
 [Step 2 결과를 여기에 붙여넣기]
 특히 다음을 확인해:
 - 벽 충돌 감지가 정확한지
 - 유령 AI가 각각 다른 패턴으로 움직이는지
 - 점수와 생명이 올바르게 계산되는지</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <div class="warn">
@@ -262,5 +288,17 @@
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

@@ -73,7 +73,15 @@
     .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
     .chapter-nav .next { text-align: right; }
     @media (max-width: 640px) { main { padding: 40px 18px 60px; } .chapter-nav { flex-direction: column; } }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -164,6 +172,7 @@
 
   <h3>완성 예시</h3>
   <p>4장 실습(G-1, D-1)에서 작성한 두 에이전트가 들어간 AGENTS.md 전체 모습이다.</p>
+  <div style="position:relative">
   <pre class="code-block">## Agent: reviewer
 
 역할: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
@@ -178,6 +187,8 @@
 출력: 초안 텍스트 파일
 권한: 쓰기 허용 — 지정된 파일에만 저장한다.
 handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <div class="note">AGENTS.md는 AI 도구를 향한 지시문이 아니라 <strong>사람이 정의한 여러 역할의 등록부</strong>다. Claude 계열은 이 등록부를 읽고 도구별 정의 파일(<code>.claude/agents/*.md</code>)로 "번역"하고, Antigravity 계열은 등록부 자체를 오케스트레이션이 직접 읽고 해석한다.</div>
 
@@ -271,6 +282,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
   <h3>4. handoff로 선후 관계 선언</h3>
   <p><code>handoff_to</code>는 "이 에이전트가 작업을 마치면 결과를 어디로 넘길 것인가"를 선언한다. 이것은 <strong>명령이 아니라 힌트</strong>다. 실제로 순차 파이프라인을 구성하는 것은 메인 세션(오케스트레이터)의 몫이다.</p>
 
+  <div style="position:relative">
   <pre class="code-block">## Agent: draft-writer
 역할: 주어진 주제로 초안을 작성한다.
 handoff_to: reviewer (초안 완료 후 검토로 이어짐)
@@ -281,6 +293,8 @@ handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
 
 ## Agent: editor
 역할: 피드백을 반영해 최종 문서를 완성한다.</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <div class="note">handoff_to가 선언되지 않은 에이전트(위 예시의 <code>editor</code>)는 파이프라인의 종점이다. 오케스트레이터는 에이전트의 결과를 최종 사용자에게 반환한다.</div>
 
@@ -340,5 +354,17 @@ handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

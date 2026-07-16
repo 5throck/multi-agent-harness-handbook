@@ -658,10 +658,13 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       <div class="tip-box">
         <code>_ORIGIN.md</code>의 "Manual Phase B Steps" 절이 있다면, 파이프라인이 자동으로 옮기지 못한 도메인 전용 디렉터리 목록이 거기 적혀 있다 — 이 목록을 빠짐없이 수동으로 옮겼는지 마지막으로 대조한다. 예를 들어 co-marketing의 <code>_ORIGIN.md</code>라면 아래처럼 적혀 있을 수 있다.
         <div style="position:relative;margin-top:10px;">
-          <pre class="code-block">## Manual Phase B Steps
+          <div style="position:relative">
+  <pre class="code-block">## Manual Phase B Steps
 - [ ] brand-assets/ 디렉터리를 templates/co-marketing/brand-assets/로 복사
 - [ ] campaign-templates/ 아래 캠페인 브리프 골격 파일을 그대로 이관
 - [ ] channel-configs.json의 채널 목록 초기값을 빈 배열로 초기화</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
         </div>
         이런 항목은 reconcile이 다루는 "공통 파일 중복 제거"와는 성격이 다른, variant 고유의 자산이므로 파이프라인이 알아서 처리해주지 않는다 — 체크박스를 하나씩 직접 확인하며 옮겨야 한다.
       </div>

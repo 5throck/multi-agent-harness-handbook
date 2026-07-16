@@ -267,7 +267,15 @@
     .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
     .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
     .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -311,7 +319,8 @@
 
   <!-- ── 개념/명령 트리 ── -->
   <h2 id="tree">개요 — 전체 구조</h2>
-  <div class="tree-box"><pre>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
 하네스 기반 멀티 에이전트 팀 활용 (Desktop 앱을 기준으로, CLI는 동일 개념의 대안으로 병기)
 ├── 서브에이전트 정의하기
 │   ├── Claude App / Claude Code    .claude/agents/*.md (YAML frontmatter, 사전 정의 — 둘 다 동일)
@@ -329,7 +338,9 @@
     ├── Claude Code                 PostToolUse/TeammateIdle/TaskCompleted 훅 자동 발화
     ├── Antigravity Desktop         해당 없음 — GUI 중심
     └── Antigravity CLI             agy -p "프롬프트"(비대화형 CI용), agy inspect(설정 확인)
-</pre></div>
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div></div>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">에이전트 팀 구성 예시</div>
@@ -493,5 +504,17 @@
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

@@ -834,6 +834,9 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
             <div class="step-content">
               <strong>① 설정 파일 작성 (터미널) — <code>.claude/settings.json</code>이 없다면 새로 만들고, 있다면 아래 두 키를 병합</strong>
               <p style="font-size:13.5px;color:var(--text-dim);margin:6px 0;">macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+              <div class="warning-box">
+                이 명령은 <code>.claude/settings.json</code> 파일 전체를 덮어씁니다. 이미 다른 설정이 들어있는 파일이라면 기존 내용이 모두 사라지므로, 필요한 설정이 있다면 미리 백업하거나 아래 내용을 수동으로 병합하세요.
+              </div>
               <div style="position:relative">
                 <pre class="code-block">cat > .claude/settings.json << 'EOF'
 {

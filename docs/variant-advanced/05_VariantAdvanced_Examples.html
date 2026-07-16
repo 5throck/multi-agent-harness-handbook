@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>11장 §2 · 새 variant vs 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드</title>
+  <title>12장 · 새 variant vs 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -228,6 +228,15 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
     hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    /* ── 장 이동 ── */
+    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
+    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
+    .chapter-nav a:hover { background: var(--bg2); }
+    .chapter-nav .prev { text-align: left; }
+    .chapter-nav .next { text-align: right; }
+    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
+    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -235,7 +244,7 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">11장 §2 · 새 variant vs 신규 variant 승격 실습</div>
+  <div class="nav-title">12장 · 새 variant vs 신규 variant 승격 실습</div>
   <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
 
   <div class="nav-group">초급 시나리오</div>
@@ -248,17 +257,18 @@
   <a href="#scenario-3"><span class="dot dot-p"></span>P-1 승격 파이프라인 실행과 검증</a>
 
   <div class="nav-group">바로가기</div>
-  <a href="05_VariantAdvanced_Chapter.html">📖 10장 §1 — 새 variant vs 승격 →</a>
-  <a href="../capstone/00_Capstone.html">🎓 12장 — 캡스톤 실습 →</a>
+  <a href="05_VariantAdvanced_Chapter.html">📖 11장 §1 — 새 variant vs 승격 →</a>
+  <a href="../capstone/00_Capstone.html">🎓 13장 — 캡스톤 실습 →</a>
 </nav>
 
 <main>
+  <div class="chapter-eyebrow">12장</div>
   <h1>새 variant vs 신규 variant 승격 실습 예시</h1>
   <p class="subtitle">co-marketing 프로토타입을 기준으로 두 경로를 손으로 비교해보는 실습 가이드 &nbsp;|&nbsp; <a href="05_VariantAdvanced_Chapter.html">← 레퍼런스 문서로 돌아가기</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>10장 §1에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-marketing 프로토타입에 적용해보는 실습</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>12장에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-marketing 프로토타입에 적용해보는 실습</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="05_VariantAdvanced_Chapter.html">05_VariantAdvanced_Chapter.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
@@ -289,6 +299,102 @@
           <span class="cmd-chip" style="cursor:default">README_ko.md</span>
           <span class="cmd-chip" style="cursor:default">docs/adr/</span>
         </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="compareArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+            </marker>
+          </defs>
+          <g font-family="-apple-system,Segoe UI,sans-serif">
+            <!-- Title -->
+            <text x="340" y="22" text-anchor="middle" font-size="12" fill="#1f2328" font-weight="700">정식 템플릿 vs Phase A 프로토타입 구조 비교</text>
+
+            <!-- Left Panel: templates/co-marketing/ -->
+            <rect x="20" y="38" width="290" height="258" rx="8" fill="#f0f7ff" stroke="#a5d5f7" stroke-width="1.5"/>
+            <!-- Header -->
+            <rect x="20" y="38" width="290" height="30" rx="8" fill="#0969da"/>
+            <rect x="20" y="56" width="290" height="12" fill="#0969da"/>
+            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700">templates/co-marketing/ (정식 템플릿)</text>
+            <!-- Status badge -->
+            <rect x="230" y="42" width="72" height="18" rx="9" fill="#1a7f37"/>
+            <text x="266" y="55" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">검증 완료</text>
+
+            <!-- File list left -->
+            <text x="40" y="90" font-size="11" fill="#1f2328" font-weight="600">variant.json</text>
+            <rect x="40" y="96" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="104" font-size="9" fill="#636c76">버전·매니페스트 메타데이터</text>
+
+            <text x="40" y="122" font-size="11" fill="#1f2328" font-weight="600">README.md / README_ko.md</text>
+            <rect x="40" y="128" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="136" font-size="9" fill="#636c76">완전한 문서화</text>
+
+            <text x="40" y="154" font-size="11" fill="#1f2328" font-weight="600">docs/adr/</text>
+            <rect x="40" y="160" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="168" font-size="9" fill="#636c76">아키텍처 결정 기록</text>
+
+            <text x="40" y="186" font-size="11" fill="#1f2328" font-weight="600">.claude/ / .gemini/</text>
+            <rect x="40" y="192" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="200" font-size="9" fill="#636c76">플랫폼 패리티 확보</text>
+
+            <text x="40" y="218" font-size="11" fill="#1f2328" font-weight="600">agents/*.md</text>
+            <rect x="40" y="224" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="232" font-size="9" fill="#636c76">에이전트 프론트매터 완결</text>
+
+            <text x="40" y="250" font-size="11" fill="#1f2328" font-weight="600">skills/</text>
+            <rect x="40" y="256" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="264" font-size="9" fill="#636c76">스킬 매니페스트 등록 완료</text>
+
+            <!-- Version tag -->
+            <text x="40" y="286" font-size="9.5" fill="#0969da" font-weight="600">태그: v1.0.0</text>
+
+            <!-- Center comparison arrows -->
+            <text x="340" y="158" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">vs</text>
+            <line x1="315" y1="166" x2="365" y2="166" stroke="#d0d7de" stroke-width="1.5"/>
+            <polygon points="320,166 315,162 315,170" fill="#d0d7de"/>
+            <polygon points="360,166 365,162 365,170" fill="#d0d7de"/>
+
+            <!-- Right Panel: Projects/co-marketing/ -->
+            <rect x="370" y="38" width="290" height="258" rx="8" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+            <!-- Header -->
+            <rect x="370" y="38" width="290" height="30" rx="8" fill="#953800"/>
+            <rect x="370" y="56" width="290" height="12" fill="#953800"/>
+            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700">Projects/co-marketing/ (Phase A)</text>
+            <!-- Status badge -->
+            <rect x="580" y="42" width="72" height="18" rx="9" fill="#cf222e"/>
+            <text x="616" y="55" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">진행 중</text>
+
+            <!-- File list right -->
+            <text x="390" y="90" font-size="11" fill="#953800" font-weight="600">variant.json</text>
+            <rect x="390" y="96" width="9" height="9" rx="2" fill="#cf222e"/>
+            <text x="404" y="104" font-size="9" fill="#636c76">아직 없거나 최소 구성</text>
+
+            <text x="390" y="122" font-size="11" fill="#953800" font-weight="600">README.md / README_ko.md</text>
+            <rect x="390" y="128" width="9" height="9" rx="2" fill="#953800"/>
+            <text x="404" y="136" font-size="9" fill="#636c76">초안 또는 미작성</text>
+
+            <text x="390" y="154" font-size="11" fill="#953800" font-weight="600">docs/adr/</text>
+            <rect x="390" y="160" width="9" height="9" rx="2" fill="#cf222e"/>
+            <text x="404" y="168" font-size="9" fill="#636c76">디렉터리 없음</text>
+
+            <text x="390" y="186" font-size="11" fill="#1f2328" font-weight="600">.claude/ / .gemini/</text>
+            <rect x="390" y="192" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="404" y="200" font-size="9" fill="#636c76">스캐폴딩 시 생성됨</text>
+
+            <text x="390" y="218" font-size="11" fill="#1f2328" font-weight="600">agents/*.md</text>
+            <rect x="390" y="224" width="9" height="9" rx="2" fill="#953800"/>
+            <text x="404" y="232" font-size="9" fill="#636c76">필드 누락 가능</text>
+
+            <text x="390" y="250" font-size="11" fill="#953800" font-weight="600">skills/</text>
+            <rect x="390" y="256" width="9" height="9" rx="2" fill="#953800"/>
+            <text x="404" y="264" font-size="9" fill="#636c76">매니페스트 미등록</text>
+
+            <!-- No version tag -->
+            <text x="390" y="286" font-size="9.5" fill="#cf222e" font-weight="600">태그: 없음 (승격 대기)</text>
+          </g>
+        </svg>
       </div>
 
       <div class="steps-title">단계별 실행</div>
@@ -559,8 +665,88 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
         이런 항목은 reconcile이 다루는 "공통 파일 중복 제거"와는 성격이 다른, variant 고유의 자산이므로 파이프라인이 알아서 처리해주지 않는다 — 체크박스를 하나씩 직접 확인하며 옮겨야 한다.
       </div>
 
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="doneArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+            </marker>
+            <linearGradient id="doneGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#1a7f37"/>
+              <stop offset="100%" stop-color="#116329"/>
+            </linearGradient>
+          </defs>
+          <g font-family="-apple-system,Segoe UI,sans-serif">
+            <!-- Title -->
+            <text x="350" y="22" text-anchor="middle" font-size="12" fill="#1f2328" font-weight="700">승격 파이프라인 완료 상태</text>
+
+            <!-- Step 1: Phase A 프로토타입 -->
+            <rect x="20" y="50" width="120" height="42" rx="8" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+            <text x="80" y="70" text-anchor="middle" font-size="10.5" fill="#953800" font-weight="700">Phase A</text>
+            <text x="80" y="83" text-anchor="middle" font-size="10.5" fill="#953800" font-weight="700">프로토타입</text>
+
+            <!-- Arrow 1→2 -->
+            <line x1="142" y1="71" x2="158" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 2: reconcile -->
+            <rect x="162" y="50" width="100" height="42" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+            <text x="212" y="76" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">reconcile</text>
+
+            <!-- Arrow 2→3 -->
+            <line x1="264" y1="71" x2="280" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 3: 체크리스트 통과 -->
+            <rect x="284" y="50" width="108" height="42" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+            <text x="338" y="69" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="700">체크리스트</text>
+            <text x="338" y="83" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="700">통과</text>
+
+            <!-- Arrow 3→4 -->
+            <line x1="394" y1="71" x2="410" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 4: templates/ 에 병합 -->
+            <rect x="414" y="50" width="112" height="42" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+            <text x="470" y="69" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">templates/ 에</text>
+            <text x="470" y="83" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">병합</text>
+
+            <!-- Arrow 4→5 -->
+            <line x1="528" y1="71" x2="544" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 5: new-project.ts로 스캐폴딩 가능 -->
+            <rect x="548" y="50" width="132" height="42" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+            <text x="614" y="69" text-anchor="middle" font-size="9.5" fill="#116329" font-weight="700">new-project.ts로</text>
+            <text x="614" y="83" text-anchor="middle" font-size="9.5" fill="#116329" font-weight="700">스캐폴딩 가능</text>
+
+            <!-- 완료 badge -->
+            <rect x="594" y="108" width="80" height="28" rx="14" fill="url(#doneGrad)"/>
+            <text x="634" y="126" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">완료</text>
+            <!-- Checkmark inside badge -->
+            <circle cx="610" y="122" r="6" fill="none" stroke="#fff" stroke-width="1.2" cy="122"/>
+            <polyline points="606,122 609,126 615,119" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Connecting line to badge -->
+            <line x1="634" y1="94" x2="634" y2="106" stroke="#1a7f37" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+            <!-- Progress bar at bottom -->
+            <rect x="20" y="155" width="660" height="8" rx="4" fill="#eef1f4"/>
+            <rect x="20" y="155" width="660" height="8" rx="4" fill="#1a7f37" opacity="0.3"/>
+            <rect x="20" y="155" width="660" height="8" rx="4" fill="#1a7f37"/>
+            <!-- Progress labels -->
+            <text x="20" y="180" font-size="9" fill="#636c76">Phase A</text>
+            <text x="165" y="180" font-size="9" fill="#636c76">변환</text>
+            <text x="310" y="180" font-size="9" fill="#636c76">검증</text>
+            <text x="445" y="180" font-size="9" fill="#636c76">병합</text>
+            <text x="600" y="180" font-size="9" fill="#116329" font-weight="600">배포 준비 완료</text>
+            <!-- Tick marks on progress bar -->
+            <line x1="150" y1="152" x2="150" y2="166" stroke="#fff" stroke-width="1.5"/>
+            <line x1="290" y1="152" x2="290" y2="166" stroke="#fff" stroke-width="1.5"/>
+            <line x1="430" y1="152" x2="430" y2="166" stroke="#fff" stroke-width="1.5"/>
+            <line x1="560" y1="152" x2="560" y2="166" stroke="#fff" stroke-width="1.5"/>
+          </g>
+        </svg>
+      </div>
+
       <div class="related-cmds">
-        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">10장 §1 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
+        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">11장 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
       </div>
 
     </div>
@@ -571,6 +757,11 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
     ai-workspace-standards main 브랜치 기준 | 2026년 7월 14일 작성<br>
     <a href="../index.html">← 핸드북 홈으로</a>
   </p>
+
+  <div class="chapter-nav">
+    <a href="05_VariantAdvanced_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">11장 §1 · 새 variant vs 승격</div></a>
+    <a href="../capstone/00_Capstone.html" class="next"><div class="dir">다음 →</div><div class="ttl">13장 · 통합 실습</div></a>
+  </div>
 </main>
 
 </div>

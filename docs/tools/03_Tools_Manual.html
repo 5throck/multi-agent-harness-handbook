@@ -129,6 +129,15 @@
     .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
     .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
     .chapter-nav .next { text-align: right; }
+    /* ── 참고 영상 ── */
+    .video-refs { margin: 28px 0; padding: 16px 20px; background: #f0f6ff; border: 1px solid #d0e8ff; border-radius: 8px; }
+    .video-refs h3 { font-size: 15px; font-weight: 700; color: var(--accent6); margin: 0 0 12px; }
+    .video-refs ul { list-style: none; padding: 0; margin: 0; }
+    .video-refs li { padding: 6px 0; line-height: 1.6; }
+    .video-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; color: #fff; vertical-align: middle; margin-right: 6px; }
+    .video-badge.en { background: #0969da; }
+    .video-badge.ko { background: #1a7f37; }
+    .video-meta { font-size: 12px; color: var(--text-dim); }
   </style>
 </head>
 <body>
@@ -341,6 +350,106 @@ Google 계열
     <li><strong>훅 기반 자동화(감사·QA 게이트)가 필요하다면.</strong> Claude Code(CLI)로 넘어간다. Claude App과 Antigravity 계열에는 이에 대응하는 자동 훅이 없다.</li>
     <li><strong>서브에이전트를 일일이 정의하지 않고 오케스트레이터가 알아서 쪼개 주길 원한다면.</strong> Antigravity CLI(<code>agy</code>)가 목표만 주면 동적으로 서브에이전트를 만들어 준다. 대신 세부 제어는 상대적으로 덜하다.</li>
   </ol>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowDt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+        <marker id="arrowDtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+        </marker>
+        <marker id="arrowDtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+        <marker id="arrowDtP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6639ba"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Title -->
+        <text x="360" y="20" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">도구 선택 의사결정 흐름도</text>
+
+        <!-- Diamond 1: CLI가 필요한가? -->
+        <polygon points="260,46 340,80 260,114 180,80" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
+        <text x="260" y="76" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">CLI가</text>
+        <text x="260" y="90" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">필요한가?</text>
+
+        <!-- Start arrow to diamond 1 -->
+        <line x1="80" y1="80" x2="180" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+        <rect x="10" y="64" width="68" height="32" rx="6" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+        <text x="44" y="84" text-anchor="middle" font-size="10" fill="#636c76" font-weight="600">시작</text>
+
+        <!-- Yes path (down) from diamond 1 -->
+        <line x1="260" y1="114" x2="260" y2="140" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#arrowDtG)"/>
+        <text x="246" y="130" text-anchor="end" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+
+        <!-- Yes branch: Claude Code -->
+        <rect x="148" y="142" width="120" height="40" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="208" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude Code</text>
+        <text x="208" y="174" text-anchor="middle" font-size="8.5" fill="#0969da">프로 · 훅 지원</text>
+
+        <!-- Yes branch: Antigravity CLI -->
+        <rect x="280" y="142" width="120" height="40" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="340" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity CLI</text>
+        <text x="340" y="174" text-anchor="middle" font-size="8.5" fill="#6639ba">실험 · 동적 에이전트</text>
+
+        <!-- No path (right) from diamond 1 -->
+        <line x1="340" y1="80" x2="380" y2="80" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrowDtB)"/>
+        <text x="362" y="74" text-anchor="middle" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- No branch boxes -->
+        <rect x="382" y="62" width="110" height="36" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="437" y="80" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude App</text>
+        <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="#0969da">프로 · GUI 기본</text>
+
+        <rect x="382" y="104" width="110" height="36" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="437" y="122" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity</text>
+        <text x="437" y="134" text-anchor="middle" font-size="8.5" fill="#6639ba">실험 · Agent Manager</text>
+
+        <!-- Connecting lines from No to the two boxes -->
+        <line x1="378" y1="80" x2="378" y2="122" stroke="#0969da" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="378" y1="80" x2="382" y2="80" stroke="#0969da" stroke-width="1"/>
+        <line x1="378" y1="122" x2="382" y2="122" stroke="#6639ba" stroke-width="1"/>
+
+        <!-- Diamond 2: 팀 단위 병렬이 필요한가? -->
+        <polygon points="260,206 380,250 260,294 140,250" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
+        <text x="260" y="244" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">팀 단위</text>
+        <text x="260" y="258" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">병렬이 필요한가?</text>
+
+        <!-- Arrow from first-level results down to diamond 2 -->
+        <line x1="208" y1="182" x2="208" y2="208" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="208" y1="208" x2="180" y2="230" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+        <line x1="437" y1="140" x2="437" y2="206" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="437" y1="206" x2="380" y2="235" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+
+        <!-- Yes path (down) from diamond 2 -->
+        <line x1="260" y1="294" x2="260" y2="298" stroke="#1a7f37" stroke-width="1"/>
+        <text x="246" y="307" text-anchor="end" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+
+        <!-- Yes branch from diamond 2: two boxes side by side -->
+        <rect x="160" y="296" width="95" height="12" rx="4" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+        <text x="208" y="305" text-anchor="middle" font-size="7" fill="#0969da" font-weight="600">Agent Teams (Claude)</text>
+
+        <rect x="265" y="296" width="120" height="12" rx="4" fill="#f1e8fd" stroke="#6639ba" stroke-width="1"/>
+        <text x="325" y="305" text-anchor="middle" font-size="7" fill="#6639ba" font-weight="600">Agent Manager (Antigravity)</text>
+
+        <!-- Legend -->
+        <rect x="530" y="62" width="14" height="14" rx="3" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+        <text x="550" y="73" font-size="9" fill="#636c76">Claude 계열</text>
+        <rect x="530" y="82" width="14" height="14" rx="3" fill="#f1e8fd" stroke="#6639ba" stroke-width="1"/>
+        <text x="550" y="93" font-size="9" fill="#636c76">Antigravity 계열</text>
+        <polygon points="537,112 544,118 537,124 530,118" fill="#fef7e0" stroke="#953800" stroke-width="1"/>
+        <text x="550" y="122" font-size="9" fill="#636c76">의사결정 노드</text>
+
+        <!-- Platform labels -->
+        <text x="270" y="36" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">실행 환경 선택</text>
+        <text x="270" y="200" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">병렬 실행 필요 여부</text>
+      </g>
+    </svg>
+  </div>
+
   <p style="background:#e8f4fd;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">💡 <strong>핵심 한 줄:</strong> 네 도구 모두 "서브에이전트에게 좁은 역할을 맡기고 오케스트레이터가 조율한다"는 하네스 엔지니어링의 기본 구조는 같다. 달라지는 것은 그 구조를 어떤 실행 환경(CLI/GUI, 훅 유무, 서브에이전트를 미리 정의하는지 즉석에서 생성하는지)에 얹느냐이다.</p>
 
   <hr>
@@ -383,6 +492,14 @@ Google 계열
 
   <hr>
   <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 기준 | 2026년 7월</p>
+
+  <div class="video-refs">
+    <h3 id="videos">참고 영상</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=7fQcsPOm8ys" target="_blank">Gemini CLI vs Claude Code vs Codex Compared!</a><span class="video-meta">(8:34)</span> — 세 가지 AI CLI 도구의 핵심 기능 비교 분석</li>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=_ixVAwp_KHE" target="_blank">Claude Code vs Gemini CLI vs Codex: Which One is Best?</a><span class="video-meta">(11:55)</span> — 실사용 비교와 도구 선택 기준</li>
+    </ul>
+  </div>
 
   <div class="chapter-nav">
     <a href="../variant-practice/04_VariantPractice_Examples.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">6장 · Variant 실습 예시</div></a>

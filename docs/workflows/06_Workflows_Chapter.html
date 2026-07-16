@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  Manual(레퍼런스)/Examples(실습)과 달리 버전 박스·코드 강조가 아니라 본문 흐름 중심이다.
+  수정할 곳: (1) <title>/장 번호/제목/리드  (2) nav(이 장의 절 + 다른 장)  (3) '이 장의 요점'
+            (4) <h2 id>/<h3> 절과 본문  (5) 이전/다음 장 링크
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9장 · 워크플로우 디자인 패턴</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 260px; min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+      padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-dim); padding: 0 16px 8px;
+    }
+    nav a {
+      display: block; padding: 6px 16px; color: var(--text-dim);
+      text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section {
+      margin-top: 12px; padding: 6px 16px 4px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+    }
+    main { flex: 1; display: flex; justify-content: center; padding: 56px 48px 96px; overflow-x: hidden; }
+    .reading { width: 100%; max-width: 720px; }
+    .chapter-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 1.12rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+    .source-line { font-size: 13px; color: var(--text-dim); margin-bottom: 30px; }
+    .source-line a { color: var(--accent); text-decoration: none; }
+    .keypoints {
+      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 18px 22px; margin: 0 0 40px;
+    }
+    .keypoints .kp-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+    .keypoints ul { margin: 0 0 0 18px; font-size: 14.5px; line-height: 1.85; }
+    h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      margin: 52px 0 14px; scroll-margin-top: 20px; line-height: 1.35;
+    }
+    h3 { font-size: 1.12rem; font-weight: 700; color: var(--accent6); margin: 30px 0 8px; scroll-margin-top: 20px; }
+    p { margin: 14px 0; }
+    p + p { margin-top: 16px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin: 6px 0; }
+    .pullquote {
+      border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 28px 0;
+      font-size: 1.22rem; line-height: 1.6; color: #2b3138; font-weight: 600;
+    }
+    .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .variant-list { margin: 16px 0 24px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .variant-row { display: flex; gap: 14px; padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .variant-row:last-child { border-bottom: none; }
+    .variant-row:nth-child(even) { background: var(--bg2); }
+    .variant-name { min-width: 130px; font-family: 'SFMono-Regular','Consolas',monospace; font-weight: 700; color: var(--accent6); flex-shrink: 0; }
+    .chapter-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .chapter-nav a {
+      display: block; flex: 1; padding: 14px 18px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text); transition: border-color .15s;
+    }
+    .chapter-nav a:hover { border-color: var(--accent); text-decoration: none; }
+    .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
+    .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
+    .chapter-nav .next { text-align: right; }
+    @media (max-width: 640px) {
+      main { padding: 40px 18px 60px; }
+      .chapter-nav { flex-direction: column; }
+    }
+    /* ── 사례 카드 ── */
+    .wf-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px 22px; margin: 24px 0;
+    }
+    .wf-card h3 { margin-top: 0; font-size: 1.15rem; color: var(--text); }
+    .wf-card h3 .wf-domain {
+      display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+      border-radius: 10px; color: #fff; vertical-align: middle; margin-left: 8px;
+    }
+    .wf-card .wf-patterns { font-size: 13px; color: var(--text-dim); margin: 6px 0 12px; }
+    .wf-card .wf-patterns code { background: #fff3cd; border-color: #f5c518; color: #953800; }
+    .wf-card .wf-stages { font-size: 13.5px; line-height: 1.8; }
+    .wf-card .wf-stages strong { color: var(--accent6); }
+    .wf-card .wf-gate { color: var(--accent2); font-weight: 600; }
+    .wf-card svg { margin: 14px 0 8px; }
+    /* ── 의사결정 나무 ── */
+    .decision-box {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px 22px; margin: 24px 0;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th, td { padding: 8px 12px; border: 1px solid var(--border); text-align: left; }
+    th { background: var(--bg2); font-weight: 600; font-size: 13px; color: var(--text-dim); }
+    td { vertical-align: top; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">9장 · 워크플로우 디자인 패턴</div>
+  <a href="#s1">워크플로우란 무엇인가</a>
+  <a href="#s2">워크플로우 구성요소</a>
+  <a href="#s3">실제 워크플로우 사례</a>
+  <a href="#s4">워크플로우 선택 가이드</a>
+  <div class="nav-section">다른 장</div>
+  <a href="../tools/03_Tools_Manual.html">7장 · 도구 비교</a>
+  <a href="../enterprise/03_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../intro/04_Intro_Advanced_Chapter.html">10장 · 배포와 SSOT</a>
+  <a href="../glossary/00_Glossary.html">용어집</a>
+  <a href="../faq/00_FAQ.html">FAQ</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">9장</div>
+  <h1>워크플로우 디자인 패턴</h1>
+  <p class="lead">오케스트레이션 패턴을 조합해 실제 도메인에서 쓰이는 완결된 워크플로우를 설계하는 방법과 다양한 사례를 다룬다.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 장에서 다루는 것</div>
+    <ul>
+      <li>오케스트레이션 패턴과 워크플로우의 관계 — 패턴은 블록, 워크플로우는 완성된 조립품</li>
+      <li>워크플로우를 구성하는 6가지 요소: 단계·분기·병렬·취합·게이트·루프</li>
+      <li>5가지 실제 도메인 워크플로우 사례와 흐름도</li>
+      <li>업무 성격에 따라 어떤 패턴을 선택하고 조합할지를 결정하는 가이드</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">워크플로우란 무엇인가</h2>
+
+  <p>2장 §4에서 배운 오케스트레이션 패턴 5가지 — 프롬프트 체이닝(파이프라인), 라우팅, 병렬화(팬아웃/투표), 오케스트레이터-워커, 평가자-최적화(검증-후-적용) — 은 단일 작업 단위에서 에이전트 간 협력을 구성하는 <strong>기본 빌딩 블록</strong>이다. 하지만 실무에서는 이 블록 하나만으로 업무를 완수하는 경우보다 여러 블록을 연결하고 겹쳐서 하나의 완결된 흐름을 만드는 경우가 훨씬 많다.</p>
+
+  <p><strong>워크플로우(workflow)</strong>는 "하나 이상의 에이전트가 협력하여 복잡한 작업을 완수하는 과정 전체"를 말한다. 오케스트레이션 패턴이 <em>어떻게 협력하는가</em>에 대한 답이라면, 워크플로우는 <em>전체 과정이 어떤 순서와 구조로 진행되는가</em>에 대한 답이다. 워크플로우는 보통 다음 세 가지가 결합된다.</p>
+
+  <ul>
+    <li><strong>오케스트레이션 패턴의 조합</strong> — 어떤 단계는 순차(파이프라인), 어떤 단계는 병렬(팬아웃), 어떤 분기는 조건(라우팅)으로 나뉜다.</li>
+    <li><strong>도메인 규칙</strong> — "코드 리뷰에서는 보안 관점과 성능 관점을 반드시 별도 검토해야 한다"처럼, 해당 업무 도메인에서 요구되는 규칙이다.</li>
+    <li><strong>인간 승인 게이트</strong> — 3장에서 배운 가드레일 원칙에 따라, 되돌릴 수 없는 지점 앞에서 반드시 사람이 확인하는 단계다.</li>
+  </ul>
+
+  <div class="pullquote">
+    오케스트레이션 패턴은 레고 블록이다. 하나만 써도 작동하지만, 여러 개를 조립하면 훨씬 복잡하고 유용한 형태를 만들 수 있다. 워크플로우는 그 조립 결과물이다.
+  </div>
+
+  <!-- §1 SVG: 패턴 → 워크플로우 관계 -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
+    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif">
+        <!-- Title -->
+        <text x="340" y="22" text-anchor="middle" font-size="13" fill="#636c76" font-weight="600">오케스트레이션 패턴 (블록) → 워크플로우 (조립)</text>
+
+        <!-- Pattern blocks -->
+        <rect x="20" y="50" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.5"/>
+        <text x="70" y="73" text-anchor="middle" font-size="11" fill="#0969da" font-weight="700">파이프라인</text>
+
+        <rect x="130" y="50" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="170" y="73" text-anchor="middle" font-size="11" fill="#1a7f37" font-weight="700">라우팅</text>
+
+        <rect x="220" y="50" width="90" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="265" y="73" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">팬아웃</text>
+
+        <rect x="320" y="50" width="120" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="380" y="73" text-anchor="middle" font-size="11" fill="#cf5800" font-weight="700">오케스트레이터</text>
+
+        <rect x="450" y="50" width="110" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="505" y="73" text-anchor="middle" font-size="11" fill="#cf222e" font-weight="700">검증-후-적용</text>
+
+        <!-- Arrow down -->
+        <line x1="340" y1="95" x2="340" y2="125" stroke="#636c76" stroke-width="1.5" marker-end="url(#wfArrow)"/>
+        <text x="355" y="115" font-size="10" fill="#636c76">조합</text>
+
+        <!-- Workflow assembly -->
+        <rect x="40" y="130" width="600" height="70" rx="10" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="340" y="150" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">워크플로우 (예: 코드 리뷰)</text>
+
+        <!-- Stage flow inside workflow box -->
+        <rect x="65" y="158" width="70" height="28" rx="5" fill="#e16f24" opacity="0.2" stroke="#e16f24" stroke-width="1"/>
+        <text x="100" y="177" text-anchor="middle" font-size="9.5" fill="#cf5800" font-weight="600">라우팅</text>
+
+        <line x1="135" y1="172" x2="160" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="165" y="158" width="80" height="28" rx="5" fill="#6639ba" opacity="0.2" stroke="#6639ba" stroke-width="1"/>
+        <text x="205" y="177" text-anchor="middle" font-size="9.5" fill="#6639ba" font-weight="600">팬아웃</text>
+
+        <line x1="245" y1="172" x2="270" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="275" y="158" width="70" height="28" rx="5" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1"/>
+        <text x="310" y="177" text-anchor="middle" font-size="9.5" fill="#1a7f37" font-weight="600">취합</text>
+
+        <line x1="345" y1="172" x2="370" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="375" y="158" width="90" height="28" rx="5" fill="#0969da" opacity="0.2" stroke="#0969da" stroke-width="1"/>
+        <text x="420" y="177" text-anchor="middle" font-size="9.5" fill="#0969da" font-weight="600">파이프라인</text>
+
+        <line x1="465" y1="172" x2="490" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="495" y="158" width="80" height="28" rx="5" fill="#cf222e" opacity="0.2" stroke="#cf222e" stroke-width="1"/>
+        <text x="535" y="177" text-anchor="middle" font-size="9.5" fill="#cf222e" font-weight="600">검증</text>
+
+        <!-- Loop arrow -->
+        <path d="M575,172 Q595,172 595,150 Q595,130 575,130 L420,130" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="500" y="126" text-anchor="middle" font-size="9" fill="#636c76">거부 시 루프</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>이 장에서는 2장의 패턴을 이미 알고 있다고 전제한다. 모르는 용어가 나오면 <a href="../concepts/01_Concepts_Chapter.html#s4">2장 §4 오케스트레이션 패턴</a>과 <a href="../concepts/01_Concepts_Chapter.html#s4b">§4b 동적 팀 구성</a>을 먼저 읽고 오자. 다음 절에서는 패턴을 넘어, 워크플로우를 구성하는 6가지 요소를 정리한다.</p>
+
+
+  <h2 id="s2">워크플로우 구성요소</h2>
+
+  <p>복잡한 워크플로우를 분해하면 몇 가지 반복되는 구조 요소가 나온다. 2장의 5가지 패턴은 에이전트 간 협력 방식에 초점을 맞추었지만, 여기서는 워크플로우의 <em>구조적 뼈대</em>에 초점을 맞춘다.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">단계 (Stage)</span><span>순차적으로 실행되는 하나의 작업 단위. 워크플로우의 가장 기본적인 빌딩 블록이다. 이전 단계의 출력이 다음 단계의 입력이 된다.</span></div>
+    <div class="variant-row"><span class="variant-name">분기 (Branch)</span><span>조건에 따라 경로가 갈라지는 지점. 라우팅 패턴의 실제 적용 — 예를 들어 "변경 규모가 작으면 빠른 리뷰, 크면 전체 검토"처럼 요청의 성질에 따라 다른 에이전트나 다음 단계로 보낸다.</span></div>
+    <div class="variant-row"><span class="variant-name">병렬 (Fan-out)</span><span>독립적인 하위 작업을 동시에 실행하는 지점. 팬아웃 패턴의 구조적 표현이다. 실행 시간은 가장 느린 하위 작업에 수렴한다. 예: 보안·성능·가독성 세 관점을 동시에 검토.</span></div>
+    <div class="variant-row"><span class="variant-name">취합 (Fan-in)</span><span>병렬로 나뉘어 실행된 여러 결과를 하나로 모으는 단계. <strong>2장에서 다루지 않은 개념</strong>이다. 취합 시 어떤 결과를 우선할지(투표), 어떻게 병합할지(합산/선택)를 결정하는 규칙이 필요하다. 예: 세 리뷰어의 의견을 종합해 최종 피드백으로 작성.</span></div>
+    <div class="variant-row"><span class="variant-name">게이트 (Gate)</span><span>다음 단계로 넘어가기 전에 검증 또는 인간 승인을 요구하는 지점. <a href="../guardrails/00_Guardrails_Chapter.html">3장 가드레일</a>의 실제 적용 지점이다. 되돌리기 어려운 작업(파일 수정·배포·PR 병합) 앞에 둔다.</span></div>
+    <div class="variant-row"><span class="variant-name">루프 (Loop)</span><span>검증 단계에서 거부(reject)된 경우 이전 단계로 돌아가는 반복 구조. 평가자-최적화 패턴(검증-후-적용)의 구조적 표현이다. 최대 반복 횟수를 정해두어야 무한 루프를 방지할 수 있다.</span></div>
+  </div>
+
+  <div class="note">이 6가지 요소는 2장의 5가지 패턴과 1:1 대응되지 않는다. 하나의 패턴이 여러 구성요소를 포함할 수 있고(예: 팬아웃 패턴 = 병렬 + 취합), 하나의 구성요소가 여러 패턴에서 쓰일 수도 있다(예: 게이트는 검증-후-적용과 파이프라인 모두에 나타난다).</div>
+
+  <p>이 요소들을 조합하면 거의 모든 실무 워크플로우를 표현할 수 있다. 다음 절에서는 실제 도메인에 이 요소들을 어떻게 배치하는지 사례별로 살펴본다.</p>
+
+
+  <h2 id="s3">실제 워크플로우 사례</h2>
+
+  <p>5가지 도메인 워크플로우를 사례별로 정리한다. 각 사례는 핵심 패턴 조합, 스테이지 흐름, 담당 에이전트, 인간 게이트 위치를 보여준다. 이미 ai-workspace-standards에 구현된 variant와 연결된 사례도 포함한다.</p>
+
+  <!-- 사례 1: 코드 리뷰 -->
+  <div class="wf-card">
+    <h3>코드 리뷰 <span class="wf-domain" style="background:#0969da">소프트웨어 개발</span></h3>
+    <p class="wf-patterns">핵심 패턴: <code>라우팅</code> → <code>팬아웃</code> → <code>취합</code> → <code>파이프라인</code> → <code>검증-후-적용</code>(루프)</p>
+    <p class="wf-stages">
+      <strong>① 변경 분석(라우팅)</strong>: 변경된 파일의 규모와 유형을 분석하여 검토 범위를 결정한다. 단순 오타 수정이면 빠른 경로, 큰 기능 변경이면 전체 검토 경로로 분기한다.<br>
+      <strong>② 다관점 검토(팬아웃)</strong>: 보안·성능·가독성 세 관점을 각각 전문 리뷰어 에이전트가 동시에 검토한다.<br>
+      <strong>③ 의견 취합(취합)</strong>: 세 리뷰어의 피드백을 종합 에이전트가 하나의 피드백 보고서로 작성한다.<br>
+      <strong>④ 수정 제안(파이프라인)</strong>: 피드백을 바탕으로 코드 수정 제안을 생성한다.<br>
+      <strong>⑤ 최종 승인(검증-후-적용)</strong>: 수정된 코드를 재검토. 통과하면 <span class="wf-gate">인간 승인 게이트</span>로, 거부되면 ④로 루프.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="100" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① 변경 분석</text>
+        <line x1="105" y1="48" x2="125" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="180" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② 다관점 검토</text>
+        <line x1="230" y1="48" x2="250" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="30" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="295" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ 취합</text>
+        <line x1="335" y1="48" x2="355" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="30" width="90" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="405" y="53" text-anchor="middle" font-weight="700" fill="#0969da">④ 수정 제안</text>
+        <line x1="450" y1="48" x2="470" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="475" y="30" width="80" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="515" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">⑤ 승인</text>
+        <!-- gate -->
+        <rect x="555" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="580" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">사람</text>
+        <!-- loop -->
+        <path d="M515,66 L515,85 L405,85 L405,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="460" y="96" text-anchor="middle" font-size="9" fill="#636c76">거부 시 루프</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-develop</code>의 6단계 거버넌스 파이프라인과 구조적으로 유사하다. <a href="../variant-practice/04_VariantPractice_Manual.html">6장 §1</a> 참조.</p>
+  </div>
+
+  <!-- 사례 2: 시장 조사 보고서 -->
+  <div class="wf-card">
+    <h3>시장 조사 보고서 <span class="wf-domain" style="background:#6639ba">컨설팅 · 리서치</span></h3>
+    <p class="wf-patterns">핵심 패턴: <code>오케스트레이터-워커</code> → <code>팬아웃</code> → <code>파이프라인</code> → <code>검증-후-적용</code></p>
+    <p class="wf-stages">
+      <strong>① 오케스트레이션(PM)</strong>: PM 에이전트가 조사 범위, 타겟 시장, 산출물 형식을 정의하고 워커에게 위임한다.<br>
+      <strong>② 병렬 조사(팬아웃)</strong>: 시장 규모 분석, 경쟁사 분석, 기술 트렌드 조사를 세 에이전트가 동시에 수행한다.<br>
+      <strong>③ 취합·초안(파이프라인)</strong>: 세 조사 결과를 종합해 보고서 초안을 작성하고, 시각화(차트)를 생성한다.<br>
+      <strong>④ 교차 검증(검증-후-적용)</strong>: 전문 검토자가 데이터 출처, 논리적 일관성, 누락 여부를 검토. <span class="wf-gate">인간 승인 게이트</span> 후 최종 보고서 확정.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="110" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① PM 오케스트레이션</text>
+        <line x1="115" y1="48" x2="135" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="140" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="190" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② 병렬 조사 ×3</text>
+        <line x1="240" y1="48" x2="260" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="265" y="30" width="90" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="310" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ 취합·초안</text>
+        <line x1="355" y1="48" x2="375" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="380" y="30" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="430" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">④ 교차 검증</text>
+        <line x1="480" y1="48" x2="500" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="505" y="30" width="70" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="540" y="53" text-anchor="middle" font-weight="700" fill="#0969da">⑤ 확정</text>
+        <rect x="575" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">사람</text>
+        <path d="M430,66 L430,85 L310,85 L310,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="370" y="96" text-anchor="middle" font-size="9" fill="#636c76">보완 필요 시</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-consult</code>의 7단계(Phase 0~6) 파이프라인 구조를 기반으로 한다. <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습(G-1)</a>에서 직접 경험할 수 있다.</p>
+  </div>
+
+  <!-- 사례 3: 프레젠테이션 제작 -->
+  <div class="wf-card">
+    <h3>프레젠테이션 제작 <span class="wf-domain" style="background:#1a7f37">강의 · 발표</span></h3>
+    <p class="wf-patterns">핵심 패턴: <code>파이프라인</code>(장파이프라인) + <code>팬아웃</code>(중간 병렬)</p>
+    <p class="wf-stages">
+      <strong>① 리서치</strong>: 주제에 관련된 자료를 수집하고 출처를 검증한다.<br>
+      <strong>② 스토리라인</strong>: 전체 내용의 흐름과 슬라이드 구성을 기획한다.<br>
+      <strong>③ 디자인</strong>: 시각적 레이아웃과 테마를 선택한다.<br>
+      <strong>④ 이미지 큐레이션 + 다이어그램 생성(팬아웃)</strong>: 일러스트와 다이어그램을 <em>동시에</em> 생성하여 시간을 단축한다.<br>
+      <strong>⑤⑥⑦ 빌드·측정·내보내기(파이프라인)</strong>: HTML 빌드 → 레이아웃 검측 → PDF 출력까지 순차 처리.<br>
+      <strong>⑧⑨⑩⑩ 최종 검토(검증-후-적용)</strong>: 완성된 PDF를 교차 검토 후 <span class="wf-gate">인간 승인 게이트</span>.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="#1f2328">
+        <rect x="5" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="#0969da">① 리서치</text>
+        <line x1="65" y1="46" x2="80" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="85" y="30" width="65" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="117" y="50" text-anchor="middle" font-weight="700" fill="#0969da">② 스토리</text>
+        <line x1="150" y1="46" x2="165" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="170" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="197" y="50" text-anchor="middle" font-weight="700" fill="#0969da">③ 디자인</text>
+        <line x1="225" y1="46" x2="240" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <!-- Fan-out split -->
+        <rect x="245" y="15" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="35" text-anchor="middle" font-weight="700" fill="#6639ba">이미지</text>
+        <rect x="245" y="52" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="72" text-anchor="middle" font-weight="700" fill="#6639ba">다이어그램</text>
+        <!-- Fan-in merge -->
+        <line x1="320" y1="30" x2="345" y2="46" stroke="#636c76" stroke-width="1"/>
+        <line x1="320" y1="67" x2="345" y2="50" stroke="#636c76" stroke-width="1"/>
+        <rect x="350" y="30" width="55" height="32" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="377" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37">취합</text>
+        <line x1="405" y1="46" x2="420" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="425" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="455" y="50" text-anchor="middle" font-weight="700" fill="#0969da">빌드</text>
+        <line x1="485" y1="46" x2="495" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="500" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="527" y="50" text-anchor="middle" font-weight="700" fill="#0969da">PDF</text>
+        <line x1="555" y1="46" x2="570" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="575" y="32" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">사람</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-deck</code>의 11단계(Stage 0~11) 파이프라인 그대로다. <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습(G-2)</a>에서 한식 세계화 프레젠테이션으로 직접 경험할 수 있다.</p>
+  </div>
+
+  <!-- 사례 4: 이슈 트리아지 -->
+  <div class="wf-card">
+    <h3>이슈 트리아지 <span class="wf-domain" style="background:#e16f24">운영 · 인시던트</span></h3>
+    <p class="wf-patterns">핵심 패턴: <code>라우팅</code> → <code>오케스트레이터-워커</code> → <code>에스컬레이션</code></p>
+    <p class="wf-stages">
+      <strong>① 분류(라우팅)</strong>: 들어온 이슈의 긴급도와 유형을 분석하여 경로를 결정한다. 버그면 수정 경로, 기능 요청이면 기획 경로, 보안이면 긴급 경로로 분기한다.<br>
+      <strong>② 자동 조사(오케스트레이터-워커)</strong>: 분류된 이슈를 관련 로그 검색, 재현 시도, 영향 범위 파악 등 하위 작업으로 나누어 워커 에이전트들이 조사한다.<br>
+      <strong>③ 우선순위 결정</strong>: 조사 결과를 바탕으로 우선순위와 담당자를 추천한다.<br>
+      <strong>④ 에스컬레이션 또는 자동 해결</strong>: 자동으로 해결할 수 있는 사소한 이슈(예: 설정 오류)는 즉시 수정하고, 복잡한 이슈는 <span class="wf-gate">인간 승인 게이트</span>로 에스컬레이션한다.
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="80" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="#cf5800">① 분류</text>
+        <line x1="85" y1="46" x2="105" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="110" y="28" width="120" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="170" y="51" text-anchor="middle" font-weight="700" fill="#6639ba">② 자동 조사</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="110" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="310" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ 우선순위 결정</text>
+        <line x1="365" y1="46" x2="385" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <!-- Branch -->
+        <rect x="390" y="8" width="80" height="30" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="430" y="28" text-anchor="middle" font-weight="700" fill="#1a7f37">자동 해결</text>
+        <rect x="390" y="52" width="80" height="30" rx="5" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1"/><text x="430" y="72" text-anchor="middle" font-weight="700" fill="#cf222e">에스컬레이션</text>
+        <rect x="475" y="57" width="50" height="22" rx="11" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="500" y="73" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">사람</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">인시던트 관리에 특화된 variant는 아직 없지만, <code>co-develop</code>의 PM 역할과 2장의 실패 처리 패턴(재시도·롤백·에스컬레이션)을 조합해 구현할 수 있다.</p>
+  </div>
+
+  <!-- 사례 5: PR 생성과 검증 -->
+  <div class="wf-card">
+    <h3>PR 생성과 검증 <span class="wf-domain" style="background:#cf222e">거버넌스</span></h3>
+    <p class="wf-patterns">핵심 패턴: <code>파이프라인</code> → <code>검증-후-적용</code>(루프) → <code>게이트</code></p>
+    <p class="wf-stages">
+      <strong>① 변경사항 수집</strong>: 커밋 히스토리와 diff를 수집해 PR 초안(제목·본문)을 작성한다.<br>
+      <strong>② 규칙 검증(검증-후-적용)</strong>: PR이 CONSTITUTION.md의 규칙(영어 제목, 특정 형식 등)을 준수하는지 자동 검사. 위반 항목이 있으면 ①로 돌아가 수정 요구.<br>
+      <strong>③ 영향 분석</strong>: 변경이 다른 파일·기능에 미치는 영향을 분석하여 PR 본문에 추가한다.<br>
+      <strong>④ 최종 검토 + 승인</strong>: 전체 PR을 재검토한 후 <span class="wf-gate">인간 승인 게이트</span>. 승인되면 병합 대기 상태로 전환.
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="#0969da">① 변경 수집</text>
+        <line x1="105" y1="46" x2="125" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="28" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="180" y="51" text-anchor="middle" font-weight="700" fill="#cf222e">② 규칙 검증</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="295" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ 영향 분석</text>
+        <line x1="335" y1="46" x2="355" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="400" y="51" text-anchor="middle" font-weight="700" fill="#0969da">④ 검토</text>
+        <line x1="440" y1="46" x2="460" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="465" y="33" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="490" y="51" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">사람</text>
+        <!-- loop -->
+        <path d="M180,64 L180,82 L55,82 L55,64" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="117" y="93" text-anchor="middle" font-size="9" fill="#636c76">위반 시 루프</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">ai-workspace-standards의 CONSTITUTION.md에 정의된 PR 워크플로우를 에이전트가 자동화하는 구조다. <a href="../intro/04_Intro_Chapter.html#s2">10장 §2 핵심 파일</a>와 <a href="../intro/04_Intro_Advanced_Deploy.html">10장 §1 배포와 SSOT</a>에서 배포 파이프라인과 함께 다룬다.</p>
+  </div>
+
+  <h3 id="s3-note">사례에서 보이는 공통 패턴</h3>
+  <p>5가지 사례에서 몇 가지 공통 구조가 드러난다.</p>
+  <ul>
+    <li><strong>모든 워크플로우에 인간 게이트가 있다.</strong> 자동화가 아무리 진척되어도 최종 산출물 확정, 병합, 배포 같은 되돌리기 어려운 결정 앞에는 사람의 승인이 필요하다. 이것이 3장에서 배운 가드레일의 실제 적용 지점이다.</li>
+    <li><strong>팬아웃 뒤에는 반드시 취합이 온다.</strong> 병렬로 나뉜 결과를 그냥 나란히 놓아두면 소비자(다음 단계의 에이전트나 사람)가 직접 합성해야 한다. 취합 단계에서 명시적으로 하나의 산출물로 만들어야 다음 파이프라인 단계로 깔끔하게 넘어갈 수 있다.</li>
+    <li><strong>검증 단계에서 루프이냐 에스컬레이션이냐가 워크플로우의 복잡도를 결정한다.</strong> 자동 수정이 가능한 문제(형식 위반, 오타)는 루프로 해결하고, 판단이 필요한 문제(설계 결함, 보안 취약점)는 에스컬레이션으로 사람에게 넘긴다.</li>
+    <li><strong>단순한 파이프라인은 잘 쓰이지 않는다.</strong> 5가지 사례 중 "순수하게 순차적인" 워크플로우는 없다. 최소한 한 곳에 라우팅(분기)이나 팬아웃(병렬)이 들어간다.</li>
+  </ul>
+
+
+  <h2 id="s4">워크플로우 선택 가이드</h2>
+
+  <p>새로운 업무에 멀티 에이전트 워크플로우를 도입하려면, 어떤 패턴으로 시작하고 어떻게 확장해 나갈지 결정해야 한다. 다음 의사결정 나무는 첫 단계를 고르는 데 도움이 된다.</p>
+
+  <!-- 의사결정 나무 SVG -->
+  <div class="decision-box">
+    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#636c76"/></marker>
+        <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/></marker>
+        <marker id="dtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <!-- Q1 -->
+        <rect x="220" y="5" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="30" text-anchor="middle" font-weight="700">하위 작업 간에 의존 관계가 있는가?</text>
+        <!-- Yes branch -->
+        <line x1="330" y1="45" x2="330" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="58" font-size="9" fill="#1a7f37" font-weight="700">예</text>
+        <!-- No branch -->
+        <line x1="440" y1="25" x2="530" y2="25" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="530" y1="25" x2="530" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="480" y="20" font-size="9" fill="#0969da" font-weight="700">아니오</text>
+
+        <!-- Q2 (Yes from Q1) -->
+        <rect x="220" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="95" text-anchor="middle" font-weight="700">순서대로 실행하면 되는가?</text>
+        <!-- Yes → Pipeline -->
+        <line x1="220" y1="90" x2="140" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="90" x2="140" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="85" font-size="9" fill="#1a7f37" font-weight="700">예</text>
+        <!-- No → Orchestrator -->
+        <line x1="330" y1="110" x2="330" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="125" font-size="9" fill="#0969da" font-weight="700">아니오</text>
+
+        <!-- Pipeline result -->
+        <rect x="60" y="135" width="160" height="40" rx="8" fill="#0969da" opacity="0.1" stroke="#0969da" stroke-width="1.5"/>
+        <text x="140" y="153" text-anchor="middle" font-weight="700" fill="#0969da">파이프라인</text>
+        <text x="140" y="166" text-anchor="middle" font-size="9" fill="#636c76">순차 단계를 설계</text>
+
+        <!-- Q3 (No from Q2) -->
+        <rect x="220" y="135" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="160" text-anchor="middle" font-weight="700">검증이 필요한가?</text>
+        <!-- Yes → Verify -->
+        <line x1="220" y1="155" x2="140" y2="155" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="155" x2="140" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="150" font-size="9" fill="#1a7f37" font-weight="700">예</text>
+        <!-- No → Orchestrator-Worker -->
+        <line x1="330" y1="175" x2="330" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="190" font-size="9" fill="#0969da" font-weight="700">아니오</text>
+
+        <!-- Verify result -->
+        <rect x="60" y="200" width="160" height="40" rx="8" fill="#cf222e" opacity="0.1" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="140" y="218" text-anchor="middle" font-weight="700" fill="#cf222e">검증-후-적용 + 파이프라인</text>
+        <text x="140" y="231" text-anchor="middle" font-size="9" fill="#636c76">루프를 포함한 단계 설계</text>
+
+        <!-- Orchestrator-Worker result -->
+        <rect x="230" y="200" width="200" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="330" y="218" text-anchor="middle" font-weight="700" fill="#cf5800">오케스트레이터-워커</text>
+        <text x="330" y="231" text-anchor="middle" font-size="9" fill="#636c76">PM이 동적으로 작업 분배</text>
+
+        <!-- Q4 (No from Q1) -->
+        <rect x="430" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="540" y="95" text-anchor="middle" font-weight="700">동시에 실행해도 되는가?</text>
+        <!-- Yes → Fan-out -->
+        <line x1="540" y1="110" x2="540" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="555" y="125" font-size="9" fill="#1a7f37" font-weight="700">예</text>
+        <!-- No → Routing -->
+        <line x1="540" y1="90" x2="620" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="620" y1="90" x2="620" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="575" y="85" font-size="9" fill="#0969da" font-weight="700">아니오</text>
+
+        <!-- Fan-out result -->
+        <rect x="460" y="135" width="160" height="40" rx="8" fill="#6639ba" opacity="0.1" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="540" y="153" text-anchor="middle" font-weight="700" fill="#6639ba">팬아웃 + 취합</text>
+        <text x="540" y="166" text-anchor="middle" font-size="9" fill="#636c76">병렬 작업 + 결과 합산</text>
+
+        <!-- Routing result -->
+        <rect x="540" y="135" width="110" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="595" y="153" text-anchor="middle" font-weight="700" fill="#cf5800">라우팅</text>
+        <text x="595" y="166" text-anchor="middle" font-size="9" fill="#636c76">조건별 분기</text>
+
+        <!-- Combination note -->
+        <rect x="60" y="265" width="540" height="55" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+        <text x="330" y="285" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">💡 실무에서는 여러 패턴을 조합한다</text>
+        <text x="330" y="302" text-anchor="middle" font-size="10" fill="#636c76">코드 리뷰 = 라우팅 + 팬아웃 + 취합 + 파이프라인 + 검증-후-적용 (이 장 §3 사례 1)</text>
+        <text x="330" y="315" text-anchor="middle" font-size="10" fill="#636c76">의사결정 나무는 <strong>첫 패턴을 고르는</strong> 용도다. 복잡한 업무는 위에서 아래로 단계를 설계하면서 패턴을 자연스럽게 추가한다.</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>업무 유형별 시작 패턴</h3>
+  <p>의사결정 나무의 결과를 업무 유형별로 정리하면 다음과 같다.</p>
+
+  <table>
+    <thead>
+      <tr><th>업무 유형</th><th>의존 관계</th><th>병렬 가능</th><th>검증 필요</th><th>권장 시작 패턴</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>문서 번역·요약</td><td>순차</td><td>×</td><td>보통</td><td><code>파이프라인</code></td></tr>
+      <tr><td>코드 리뷰</td><td>부분</td><td>○</td><td>필수</td><td><code>라우팅 → 팬아웃 → 검증</code></td></tr>
+      <tr><td>시장 조사</td><td>부분</td><td>○</td><td>필수</td><td><code>오케스트레이터-워커 → 팬아웃</code></td></tr>
+      <tr><td>버그 수정</td><td>순차</td><td>×</td><td>필수</td><td><code>파이프라인 + 검증-후-적용</code></td></tr>
+      <tr><td>이슈 트리아지</td><td>없음</td><td>조건부</td><td>보통</td><td><code>라우팅 → 오케스트레이터-워커</code></td></tr>
+      <tr><td>프레젠테이션 제작</td><td>부분</td><td>○</td><td>필수</td><td><code>파이프라인(장) + 팬아웃(중간)</code></td></tr>
+      <tr><td>PR 생성</td><td>순차</td><td>×</td><td>필수</td><td><code>파이프라인 + 검증-후-적용</code></td></tr>
+      <tr><td>다국어 콘텐츠 생성</td><td>없음</td><td>○</td><td>보통</td><td><code>팬아웃 + 취합</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>패턴 조합 가이드</h3>
+  <p>어떤 패턴을 함께 쓰면 시너지가 나는지 정리한다.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">팬아웃 + 파이프라인</span><span>병렬 리뷰, 다국어 번역 후 후처리. 팬아웃으로 속도를 얻고 파이프라인으로 순서를 보장한다.</span></div>
+    <div class="variant-row"><span class="variant-name">라우팅 + 팬아웃</span><span>이슈 트리아지, 규모별 검토. 라우팅으로 분류하고 각 경로마다 다른 병렬 작업을 수행한다.</span></div>
+    <div class="variant-row"><span class="variant-name">오케스트레이터-워커 + 검증</span><span>복잡한 분석, 설계 검토. PM이 동적으로 분배한 후 결과를 검증한다.</span></div>
+    <div class="variant-row"><span class="variant-name">파이프라인 + 검증(루프)</span><td>코드 생성, PR 생성. 순차적으로 작성하되 품질 기준에 맞지 않으면 이전 단계로 되돌린다.</span></div>
+    <div class="variant-row"><span class="variant-name">라우팅 + 오케스트레이터</span><span>모델 티어링. 쉬운 작업은 가벼운 모델로, 어려운 작업은 강한 모델로 분배한다.</span></div>
+  </div>
+
+  <div class="note">
+    이 장의 워크플로우 사례는 <a href="practice/02_Practice_Examples.html">4장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="variant-practice/04_VariantPractice_Examples.html">6장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="capstone/00_Capstone.html">13장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../enterprise/03_Enterprise_Chapter.html" class="prev">
+      <div class="dir">← 이전 장</div>
+      <div class="ttl">8장 · 기업 내부 멀티 에이전트팀 운영</div>
+    </a>
+    <a href="../intro/04_Intro_Advanced_Chapter.html" class="next">
+      <div class="dir">다음 장 →</div>
+      <div class="ttl">10장 · 배포와 SSOT</div>
+    </a>
+  </div>
+
+ </article>
+</main>
+</div>
+</body>
+</html>

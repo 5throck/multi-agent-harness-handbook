@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4장 §2-B · 멀티 에이전트 팀 실습 — Antigravity 중심 시나리오별 학습 가이드</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent-g: #1a7f37;
+      --accent-o: #953800;
+      --accent-p: #6639ba;
+      --accent-r: #cf222e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── 사이드바 ── */
+    nav {
+      width: 270px; min-width: 270px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto; padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--text-dim);
+      padding: 0 16px 10px;
+    }
+    nav a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 16px;
+      color: var(--text-dim); text-decoration: none;
+      font-size: 13px; border-left: 2px solid transparent;
+      transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-group {
+      margin-top: 10px; padding: 7px 16px 4px;
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--text-dim);
+      border-top: 1px solid var(--border);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-g { background: #1a7f37; }
+    .dot-b { background: #0969da; }
+    .dot-p { background: #6639ba; }
+
+    /* ── 본문 ── */
+    main { flex: 1; max-width: 880px; padding: 40px 52px; overflow-x: hidden; }
+    h1 { font-size: 1.9rem; font-weight: 700; color: #1f2328; margin-bottom: 6px; }
+    .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
+    .subtitle a { color: var(--accent); text-decoration: none; }
+
+    /* ── 버전 박스 ── */
+    .version-box {
+      background: #f0f7ff; border: 1px solid #a5d5f7;
+      border-left: 4px solid #0969da; border-radius: 6px;
+      padding: 14px 18px; margin-bottom: 36px; font-size: 13px;
+    }
+    .version-row { display: flex; gap: 12px; padding: 3px 0; border-bottom: 1px solid #d0e8ff; }
+    .version-row:last-child { border-bottom: none; }
+    .vlabel { min-width: 160px; font-weight: 600; color: #0550ae; flex-shrink: 0; }
+
+    /* ── 레벨 섹션 헤더 ── */
+    .level-header {
+      display: flex; align-items: center; gap: 12px;
+      margin: 48px 0 20px; padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+    .level-header .badge { flex-shrink: 0; }
+    .level-header .level-title { flex-shrink: 0; }
+    .level-header .level-desc { flex: 1; }
+    .level-title { font-size: 1.3rem; font-weight: 700; }
+    .level-title-g { color: #1a7f37; }
+    .level-title-b { color: #0969da; }
+    .level-title-p { color: #6639ba; }
+    .level-desc { font-size: 13px; color: var(--text-dim); }
+
+    /* ── 레벨 배지 ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10.5px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .badge-g { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
+    .badge-b { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
+    .badge-p { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
+    .badge-claude { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
+    .badge-claudeapp { background: #e6ffec; color: #1a7f37; border: 1px solid #a2d9b1; }
+    .badge-agy { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
+    .badge-antigravity { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
+
+    /* ── 시나리오 카드 ── */
+    .scenario-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 22px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+    .card-id {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 11px; font-weight: 700;
+      color: var(--text-dim); min-width: 34px;
+    }
+    .card-title { font-size: 1.05rem; font-weight: 700; color: #1f2328; }
+    .card-body { padding: 22px 26px; }
+
+    /* ── 플랫폼 구획 ── */
+    .platform-block {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box {
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+    .platform-block.claude { border-top: 3px solid #1a7f37; }
+    .platform-block.claudeapp { border-top: 3px dashed #1a7f37; }
+    .platform-block.agy { border-top: 3px solid #0550ae; }
+    .platform-block.antigravity { border-top: 3px dashed #6639ba; }
+    .platform-block-title {
+      font-size: 13.5px; font-weight: 700; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── 상황 설명 ── */
+    .situation {
+      background: #fffbf0; border-left: 3px solid #d4a72c;
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px; margin-bottom: 20px;
+      font-size: 14px; line-height: 1.7;
+    }
+    .situation::before {
+      content: '📌 상황'; display: block;
+      font-weight: 700; color: #7d4e00; margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    /* ── 명령어 목록 ── */
+    .cmd-list { margin-bottom: 20px; }
+    .cmd-list-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 8px;
+    }
+    .cmd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cmd-chip {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 12px; font-weight: 600;
+      background: #f6f8fa; border: 1px solid #d0d7de;
+      border-radius: 6px; padding: 4px 10px;
+      color: #cf222e; text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: #ddf4ff; border-color: #a5d5f7; color: #0550ae; }
+
+    /* ── 단계별 실행 ── */
+    .steps-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 12px;
+    }
+    .step-list { list-style: none; counter-reset: step-counter; margin-bottom: 20px; }
+    .step-list li {
+      counter-increment: step-counter;
+      display: flex; gap: 14px;
+      margin-bottom: 18px; align-items: flex-start;
+    }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: #0969da; color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: #1f2328; font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+
+    /* ── 코드 블록 ── */
+    pre.code-block {
+      background: #f6f8fa; border: 1px solid #d0d7de;
+      border-radius: 6px; padding: 12px 16px; overflow-x: auto;
+      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+      font-size: 13px; line-height: 1.55; color: #116329;
+      margin: 6px 0 0; position: relative;
+    }
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+
+    /* ── 흐름 설명 ── */
+    .flow-box {
+      background: #f0f7ff; border: 1px solid #a5d5f7;
+      border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px;
+      overflow-wrap: break-word;
+    }
+    .flow-box::before {
+      content: '⚙️ 내부 동작'; display: block;
+      font-weight: 700; color: #0550ae; margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    /* ── 팁 박스 ── */
+    .tip-box {
+      background: #dafbe1; border: 1px solid #a2d9b1; border-radius: 6px;
+      padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; color: #0a3622;
+      overflow-wrap: break-word;
+    }
+    .tip-box::before {
+      content: '💡 팁'; display: block; font-weight: 700; color: #116329;
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    /* ── 경고 박스 ── */
+    .warning-box {
+      background: #fff8c5; border: 1px solid #d4a72c;
+      border-radius: 6px; padding: 12px 16px; margin-bottom: 14px;
+      font-size: 13.5px; color: #5c3900;
+      overflow-wrap: break-word;
+    }
+    .warning-box::before {
+      content: '⚠️ 주의'; display: block; font-weight: 700; color: #7d4e00;
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    /* ── 관련 명령어 조합 ── */
+    .related-cmds {
+      border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px;
+      font-size: 13px; color: var(--text-dim);
+    }
+    .related-cmds strong { color: #1f2328; }
+
+    /* ── 인라인 코드 ── */
+    code {
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 12px; background: #f6f8fa;
+      border: 1px solid #d0d7de; border-radius: 4px;
+      padding: 2px 6px; color: #cf222e;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    /* ── 장 이동 ── */
+    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
+    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
+    .chapter-nav a:hover { background: var(--bg2); }
+    .chapter-nav .prev { text-align: left; }
+    .chapter-nav .next { text-align: right; }
+    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
+    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── 사이드바 ── -->
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">4장 §2-B · 멀티 에이전트 팀 실습 (Antigravity 중심)</div>
+  <a href="#setup">🛠 준비: 필요한 프로그램 설치</a>
+  <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
+
+  <div class="nav-group">초급 시나리오</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 첫 커스텀 서브에이전트 만들고 호출하기</a>
+
+  <div class="nav-group">중급 시나리오</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer 2단계 파이프라인</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 요청에 따라 팀 구성과 워크플로우가 달라지는 것 관찰하기</a>
+
+  <div class="nav-group">고급 시나리오</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 독립 작업 병렬 실행 — Agent Manager</a>
+
+  <div class="nav-group">바로가기</div>
+  <a href="02_Practice_Manual.html">📖 4장 §1 레퍼런스 →</a>
+  <a href="02_Practice_Examples.html">🖥 4장 §2-A Claude 중심 실습 →</a>
+</nav>
+
+<!-- ── 본문 ── -->
+<main>
+  <div class="chapter-eyebrow">4장 §2-B</div>
+  <h1>4장 §2-B · 멀티 에이전트 팀 실습</h1>
+  <p class="subtitle">빈 실습 폴더에서 시작해 Antigravity(Desktop)/Antigravity CLI 위주로 시나리오를 따라해보는 실습 가이드 — Desktop 앱을 기준으로 안내하고 CLI 대응을 이어서 소개한다 &nbsp;|&nbsp; <a href="02_Practice_Manual.html">← 4장 §1 레퍼런스 문서로 돌아가기</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">대상 버전/범위</span><span>Antigravity CLI (agy) 1.1.0+, Antigravity 2.0 — Antigravity를 중심으로 안내하며, Claude App/Code 대응은 4장 §2-A를 참조</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>서브에이전트 정의·호출, 순차 파이프라인, 동적 팀 구성·워크플로우 조합, 병렬 실행을 Antigravity(Desktop)/Antigravity CLI 위주로 손으로 따라해보는 4단계 실습 제공</span></div>
+    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="02_Practice_Manual.html">4장 §1 공통</a> · <a href="02_Practice_Manual_A.html">4장 §1-A Claude 상세</a> · <a href="02_Practice_Manual_B.html">4장 §1-B Antigravity 상세</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
+    <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
+  </div>
+
+  <div class="note" style="background:#f0f7ff;border-left:3px solid #0969da;padding:12px 18px;border-radius:4px;font-size:14px;margin:0 0 32px;">
+    <strong>이 과정 전체가 따르는 원칙</strong> — 특정 도구 하나에 맞춰 실습을 익히면 다른 도구로 옮길 때 처음부터 다시 배워야 한다. 그래서 아래 모든 시나리오는 먼저 서브에이전트의 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 적고, 그 <em>같은 명세</em>를 Antigravity 계열에서는 자연어 목표로 "구현"하는 순서를 따른다(2장 §5 AGENTS.md 참고). Claude 계열에서의 대응 방식은 <a href="02_Practice_Examples.html">4장 §2-A</a>에서 다룬다. 정의는 하나, 실행 방식만 도구별로 다르다는 원칙을 손으로 확인하는 것이 이 실습의 핵심 목표다.
+  </div>
+
+  <!-- ══════════════════════════════ 실습 전 준비 ══════════════════════════════ -->
+  <h2 id="setup">준비: 필요한 프로그램 설치</h2>
+  <p>아래 실습은 Antigravity(Desktop)와 Antigravity CLI(<code>agy</code>)를 중심으로 진행된다. 로컬 환경에 이 도구들이 아직 없다면, 이 핸드북에 함께 담아 둔 환경 설정 자동화 도구인 <a href="../setup/SETUP_ko.html">setup 가이드</a>가 이 장의 실습에 정확히 필요한 구성을 자동으로 설치해준다. 안내에 따라 스크립트를 내려받아 로컬에서 실행하면 된다.</p>
+
+  <div class="platform-block" style="border-top:3px solid #d4a72c;">
+    <div class="platform-block-title">📦 설치 전 확인 사항</div>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">스크립트를 실행하기 전에 <a href="../setup/SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>를 먼저 읽어본다. 이 문서에는 다음 전제 조건이 정리되어 있다.</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>Antigravity 사용을 위한 Google 계정 (개별 API 키가 아니라 구독제/계정 기반 플랜이어야 한다)</li>
+      <li><code>gh auth login</code>을 진행할 수 있는 GitHub 계정</li>
+      <li>최소 5GB의 여유 디스크 공간</li>
+      <li>관리자(admin) 또는 sudo 권한</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>GitHub 계정이 아직 없다면</strong><br>
+    ① 브라우저에서 <a href="https://github.com/signup" target="_blank">github.com/signup</a>에 접속한다.<br>
+    ② 이메일 주소, 비밀번호, 사용자 이름(username)을 입력한다 — username은 나중에 저장소 URL(<code>github.com/&lt;username&gt;/...</code>)에 그대로 쓰이므로 신중히 정한다.<br>
+    ③ 자동 가입 방지를 위한 퍼즐/코드 인증을 통과한다.<br>
+    ④ 가입 시 입력한 이메일로 온 인증 메일을 열어 <strong>이메일 인증</strong>을 완료한다 — 이 단계를 건너뛰면 이후 <code>gh auth login</code>이나 저장소 생성이 막힐 수 있다.<br>
+    ⑤ 무료(Free) 플랜으로 가입하면 충분하다 — 이 핸드북의 실습·PR 연습에는 유료 플랜이 필요 없다.<br>
+    가입이 끝나면 <a href="https://cli.github.com/" target="_blank">GitHub CLI(<code>gh</code>)</a>가 위 설치 스크립트에 포함돼 함께 설치되고, 아래 <code>gh auth login</code> 명령으로 터미널을 그 계정과 연결한다.
+    <pre class="code-block" style="margin-top:10px;">gh auth login
+# 안내에 따라: GitHub.com 선택 → HTTPS 선택 → 브라우저로 로그인(권장) 선택
+# 브라우저가 열리면 방금 만든 계정으로 로그인하고 인증 코드를 확인한다</pre>
+  </div>
+
+  <h3>Windows에서 설치하기</h3>
+  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>을 내려받아 실습 전용 폴더(예: <code>harness-lab/setup/</code>)에 두고, PowerShell을 <strong>관리자 권한으로</strong> 실행한 뒤 아래 명령을 돌린다.</p>
+  <div class="tip-box">
+    <strong>PowerShell을 관리자 권한으로 여는 법</strong><br>
+    ① 시작 메뉴를 열고 <code>PowerShell</code>을 검색한다.<br>
+    ② 검색 결과의 "Windows PowerShell"을 <strong>마우스 우클릭</strong>한다.<br>
+    ③ 나오는 메뉴에서 <strong>"관리자 권한으로 실행"</strong>을 선택한다.<br>
+    ④ 사용자 계정 컨트롤(UAC) 창이 뜨면 <strong>"예"</strong>를 눌러 승인한다.<br>
+    창 제목 표시줄에 <code>관리자: Windows PowerShell</code>처럼 "관리자"가 붙어 있으면 제대로 연 것이다. winget 설치 등 일부 단계는 관리자 권한 없이 실행하면 오류가 나거나 조용히 건너뛰어질 수 있다.
+  </div>
+  <pre class="code-block">cd ./setup
+.\setup-windows.ps1
+# 선택 옵션: -WSL2, -WezTerm, -Docker, -Force (이미 설치된 도구도 재설치)</pre>
+  <p>스크립트가 끝나면 터미널을 완전히 닫았다가 다시 열어야 PATH 변경 사항이 적용된다.</p>
+
+  <h3>macOS / Linux에서 설치하기</h3>
+  <p>macOS는 <a href="../setup/setup-mac.sh">setup-mac.sh</a>, Linux는 <a href="../setup/setup-linux.sh">setup-linux.sh</a>를 내려받아 사용한다. 둘 다 <code>--wezterm</code>, <code>--docker</code> 선택 플래그를 지원한다.</p>
+  <pre class="code-block"># macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+
+  <h3>설치 검증하기</h3>
+  <p>운영체제와 무관하게 <a href="../setup/setup-common.ts">setup-common.ts</a>를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+
+  <p>이 프로젝트가 설치하는 도구 중 이 장의 실습과 직접 관련된 것은 다음과 같다. Antigravity(Desktop), <code>agy</code>(Antigravity CLI), 그리고 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
+
+  <div class="tip-box">
+    Antigravity CLI(<code>agy</code>)는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리다 — 압축 해제 후 PATH에 넣기만 하면 바로 실행된다. 옛 자료에 남아 있는 "Gemini CLI를 npm으로 전역 설치" 같은 안내는 더 이상 유효하지 않다. 최신 설치 방법은 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>에서 확인한다.
+  </div>
+
+  <div class="tip-box">
+    설치 중 문제가 생기면 Windows 기준 <code>%USERPROFILE%\workshop-setup-logs\</code> 폴더에 로그가 남는다. 문제를 해결할 때 이 로그부터 확인한다.
+  </div>
+
+  <!-- ══════════════════════════════ 초급 ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● 초급</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">Antigravity(Desktop)에서 목표를 주고 동적 생성을 관찰하는 첫 단계</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">초급</span>
+      <strong class="card-title">첫 커스텀 서브에이전트 만들고 호출하기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        하네스를 처음 써보는 개발자가 실습 전용 빈 폴더 <code>harness-lab/</code>를 새로 만들고, <code>reviewer</code> 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 먼저 적어 둔 뒤, Antigravity(Desktop)에서 자연어 목표로 "구현"해 호출해본다. 이 폴더는 실습 전용이므로 다른 프로젝트 파일과 섞이지 않는다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
+          <a class="cmd-chip" href="02_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
+          <a class="cmd-chip" href="02_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① 실습 폴더 생성 및 진입</strong>
+            <p>현재 폴더 아래 <code>harness-lab</code> 폴더를 새로 만들고 그 안으로 이동한다. 이후 모든 명령은 이 폴더 안에서 실행한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② 공통 역할 명세 작성 — <code>AGENTS.md</code></strong>
+            <p>Claude나 Antigravity, 그 외 AGENTS.md 표준을 지원하는 어떤 도구로 열어도 같은 의미로 읽히도록, <code>reviewer</code> 역할을 도구 종속적인 표현 없이 순수 텍스트로 적는다. 이 파일 하나가 "무엇을 하는 역할인가"의 유일한 원본이 되고, 아래 Antigravity는 이 원본을 자연어 목표로 구현할 뿐이다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+역할: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
+입력: 검토 대상 텍스트 파일 경로
+출력: 오탈자 · 논리적 허점 · 개선점 목록
+권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> <code>cat</code> 명령 자체는 <code>Get-Content</code>의 별칭으로 파일 읽기에 그대로 쓸 수 있다. 다만 <code>&lt;&lt; 'EOF'</code>처럼 여러 줄을 직접 넣는 heredoc 문법은 지원하지 않으므로, 같은 내용은 따옴표 있는 here-string(<code>@'...'@</code>)으로 만들어 <code>Set-Content</code>로 파일에 쓴다.</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+역할: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
+입력: 검토 대상 텍스트 파일 경로
+출력: 오탈자 · 논리적 허점 · 개선점 목록
+권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 같은 AGENTS.md 명세를 자연어 목표로 구현</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 <code>.claude/agents</code> 같은 사전 정의 파일 개념이 없다. 대신 방금 작성한 <code>AGENTS.md</code>를 워크스페이스에 그대로 둔 채, 같은 명세를 목표 프롬프트에 담아 준다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 검토 대상 파일 미리 준비 (터미널)</strong>
+              <div style="position:relative">
+                <pre class="code-block">echo "이 프로젝트는 매우 좋다. 이것은 아주 좋다." > notes.txt</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Antigravity Agent Manager에서 Workspace 생성</strong>
+              <p>Agent Manager를 열고 <code>harness-lab/</code> 폴더(AGENTS.md가 이미 들어있는 폴더)를 가리키는 새 Workspace를 하나 만든다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ 목표 지시 — Workspace 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">AGENTS.md에 적힌 reviewer 역할 명세대로 notes.txt를 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                Workspace를 맡은 에이전트가 AGENTS.md를 읽고, 그 안의 역할/입력/출력/권한 명세를 그대로 목표로 삼아 필요한 작업(파일 읽기, 개선점 정리)을 스스로 판단해 수행한다. AGENTS.md가 "무엇을 검토 기준으로 삼는가"의 유일한 원본이므로, 검토 기준(오탈자·논리적 허점·개선점)은 이 명세에 의해 결정된다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)에서도</strong> 같은 개념으로 실습할 수 있다 — 사전 정의 파일 없이 <code>/goal</code>로 목표만 준다.</p>
+        <div style="position:relative">
+          <pre class="code-block">cd harness-lab && agy
+/goal notes.txt 파일을 검토하고 개선점을 요약해줘</pre>
+          <button class="copy-btn" onclick="copyCode(this)">복사</button>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        Antigravity는 정의 파일이 없으므로 Claude 계열처럼 <code>tools</code> 필드로 사전 권한 제한을 할 수는 없다. 대신 목표 프롬프트 자체를 "읽고 요약만 해줘"처럼 명확히 좁히는 것이 안전하다. AGENTS.md에 적힌 <code>권한: 읽기 전용</code> 명세도 오케스트레이터에게 권한 경계를 알려주는 역할을 한다.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 중급 ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● 중급</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">메인 세션이 오케스트레이터가 되어 writer와 reviewer 두 전문 에이전트를 순서대로 지휘하는 실무 패턴</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">중급</span>
+      <strong class="card-title">writer → reviewer 2단계 파이프라인</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        G-1을 마친 실무자가 같은 <code>harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>에 먼저 명세한 뒤, Antigravity(Desktop)에서 자연어 목표로 구현한다. writer가 먼저 초안을 쓰고 reviewer가 그 결과를 비평하는 파이프라인을 오케스트레이터가 순서를 지켜 지휘하게 한다.
+      </div>
+
+      <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+          </defs>
+          <!-- Box 1: 사용자 요청 (gray) -->
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="#6b7280">사용자 요청</text>
+          <!-- Arrow 1 -->
+          <line x1="115" y1="43" x2="150" y2="43" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <!-- Box 2: writer.md (blue) -->
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#3b82f6">writer.md</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#3b82f6">초안 작성</text>
+          <!-- Arrow 2 -->
+          <line x1="295" y1="43" x2="330" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <!-- Return arrow (curved, below) -->
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="#f59e0b"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#f59e0b">수정 요청 시 writer로 되돌아감</text>
+          <!-- Box 3: reviewer.md (green) -->
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#22c55e">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">피드백/승인</text>
+          <!-- Arrow 3 -->
+          <line x1="475" y1="43" x2="510" y2="43" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <!-- Box 4: 최종 결과물 (purple) -->
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#8b5cf6">최종 결과물</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">완성</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
+          <a class="cmd-chip" href="02_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
+          <a class="cmd-chip" href="02_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>공통 역할 명세 추가 — <code>AGENTS.md</code>에 writer 항목 이어쓰기</strong>
+            <p>G-1에서 만든 같은 <code>AGENTS.md</code>에 <code>writer</code> 역할을 이어서 적는다. reviewer 항목은 그대로 두고 아래 내용만 추가한다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+역할: 주어진 주제로 3~5문장 분량의 짧은 초안을 작성한다.
+입력: 주제, 저장할 파일 경로
+출력: 초안 텍스트 파일
+권한: 쓰기 허용 — 지정된 파일에만 저장한다.
+handoff_to: reviewer (초안 완료 후 검토로 이어짐)
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string을 <code>Add-Content</code>로 이어붙인다(<code>Set-Content</code>는 파일을 덮어쓰므로 반드시 <code>Add-Content</code>를 써야 reviewer 항목이 지워지지 않는다).</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+역할: 주어진 주제로 3~5문장 분량의 짧은 초안을 작성한다.
+입력: 주제, 저장할 파일 경로
+출력: 초안 텍스트 파일
+권한: 쓰기 허용 — 지정된 파일에만 저장한다.
+handoff_to: reviewer (초안 완료 후 검토로 이어짐)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 같은 AGENTS.md 명세 두 개를 한 목표로 오케스트레이터가 스스로 분해</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 사전에 <code>writer</code>/<code>reviewer</code> 파일을 나눠 정의하지 않는다. 대신 AGENTS.md에 이미 적어 둔 두 역할 명세(reviewer는 G-1에서, writer는 방금)를 그대로 참조하게 한다. G-1에서 만든 같은 Workspace의 채팅에서 이어서 진행한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 2단계 목표 지시 — Workspace 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">AGENTS.md의 writer 명세대로 draft.txt에 '원격 근무의 장점' 주제 초안을 먼저 작성하고, 완료되면 AGENTS.md의 reviewer 명세대로 그 초안을 검토해줘. 두 단계를 순서대로 진행해.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                오케스트레이터가 AGENTS.md의 <code>handoff_to: reviewer</code> 관계를 읽고 목표를 "초안 작성 → 검토"의 두 하위 작업으로 스스로 쪼갠 뒤, 초안 작성이 끝난 뒤에야 검토 작업을 시작한다. 순서 조율의 책임이 사용자가 아니라 오케스트레이터 내부에 있다는 점이 특징이다 — 다만 "무엇을 검토 기준으로 삼는가"는 AGENTS.md가 유일한 원본이다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)에서도</strong> 같은 목표를 한 번에 줄 수 있다. <code>/goal</code>로 전체 파이프라인을 한 문장에 담으면 오케스트레이터가 알아서 분해하고, 필요하면 <code>/agent</code>로 검토 단계를 백그라운드에 맡긴 채 다른 작업을 이어갈 수도 있다.</p>
+        <div style="position:relative">
+          <pre class="code-block">agy
+/goal draft.txt에 '원격 근무의 장점' 주제로 초안을 먼저 쓰고,
+완료되면 그 초안을 검토해서 개선점을 요약해줘</pre>
+          <button class="copy-btn" onclick="copyCode(this)">복사</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">중급</span>
+      <strong class="card-title">요청에 따라 팀 구성과 워크플로우가 달라지는 것 관찰하기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        2장 §4b에서 다룬 "동적 팀 구성"과 "다양한 워크플로우 조합"을 직접 눈으로 확인하는 시나리오다. D-1에서 만든 <code>writer</code>·<code>reviewer</code> 두 역할 명세는 그대로 두고, 요청의 성격만 바꿔가며 오케스트레이터가 실제로 어떤 작업을, 몇 번, 어떤 순서로 수행하는지 관찰한다 — 서브에이전트 정의는 한 번도 새로 만들지 않는다는 점이 핵심이다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s4b">동적 팀 구성과 다양한 워크플로우</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 목표 자연어만으로도 같은 유연성이 드러난다</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity는 애초에 서브에이전트를 동적으로 생성하는 방식이므로, 이 유연성이 더 직접적으로 드러난다. D-1에서 쓰던 같은 Workspace 채팅에서 이어서 진행한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 단순 목표 지시</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txt의 오탈자만 훑어봐줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                오케스트레이터는 이번 요청에 작성 역할이 필요 없다고 판단해 검토 역할 하나만 즉석에서 구성한다. AGENTS.md에 두 역할이 정의돼 있어도, 실제로 투입되는 구성은 요청마다 오케스트레이터가 그때그때 결정한다는 것을 보여주는 가장 단순한 예다.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 복합 목표 지시</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft2.txt에 '4일 근무제' 주제로 새 초안을 먼저 쓰고, 완료되면 그 초안을 문법 관점과 논리 관점 두 가지로 각각 독립적으로 동시에 검토해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+              <div class="flow-box">
+                오케스트레이터가 ①에서는 검토 역할 하나만 즉석에서 구성하고, ②에서는 작성 역할 하나와 검토 역할 둘(서로 다른 관점)을 새로 구성한다. 사전에 정의된 서브에이전트 파일이 아예 없으므로, "이번 작업에 맞는 팀을 매번 새로 짠다"는 원칙이 더 선명하게 드러난다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          ①과 ②를 나란히 비교하면 "AGENTS.md에 어떤 역할을 정의해 뒀는가"와 "이번 작업에 실제로 투입되는 구성이 무엇인가"가 서로 다른 층위라는 게 뚜렷해진다. 전자는 AGENTS.md에 미리 고정돼 있지만, 후자는 매 요청마다 오케스트레이터가 새로 결정한다.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> <a href="../concepts/01_Concepts_Chapter.html#s4b">2장 §4b — 동적 팀 구성과 다양한 워크플로우</a>, <a href="02_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 고급 ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● 고급</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">writer와 reviewer를 독립적인 두 파일에 대해 동시에 돌리는 병렬 운영 — Agent Manager 활용</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">고급</span>
+      <strong class="card-title">독립 작업 병렬 실행 — Agent Manager</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        D-1까지 마친 숙련자가 서로 의존하지 않는 두 개의 독립적인 작업(<code>topic-a.txt</code>, <code>topic-b.txt</code> 초안 작성)을 Antigravity(Desktop) Agent Manager에서 병렬로 돌려본다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="02_Practice_Manual.html#section-3">병렬 실행 — 팀 단위로 확장하기</a>
+          <a class="cmd-chip" href="02_Practice_Manual.html#section-3">병렬 실행</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — Agent Manager, Workspace별 에이전트 1개</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity를 열고 Agent Manager에서 <code>harness-lab/</code>을 가리키는 Project를 하나 준비한다. 이번에는 하나의 Workspace에 두 에이전트를 몰아넣지 않고, <strong>서로 다른 Workspace 두 개</strong>를 만들어 각각 에이전트를 하나씩 배정한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Workspace A 생성</strong>
+              <p>New Worktree Mode로 Workspace를 하나 만든다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Workspace A 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">topic-a.txt에 '재택근무' 주제로 3~5문장 초안을 작성해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Workspace B 생성</strong>
+              <p>별도의 Workspace를 하나 더 만든다(New Worktree Mode 권장). Workspace A의 에이전트와는 완전히 분리된 인스턴스다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ Workspace B 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">topic-b.txt에 '4일 근무제' 주제로 3~5문장 초안을 작성해줘.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>⑤ Inbox에서 두 에이전트 진행 상황 확인</strong>
+              <p>두 에이전트가 각자의 Workspace에서 동시에 작업하는 동안, Inbox에서 승인이나 피드백이 필요한 메시지가 오는지 확인하고 필요하면 응답한다.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          두 에이전트를 <strong>같은 Workspace</strong>에 함께 배정하지 않는다 — 같은 폴더를 공유하면 한 에이전트가 다른 에이전트의 작업 맥락을 자기 것으로 착각하는 "인지적 중첩(cognitive overlap)"이 발생할 수 있다. Workspace 또는 worktree로 반드시 분리하는 것이 Antigravity의 권장 관행이다.
+        </div>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)에서도</strong> 데스크톱의 Agent Manager 대신 터미널을 여러 개 띄워 같은 효과를 낼 수 있다 — 한 터미널에서 <code>agy</code>로 topic-a.txt 작업을, 다른 터미널에서 별도 <code>agy</code> 세션으로 topic-b.txt 작업을 동시에 진행한다(세션 간 병렬). 서로 다른 파일을 건드리는 한 두 세션은 충돌하지 않는다.</p>
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> <a href="02_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행</a>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+    Antigravity CLI (agy) 1.1.0+ · Antigravity 2.0 기준 | 2026년 7월 14일 작성<br>
+    <a href="02_Practice_Examples.html">← 4장 §2-A Claude 중심 실습으로</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="02_Practice_Examples.html" class="prev"><div class="dir">← 이전</div><div class="ttl">4장 §2-A · Claude 실습</div></a>
+    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards</div></a>
+  </div>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

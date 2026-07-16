@@ -252,6 +252,15 @@
     .mode-table td:first-child { font-family: monospace; color: #ff7b72; font-size: 12px; }
     /* ── 노트 박스 ── */
     .note { background: #e8f4fd; border-left: 3px solid #0969da; padding: 10px 16px; border-radius: 4px; font-size: 14px; margin: 14px 0; }
+    /* ── 장 이동 ── */
+    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
+    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
+    .chapter-nav a:hover { background: var(--bg2); }
+    .chapter-nav .prev { text-align: left; }
+    .chapter-nav .next { text-align: right; }
+    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
+    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -270,10 +279,11 @@
   <a href="#section-3">참고 링크</a>
   <div class="nav-section">다른 장</div>
   <a href="../intro/04_Intro_Chapter.html">5장 §1 · ai-workspace-standards 소개</a>
-  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
+  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
 </nav>
 
 <main>
+  <div class="chapter-eyebrow">6장 §1</div>
   <h1>ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩</h1>
   <p class="subtitle">워크스페이스를 로컬에 세팅하고, 기존 variant로 프로젝트를 스캐폴딩하는 방법을 다루는 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a></p>
 
@@ -299,6 +309,20 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
 ├── scripts/                           new-project.ts 등 운영 스크립트(TypeScript, bun으로 실행)
 └── Projects/                          &lt;프로젝트명&gt;/ 형태의 개별 프로젝트(각자 독립 git 저장소)
 </pre></div>
+
+  <h3>Variant 7종 전체 목록</h3>
+  <table>
+    <thead><tr><th>Variant</th><th>목적</th></tr></thead>
+    <tbody>
+      <tr><td><code>co-work</code></td><td>일반 협업/문서 — 공통 업무 워크플로우 6단계</td></tr>
+      <tr><td><code>co-consult</code></td><td>컨설팅/분석 — 고객 문제 진단 및 제안서 작성</td></tr>
+      <tr><td><code>co-deck</code></td><td>프레젠테이션 — 슬라이드 구성 및 초안 생성</td></tr>
+      <tr><td><code>co-marketing</code></td><td>마케팅 — 콘텐츠 기획·생성·검토 파이프라인</td></tr>
+      <tr><td><code>co-develop</code></td><td>소프트웨어 개발 — 6단계 개발 파이프라인</td></tr>
+      <tr><td><code>co-research</code></td><td>연구 — 문헌 조사 및 요약 워크플로우</td></tr>
+      <tr><td><code>co-review</code></td><td>코드/문서 검토 — PR 리뷰 및 품질 검증</td></tr>
+    </tbody>
+  </table>
 
   <h3 id="repository-walk">저장소 구조 둘러보기 — clone 후 처음 확인할 곳 5곳</h3>
   <p><code>git clone</code>으로 워크스페이스 루트에 저장소를 복제한 뒤, 가장 먼저 확인할 핵심 디렉터리 5곳을 순서대로 짚어본다. 이 순서는 5장에서 다룬 "런타임 흐름"과 일치한다.</p>
@@ -377,19 +401,24 @@ git --version</pre>
   <div class="warning-box">스캐폴딩된 프로젝트는 워크스페이스 루트와는 별개의 독립 git 저장소로 생성된다. 워크스페이스 루트 파일과 새 프로젝트 파일을 같은 작업/커밋에서 섞어 수정하지 않도록 주의한다.</div>
 
   <h3>새 variant를 직접 만들고 싶다면</h3>
-  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> variant로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 6장 §2 실습과 10장에서 각각 다룬다.</p>
+  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> variant로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 11장(신규 생성 D-1)과 12장(승격 P-1)에서 다룬다.</p>
 
   <hr>
 
   <h2 id="section-3">3. 참고 링크</h2>
   <ul style="list-style: none; padding: 0; line-height: 2.2;">
     <li>📖 <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></li>
-    <li>⚙️ <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습. co-marketing variant 만들어보기</a></li>
-    <li>⚙️ <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">10장. 신규 variant 생성</a></li>
+    <li>⚙️ <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습. 기존 variant 활용 (co-consult, co-deck)</a></li>
+    <li>⚙️ <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">11장. 신규 variant 생성</a></li>
   </ul>
 
   <hr>
   <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">ai-workspace-standards main 브랜치 기준 | 2026년 7월</p>
+
+  <div class="chapter-nav">
+    <a href="../intro/04_Intro_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">5장 · ai-workspace-standards</div></a>
+    <a href="04_VariantPractice_Examples.html" class="next"><div class="dir">다음 →</div><div class="ttl">6장 §2 · Variant 실습</div></a>
+  </div>
 </main>
 
 </div>

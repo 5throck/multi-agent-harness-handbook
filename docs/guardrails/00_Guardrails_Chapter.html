@@ -56,6 +56,16 @@
     .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
     .chapter-nav .next { text-align: right; }
     @media (max-width: 640px) { main { padding: 40px 18px 60px; } .chapter-nav { flex-direction: column; } }
+
+    /* ── 참고 영상 ── */
+    .video-refs { margin: 28px 0; padding: 16px 20px; background: #f0f6ff; border: 1px solid #d0e8ff; border-radius: 8px; }
+    .video-refs h3 { font-size: 15px; font-weight: 700; color: var(--accent6); margin: 0 0 12px; }
+    .video-refs ul { list-style: none; padding: 0; margin: 0; }
+    .video-refs li { padding: 6px 0; line-height: 1.6; }
+    .video-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; color: #fff; vertical-align: middle; margin-right: 6px; }
+    .video-badge.en { background: #0969da; }
+    .video-badge.ko { background: #1a7f37; }
+    .video-meta { font-size: 12px; color: var(--text-dim); }
   </style>
 </head>
 <body>
@@ -140,9 +150,134 @@
   <p>이 원칙을 실제 사고 시나리오로 보면 왜 중요한지 분명해진다. 만약 reviewer에게 <code>Write</code> 권한까지 습관적으로 열어 뒀다면, "이 파일을 검토하고 개선해줘"처럼 살짝 모호한 요청을 받았을 때 reviewer가 "개선"을 "직접 수정"으로 해석해 원본을 덮어쓸 수도 있다. <code>tools</code> 필드로 권한을 미리 좁혀 두면, 이런 해석 차이가 애초에 사고로 이어지지 않는다. 프롬프트 품질에 기대는 대신 구조적으로 막는 것이다.</p>
   <div class="note">권한은 "이 역할이 최대로 무엇까지 할 수 있는가"가 아니라 "이 역할이 정상 작동하는 데 최소로 무엇이 필요한가"를 기준으로 정한다. 나중에 필요해지면 넓히는 것은 쉽지만, 처음부터 넓게 열어 둔 권한을 사고 이후에 좁히는 것은 이미 늦다.</div>
 
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">최소 권한 원칙 — 3단계 권한 레벨 계층도</div>
+    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+      <defs>
+        <linearGradient id="pyramidRed" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#cf222e"/>
+          <stop offset="100%" stop-color="#ff8182"/>
+        </linearGradient>
+        <linearGradient id="pyramidOrange" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#953800"/>
+          <stop offset="100%" stop-color="#f5c518"/>
+        </linearGradient>
+        <linearGradient id="pyramidGreen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a7f37"/>
+          <stop offset="100%" stop-color="#a2d9b1"/>
+        </linearGradient>
+      </defs>
+      <!-- Top tier: 파괴적 작업 -->
+      <polygon points="300,20 395,100 205,100" fill="url(#pyramidRed)" opacity="0.9"/>
+      <text x="300" y="62" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">파괴적 작업</text>
+      <text x="300" y="78" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Destructive</text>
+      <!-- Red tier label -->
+      <rect x="420" y="48" width="160" height="44" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+      <text x="500" y="66" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">예: git push, rm -rf</text>
+      <text x="500" y="82" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">배포, 결제, 외부 메시지</text>
+      <line x1="395" y1="70" x2="420" y2="70" stroke="#ff8182" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Middle tier: 쓰기 작업 -->
+      <polygon points="205,100 465,190 135,190" fill="url(#pyramidOrange)" opacity="0.9"/>
+      <text x="300" y="142" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">쓰기 작업</text>
+      <text x="300" y="158" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Write</text>
+      <!-- Orange tier label -->
+      <rect x="420" y="138" width="160" height="44" rx="6" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+      <text x="500" y="156" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#953800">예: 파일 수정, PR 생성</text>
+      <text x="500" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">로컬 커밋, 설정 변경</text>
+      <line x1="465" y1="145" x2="420" y2="155" stroke="#f5c518" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Bottom tier: 읽기 작업 -->
+      <polygon points="135,190 540,280 60,280" fill="url(#pyramidGreen)" opacity="0.9"/>
+      <text x="300" y="234" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">읽기 작업</text>
+      <text x="300" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Read</text>
+      <!-- Green tier label -->
+      <rect x="420" y="225" width="160" height="44" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+      <text x="500" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#116329">예: 파일 읽기, 검색</text>
+      <text x="500" y="259" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">웹 조회, 로그 열람</text>
+      <line x1="540" y1="235" x2="420" y2="242" stroke="#a2d9b1" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- 최소 권한 원칙 label -->
+      <text x="300" y="320" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="600" fill="#636c76">▲ 최소 권한 원칙 (Least Privilege) — 필요한 권한만 부여</text>
+    </svg>
+  </div>
+
   <h2 id="s4">사람 승인 게이트</h2>
   <p>2장에서 오케스트레이터를 "사용자와의 확인이 필요한 지점(게이트)에서 진행을 멈추는 역할"이라고 정의했다. 가드레일 설계에서 가장 중요한 질문은 "그 게이트를 정확히 어디에 둘 것인가"다. 너무 자주 멈추면 에이전트에게 일을 맡기는 의미가 없어지고, 너무 안 멈추면 파괴적 작업까지 조용히 지나가 버린다.</p>
   <p>실무에서 검증된 기준은 단순하다. §2의 "파괴적/외부 영향" 단계에 해당하는 작업 직전에는 항상 멈추고, 그 아래 단계는 사후 검토로 충분하다. 예를 들어 <code>/sync</code> 파이프라인은 커밋·푸시·PR 생성까지는 자동으로 진행하지만, PR을 실제로 병합하거나 프로덕션에 배포하는 단계는 별도의 사람 승인을 요구하도록 설계돼 있다. "어디까지는 믿고 맡기고, 어디부터는 반드시 사람이 본다"는 경계선을 명시적으로 그어두는 것이 게이트 설계의 핵심이다.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">승인 게이트 동작 흐름도</div>
+    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+        <marker id="agArrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#cf222e"/></marker>
+        <marker id="agArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+      </defs>
+      <!-- 1. 사용자 요청 -->
+      <rect x="10" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#0969da" stroke-width="1.5"/>
+      <text x="65" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">사용자 요청</text>
+      <text x="65" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">에이전트 동작</text>
+      <!-- Arrow 1→2 -->
+      <line x1="120" y1="150" x2="155" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+
+      <!-- 2. 위험도 분석 -->
+      <rect x="160" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="215" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#6639ba">위험도 분류</text>
+      <text x="215" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">자동 판단</text>
+      <!-- Arrow 2→3 -->
+      <line x1="270" y1="150" x2="305" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+
+      <!-- 3. Decision diamond -->
+      <polygon points="360,108 420,150 360,192 300,150" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+      <text x="360" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">위험도</text>
+      <text x="360" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">판단?</text>
+
+      <!-- 낮음 branch (up) -->
+      <line x1="360" y1="108" x2="360" y2="58" stroke="#1a7f37" stroke-width="1.5"/>
+      <line x1="360" y1="58" x2="440" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <text x="365" y="78" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#1a7f37">낮음</text>
+      <!-- 낮음: 자동 실행 -->
+      <rect x="445" y="40" width="100" height="36" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+      <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">자동 실행</text>
+      <text x="495" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Read / Write</text>
+
+      <!-- 높음 branch (down) -->
+      <line x1="360" y1="192" x2="360" y2="240" stroke="#cf222e" stroke-width="1.5"/>
+      <line x1="360" y1="240" x2="440" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <text x="365" y="228" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">높음</text>
+      <!-- 높음: 사람 승인 대기 -->
+      <rect x="445" y="222" width="100" height="36" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1.2"/>
+      <text x="495" y="237" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#cf222e">승인 대기</text>
+      <text x="495" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">사람 확인</text>
+
+      <!-- 낮음 → 실행 → 결과 -->
+      <line x1="545" y1="58" x2="575" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="580" y="42" width="68" height="32" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1.2"/>
+      <text x="614" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#1a7f37">실행</text>
+      <text x="614" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#1a7f37"></text>
+      <!-- 실행 → 결과 -->
+      <line x1="545" y1="240" x2="575" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <rect x="580" y="224" width="68" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+      <text x="614" y="238" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">승인</text>
+      <text x="614" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#0969da"></text>
+
+      <!-- Both paths converge to 결과 -->
+      <line x1="614" y1="74" x2="614" y2="110" stroke="#1a7f37" stroke-width="1.2"/>
+      <line x1="614" y1="110" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
+      <line x1="614" y1="256" x2="614" y2="280" stroke="#cf222e" stroke-width="1.2"/>
+      <line x1="670" y1="280" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
+      <line x1="614" y1="280" x2="670" y2="280" stroke="#0969da" stroke-width="1.2"/>
+      <!-- 결과 -->
+      <rect x="640" y="130" width="60" height="40" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1.5"/>
+      <text x="670" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">결과</text>
+      <text x="670" y="161" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">응답 반환</text>
+
+      <!-- Bottom note -->
+      <text x="360" y="290" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 파괴적/외부 영향 작업은 반드시 사람 승인 게이트를 거쳐야 한다</text>
+    </svg>
+  </div>
 
   <h2 id="s5">격리 — worktree와 sandbox</h2>
   <p>4장 §2의 고급 시나리오(P-1)에서 "같은 Workspace에 에이전트 여러 개를 배정하면 인지적 중첩(cognitive overlap)이 생길 수 있다"고 경고했다. 이것도 가드레일의 한 형태다. 여러 에이전트가 같은 파일·같은 git 이력을 동시에 건드리면, 한 에이전트의 실수가 다른 에이전트의 작업 맥락까지 오염시킬 수 있다.</p>
@@ -152,12 +287,114 @@
   <p>가드레일이 사전 예방이라면, 감사 로그는 사후 추적이다. 완벽한 가드레일은 없으므로, 사고가 났을 때 "언제, 어떤 에이전트가, 어떤 도구로, 무엇을 했는지"를 되짚어볼 수 있는 최소한의 기록이 반드시 필요하다. 5장에서 다룬 <code>memory/MEMORY.md</code>가 세션 간 맥락을 기록하는 용도라면, CI 환경의 <code>PostToolUse</code> 훅으로 실행되는 <code>audit.ts</code> 같은 감사 스크립트는 "규칙을 어긴 변경이 있었는지"를 매번 기계적으로 검사하는 관측성 장치다.</p>
   <div class="warn">4장에서 다룰 Claude App(Desktop)에서는 이런 훅이 발화하지 않는다. Desktop 앱 위주로 작업하는 팀이라면, 감사 로그가 "돌고 있는 줄 알았는데 사실 하나도 안 돌고 있었다"는 상황이 실제로 생길 수 있다. 가드레일을 설계할 때는 반드시 "이 정책이 내가 쓰는 도구에서 실제로 발동하는가"까지 확인해야 한다.</div>
 
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">감사 로그 구조와 감사 흐름</div>
+    <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+        <marker id="alArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+      </defs>
+
+      <!-- Left side: Audit Log Structure -->
+      <text x="80" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">감사 로그 구조</text>
+      <!-- Log entry card -->
+      <rect x="10" y="32" width="140" height="140" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+      <!-- Header row -->
+      <rect x="10" y="32" width="140" height="26" rx="8" fill="#eef1f4"/>
+      <rect x="10" y="46" width="140" height="12" fill="#eef1f4"/>
+      <text x="80" y="49" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="10" font-weight="700" fill="#0550ae">log_entry</text>
+      <!-- Fields -->
+      <text x="20" y="74" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">timestamp</text>
+      <rect x="78" y="64" width="60" height="16" rx="3" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="0.8"/>
+      <text x="108" y="75" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#0550ae">ISO 8601</text>
+
+      <text x="20" y="98" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">agent</text>
+      <rect x="78" y="88" width="60" height="16" rx="3" fill="#fbefff" stroke="#d2b9ff" stroke-width="0.8"/>
+      <text x="108" y="99" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#6639ba">reviewer</text>
+
+      <text x="20" y="122" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">action</text>
+      <rect x="78" y="112" width="60" height="16" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.8"/>
+      <text x="108" y="123" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#953800">Read/Grep</text>
+
+      <text x="20" y="146" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">result</text>
+      <rect x="78" y="136" width="60" height="16" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.8"/>
+      <text x="108" y="147" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#116329">ok / deny</text>
+
+      <text x="20" y="168" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">context</text>
+      <rect x="78" y="158" width="60" height="16" rx="3" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.8"/>
+      <text x="108" y="169" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#636c76">filepath…</text>
+
+      <!-- Divider line -->
+      <line x1="170" y1="30" x2="170" y2="275" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+      <!-- Right side: Flow -->
+      <text x="400" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">감사 흐름</text>
+
+      <!-- Step 1: 에이전트 동작 -->
+      <rect x="200" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1.2"/>
+      <text x="250" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">에이전트 동작</text>
+      <text x="250" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">tool 호출</text>
+      <!-- Arrow -->
+      <line x1="300" y1="58" x2="335" y2="58" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+
+      <!-- Step 2: 로그 기록 -->
+      <rect x="340" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+      <text x="390" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">로그 기록</text>
+      <text x="390" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">audit.ts</text>
+      <!-- Arrow down -->
+      <line x1="390" y1="76" x2="390" y2="100" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+
+      <!-- Step 3: 검사/분석 -->
+      <rect x="340" y="105" width="100" height="36" rx="6" fill="#ffffff" stroke="#953800" stroke-width="1.2"/>
+      <text x="390" y="121" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">검사 / 분석</text>
+      <text x="390" y="133" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">규칙 위반?</text>
+
+      <!-- Branch: 정상 -->
+      <line x1="440" y1="115" x2="475" y2="115" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#alArrowB)"/>
+      <text x="450" y="108" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#1a7f37">정상</text>
+      <rect x="480" y="100" width="80" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+      <text x="520" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#116329">기록 보존</text>
+
+      <!-- Branch: 위반 -->
+      <line x1="440" y1="131" x2="475" y2="131" stroke="#cf222e" stroke-width="1.2"/>
+      <polygon points="480,131 475,128 475,134" fill="#cf222e"/>
+      <text x="450" y="140" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#cf222e">위반</text>
+      <rect x="480" y="155" width="80" height="30" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+      <text x="520" y="170" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#cf222e">경고 / 알림</text>
+      <line x1="475" y1="131" x2="475" y2="170" stroke="#cf222e" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="475" y1="170" x2="480" y2="170" stroke="#cf222e" stroke-width="1"/>
+
+      <!-- Arrow from 경고 down to 사후 검토 -->
+      <line x1="520" y1="185" x2="520" y2="210" stroke="#cf222e" stroke-width="1.2" marker-end="url(#alArrow)"/>
+      <rect x="470" y="215" width="100" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
+      <text x="520" y="232" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#953800">사후 검토</text>
+      <text x="520" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">팀 리뷰</text>
+
+      <!-- Loop arrow: 사후 검토 → 에이전트 동작 -->
+      <path d="M470,235 L200,235 L200,76" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
+      <polygon points="200,76 197,82 203,82" fill="#636c76"/>
+      <text x="335" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">피드백 루프 — 가드레일 개선</text>
+
+      <!-- Bottom note -->
+      <text x="320" y="275" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 완벽한 가드레일은 없다 — 사고 발생 시 추적 가능해야 한다</text>
+    </svg>
+  </div>
+
   <div class="note">한 문장으로 요약하면: 가드레일은 <strong>위험도에 따라 권한을 차등 부여(§2·§3)</strong>하고, <strong>돌이킬 수 없는 지점 앞에서는 반드시 사람이 확인(§4)</strong>하며, <strong>병렬 작업은 물리적으로 격리(§5)</strong>하고, <strong>모든 것이 실패했을 때를 대비해 기록을 남기는(§6)</strong> 네 가지 습관이다. 4장부터는 이 원칙을 실제 실습 코드 안에 적용해 가며 진행한다.</div>
 
   <div class="chapter-nav">
     <a href="../concepts/01_Concepts_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</div></a>
     <a href="../practice/02_Practice_Manual.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">4장 · Claude Code 멀티 에이전트팀 실습</div></a>
   </div>
+
+<div class="video-refs">
+  <h3 id="videos">참고 영상</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=5fwoMW3aUSk" target="_blank">Anthropic's Constitutional AI — How Claude Judges Itself</a><span class="video-meta">(2:31)</span> — Claude가 스스로 출력을 판단하는 Constitutional AI 원리</li>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=6Unxqr50Kqg" target="_blank">Controlling powerful AI</a><span class="video-meta">(51:27)</span> — Anthropic 공식: 강력한 AI 시스템의 통제와 안전 관리 철학</li>
+  </ul>
+</div>
  </article>
 </main>
 

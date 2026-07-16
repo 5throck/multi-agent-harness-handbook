@@ -55,6 +55,8 @@
   - 그 **같은 명세**를 Claude 계열은 사전 정의 서브에이전트로, Antigravity 계열은 자연어
     목표로 각각 구현하는 절차를 나란히 보여준다.
   - 핵심 구호: **"정의는 하나, 실행 방식만 도구별로 다르다."**
+  - 실행이 플랫폼별로 크게 다른 경우(코드·명령·UI 단계), 공통 개념과 도구별 구현을
+    **A/B 파일로 분리**한다(§18). 공통 영역은 3-link branch nav로 양쪽을 안내한다.
 
 ---
 
@@ -517,6 +519,90 @@ CSS:
 
 ---
 
+## 18. 플랫폼별 분리 (A/B Branching)
+
+**원칙**: 동일 개념을 Claude 계열과 Antigravity 계열이 각각 다른 방식으로 구현하는 섹션은,
+공통 영역과 도구별 특성 영역으로 분리한다.
+
+- **왜**: 하나의 파일에 두 계열의 구현을 모두 담으면 (a) 사용자가 자신의 도구와 무관한 내용을
+  건너뛰야 하고, (b) 파일이 지나치게 길어지며, (c) 어느 한쪽의 업데이트가 다른 쪽과 어긋날 위험이 있다.
+- **어떻게 적용**:
+
+### 18-1. 분리 기준
+
+| 조건 | 분할 여부 |
+|------|----------|
+| 코드/명령이 플랫폼별로 다름 | 분할 |
+| UI 조작 단계가 플랫폼별로 다름 | 분할 |
+| 지원 기능 자체가 다름(지원/미지원) | 분할 |
+| 개념 설명, 공식 명세 비교표 | 통합 유지 |
+| 요약, 참고 링크 | 통합 유지 |
+
+### 18-2. 명명 규칙
+
+| 요소 | A (Claude) | B (Antigravity) |
+|------|-----------|----------------|
+| 파일명 | `_Examples.html` (접미사 없음) | `_Examples_B.html` |
+| 섹션 레이블 | `§N-A` | `§N-B` |
+| 색상 | Green `#1a7f37` | Purple `#6639ba` |
+| badge class | `badge-claude`, `badge-claudeapp` | `badge-antigravity`, `badge-agy` |
+
+### 18-3. 3-link Branch Navigation (공통 → 도구별)
+
+공통 영역(레퍼런스 파일) 하단에는 `prev | branch(A, B) | next` 3-link 패턴으로
+도구별 파일로 분기하는 네비게이션을 배치한다.
+
+HTML 템플릿:
+```html
+<div class="chapter-nav">
+  <a href="이전_장.html" class="prev">
+    <div class="dir">← 이전</div><div class="ttl">N장 · 제목</div>
+  </a>
+  <div class="branch">
+    <div class="branch-label">N장 실습</div>
+    <a href="Examples.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
+    <a href="Examples_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
+  </div>
+  <a href="다음_장.html" class="next">
+    <div class="dir">다음 →</div><div class="ttl">N장 · 제목</div>
+  </a>
+</div>
+```
+
+CSS (필요 시 파일에 추가):
+```css
+.chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+.chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+.chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+```
+
+### 18-4. 2-link Chain Navigation (A↔B 순차)
+
+A/B 파일 상호 간에는 prev/next 링크로 순차 연결한다.
+
+- **A 파일 하단**: `← §N 공통 영역` | `§N-B Antigravity 중심 →`
+- **B 파일 하단**: `§N-A Claude 중심 →` | `다음 장 →`
+
+### 18-5. platform-pair / platform-block 규칙
+
+- **`.platform-pair`**: 2-column 비교 그리드 — 공통 레퍼런스 파일에서만 사용.
+  4도구를 나란히 비교할 때 쓴다(예: 4장 §1 레퍼런스).
+- **`.platform-block`**: 단일 플랫폼 명령 블록 — A/B 분할 파일에서는
+  해당 플랫폼의 블록만 표시한다. 반대쪽 플랫폼 블록은 제거한다.
+- **4-tool 분류 체계**: Claude App(Desktop), Claude Code(CLI),
+  Antigravity(Desktop), Antigravity CLI(agy).
+
+### 18-6. A/B 분할 체크포인트
+
+분할이 완료되면 다음을 확인한다.
+
+- [ ] 공통 영역에서 A/B 양쪽으로 branch navigation이 연결되었는가?
+- [ ] A/B 파일 간 상호 링크가 일관되게 되어 있는가?
+- [ ] A 파일에는 Claude 계열 내용만, B 파일에는 Antigravity 계열 내용만 있는가?
+- [ ] index.html에 A/B 카드가 나란히 배치되었는가?
+
+---
+
 ## A. 출고 전 체크리스트 (Authoring Checklist)
 
 초안을 다 쓴 뒤 아래 항목을 하나씩 확인한다.
@@ -550,6 +636,9 @@ CSS:
 - [ ] §16 본문은 한국어, 코드/식별자/커밋은 영어인가?
 - [ ] §17 공식 영상 자료가 있는 섹션에 "참고 영상" 블록이 있는가?
 - [ ] §17 영상 링크가 `.video-refs` 패턴으로 일관되게 스타일링되어 있는가?
+- [ ] §18 플랫폼별 구현 차이가 있는 섹션에 A/B 분할이 적용되었는가?
+- [ ] §18 공통 영역에서 A/B 양쪽으로 branch navigation이 연결되었는가?
+- [ ] §18 A/B 파일 간 상호 링크가 일관된가?
 
 ---
 

@@ -254,30 +254,18 @@
     .warning-box::before { content: '⚠️  '; }
     /* ── 권한 모드 표 ── */
     .mode-table td:first-child { font-family: monospace; color: #ff7b72; font-size: 12px; }
-    /* ── 플랫폼 비교 블록 ── */
-    .platform-pair {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin: 12px 0 20px;
-    }
-    @media (max-width: 760px) {
-      .platform-pair { grid-template-columns: 1fr; }
-    }
-    .platform-col {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      min-width: 0;
-    }
-    .platform-col pre.code-block { max-width: 100%; }
-    .platform-col.claude { border-top: 3px solid var(--accent2); }
-    .platform-col.claudeapp { border-top: 3px dashed var(--accent2); }
-    .platform-col.agy { border-top: 3px solid var(--accent6); }
-    .platform-col.antigravity { border-top: 3px dashed var(--accent6); }
-    .platform-col h3 { margin-top: 0; }
-    .platform-pair.quad { grid-template-columns: 1fr 1fr; }
-    @media (max-width: 760px) { .platform-pair.quad { grid-template-columns: 1fr; } }
+    /* ── 장 이동 ── */
+    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
+    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
+    .chapter-nav a:hover { background: var(--bg2); }
+    .chapter-nav .prev { text-align: left; }
+    .chapter-nav .next { text-align: right; }
+    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
+    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
   </style>
 </head>
 <body>
@@ -296,6 +284,9 @@
   <a href="#section-4">4. 자동화/훅 — 무엇이 자동으로 발화하는가</a>
   <div class="nav-section">참고</div>
   <a href="#refs">참고 링크</a>
+  <div class="nav-section">형제 문서</div>
+  <a href="02_Practice_Manual_A.html">4장 §1-A · Claude 중심</a>
+  <a href="02_Practice_Manual_B.html">4장 §1-B · Antigravity 중심</a>
   <div class="nav-section">다른 장</div>
   <a href="../guardrails/00_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
   <a href="../intro/04_Intro_Chapter.html">5장 · 도입</a>
@@ -303,6 +294,7 @@
 
 <!-- ── 본문 ── -->
 <main>
+  <div class="chapter-eyebrow">4장 §1</div>
   <h1>4장 §1 · 하네스 기반 멀티 에이전트 팀 활용</h1>
   <p class="subtitle">Claude Code / Claude App / Antigravity CLI / Antigravity(Desktop) 네 도구에서 서브에이전트를 정의하고, 호출하고, 병렬·자동화 단위로 확장하는 방법을 나란히 정리한 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager</a></p>
 
@@ -338,6 +330,50 @@
     └── Antigravity CLI             agy -p "프롬프트"(비대화형 CI용), agy inspect(설정 확인)
 </pre></div>
 
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">에이전트 팀 구성 예시</div>
+    <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="teamArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+      </defs>
+      <!-- Main Session -->
+      <rect x="160" y="10" width="200" height="44" rx="10" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="260" y="32" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">Main Session</text>
+      <text x="260" y="46" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#0969da">오케스트레이터</text>
+
+      <!-- Vertical line down -->
+      <line x1="260" y1="54" x2="260" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+      <!-- Horizontal branch -->
+      <line x1="90" y1="85" x2="430" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+
+      <!-- writer -->
+      <line x1="90" y1="85" x2="90" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="20" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="90" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#6639ba">writer</text>
+      <text x="90" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">초안 작성</text>
+
+      <!-- reviewer -->
+      <line x1="260" y1="85" x2="260" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="190" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="260" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#1a7f37">reviewer</text>
+      <text x="260" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">검토 / 피드백</text>
+
+      <!-- researcher (optional) -->
+      <line x1="430" y1="85" x2="430" y2="108" stroke="#d0d7de" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#teamArrow)"/>
+      <rect x="355" y="110" width="150" height="40" rx="8" fill="#ffffff" stroke="#953800" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <text x="430" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#953800">researcher</text>
+      <text x="430" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">조사 (optional)</text>
+
+      <!-- Connection lines between specialists -->
+      <path d="M90,150 L90,175 L260,175" fill="none" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <polygon points="260,175 254,172 254,178" fill="#6639ba"/>
+      <text x="175" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">초안 전달</text>
+
+      <!-- Bottom note -->
+      <text x="260" y="210" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">오케스트레이터가 요청에 따라 전문가를 동적으로 조합</text>
+    </svg>
+  </div>
+
   <hr>
 
   <!-- ── 섹션 1 ── -->
@@ -345,37 +381,10 @@
 
   <p>Anthropic 계열(Claude App/Claude Code)은 프로젝트 폴더 아래에 마크다운 파일 하나로 서브에이전트 하나를 미리 정의해 둔다. Google 계열(Antigravity Desktop/CLI)은 별도의 정의 파일이 없다 — 오케스트레이터가 주어진 목표를 보고 그때그때 서브에이전트를 만든다. 아래에서는 Claude App과 Antigravity(Desktop)를 기준으로 먼저 설명하고, 각각의 CLI 대응을 이어서 소개한다.</p>
 
-  <div class="platform-pair">
-    <div class="platform-col claudeapp">
-      <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> .claude/agents/*.md</h3>
-      <p>프로젝트 루트의 <code>.claude/agents/</code> 폴더에 마크다운 파일을 두면 Claude App에서도 자동으로 커스텀 서브에이전트로 인식된다. <code>name</code>이 나중에 <code>subagent_type</code>으로 참조하는 식별자가 된다. <strong>Claude Code(CLI)에서도 완전히 같은 파일이 완전히 같은 방식으로 동작한다</strong> — 둘은 같은 서브에이전트 정의 포맷을 공유한다.</p>
-      <pre class="code-block">---
-name: reviewer
-description: 텍스트 파일의 오탈자와
-  논리적 허점을 검토한다.
-tools: Read, Grep
-model: sonnet
----
-
-너는 리뷰어 역할이다. 주어진 파일을
-읽고 개선점을 목록으로 정리해 보고한다.</pre>
-    </div>
-    <div class="platform-col antigravity">
-      <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> 워크스페이스 단위 — 별도 정의 파일 없음</h3>
-      <p>Antigravity Desktop의 Agent Manager는 에이전트를 사전에 정의된 파일 단위가 아니라 Workspace 단위로 다룬다. 사용자가 목표를 주면 그 Workspace를 맡은 에이전트(오케스트레이터)가 스스로 하위 작업을 쪼개고 필요한 서브에이전트를 즉석에서 만든다. 즉 "reviewer.md 같은 파일을 미리 준비한다"는 개념 자체가 없다.</p>
-    </div>
-  </div>
-
-  <div class="platform-pair">
-    <div class="platform-col claude">
-      <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude App과 동일한 .claude/agents/*.md</h3>
-      <p>Claude App에서 쓴 것과 완전히 같은 <code>.claude/agents/*.md</code> 파일을 그대로 인식한다. Desktop App과 CLI 사이에 서브에이전트 정의 방식의 차이는 없다.</p>
-    </div>
-    <div class="platform-col agy">
-      <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 오케스트레이터가 동적으로 생성</h3>
-      <p>Antigravity Desktop과 마찬가지로 <code>agy</code>도 사전 정의 파일 없이, 목표(goal)를 받으면 오케스트레이터 에이전트가 작업을 어떻게 쪼갤지 스스로 판단해 서브에이전트를 즉석에서 만들어 병렬로 실행한다. 각 서브에이전트는 독립된 컨텍스트 창을 가져 메인 세션의 맥락이 흐려지는 것을 막는다.</p>
-    </div>
-  </div>
+  <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
+    Claude 계열의 구체적인 정의·호출 방식은 <a href="02_Practice_Manual_A.html">§1-A Claude 중심</a>에서,
+    Antigravity 계열의 구체적인 방식은 <a href="02_Practice_Manual_B.html">§1-B Antigravity 중심</a>에서 다룬다.
+  </p>
 
   <table>
     <thead><tr><th>frontmatter 필드</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
@@ -407,71 +416,26 @@ model: sonnet
   <!-- ── 섹션 2 ── -->
   <h2 id="section-2">2. 서브에이전트 호출/위임하기</h2>
 
-  <div class="platform-pair">
-    <div class="platform-col claudeapp">
-      <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent(Task) 툴</h3>
-      <p>Claude App에서도 메인 세션은 <code>Agent</code> 툴(문서에서는 <code>Task</code> 툴로도 불림)을 호출해 별도의 컨텍스트를 가진 서브에이전트를 띄운다. 서브에이전트는 메인 세션의 대화 기록을 보지 못하므로, <code>prompt</code>에 필요한 배경을 자족적으로 담아야 한다. <strong>Claude Code(CLI)도 같은 <code>Agent</code>/<code>Task</code> 툴을 그대로 쓴다</strong> — 채팅창에 자연어로 요청하면 내부적으로 아래와 같은 형태로 호출된다.</p>
-      <pre class="code-block">Agent(
-  description   = "인증 모듈 리뷰",
-  prompt         = "src/auth/login.ts의 세션
-    만료 처리 로직을 검토하고 버그를 찾아줘.",
-  subagent_type  = "reviewer"
-)</pre>
-    </div>
-    <div class="platform-col antigravity">
-      <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> Agent Manager UI</h3>
-      <p>Antigravity Desktop에서는 Agent Manager 화면에서 Workspace를 고르고, 그 Workspace를 맡을 에이전트를 스폰(Local Mode 또는 New Worktree Mode)한 뒤 자연어로 목표를 준다. 승인·피드백이 필요한 시점에는 Inbox에 메시지가 쌓인다. "서브에이전트를 호출한다"는 개념보다는 "에이전트에게 목표를 맡기고 진행 상황을 지켜본다"에 가깝다.</p>
-    </div>
-  </div>
+  <p>Anthropic 계열(Claude App/Claude Code)은 <code>Agent</code>/<code>Task</code> 툴로 별도 컨텍스트의 서브에이전트를 스폰한다. Google 계열(Antigravity Desktop/CLI)은 Agent Manager UI 또는 슬래시 커맨드로 에이전트에게 목표를 위임한다.</p>
 
-  <div class="platform-pair">
-    <div class="platform-col claude">
-      <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude App과 동일한 Agent(Task) 툴</h3>
-      <p>Claude App과 완전히 같은 <code>Agent</code>/<code>Task</code> 툴 호출 방식이다. 터미널에서 자연어로 요청하면 동일한 방식으로 서브에이전트가 스폰된다.</p>
-    </div>
-    <div class="platform-col agy">
-      <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — /goal, /agent, /agents</h3>
-      <p>왼쪽의 <code>Agent</code>/<code>Task</code> 툴과 같은 "동적으로 필요한 서브에이전트를 스폰한다"는 동작을, <code>agy</code>는 슬래시 커맨드로 부른다는 차이일 뿐이다. <code>agy</code> 세션에서 <code>/goal</code>로 목표를 주면 중간 확인 없이 끝까지 실행하고(주지 않으면 주요 단계마다 확인을 위해 멈춘다), <code>/agent</code>로 장기 작업을 백그라운드에 맡긴 채 계속 다른 프롬프트를 이어갈 수 있다. <code>/agents</code>는 실행 중/완료/막힌 서브에이전트 목록을 보여주는 패널이다.</p>
-      <pre class="code-block">agy                      # TUI 세션 시작
-/goal notes.txt 파일을 검토하고 개선점을 요약해줘
-/agents                  # 실행 중/완료된 서브에이전트 목록</pre>
-    </div>
-  </div>
-
-  <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">비대화형 자동화가 필요하면 <code>agy -p "프롬프트"</code>로 한 번만 실행하고 종료시킬 수 있다(CI/자동화용). 프로젝트에 어떤 설정·스킬·플러그인·훅이 로드됐는지 확인하려면 <code>agy inspect</code>를 쓴다.</p>
+  <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
+    Claude 계열의 구체적인 호출 방식은 <a href="02_Practice_Manual_A.html#section-2">§1-A 섹션 2</a>에서,
+    Antigravity 계열의 구체적인 방식은 <a href="02_Practice_Manual_B.html#section-2">§1-B 섹션 2</a>에서 다룬다.
+  </p>
 
   <hr>
 
   <!-- ── 섹션 3 ── -->
   <h2 id="section-3">3. 병렬 실행 — 4가지 도구 비교</h2>
 
-  <div class="platform-pair">
-    <div class="platform-col antigravity">
-      <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> Agent Manager로 여러 Workspace에 에이전트 배정</h3>
-      <p>Antigravity Desktop의 Agent Manager는 Editor보다 상위 레벨에서 여러 Workspace에 걸쳐 여러 에이전트를 한눈에 관리하는 인터페이스다. 코드를 직접 작성하기보다 에이전트를 통해 코드베이스와 상호작용하는 방식이 기본이다. 각 Workspace에는 원칙적으로 에이전트를 하나씩만 배정하는 것이 권장되지만, 필요하면 한 Workspace를 여러 에이전트가 함께 쓸 수도 있다. 에이전트를 스폰할 때는 활성 폴더에서 바로 작업하는 <strong>Local Mode</strong>와, 격리된 git worktree에서 작업하는 <strong>New Worktree Mode</strong> 중 하나를 선택한다.</p>
-    </div>
-    <div class="platform-col claudeapp">
-      <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent Teams — in-process</h3>
-      <p>Claude App에서도 실험적 기능인 Agent Teams를 켜면 여러 팀메이트가 병렬로 작업한다. 다만 Desktop App에서는 <code>teammateMode: in-process</code>만 쓸 수 있고, 일부 키보드 내비게이션(Shift+Down 등)이 제한된다. <strong>Claude Code(CLI)에서도 같은 <code>in-process</code> 모드가 그대로 동작</strong>하며, CLI에서는 추가로 tmux 분할 창을 쓰는 <code>tmux</code> 모드도 고를 수 있다.</p>
-    </div>
-  </div>
+  <p>네 도구 모두 병렬 실행을 지원하지만, 방식이 다르다. Claude 계열은 Agent Teams / 다중 Agent 호출, Antigravity 계열은 Agent Manager / 세션 간 병렬을 사용한다.</p>
 
   <div class="warning-box">같은 디렉터리·Workspace에서 여러 에이전트를 동시에 돌리면 "인지적 중첩(cognitive overlap)"이 발생할 수 있다 — 한 에이전트가 같은 폴더에서 작업 중인 다른 에이전트의 결과를 자기 작업 맥락으로 착각(hallucination)하는 문제다. Workspace나 worktree로 에이전트를 분리하는 것이 권장 관행이며, 예외적으로 넘어갈 수 있는 사소한 문제가 아니다.</div>
 
-  <div class="platform-pair">
-    <div class="platform-col agy">
-      <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 세션 내부 + 세션 간 병렬</h3>
-      <p><code>agy</code>는 두 층위의 병렬성을 지원한다. 한 세션 안에서는 오케스트레이터가 여러 서브에이전트를 동시에 실행하고, 세션 간에는 터미널을 여러 개 띄워 서로 다른 <code>agy</code> 세션을 독립적으로 병렬 실행할 수 있다 — 서로 다른 파일을 건드리는 한 안전하다. Antigravity Desktop의 Agent Manager를 못 쓰는 환경에서 이 세션 간 병렬이 대안이 된다.</p>
-    </div>
-    <div class="platform-col claude">
-      <h3><span class="badge badge-claude">Claude Code (CLI)</span> — 한 메시지에 여러 Agent 호출</h3>
-      <p>서로 의존성이 없는 작업이 여러 개 있다면, 한 메시지 안에 <code>Agent</code> 호출을 여러 개 나란히 담아 동시에 실행할 수 있다. Claude Code는 이 호출들을 병렬로 디스패치한다.</p>
-      <pre class="code-block">Agent(description="API 문서 초안 작성",
-  prompt="...", subagent_type="writer")
-Agent(description="테스트 커버리지 점검",
-  prompt="...", subagent_type="reviewer")</pre>
-    </div>
-  </div>
+  <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
+    Claude 계열의 병렬 실행 방식은 <a href="02_Practice_Manual_A.html#section-3">§1-A 섹션 3</a>에서,
+    Antigravity 계열의 병렬 실행 방식은 <a href="02_Practice_Manual_B.html#section-3">§1-B 섹션 3</a>에서 다룬다.
+  </p>
 
   <table>
     <thead><tr><th>항목</th><th>Antigravity (Desktop)</th><th>Claude App (Desktop)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
@@ -491,40 +455,12 @@ Agent(description="테스트 커버리지 점검",
   <!-- ── 섹션 4 ── -->
   <h2 id="section-4">4. 자동화/훅 — 무엇이 자동으로 발화하는가</h2>
 
-  <div class="platform-pair">
-    <div class="platform-col antigravity">
-      <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 해당 없음, GUI 중심</h3>
-      <p>Antigravity Desktop은 GUI로 승인·진행을 관리하는 구조라, Claude Code의 훅에 대응하는 자동 발화 장치가 없다. 자동화가 필요한 반복 작업은 Antigravity CLI 쪽으로 옮기는 것이 현실적이다.</p>
-    </div>
-    <div class="platform-col claudeapp">
-      <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 훅 미발화</h3>
-      <p><code>.claude/settings.json</code>에 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅을 정의해도 Claude App에서는 자동으로 발화하지 않는다. 훅이 하던 일(예: 감사 스크립트 실행)은 세션이 끝난 뒤 수동으로 실행해야 한다. <strong>Claude Code(CLI)에서는 같은 설정 파일의 훅이 이벤트에 맞춰 자동으로 발화한다</strong> — 자동화 게이트가 필요한 팀은 이 지점에서 CLI를 선택하는 것이 합리적이다.</p>
-    </div>
-  </div>
+  <p>Claude Code(CLI)는 이벤트 훅(PostToolUse/TeammateIdle/TaskCompleted)을 자동 발화하지만, Claude App과 Antigravity Desktop은 훅을 자동 발화하지 않는다. Antigravity CLI는 <code>agy -p</code>로 비대화형 실행, <code>agy inspect</code>로 설정 점검을 제공한다.</p>
 
-  <div class="platform-pair">
-    <div class="platform-col agy">
-      <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 비대화형 실행 + 설정 점검</h3>
-      <p><code>agy -p "프롬프트"</code>는 한 번 실행하고 종료하는 비대화형 모드로, CI 파이프라인 같은 자동화에 적합하다. <code>agy inspect</code>는 프로젝트에 로드된 설정·스킬·플러그인·훅 구성을 보여준다 — Claude Code의 훅 자동 발화에 대응하는 것은 아니지만, "지금 어떤 설정이 실제로 적용돼 있는지" 확인하는 역할은 같다.</p>
-      <pre class="code-block">agy -p "커밋 메시지 초안 작성"   # 비대화형 — 한 번 실행하고 종료
-agy inspect
-# → skills: 3 loaded, plugins: 1 loaded
-# → hooks: none configured
-# → config source: ~/.gemini/antigravity-cli/settings.json</pre>
-    </div>
-    <div class="platform-col claude">
-      <h3><span class="badge badge-claude">Claude Code (CLI)</span> — 훅 자동 발화</h3>
-      <p><code>.claude/settings.json</code>의 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅이 파일 저장·작업 완료 같은 이벤트에 맞춰 자동으로 실행된다.</p>
-      <pre class="code-block">{
-  "hooks": {
-    "PostToolUse": [
-      { "matcher": "Write|Edit",
-        "hooks": [{ "type": "command", "command": "bun scripts/audit.ts" }] }
-    ]
-  }
-}</pre>
-    </div>
-  </div>
+  <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
+    Claude 계열의 자동화/훅 세부는 <a href="02_Practice_Manual_A.html#section-4">§1-A 섹션 4</a>에서,
+    Antigravity 계열의 자동화/훅 세부는 <a href="02_Practice_Manual_B.html#section-4">§1-B 섹션 4</a>에서 다룬다.
+  </p>
 
   <p style="background:#fff8c5;border-left:3px solid #d4a72c;padding:8px 14px;border-radius:4px;font-size:13.5px;color:#5c3900;">실무 팁: Antigravity에는 계산된 작업량(work done)에 기반한, 주기적으로 갱신되는 사용량 쿼터가 있다. 정확한 수치는 계정·플랜마다 다를 수 있으므로 여러 에이전트를 장시간 병렬로 돌리는 작업을 계획할 때는 이 점을 감안하는 편이 안전하다.</p>
 
@@ -544,6 +480,15 @@ agy inspect
 
   <hr>
   <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 기준 | 2026년 7월</p>
+  <div class="chapter-nav">
+    <a href="../guardrails/00_Guardrails_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">3장 · 가드레일</div></a>
+    <div class="branch">
+      <div class="branch-label">4장 실습</div>
+      <a href="02_Practice_Examples.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
+      <a href="02_Practice_Examples_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
+    </div>
+    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards</div></a>
+  </div>
 </main>
 
 </div>

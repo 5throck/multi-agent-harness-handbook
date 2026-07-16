@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<!--
+  10장 §3 · AGENTS.md 심화 — 에이전트 로스터 명세의 구조, 작성 가이드, 도구별 구현 매핑, 검증과 생애주기 연결
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10장 §3 · AGENTS.md 심화</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.85; font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 260px; min-width: 260px;
+      background: var(--bg2); border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 20px 0;
+    }
+    nav .nav-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); padding: 0 16px 8px; }
+    nav a { display: block; padding: 6px 16px; color: var(--text-dim); text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s; }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section { margin-top: 12px; padding: 6px 16px 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); }
+    main { flex: 1; display: flex; justify-content: center; padding: 56px 48px 96px; overflow-x: hidden; }
+    .reading { width: 100%; max-width: 720px; }
+    .chapter-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 1.12rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+    .source-line { font-size: 13px; color: var(--text-dim); margin-bottom: 30px; }
+    .source-line a { color: var(--accent); text-decoration: none; }
+    .keypoints { background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent); border-radius: 8px; padding: 18px 22px; margin: 0 0 40px; }
+    .keypoints .kp-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+    .keypoints ul { margin: 0 0 0 18px; font-size: 14.5px; line-height: 1.85; }
+    h2 { font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 52px 0 14px; scroll-margin-top: 20px; line-height: 1.35; }
+    h3 { font-size: 1.12rem; font-weight: 700; color: var(--accent6); margin: 30px 0 8px; scroll-margin-top: 20px; }
+    p { margin: 14px 0; }
+    p + p { margin-top: 16px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin: 6px 0; }
+    .pullquote { border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 28px 0; font-size: 1.22rem; line-height: 1.6; color: #2b3138; font-weight: 600; }
+    .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 14px; }
+    th { background: var(--bg3); color: var(--accent6); text-align: left; padding: 9px 14px; font-weight: 600; border: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    td { padding: 8px 14px; border: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--bg2); }
+    td code { font-size: 12.5px; }
+    pre.code-block { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; overflow-x: auto; font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; line-height: 1.55; color: #116329; margin: 12px 0 18px; }
+    .chapter-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .chapter-nav a { display: block; flex: 1; padding: 14px 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); transition: border-color .15s; }
+    .chapter-nav a:hover { border-color: var(--accent); text-decoration: none; }
+    .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
+    .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
+    .chapter-nav .next { text-align: right; }
+    @media (max-width: 640px) { main { padding: 40px 18px 60px; } .chapter-nav { flex-direction: column; } }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">10장 §3 · AGENTS.md 심화</div>
+  <a href="#spec-format" style="color:#0969da;border-left-color:#0969da;">명세 포맷</a>
+  <a href="#impl-mapping">도구별 구현 매핑</a>
+  <a href="#authoring-guide">작성 가이드</a>
+  <a href="#verify-lifecycle">검증과 생애주기</a>
+  <div class="nav-section">10장 다른 절</div>
+  <a href="04_Intro_Advanced_Deploy.html">§1 · 배포와 SSOT</a>
+  <a href="04_Intro_Advanced_Chapter.html">§2 · 생애주기 관리</a>
+  <a href="04_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
+  <div class="nav-section">다른 장</div>
+  <a href="04_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
+  <a href="../enterprise/03_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">10장 §3</div>
+  <h1>AGENTS.md 심화</h1>
+  <p class="lead">AGENTS.md의 명세 포맷, 도구별 구현 방식, 작성 원칙, 검증 절차를 정리한다. 5장에서 개념적으로 소개한 AGENTS.md를 실무 관점에서 심화한다.</p>
+  <p class="source-line">표준 명세: <a href="https://agents.md/" target="_blank">agents.md</a> · 실습 예시: <a href="../practice/02_Practice_Examples.html">4장 §2-A</a> / <a href="../practice/02_Practice_Examples_B.html">4장 §2-B</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 절에서 다루는 것</div>
+    <ul>
+      <li>에이전트 항목의 필드 구조와 의미</li>
+      <li>AGENTS.md(공통 명세)가 Claude 계열과 Antigravity 계열에서 각각 어떻게 "구현"되는지</li>
+      <li>최소 권한 원칙과 handoff 선언</li>
+      <li>검증 도구(<code>agent:verify</code>)와 생애주기 연결</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. 명세 포맷
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="spec-format">명세 포맷</h2>
+
+  <p>AGENTS.md의 각 에이전트 항목은 <code>## Agent: {이름}</code>으로 시작하는 마크다운 섹션이다. 이 섹션 안에 역할·입력·출력·권한·handoff 등의 필드를 자유 형식으로 기술한다. 표준 명세는 strict schema를 강제하지 않고, 도구가 공통으로 인식하는 관례(convention)에 의존한다.</p>
+
+  <table>
+    <thead><tr><th>필드</th><th>의미</th><th>필수 여부</th><th>4장 실습 예시</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>## Agent: {이름}</code></td>
+        <td>에이전트 식별자. Claude 계열에서는 <code>subagent_type</code> 값과 일치해야 호출 가능</td>
+        <td>필수</td>
+        <td><code>## Agent: reviewer</code></td>
+      </tr>
+      <tr>
+        <td><code>역할</code></td>
+        <td>이 에이전트가 무엇을 하는가</td>
+        <td>필수</td>
+        <td>"텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다"</td>
+      </tr>
+      <tr>
+        <td><code>입력</code></td>
+        <td>어떤 입력을 받는가</td>
+        <td>권장</td>
+        <td>"검토 대상 텍스트 파일 경로"</td>
+      </tr>
+      <tr>
+        <td><code>출력</code></td>
+        <td>어떤 출력을 내는가</td>
+        <td>권장</td>
+        <td>"오탈자 · 논리적 허점 · 개선점 목록"</td>
+      </tr>
+      <tr>
+        <td><code>권한</code></td>
+        <td>파일 접근 범위. 최소 권한 원칙 — 필요한 것만 허용</td>
+        <td>권장</td>
+        <td>"읽기 전용 — 파일을 직접 수정하지 않는다"</td>
+      </tr>
+      <tr>
+        <td><code>handoff_to</code></td>
+        <td>완료 후 결과를 넘길 다른 에이전트. 오케스트레이터가 참조하는 선언적 힌트</td>
+        <td>선택</td>
+        <td><code>handoff_to: reviewer</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>완성 예시</h3>
+  <p>4장 실습(G-1, D-1)에서 작성한 두 에이전트가 들어간 AGENTS.md 전체 모습이다.</p>
+  <pre class="code-block">## Agent: reviewer
+
+역할: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
+입력: 검토 대상 텍스트 파일 경로
+출력: 오탈자 · 논리적 허점 · 개선점 목록
+권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
+
+## Agent: writer
+
+역할: 주어진 주제로 3~5문장 분량의 짧은 초안을 작성한다.
+입력: 주제, 저장할 파일 경로
+출력: 초안 텍스트 파일
+권한: 쓰기 허용 — 지정된 파일에만 저장한다.
+handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
+
+  <div class="note">AGENTS.md는 AI 도구를 향한 지시문이 아니라 <strong>사람이 정의한 여러 역할의 등록부</strong>다. Claude 계열은 이 등록부를 읽고 도구별 정의 파일(<code>.claude/agents/*.md</code>)로 "번역"하고, Antigravity 계열은 등록부 자체를 오케스트레이션이 직접 읽고 해석한다.</div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. 도구별 구현 매핑
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="impl-mapping">도구별 구현 매핑</h2>
+
+  <p>AGENTS.md는 도구 중립적인 공통 명세다. 하지만 실제로 서브에이전트를 "구현"하는 방식은 Claude 계열과 Antigravity 계열에서 근본적으로 다르다.</p>
+
+  <table>
+    <thead><tr><th>층위</th><th>Claude App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>AGENTS.md 읽기</td>
+        <td>메인 세션이 <code>AGENTS.md</code>를 읽고 에이전트 목록을 파악</td>
+        <td>오케스트레이터가 <code>AGENTS.md</code>를 읽고 동적으로 서브에이전트 생성</td>
+      </tr>
+      <tr>
+        <td>서브에이전트 정의</td>
+        <td><code>.claude/agents/{name}.md</code> 파일에 YAML frontmatter(<code>name</code>, <code>description</code>, <code>tools</code>, <code>model</code>) + 시스템 프롬프트</td>
+        <td>정의 파일 없음 — 오케스트레이터가 실행 시점에 역할·툴 범위를 자율 판단</td>
+      </tr>
+      <tr>
+        <td>권한 구현</td>
+        <td><code>.claude/agents/*.md</code>의 <code>tools</code> 필드에 <code>Read, Grep</code> 등 필요한 최소 툴만 나열</td>
+        <td>오케스트레이터가 AGENTS.md의 <code>권한</code> 필드를 해석해 툴 접근을 스스로 제한</td>
+      </tr>
+      <tr>
+        <td>handoff</td>
+        <td><code>handoff_to</code>는 참고 힌트. 메인 세션이 <code>Agent</code> 툴을 순차 호출해 관계를 조율</td>
+        <td>오케스트레이터가 <code>handoff_to</code>를 읽고 자동으로 순차 파이프라인 구성</td>
+      </tr>
+      <tr>
+        <td>상세 참조</td>
+        <td><a href="../practice/02_Practice_Manual_A.html">4장 §1-A Claude 중심</a></td>
+        <td><a href="../practice/02_Practice_Manual_B.html">4장 §1-B Antigravity 중심</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">AGENTS.md → 도구별 구현 흐름</div>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+        <marker id="agArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+      </defs>
+      <!-- AGENTS.md at top -->
+      <rect x="180" y="10" width="200" height="40" rx="8" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="280" y="34" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">AGENTS.md (공통 명세)</text>
+      <!-- Branch arrows -->
+      <line x1="220" y1="50" x2="140" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="340" y1="50" x2="420" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <!-- Claude side -->
+      <rect x="40" y="82" width="200" height="44" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="140" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#1a7f37">Claude App / Claude Code</text>
+      <text x="140" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">.claude/agents/*.md (사전 정의)</text>
+      <line x1="140" y1="126" x2="140" y2="152" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="50" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="140" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#1a7f37">YAML frontmatter + 시스템 프롬프트</text>
+      <!-- Antigravity side -->
+      <rect x="320" y="82" width="200" height="44" rx="8" fill="#faf5ff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="420" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#6639ba">Antigravity Desktop / CLI</text>
+      <text x="420" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">정의 파일 없음 (동적 생성)</text>
+      <line x1="420" y1="126" x2="420" y2="152" stroke="#6639ba" stroke-width="1.5" marker-end="url(#agArrowP)"/>
+      <rect x="330" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6639ba">오케스트레이터가 실시간 해석</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. 작성 가이드
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="authoring-guide">작성 가이드</h2>
+
+  <h3>1. 섹션으로 시작</h3>
+  <p><code>## Agent: {이름}</code>으로 에이전트 항목을 시작한다. 이름은 <strong>영문 소문자</strong>로 하되 여러 단어는 <code>-</code>로 연결한다(<code>code-reviewer</code>, <code>api-tester</code>). 이 이름이 Claude 계열에서는 <code>subagent_type</code> 값으로 사용된다.</p>
+
+  <h3>2. 역할을 간결하게</h3>
+  <p><code>역할</code>은 "무엇을 하는가"를 1~2문장으로 명확히 기술한다. 다른 에이전트와의 중복을 피하고, 각 에이전트가 독립적으로 책임지는 영역이 명확하도록 한다.</p>
+
+  <h3>3. 최소 권한으로 권한 설정</h3>
+  <p><code>권한</code> 필드는 파일 접근 범위를 제한한다. 이 원칙을 지키지 않으면 서브에이전트가 실수로 중요 파일을 덮어쓰 수 있다. Claude 계열에서는 이 권한이 <code>.claude/agents/*.md</code>의 <code>tools</code> 필드(<code>Read, Grep</code>, <code>Write</code> 등)로 번역된다.</p>
+
+  <div class="pullquote">reviewer는 애초에 쓸 수 없으므로 실수가 발생하지 않는다.
+    <span class="by">— 4장 §2-A 최소 권한 원칙</span>
+  </div>
+
+  <h3>4. handoff로 선후 관계 선언</h3>
+  <p><code>handoff_to</code>는 "이 에이전트가 작업을 마치면 결과를 어디로 넘길 것인가"를 선언한다. 이것은 <strong>명령이 아니라 힌트</strong>다. 실제로 순차 파이프라인을 구성하는 것은 메인 세션(오케스트레이터)의 몫이다.</p>
+
+  <pre class="code-block">## Agent: draft-writer
+역할: 주어진 주제로 초안을 작성한다.
+handoff_to: reviewer (초안 완료 후 검토로 이어짐)
+
+## Agent: reviewer
+역할: 텍스트의 오탈자와 논리를 검토한다.
+handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
+
+## Agent: editor
+역할: 피드백을 반영해 최종 문서를 완성한다.</pre>
+
+  <div class="note">handoff_to가 선언되지 않은 에이전트(위 예시의 <code>editor</code>)는 파이프라인의 종점이다. 오케스트레이터는 에이전트의 결과를 최종 사용자에게 반환한다.</div>
+
+  <h3>5. 검증</h3>
+  <p>작성이 완료되면 <code>bun run agent:verify</code>로 구조를 검증한다. 이 스크립트는 에이전트 frontmatter의 완결성, 필수 섹션 존재, <code>AGENTS.md</code> 로스터와의 정합성을 확인한다.</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. 검증과 생애주기
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="verify-lifecycle">검증과 생애주기</h2>
+
+  <p>AGENTS.md에 에이전트를 등록하는 것은 <strong>생애주기의 Create 단계</strong>에 해당한다(10장 §2 참조). 등록된 에이전트는 다음 단계를 거친다.</p>
+
+  <table>
+    <thead><tr><th>생애주기 단계</th><th>AGENTS.md에서의 동작</th><th>검증</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Create</strong></td>
+        <td><code>## Agent: {이름}</code> 섹션을 AGENTS.md에 추가</td>
+        <td><code>bun run agent:verify</code> — 구조 완결성</td>
+      </tr>
+      <tr>
+        <td><strong>Verify</strong></td>
+        <td>등록 내용이 워크스페이스의 다른 파일(CONSTITUTION.md, agents/*.md)과 정합한지 확인</td>
+        <td><code>bun run agent:verify</code> — 무결성 검증</td>
+      </tr>
+      <tr>
+        <td><strong>Operate</strong></td>
+        <td>실제 세션에서 오케스트레이터가 로스터를 읽고 에이전트를 호출</td>
+        <td>세션 로그에서 에이전트 호출 추적</td>
+      </tr>
+      <tr>
+        <td><strong>Improve</strong></td>
+        <td>역할 정의, 권한, handoff 관계 수정</td>
+        <td>수정 후 다시 <code>agent:verify</code></td>
+      </tr>
+      <tr>
+        <td><strong>Deprecate</strong></td>
+        <td>AGENTS.md에서 해당 에이전트 항목을 제거하거나 주석 처리</td>
+        <td><code>agent:verify</code> — 참조 무결성 (다른 에이전트의 handoff_to가 deprecated를 가리키지 않는지)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>에이전트를 새로 만들거나 변경할 때마다 <code>agent:verify</code>를 실행하는 것을 습관화하면, "로스터에는 있는데 실제 정의 파일이 없는" 또는 "handoff_to가 가리키는 에이전트가 삭제된" 같은 불일치를 조기에 발견할 수 있다.</p>
+
+  <p>이 검증 흐름의 자동화는 10장 §1(배포와 SSOT)에서 다루는 CI/CD 파이프라인에 <code>validate-templates.ts</code> 단계로 통합할 수 있다.</p>
+
+  <div class="note"><strong>FAQ:</strong> <code>bun run agent:verify</code> 실행 시 "AGENTS.md 표와 실제 <code>agents/*.md</code> 파일 목록이 어긋난다"는 오류가 나면, AGENTS.md의 에이전트 이름과 <code>.claude/agents/</code> 폴더의 파일명을 대조하고 누락된 항목을 추가하거나 불필요한 파일을 제거한다. → <a href="../faq/00_FAQ.html">FAQ</a></div>
+
+  <div class="chapter-nav">
+    <a href="04_Intro_Advanced_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">10장 §2 · 생애주기 관리</div></a>
+    <a href="04_Intro_Advanced_Architecture.html" class="next"><div class="dir">다음 →</div><div class="ttl">10장 §4 · 아키텍처 심화</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

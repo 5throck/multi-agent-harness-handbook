@@ -12,7 +12,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>9장 §1 · 생애주기 관리</title>
+  <title>10장 §2 · 생애주기 관리</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -124,22 +124,24 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">9장 · 아키텍처 심화</div>
-  <a href="#s1-lifecycle-why">생애주기 관리가 필요한 이유</a>
-  <a href="#s1-agent-lifecycle">에이전트 생애주기</a>
-  <a href="#s1-skill-lifecycle">스킬 생애주기</a>
-  <a href="#s1-script-lifecycle">스크립트 생애주기</a>
+  <div class="nav-title">10장 · 아키텍처 심화</div>
+  <a href="04_Intro_Advanced_Deploy.html">§1 · 배포와 SSOT</a>
+  <a href="#s2-lifecycle-why">생애주기 관리가 필요한 이유</a>
+  <a href="#s2-agent-lifecycle">에이전트 생애주기</a>
+  <a href="#s2-skill-lifecycle">스킬 생애주기</a>
+  <a href="#s2-script-lifecycle">스크립트 생애주기</a>
   <div class="nav-section">이 장의 다른 절</div>
-  <a href="04_Intro_Advanced_Deploy.html">§2 · 배포와 SSOT</a>
+  <a href="04_Intro_Advanced_AGENTS.html">§3 · AGENTS.md 심화</a>
+  <a href="04_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
   <div class="nav-section">다른 장</div>
   <a href="../intro/04_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
   <a href="../enterprise/03_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
-  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
+  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">9장 §1</div>
+  <div class="chapter-eyebrow">10장 §2</div>
   <h1>생애주기 관리</h1>
   <p class="lead">에이전트, 스킬, 스크립트 각각이 생성부터 폐기까지 어떤 단계를 거치는지, 그리고 이 단계들이 실제 워크스페이스에서 어떻게 관리되는지 다룬다.</p>
 
@@ -153,7 +155,7 @@
     </ul>
   </div>
 
-  <h2 id="s1-lifecycle-why">생애주기 관리가 필요한 이유</h2>
+  <h2 id="s2-lifecycle-why">생애주기 관리가 필요한 이유</h2>
 
   <p>멀티 에이전트 시스템을 운영하다 보면 워크스페이스에 에이전트, 스킬, 스크립트가 계속 늘어난다. 새로운 것을 만드는 것만으로는 충분하지 않다. 각 구성요소가 <strong>어떤 단계에 있는지</strong>를 명확히 해야 한다. 그래야 다음 문제들을 피할 수 있다.</p>
 
@@ -167,7 +169,7 @@
 
   <!-- ─── 에이전트 생애주기 ─── -->
 
-  <h2 id="s1-agent-lifecycle">에이전트 생애주기</h2>
+  <h2 id="s2-agent-lifecycle">에이전트 생애주기</h2>
 
   <p>에이전트는 <code>agents/</code> 디렉터리 아래에 <code>.md</code> 파일로 정의된다. 에이전트 하나가 태어나서 운영되다가 결국 폐기되기까지 다음 다섯 단계를 거친다.</p>
 
@@ -213,7 +215,7 @@
     </svg>
   </div>
 
-  <h3 id="s1-agent-create">Create — 에이전트 생성</h3>
+  <h3 id="s2-agent-create">Create — 에이전트 생성</h3>
   <p>에이전트 생애주기는 <code>agents/</code> 디렉터리에 새 <code>.md</code> 파일을 만드는 것으로 시작된다. 이 파일에는 프론트매터(name, role, model 등 필드)와 본문(system prompt)이 포함된다. 생성 시 다음 사항을 확인한다.</p>
   <ul>
     <li>파일명이 에이전트 역할을 명확히 나타내는지(예: <code>pm.md</code>, <code>reviewer.md</code>)</li>
@@ -222,7 +224,7 @@
   </ul>
   <p>초기 <code>status</code> 필드값은 <code>draft</code>로 설정한다. 이 상태에서는 에이전트가 운영 세션에서 자동으로 선택되지 않는다.</p>
 
-  <h3 id="s1-agent-verify">Verify — 에이전트 검증</h3>
+  <h3 id="s2-agent-verify">Verify — 에이전트 검증</h3>
   <p>생성된 에이전트 파일이 워크스페이스 규격에 맞는지 <code>bun run agent:verify</code>로 검증한다. 이 명령은 다음을 확인한다.</p>
   <ul>
     <li>프론트매터 필드 누락 여부 및 타입 일치 여부</li>
@@ -232,7 +234,7 @@
   </ul>
   <p>검증을 통과하면 <code>status</code>를 <code>active</code>로 변경한다. 통과하지 못하면 <code>draft</code> 상태를 유지하며, 에러 메시지를 기준으로 수정 후 재검증한다.</p>
 
-  <h3 id="s1-agent-operate">Operate — 에이전트 운영</h3>
+  <h3 id="s2-agent-operate">Operate — 에이전트 운영</h3>
   <p><code>active</code> 상태의 에이전트는 실제 세션에서 호출될 수 있다. 운영 단계에서는 에이전트의 실제 동작을 관찰하고, 세션 로그에서 다음을 모니터링한다.</p>
   <ul>
     <li>에이전트가 정의된 역할에 맞게 동작하는지</li>
@@ -241,7 +243,7 @@
   </ul>
   <p>운영 중 발견된 문제는 기록하여 Improve 단계의 입력으로 사용한다.</p>
 
-  <h3 id="s1-agent-improve">Improve — 에이전트 개선</h3>
+  <h3 id="s2-agent-improve">Improve — 에이전트 개선</h3>
   <p>운영 피드백을 바탕으로 에이전트 파일을 갱신한다. 개선 내역은 다음과 같다.</p>
   <ul>
     <li>system prompt의 모호한 지시를 명확하게 수정</li>
@@ -250,7 +252,7 @@
   </ul>
   <p>파일을 수정한 후에는 반드시 다시 <code>bun run agent:verify</code>를 실행하여 <strong>재검증</strong>해야 한다. Verify 단계로 돌아가는 이 루프는 에이전트 생애주기에서 핵심적인 피드백 사이클이다. 검증을 통과하면 다시 Operate 단계로 진입한다.</p>
 
-  <h3 id="s1-agent-deprecate">Deprecate — 에이전트 폐기</h3>
+  <h3 id="s2-agent-deprecate">Deprecate — 에이전트 폐기</h3>
   <p>에이전트가 더 이상 필요하지 않게 되면 <code>status</code>를 <code>deprecated</code>로 변경한다. 폐기 시 다음을 수행한다.</p>
   <ul>
     <li><code>AGENTS.md</code>에서 해당 에이전트 항목을 제거하거나 주석 처리</li>
@@ -265,7 +267,7 @@
 
   <!-- ─── 스킬 생애주기 ─── -->
 
-  <h2 id="s1-skill-lifecycle">스킬 생애주기</h2>
+  <h2 id="s2-skill-lifecycle">스킬 생애주기</h2>
 
   <p>스킬은 에이전트가 세션에서 호출할 수 있는 재사용 가능한 동작 단위다. <code>SKILL.md</code> 파일로 정의되며, 플러그인이나 워크스페이스의 <code>.zcode/skills/</code>에 배치된다. 스킬의 생애주기는 다음 다섯 단계로 구성된다.</p>
 
@@ -311,7 +313,7 @@
     </svg>
   </div>
 
-  <h3 id="s1-skill-define">Define — 스킬 정의</h3>
+  <h3 id="s2-skill-define">Define — 스킬 정의</h3>
   <p>스킬은 <code>SKILL.md</code> 파일로 정의된다. 이 파일에는 프론트매터(name, description, triggers 등)와 함께 스킬이 수행할 동작의 설명이 포함된다. 정의 시 다음을 명확히 한다.</p>
   <ul>
     <li><code>name</code>: 스킬의 고유 식별자</li>
@@ -321,7 +323,7 @@
   </ul>
   <p>초기에는 <code>status: draft</code>로 두고, 에이전트가 실제로 이 스킬을 자동 선택하지 못하게 한다.</p>
 
-  <h3 id="s1-skill-test">Test — 스킬 검증</h3>
+  <h3 id="s2-skill-test">Test — 스킬 검증</h3>
   <p>스킬 정의가 올바른지 <code>validate-skills.ts</code>로 검증한다. 이 스크립트는 다음을 확인한다.</p>
   <ul>
     <li>프론트매터 필드 완전성 및 형식 일치</li>
@@ -331,7 +333,7 @@
   </ul>
   <p>검증을 통과하면 Deploy 단계로 이동할 준비가 된다.</p>
 
-  <h3 id="s1-skill-deploy">Deploy — 스킬 배포</h3>
+  <h3 id="s2-skill-deploy">Deploy — 스킬 배포</h3>
   <p>검증된 스킬을 에이전트가 실제로 호출할 수 있는 환경에 배포한다. 배포란 구체적으로 다음을 의미한다.</p>
   <ul>
     <li><code>status</code>를 <code>active</code>로 변경하여 에이전트의 자동 선택 대상에 포함</li>
@@ -340,7 +342,7 @@
   </ul>
   <p>배포 후에는 에이전트 세션에서 스킬이 정상적으로 트리거되고 실행되는지 확인하는 수동 검토를 수행한다.</p>
 
-  <h3 id="s1-skill-version">Version — 스킬 버전 관리</h3>
+  <h3 id="s2-skill-version">Version — 스킬 버전 관리</h3>
   <p>운영 환경에서 사용 중인 스킬에 변경이 필요할 때 버전 관리를 통해 안전하게 갱신한다.</p>
   <ul>
     <li>스킬 파일의 변경 이력을 <code>SKILL.md</code> 헤더 주석이나 changelog에 기록</li>
@@ -349,7 +351,7 @@
   </ul>
   <p>Version 단계에서 Test 단계로 돌아가는 루프는 스킬 생애주기의 핵심 피드백 사이클이다. 갱신된 스킬이 검증을 통과하면 다시 Deploy 단계로 진입한다.</p>
 
-  <h3 id="s1-skill-retire">Retire — 스킬 폐기</h3>
+  <h3 id="s2-skill-retire">Retire — 스킬 폐기</h3>
   <p>스킬이 더 이상 사용되지 않거나 다른 스킬로 대체되면 폐기한다.</p>
   <ul>
     <li><code>status</code>를 <code>retired</code>로 변경하여 에이전트 선택 대상에서 제외</li>
@@ -363,7 +365,7 @@
 
   <!-- ─── 스크립트 생애주기 ─── -->
 
-  <h2 id="s1-script-lifecycle">스크립트 생애주기</h2>
+  <h2 id="s2-script-lifecycle">스크립트 생애주기</h2>
 
   <p>스크립트는 <code>scripts/</code> 디렉터리 아래에 <code>.ts</code> 파일로 관리된다. 에이전트 생성 검증, 템플릿 발행, 프로젝트 스캐폴딩 등 워크스페이스 인프라를 자동화하는 실행 가능한 코드다. 스크립트의 생애주기는 다음 다섯 단계로 구성된다.</p>
 
@@ -409,7 +411,7 @@
     </svg>
   </div>
 
-  <h3 id="s1-script-write">Write — 스크립트 작성</h3>
+  <h3 id="s2-script-write">Write — 스크립트 작성</h3>
   <p>새 스크립트는 <code>scripts/</code> 디렉터리에 <code>.ts</code> 파일로 작성된다. 작성 시 다음을 준수한다.</p>
   <ul>
     <li>파일명이 스크립트의 목적을 명확히 나타내야 한다(예: <code>publish-to-template.ts</code>, <code>validate-skills.ts</code>)</li>
@@ -419,7 +421,7 @@
   </ul>
   <p>작성 직후의 스크립트는 <code>draft</code> 상태로 간주한다.</p>
 
-  <h3 id="s1-script-lint">Lint — 정적 분석</h3>
+  <h3 id="s2-script-lint">Lint — 정적 분석</h3>
   <p>작성된 스크립트에 대해 정적 분석(lint)을 수행한다. TypeScript 기반 워크스페이스에서는 <code>bun run lint</code> 또는 <code>tsc --noEmit</code>를 사용하여 다음을 확인한다.</p>
   <ul>
     <li>타입 오류 없음</li>
@@ -429,7 +431,7 @@
   </ul>
   <p>정적 분석에서 발견된 문제는 모두 수정해야 다음 단계로 진행할 수 있다.</p>
 
-  <h3 id="s1-script-test">Test — 테스트</h3>
+  <h3 id="s2-script-test">Test — 테스트</h3>
   <p>정적 분석을 통과한 스크립트에 대해 단위 테스트 및 통합 테스트를 수행한다. 스크립트가 파일 시스템이나 네트워크에 의존하는 경우, 모의(mock) 환경에서 테스트한다.</p>
   <ul>
     <li>정상 경로(happy path): 예상 입력에 대해 올바른 출력이 나오는지</li>
@@ -438,7 +440,7 @@
   </ul>
   <p>테스트를 통과한 스크립트만 Register 단계로 이동할 수 있다.</p>
 
-  <h3 id="s1-script-register">Register — 스크립트 등록</h3>
+  <h3 id="s2-script-register">Register — 스크립트 등록</h3>
   <p>테스트를 통과한 스크립트를 <code>package.json</code>의 <code>scripts</code> 섹션에 등록하여 <code>bun run &lt;name&gt;</code> 형태로 실행할 수 있게 만든다.</p>
   <ul>
     <li><code>package.json</code>에 적절한 스크립트 이름과 실행 명령을 추가</li>
@@ -447,7 +449,7 @@
   </ul>
   <p>등록 완료 후, <code>bun run &lt;name&gt;</code>가 정상적으로 실행되는지 최종 확인한다.</p>
 
-  <h3 id="s1-script-deprecate">Deprecate — 스크립트 폐기</h3>
+  <h3 id="s2-script-deprecate">Deprecate — 스크립트 폐기</h3>
   <p>스크립트가 더 이상 필요하지 않거나 다른 스크립트로 대체된 경우 폐기한다.</p>
   <ul>
     <li><code>package.json</code>에서 해당 스크립트 항목을 제거</li>
@@ -461,7 +463,7 @@
 
   <!-- ─── 세 생애주기의 관계 ─── -->
 
-  <h2 id="s1-lifecycle-summary">세 생애주기의 공통 원칙과 상호 의존성</h2>
+  <h2 id="s2-lifecycle-summary">세 생애주기의 공통 원칙과 상호 의존성</h2>
 
   <p>에이전트·스킬·스크립트의 생애주기는 각각 독립적으로 정의되어 있지만, 실제 워크스페이스에서는 밀접하게 연결되어 있다.</p>
 
@@ -486,7 +488,7 @@
     <li><strong>폐기 후 보존:</strong> 폐기된 구성요소를 즉시 삭제하지 않고 일정 기간 보존한다. 이를 통해 필요한 경우 복원이 가능하고, 폐기 결정의 근거를 추적할 수 있다.</li>
   </ul>
 
-  <p>다음 절(§2 배포와 SSOT)에서는 이 생애주기 관리 원칙이 실제 배포 파이프라인과 Single Source of Truth(SSOT) 모델과 어떻게 결합되는지를 다룬다.</p>
+  <p>다음 절(§3 아키텍처 심화)에서는 생애주기 관리 원칙이 실제 고도화 방향(컨테이너화, 메모리 관리, variant 배포 파이프라인)과 어떻게 결합되는지를 다룬다.</p>
 
   <div class="video-refs">
     <h3 id="videos">참고 영상</h3>
@@ -497,8 +499,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="../enterprise/03_Enterprise_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">8장 · 기업 내부 멀티 에이전트팀 운영</div></a>
-    <a href="04_Intro_Advanced_Deploy.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">9장 §2 · 배포와 SSOT</div></a>
+    <a href="04_Intro_Advanced_Deploy.html" class="prev"><div class="dir">← 이전</div><div class="ttl">10장 §1 · 배포와 SSOT</div></a>
+    <a href="04_Intro_Advanced_AGENTS.html" class="next"><div class="dir">다음 →</div><div class="ttl">10장 §3 · AGENTS.md 심화</div></a>
   </div>
  </article>
 </main>

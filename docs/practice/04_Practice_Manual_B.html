@@ -290,7 +290,15 @@
     .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
     .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
     .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -360,9 +368,12 @@
   <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent6); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — /goal, /agent, /agents</h3>
     <p>Claude Code의 <code>Agent</code>/<code>Task</code> 툴과 같은 "동적으로 필요한 서브에이전트를 스폰한다"는 동작을, <code>agy</code>는 슬래시 커맨드로 부른다는 차이일 뿐이다(<a href="04_Practice_Manual_A.html#section-2">§1-A 섹션 2</a> 참조). <code>agy</code> 세션에서 <code>/goal</code>로 목표를 주면 중간 확인 없이 끝까지 실행하고(주지 않으면 주요 단계마다 확인을 위해 멈춘다), <code>/agent</code>로 장기 작업을 백그라운드에 맡긴 채 계속 다른 프롬프트를 이어갈 수 있다. <code>/agents</code>는 실행 중/완료/막힌 서브에이전트 목록을 보여주는 패널이다.</p>
-    <pre class="code-block">agy                      # TUI 세션 시작
+    <div style="position:relative">
+  <pre class="code-block">agy                      # TUI 세션 시작
 /goal notes.txt 파일을 검토하고 개선점을 요약해줘
 /agents                  # 실행 중/완료된 서브에이전트 목록</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">비대화형 자동화가 필요하면 <code>agy -p "프롬프트"</code>로 한 번만 실행하고 종료시킬 수 있다(CI/자동화용). 프로젝트에 어떤 설정·스킬·플러그인·훅이 로드됐는지 확인하려면 <code>agy inspect</code>를 쓴다.</p>
@@ -412,11 +423,14 @@
   <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent6); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 비대화형 실행 + 설정 점검</h3>
     <p><code>agy -p "프롬프트"</code>는 한 번 실행하고 종료하는 비대화형 모드로, CI 파이프라인 같은 자동화에 적합하다. <code>agy inspect</code>는 프로젝트에 로드된 설정·스킬·플러그인·훅 구성을 보여준다 — Claude Code의 훅 자동 발화에 대응하는 것은 아니지만, "지금 어떤 설정이 실제로 적용돼 있는지" 확인하는 역할은 같다.</p>
-    <pre class="code-block">agy -p "커밋 메시지 초안 작성"   # 비대화형 — 한 번 실행하고 종료
+    <div style="position:relative">
+  <pre class="code-block">agy -p "커밋 메시지 초안 작성"   # 비대화형 — 한 번 실행하고 종료
 agy inspect
 # → skills: 3 loaded, plugins: 1 loaded
 # → hooks: none configured
 # → config source: ~/.gemini/antigravity-cli/settings.json</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <p style="background:#fff8c5;border-left:3px solid #d4a72c;padding:8px 14px;border-radius:4px;font-size:13.5px;color:#5c3900;">실무 팁: Antigravity에는 계산된 작업량(work done)에 기반한, 주기적으로 갱신되는 사용량 쿼터가 있다. 정확한 수치는 계정·플랜마다 다를 수 있으므로 여러 에이전트를 장시간 병렬로 돌리는 작업을 계획할 때는 이 점을 감안하는 편이 안전하다.</p>
@@ -451,5 +465,17 @@ agy inspect
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

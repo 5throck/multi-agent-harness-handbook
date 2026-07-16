@@ -74,7 +74,8 @@
   <p class="subtitle">워크숍 <strong>시작 전</strong>에 설치를 완료하세요 — 세션이 시작될 때 별도의 환경 설정 없이 바로 실습에 진입할 수 있는 상태를 만드는 것이 목표이다.</p>
 
   <h2 id="flow">설치 흐름</h2>
-  <div class="flow-box"><pre>1. OS 업데이트
+  <div class="flow-box"><div style="position:relative">
+  <pre>1. OS 업데이트
    └─ Windows: winget upgrade --all
    └─ macOS:   brew update &amp;&amp; brew upgrade
    └─ Linux:   apt update &amp;&amp; apt upgrade
@@ -100,7 +101,9 @@
    └─ Mark  (Markdown 뷰어)
 
 6. 최종 확인 ✅
-   └─ bun setup-common.ts</pre></div>
+   └─ bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div></div>
 
   <h2 id="step1">Step 1 — 체크리스트 완료</h2>
   <p>스크립트 실행 전 <a href="SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>를 먼저 읽고 완료하세요.</p>
@@ -208,7 +211,10 @@ bash setup-linux.sh --wezterm --docker</pre>
 
   <p><strong>설치 후 <code>bun: command not found</code></strong></p>
   <p>터미널을 재시작하세요. Windows에서는 bun이 User 환경변수에 자동으로 등록됩니다. macOS/Linux:</p>
+  <div style="position:relative">
   <pre class="code-block">export PATH="$HOME/.bun/bin:$PATH"</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <p><strong><code>bun install -g</code> 후 <code>claude: command not found</code></strong></p>
   <p>스크립트가 bun 실패 시 npm fallback으로 자동 재시도한다. 여전히 문제가 있다면 <code>bun pm ls -g</code>로 경로를 확인한 뒤 PATH에 추가하세요.</p>
@@ -218,7 +224,10 @@ bash setup-linux.sh --wezterm --docker</pre>
 
   <p><strong>Windows: "스크립트 실행이 비활성화되어 있습니다"</strong></p>
   <p>스크립트가 자동으로 <code>RemoteSigned</code>로 설정한다. 수동으로 변경하려면:</p>
+  <div style="position:relative">
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <div class="warn"><strong>Windows: 관리자 권한 없이 실행한 경우</strong> — 스크립트가 경고를 표시하지만 계속 진행됩니다. winget 등 일부 설치에서 오류가 발생할 수 있으므로, PowerShell을 관리자 권한으로 재실행하는 것을 권장한다.</div>
 

@@ -262,7 +262,15 @@
     .chapter-nav .next { text-align: right; }
     .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
     .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -298,7 +306,8 @@
   </div>
 
   <h2 id="tree">전체 구조 개요</h2>
-  <div class="tree-box"><pre>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
 ai-workspace-standards/                (워크스페이스 루트로 클론)
 ├── CONSTITUTION.md                    공유 표준 — 가장 먼저 읽는 파일
 ├── CLAUDE.md / GEMINI.md / AGENTS.md  플랫폼별 동작·에이전트 로스터
@@ -309,7 +318,9 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
 │   └── ...                            co-security, co-consult, co-deck 등
 ├── scripts/                           new-project.ts 등 운영 스크립트(TypeScript, bun으로 실행)
 └── Projects/                          &lt;프로젝트명&gt;/ 형태의 개별 프로젝트(각자 독립 git 저장소)
-</pre></div>
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div></div>
 
   <h3>Variant 7종 전체 목록</h3>
   <table>
@@ -343,13 +354,19 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
   <h3><code>git clone</code>. 워크스페이스 루트로 클론</h3>
   <p>ai-workspace-standards는 일반적인 라이브러리처럼 프로젝트 안에 넣는 게 아니라, 워크스페이스 자체의 루트로 클론해서 쓰도록 설계되어 있다. 예를 들어 Windows에서는 <code>C:\git</code>, macOS/Linux에서는 <code>~/git</code> 같은 위치에 이 저장소를 클론하면, 그 아래에서 만드는 모든 프로젝트가 <code>CONSTITUTION.md</code>의 공유 규칙을 자동으로 물려받는다.</p>
   <p>만약 이 규칙을 무시하고 특정 프로젝트 폴더 안에(예: <code>my-project/ai-workspace-standards/</code>처럼) 서브모듈처럼 넣어버리면 어떻게 될까? <code>new-project.ts</code> 같은 스크립트는 "워크스페이스 루트에서 실행됐는가"를 스스로 확인하는데, 이 조건이 깨지므로 스캐폴딩 자체가 거부되거나, 경로 계산이 어긋나 엉뚱한 위치에 프로젝트가 생성된다. 게다가 그 프로젝트 하나만 공유 규칙을 물려받고 나중에 만들 다른 프로젝트들은 규칙을 전혀 공유하지 못해, 애초에 "워크스페이스 전체가 같은 표준을 쓴다"는 이 저장소의 존재 이유 자체가 무너진다.</p>
+  <div style="position:relative">
   <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
 cd C:\git</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <h3><code>bun</code>. 런타임 설치</h3>
   <p>워크스페이스의 모든 운영 스크립트(<code>scripts/*.ts</code>)는 TypeScript로 작성되어 있고 <code>bun</code>으로 실행한다. 별도의 <code>.sh</code>/<code>.ps1</code> 버전은 존재하지 않으므로, bun 설치가 선행되어야 스크립트를 돌릴 수 있다.</p>
+  <div style="position:relative">
   <pre class="code-block">bun --version
 git --version</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p style="background:#e8f4fd;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">💡 <strong>핵심 한 줄:</strong> 두 명령이 모두 정상적으로 버전을 출력하면 로컬 환경 준비는 끝난 것이다.</p>
 
   <h3 id="session-checklist">세션 시작 체크리스트</h3>
@@ -369,13 +386,22 @@ git --version</pre>
 
   <h3><code>bun scripts/list-template-versions.ts</code>. 사용 가능한 variant 확인</h3>
   <p>새 프로젝트를 만들기 전에, 워크스페이스에 어떤 variant들이 있고 각각 어떤 버전이 태그되어 있는지 먼저 확인한다.</p>
+  <div style="position:relative">
   <pre class="code-block">bun scripts/list-template-versions.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <h3><code>bun scripts/new-project.ts</code>. 기존 베리언트(variant)로 프로젝트 생성</h3>
   <p>가장 자주 쓰는 명령이다. variant 하나를 골라 프로젝트 이름과 함께 실행하면, <code>templates/&lt;variant&gt;/</code>의 전체 구성(에이전트 정의, 스킬, 커맨드, 거버넌스 파이프라인)이 새 독립 저장소로 복제된다.</p>
+  <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>특정 버전을 고정해서 스캐폴딩하고 싶다면 <code>--version</code>을 함께 지정한다.</p>
+  <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop --version 1.4.0</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
 
   <table>
     <thead><tr><th>옵션</th><th>설명</th><th>비고</th></tr></thead>
@@ -424,5 +450,17 @@ git --version</pre>
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

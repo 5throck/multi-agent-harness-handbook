@@ -105,7 +105,15 @@
     .video-badge.en { background: #0969da; }
     .video-badge.ko { background: #1a7f37; }
     .video-meta { font-size: 12px; color: var(--text-dim); }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -442,6 +450,7 @@
   <p>에이전트 사이에 작업을 넘길 때 주고받는 정보의 형식이다. 자연어로만 넘기면 다음 에이전트가 맥락을 다시 추측해야 하지만, 구조화된 입력(예: JSON)으로 "이 작업의 목적·범위·이전 단계 산출물"을 명시하면 다음 에이전트가 바로 작업에 들어갈 수 있다.</p>
   <p>택배 인수인계를 떠올리면 된다. "이거 저기 갖다 줘"라고만 하면 받는 사람이 주소·수량·주의사항을 다시 물어봐야 하지만, 송장(운송장 번호·수령인·수량·특이사항이 적힌 문서)을 같이 넘기면 받는 사람이 바로 배송을 시작할 수 있다. 핸드오프 계약은 에이전트 사이의 "송장"이다. writer가 reviewer에게 "이 파일을, 이런 기준으로, 이 형식으로 검토해줘"라고 명시적으로 넘기면 reviewer는 다시 물어볼 필요 없이 바로 시작한다.</p>
   <p>실제로는 다음과 같은 구조화된 문서로 넘긴다.</p>
+  <div style="position:relative">
   <pre class="code-block">{
   "task": "코드 리뷰",
   "agent": "reviewer",
@@ -468,6 +477,8 @@
     "보안 기준 미충족 시 block으로 표시"
   ]
 }</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>이 예시에서 <code>task</code>, <code>scope</code>, <code>review_criteria</code>가 "무엇을 검토할지"를 정하고, <code>output_format</code>이 "결과를 어떤 형식으로 줄지"를 정한다. <code>failure_conditions</code>은 검토 대상 자체에 문제가 있을 때의 처리 방식이다. 이처럼 핸드오프 계약은 <strong>목적·범위·기준·형식·예외 처리</strong>를 명시적으로 정의해 다음 에이전트가 다시 물어볼 필요 없이 바로 작업에 들어갈 수 있게 한다.</p>
   <div class="note">세 요소 중 어느 하나라도 빠지면 팀이 아니라 "각자 따로 일하는 에이전트 여러 개"가 된다. 조율(오케스트레이터)과 계약(핸드오프)이 팀을 팀답게 만든다.</div>
 
@@ -796,5 +807,17 @@
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

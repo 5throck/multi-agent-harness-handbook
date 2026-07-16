@@ -109,7 +109,15 @@
       main { padding: 40px 18px 60px; }
       .chapter-nav { flex-direction: column; }
     }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -150,7 +158,8 @@
   <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 베리언트(variant)를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 실제 만들어진 살아있는 프로젝트 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다.</p>
 
   <div class="tree-box" style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
-    <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">L0 — 워크스페이스 루트 (C:\git\, 유일한 원본)
+    <div style="position:relative">
+  <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">L0 — 워크스페이스 루트 (C:\git\, 유일한 원본)
   │  L0→L1: publish-to-template.ts (dev-sync 때마다 자동·지속)
   ▼
 L1 — templates/common/ (공통 템플릿 스냅샷)
@@ -159,6 +168,8 @@ L1 — templates/common/ (공통 템플릿 스냅샷)
 L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
      └─ 포크 이후 독립적으로 진화, 자동 역동기화 없음
      └─ 공식 템플릿으로 승격하려면 명시적으로 l2-to-variant-pipeline.ts 실행</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   </div>
 
   <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:0 0 28px;">
@@ -252,5 +263,17 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

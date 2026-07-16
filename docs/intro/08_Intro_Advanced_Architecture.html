@@ -112,7 +112,15 @@
       main { padding: 40px 18px 60px; }
       .chapter-nav { flex-direction: column; }
     }
-  </style>
+  
+    .copy-btn {
+      position: absolute; top: 8px; right: 10px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
+      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+</style>
 </head>
 <body>
 <div class="layout">
@@ -182,12 +190,15 @@
   <p>5장에서 소개한 tier 배정은 <code>agents/*.md</code> frontmatter에 정적으로 정의된다. 각 에이전트 파일의 <code>tier</code> 필드는 플랫폼별 모델 별칭으로 번역되어 실행 시점에 적용된다.</p>
 
   <h3>frontmatter 예시</h3>
+  <div style="position:relative">
   <pre class="code-block">---
 name: pm                       # pm, code-writer, automation-engineer ...
 tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨)
   claude: high                 #   high = claude-opus-4-7
   antigravity: high            #   high = gemini-3.1-pro
 ---</pre>
+  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+</div>
   <p>이 번역이 <code>model: inherit</code> 뒤에서 자동으로 일어나기 때문에, agents/*.md를 작성하는 사람은 구체적인 모델 이름을 전혀 몰라도 되고 "이 역할이 얼마나 무거운 판단을 하는가"만 신경 쓰면 된다.</p>
 
   <h3>티어 정의와 모델 매핑</h3>
@@ -277,5 +288,17 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
 </body>
 </html>

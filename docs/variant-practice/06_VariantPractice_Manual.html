@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="6장 §1 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>6장 §1 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩</title>
   <style>
@@ -285,14 +286,14 @@
 <main>
   <div class="chapter-eyebrow">6장 §1</div>
   <h1>ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩</h1>
-  <p class="subtitle">워크스페이스를 로컬에 세팅하고, 기존 variant로 프로젝트를 스캐폴딩하는 방법을 다루는 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a></p>
+  <p class="subtitle">워크스페이스를 로컬에 세팅하고, 기존 베리언트(variant)로 프로젝트를 스캐폴딩하는 방법을 다루는 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span class="vvalue">ai-workspace-standards</span></div>
     <div class="version-row"><span class="vlabel">대상 브랜치</span><span class="vvalue">main</span></div>
     <div class="version-row"><span class="vlabel">참조 문서 URL</span><span class="vvalue"><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a></span></div>
     <div class="version-row"><span class="vlabel">문서 수집일</span><span class="vvalue">2026-07-14</span></div>
-    <div class="version-row"><span class="vlabel">버전 확인 방법</span><span class="vvalue"><code>git --version</code>, <code>bun --version</code>으로 로컬 도구 버전 확인. 워크스페이스 자체는 <code>templates/VERSION</code>과 각 variant의 <code>template-vX.Y.Z</code> 태그로 버전을 관리한다.</span></div>
+    <div class="version-row"><span class="vlabel">버전 확인 방법</span><span class="vvalue"><code>git --version</code>, <code>bun --version</code>으로 로컬 도구 버전 확인. 워크스페이스 자체는 <code>templates/VERSION</code>과 각 베리언트(variant)의 <code>template-vX.Y.Z</code> 태그로 버전을 관리한다.</span></div>
     <div class="version-row"><span class="vlabel">개정 시 확인 사항</span><span class="vvalue">저장소의 <code>CONSTITUTION.md</code>, <code>scripts/new-project.ts</code>, <code>scripts/list-template-versions.ts</code>가 바뀌었는지 원본 저장소에서 재확인한다.</span></div>
   </div>
 
@@ -331,7 +332,7 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
     <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — 사용하는 AI 코딩 도구에 맞는 파일을 확인. 각 플랫폼별 동작 방식(훅, 슬래시 커맨드, 에이전트 디스패치 규칙)이 정의되어 있다.</li>
     <li><strong><code>AGENTS.md</code></strong> — 이 워크스페이스에서 호출 가능한 에이전트 로스터. "누가 어떤 역할을 하는가"를 한눈에 확인할 수 있다.</li>
     <li><strong><code>templates/</code></strong> — 사용 가능한 variant 7종이 이 디렉터리 아래에 있다. 각 variant 폴더를 열어 에이전트 구성과 거버넌스 파이프라인을 살펴본다.</li>
-    <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code>가 여기에 있다. 이 스크립트가 variant를 실제 프로젝트로 복제하는 핵심 명령이다.</li>
+    <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code>가 여기에 있다. 이 스크립트가 베리언트(variant)를 실제 프로젝트로 복제하는 핵심 명령이다.</li>
   </ol>
   <div class="note">이 둘러보기는 4장 실습에서 에이전트를 직접 만지기 전에, "이 저장소가 무엇을 담고 있는지"를 감을 잡기 위한 짧은 안내다. 실습 시간에는 이 5곳만 먼저 열어보고, 나머지 구조는 필요할 때마다 돌아와서 확인하는 방식으로 진행한다.</div>
 
@@ -370,7 +371,7 @@ git --version</pre>
   <p>새 프로젝트를 만들기 전에, 워크스페이스에 어떤 variant들이 있고 각각 어떤 버전이 태그되어 있는지 먼저 확인한다.</p>
   <pre class="code-block">bun scripts/list-template-versions.ts</pre>
 
-  <h3><code>bun scripts/new-project.ts</code>. 기존 variant로 프로젝트 생성</h3>
+  <h3><code>bun scripts/new-project.ts</code>. 기존 베리언트(variant)로 프로젝트 생성</h3>
   <p>가장 자주 쓰는 명령이다. variant 하나를 골라 프로젝트 이름과 함께 실행하면, <code>templates/&lt;variant&gt;/</code>의 전체 구성(에이전트 정의, 스킬, 커맨드, 거버넌스 파이프라인)이 새 독립 저장소로 복제된다.</p>
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
   <p>특정 버전을 고정해서 스캐폴딩하고 싶다면 <code>--version</code>을 함께 지정한다.</p>
@@ -386,7 +387,7 @@ git --version</pre>
       </tr>
       <tr>
         <td><code>--version</code></td>
-        <td>해당 variant의 특정 <code>template-vX.Y.Z</code> 태그를 고정해서 사용</td>
+        <td>해당 베리언트(variant)의 특정 <code>template-vX.Y.Z</code> 태그를 고정해서 사용</td>
         <td>생략하면 최신 버전 사용</td>
       </tr>
     </tbody>
@@ -400,8 +401,8 @@ git --version</pre>
 
   <div class="warning-box">스캐폴딩된 프로젝트는 워크스페이스 루트와는 별개의 독립 git 저장소로 생성된다. 워크스페이스 루트 파일과 새 프로젝트 파일을 같은 작업/커밋에서 섞어 수정하지 않도록 주의한다.</div>
 
-  <h3>신규 variant를 직접 만들고 싶다면</h3>
-  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> variant로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 11장(신규 생성 D-1)과 12장(승격 P-1)에서 다룬다.</p>
+  <h3>신규 베리언트(variant)를 직접 만들고 싶다면</h3>
+  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> 베리언트(variant)로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 11장(신규 생성 D-1)과 12장(승격 P-1)에서 다룬다.</p>
 
   <hr>
 

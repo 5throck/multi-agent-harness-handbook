@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드</title>
   <style>
@@ -396,7 +397,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <p>이 프로젝트가 설치하는 도구 중 이 장의 4도구 실습과 직접 관련된 것은 다음과 같다. Claude App(Desktop), <code>claude</code>(Claude Code CLI), Antigravity(Desktop), <code>agy</code>(Antigravity CLI), 그리고 <code>.claude/agents/*.md</code> 기반 서브에이전트 실행에 필요한 <code>bun</code>, 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
 
   <div class="tip-box">
-    Antigravity CLI(<code>agy</code>)는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리다 — 압축 해제 후 PATH에 넣기만 하면 바로 실행된다. 옛 자료에 남아 있는 "Gemini CLI를 npm으로 전역 설치" 같은 안내는 더 이상 유효하지 않다. 최신 설치 방법은 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>에서 확인한다.
+    Antigravity CLI(<code>agy</code>)는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리다 — 압축 해제 후 PATH에 넣기만 하면 바로 실행된다. 옛 자료에 남아 있는 "Gemini 명령줄 인터페이스(CLI)를 npm으로 전역 설치" 같은 안내는 더 이상 유효하지 않다. 최신 설치 방법은 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>에서 확인한다.
   </div>
 
   <div class="tip-box">
@@ -510,7 +511,7 @@ EOF</pre>
             </div>
           </li>
         </ol>
-        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 터미널에서 <code>claude</code>를 실행한 뒤 ②③의 문장을 그대로 채팅으로 붙여넣으면, CLI가 똑같이 AGENTS.md 명세를 읽고 <code>.claude/agents/reviewer.md</code>를 직접 생성·호출한다. CLI에는 추가로 <code>PostToolUse</code> 등 자동화 훅이 발화한다는 차이가 있다(App에서는 훅이 발화하지 않는다).</p>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 터미널에서 <code>claude</code>를 실행한 뒤 ②③의 문장을 그대로 채팅으로 붙여넣으면, 명령줄 인터페이스(CLI)가 똑같이 AGENTS.md 명세를 읽고 <code>.claude/agents/reviewer.md</code>를 직접 생성·호출한다. CLI에는 추가로 <code>PostToolUse</code> 등 자동화 훅이 발화한다는 차이가 있다(App에서는 훅이 발화하지 않는다).</p>
       </div>
 
       <div class="tip-box">

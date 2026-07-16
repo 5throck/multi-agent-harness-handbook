@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="워크숍 환경 설치 가이드 · 멀티 에이전트팀 하네스 엔지니어링 핸드북 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>워크숍 환경 설치 가이드 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
   <style>
@@ -70,7 +71,7 @@
 
 <main>
   <h1>워크숍 환경 설치 가이드</h1>
-  <p class="subtitle">워크숍 <strong>시작 전</strong>에 설치를 완료하세요 — 세션이 시작될 때 별도의 환경 설정 없이 바로 실습에 진입할 수 있는 상태를 만드는 것이 목표입니다.</p>
+  <p class="subtitle">워크숍 <strong>시작 전</strong>에 설치를 완료하세요 — 세션이 시작될 때 별도의 환경 설정 없이 바로 실습에 진입할 수 있는 상태를 만드는 것이 목표이다.</p>
 
   <h2 id="flow">설치 흐름</h2>
   <div class="flow-box"><pre>1. OS 업데이트
@@ -158,7 +159,7 @@ bash setup-linux.sh --wezterm --docker</pre>
     <pre class="code-block">bun setup-common.ts</pre>
     <button class="copy-btn" onclick="copyCode(this)">복사</button>
   </div>
-  <p>설치된 도구의 검증 표를 출력합니다. <strong>모든 항목이 ✅로 표시되면 준비 완료입니다.</strong></p>
+  <p>설치된 도구의 검증 표를 출력한다. <strong>모든 항목이 ✅로 표시되면 준비 완료이다.</strong></p>
 
   <h2 id="tools">설치 도구 목록</h2>
   <table>
@@ -181,7 +182,7 @@ bash setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>curl</strong></td><td>HTTP 클라이언트</td><td>— (기본 내장)</td><td><code>apt install curl</code></td><td>— (기본 내장)</td></tr>
     </tbody>
   </table>
-  <p style="font-size:12.5px;color:var(--text-dim);">⚠️ 항목은 직접 다운로드 및 수동 설치가 필요합니다.</p>
+  <p style="font-size:12.5px;color:var(--text-dim);">⚠️ 항목은 직접 다운로드 및 수동 설치가 필요한다.</p>
 
   <h3>선택 도구 (<code>--wezterm</code>, <code>--docker</code>)</h3>
   <table>
@@ -210,22 +211,22 @@ bash setup-linux.sh --wezterm --docker</pre>
   <pre class="code-block">export PATH="$HOME/.bun/bin:$PATH"</pre>
 
   <p><strong><code>bun install -g</code> 후 <code>claude: command not found</code></strong></p>
-  <p>스크립트가 bun 실패 시 npm fallback으로 자동 재시도합니다. 여전히 문제가 있다면 <code>bun pm ls -g</code>로 경로를 확인한 뒤 PATH에 추가하세요.</p>
+  <p>스크립트가 bun 실패 시 npm fallback으로 자동 재시도한다. 여전히 문제가 있다면 <code>bun pm ls -g</code>로 경로를 확인한 뒤 PATH에 추가하세요.</p>
 
   <p><strong>설치 후 <code>agy: command not found</code></strong></p>
-  <p>Antigravity CLI 설치 스크립트는 바이너리를 <code>~/.local/bin</code> 또는 <code>/usr/local/bin</code>에 저장합니다. <code>source ~/.bashrc</code>를 실행하거나 터미널을 재시작하세요.</p>
+  <p>Antigravity CLI 설치 스크립트는 바이너리를 <code>~/.local/bin</code> 또는 <code>/usr/local/bin</code>에 저장한다. <code>source ~/.bashrc</code>를 실행하거나 터미널을 재시작하세요.</p>
 
   <p><strong>Windows: "스크립트 실행이 비활성화되어 있습니다"</strong></p>
-  <p>스크립트가 자동으로 <code>RemoteSigned</code>로 설정합니다. 수동으로 변경하려면:</p>
+  <p>스크립트가 자동으로 <code>RemoteSigned</code>로 설정한다. 수동으로 변경하려면:</p>
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
 
-  <div class="warn"><strong>Windows: 관리자 권한 없이 실행한 경우</strong> — 스크립트가 경고를 표시하지만 계속 진행됩니다. winget 등 일부 설치에서 오류가 발생할 수 있으므로, PowerShell을 관리자 권한으로 재실행하는 것을 권장합니다.</div>
+  <div class="warn"><strong>Windows: 관리자 권한 없이 실행한 경우</strong> — 스크립트가 경고를 표시하지만 계속 진행됩니다. winget 등 일부 설치에서 오류가 발생할 수 있으므로, PowerShell을 관리자 권한으로 재실행하는 것을 권장한다.</div>
 
   <p><strong>설치 로그 확인</strong></p>
   <p>Windows 스크립트 실행 로그는 <code>%USERPROFILE%\workshop-setup-logs\</code>에 자동 저장됩니다.</p>
 
   <hr>
-  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun setup-common.ts</code>를 실행해서 모든 항목이 ✅로 표시되면 워크숍 준비 완료입니다.</p>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun setup-common.ts</code>를 실행해서 모든 항목이 ✅로 표시되면 워크숍 준비 완료이다.</p>
 </main>
 </div>
 <script>

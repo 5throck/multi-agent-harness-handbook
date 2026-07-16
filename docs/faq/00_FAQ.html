@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="FAQ · 자주 나는 오류와 해결법 · 멀티 에이전트팀 하네스 엔지니어링 핸드북 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ · 자주 나는 오류와 해결법 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
   <style>
@@ -62,7 +63,7 @@
   <p class="a">운영체제와 무관하게 <code>setup-common.ts</code>가 체크리스트를 다시 검증해준다. Windows는 스크립트를 <strong>관리자 권한</strong>으로 실행했는지, macOS/Linux는 <code>--wezterm</code>/<code>--docker</code> 같은 선택 플래그를 빠뜨리지 않았는지 먼저 확인한다. 설치 로그는 Windows 기준 <code>%USERPROFILE%\workshop-setup-logs\</code>에 남는다.</p>
   <span class="see">자세히: <a href="../practice/04_Practice_Examples_A.html#setup">4장 §2-A 준비</a></span>
 
-  <div class="q">Antigravity CLI를 npm으로 전역 설치하려는데 안 된다.</div>
+  <div class="q">Antigravity 명령줄 인터페이스(CLI)를 npm으로 전역 설치하려는데 안 된다.</div>
   <p class="a">2026-06-18부로 Gemini CLI 서비스가 종료되고 Antigravity CLI(<code>agy</code>)로 대체됐다. <code>agy</code>는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리로, 압축 해제 후 PATH에 넣기만 하면 된다. npm 설치 안내는 옛 자료다.</p>
   <span class="see">자세히: <a href="../tools/00_Tools_Manual.html">공통 참고 §도구 비교</a></span>
 
@@ -127,7 +128,7 @@
   <h2 id="cost">비용·성능</h2>
 
   <div class="q">멀티 에이전트팀을 가동하면 토큰 비용이 얼마나 드는가?</div>
-  <p class="a">비용은 에이전트 수 × 각 에이전트의 모델 티어 × 실행 빈도에 따라 결정된다. 5장에서 설명한 모델 티어링(<code>tier: high/medium/low</code>)은 비용 통제의 핵심 장치다. 예를 들어 co-consult variant의 10명 에이전트를 모두 high로 돌리면 한 세션에 수만 토큰이 소모되지만, 실제 구현 역할을 medium/low로 내리면 비용을 40~60% 줄일 수 있다. Claude Code의 <code>/cost</code> 명령으로 현재 세션의 누적 토큰을 실시간 확인할 수 있다.</p>
+  <p class="a">비용은 에이전트 수 × 각 에이전트의 모델 티어 × 실행 빈도에 따라 결정된다. 5장에서 설명한 모델 티어링(<code>tier: high/medium/low</code>)은 비용 통제의 핵심 장치다. 예를 들어 co-consult 베리언트(variant)의 10명 에이전트를 모두 high로 돌리면 한 세션에 수만 토큰이 소모되지만, 실제 구현 역할을 medium/low로 내리면 비용을 40~60% 줄일 수 있다. Claude Code의 <code>/cost</code> 명령으로 현재 세션의 누적 토큰을 실시간 확인할 수 있다.</p>
   <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s3">5장 §templates와 variant 7종</a></span>
 
   <div class="q">에이전트 응답이 갑자기 느려지거나 타임아웃된다.</div>

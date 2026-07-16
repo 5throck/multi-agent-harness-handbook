@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="4장 §1 · 하네스 기반 멀티 에이전트 팀 활용 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §1 · 하네스 기반 멀티 에이전트 팀 활용</title>
   <style>
@@ -306,7 +307,7 @@
     <div class="version-row"><span class="vlabel">개정 시 확인 사항</span><span class="vvalue">Claude Code Agent Teams와 Antigravity CLI/Agent Manager 모두 빠르게 변화하는 기능이라 플래그명·명령·UI 구성이 릴리스마다 바뀔 수 있으니 최신 릴리스 노트를 우선 확인</span></div>
   </div>
 
-  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 Gemini CLI 서비스를 종료했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 장은 그 이전에는 Gemini CLI를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI/Desktop으로 전면 갱신했다. 자세한 도구별 특성 비교는 <a href="../tools/00_Tools_Manual.html">도구 비교</a>를 참고한다.</div>
+  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 Gemini CLI 서비스를 종료했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 장은 그 이전에는 Gemini 명령줄 인터페이스(CLI)를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI/데스크톱(Desktop)으로 전면 갱신했다. 자세한 도구별 특성 비교는 <a href="../tools/00_Tools_Manual.html">도구 비교</a>를 참고한다.</div>
 
   <!-- ── 개념/명령 트리 ── -->
   <h2 id="tree">개요 — 전체 구조</h2>
@@ -455,7 +456,7 @@
   <!-- ── 섹션 4 ── -->
   <h2 id="section-4">4. 자동화/훅 — 무엇이 자동으로 발화하는가</h2>
 
-  <p>Claude Code(CLI)는 이벤트 훅(PostToolUse/TeammateIdle/TaskCompleted)을 자동 발화하지만, Claude App과 Antigravity Desktop은 훅을 자동 발화하지 않는다. Antigravity CLI는 <code>agy -p</code>로 비대화형 실행, <code>agy inspect</code>로 설정 점검을 제공한다.</p>
+  <p>Claude Code(CLI)는 이벤트 훅(PostToolUse/TeammateIdle/TaskCompleted)을 자동 발화하지만, Claude App과 Antigravity 데스크톱(Desktop)은 훅을 자동 발화하지 않는다. Antigravity 명령줄 인터페이스(CLI)는 <code>agy -p</code>로 비대화형 실행, <code>agy inspect</code>로 설정 점검을 제공한다.</p>
 
   <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
     Claude 계열의 자동화/훅 세부는 <a href="04_Practice_Manual_A.html#section-4">§1-A 섹션 4</a>에서,

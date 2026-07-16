@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="4장 §1-A · 서브에이전트 활용 상세 — Claude 중심 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §1-A · 서브에이전트 활용 상세 — Claude 중심</title>
   <style>
@@ -440,7 +441,7 @@ Agent(description="테스트 커버리지 점검",
 
   <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 훅 미발화</h3>
-    <p><code>.claude/settings.json</code>에 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅을 정의해도 Claude App에서는 자동으로 발화하지 않는다. 훅이 하던 일(예: 감사 스크립트 실행)은 세션이 끝난 뒤 수동으로 실행해야 한다. <strong>Claude Code(CLI)에서는 같은 설정 파일의 훅이 이벤트에 맞춰 자동으로 발화한다</strong> — 자동화 게이트가 필요한 팀은 이 지점에서 CLI를 선택하는 것이 합리적이다.</p>
+    <p><code>.claude/settings.json</code>에 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅을 정의해도 Claude App에서는 자동으로 발화하지 않는다. 훅이 하던 일(예: 감사 스크립트 실행)은 세션이 끝난 뒤 수동으로 실행해야 한다. <strong>Claude Code(CLI)에서는 같은 설정 파일의 훅이 이벤트에 맞춰 자동으로 발화한다</strong> — 자동화 게이트가 필요한 팀은 이 지점에서 명령줄 인터페이스(CLI)를 선택하는 것이 합리적이다.</p>
   </div>
 
   <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">

@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="6장 §2 · Variant 실습 예시 — 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>6장 §2 · Variant 실습 예시 — 시나리오별 학습 가이드</title>
   <style>
@@ -302,7 +303,7 @@
 <main>
   <div class="chapter-eyebrow">6장 §2</div>
   <h1>Variant 실습 예시</h1>
-  <p class="subtitle">기존 variant로 실무 프로젝트를 진행해보는 실습 가이드 &nbsp;|&nbsp; <a href="06_VariantPractice_Manual.html">← 레퍼런스 문서로 돌아가기</a></p>
+  <p class="subtitle">기존 베리언트(variant)로 실무 프로젝트를 진행해보는 실습 가이드 &nbsp;|&nbsp; <a href="06_VariantPractice_Manual.html">← 레퍼런스 문서로 돌아가기</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
@@ -311,7 +312,7 @@
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 16일</span></div>
   </div>
 
-  <div class="warning-box">이 문서는 이미 만들어진 variant를 프로젝트로 스캐폴딩해 실제 주제를 가지고 에이전트팀을 가동해보는 <strong>기존 variant 활용 실습</strong>입니다. 신규 variant 생성(D-1)과 승격(P-1)은 2일차 11장·12장에서 다룹니다.</div>
+  <div class="warning-box">이 문서는 이미 만들어진 베리언트(variant)를 프로젝트로 스캐폴딩해 실제 주제를 가지고 에이전트팀을 가동해보는 <strong>기존 variant 활용 실습</strong>이다. 신규 variant 생성(D-1)과 승격(P-1)은 2일차 11장·12장에서 다룬다.</div>
 
   <!-- ═══════════════════════════════════════════════════════════════════
        영역 1: 기존 variant 활용
@@ -320,14 +321,14 @@
     <span class="area-icon">🏗️</span>
     <div>
       <span class="area-title area-title-existing">영역 1 · 기존 variant 활용</span>
-      <p class="area-desc">이미 만들어진 variant를 프로젝트로 스캐폴딩하고, 실제 주제를 가지고 에이전트팀을 가동해보는 실습입니다. variant가 어떻게 구성되어 있는지, 에이전트들이 어떻게 협업하는지 직접 체감하는 것이 목표입니다.</p>
+      <p class="area-desc">이미 만들어진 베리언트(variant)를 프로젝트로 스캐폴딩하고, 실제 주제를 가지고 에이전트팀을 가동해보는 실습이다. 베리언트(variant)가 어떻게 구성되어 있는지, 에이전트들이 어떻게 협업하는지 직접 체감하는 것이 목표이다.</p>
     </div>
   </div>
 
   <div class="level-header" id="beginner">
     <span class="badge badge-g">● 초급</span>
     <span class="level-title level-title-g">Getting Started</span>
-    <span class="level-desc">기존 variant로 프로젝트를 스캐폴딩하고, 실제 주제를 가지고 에이전트팀을 가동해보는 첫 단계</span>
+    <span class="level-desc">기존 베리언트(variant)로 프로젝트를 스캐폴딩하고, 실제 주제를 가지고 에이전트팀을 가동해보는 첫 단계</span>
   </div>
 
   <!-- ── G-1: co-consult Physical AI ── -->
@@ -368,7 +369,7 @@ cd ai-workspace-standards-demo</pre>
         <li>
           <div class="step-content">
             <strong>bun 설치 확인 후 사용 가능한 variant 목록 조회</strong>
-            <p>bun이 없다면 먼저 설치한 뒤, 저장소가 제공하는 variant와 버전 목록을 확인한다.</p>
+            <p>bun이 없다면 먼저 설치한 뒤, 저장소가 제공하는 베리언트(variant)와 버전 목록을 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun --version
 bun scripts/list-template-versions.ts</pre>
@@ -402,7 +403,7 @@ find . -maxdepth 3 -type f | head -40</pre>
             <strong>컨설팅 과제 정의 — 4단계 설계 프레임워크 적용</strong>
             <p>에이전트팀 가동 전에, <strong>목표·입력·출력·검증 기준</strong>을 먼저 명확히 정의한다. 이 4가지가 구체적일수록 에이전트팀이 산출하는 결과물의 품질이 크게 올라간다.</p>
             <div class="prompt-box">
-              <p style="margin-bottom:6px;font-size:12.5px;color:#116329;">아래 프레임워크를 작성한 뒤 PM 세션에서 에이전트팀에게 전달합니다.</p>
+              <p style="margin-bottom:6px;font-size:12.5px;color:#116329;">아래 프레임워크를 작성한 뒤 PM 세션에서 에이전트팀에게 전달한다.</p>
               <div class="prompt-text">Step 1 — 목표 정의: "Physical AI(로봇·자율주행·스마트 팩토리) 시장의 2030년까지 진입 전략과 경쟁 현황 분석"
 Step 2 — 입력 정의: 대상 산업(로봇 공학, 자율주행, 스마트 팩토리), 조사 기간(2020~2025 + 2030 예측), 중점 키워드(규제, 기술, 시장 규모)
 Step 3 — 출력 정의: 마크다운 형식 보고서 — 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료 5개 섹션 구조
@@ -514,7 +515,7 @@ cat docs/reports/*.md   # 산출된 보고서 확인</pre>
     <div class="card-body">
 
       <div class="situation">
-        강의·발표 자료 제작용 variant인 <code>co-deck</code>를 활용해, "한식 세계화 전략"을 주제로 발표용 슬라이드 덱을 자동 생성해본다. <code>co-deck</code>는 Research → Source Verifier(신뢰도 검증) → Storyline → Design → Image Curation + Diagram Generation(병렬) → HTML Build → Layout Measure → PDF Export까지 11단계 파이프라인을 자동화하는 beta variant다. G-1의 co-consult와는 완전히 다른 구조를 가진 variant가 어떻게 다른 형태의 결과물을 만들어내는지 비교해보는 것이 목표다.
+        강의·발표 자료 제작용 variant인 <code>co-deck</code>를 활용해, "한식 세계화 전략"을 주제로 발표용 슬라이드 덱을 자동 생성해본다. <code>co-deck</code>는 Research → Source Verifier(신뢰도 검증) → Storyline → Design → Image Curation + Diagram Generation(병렬) → HTML Build → Layout Measure → PDF Export까지 11단계 파이프라인을 자동화하는 beta variant다. G-1의 co-consult와는 완전히 다른 구조를 가진 베리언트(variant)가 어떻게 다른 형태의 결과물을 만들어내는지 비교해보는 것이 목표다.
       </div>
 
       <div class="cmd-list">
@@ -529,7 +530,7 @@ cat docs/reports/*.md   # 산출된 보고서 확인</pre>
         <li>
           <div class="step-content">
             <strong>co-deck로 한식 세계화 발표자료 프로젝트 스캐폴딩</strong>
-            <p>G-1에서 사용한 것과 동일한 워크스페이스에서, 이번에는 <code>co-deck</code> variant로 발표자료 프로젝트를 생성한다.</p>
+            <p>G-1에서 사용한 것과 동일한 워크스페이스에서, 이번에는 <code>co-deck</code> 베리언트(variant)로 발표자료 프로젝트를 생성한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/new-project.ts "korean-cuisine-globalization" --variant co-deck</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
@@ -552,7 +553,7 @@ find . -maxdepth 3 -type f | head -40</pre>
             <strong>발표 주제 프레임 설정</strong>
             <p>파이프라인 가동 전에 발표의 방향을 세 가지로 명확히 정한다. 청중과 목적이 명확할수록 AI가 구성하는 스토리라인과 슬라이드의 품질이 크게 올라간다.</p>
             <div class="prompt-box">
-              <p style="margin-bottom:6px;font-size:12.5px;color:#116329;">아래 프레임을 작성한 뒤 PM 세션에서 에이전트팀에게 전달합니다.</p>
+              <p style="margin-bottom:6px;font-size:12.5px;color:#116329;">아래 프레임을 작성한 뒤 PM 세션에서 에이전트팀에게 전달한다.</p>
               <div class="prompt-text">청중: 글로벌 식음료 기업의 진출 전략 담당자 및 한국 정부의 한식 진흥 정책 관계자
 목적: 한국 음식 문화의 글로벌 확산 방안과 성공 사례를 소개하고, 진출 기회를 제안하는 설득형 발표
 시간: 15~20분 (약 12~15장 슬라이드)</div>

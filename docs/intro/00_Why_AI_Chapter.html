@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1장 · AI 시대의 업무 혁신</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 260px; min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+      padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-dim); padding: 0 16px 8px;
+    }
+    nav a {
+      display: block; padding: 6px 16px; color: var(--text-dim);
+      text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section {
+      margin-top: 12px; padding: 6px 16px 4px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+    }
+    main { flex: 1; display: flex; justify-content: center; padding: 56px 48px 96px; overflow-x: hidden; }
+    .reading { width: 100%; max-width: 720px; }
+    .chapter-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 1.12rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+    .source-line { font-size: 13px; color: var(--text-dim); margin-bottom: 30px; }
+    .source-line a { color: var(--accent); text-decoration: none; }
+    .keypoints {
+      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 18px 22px; margin: 0 0 40px;
+    }
+    .keypoints .kp-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+    .keypoints ul { margin: 0 0 0 18px; font-size: 14.5px; line-height: 1.85; }
+    h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      margin: 52px 0 14px; scroll-margin-top: 20px; line-height: 1.35;
+    }
+    h3 { font-size: 1.12rem; font-weight: 700; color: var(--accent6); margin: 30px 0 8px; scroll-margin-top: 20px; }
+    p { margin: 14px 0; }
+    p + p { margin-top: 16px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin: 6px 0; }
+    .pullquote {
+      border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 28px 0;
+      font-size: 1.22rem; line-height: 1.6; color: #2b3138; font-weight: 600;
+    }
+    .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* 통계 카드 */
+    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 20px 0 28px; }
+    .stat-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 18px 20px; text-align: center;
+    }
+    .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent6); }
+    .stat-label { font-size: 13px; color: var(--text-dim); margin-top: 4px; line-height: 1.5; }
+    .stat-source { font-size: 11px; color: var(--text-dim); opacity: .7; margin-top: 6px; }
+
+    /* 단계 표 */
+    .step-table { width: 100%; border-collapse: collapse; margin: 18px 0 28px; font-size: 14px; }
+    .step-table th, .step-table td { border: 1px solid var(--border); padding: 12px 16px; text-align: left; vertical-align: top; }
+    .step-table th { background: var(--bg3); color: var(--accent6); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+    .step-table .step-num { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+
+    /* 비교 박스 */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0 28px; }
+    .compare-box {
+      border: 1px solid var(--border); border-radius: 10px; padding: 20px;
+    }
+    .compare-box.without { background: #fff8f8; border-color: #ffc1bc; }
+    .compare-box.with { background: #f0fff4; border-color: #a2d9b1; }
+    .compare-box .cb-title { font-weight: 700; font-size: 14px; margin-bottom: 10px; }
+    .compare-box.without .cb-title { color: #cf222e; }
+    .compare-box.with .cb-title { color: var(--accent2); }
+    .compare-box ul { margin: 6px 0 0 18px; font-size: 14px; }
+    .compare-box li { margin: 4px 0; }
+
+    /* 시간 단축 표 */
+    .time-table { width: 100%; border-collapse: collapse; margin: 18px 0 28px; font-size: 14px; }
+    .time-table th, .time-table td { border: 1px solid var(--border); padding: 10px 14px; text-align: center; }
+    .time-table th { background: var(--bg3); color: var(--accent6); font-size: 12px; }
+    .time-table .task-name { text-align: left; font-weight: 600; }
+    .time-table .old { color: var(--text-dim); }
+    .time-table .new { color: var(--accent2); font-weight: 700; }
+    .time-table .ratio { color: var(--accent6); font-weight: 700; font-size: 13px; }
+
+    .chapter-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .chapter-nav a {
+      display: block; flex: 1; padding: 14px 18px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text); transition: border-color .15s;
+    }
+    .chapter-nav a:hover { border-color: var(--accent); text-decoration: none; }
+    .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
+    .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
+    .chapter-nav .next { text-align: right; }
+    @media (max-width: 640px) {
+      main { padding: 40px 18px 60px; }
+      .chapter-nav { flex-direction: column; }
+      .stat-grid, .compare-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">1장 · 도입</div>
+  <a href="#s0">지금 왜 AI인가</a>
+  <a href="#s1">AI 활용의 세 단계</a>
+  <a href="#s2">하네스 엔지니어링의 필요성</a>
+  <a href="#s3">멀티 에이전트: 전문가 팀의 원리</a>
+  <a href="#s4">어디에 활용할 수 있나</a>
+  <a href="#s5">오늘 이 워크숍에서 얻는 것</a>
+  <div class="nav-section">다른 장</div>
+  <a href="../concepts/01_Concepts_Chapter.html">2장 · 하네스 엔지니어링 개념</a>
+  <a href="../guardrails/00_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
+  <a href="../glossary/00_Glossary.html">용어집</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">1장 · 도입</div>
+  <h1>AI 시대의 업무 혁신</h1>
+  <p class="lead">ChatGPT가 등장한 지 3년. AI는 더 이상 "써보는" 도구가 아니라 "함께 일하는" 협업자가 되었다. 이 장에서는 왜 지금 AI를 배워야 하는지, AI를 활용하는 사람들의 세 가지 유형, 그리고 복잡한 업무를 AI에 맡길 때 왜 체계적인 설계(하네스)가 필요한지 살펴본다. 이 장은 1장에서 다루는 기술적 개념에 앞서, "왜"라는 동기를 확립하는 도입부다.</p>
+  <p class="source-line">참고: McKinsey Global Survey on AI (2024–2025), Gartner Enterprise AI Predictions (2025–2026), Anthropic "Building Effective Agents" (2024.12)</p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 장에서 다루는 것</div>
+    <ul>
+      <li>전 세계 기업의 AI 도입이 가속화되는 현황과 통계</li>
+      <li>AI 활용의 세 단계 — 사용자, 활용자, 설계자 — 그리고 이 워크숍의 목표</li>
+      <li>단순한 명령 vs 체계적인 설계(하네스 엔지니어링)의 차이</li>
+      <li>하나의 AI vs 전문가 팀(멀티 에이전트)의 비교</li>
+      <li>실무 업무에서 AI를 활용할 때 얻을 수 있는 구체적 시간 단축 효과</li>
+      <li>오늘 이틀 워크숍의 전체 로드맵과 기대 효과</li>
+    </ul>
+  </div>
+
+  <h2 id="s0">지금 왜 AI인가</h2>
+
+  <p>2022년 말 ChatGPT가 등장한 이후 3년 동안 AI는 우리가 일하는 방식을 근본적으로 바꾸고 있다. 단순한 검색 도구나 자동완성 보조기가 아니라, 보고서를 쓰고, 코드를 만들고, 데이터를 분석하고, 프레젠테이션을 디자인하는 <strong>협업자</strong>로 진화했다. 비전공자도 AI를 통해 앱, 문서, 분석 결과물을 직접 만드는 것이 현실이 되었다.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num">78%</div>
+      <div class="stat-label">글로벌 기업의 AI 도입률<br>(2022년 35% → 2025년)</div>
+      <div class="stat-source">McKinsey Global Survey on AI</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">80%+</div>
+      <div class="stat-label">2026년까지 생성형 AI<br>도입 예상 기업 비율</div>
+      <div class="stat-source">Gartner Enterprise AI Predictions</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">25%</div>
+      <div class="stat-label">AI 활용 작업자의<br>평균 업무 속도 향상률</div>
+      <div class="stat-source">Harvard Business School / BCG 연구</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">30%+</div>
+      <div class="stat-label">2026년까지 에이전트 AI<br>탑재 예상 엔터프라이즈 소프트웨어</div>
+      <div class="stat-source">Gartner Predictions 2025</div>
+    </div>
+  </div>
+
+  <p>한국도 예외가 아니다. 대기업 AI 도입률은 70%를 넘었고, 정부의 AI 기본법 시행과 K-디지털 플랫폼 추진 등 정책적 지원도 가속화되고 있다. AI 도입 기업의 생산성 향상률은 평균 15~30% 수준으로 보고되고 있다. 그러나 중소기업의 도입률은 아직 30~40% 수준에 머물러 있어, <strong>도입의 격차</strong>가 주요 과제로 떠오르고 있다.</p>
+
+  <div class="pullquote">
+    AI는 선택이 아닌 생존 경쟁력이다. 하지만 도입 자체가 목적이 아니라, <strong>어떻게</strong> 활용하는지가 진정한 경쟁력을 가른다.
+  </div>
+
+  <p>중요한 것은 "AI를 쓰고 있다"는 사실이 아니라 "어떻게" 쓰고 있는가다. ChatGPT에 질문을 던지는 것만으로는 경쟁력이 되지 않는다. AI 에이전트 시스템을 직접 설계하고, 조직의 업무 프로세스에 통합하고, 결과의 품질을 검증할 수 있는 능력이 필요하다. 이것이 이 워크숍이 다루는 핵심이다.</p>
+
+  <h2 id="s1">AI 활용의 세 단계</h2>
+
+  <p>AI를 다루는 사람들의 수준을 세 단계로 나눌 수 있다. 대부분은 1단계에 머물러 있으며, 이 워크숍의 목표는 2단계에서 3단계로 도약하는 첫 경험을 제공하는 것이다.</p>
+
+  <table class="step-table">
+    <thead>
+      <tr><th style="width:60px"></th><th>단계</th><th>무엇을 하는가</th><th>비유</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="step-num">1</span></td>
+        <td><strong>사용자</strong></td>
+        <td>AI에게 질문하고 답을 받는다. 프롬프트를 잘 다듬어 더 나은 답을 얻는 데 집중한다.</td>
+        <td>식당에서 메뉴판 보고 주문하는 손님</td>
+      </tr>
+      <tr>
+        <td><span class="step-num">2</span></td>
+        <td><strong>활용자</strong></td>
+        <td>AI를 업무 프로세스에 통합한다. 반복 작업을 AI에게 위임하고, 결과물을 자기 업무에 바로 사용한다.</td>
+        <td>레시피를 보고 직접 요리하는 사람</td>
+      </tr>
+      <tr>
+        <td><span class="step-num">3</span></td>
+        <td><strong>설계자</strong></td>
+        <td>AI 에이전트 시스템을 직접 설계한다. 역할을 나누고, 검증 기준을 정하고, 복잡한 워크플로우를 구축한다.</td>
+        <td>레시피를 만들고 주방 시스템을 설계하는 셰프</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Stage 1 -->
+        <rect x="20" y="30" width="150" height="60" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="95" y="52" text-anchor="middle" font-size="14" fill="#0550ae" font-weight="700">1단계</text>
+        <text x="95" y="70" text-anchor="middle" font-size="11" fill="#0550ae">사용자 — 질문·응답</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="170" y1="60" x2="230" y2="60" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="200" y="52" text-anchor="middle" font-size="9" fill="#636c76">업무 통합</text>
+
+        <!-- Stage 2 -->
+        <rect x="235" y="30" width="150" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="310" y="52" text-anchor="middle" font-size="14" fill="#116329" font-weight="700">2단계</text>
+        <text x="310" y="70" text-anchor="middle" font-size="11" fill="#116329">활용자 — 프로세스 통합</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="385" y1="60" x2="445" y2="60" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="415" y="52" text-anchor="middle" font-size="9" fill="#636c76">시스템 설계</text>
+
+        <!-- Stage 3 -->
+        <rect x="450" y="30" width="170" height="60" rx="10" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="535" y="52" text-anchor="middle" font-size="14" fill="#6639ba" font-weight="700">3단계</text>
+        <text x="535" y="70" text-anchor="middle" font-size="11" fill="#6639ba">설계자 — 에이전트 시스템 구축</text>
+
+        <!-- Workshop label -->
+        <text x="320" y="110" text-anchor="middle" font-size="10" fill="#cf222e" font-weight="600">▲ 이 워크숍은 2→3단계 도약을 목표로 합니다</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>1단계 사용자는 "이거 번역해줘", "이 코드에서 버그 찾아줘"처럼 단일 요청을 던진다. 유용하지만, 복잡한 업무에는 한계가 있다. 2단계 활용자는 AI를 자기 업무의 일부로 삼아 "이 보고서의 초안은 AI가 쓰고, 나는 전략적 판단에 집중한다"처럼 업무를 재설계한다. 3단계 설계자는 더 나아가 "이 보고서를 만드는 데 리서치·분석·작성·검토가 필요하니, 각 단계를 전문 에이전트에게 나눠서 맡기자"처럼 <strong>에이전트 시스템 자체를 설계</strong>한다.</p>
+
+  <div class="note">이 워크숍의 목표는 <strong>2단계에서 3단계로 도약하는 첫 경험</strong>을 제공하는 것이다. 오늘 1일차에는 기존 variant를 활용해 AI 에이전트팀을 가동해보는 2단계 실습을, 2일차에는 새로운 variant를 직접 설계해보는 3단계 실습을 진행한다.</div>
+
+  <h2 id="s2">하네스 엔지니어링의 필요성</h2>
+
+  <p>AI를 업무에 활용하다 보면 자연스럽게 한계를 느끼게 된다. "수정 요청할수록 오류가 쌓인다", "결과 품질이 매번 들쭉날쭉하다", "복잡한 작업은 한 번에 못 만든다". 이것이 <strong>체계적인 설계(하네스)</strong> 없이 AI를 다룰 때의 경험이다.</p>
+
+  <div class="compare-grid">
+    <div class="compare-box without">
+      <div class="cb-title">✗ 하네스 없이</div>
+      <ul>
+        <li>하나의 AI에게 모든 것을 요청</li>
+        <li>수정할수록 오류 누적</li>
+        <li>컨텍스트 과부하 — 길어질수록 앞부분을 잊음</li>
+        <li>결과 품질이 매번 들쭉날쭉</li>
+        <li>복잡한 작업은 불가능에 가까움</li>
+      </ul>
+    </div>
+    <div class="compare-box with">
+      <div class="cb-title">✓ 하네스 있이</div>
+      <ul>
+        <li>역할을 분리해 전문 에이전트에 할당</li>
+        <li>단계별 검증으로 오류 조기 발견</li>
+        <li>각 에이전트가 자기 역할에만 집중</li>
+        <li>검증 기준이 있어 결과가 안정적</li>
+        <li>복잡한 작업도 구조적으로 가능</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>하네스 엔지니어링(Harness Engineering)은 AI에게 <strong>역할·규칙·검증 기준</strong>을 부여하는 설계 기술이다. 단순 명령 프롬프트를 구조화된 작업 지침 시스템으로 업그레이드하는 것이다.</p>
+
+  <p>비유하면, 하네스 없는 AI는 "자유롭게 일해!"라고만 지시받은 신입사원과 같다. 의욕은 넘치지만, 무엇부터 해야 할지 모르고, 실수해도 스스로 알아차리지 못하며, 책임 범위가 불분명하다. 하네스가 있는 AI는 "이 역할은 데이터 조사 전담, 이 역할은 문서 작성 전담, 검토는 반드시 다른 역할이 수행, 수정은 git으로 되돌릴 수 있는 범위에서만"처럼 명확한 <strong>역할 분리·검증·안전장치</strong>가 갖춰진 팀과 같다.</p>
+
+  <div class="note">하네스 엔지니어링의 기술적 세부 사항(오케스트레이터·스페셜리스트·핸드오프 계약, 오케스트레이션 패턴 등)은 2장에서 상세히 다룬다. 이 장에서는 "왜 하네스가 필요한지"에 대한 동기만 확립한다.</div>
+
+  <h2 id="s3">멀티 에이전트: 전문가 팀의 원리</h2>
+
+  <p>하나의 AI에게 모든 것을 맡기면 세 가지 구조적 한계가 생긴다. <strong>컨텍스트 과부하</strong>(모든 정보를 한 곳에 담다 보면 앞부분이 희미해짐), <strong>역할 충돌</strong>(자기가 쓴 글을 스스로 검토하면 허점을 놓침), <strong>병렬성 부재</strong>(동시에 할 수 있는 일도 순서대로 처리해 시간 낭비). 이 한계는 사람의 조직에서도 똑같이 나타난다.</p>
+
+  <p>해결책은 간단하다. 회사에서 기획자·개발자·QA를 나누는 것과 같은 원리로, AI도 <strong>역할별 에이전트</strong>로 나누어 협업하게 만드는 것이다. 이것이 <strong>멀티 에이전트</strong> 시스템이다.</p>
+
+  <table class="step-table">
+    <thead>
+      <tr><th></th><th>단일 에이전트</th><th>멀티 에이전트팀</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>비유</strong></td>
+        <td>만능 신입사원 한 명</td>
+        <td>전문가 팀 (기획·개발·QA)</td>
+      </tr>
+      <tr>
+        <td><strong>컨텍스트</strong></td>
+        <td>모든 정보가 한 곳에 → 과부하</td>
+        <td>역할별로 분리 → 집중</td>
+      </tr>
+      <tr>
+        <td><strong>검증</strong></td>
+        <td>자기 작성물을 스스로 검토 → 한계</td>
+        <td>작성자≠검토자 → 독립 시선 확보</td>
+      </tr>
+      <tr>
+        <td><strong>병렬</strong></td>
+        <td>순차 처리 → 선형 시간</td>
+        <td>독립 작업 동시 실행 → 시간 단축</td>
+      </tr>
+      <tr>
+        <td><strong>복잡도</strong></td>
+        <td>단순 작업에 적합</td>
+        <td>복잡한 워크플로우에 적합</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>이 원리는 특정 AI 도구에 종속되지 않는다. Claude Code, Claude App, Antigravity, Cursor, GitHub Copilot 등 어떤 도구를 쓰든, "역할을 나누고 검증을 분리하는" 개념은 동일하게 적용된다. 이 워크숍에서는 네 가지 도구를 모두 사용해보며, 같은 멀티 에이전트 개념이 도구마다 어떻게 다르게 구현되는지 직접 경험한다.</p>
+
+  <h2 id="s4">어디에 활용할 수 있나</h2>
+
+  <p>멀티 에이전트팀은 업무 도메인에 따라 다양한 형태로 적용된다. 공통적인 패턴은 "리서치 → 분석 → 작성 → 검토"라는 파이프라인 구조이며, 각 단계를 전문 에이전트가 담당한다. 실무에서 시간 단축 효과가 가장 뚜렷한 영역을 몇 가지 예로 들어보겠다.</p>
+
+  <table class="time-table">
+    <thead>
+      <tr><th>업무</th><th>기존 소요 시간</th><th>AI 에이전트팀 활용 시</th><th>단축률</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="task-name">시장 리서치 보고서</td>
+        <td class="old">3시간</td>
+        <td class="new">~20분</td>
+        <td class="ratio">~90%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">경쟁사 분석</td>
+        <td class="old">반나절</td>
+        <td class="new">~30분</td>
+        <td class="ratio">~85%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">제안서 초안 작성</td>
+        <td class="old">반나절</td>
+        <td class="new">~1시간</td>
+        <td class="ratio">~75%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">프레젠테이션 제작</td>
+        <td class="old">2시간</td>
+        <td class="new">~10분</td>
+        <td class="ratio">~90%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">정기 보고서 작성</td>
+        <td class="old">1시간</td>
+        <td class="new">~15분</td>
+        <td class="ratio">~75%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">코드 리뷰 & 버그 수정</td>
+        <td class="old">1~2시간</td>
+        <td class="new">~20분</td>
+        <td class="ratio">~80%↓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>주의할 점이 있다. 시간 단축은 "AI가 사람을 대체한다"를 의미하지 않는다. AI가 초안을 빠르게 만들어주면, 사람은 그 절약한 시간을 <strong>전략적 판단, 크리티컬 리뷰, 클라이언트 소통</strong> 등 AI가 할 수 없는 고가치 활동에 투자할 수 있다. 20분 만에 초안이 나오면, 나머지 2시간 40분은 내용의 정확성 검증, 전략적 인사이트 추가, 독자 맞춤형 메시지 다듬기에 쓸 수 있다는 뜻이다.</p>
+
+  <div class="pullquote">
+    AI가 80%를 빠르게 해주면, 사람은 남은 20%에서 100%의 가치를 창출한다.
+    <span class="by">AI 활용의 핵심 전략</span>
+  </div>
+
+  <p>Klarna(스웨덴 핀테크 기업)의 사례가 대표적이다. AI 어시스턴트를 도입한 첫 달, 2.3백만 건의 고객 대화를 AI가 처리했다. 이는 700명 상당의 상담원 업무량에 해당한다. 하지만 상담원 700명을 해고한 것이 아니라, 이들을 복잡한 상담과 고객 관계 관리에 재배치했다. AI가 단순 반복 업무를 맡고, 사람이 복잡한 판단을 담당하는 구조다.</p>
+
+  <h2 id="s5">오늘 이 워크숍에서 얻는 것</h2>
+
+  <p>이 워크숍은 이론이 아니라 <strong>직접 체험</strong>하는 실전 워크숍이다. 이틀 동안 AI 에이전트팀을 직접 가동하고, 새로운 에이전트팀을 직접 설계해본다.</p>
+
+  <h3>1일차 — 일반 사용자: 멀티 에이전트 실전 활용</h3>
+  <ul>
+    <li>이 장에서 배운 "왜 AI인가"를 바탕으로, 실제로 에이전트팀을 가동해본다</li>
+    <li><strong>co-consult</strong> variant로 "Physical AI 시장조사" 컨설팅 프로젝트 진행 — 10명의 전문 에이전트가 7단계 컨설팅 워크플로우를 자동으로 가동</li>
+    <li><strong>co-deck</strong> variant로 "한식 세계화" 발표자료 제작 — 11단계 파이프라인(연구→디자인→PDF)이 자동으로 실행</li>
+    <li>두 variant의 구조 차이를 직접 비교하며 "멀티 에이전트는 도메인마다 다르게 설계된다"는 것을 체감</li>
+  </ul>
+
+  <h3>2일차 — IT전문가: 아키텍처·신규 생성·캡스톤</h3>
+  <ul>
+    <li>ai-workspace-standards의 아키텍처 심화 — L0→L1→L2 계층 구조, 모델 티어링</li>
+    <li>도구 비교와 기업 운영 전략 — 네 도구의 기술적 차이, 서비스 티켓 모델 vs variant 모델</li>
+    <li><strong>co-marketing</strong>이라는 새로운 variant를 Phase A 프로토타입으로 직접 설계</li>
+    <li>캡스톤: 본인의 실제 반복 업무를 골라 멀티 에이전트팀으로 재설계</li>
+  </ul>
+
+  <div class="note">이 장에서 다룬 "왜"에 대한 동기를 가지고, 2장에서는 "무엇"을(하네스 엔지니어링의 기술적 개념), 4장에서는 "어떻게"를(실제 도구에서의 구현 방법) 다룬다. 이 흐름을 따라가면, 왜 AI 에이전트팀을 설계해야 하는지 → 무엇을 설계하는지 → 직접 만들어보기까지 자연스럽게 이어진다.</div>
+
+  <div class="chapter-nav">
+    <a href="../concepts/01_Concepts_Chapter.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

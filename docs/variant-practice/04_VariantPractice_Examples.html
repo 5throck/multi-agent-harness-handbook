@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>6.1 · Variant 실습 예시 — 시나리오별 학습 가이드</title>
+  <title>6장 §2 · Variant 실습 예시 — 시나리오별 학습 가이드</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -210,6 +210,31 @@
       font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
 
+    .prompt-box {
+      background: #f0fdf4; border: 1px solid #86efac;
+      border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px;
+      overflow-wrap: break-word;
+    }
+    .prompt-box::before {
+      content: '📝 사용자 입력'; display: block;
+      font-weight: 700; color: #116329; margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .prompt-box .prompt-text {
+      background: #fff; border: 1px solid #d0d7de;
+      border-radius: 4px; padding: 10px 14px; margin-top: 6px;
+      font-family: 'SFMono-Regular', 'Consolas', monospace;
+      font-size: 13px; line-height: 1.6; color: #1f2328;
+      white-space: pre-wrap; position: relative;
+    }
+    .prompt-box .copy-btn {
+      position: absolute; top: 6px; right: 6px;
+      background: #fff; border: 1px solid #d0d7de; border-radius: 4px;
+      padding: 2px 8px; font-size: 11px; cursor: pointer; color: #636c76;
+    }
+    .prompt-box .copy-btn:hover { background: #f6f8fa; color: #0969da; }
+    .prompt-box .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
+
     .tip-box {
       background: #dafbe1; border: 1px solid #a2d9b1; border-radius: 6px;
       padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; color: #0a3622;
@@ -254,7 +279,7 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">6.1 · Variant 실습 예시</div>
+  <div class="nav-title">6장 §2 · Variant 실습 예시</div>
 
   <div class="nav-group">영역 1 — 기존 variant 활용</div>
   <a href="#area-existing"><span class="dot dot-g"></span>기존 variant 활용 (초급)</a>
@@ -270,7 +295,7 @@
   <a href="#scenario-4"><span class="dot dot-p"></span>P-1 프로토타입 검증과 승격 준비 점검</a>
 
   <div class="nav-group">바로가기</div>
-  <a href="04_VariantPractice_Manual.html">📖 6장 §1 — Variant 실습 레퍼런스 →</a>
+  <a href="04_VariantPractice_Manual.html">📖 6장 §1 · Variant 실습 레퍼런스 →</a>
 </nav>
 
 <main>
@@ -374,11 +399,12 @@ find . -maxdepth 3 -type f | head -40</pre>
           <div class="step-content">
             <strong>컨설팅 과제 정의 — 4단계 설계 프레임워크 적용</strong>
             <p>에이전트팀 가동 전에, <strong>목표·입력·출력·검증 기준</strong>을 먼저 명확히 정의한다. 이 4가지가 구체적일수록 에이전트팀이 산출하는 결과물의 품질이 크게 올라간다.</p>
-            <div class="flow-box">
-              <strong>Step 1 — 목표 정의:</strong> "Physical AI(로봇·자율주행·스마트 팩토리) 시장의 2030년까지 진입 전략과 경쟁 현황 분석"<br>
-              <strong>Step 2 — 입력 정의:</strong> 대상 산업(로봇 공학, 자율주행, 스마트 팩토리), 조사 기간(2020~2025 + 2030 예측), 중점 키워드(규제, 기술, 시장 규모)<br>
-              <strong>Step 3 — 출력 정의:</strong> 마크다운 형식 보고서 — 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료 5개 섹션 구조<br>
-              <strong>Step 4 — 검증 기준:</strong> 각 항목에 출처 URL 포함, 시사점 5개 이상 번호 목록, 2,000자 이상 분량
+            <div class="prompt-box">
+              <p style="margin-bottom:6px;font-size:12.5px;color:#116329;">아래 프레임워크를 작성한 뒤 PM 세션에서 에이전트팀에게 전달합니다.</p>
+              <div class="prompt-text">Step 1 — 목표 정의: "Physical AI(로봇·자율주행·스마트 팩토리) 시장의 2030년까지 진입 전략과 경쟁 현황 분석"
+Step 2 — 입력 정의: 대상 산업(로봇 공학, 자율주행, 스마트 팩토리), 조사 기간(2020~2025 + 2030 예측), 중점 키워드(규제, 기술, 시장 규모)
+Step 3 — 출력 정의: 마크다운 형식 보고서 — 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료 5개 섹션 구조
+Step 4 — 검증 기준: 각 항목에 출처 URL 포함, 시사점 5개 이상 번호 목록, 2,000자 이상 분량</div>
             </div>
           </div>
         </li>
@@ -395,6 +421,64 @@ find . -maxdepth 3 -type f | head -40</pre>
               <strong>Phase 3 (실무 솔루션 설계):</strong> Change Management Partner가 도입 로드맵과 변화 관리 계획 수립<br>
               <strong>Phase 4 (납품):</strong> 최종 보고서(마크다운) 작성 — 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료<br>
               <strong>Phase 5 (PR/인도):</strong> 고객 전달용 결과물 정리
+            </div>
+
+            <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+              <svg viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;">
+                <defs>
+                  <marker id="arrowC" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6b7280"/></marker>
+                  <marker id="arrowO" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f59e0b"/></marker>
+                </defs>
+                <!-- Phase 0 기획 -->
+                <rect x="2" y="32" width="72" height="52" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="38" y="54" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 0</text>
+                <text x="38" y="72" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6">기획</text>
+                <line x1="74" y1="58" x2="86" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 1 병렬 3 agents -->
+                <rect x="88" y="6" width="68" height="40" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="122" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="700">Analyst</text>
+                <text x="122" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#8b5cf6">시장 분석</text>
+                <rect x="88" y="38" width="68" height="40" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="122" y="56" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="700">Expert</text>
+                <text x="122" y="69" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#8b5cf6">도메인 관점</text>
+                <rect x="88" y="70" width="68" height="40" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="122" y="88" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="700">SME</text>
+                <text x="122" y="101" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#8b5cf6">실무 사례</text>
+                <line x1="156" y1="58" x2="168" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 1.5 교차 검증 -->
+                <rect x="170" y="38" width="78" height="40" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="209" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 1.5</text>
+                <text x="209" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#22c55e">교차 검증</text>
+                <line x1="248" y1="58" x2="260" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 2 승정 게이트 (orange highlighted) -->
+                <rect x="262" y="32" width="82" height="52" rx="8" fill="#f59e0b" opacity="0.12" stroke="#f59e0b" stroke-width="2.5"/>
+                <text x="303" y="50" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 2</text>
+                <text x="303" y="65" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#f59e0b" font-weight="600">승정 게이트</text>
+                <text x="303" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7" fill="#f59e0b">사람 승인</text>
+                <line x1="344" y1="58" x2="356" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 3 종합 보고서 -->
+                <rect x="358" y="38" width="82" height="40" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="399" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 3</text>
+                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6">종합 보고서</text>
+                <line x1="440" y1="58" x2="452" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 4 요약/발표 -->
+                <rect x="454" y="38" width="82" height="40" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 4</text>
+                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6">요약/발표</text>
+                <line x1="536" y1="58" x2="548" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 5 핸드오프 -->
+                <rect x="550" y="38" width="82" height="40" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 5</text>
+                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#22c55e">핸드오프</text>
+                <!-- Phase labels top row -->
+                <text x="38" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">킥오프</text>
+                <text x="122" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">병렬 조사</text>
+                <text x="209" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">신뢰 확보</text>
+                <text x="303" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">품질 관문</text>
+                <text x="399" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">솔루션 설계</text>
+                <text x="495" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">납품</text>
+                <text x="591" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">고객 인도</text>
+              </svg>
             </div>
           </div>
         </li>
@@ -465,10 +549,11 @@ find . -maxdepth 3 -type f | head -40</pre>
           <div class="step-content">
             <strong>발표 주제 프레임 설정</strong>
             <p>파이프라인 가동 전에 발표의 방향을 세 가지로 명확히 정한다. 청중과 목적이 명확할수록 AI가 구성하는 스토리라인과 슬라이드의 품질이 크게 올라간다.</p>
-            <div class="flow-box">
-              <strong>청중:</strong> 글로벌 식음료 기업의 진출 전략 담당자 및 한국 정부의 한식 진흥 정책 관계자<br>
-              <strong>목적:</strong> 한국 음식 문화의 글로벌 확산 방안과 성공 사례를 소개하고, 진출 기회를 제안하는 설득형 발표<br>
-              <strong>시간:</strong> 15~20분 (약 12~15장 슬라이드)
+            <div class="prompt-box">
+              <p style="margin-bottom:6px;font-size:12.5px;color:#116329;">아래 프레임을 작성한 뒤 PM 세션에서 에이전트팀에게 전달합니다.</p>
+              <div class="prompt-text">청중: 글로벌 식음료 기업의 진출 전략 담당자 및 한국 정부의 한식 진흥 정책 관계자
+목적: 한국 음식 문화의 글로벌 확산 방안과 성공 사례를 소개하고, 진출 기회를 제안하는 설득형 발표
+시간: 15~20분 (약 12~15장 슬라이드)</div>
             </div>
           </div>
         </li>
@@ -485,6 +570,67 @@ find . -maxdepth 3 -type f | head -40</pre>
               <strong>Design:</strong> 슬라이드 디자인 방향 설정 — 테마·스타일 선택에 따른 시각 일관성 확립<br>
               <strong>Image Curation + Diagram Generation (병렬):</strong> 한식 관련 이미지 큐레이션 및 시장 구조·진출 로드맵 다이어그램 자동 생성<br>
               <strong>HTML Build → Layout Measure → PDF Export:</strong> 슬라이드 HTML 생성 후 레이아웃 측정·보정, 최종 PDF 출력
+            </div>
+
+            <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+              <svg viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;">
+                <defs>
+                  <marker id="arrowD" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6b7280"/></marker>
+                  <marker id="arrowDown" markerWidth="6" markerHeight="8" refX="3" refY="8" orient="auto"><polygon points="0 0,3 8,6 0" fill="#6b7280"/></marker>
+                </defs>
+                <!-- Row 1 (y=18): Research → Source Verifier → Storyline → Design → Image Curation + Diagram (parallel) -->
+                <!-- Step 1: Research -->
+                <rect x="4" y="8" width="90" height="36" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="49" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">①</text>
+                <text x="49" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Research</text>
+                <line x1="94" y1="26" x2="106" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 2: Source Verifier -->
+                <rect x="108" y="8" width="90" height="36" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="153" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">②</text>
+                <text x="153" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="600">Source Verifier</text>
+                <line x1="198" y1="26" x2="210" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 3: Storyline -->
+                <rect x="212" y="8" width="90" height="36" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="257" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">③</text>
+                <text x="257" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Storyline</text>
+                <line x1="302" y1="26" x2="314" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 4: Design -->
+                <rect x="316" y="8" width="90" height="36" rx="8" fill="#f59e0b" opacity="0.15" stroke="#f59e0b" stroke-width="1.5"/>
+                <text x="361" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">④</text>
+                <text x="361" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Design</text>
+                <line x1="406" y1="26" x2="418" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Parallel split indicator -->
+                <line x1="408" y1="18" x2="408" y2="44" stroke="#6b7280" stroke-width="1" stroke-dasharray="3,2"/>
+                <!-- Step 5a: Image Curation (upper parallel) -->
+                <rect x="420" y="2" width="100" height="30" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="470" y="21" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="600">⑤ Image Curation</text>
+                <!-- Step 5b: Diagram (lower parallel) -->
+                <rect x="420" y="34" width="100" height="30" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="470" y="53" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="600">⑤ Diagram</text>
+                <!-- Parallel merge arrow down to row 2 -->
+                <line x1="520" y1="49" x2="540" y2="49" stroke="#6b7280" stroke-width="1.5"/>
+                <line x1="540" y1="49" x2="540" y2="90" stroke="#6b7280" stroke-width="1.5"/>
+                <line x1="540" y1="90" x2="556" y2="90" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Parallel label -->
+                <text x="540" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7" fill="#6b7280">병렬</text>
+                <!-- Row 2 (y=76): HTML Build → Layout → PDF -->
+                <!-- Row 2 connecting line from left -->
+                <line x1="4" y1="90" x2="180" y2="90" stroke="#6b7280" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+                <!-- Step 6: HTML Build -->
+                <rect x="558" y="74" width="80" height="36" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="598" y="89" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">⑥</text>
+                <text x="598" y="102" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">HTML Build</text>
+                <line x1="638" y1="92" x2="648" y2="92" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 7: Layout -->
+                <rect x="650" y="74" width="60" height="36" rx="8" fill="#f59e0b" opacity="0.15" stroke="#f59e0b" stroke-width="1.5"/>
+                <text x="680" y="89" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">⑦</text>
+                <text x="680" y="102" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Layout</text>
+                <line x1="710" y1="92" x2="720" y2="92" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 8: PDF -->
+                <rect x="722" y="74" width="50" height="36" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="747" y="89" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">⑧</text>
+                <text x="747" y="102" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">PDF</text>
+              </svg>
             </div>
           </div>
         </li>
@@ -647,7 +793,7 @@ required_skills: [copywriting]
       </ol>
 
       <div class="flow-box">
-        Phase A 프로토타입은 <code>templates/</code>가 아니라 <code>Projects/co-marketing/</code>에 독립적으로 존재한다. 이 상태에서는 아직 다른 사람이 <code>new-project.ts --variant co-marketing</code>로 스캐폴딩할 수 없다 — 그러려면 나중에 Phase B 승격을 거쳐야 한다(7장 §1에서 다룸).
+        Phase A 프로토타입은 <code>templates/</code>가 아니라 <code>Projects/co-marketing/</code>에 독립적으로 존재한다. 이 상태에서는 아직 다른 사람이 <code>new-project.ts --variant co-marketing</code>로 스캐폴딩할 수 없다 — 그러려면 나중에 신규 variant 승격을 거쳐야 한다(10장에서 다룸).
       </div>
 
       <div class="warning-box">
@@ -721,11 +867,11 @@ bun run agent:verify</pre>
       </div>
 
       <div class="tip-box">
-        Phase A에서 이미 구조를 깨끗하게 맞춰두면, 7장 §1에서 다룰 Phase B 승격 파이프라인이 훨씬 매끄럽게 진행된다.
+        Phase A에서 이미 구조를 깨끗하게 맞춰두면, 10장에서 다룰 신규 variant 승격 파이프라인이 훨씬 매끄럽게 진행된다.
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> 정식 승격(Phase B) 절차와 <code>l2-to-variant-pipeline.ts</code>는 <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7장 §1</a>과 그 실습 파일에서 이어서 다룬다.
+        <strong>함께 보기:</strong> 정식 승격(Phase B) 절차와 <code>l2-to-variant-pipeline.ts</code>는 <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">10장</a>과 그 실습 파일에서 이어서 다룬다.
       </div>
 
     </div>
@@ -734,7 +880,7 @@ bun run agent:verify</pre>
   <hr>
   <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
     ai-workspace-standards main 브랜치 기준 | 2026년 7월 16일 작성<br>
-    <a href="04_VariantPractice_Manual.html">← 6장 §1 레퍼런스로 돌아가기</a>
+    <a href="04_VariantPractice_Manual.html">← 6장 §1 · 레퍼런스로 돌아가기</a>
   </p>
 </main>
 

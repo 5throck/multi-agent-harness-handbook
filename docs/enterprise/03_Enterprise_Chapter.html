@@ -12,7 +12,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</title>
+  <title>9장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -124,20 +124,20 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">4장 · 두 모델 비교</div>
+  <div class="nav-title">9장 · 두 모델 비교</div>
   <a href="#s1">서비스 티켓 모델</a>
   <a href="#s1">↳ 왜 칸반 기반인가</a>
   <a href="#s2">개발 도구 + variant 모델</a>
   <a href="#s3">나란히 놓고 비교하기</a>
   <a href="#s3b">두 모델의 장단점</a>
   <div class="nav-section">다른 장</div>
-  <a href="../tools/03_Tools_Manual.html">3장 · Harness 도구 레퍼런스</a>
-  <a href="../intro/04_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
+  <a href="../tools/03_Tools_Manual.html">8장 · Harness 도구 레퍼런스</a>
+  <a href="../intro/04_Intro_Advanced_Chapter.html">7장 · 확장 읽기</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">4장</div>
+  <div class="chapter-eyebrow">9장</div>
   <h1>기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</h1>
   <p class="lead">멀티 에이전트 개발 환경을 도입하려는 조직은 대체로 두 갈래 길 중 하나를 고르게 된다. 하나는 중앙화된 하나의 팀이 요청을 티켓으로 받는 방식이고, 다른 하나는 팀마다 자기 팀을 스스로 만들 수 있는 도구를 나눠주는 방식이다. 이 장에서는 두 모델을 나란히 놓고 무엇이 다른지만 짚는다.</p>
 
@@ -259,7 +259,7 @@
       <h4 style="color:#1a7f37;">장점</h4>
       <ul>
         <li><strong>진입 장벽이 낮다.</strong> 새 팀도 별도 셋업 없이 곧바로 같은 창구를 쓸 수 있다.</li>
-        <li><strong>거버넌스가 단순하다.</strong> 운영이 한 팀에 집중돼 있어 규칙 위반 여부를 한곳에서만 통제·감사하면 된다(1.5장 §1의 감사 로그 원칙이 적용될 지점도 하나뿐이다).</li>
+        <li><strong>거버넌스가 단순하다.</strong> 운영이 한 팀에 집중돼 있어 규칙 위반 여부를 한곳에서만 통제·감사하면 된다(3장의 감사 로그 원칙이 적용될 지점도 하나뿐이다).</li>
         <li><strong>응답 품질이 표준화된다.</strong> 모든 요청이 같은 PM/에이전트팀을 거치므로 결과물의 형식과 수준이 균일하다.</li>
         <li><strong>초기 도입 비용이 최소화된다.</strong> 적용 범위(회사 전체 또는 본부 단위) 안에 에이전트팀을 하나만 구축·운영하면 된다.</li>
       </ul>
@@ -292,7 +292,7 @@
         <li><strong>초기 셋업 비용이 든다.</strong> 팀마다 스캐폴딩·에이전트 정의·거버넌스 파이프라인을 갖춰야 한다.</li>
         <li><strong>거버넌스가 파편화될 위험이 있다.</strong> 공유 표준(CONSTITUTION.md)이 없거나 지켜지지 않으면 팀마다 다른 규칙으로 표류한다. 포크 모델(5장 §3)이 주는 자유의 대가다.</li>
         <li><strong>인프라가 중복된다.</strong> 유사한 구성을 여러 프로젝트가 각자 유지해야 한다. L0→L1→L2 구조가 이를 완화하지만 완전히 없애지는 못한다.</li>
-        <li><strong>숙련도를 요구한다.</strong> 팀원이 하네스 구성 자체(1장 §1·1.5장 §1의 개념)를 어느 정도 이해하고 있어야 제대로 활용할 수 있다.</li>
+        <li><strong>숙련도를 요구한다.</strong> 팀원이 하네스 구성 자체(2장 §1·3장의 개념)를 어느 정도 이해하고 있어야 제대로 활용할 수 있다.</li>
       </ul>
     </div>
   </div>
@@ -300,8 +300,8 @@
   <div class="note">결국 트레이드오프는 한 문장으로 압축된다. <strong>티켓 모델은 "낮은 진입 장벽과 단순한 통제"를 사고, 그 대가로 "맥락 단절과 확장 한계"를 지불한다. variant 모델은 "깊은 맥락과 확장성"을 사고, 그 대가로 "초기 비용과 숙련도 요구"를 지불한다.</strong> 어느 쪽이 "더 나은" 모델이 아니라, 조직이 지금 어떤 대가를 감당할 수 있는지의 문제다.</div>
 
   <div class="chapter-nav">
-    <a href="../tools/03_Tools_Manual.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">3장 · Harness 도구 레퍼런스</div></a>
-    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">5장 · ai-workspace-standards 소개</div></a>
+    <a href="../tools/03_Tools_Manual.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">8장 · Harness 도구 레퍼런스</div></a>
+    <a href="../variant-advanced/05_VariantAdvanced_Chapter.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">10장 · 신규 variant 생성</div></a>
   </div>
  </article>
 </main>

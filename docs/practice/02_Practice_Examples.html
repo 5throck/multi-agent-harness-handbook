@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2.1 · 멀티 에이전트 팀 실습 — 시나리오별 학습 가이드</title>
+  <title>4장 §2 · 멀티 에이전트 팀 실습 — 시나리오별 학습 가이드</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -277,7 +277,7 @@
 <!-- ── 사이드바 ── -->
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">2.1 · 멀티 에이전트 팀 실습</div>
+  <div class="nav-title">4장 §2 · 멀티 에이전트 팀 실습</div>
   <a href="#setup">🛠 준비: 필요한 프로그램 설치</a>
   <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
 
@@ -293,23 +293,23 @@
   <a href="#scenario-4"><span class="dot dot-p"></span>P-2 모델 티어 비교로 비용 감각 익히기</a>
 
   <div class="nav-group">바로가기</div>
-  <a href="02_Practice_Manual.html">📖 2.0 멀티 에이전트 팀 활용 레퍼런스 →</a>
+  <a href="02_Practice_Manual.html">📖 4장 §1 멀티 에이전트 팀 활용 레퍼런스 →</a>
 </nav>
 
 <!-- ── 본문 ── -->
 <main>
-  <h1>2.1 · 멀티 에이전트 팀 실습</h1>
-  <p class="subtitle">빈 실습 폴더에서 시작해 Claude App/Claude Code와 Antigravity(Desktop)/Antigravity CLI, 네 도구에서 같은 시나리오를 따라해보는 실습 가이드 — Desktop 앱을 기준으로 안내하고 CLI 대응을 이어서 소개한다 &nbsp;|&nbsp; <a href="02_Practice_Manual.html">← 2.0 레퍼런스 문서로 돌아가기</a></p>
+  <h1>4장 §2 · 멀티 에이전트 팀 실습</h1>
+  <p class="subtitle">빈 실습 폴더에서 시작해 Claude App/Claude Code와 Antigravity(Desktop)/Antigravity CLI, 네 도구에서 같은 시나리오를 따라해보는 실습 가이드 — Desktop 앱을 기준으로 안내하고 CLI 대응을 이어서 소개한다 &nbsp;|&nbsp; <a href="02_Practice_Manual.html">← 4장 §1 레퍼런스 문서로 돌아가기</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 버전/범위</span><span>Claude Code/App 2026-07 릴리스, Antigravity CLI (agy) 1.1.0+, Antigravity 2.0 — 모두 CLI/앱 기준</span></div>
     <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>서브에이전트 정의·호출, 순차 파이프라인, 동적 팀 구성·워크플로우 조합, 병렬 실행을 네 도구에서 각각 손으로 따라해보는 4단계 실습 제공</span></div>
-    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="02_Practice_Manual.html">02_Practice_Manual.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
+    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="02_Practice_Manual.html">4장 §1 (02_Practice_Manual.html)</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
 
   <div class="note" style="background:#f0f7ff;border-left:3px solid #0969da;padding:12px 18px;border-radius:4px;font-size:14px;margin:0 0 32px;">
-    <strong>이 과정 전체가 따르는 원칙</strong> — 특정 도구 하나에 맞춰 실습을 익히면 다른 도구로 옮길 때 처음부터 다시 배워야 한다. 그래서 아래 모든 시나리오는 먼저 서브에이전트의 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 적고, 그 <em>같은 명세</em>를 Claude 계열에서는 사전 정의 서브에이전트 파일로, Antigravity 계열에서는 자연어 목표로 각각 "구현"하는 순서를 따른다(1장 §5 AGENTS.md 참고). 정의는 하나, 실행 방식만 도구별로 다르다는 원칙을 손으로 확인하는 것이 이 실습의 핵심 목표다.
+    <strong>이 과정 전체가 따르는 원칙</strong> — 특정 도구 하나에 맞춰 실습을 익히면 다른 도구로 옮길 때 처음부터 다시 배워야 한다. 그래서 아래 모든 시나리오는 먼저 서브에이전트의 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 적고, 그 <em>같은 명세</em>를 Claude 계열에서는 사전 정의 서브에이전트 파일로, Antigravity 계열에서는 자연어 목표로 각각 "구현"하는 순서를 따른다(2장 §5 AGENTS.md 참고). 정의는 하나, 실행 방식만 도구별로 다르다는 원칙을 손으로 확인하는 것이 이 실습의 핵심 목표다.
   </div>
 
   <!-- ══════════════════════════════ 실습 전 준비 ══════════════════════════════ -->
@@ -367,7 +367,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <p>운영체제와 무관하게 <a href="../setup/setup-common.ts">setup-common.ts</a>를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
 
-  <p>이 프로젝트가 설치하는 도구 중 이번 장의 4도구 실습과 직접 관련된 것은 다음과 같다. Claude App(Desktop), <code>claude</code>(Claude Code CLI), Antigravity(Desktop), <code>agy</code>(Antigravity CLI), 그리고 <code>.claude/agents/*.md</code> 기반 서브에이전트 실행에 필요한 <code>bun</code>, 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
+  <p>이 프로젝트가 설치하는 도구 중 이 장의 4도구 실습과 직접 관련된 것은 다음과 같다. Claude App(Desktop), <code>claude</code>(Claude Code CLI), Antigravity(Desktop), <code>agy</code>(Antigravity CLI), 그리고 <code>.claude/agents/*.md</code> 기반 서브에이전트 실행에 필요한 <code>bun</code>, 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
 
   <div class="tip-box">
     Antigravity CLI(<code>agy</code>)는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리다 — 압축 해제 후 PATH에 넣기만 하면 바로 실행된다. 옛 자료에 남아 있는 "Gemini CLI를 npm으로 전역 설치" 같은 안내는 더 이상 유효하지 않다. 최신 설치 방법은 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>에서 확인한다.
@@ -399,7 +399,7 @@ cd ./setup && bash setup-linux.sh</pre>
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (1장)</a>
+          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
           <a class="cmd-chip" href="02_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
           <a class="cmd-chip" href="02_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
         </div>
@@ -553,10 +553,46 @@ EOF</pre>
         G-1을 마친 실무자가 같은 <code>harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>에 먼저 명세한 뒤, Claude App에는 사전 정의 서브에이전트로, Antigravity(Desktop)에는 자연어 목표로 각각 구현한다. writer가 먼저 초안을 쓰고 reviewer가 그 결과를 비평하는 파이프라인을 네 도구 모두에서 순서를 지켜 지휘하게 한다.
       </div>
 
+      <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+          </defs>
+          <!-- Box 1: 사용자 요청 (gray) -->
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="#6b7280">사용자 요청</text>
+          <!-- Arrow 1 -->
+          <line x1="115" y1="43" x2="150" y2="43" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <!-- Box 2: writer.md (blue) -->
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#3b82f6">writer.md</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#3b82f6">초안 작성</text>
+          <!-- Arrow 2 -->
+          <line x1="295" y1="43" x2="330" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <!-- Return arrow (curved, below) -->
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="#f59e0b"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#f59e0b">수정 요청 시 writer로 되돌아감</text>
+          <!-- Box 3: reviewer.md (green) -->
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#22c55e">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">피드백/승인</text>
+          <!-- Arrow 3 -->
+          <line x1="475" y1="43" x2="510" y2="43" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <!-- Box 4: 최종 결과물 (purple) -->
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#8b5cf6">최종 결과물</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">완성</text>
+        </svg>
+      </div>
+
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (1장)</a>
+          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
           <a class="cmd-chip" href="02_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
           <a class="cmd-chip" href="02_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
         </div>
@@ -672,7 +708,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
     <div class="card-body">
 
       <div class="situation">
-        1장 §4b에서 다룬 "동적 팀 구성"과 "다양한 워크플로우 조합"을 직접 눈으로 확인하는 시나리오다. D-1에서 만든 <code>writer</code>·<code>reviewer</code> 두 서브에이전트는 그대로 두고, 요청의 성격만 바꿔가며 오케스트레이터가 실제로 누구를, 몇 번, 어떤 순서로 호출하는지 관찰한다 — 서브에이전트 정의는 한 번도 새로 만들지 않는다는 점이 핵심이다.
+        2장 §4b에서 다룬 "동적 팀 구성"과 "다양한 워크플로우 조합"을 직접 눈으로 확인하는 시나리오다. D-1에서 만든 <code>writer</code>·<code>reviewer</code> 두 서브에이전트는 그대로 두고, 요청의 성격만 바꿔가며 오케스트레이터가 실제로 누구를, 몇 번, 어떤 순서로 호출하는지 관찰한다 — 서브에이전트 정의는 한 번도 새로 만들지 않는다는 점이 핵심이다.
       </div>
 
       <div class="cmd-list">
@@ -746,7 +782,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> <a href="../concepts/01_Concepts_Chapter.html#s4b">1장 §4b — 동적 팀 구성과 다양한 워크플로우</a>, <a href="02_Practice_Manual.html#section-3">2.0 레퍼런스 — 병렬 실행</a>
+        <strong>함께 보기:</strong> <a href="../concepts/01_Concepts_Chapter.html#s4b">2장 §4b — 동적 팀 구성과 다양한 워크플로우</a>, <a href="02_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행</a>
       </div>
 
     </div>
@@ -885,7 +921,7 @@ EOF</pre>
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> <a href="02_Practice_Manual.html#section-3">2.0 레퍼런스 — 병렬 실행 (4가지 도구 비교)</a>
+        <strong>함께 보기:</strong> <a href="02_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행 (4가지 도구 비교)</a>
       </div>
 
     </div>
@@ -972,7 +1008,7 @@ EOF</pre>
   <hr>
   <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
     Claude Code/App 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 기준 | 2026년 7월 14일 작성<br>
-    <a href="02_Practice_Manual.html">← 2.0 멀티 에이전트 팀 활용 레퍼런스</a>
+    <a href="02_Practice_Manual.html">← 4장 §1 멀티 에이전트 팀 활용 레퍼런스</a>
   </p>
 </main>
 

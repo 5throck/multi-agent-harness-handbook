@@ -67,6 +67,33 @@
       color: var(--text-dim);
       margin: 0 0 14px;
     }
+    .section-label .day {
+      display: inline-block;
+      background: var(--accent6);
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .section-label .day.day2 {
+      background: var(--accent4);
+    }
+    .section-label .type {
+      display: inline-block;
+      background: var(--bg3);
+      color: var(--text-dim);
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
 
     .grid {
       display: grid;
@@ -141,7 +168,7 @@
   <div class="wrap">
     <header>
       <h1>멀티 에이전트팀 하네스 엔지니어링 핸드북</h1>
-      <p class="subtitle">개념 이해부터 Claude Code/Claude App/Antigravity CLI/Antigravity 실습, 기업 내 운영 전략, ai-workspace-standards로 직접 variant 만들어보기까지</p>
+      <p class="subtitle">개념 이해부터 Claude Code/Claude App/Antigravity 실습, 기업 내 운영 전략, ai-workspace-standards로 직접 variant 만들어보기까지</p>
     </header>
 
     <div class="meta">
@@ -153,13 +180,14 @@
       <br>최종 업데이트 <strong>2026년 7월 14일</strong>
     </div>
 
+    <!-- ─── 강사용 자료 ─── -->
     <div class="group">
-      <p class="section-label">강사용 자료 · 참고</p>
+      <p class="section-label">강사용 자료</p>
       <div class="grid">
         <a class="card" href="lecture-guide/00_Course_Overview.html">
           <span class="tag tag-ref">강의 소개</span>
           <h2>강의 소개 — 학습 목표 · 대상자 · 일정 · 수료 후 얻게 되는 것</h2>
-          <p>이 워크숍이 무엇을 다루는지, 누구를 위한 것인지, 하루 일정이 어떻게 구성되는지, 참가자가 워크숍 후 어떤 역량을 갖추게 되는지 한눈에 확인할 수 있는 소개 자료입니다.</p>
+          <p>이 워크숍이 무엇을 다루는지, 누구를 위한 것인지, 이틀 일정이 어떻게 구성되는지, 참가자가 워크숍 후 어떤 역량을 갖추게 되는지 한눈에 확인할 수 있는 소개 자료입니다.</p>
           <div class="go">소개자료 열기 →</div>
         </a>
         <a class="card" href="lecture-guide/00_Lecture_Guide.html">
@@ -167,12 +195,6 @@
           <h2>강의 진행 가이드 — 사전 준비물 · 시간 배분표 · 장별 강사 노트 · 확인 질문</h2>
           <p>이 핸드북 전체로 강의를 진행할 때 참고할 통합 체크리스트, 절별 시간 배분, 실습 중 시연 전용 구간 안내, 장별 확인 질문을 모았습니다.</p>
           <div class="go">가이드 열기 →</div>
-        </a>
-        <a class="card" href="glossary/00_Glossary.html">
-          <span class="tag tag-ref">용어집</span>
-          <h2>용어집 — 장마다 나온 용어를 한곳에서 찾아보기</h2>
-          <p>오케스트레이터·핸드오프·SSOT·tier·L0/L1/L2·variant 등 핸드북 전체에서 반복되는 용어를 정의와 함께 모았습니다.</p>
-          <div class="go">용어집 열기 →</div>
         </a>
         <a class="card" href="setup/SETUP_ko.html">
           <span class="tag tag-ref">설치 가이드</span>
@@ -189,127 +211,132 @@
       </div>
     </div>
 
+    <!-- ─── 1일차: 개념 ─── -->
     <div class="group">
-      <p class="section-label">① 개념 이해</p>
+      <p class="section-label"><span class="day">1일차</span> <span class="type">개념</span> 일반 사용자 — 기초 개념 학습</p>
       <div class="grid">
-        <a class="card" href="concepts/01_Concepts_Chapter.html">
-          <span class="tag tag-ch">챕터</span>
-          <h2>1장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</h2>
-          <p>하네스 엔지니어링이 왜 필요한지, 단일 에이전트의 한계, 오케스트레이터·스페셜리스트·핸드오프 계약이라는 멀티 에이전트팀의 뼈대를 읽고 이해합니다.</p>
+        <a class="card" href="intro/00_Why_AI_Chapter.html">
+          <span class="tag tag-ch">1장</span>
+          <h2>AI 시대의 업무 혁신</h2>
+          <p>왜 지금 AI를 배워야 하는지, AI 활용의 세 단계(사용자→활용자→설계자), 하네스 엔지니어링의 필요성, 멀티 에이전트의 원리, 실무 시간 단축 사례, 이 워크숍의 로드맵을 읽고 동기를 확립합니다.</p>
           <div class="go">1장 읽기 →</div>
         </a>
+        <a class="card" href="concepts/01_Concepts_Chapter.html">
+          <span class="tag tag-ch">2장</span>
+          <h2>하네스 엔지니어링과 멀티 에이전트팀 개념</h2>
+          <p>하네스 엔지니어링이 왜 필요한지, 단일 에이전트의 한계, 오케스트레이터·스페셜리스트·핸드오프 계약이라는 멀티 에이전트팀의 뼈대, 5가지 오케스트레이션 패턴을 읽고 이해합니다.</p>
+          <div class="go">2장 읽기 →</div>
+        </a>
         <a class="card" href="guardrails/00_Guardrails_Chapter.html">
-          <span class="tag tag-ch">챕터</span>
-          <h2>1.5장 · 가드레일과 권한 모델</h2>
-          <p>서브에이전트에게 무엇을 허용하고 무엇을 막을지, 위험 작업 3단계 분류, 최소 권한 원칙, 사람 승인 게이트, 격리와 감사 로그를 다룹니다.</p>
-          <div class="go">1.5장 읽기 →</div>
+          <span class="tag tag-ch">3장</span>
+          <h2>가드레일과 권한 모델</h2>
+          <p>서브에이전트에게 무엇을 허용하고 무엇을 막을지, 위험 작업 3단계 분류(읽기/쓰기/파괴적), 최소 권한 원칙, 사람 승인 게이트, 격리와 감사 로그를 다룹니다.</p>
+          <div class="go">3장 읽기 →</div>
         </a>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="section-label">② 하네스 기반 멀티 에이전트 팀 활용</p>
-      <div class="grid">
-        <a class="card" href="practice/02_Practice_Manual.html">
-          <span class="tag tag-ref">레퍼런스</span>
-          <h2>2.0 · 멀티 에이전트 도구 매뉴얼 (Claude Code/App + Antigravity CLI/Desktop)</h2>
-          <p>서브에이전트 정의·호출·병렬 실행·자동화를 Claude Code, Claude App, Antigravity CLI, Antigravity Desktop 네 도구로 나란히 참조합니다.</p>
-          <div class="go">매뉴얼 열기 →</div>
-        </a>
-        <a class="card" href="practice/02_Practice_Examples.html">
-          <span class="tag tag-ex">실습 예시</span>
-          <h2>2.1 · 멀티 에이전트 팀 실습 (Claude Code/App + Antigravity CLI/Desktop)</h2>
-          <p>필요한 프로그램 설치부터 리뷰어·작성자 서브에이전트, 파이프라인, 네 도구 각각의 병렬 실행까지 직접 해봅니다.</p>
-          <div class="go">실습 시작 →</div>
-        </a>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="section-label">③ 도구 비교</p>
-      <div class="grid single">
-        <a class="card" href="tools/03_Tools_Manual.html">
-          <span class="tag tag-ref">레퍼런스</span>
-          <h2>3장 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity</h2>
-          <p>같은 멀티 에이전트팀 개념이 네 도구에서 각각 어떻게 다르게 구현되는지, 훅·병렬 실행·격리 방식 차이를 비교합니다.</p>
-          <div class="go">비교표 보기 →</div>
-        </a>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="section-label">④ 기업 운영 전략 비교</p>
-      <div class="grid single">
-        <a class="card" href="enterprise/03_Enterprise_Chapter.html">
-          <span class="tag tag-ch">챕터</span>
-          <h2>4장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</h2>
-          <p>전사 서비스 티켓형 운영과 variant 개발도구형 운영을 나란히 비교하며 각각의 강점과 한계를 읽어봅니다.</p>
-          <div class="go">4장 읽기 →</div>
-        </a>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="section-label">⑤ ai-workspace-standards 소개</p>
-      <div class="grid single">
         <a class="card" href="intro/04_Intro_Chapter.html">
-          <span class="tag tag-ch">챕터</span>
-          <h2>5장 · ai-workspace-standards 소개</h2>
-          <p>variant 개발도구형 모델을 실제로 구현하는 ai-workspace-standards 저장소의 구조, 핵심 문서, 7개 variant, L0→L1→L2 계층 구조를 살펴봅니다.</p>
+          <span class="tag tag-ch">5장</span>
+          <h2>ai-workspace-standards 소개</h2>
+          <p>variant 개발도구형 모델을 실제로 구현하는 ai-workspace-standards 저장소의 구조, 핵심 문서 4종, 7개 variant, 세션 시작 체크리스트와 스캐폴딩 흐름을 살펴봅니다.</p>
           <div class="go">5장 읽기 →</div>
         </a>
       </div>
     </div>
 
+    <!-- ─── 1일차: 실습 ─── -->
     <div class="group">
-      <p class="section-label">⑥ variant 실습</p>
+      <p class="section-label"><span class="day">1일차</span> <span class="type">실습</span> 일반 사용자 — 직접 에이전트팀 가동</p>
       <div class="grid">
+        <a class="card" href="practice/02_Practice_Manual.html">
+          <span class="tag tag-ref">4장 §1</span>
+          <h2>하네스 기반 멀티 에이전트 팀 활용 (매뉴얼)</h2>
+          <p>서브에이전트 정의·호출·병렬 실행·자동화를 Claude Code, Claude App, Antigravity CLI, Antigravity Desktop 네 도구로 나란히 참조합니다.</p>
+          <div class="go">매뉴얼 열기 →</div>
+        </a>
+        <a class="card" href="practice/02_Practice_Examples.html">
+          <span class="tag tag-ex">4장 §2</span>
+          <h2>멀티 에이전트 팀 실습 (시나리오별)</h2>
+          <p>리뷰어·작성자 서브에이전트, 파이프라인, 네 도구 각각의 병렬 실행까지 직접 해봅니다.</p>
+          <div class="go">실습 시작 →</div>
+        </a>
         <a class="card" href="variant-practice/04_VariantPractice_Manual.html">
-          <span class="tag tag-ref">레퍼런스</span>
-          <h2>6.0 · ai-workspace-standards 매뉴얼</h2>
+          <span class="tag tag-ref">6장 §1</span>
+          <h2>기존 variant 활용 (매뉴얼)</h2>
           <p>워크스페이스 클론, bun 설치, new-project.ts 사용법, 세션 시작 체크리스트를 빠르게 참조합니다.</p>
           <div class="go">매뉴얼 열기 →</div>
         </a>
         <a class="card" href="variant-practice/04_VariantPractice_Examples.html">
-          <span class="tag tag-ex">실습 예시</span>
-          <h2>6.1 · 새 variant 하나 만들어보기</h2>
-          <p>기존 variant로 프로젝트를 만들어본 뒤, co-marketing이라는 새 variant 프로토타입을 직접 스캐폴딩합니다.</p>
+          <span class="tag tag-ex">6장 §2</span>
+          <h2>기존 variant 활용 (실습)</h2>
+          <p>co-consult로 시장조사 컨설팅 프로젝트를 진행하고, co-deck으로 발표자료를 자동 제작해봅니다.</p>
           <div class="go">실습 시작 →</div>
         </a>
       </div>
     </div>
 
+    <!-- ─── 2일차: 개념 ─── -->
     <div class="group">
-      <p class="section-label">⑦ variant 심화</p>
+      <p class="section-label"><span class="day day2">2일차</span> <span class="type">개념</span> IT전문가 — 아키텍처 심화와 전략</p>
+      <div class="grid">
+        <a class="card" href="intro/04_Intro_Advanced_Chapter.html">
+          <span class="tag tag-ch">7장</span>
+          <h2>ai-workspace-standards 아키텍처 심화</h2>
+          <p>L0→L1→L2 3-tier 계층 구조, 포크 모델과 자동 동기화 불가의 이유, 파일별 SSOT 흐름, 컨테이너·메모리·배포 고도화 방향을 다룹니다.</p>
+          <div class="go">7장 읽기 →</div>
+        </a>
+        <a class="card" href="tools/03_Tools_Manual.html">
+          <span class="tag tag-ch">8장</span>
+          <h2>도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity</h2>
+          <p>같은 멀티 에이전트팀 개념이 네 도구에서 각각 어떻게 다르게 구현되는지, 훅·병렬 실행·격리 방식 차이를 비교합니다.</p>
+          <div class="go">비교표 보기 →</div>
+        </a>
+        <a class="card" href="enterprise/03_Enterprise_Chapter.html">
+          <span class="tag tag-ch">9장</span>
+          <h2>기업 내 운영 전략 비교</h2>
+          <p>전사 서비스 티켓형 운영과 variant 개발도구형 운영을 나란히 비교하며 각각의 강점과 한계를 읽어봅니다.</p>
+          <div class="go">9장 읽기 →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── 2일차: 실습 ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day day2">2일차</span> <span class="type">실습</span> IT전문가 — 신규 생성과 승격</p>
       <div class="grid">
         <a class="card" href="variant-advanced/05_VariantAdvanced_Chapter.html">
-          <span class="tag tag-ch">챕터</span>
-          <h2>7.0 · 새 variant 만들기 vs 기존 프로젝트를 variant로 승격하기</h2>
-          <p>처음부터 만드는 것과 이미 있는 프로젝트를 승격(promote)하는 것의 차이를 개념적으로 정리합니다.</p>
-          <div class="go">7.0 읽기 →</div>
+          <span class="tag tag-ch">10장</span>
+          <h2>신규 variant 생성 (Phase A)</h2>
+          <p>co-marketing이라는 새 variant를 Phase A 프로토타입으로 처음부터 직접 설계합니다. create-l2-scaffold.ts로 에이전트 팀 구성을 만드는 과정을 경험합니다.</p>
+          <div class="go">10장 읽기 →</div>
         </a>
         <a class="card" href="variant-advanced/05_VariantAdvanced_Examples.html">
-          <span class="tag tag-ex">실습 예시</span>
-          <h2>7.1 · 승격 절차 따라가 보기</h2>
-          <p>co-marketing 프로토타입 구조를 기존 템플릿과 비교하고, PROMOTION_CHECKLIST와 승격 파이프라인 명령을 단계별로 살펴봅니다.</p>
+          <span class="tag tag-ex">11장 §2</span>
+          <h2>신규 variant 승격 (Phase B)</h2>
+          <p>co-marketing 프로토타입을 정식 templates/ variant로 승격하는 파이프라인을 단계별로 따라갑니다. PROMOTION_CHECKLIST와 reconcile 과정을 확인합니다.</p>
           <div class="go">실습 시작 →</div>
+        </a>
+        <a class="card" href="capstone/00_Capstone.html">
+          <span class="tag tag-ex">12장</span>
+          <h2>캡스톤 — 나만의 워크플로우 설계하기</h2>
+          <p>본인이 반복하는 실제 작업 하나를 골라, 개념부터 가드레일·서브에이전트 구현·검증까지 처음부터 끝까지 직접 설계해보는 마무리 실습입니다.</p>
+          <div class="go">캡스톤 시작 →</div>
         </a>
       </div>
     </div>
 
+    <!-- ─── 공통 참고 ─── -->
     <div class="group">
-      <p class="section-label">⑧ 종합 실습 · 참고</p>
+      <p class="section-label">공통 참고</p>
       <div class="grid">
-        <a class="card" href="capstone/00_Capstone.html">
-          <span class="tag tag-ex">캡스톤</span>
-          <h2>8장 · 캡스톤 실습 — 나만의 워크플로우 설계하기</h2>
-          <p>본인이 반복하는 실제 작업 하나를 골라, 개념부터 가드레일·서브에이전트 구현·검증까지 처음부터 끝까지 직접 설계해보는 마무리 실습입니다.</p>
-          <div class="go">캡스톤 시작 →</div>
+        <a class="card" href="glossary/00_Glossary.html">
+          <span class="tag tag-ref">용어집</span>
+          <h2>용어집 — 장마다 나온 용어를 한곳에서 찾아보기</h2>
+          <p>오케스트레이터·핸드오프·SSOT·tier·L0/L1/L2·variant·스캐폴딩·포크 모델 등 핸드북 전체에서 반복되는 용어를 정의와 함께 모았습니다.</p>
+          <div class="go">용어집 열기 →</div>
         </a>
         <a class="card" href="faq/00_FAQ.html">
           <span class="tag tag-ref">FAQ</span>
           <h2>FAQ · 자주 나는 오류와 해결법</h2>
-          <p>실습 중 흔히 겪는 문제(순차 호출 실패, 훅 미발화, 인지적 중첩, 스캐폴딩 오류 등)를 증상별로 모아 원인과 해결책, 관련 장으로 연결합니다.</p>
+          <p>실습 중 흔히 겪는 문제(순차 호출 실패, 훅 미발화, 인지적 중첩, 스캐폴딩 오류, 비용·타임아웃 등)를 증상별로 모아 원인과 해결책을 연결합니다.</p>
           <div class="go">FAQ 열기 →</div>
         </a>
       </div>

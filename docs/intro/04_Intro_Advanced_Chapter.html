@@ -12,7 +12,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>7장 · ai-workspace-standards 아키텍처 심화</title>
+  <title>9장 §1 · 생애주기 관리</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -115,135 +115,373 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">7장 · 아키텍처 심화</div>
-  <a href="#s5">L0→L1→L2 계층 구조</a>
-  <a href="#s6">현재 상태와 고도화 방향</a>
+  <div class="nav-title">9장 · 아키텍처 심화</div>
+  <a href="#s1-lifecycle-why">생애주기 관리가 필요한 이유</a>
+  <a href="#s1-agent-lifecycle">에이전트 생애주기</a>
+  <a href="#s1-skill-lifecycle">스킬 생애주기</a>
+  <a href="#s1-script-lifecycle">스크립트 생애주기</a>
+  <div class="nav-section">이 장의 다른 절</div>
+  <a href="04_Intro_Advanced_Deploy.html">§2 · 배포와 SSOT</a>
   <div class="nav-section">다른 장</div>
   <a href="../intro/04_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
-  <a href="../tools/03_Tools_Manual.html">8장 · 도구 비교</a>
+  <a href="../enterprise/03_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">7장</div>
-  <h1>ai-workspace-standards 아키텍처 심화</h1>
-  <p class="lead">5장에서 소개한 ai-workspace-standards의 계층 구조(L0→L1→L2)와 포크 모델, 그리고 현재 상태와 고도화 방향을 깊이 있게 다룬다. 2일차 전반부의 개념 세션에서 다룬다.</p>
+  <div class="chapter-eyebrow">9장 §1</div>
+  <h1>생애주기 관리</h1>
+  <p class="lead">에이전트, 스킬, 스크립트 각각이 생성부터 폐기까지 어떤 단계를 거치는지, 그리고 이 단계들이 실제 워크스페이스에서 어떻게 관리되는지 다룬다.</p>
 
   <div class="keypoints">
-    <div class="kp-title">이 장에서 다루는 것</div>
+    <div class="kp-title">이 절에서 다루는 것</div>
     <ul>
-      <li>L0→L1→L2 3-tier 원리</li>
-      <li>포크 모델과 자동 동기화 불가의 이유</li>
-      <li>파일별 SSOT 흐름</li>
-      <li>컨테이너/메모리/배포 고도화 방향</li>
+      <li>에이전트 생애주기: create → verify → operate → improve → deprecate</li>
+      <li>스킬 생애주기: define → test → deploy → version → retire</li>
+      <li>스크립트 생애주기: write → lint → test → register → deprecate</li>
+      <li>생애주기 관리가 왜 필요한지</li>
     </ul>
   </div>
 
-  <h2 id="s5">L0 → L1 → L2 계층 구조 (3-tier)</h2>
-  <p>지금까지 나온 CONSTITUTION.md·templates/·variant·new-project.ts는 모두 하나의 큰 원칙 위에서 움직인다. 저장소는 <strong>L0(워크스페이스 루트) → L1(공통 템플릿) → L2(variant/프로젝트)</strong>라는 3단 계층(3-tier)으로 설계돼 있고, 신뢰할 수 있는 원본(Single Source of Truth)은 항상 위에서 아래로만 흐른다. 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다. 앞 절에서 다룬 보일러플레이트가 바로 이 3-tier 중 L1에 해당한다. 이 보일러플레이트는 L0에서 발행되고, L2가 태어날 때 딱 한 번 전달되는 스냅샷이다.</p>
+  <h2 id="s1-lifecycle-why">생애주기 관리가 필요한 이유</h2>
 
-  <h3>세 계층이 각각 담당하는 것</h3>
-  <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 variant를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 실제 만들어진 살아있는 프로젝트 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다.</p>
+  <p>멀티 에이전트 시스템을 운영하다 보면 워크스페이스에 에이전트, 스킬, 스크립트가 계속 늘어난다. 새로운 것을 만드는 것만으로는 충분하지 않다. 각 구성요소가 <strong>어떤 단계에 있는지</strong>를 명확히 해야 한다. 그래야 다음 문제들을 피할 수 있다.</p>
 
-  <div class="tree-box" style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
-    <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">L0 — 워크스페이스 루트 (C:\git\, 유일한 원본)
-  │  L0→L1: publish-to-template.ts (dev-sync 때마다 자동·지속)
-  ▼
-L1 — templates/common/ (공통 템플릿 스냅샷)
-  │  L1→L2: create-l2-scaffold.ts (variant 생성 시점, 딱 1회)
-  ▼
-L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
-     └─ 포크 이후 독립적으로 진화, 자동 역동기화 없음
-     └─ 공식 템플릿으로 승격하려면 명시적으로 l2-to-variant-pipeline.ts 실행</pre>
-  </div>
+  <ul>
+    <li><strong>미검증 구성요소가 운영에 투입되는 문제.</strong> 에이전트가 <code>agent:verify</code>를 거치지 않고 배포되면, 누락된 프론트매터 필드나 잘못된 역할 정의로 인해 실제 세션에서 에러가 발생한다.</li>
+    <li><strong>폐기 대상이 여전히 호출되는 문제.</strong> 더 이상 유효하지 않은 스킬이 레지스트리에 남아 있으면, 에이전트가 의도치 않게 해당 스킬을 선택하고 실패한다.</li>
+    <li><strong>버전 불일치로 인한 재현 불가 문제.</strong> 스크립트가 갱신되었는데 어떤 variant에서는 구버전을 여전히 참조하고 있으면, 동일한 입력에 대해 다른 결과가 나온다.</li>
+  </ul>
 
-  <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:0 0 28px;">
-    <svg viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <p>이러한 문제를 체계적으로 방지하기 위해, ai-workspace-standards는 에이전트·스킬·스크립트 각각에 대해 <strong>명명된 단계(named stages)</strong>를 정의하고, 각 단계에서 수행해야 하는 검증과 전이 조건을 규정한다. 이 절에서는 세 가지 생애주기를 각각 설명하고, 워크스페이스에서 실제로 어떻게 관리되는지를 다룬다.</p>
+
+  <!-- ─── 에이전트 생애주기 ─── -->
+
+  <h2 id="s1-agent-lifecycle">에이전트 생애주기</h2>
+
+  <p>에이전트는 <code>agents/</code> 디렉터리 아래에 <code>.md</code> 파일로 정의된다. 에이전트 하나가 태어나서 운영되다가 결국 폐기되기까지 다음 다섯 단계를 거친다.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
-        <marker id="arrowL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6639ba"/>
         </marker>
       </defs>
       <g font-family="-apple-system,Segoe UI,sans-serif">
-        <rect x="20" y="80" width="110" height="50" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="75" y="102" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">L0</text>
-        <text x="75" y="118" text-anchor="middle" font-size="10" fill="#6639ba">워크스페이스 루트</text>
+        <!-- Create -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Create</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">agents/*.md 작성</text>
+        <!-- Verify -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Verify</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">agent:verify</text>
+        <!-- Operate -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Operate</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">세션에서 실행</text>
+        <!-- Improve -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Improve</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">피드백 반영</text>
+        <!-- Deprecate -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecate</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">사용 중단</text>
 
-        <line x1="130" y1="105" x2="185" y2="105" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowL)"/>
-        <text x="157" y="96" text-anchor="middle" font-size="9" fill="#636c76">자동·지속</text>
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
 
-        <rect x="190" y="80" width="130" height="50" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
-        <text x="255" y="102" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">L1</text>
-        <text x="255" y="118" text-anchor="middle" font-size="10" fill="#0550ae">templates/common/</text>
-
-        <line x1="320" y1="90" x2="400" y2="35" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
-        <line x1="320" y1="105" x2="400" y2="105" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
-        <line x1="320" y1="120" x2="400" y2="175" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
-        <text x="355" y="55" text-anchor="middle" font-size="9" fill="#636c76">스캐폴딩 시 1회</text>
-
-        <rect x="405" y="10" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
-        <text x="500" y="30" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-develop</text>
-        <text x="500" y="46" text-anchor="middle" font-size="9.5" fill="#116329">포크 이후 독립 진화</text>
-
-        <rect x="405" y="80" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
-        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — Projects/my-app</text>
-        <text x="500" y="116" text-anchor="middle" font-size="9.5" fill="#116329">포크 이후 독립 진화</text>
-
-        <rect x="405" y="150" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
-        <text x="500" y="170" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-marketing</text>
-        <text x="500" y="186" text-anchor="middle" font-size="9.5" fill="#116329">포크 이후 독립 진화</text>
-
-        <path d="M500,60 C440,60 440,70 500,80" fill="none" stroke="#cf222e" stroke-width="1.1" stroke-dasharray="3,2"/>
-        <text x="360" y="200" font-size="9.5" fill="#cf222e">✕ 자동 역동기화 없음 — L2→L1 방향 화살표는 존재하지 않는다</text>
+        <!-- Feedback loop: Improve → Verify -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowA)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">재검증 루프</text>
       </g>
     </svg>
   </div>
 
-  <h3>L1 → L2가 "포크"로 끝나는 이유</h3>
-  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 variant에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. variant가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 새 variant를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 variant를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(10장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다.</p>
+  <h3 id="s1-agent-create">Create — 에이전트 생성</h3>
+  <p>에이전트 생애주기는 <code>agents/</code> 디렉터리에 새 <code>.md</code> 파일을 만드는 것으로 시작된다. 이 파일에는 프론트매터(name, role, model 등 필드)와 본문(system prompt)이 포함된다. 생성 시 다음 사항을 확인한다.</p>
+  <ul>
+    <li>파일명이 에이전트 역할을 명확히 나타내는지(예: <code>pm.md</code>, <code>reviewer.md</code>)</li>
+    <li>프론트매터에 <code>name</code>, <code>role</code>, <code>model</code>, <code>status</code> 필드가 모두 있는지</li>
+    <li>본문에 해당 에이전트의 동작 원칙과 제약 조건이 명시되어 있는지</li>
+  </ul>
+  <p>초기 <code>status</code> 필드값은 <code>draft</code>로 설정한다. 이 상태에서는 에이전트가 운영 세션에서 자동으로 선택되지 않는다.</p>
 
-  <h3>파일별 SSOT — 무엇이 어디서 어디로 흐르는가</h3>
+  <h3 id="s1-agent-verify">Verify — 에이전트 검증</h3>
+  <p>생성된 에이전트 파일이 워크스페이스 규격에 맞는지 <code>bun run agent:verify</code>로 검증한다. 이 명령은 다음을 확인한다.</p>
+  <ul>
+    <li>프론트매터 필드 누락 여부 및 타입 일치 여부</li>
+    <li><code>AGENTS.md</code>에 해당 에이전트가 올바르게 등록되어 있는지</li>
+    <li>참조하는 스킬과 스크립트가 실제 존재하는지</li>
+    <li>다른 에이전트와 역할이 중복되지 않는지</li>
+  </ul>
+  <p>검증을 통과하면 <code>status</code>를 <code>active</code>로 변경한다. 통과하지 못하면 <code>draft</code> 상태를 유지하며, 에러 메시지를 기준으로 수정 후 재검증한다.</p>
+
+  <h3 id="s1-agent-operate">Operate — 에이전트 운영</h3>
+  <p><code>active</code> 상태의 에이전트는 실제 세션에서 호출될 수 있다. 운영 단계에서는 에이전트의 실제 동작을 관찰하고, 세션 로그에서 다음을 모니터링한다.</p>
+  <ul>
+    <li>에이전트가 정의된 역할에 맞게 동작하는지</li>
+    <li>다른 에이전트와의 협업에서 간섭이나 충돌이 없는지</li>
+    <li>응답 품질이 기대 수준에 도달하는지</li>
+  </ul>
+  <p>운영 중 발견된 문제는 기록하여 Improve 단계의 입력으로 사용한다.</p>
+
+  <h3 id="s1-agent-improve">Improve — 에이전트 개선</h3>
+  <p>운영 피드백을 바탕으로 에이전트 파일을 갱신한다. 개선 내역은 다음과 같다.</p>
+  <ul>
+    <li>system prompt의 모호한 지시를 명확하게 수정</li>
+    <li>누락된 제약 조건이나 예외 처리 규칙 추가</li>
+    <li>모델 변경(<code>model</code> 필드)이 필요한 경우 갱신</li>
+  </ul>
+  <p>파일을 수정한 후에는 반드시 다시 <code>bun run agent:verify</code>를 실행하여 <strong>재검증</strong>해야 한다. Verify 단계로 돌아가는 이 루프는 에이전트 생애주기에서 핵심적인 피드백 사이클이다. 검증을 통과하면 다시 Operate 단계로 진입한다.</p>
+
+  <h3 id="s1-agent-deprecate">Deprecate — 에이전트 폐기</h3>
+  <p>에이전트가 더 이상 필요하지 않게 되면 <code>status</code>를 <code>deprecated</code>로 변경한다. 폐기 시 다음을 수행한다.</p>
+  <ul>
+    <li><code>AGENTS.md</code>에서 해당 에이전트 항목을 제거하거나 주석 처리</li>
+    <li>해당 에이전트를 참조하던 variant나 스크립트에서 의존성 제거</li>
+    <li>파일 자체는 삭제하지 않고 <code>status: deprecated</code>로 보존(필요 시 복원 가능)</li>
+  </ul>
+  <p>일정 기간(예: 30일)이 지난 후, 더 이상 참조가 없는 것으로 확인되면 파일을 아카이브 디렉터리로 이동하거나 최종 삭제한다.</p>
+
+  <div class="note">
+    <code>bun run agent:verify</code>는 에이전트 생애주기에서 Verify 단계의 핵심 도구다. 이 명령은 단순한 문법 검사를 넘어, 에이전트가 워크스페이스의 다른 구성요소와 일관성 있게 연결되어 있는지까지 확인한다. CI/CD 파이프라인에 이 검증을 포함시키면, 미검증 에이전트가 운영에 투입되는 것을 시스템적으로 방지할 수 있다.
+  </div>
+
+  <!-- ─── 스킬 생애주기 ─── -->
+
+  <h2 id="s1-skill-lifecycle">스킬 생애주기</h2>
+
+  <p>스킬은 에이전트가 세션에서 호출할 수 있는 재사용 가능한 동작 단위다. <code>SKILL.md</code> 파일로 정의되며, 플러그인이나 워크스페이스의 <code>.zcode/skills/</code>에 배치된다. 스킬의 생애주기는 다음 다섯 단계로 구성된다.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Define -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Define</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">SKILL.md 작성</text>
+        <!-- Test -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Test</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">validate-skills.ts</text>
+        <!-- Deploy -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Deploy</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">레지스트리 등록</text>
+        <!-- Version -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Version</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">버전 관리</text>
+        <!-- Retire -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Retire</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">사용 중단</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+
+        <!-- Feedback loop: Version → Test -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowS)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">갱신 후 재테스트</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s1-skill-define">Define — 스킬 정의</h3>
+  <p>스킬은 <code>SKILL.md</code> 파일로 정의된다. 이 파일에는 프론트매터(name, description, triggers 등)와 함께 스킬이 수행할 동작의 설명이 포함된다. 정의 시 다음을 명확히 한다.</p>
+  <ul>
+    <li><code>name</code>: 스킬의 고유 식별자</li>
+    <li><code>description</code>: 에이전트가 이 스킬을 언제 선택해야 하는지를 결정하는 설명</li>
+    <li><code>triggers</code>: 스킬이 자동으로 활성화되는 조건</li>
+    <li>본문: 스킬 실행 시 에이전트가 따라야 할 절차</li>
+  </ul>
+  <p>초기에는 <code>status: draft</code>로 두고, 에이전트가 실제로 이 스킬을 자동 선택하지 못하게 한다.</p>
+
+  <h3 id="s1-skill-test">Test — 스킬 검증</h3>
+  <p>스킬 정의가 올바른지 <code>validate-skills.ts</code>로 검증한다. 이 스크립트는 다음을 확인한다.</p>
+  <ul>
+    <li>프론트매터 필드 완전성 및 형식 일치</li>
+    <li>트리거 조건이 다른 스킬과 모호하게 겹치지 않는지</li>
+    <li>참조하는 도구(MCP tool 등)가 현재 환경에서 사용 가능한지</li>
+    <li>스킬 설명이 에이전트가 올바르게 이해할 수 있는 수준으로 구체적인지</li>
+  </ul>
+  <p>검증을 통과하면 Deploy 단계로 이동할 준비가 된다.</p>
+
+  <h3 id="s1-skill-deploy">Deploy — 스킬 배포</h3>
+  <p>검증된 스킬을 에이전트가 실제로 호출할 수 있는 환경에 배포한다. 배포란 구체적으로 다음을 의미한다.</p>
+  <ul>
+    <li><code>status</code>를 <code>active</code>로 변경하여 에이전트의 자동 선택 대상에 포함</li>
+    <li>필요한 경우 워크스페이스의 <code>.zcode/skills/</code> 또는 플러그인 레지스트리에 등록</li>
+    <li>해당 스킬을 사용하는 에이전트의 프론트매터에 의존성을 명시</li>
+  </ul>
+  <p>배포 후에는 에이전트 세션에서 스킬이 정상적으로 트리거되고 실행되는지 확인하는 수동 검토를 수행한다.</p>
+
+  <h3 id="s1-skill-version">Version — 스킬 버전 관리</h3>
+  <p>운영 환경에서 사용 중인 스킬에 변경이 필요할 때 버전 관리를 통해 안전하게 갱신한다.</p>
+  <ul>
+    <li>스킬 파일의 변경 이력을 <code>SKILL.md</code> 헤더 주석이나 changelog에 기록</li>
+    <li>호환성을 깨뜨리는 변경(breaking change)인 경우, 기존 스킬을 유지한 채 새 버전으로 복제 후 갱신</li>
+    <li>변경 후 반드시 <code>validate-skills.ts</code>로 재검증을 수행</li>
+  </ul>
+  <p>Version 단계에서 Test 단계로 돌아가는 루프는 스킬 생애주기의 핵심 피드백 사이클이다. 갱신된 스킬이 검증을 통과하면 다시 Deploy 단계로 진입한다.</p>
+
+  <h3 id="s1-skill-retire">Retire — 스킬 폐기</h3>
+  <p>스킬이 더 이상 사용되지 않거나 다른 스킬로 대체되면 폐기한다.</p>
+  <ul>
+    <li><code>status</code>를 <code>retired</code>로 변경하여 에이전트 선택 대상에서 제외</li>
+    <li>해당 스킬을 참조하던 에이전트의 프론트매터에서 의존성 제거</li>
+    <li>파일은 보존하되 <code>retired</code> 상태로 명시하여 재사용 시 원본 참조 가능하게 유지</li>
+  </ul>
+
+  <div class="note">
+    <code>validate-skills.ts</code>는 스킬 생애주기에서 Test 단계의 핵심 도구다. 이 스크립트는 단순한 형식 검사뿐 아니라, 스킬 간 트리거 충돌과 참조 무결성까지 점검한다. 새 스킬을 추가하거나 기존 스킬을 수정할 때마다 반드시 실행해야 한다. 에이전트의 <code>agent:verify</code>와 마찬가지로, CI/CD 파이프라인에 포함시키면 미검증 스킬의 배포를 자동으로 방지할 수 있다.
+  </div>
+
+  <!-- ─── 스크립트 생애주기 ─── -->
+
+  <h2 id="s1-script-lifecycle">스크립트 생애주기</h2>
+
+  <p>스크립트는 <code>scripts/</code> 디렉터리 아래에 <code>.ts</code> 파일로 관리된다. 에이전트 생성 검증, 템플릿 발행, 프로젝트 스캐폴딩 등 워크스페이스 인프라를 자동화하는 실행 가능한 코드다. 스크립트의 생애주기는 다음 다섯 단계로 구성된다.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Write -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Write</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">scripts/*.ts 작성</text>
+        <!-- Lint -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Lint</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">정적 분석</text>
+        <!-- Test -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Test</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">단위/통합 테스트</text>
+        <!-- Register -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Register</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">package.json 등록</text>
+        <!-- Deprecate -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecate</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">사용 중단</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+
+        <!-- Feedback loop: Register → Lint -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowSc)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">수정 후 재검증</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s1-script-write">Write — 스크립트 작성</h3>
+  <p>새 스크립트는 <code>scripts/</code> 디렉터리에 <code>.ts</code> 파일로 작성된다. 작성 시 다음을 준수한다.</p>
+  <ul>
+    <li>파일명이 스크립트의 목적을 명확히 나타내야 한다(예: <code>publish-to-template.ts</code>, <code>validate-skills.ts</code>)</li>
+    <li>스크립트 상단에 목적, 사용법, 인자 설명을 주석으로 기록</li>
+    <li>타입 정의를 명확히 하고, 외부 의존성을 최소화</li>
+    <li>에러 처리를 포함하여 실패 시 의미 있는 메시지를 출력</li>
+  </ul>
+  <p>작성 직후의 스크립트는 <code>draft</code> 상태로 간주한다.</p>
+
+  <h3 id="s1-script-lint">Lint — 정적 분석</h3>
+  <p>작성된 스크립트에 대해 정적 분석(lint)을 수행한다. TypeScript 기반 워크스페이스에서는 <code>bun run lint</code> 또는 <code>tsc --noEmit</code>를 사용하여 다음을 확인한다.</p>
+  <ul>
+    <li>타입 오류 없음</li>
+    <li>사용되지 않는 변수나 임포트 없음</li>
+    <li>코드 스타일 일관성</li>
+    <li>잠재적 런타임 에러(예: null 참조) 경고</li>
+  </ul>
+  <p>정적 분석에서 발견된 문제는 모두 수정해야 다음 단계로 진행할 수 있다.</p>
+
+  <h3 id="s1-script-test">Test — 테스트</h3>
+  <p>정적 분석을 통과한 스크립트에 대해 단위 테스트 및 통합 테스트를 수행한다. 스크립트가 파일 시스템이나 네트워크에 의존하는 경우, 모의(mock) 환경에서 테스트한다.</p>
+  <ul>
+    <li>정상 경로(happy path): 예상 입력에 대해 올바른 출력이 나오는지</li>
+    <li>예외 경로: 잘못된 입력, 파일 없음, 권한 오류 등에 대해 적절히 에러를 처리하는지</li>
+    <li>통합 테스트: 실제 워크스페이스 환경에서 다른 스크립트나 에이전트와 연동 시 정상 동작하는지</li>
+  </ul>
+  <p>테스트를 통과한 스크립트만 Register 단계로 이동할 수 있다.</p>
+
+  <h3 id="s1-script-register">Register — 스크립트 등록</h3>
+  <p>테스트를 통과한 스크립트를 <code>package.json</code>의 <code>scripts</code> 섹션에 등록하여 <code>bun run &lt;name&gt;</code> 형태로 실행할 수 있게 만든다.</p>
+  <ul>
+    <li><code>package.json</code>에 적절한 스크립트 이름과 실행 명령을 추가</li>
+    <li>스크립트 설명서(이 핸드북 또는 별도 README)에 사용법을 기록</li>
+    <li>다른 스크립트나 에이전트에서 이 스크립트를 호출하는 경우, 해당 의존성을 문서화</li>
+  </ul>
+  <p>등록 완료 후, <code>bun run &lt;name&gt;</code>가 정상적으로 실행되는지 최종 확인한다.</p>
+
+  <h3 id="s1-script-deprecate">Deprecate — 스크립트 폐기</h3>
+  <p>스크립트가 더 이상 필요하지 않거나 다른 스크립트로 대체된 경우 폐기한다.</p>
+  <ul>
+    <li><code>package.json</code>에서 해당 스크립트 항목을 제거</li>
+    <li>이 스크립트를 호출하던 다른 스크립트에서 의존성을 제거하고 대체 경로로 업데이트</li>
+    <li>파일 자체는 <code>scripts/_deprecated/</code> 같은 아카이브 디렉터리로 이동하거나, 주석에 <code>@deprecated</code>를 명시하여 보존</li>
+  </ul>
+
+  <div class="note">
+    스크립트 생애주기에서 사람이 직접 수행하는 <strong>수동 검토(manual review)</strong>는 Lint와 Test 사이, 그리고 Test와 Register 사이에서 각각 한 번씩 권장된다. 자동화된 검증이 모든 문제를 잡을 수는 없다. 특히 스크립트가 워크스페이스의 파일 구조를 변경하는 경우(예: <code>publish-to-template.ts</code>), 사람이 실제 결과를 눈으로 확인하는 과정이 필수적이다.
+  </div>
+
+  <!-- ─── 세 생애주기의 관계 ─── -->
+
+  <h2 id="s1-lifecycle-summary">세 생애주기의 공통 원칙과 상호 의존성</h2>
+
+  <p>에이전트·스킬·스크립트의 생애주기는 각각 독립적으로 정의되어 있지만, 실제 워크스페이스에서는 밀접하게 연결되어 있다.</p>
+
   <table style="width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;">
     <thead><tr>
-      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">파일</th>
-      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">원본(SSOT)</th>
-      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">동기화 방식</th>
+      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">검증 도구</th>
+      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">관련 생애주기</th>
+      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">역할</th>
     </tr></thead>
     <tbody>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>CLAUDE.md</code> / <code>GEMINI.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">워크스페이스 루트</td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">수동 전파 + <code>validate-templates.ts</code></td></tr>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>agents/*.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;">워크스페이스 루트 <code>agents/</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>bun run agent:verify</code></td></tr>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>AGENTS.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">워크스페이스 루트</td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;"><code>bun run agent:verify</code></td></tr>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>variant.json</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>templates/co-&lt;name&gt;/</code> 자신</td><td style="padding:8px 12px;border:1px solid #d0d7de;">해당 variant가 곧 원본</td></tr>
+      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>bun run agent:verify</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;">에이전트</td><td style="padding:8px 12px;border:1px solid #d0d7de;">에이전트 파일의 구조, 참조 무결성, AGENTS.md 등록 여부 검증</td></tr>
+      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>validate-skills.ts</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;">스킬</td><td style="padding:8px 12px;border:1px solid #d0d7de;">스킬 프론트매터, 트리거 충돌, 도구 참조 유효성 검증</td></tr>
+      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;">수동 검토</td><td style="padding:8px 12px;border:1px solid #d0d7de;">모든 생애주기</td><td style="padding:8px 12px;border:1px solid #d0d7de;">자동 검증으로 잡히지 않는 의미적 정확성, 사용성, 영향 범위 확인</td></tr>
     </tbody>
   </table>
 
-  <p><code>agents/pm.md</code>는 L0→L1 관계를 가장 잘 보여주는 사례다. L0의 <code>agents/pm.md</code>가 완전한 원본이고, L1의 <code>templates/common/agents/pm.md</code>는 <code>extends: ../../../agents/pm.md</code> 프론트매터로 L0를 참조하되 워크스페이스 전용 섹션(예: Auto-Mode, 라이프사이클 상태 필드)은 제거한 "순수 확장" 파일이다. L2의 <code>templates/co-*/agents/pm.md</code>는 L1을 이어받되 내용을 그대로 복사하지 않고, variant 고유의 오버라이드로부터 필요한 내용을 처음부터 다시 생성한다("Layout Reconstruction"). 그래서 L0의 <code>agents/pm.md</code>가 300줄이 넘어도 L2의 pm.md는 50~100줄 남짓으로 유지된다.</p>
+  <p>세 생애주기는 다음 세 가지 공통 원칙을 공유한다.</p>
 
-  <div class="note">L0→L1→L2를 한 문장으로: <strong>원본은 위에서만 고친다. 아래 계층은 원본의 스냅샷이거나, 스캐폴딩 시점의 복사본이다. 흐름은 언제나 위에서 아래로만 간다.</strong> 이 원칙을 어기는 대표적인 실수가 "새 프로젝트(L2)에서 에이전트 파일을 고쳐 놓고 워크스페이스 루트(L0)에는 반영하지 않는 것"이다 — L2에서 L0로 거슬러 올라가는 역방향 흐름은 애초에 존재하지 않으므로, 그 수정은 그 프로젝트 안에서만 유효하고 다른 곳에는 영영 반영되지 않는다.</div>
+  <ul>
+    <li><strong>단계 명시:</strong> 모든 구성요소는 <code>status</code> 필드나 파일 위치를 통해 현재 단계를 명확히 나타내야 한다. <code>draft</code> 상태인 것은 운영에 투입되지 않으며, <code>deprecated</code>/<code>retired</code> 상태인 것은 새로운 호출 대상에서 제외된다.</li>
+    <li><strong>검증 게이트:</strong> 한 단계에서 다음 단계로 이동하기 전에 반드시 정의된 검증을 통과해야 한다. 검증에 실패하면 이전 단계로 돌아가서 수정 후 재검증한다.</li>
+    <li><strong>폐기 후 보존:</strong> 폐기된 구성요소를 즉시 삭제하지 않고 일정 기간 보존한다. 이를 통해 필요한 경우 복원이 가능하고, 폐기 결정의 근거를 추적할 수 있다.</li>
+  </ul>
 
-  <h2 id="s6">현재 상태와 고도화 방향</h2>
-
-  <p>ai-workspace-standards는 앞서 설명한 계층 구조, 7종 variant, 포크 모델까지 구현된 **실행 가능한 저장소**지만, "완성된 형태"는 아니다. 특히 다음 두 영역에서 고도화가 필요하다.</p>
-
-  <h3>컨테이너(container) 기반 서비스 연계</h3>
-  <p>현재 각 variant로 스캐폴딩된 프로젝트는 로컬 워크스페이스 안에서 Claude Code/App, Antigravity 같은 AI 코딩 도구와 직접 연동되는 방식으로만 동작한다. 하지만 실제 기업 환경에서는 프로젝트 단위로 <strong>독립적인 서비스</strong>로 배포되어야 하는 경우가 많다.</p>
-  <p>고도화의 핵심은, 스캐폴딩된 프로젝트가 Docker 또는 Kubernetes 환경에서 **Open WebUI 같은 프론트엔드 서비스와 연계되어 개인 단위로 지원**될 수 있어야 한다는 점이다. 각 사용자가 자신에게 할당된 에이전트 팀을 브라우저 인터페이스를 통해 호출하고, 결과를 확인하고, 세션 간 컨텍스트를 유지할 수 있는 형태다.</p>
-
-  <h3>메모리(memory) 취합과 정리</h3>
-  <p>현재 각 L2 프로젝트는 독립적인 <code>memory/MEMORY.md</code> 파일을 유지한다(5장 §4에서 다룸). 이 파일은 해당 프로젝트의 세션 간 컨텍스트를 기록하지만, 프로젝트가 늘어날수록 메모리 파일도 산재되어 <strong>전체 워크스페이스 수준에서의 인사이트를 파악하기 어려워진다</strong>.</p>
-  <p>고도화의 두 번째 축은, 개별 프로젝트 단위로 흩어져 있는 메모리 파일들을 **취합해서 정리할 수 있는 기능**이 필요하다는 점이다. 예를 들어 "지난 주 모든 프로젝트에서 에이전트 팀이 어떤 패턴의 오류를 자주 겪었는가", "어떤 역할 조합이 가장 자주 쓰였는가" 같은 워크스페이스 수준의 트렌드 분석이 가능해져야 한다.</p>
-
-  <h3>variant 배포 방식의 진화</h3>
-  <p>현재 variant 배포는 <code>new-project.ts</code>에 의한 로컬 스캐폴딩 중심이고, 템플릿 갱신이 L2에 자동으로 전파되지 않는 포크 모델을 따른다. 이 방식은 의도한 차이를 보존한다는 장점이 있지만, 운영 관점에서는 템플릿의 버그 수정이나 보안 패치가 각 프로젝트에 일일이 수동 반영되어야 한다는 부담을 만든다.</p>
-  <p>고도화 방향으로는 (a) 포크 모델의 장점을 유지하면서도 보안 패치나 중요 버그 수정만 선택적으로 L2에 전파할 수 있는 **동의 기반(consent-based) 수신 모델**, (b) variant를 중앙 레지스트리에서 관리하고 <code>new-project.ts</code>가 네트워크를 통해 최신 버전을 끌어오는 **비동기 배포 파이프라인**이 거론된다.</p>
-
-  <div class="note">
-    이 핸드북은 ai-workspace-standards의 <strong>현재 구현 상태</strong>(main 브랜치, 2026년 7월 기준)를 기준으로 작성되었다. 위에 언급된 고도화 방향은 저장소의 로드맵에 반영된 계획이며, 실제 구현 시점과 형태는 달라질 수 있다.
-  </div>
+  <p>다음 절(§2 배포와 SSOT)에서는 이 생애주기 관리 원칙이 실제 배포 파이프라인과 Single Source of Truth(SSOT) 모델과 어떻게 결합되는지를 다룬다.</p>
 
   <div class="chapter-nav">
-    <a href="../intro/04_Intro_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">5장 · ai-workspace-standards 소개</div></a>
-    <a href="../tools/03_Tools_Manual.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">8장 · 도구 비교</div></a>
+    <a href="../enterprise/03_Enterprise_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">8장 · 기업 내부 멀티 에이전트팀 운영</div></a>
+    <a href="04_Intro_Advanced_Deploy.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">9장 §2 · 배포와 SSOT</div></a>
   </div>
  </article>
 </main>

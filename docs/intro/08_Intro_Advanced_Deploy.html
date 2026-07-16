@@ -203,6 +203,7 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
   </div>
 
   <h3>L1 → L2가 "포크"로 끝나는 이유</h3>
+  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 variant에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. variant가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 신규 variant를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 variant를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(11장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다. 반대 방향 — 이미 만든 L2 프로젝트에 L1의 최신 변경을 실제로 반영하는 절차는 <a href="10_ProjectUpgrade_Chapter.html">10장 · L2 프로젝트 업그레이드</a>에서 다룬다.</p>
 
   <h3>파일별 SSOT — 무엇이 어디서 어디로 흐르는가</h3>
   <table style="width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;">

@@ -102,19 +102,19 @@
 
   <div class="q">승격 파이프라인(<code>l2-to-variant-pipeline.ts</code>)을 실행해도 되는지 확신이 안 선다.</div>
   <p class="a">이 명령은 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다. 강의·워크숍 환경이라면 참가자 전원이 실행하지 말고 강사가 한 번 시연하는 것으로 충분하다. <a href="../lecture-guide/00_Lecture_Guide.html#per-section">강의 진행 가이드</a>에 안내가 있다.</p>
-  <span class="see">자세히: <a href="../variant-advanced/11_VariantAdvanced_Examples.html">11장 실습</a></span>
+  <span class="see">자세히: <a href="../variant-advanced/12_VariantAdvanced_Examples.html">12장 실습</a></span>
 
   <div class="q">ai-workspace-standards를 실제 서비스 환경(Docker/Kubernetes)에서 쓰려면?</div>
   <p class="a">현재 ai-workspace-standards는 로컬 AI 코딩 도구(Claude Code/App, Antigravity 등)와 직접 연동되는 방식으로만 동작한다. Docker 또는 Kubernetes 환경에서 Open WebUI 같은 프론트엔드 서비스와 연계하여 개인 단위로 에이전트 팀을 지원하는 형태는 <strong>고도화 방향</strong>으로 논의 중이며, 아직 구현되지 않았다.
-    <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#container">8장 §6 고도화 로드맵</a></span></p>
+    <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#container">8장 §5 고도화 로드맵</a></span></p>
 
   <div class="q">여러 프로젝트의 memory/MEMORY.md를 한 곳에서 모아볼 수 있는가?</div>
   <p class="a">현재는 개별 프로젝트마다 독립적인 <code>memory/MEMORY.md</code>를 유지하는 구조이며, 워크스페이스 수준에서 메모리를 취합·정리하는 기능은 <strong>고도화 방향</strong>으로 계획 중이다. 프로젝트가 늘어날수록 개별 메모리 파일에서 전체 트렌드를 파악하기 어려워지는 점을 개선할 예정이다.
-    <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#memory">8장 §6 고도화 로드맵</a></span></p>
+    <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#memory">8장 §5 고도화 로드맵</a></span></p>
 
   <div class="q">variant 템플릿이 업데이트되면 기존 프로젝트에도 자동으로 반영되는가?</div>
   <p class="a">아니다. ai-workspace-standards는 <strong>포크 모델(Fork Model)</strong>을 사용한다. L1(공통 템플릿)의 변경은 이미 스캐폴딩된 L2 프로젝트에 자동으로 전파되지 않는다. 이는 의도한 차이를 보존하기 위한 설계이지만, 보안 패치나 버그 수정이 수동 반영되어야 한다는 운영 부담을 만든다. 동의 기반(consent-based) 선택적 수신 모델과 비동기 배포 파이프라인이 고도화 방향으로 거론되고 있다.
-    <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#variant-deploy">8장 §6 고도화 로드맵</a></span></p>
+    <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#variant-deploy">8장 §5 고도화 로드맵</a></span></p>
 
   <h2 id="cost">비용·성능</h2>
 

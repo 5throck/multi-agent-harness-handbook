@@ -243,9 +243,9 @@
 | 9장 §1 | 생애주기 관리 | 에이전트/스킬/스크립트 lifecycle 다이어그램 | SVG ×3 |
 | 9장 §2 | 배포·SSOT | L0→L1→L2 다이어그램 + SSOT 표 | SVG + HTML 표 |
 | 9장 §3 | 아키텍처 심화 | 고도화 방향 로드맵 | SVG |
-| 10장 | 두 경로 비교 | Phase A 생성 SVG + compare-grid | SVG + CSS |
-| 11장 | 템플릿 vs 프로토타입 | 구조 비교 + 승격 파이프라인 | SVG ×2 |
-| 12장 | 캡스톤 | 4단계 프로세스 + 단계별 산출물 | SVG + 표 |
+| 11장 | 두 경로 비교 | Phase A 생성 SVG + compare-grid | SVG + CSS |
+| 12장 | 템플릿 vs 프로토타입 | 구조 비교 + 승격 파이프라인 | SVG ×2 |
+| 13장 | 캡스톤 | 4단계 프로세스 + 단계별 산출물 | SVG + 표 |
 
 ---
 
@@ -513,7 +513,7 @@ CSS:
 | 4장 §2 | Claude Code / Antigravity CLI 실제 동작 데모 | Anthropic 공식, Claude Code 튜토리얼 |
 | 7장(←8장) | 네 도구 비교, Claude Code vs Antigravity | Anthropic, Google 공식 |
 | 9장 §1 | 에이전트 생애주기 관리 개념 | Agentic AI 채널 |
-| 10장 | Phase A 프로토타입 생성 데모 | 실무 튜토리얼 채널 |
+| 11장 | Phase A 프로토타입 생성 데모 | 실무 튜토리얼 채널 |
 
 영상 URL은 작성 시점에 확인하여 반영한다. 공식 영상이 없는 섹션은 강제로 추가하지 않는다.
 

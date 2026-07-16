@@ -25,6 +25,7 @@
     { path: 'intro/08_Intro_Advanced_AGENTS.html', title: '8장 §3 · AGENTS.md 심화' },
     { path: 'intro/08_Intro_Advanced_Architecture.html', title: '8장 §4 · 아키텍처 심화' },
     { path: 'intro/08_Intro_Advanced_ProjectUpgrade.html', title: '8장 §5 · L2 프로젝트 업그레이드' },
+    { path: 'intro/08_Intro_Advanced_Roadmap.html', title: '8장 §6 · 고도화 로드맵' },
     { path: 'workflows/09_Workflows_Chapter.html', title: '9장 · 워크플로우 디자인 패턴' },
     { path: 'variant-advanced/10_VariantAdvanced_Chapter.html', title: '10장 · 신규 variant 만들기 vs 기존 프로젝트를 variant로 승격하기' },
     { path: 'variant-advanced/11_VariantAdvanced_Examples.html', title: '11장 · 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드' },

@@ -116,16 +116,17 @@
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
   <div class="nav-title">8장 §4 · 아키텍처 심화</div>
-  <a href="#container">컨테이너 기반 서비스 연계</a>
-  <a href="#memory">메모리 취합과 정리</a>
-  <a href="#variant-deploy">variant 배포 방식의 진화</a>
-  <a href="#boilerplate-strategy">보일러플레이트 전략 심화</a>
-  <a href="#tier-strategy">모델 티어 전략 심화</a>
+  <a href="#layout-reconstruction">Layout Reconstruction</a>
+  <a href="#extends">extends 프론트매터 해석 순서</a>
+  <a href="#boilerplate-example">보일러플레이트 전략 실전 예시</a>
+  <a href="#tier-example">모델 티어 전략 실전 예시</a>
+  <a href="#platform-parity">플랫폼 패리티</a>
   <div class="nav-section">8장 다른 절</div>
   <a href="08_Intro_Advanced_Deploy.html">8장 §1 · 배포와 SSOT</a>
   <a href="08_Intro_Advanced_Chapter.html">8장 §2 · 생애주기 관리</a>
   <a href="08_Intro_Advanced_AGENTS.html">8장 §3 · AGENTS.md 심화</a>
   <a href="08_Intro_Advanced_ProjectUpgrade.html">8장 §5 · L2 프로젝트 업그레이드</a>
+  <a href="08_Intro_Advanced_Roadmap.html">8장 §6 · 고도화 로드맵</a>
   <div class="nav-section">다른 장</div>
   <a href="05_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
   <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 기업 내부 멀티 에이전트팀 운영</a>
@@ -136,120 +137,73 @@
  <article class="reading">
   <div class="chapter-eyebrow">8장 §4</div>
   <h1>아키텍처 심화</h1>
-  <p class="lead">ai-workspace-standards의 고도화 방향 다섯 가지 — 컨테이너 기반 서비스 연계, 메모리 취합과 정리, variant 배포 방식의 진화, 보일러플레이트 전략 심화, 모델 티어 전략 심화 — 를 다룬다. 실행 가능한 저장소로서의 현재 상태를 기준으로, 각 영역에서 왜 고도화가 필요하고 어떤 방향으로 나아가고 있는지를 정리한다.</p>
+  <p class="lead">§1에서 L0→L1→L2가 "무엇이 어디서 어디로 흐르는가"를 다뤘다면, 이 절은 그 흐름이 <strong>실제로 어떻게 구현되는지</strong>를 파고든다 — 파일이 그대로 복사되지 않고 재생성되는 이유, 상속 프론트매터가 해석되는 순서, 보일러플레이트·티어 전략이 실전에서 어떻게 적용되는지의 구체적 예시, 그리고 두 플랫폼(.claude/.gemini)이 구조적으로 어긋나지 않게 유지되는 방법까지 다룬다.</p>
 
   <div class="keypoints">
     <div class="kp-title">이 절에서 다루는 것</div>
     <ul>
-      <li>컨테이너(Docker/Kubernetes) 환경에서의 서비스 연계 필요성</li>
-      <li>독립적인 MEMORY.md 파일들의 워크스페이스 수준 취합</li>
-      <li>포크 모델의 장점을 유지하면서 보안 패치·버그 수정을 선택적으로 전파하는 방안</li>
-      <li>LOCKED/MERGE/PRESERVE 3분류가 고정 분류표라는 한계와 조직별 커스터마이징 방향</li>
-      <li>정적으로 배정된 모델 티어를 조직 운영 데이터에 맞춰 조정하는 방향</li>
+      <li>L2 파일이 L1을 그대로 복사하지 않고 "재생성"되는 이유(Layout Reconstruction)</li>
+      <li><code>extends</code> 프론트매터가 실제로 해석되는 순서</li>
+      <li>LOCKED/MERGE/PRESERVE 분류를 실제 파일에 적용한 예시</li>
+      <li>tier 배정을 실제 agents/*.md에 적용한 예시와 비용 영향</li>
+      <li><code>.claude/</code>·<code>.gemini/</code> 플랫폼 패리티가 강제되는 방법</li>
     </ul>
   </div>
 
-  <h2 id="container">컨테이너 기반 서비스 연계</h2>
-  <p>현재 각 variant로 스캐폴딩된 프로젝트는 로컬 워크스페이스 안에서 Claude Code/App, Antigravity 같은 AI 코딩 도구와 직접 연동되는 방식으로만 동작한다. 하지만 실제 기업 환경에서는 프로젝트 단위로 <strong>독립적인 서비스</strong>로 배포되어야 하는 경우가 많다.</p>
-  <p>고도화의 핵심은, 스캐폴딩된 프로젝트가 Docker 또는 Kubernetes 환경에서 **Open WebUI 같은 프론트엔드 서비스와 연계되어 개인 단위로 지원**될 수 있어야 한다는 점이다. 각 사용자가 자신에게 할당된 에이전트 팀을 브라우저 인터페이스를 통해 호출하고, 결과를 확인하고, 세션 간 컨텍스트를 유지할 수 있는 형태다.</p>
+  <h2 id="layout-reconstruction">Layout Reconstruction — L2가 L1을 그대로 복사하지 않는 이유</h2>
+  <p>§1에서 짧게 언급한 <code>agents/pm.md</code> 사례를 좀 더 파고들어 보자. L0의 <code>agents/pm.md</code>는 워크스페이스 전체 거버넌스를 담아 300줄이 넘는다. 여기에는 Auto-Mode 동작, 라이프사이클 상태 필드처럼 <strong>워크스페이스 루트에서만 의미 있는 섹션</strong>이 섞여 있다. L1의 <code>templates/common/agents/pm.md</code>가 이걸 그대로 복사한다면, variant를 새로 만들 때마다 프로젝트와 무관한 워크스페이스 전용 내용까지 함께 딸려온다.</p>
+  <p>그래서 L1은 복사 대신 <strong>필터링된 재구성</strong>을 한다 — L0 원본에서 variant 스캐폴딩에 실제로 필요한 섹션만 골라내고, 워크스페이스 전용 섹션은 제거한 뒤 <code>extends</code> 참조로 나머지를 연결한다. L2로 내려갈 때도 같은 원리가 반복된다. variant 고유의 오버라이드(예: co-marketing이라면 마케팅 도메인 특화 PM 규칙)를 L1 위에 얹어 <strong>처음부터 다시 생성</strong>하지, L1 파일을 diff-patch 방식으로 수정하지 않는다. 그 결과 L0의 pm.md가 300줄이 넘어도 L2의 pm.md는 50~100줄 남짓으로 유지된다 — "복사하고 남는 걸 지우는" 방식이 아니라 "필요한 것만 골라 새로 짓는" 방식이기 때문이다.</p>
+  <p>이 설계가 중요한 이유는 실패 모드 때문이다. 만약 L1→L2가 단순 복사였다면, L0에서 워크스페이스 전용 섹션 하나를 추가할 때마다 <strong>모든 L2 프로젝트의 pm.md가 불필요하게 부풀어 오른다</strong>. Layout Reconstruction은 "L0가 아는 것"과 "L2가 알아야 하는 것" 사이에 항상 필터를 둠으로써 이 문제를 원천 차단한다.</p>
 
-  <h2 id="memory">메모리 취합과 정리</h2>
-  <p>현재 각 L2 프로젝트는 독립적인 <code>memory/MEMORY.md</code> 파일을 유지한다(5장 §4에서 다룸). 이 파일은 해당 프로젝트의 세션 간 컨텍스트를 기록하지만, 프로젝트가 늘어날수록 메모리 파일도 산재되어 <strong>전체 워크스페이스 수준에서의 인사이트를 파악하기 어려워진다</strong>.</p>
-  <p>고도화의 두 번째 축은, 개별 프로젝트 단위로 흩어져 있는 메모리 파일들을 **취합해서 정리할 수 있는 기능**이 필요하다는 점이다. 예를 들어 "지난 주 모든 프로젝트에서 에이전트 팀이 어떤 패턴의 오류를 자주 겪었는가", "어떤 역할 조합이 가장 자주 쓰였는가" 같은 워크스페이스 수준의 트렌드 분석이 가능해져야 한다.</p>
+  <h2 id="extends">extends 프론트매터 — 상속이 해석되는 순서</h2>
+  <p><code>extends: ../../../agents/pm.md</code> 같은 프론트매터 필드는 "이 파일은 저 파일을 참조한다"는 선언이지, 파일을 합치는 매크로가 아니다. 해석 순서는 다음과 같다.</p>
+  <ol>
+    <li><strong>도구가 파일을 읽을 때</strong>(예: Claude Code가 <code>agents/pm.md</code>를 로드할 때), frontmatter의 <code>extends</code> 경로를 먼저 확인한다.</li>
+    <li>참조된 원본(L0 또는 L1)을 읽어 <strong>본문을 상속</strong>하되, 현재 파일에 명시적으로 다시 쓰인 섹션이 있으면 그 섹션만 <strong>오버라이드</strong>한다.</li>
+    <li>원본에 없는, 현재 파일에만 있는 섹션(예: variant 고유 규칙)은 <strong>그대로 추가</strong>된다.</li>
+  </ol>
+  <p>즉 <code>extends</code>는 "상속 + 선택적 오버라이드 + 추가"의 3단계로 해석되는 것이지, 두 파일을 텍스트로 이어 붙이는 것이 아니다. 이 구조 때문에 L1의 <code>templates/common/agents/pm.md</code>는 실제 내용을 거의 담지 않고도(대부분 <code>extends</code>로 L0를 가리키기만 함) 유효한 파일로 동작하고, L0에서 공통 규칙이 바뀌면 <code>extends</code>를 쓰는 모든 하위 파일이 다음 조회 시점에 자동으로 최신 내용을 반영한다 — <strong>단, 이건 "읽을 때 해석"이지 §1에서 다룬 "파일 동기화(SYNC_IF_NEWER)"와는 다른 메커니즘</strong>이다. <code>extends</code>는 도구가 파일을 여는 순간의 실시간 참조이고, SYNC_IF_NEWER는 <code>upgrade-project.ts</code>를 실행해야 갱신되는 정적 파일 복사다. 두 메커니즘이 같은 "상속처럼 보이는 동작"을 하지만 갱신 시점이 다르다는 걸 혼동하지 않아야 한다.</p>
 
-  <h2 id="variant-deploy">variant 배포 방식의 진화</h2>
-  <p>현재 variant 배포는 <code>new-project.ts</code>에 의한 로컬 스캐폴딩 중심이고, 템플릿 갱신이 L2에 자동으로 전파되지 않는 포크 모델을 따른다. 이 방식은 의도한 차이를 보존한다는 장점이 있지만, 운영 관점에서는 템플릿의 버그 수정이나 보안 패치가 각 프로젝트에 일일이 수동 반영되어야 한다는 부담을 만든다.</p>
-  <p>고도화 방향으로는 (a) 포크 모델의 장점을 유지하면서도 보안 패치나 중요 버그 수정만 선택적으로 L2에 전파할 수 있는 **동의 기반(consent-based) 수신 모델**, (b) variant를 중앙 레지스트리에서 관리하고 <code>new-project.ts</code>가 네트워크를 통해 최신 버전을 끌어오는 **비동기 배포 파이프라인**이 거론된다.</p>
+  <h2 id="boilerplate-example">보일러플레이트 전략 실전 예시</h2>
+  <p>§1에서 다룬 LOCKED/MERGE/PRESERVE 분류가 실제 파일에 어떻게 적용되는지 하나씩 예로 확인해보자.</p>
+  <ul>
+    <li><strong>LOCKED 예 — <code>.githooks/pre-commit</code></strong>: 이 파일은 시크릿 스캔, 커밋 메시지 검증 같은 보안 게이트를 실행한다. 프로젝트마다 이 검증을 다르게 하면 조직 전체의 보안 기준이 프로젝트별로 달라지는 것이므로, <code>upgrade-project.ts</code>는 이 파일을 로컬 수정 여부와 무관하게 항상 L1 최신본으로 덮어쓴다.</li>
+    <li><strong>MERGE 예 — <code>CLAUDE.md</code></strong>: 이 파일에는 <code>&lt;!-- WORKSPACE-MANAGED --&gt;...&lt;!-- /WORKSPACE-MANAGED --&gt;</code>로 감싼 구간(예: PM 게이트웨이 규칙)과, 그 바깥의 프로젝트 고유 규칙(예: "이 프로젝트는 항상 한국어로 커밋 메시지를 쓴다")이 함께 들어 있다. 업그레이드 시 마커 안쪽만 L1 최신본으로 교체되고, 마커 바깥의 한국어 커밋 규칙은 그대로 남는다.</li>
+    <li><strong>PRESERVE 예 — <code>docs/context.md</code></strong>: 이 파일은 프로젝트가 무엇인지 설명하는 문서라 L1이 존재 확인만 하고 내용에는 절대 관여하지 않는다.</li>
+  </ul>
+  <p>세 예시를 나란히 보면 분류 기준이 명확해진다 — <strong>바뀌면 보안·거버넌스 사고로 이어지는가(LOCKED), 조직 규칙과 프로젝트 맥락이 한 파일 안에 공존해야 하는가(MERGE), 프로젝트의 정체성 그 자체인가(PRESERVE)</strong>. 새 파일을 이 저장소의 boilerplate에 추가할 때도 이 세 질문을 순서대로 던져보면 어디에 속하는지 대부분 바로 판단된다.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <defs>
-        <marker id="roadmapArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
-        </marker>
-      </defs>
-      <g font-family="-apple-system,Segoe UI,sans-serif">
-        <!-- Timeline base line -->
-        <line x1="50" y1="100" x2="630" y2="100" stroke="#d0d7de" stroke-width="2" stroke-dasharray="6,4"/>
+  <h2 id="tier-example">모델 티어 전략 실전 예시</h2>
+  <p>5장에서 소개한 tier 배정을 실제 <code>agents/*.md</code> frontmatter로 보면 이렇다.</p>
+  <pre class="code-block">---
+name: pm
+tier:
+  claude: high
+  antigravity: high
+---
 
-        <!-- Node 1: 현재 -->
-        <circle cx="80" cy="100" r="14" fill="#0969da" stroke="#fff" stroke-width="2"/>
-        <text x="80" y="104" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">현재</text>
-        <text x="80" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">로컬 스캐폴딩</text>
-        <text x="80" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">new-project.ts 중심</text>
+---
+name: code-writer
+tier:
+  claude: medium
+  antigravity: medium
+---
 
-        <!-- Arrow 1→2 -->
-        <line x1="96" y1="100" x2="200" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
-        <text x="148" y="90" text-anchor="middle" font-size="9" fill="#636c76">1단계</text>
+---
+name: automation-engineer
+tier:
+  claude: low
+  antigravity: low
+---</pre>
+  <p>실행 시점에는 각 플랫폼이 이 tier 값을 자기 쪽 모델 별칭으로 번역한다 — Claude 계열은 <code>high→opus</code>, <code>medium→sonnet</code>, <code>low→haiku</code>로, Antigravity 계열은 자체 모델 별칭으로 매핑한다. 이 번역이 <code>model: inherit</code> 뒤에서 자동으로 일어나기 때문에, agents/*.md를 작성하는 사람은 구체적인 모델 이름을 전혀 몰라도 되고 "이 역할이 얼마나 무거운 판단을 하는가"만 신경 쓰면 된다.</p>
+  <p>비용 영향은 체감으로 확인할 수 있다(4장 §2-A P-2 실습 참고). 정형화된 검토 작업 하나를 high로 돌리면 haiku 대비 응답이 눈에 띄게 느려지고 비용도 커지지만, 논증 구조의 허점처럼 깊은 판단이 필요한 작업에서는 낮은 티어가 표면적인 지적에 그치는 경향이 뚜렷해진다. 이 저장소가 PM·Architect에는 high, code-writer·docs-writer에는 medium, automation-engineer에는 low를 기본값으로 못박아 둔 것도 바로 이 트레이드오프를 역할 단위로 미리 조정해 둔 결과다.</p>
 
-        <!-- Node 2: 컨테이너 서비스 통합 -->
-        <circle cx="220" cy="100" r="14" fill="#6639ba" stroke="#fff" stroke-width="2"/>
-        <text x="220" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">①</text>
-        <text x="220" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
-        <text x="220" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">컨테이너 서비스</text>
-        <text x="220" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">Docker / K8s 연계</text>
-
-        <!-- Arrow 2→3 -->
-        <line x1="236" y1="100" x2="340" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
-        <text x="288" y="90" text-anchor="middle" font-size="9" fill="#636c76">2단계</text>
-
-        <!-- Node 3: 메모리 집계 -->
-        <circle cx="360" cy="100" r="14" fill="#1a7f37" stroke="#fff" stroke-width="2"/>
-        <text x="360" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">②</text>
-        <text x="360" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
-        <text x="360" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">메모리 집계</text>
-        <text x="360" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">워크스페이스 수준</text>
-
-        <!-- Arrow 3→4 -->
-        <line x1="376" y1="100" x2="480" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
-        <text x="428" y="90" text-anchor="middle" font-size="9" fill="#636c76">3단계</text>
-
-        <!-- Node 4: variant 배포 자동화 -->
-        <circle cx="500" cy="100" r="14" fill="#953800" stroke="#fff" stroke-width="2"/>
-        <text x="500" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">③</text>
-        <text x="500" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
-        <text x="500" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">variant 배포</text>
-        <text x="500" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">자동화 파이프라인</text>
-
-        <!-- Final goal badge -->
-        <line x1="516" y1="100" x2="572" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
-        <rect x="578" y="82" width="100" height="36" rx="18" fill="#0969da" stroke="#0550ae" stroke-width="1"/>
-        <text x="628" y="104" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">비전 완성</text>
-
-        <!-- Milestone labels above -->
-        <rect x="56" y="52" width="48" height="20" rx="4" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="1"/>
-        <text x="80" y="66" text-anchor="middle" font-size="9" fill="#0550ae" font-weight="600">v1.0</text>
-
-        <rect x="196" y="52" width="48" height="20" rx="4" fill="#fbefff" stroke="#d2b9ff" stroke-width="1"/>
-        <text x="220" y="66" text-anchor="middle" font-size="9" fill="#6639ba" font-weight="600">v1.x</text>
-
-        <rect x="336" y="52" width="48" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
-        <text x="360" y="66" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">v2.0</text>
-
-        <rect x="476" y="52" width="48" height="20" rx="4" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
-        <text x="500" y="66" text-anchor="middle" font-size="9" fill="#7d4e00" font-weight="600">v3.0</text>
-
-        <!-- Dashed lines from milestones to nodes -->
-        <line x1="80" y1="72" x2="80" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
-        <line x1="220" y1="72" x2="220" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
-        <line x1="360" y1="72" x2="360" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
-        <line x1="500" y1="72" x2="500" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
-      </g>
-    </svg>
-  </div>
-
-  <p>위 세 가지가 <strong>인프라 수준</strong>의 고도화 방향이라면, 아래 두 가지는 <strong>거버넌스 수준</strong>의 고도화 방향이다 — 8장§1에서 소개한 보일러플레이트 전략과 모델 티어 전략이 지금 어떤 한계를 갖고 있고, 어느 방향으로 다듬어질 수 있는지를 다룬다.</p>
-
-  <h2 id="boilerplate-strategy">보일러플레이트 전략 심화</h2>
-  <p>8장§1에서 LOCKED·MERGE·PRESERVE·SYNC_IF_NEWER·PRUNE 5분류를 "무엇을 잠그고 무엇을 열어 둘지"의 판단 기준으로 소개했다. 지금 이 분류는 <code>upgrade-project.ts</code> 코드 안에 <strong>파일 경로 단위로 하드코딩</strong>돼 있다 — 어떤 파일이 LOCKED인지, MERGE인지는 스크립트를 고쳐야만 바뀐다. 이 방식은 저장소가 관리하는 파일 종류가 적을 때는 문제가 없지만, 조직마다 "우리는 이 파일도 LOCKED로 취급하고 싶다"거나 "이 MERGE 파일은 우리 조직에서는 완전히 PRESERVE로 풀고 싶다" 같은 예외가 늘어날수록 스크립트 자체를 포크해야 하는 부담으로 이어진다.</p>
-  <p>고도화 방향은 이 분류를 <strong>코드가 아니라 선언적 매니페스트</strong>로 옮기는 것이다. 예를 들어 워크스페이스 루트에 <code>boilerplate-policy.json</code> 같은 파일을 두고, 각 조직이 자신의 LOCKED/MERGE/PRESERVE 경계를 파일 패턴 단위로 재정의할 수 있게 하는 방향이 거론된다. 이렇게 되면 <code>upgrade-project.ts</code>는 하드코딩된 분류표 대신 이 매니페스트를 읽어 동작하게 되고, 조직은 스크립트를 건드리지 않고도 자신들의 보안·거버넌스 기준에 맞게 경계를 조정할 수 있다.</p>
-
-  <h2 id="tier-strategy">모델 티어 전략 심화</h2>
-  <p>8장§1에서 tier 배정이 <code>agents/*.md</code> frontmatter에 정적으로 박혀 있고, L0에서 바뀌면 <code>upgrade-project.ts</code>의 SYNC_IF_NEWER로만 전파된다는 것을 봤다. 이 방식의 한계는 <strong>티어 배정이 "역할"에만 묶여 있고, 실제 작업의 난이도나 조직의 비용 예산은 반영하지 못한다</strong>는 점이다. 예를 들어 code-writer 역할은 항상 medium이지만, 실제로는 프로젝트마다 code-writer가 다루는 코드베이스의 복잡도가 크게 다르다. 지금 구조에서는 이 차이를 반영하려면 사람이 직접 각 프로젝트의 <code>agents/*.md</code>를 손으로 고쳐야 한다.</p>
-  <p>고도화 방향으로는 (a) 세션 로그나 <code>/cost</code> 데이터를 근거로 "이 역할은 최근 N번의 세션에서 반복적으로 재시도가 발생했다 → high로 올리는 것을 권장" 같은 <strong>운영 데이터 기반 티어 추천</strong>, (b) 워크스페이스 전체 또는 조직 단위로 "이번 달 예산은 이 정도이니 high 티어 배정은 N개 역할로 제한한다" 같은 <strong>티어 예산 상한 governance</strong>가 거론된다. 두 방향 모두 지금의 "정적 배정 + 수동 오버라이드" 모델을 유지하면서, 그 위에 관측 가능성(observability)과 조직 정책을 얹는 확장이다.</p>
+  <h2 id="platform-parity">플랫폼 패리티 — .claude/와 .gemini/를 구조적으로 동일하게 유지하는 법</h2>
+  <p>이 저장소는 Claude 계열(<code>.claude/</code>)과 Antigravity/Gemini 계열(<code>.gemini/</code>) 두 플랫폼을 동시에 지원한다. 두 디렉터리가 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 이걸 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
+  <p>이 검사는 두 디렉터리를 구조적으로 대조해 한쪽에만 존재하는 에이전트·스킬·커맨드가 없는지 확인한다. 10장에서 다루는 승격(promote) 파이프라인도 이 검사를 승격 전 필수 게이트로 포함하고 있어서, "Claude용으로만 만들고 Antigravity용은 깜빡한" 상태로는 애초에 정식 variant가 될 수 없다. 두 플랫폼이 서로 다른 실행 방식(§1의 CLAUDE.md/GEMINI.md MERGE 예시 참고)을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
 
   <div class="note">
-    이 핸드북은 ai-workspace-standards의 <strong>현재 구현 상태</strong>(main 브랜치, 2026년 7월 기준)를 기준으로 작성되었다. 위에 언급된 고도화 방향은 저장소의 로드맵에 반영된 계획이며, 실제 구현 시점과 형태는 달라질 수 있다. 특히 보일러플레이트 전략·모델 티어 전략 심화 절의 매니페스트·추천 시스템은 현재 코드베이스에 구현되어 있지 않은 <strong>설계 방향 제안</strong>이며, §1에서 다룬 LOCKED/MERGE/PRESERVE 분류와 tier frontmatter 필드만이 실제 구현이다.
+    이 절은 §1에서 소개한 개념(L0→L1→L2, 포크 모델, LOCKED/MERGE/PRESERVE)의 <strong>실제 동작 방식과 구체적 예시</strong>를 다룬다 — 여기 나온 내용은 모두 현재 구현이다. 아직 구현되지 않은 고도화 방향(컨테이너 연계, 메모리 취합, 보일러플레이트/티어 전략의 향후 확장 등)은 <a href="08_Intro_Advanced_Roadmap.html">§6 고도화 로드맵</a>에서 별도로 다룬다.
   </div>
 
   <div class="chapter-nav">

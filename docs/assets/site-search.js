@@ -14,7 +14,7 @@
     { path: 'practice/04_Practice_Manual.html', title: '4장 §1 · 하네스 기반 멀티 에이전트 팀 활용' },
     { path: 'practice/04_Practice_Manual_A.html', title: '4장 §1-A · 서브에이전트 활용 상세 — Claude 중심' },
     { path: 'practice/04_Practice_Manual_B.html', title: '4장 §1-B · 서브에이전트 활용 상세 — Antigravity 중심' },
-    { path: 'practice/04_Practice_Examples.html', title: '4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드' },
+    { path: 'practice/04_Practice_Examples_A.html', title: '4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드' },
     { path: 'practice/04_Practice_Examples_B.html', title: '4장 §2-B · 멀티 에이전트 팀 실습 — Antigravity 중심 시나리오별 학습 가이드' },
     { path: 'intro/05_Intro_Chapter.html', title: '5장 · ai-workspace-standards 소개' },
     { path: 'variant-practice/06_VariantPractice_Manual.html', title: '6장 §1 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩' },

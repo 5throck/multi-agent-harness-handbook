@@ -17,6 +17,7 @@
       --accent-o: #953800;
       --accent-p: #6639ba;
       --accent-r: #cf222e;
+      --accent-amber: #d4a72c;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -284,7 +285,7 @@
 
     /* ── 참고 영상 ── */
     .video-refs { margin: 28px 0; padding: 16px 20px; background: #f0f6ff; border: 1px solid #d0e8ff; border-radius: 8px; }
-    .video-refs h3 { font-size: 15px; font-weight: 700; color: var(--accent6); margin: 0 0 12px; }
+    .video-refs h3 { font-size: 15px; font-weight: 700; color: var(--accent); margin: 0 0 12px; }
     .video-refs ul { list-style: none; padding: 0; margin: 0; }
     .video-refs li { padding: 6px 0; line-height: 1.6; }
     .video-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; color: #fff; vertical-align: middle; margin-right: 6px; }
@@ -313,27 +314,28 @@
   <div class="nav-group">고급 시나리오</div>
   <a href="#scenario-3"><span class="dot dot-p"></span>P-1 독립 작업 병렬 실행 — Agent Manager vs Agent Teams</a>
   <a href="#scenario-4"><span class="dot dot-p"></span>P-2 모델 티어 비교로 비용 감각 익히기</a>
+  <a href="#cleanup">🧹 실습 마무리 정리</a>
 
   <div class="nav-group">바로가기</div>
-  <a href="02_Practice_Manual.html">📖 4장 §1 레퍼런스 →</a>
-  <a href="02_Practice_Examples_B.html">🖥 4장 §2-B Antigravity 중심 실습 →</a>
+  <a href="04_Practice_Manual.html">📖 4장 §1 레퍼런스 →</a>
+  <a href="04_Practice_Examples_B.html">🖥 4장 §2-B Antigravity 중심 실습 →</a>
 </nav>
 
 <!-- ── 본문 ── -->
 <main>
   <div class="chapter-eyebrow">4장 §2-A</div>
   <h1>4장 §2-A · 멀티 에이전트 팀 실습 (Claude 중심)</h1>
-  <p class="subtitle">빈 실습 폴더에서 시작해 Claude App/Claude Code 위주로 시나리오를 따라해보는 실습 가이드 — Desktop 앱을 기준으로 안내하고 CLI 대응을 이어서 소개한다 &nbsp;|&nbsp; <a href="02_Practice_Manual.html">← 4장 §1 레퍼런스 문서로 돌아가기</a> &nbsp;|&nbsp; <a href="02_Practice_Examples_B.html">4장 §2-B Antigravity 중심 →</a></p>
+  <p class="subtitle">빈 실습 폴더에서 시작해 Claude App/Claude Code 위주로 시나리오를 따라해보는 실습 가이드 — Desktop 앱을 기준으로 안내하고 CLI 대응을 이어서 소개한다 &nbsp;|&nbsp; <a href="04_Practice_Manual.html">← 4장 §1 레퍼런스 문서로 돌아가기</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B.html">4장 §2-B Antigravity 중심 →</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 버전/범위</span><span>Claude Code/App 2026-07 릴리스 — Claude를 중심으로 안내하며, Antigravity 대응은 4장 §2-B를 참조</span></div>
     <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>서브에이전트 정의·호출, 순차 파이프라인, 동적 팀 구성·워크플로우 조합, 병렬 실행, 모델 티어 비교를 Claude App/Code에서 손으로 따라해보는 5단계 실습 제공</span></div>
-    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="02_Practice_Manual.html">4장 §1 공통</a> · <a href="02_Practice_Manual_A.html">4장 §1-A Claude 상세</a> · <a href="02_Practice_Manual_B.html">4장 §1-B Antigravity 상세</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
+    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="04_Practice_Manual.html">4장 §1 공통</a> · <a href="04_Practice_Manual_A.html">4장 §1-A Claude 상세</a> · <a href="04_Practice_Manual_B.html">4장 §1-B Antigravity 상세</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
 
   <div class="note" style="background:#f0f7ff;border-left:3px solid #0969da;padding:12px 18px;border-radius:4px;font-size:14px;margin:0 0 32px;">
-    <strong>이 과정 전체가 따르는 원칙</strong> — 아래 모든 시나리오는 먼저 서브에이전트의 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 적고, 그 명세를 Claude 계열에서는 사전 정의 서브에이전트 파일로 "구현"하는 순서를 따른다(2장 §5 AGENTS.md 참고). 정의는 하나, 실행 방식만 도구별로 다르다는 원칙을 손으로 확인하는 것이 이 실습의 핵심 목표다. Antigravity에서의 대응 방법은 <a href="02_Practice_Examples_B.html">4장 §2-B</a>를 참조한다.
+    <strong>이 과정 전체가 따르는 원칙</strong> — 아래 모든 시나리오는 먼저 서브에이전트의 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 적고, 그 명세를 Claude 계열에서는 사전 정의 서브에이전트 파일로 "구현"하는 순서를 따른다(2장 §5 AGENTS.md 참고). 정의는 하나, 실행 방식만 도구별로 다르다는 원칙을 손으로 확인하는 것이 이 실습의 핵심 목표다. Antigravity에서의 대응 방법은 <a href="04_Practice_Examples_B.html">4장 §2-B</a>를 참조한다.
   </div>
 
   <!-- ══════════════════════════════ 실습 전 준비 ══════════════════════════════ -->
@@ -423,9 +425,9 @@ cd ./setup && bash setup-linux.sh</pre>
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
-          <a class="cmd-chip" href="02_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
-          <a class="cmd-chip" href="02_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
+          <a class="cmd-chip" href="04_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
+          <a class="cmd-chip" href="04_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
         </div>
       </div>
 
@@ -512,7 +514,11 @@ EOF</pre>
       </div>
 
       <div class="tip-box">
-        Claude App/Code에서는 <code>tools</code> 필드를 <code>Read, Grep</code>처럼 필요한 최소 권한만 나열하면, 리뷰어가 실수로 파일을 수정하는 사고를 방지할 수 있다. Antigravity에서의 대응 방법은 <a href="02_Practice_Examples_B.html">4장 §2-B</a>를 참조한다.
+        <strong>결과 확인</strong> — <code>harness-lab/.claude/agents/reviewer.md</code> 파일이 실제로 생성됐는지, 그 안의 <code>description</code>·<code>tools</code>·<code>model</code> 필드가 요청한 대로인지 확인한다. 마지막 응답에는 오탈자·논리적 허점·개선점을 나눈 목록이 보여야 정상이다 — reviewer가 "수정했습니다" 같은 답을 하면 <code>tools</code> 제한이 잘못 적용된 것이다.
+      </div>
+
+      <div class="warning-box">
+        <strong>흔한 실패</strong> — 서브에이전트가 호출되지 않고 메인 세션이 직접 notes.txt를 검토해버린다면, ② 단계 문장에 <code>reviewer 서브에이전트로</code>라는 표현이 빠졌거나 <code>.claude/agents/reviewer.md</code> 생성이 먼저 완료되지 않은 채로 ③을 요청한 경우다. ②의 응답에서 파일 생성이 끝났는지 먼저 확인한 뒤 ③을 보낸다.
       </div>
 
     </div>
@@ -540,45 +546,45 @@ EOF</pre>
       <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
         <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
-            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
-            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
-            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
-            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-g)"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-p)"/></marker>
           </defs>
           <!-- Box 1: 사용자 요청 (gray) -->
-          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
-          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="#6b7280">사용자 요청</text>
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="var(--text-dim)" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="var(--text-dim)">사용자 요청</text>
           <!-- Arrow 1 -->
-          <line x1="115" y1="43" x2="150" y2="43" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <line x1="115" y1="43" x2="150" y2="43" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrow1)"/>
           <!-- Box 2: writer.md (blue) -->
-          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
-          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#3b82f6">writer.md</text>
-          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#3b82f6">초안 작성</text>
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent)">writer.md</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent)">초안 작성</text>
           <!-- Arrow 2 -->
-          <line x1="295" y1="43" x2="330" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-g)" stroke-width="1.5" marker-end="url(#arrow1g)"/>
           <!-- Return arrow (curved, below) -->
-          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
-          <polygon points="197,63 200,55 203,63" fill="#f59e0b"/>
-          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#f59e0b">수정 요청 시 writer로 되돌아감</text>
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="var(--accent-amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="var(--accent-amber)"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-amber)">수정 요청 시 writer로 되돌아감</text>
           <!-- Box 3: reviewer.md (green) -->
-          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
-          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#22c55e">reviewer.md</text>
-          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">피드백/승인</text>
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-g)" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-g)">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-g)">피드백/승인</text>
           <!-- Arrow 3 -->
-          <line x1="475" y1="43" x2="510" y2="43" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-p)" stroke-width="1.5" marker-end="url(#arrow1p)"/>
           <!-- Box 4: 최종 결과물 (purple) -->
-          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
-          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#8b5cf6">최종 결과물</text>
-          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">완성</text>
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-p)" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-p)">최종 결과물</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-p)">완성</text>
         </svg>
       </div>
 
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
-          <a class="cmd-chip" href="02_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
-          <a class="cmd-chip" href="02_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
+          <a class="cmd-chip" href="04_Practice_Manual.html#section-1">서브에이전트 정의하기</a>
+          <a class="cmd-chip" href="04_Practice_Manual.html#section-2">서브에이전트 호출하기</a>
         </div>
       </div>
 
@@ -651,6 +657,9 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
         <div class="warning-box">
           writer와 reviewer를 병렬(한 메시지에 동시)로 호출하면 reviewer가 아직 존재하지 않는 draft.txt를 검토하려 시도해 실패할 수 있다 — 의존 관계가 있는 작업은 반드시 순차 호출로 요청해야 한다(위 ②처럼 "두 단계를 순서대로 진행해"라고 명시하는 것이 핵심이다).
         </div>
+        <div class="tip-box">
+          <strong>결과 확인</strong> — 채팅 화면에 <code>writer</code> 호출 → 완료 → <code>reviewer</code> 호출 → 완료 순서로 두 번의 서브에이전트 스폰이 표시되어야 정상이다. 한 번만 표시된다면 오케스트레이터가 파이프라인을 한 단계로 합쳐버린 것이니, 요청 문장에 "순서대로"가 명시됐는지 다시 확인한다. 완료 후 <code>harness-lab/draft.txt</code>를 열어 초안이 실제로 저장돼 있는지도 확인한다.
+        </div>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 순차 디스패치된다.</p>
       </div>
 
@@ -673,62 +682,62 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
         <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">동적 라우팅 분기 흐름도 — 같은 팀, 다른 요청</div>
         <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
           <defs>
-            <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
-            <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
-            <marker id="drArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
-            <marker id="drArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+            <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-p)"/></marker>
+            <marker id="drArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-g)"/></marker>
+            <marker id="drArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
           </defs>
 
           <!-- Row 1: Request A → reviewer only -->
-          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#636c76">요청 A</text>
-          <rect x="15" y="30" width="80" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
-          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">단순 검토</text>
-          <line x1="95" y1="46" x2="145" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 A</text>
+          <rect x="15" y="30" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">단순 검토</text>
+          <line x1="95" y1="46" x2="145" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
           <!-- reviewer box -->
           <rect x="150" y="30" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
           <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
           <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">×1</text>
-          <line x1="260" y1="46" x2="320" y2="46" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
           <!-- Result -->
-          <rect x="325" y="30" width="80" height="32" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1"/>
-          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">결과</text>
+          <rect x="325" y="30" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
           <!-- Label: simple -->
-          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#1a7f37" font-weight="600">단일 패스</text>
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-g)" font-weight="600">단일 패스</text>
 
           <!-- Row 2: Request B → writer → reviewer (pipeline) -->
-          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#636c76">요청 B</text>
-          <rect x="15" y="105" width="80" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
-          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">초안+검토</text>
-          <line x1="95" y1="121" x2="145" y2="121" stroke="#636c76" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 B</text>
+          <rect x="15" y="105" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">초안+검토</text>
+          <line x1="95" y1="121" x2="145" y2="121" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
           <!-- writer box -->
           <rect x="150" y="105" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
-          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">writer</text>
-          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">×1</text>
-          <line x1="260" y1="121" x2="320" y2="121" stroke="#6639ba" stroke-width="1.2" marker-end="url(#drArrowP)"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-p)">writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-p)">×1</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-p)" stroke-width="1.2" marker-end="url(#drArrowP)"/>
           <!-- reviewer box -->
           <rect x="325" y="105" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
           <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
           <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">×1</text>
-          <line x1="435" y1="121" x2="480" y2="121" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
           <!-- Result -->
-          <rect x="485" y="105" width="80" height="32" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1"/>
-          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">결과</text>
+          <rect x="485" y="105" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
           <!-- Label: pipeline -->
-          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#6639ba" font-weight="600">파이프라인</text>
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-p)" font-weight="600">파이프라인</text>
 
           <!-- Row 3: Request C → writer → reviewer×2 (fan-out) -->
-          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#636c76">요청 C</text>
-          <rect x="15" y="180" width="80" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
-          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#0969da">초안+다중</text>
-          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#0969da">검토</text>
-          <line x1="95" y1="196" x2="145" y2="196" stroke="#636c76" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 C</text>
+          <rect x="15" y="180" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">초안+다중</text>
+          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">검토</text>
+          <line x1="95" y1="196" x2="145" y2="196" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
           <!-- writer box -->
           <rect x="150" y="180" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
-          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">writer</text>
-          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">×1</text>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-p)">writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-p)">×1</text>
           <!-- Fan-out to 2 reviewers -->
-          <line x1="260" y1="190" x2="310" y2="185" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
-          <line x1="260" y1="202" x2="310" y2="218" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
           <!-- reviewer 1 (문법) -->
           <rect x="315" y="170" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
           <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
@@ -738,22 +747,22 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
           <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
           <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">논리 관점</text>
           <!-- Merge to result -->
-          <line x1="425" y1="185" x2="480" y2="196" stroke="#1a7f37" stroke-width="1"/>
-          <line x1="425" y1="221" x2="480" y2="196" stroke="#1a7f37" stroke-width="1"/>
-          <rect x="485" y="182" width="80" height="30" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1"/>
-          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">결과</text>
+          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-g)" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-g)" stroke-width="1"/>
+          <rect x="485" y="182" width="80" height="30" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
           <!-- Label: fan-out -->
-          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#1a7f37" font-weight="600">팬아웃</text>
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-g)" font-weight="600">팬아웃</text>
 
           <!-- Bottom note -->
-          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 서브에이전트 정의는 1회 — 오케스트레이터가 요청마다 동적으로 라우팅</text>
+          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 서브에이전트 정의는 1회 — 오케스트레이터가 요청마다 동적으로 라우팅</text>
         </svg>
       </div>
 
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="../concepts/01_Concepts_Chapter.html#s4b">동적 팀 구성과 다양한 워크플로우</a>
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter.html#s4b">동적 팀 구성과 다양한 워크플로우</a>
         </div>
       </div>
 
@@ -790,10 +799,13 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
           ①과 ②를 나란히 비교하면 "팀 명단(어떤 서브에이전트를 정의해 뒀는가)"과 "이번 작업에 실제로 투입되는 구성(누가 몇 번, 어떤 순서로 호출되는가)"이 서로 다른 층위라는 게 뚜렷해진다. 전자는 <code>.claude/agents/</code>에 미리 고정돼 있지만, 후자는 매 요청마다 새로 결정된다.
         </div>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 동작한다.</p>
+        <div class="warning-box">
+          <strong>흔한 실패</strong> — ②에서 "동시에 검토해줘"라고 했는데도 reviewer가 한 번만 호출된다면, 요청 문장이 "문법 관점과 논리 관점"처럼 두 관점을 명확히 구분하지 않았을 가능성이 높다. 관점을 더 구체적으로 나눠 다시 요청해본다.
+        </div>
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> <a href="../concepts/01_Concepts_Chapter.html#s4b">2장 §4b — 동적 팀 구성과 다양한 워크플로우</a>, <a href="02_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행</a>
+        <strong>함께 보기:</strong> <a href="../concepts/02_Concepts_Chapter.html#s4b">2장 §4b — 동적 팀 구성과 다양한 워크플로우</a>, <a href="04_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행</a>
       </div>
 
     </div>
@@ -821,8 +833,8 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="02_Practice_Manual.html#section-3">병렬 실행 — 팀 단위로 확장하기</a>
-          <a class="cmd-chip" href="02_Practice_Manual.html#section-3">병렬 실행</a>
+          <a class="cmd-chip" href="04_Practice_Manual.html#section-3">병렬 실행 — 팀 단위로 확장하기</a>
+          <a class="cmd-chip" href="04_Practice_Manual.html#section-3">병렬 실행</a>
         </div>
       </div>
 
@@ -884,19 +896,22 @@ EOF</pre>
         <div class="tip-box">
           작업 목록이 서로 얽히지 않도록, 병렬로 스폰하는 팀메이트에게는 처음부터 완전히 분리된 파일이나 디렉터리를 배정하는 것이 안전하다.
         </div>
+        <div class="warning-box">
+          <strong>흔한 실패</strong> — "Agent Teams 기능을 찾을 수 없다"거나 팀메이트가 스폰되지 않는다면, 대개 ① <code>.claude/settings.json</code>이 <code>harness-lab/</code> 폴더 기준으로 저장됐는지(다른 폴더에 저장하면 인식되지 않는다), ② ②에서 Claude App을 완전히 재시작했는지 두 가지를 놓친 경우다. JSON 문법 오류(쉼표 누락 등)로 설정 파일 자체가 무시되는 경우도 흔하니, 편집기로 열어 문법을 다시 확인한다.
+        </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
         <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">권한 설정 전후 비교 — 최소 권한 원칙</div>
         <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <defs>
-            <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+            <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
 
           <!-- BEFORE section -->
-          <text x="140" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#cf222e">Before — 모든 도구 허용</text>
+          <text x="140" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-r)">Before — 모든 도구 허용</text>
           <!-- Wide open box -->
           <rect x="30" y="28" width="220" height="80" rx="8" fill="#ffebe9" stroke="#ff8182" stroke-width="1.5"/>
-          <text x="140" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#cf222e">tools: [모든 도구]</text>
+          <text x="140" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="var(--accent-r)">tools: [모든 도구]</text>
           <!-- Tool icons row -->
           <rect x="50" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
           <text x="72" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Read</text>
@@ -911,21 +926,21 @@ EOF</pre>
           <rect x="150" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
           <text x="172" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Push</text>
           <!-- Attack surface label -->
-          <text x="140" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#cf222e">공격 표면: 넓음</text>
+          <text x="140" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--accent-r)">공격 표면: 넓음</text>
 
           <!-- Arrow between -->
-          <line x1="260" y1="68" x2="325" y2="68" stroke="#636c76" stroke-width="2" marker-end="url(#paArrow)"/>
-          <text x="293" y="60" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#0969da">최소 권한</text>
+          <line x1="260" y1="68" x2="325" y2="68" stroke="var(--text-dim)" stroke-width="2" marker-end="url(#paArrow)"/>
+          <text x="293" y="60" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--accent)">최소 권한</text>
 
           <!-- AFTER section -->
-          <text x="460" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1a7f37">After — 필요한 도구만</text>
+          <text x="460" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-g)">After — 필요한 도구만</text>
           <!-- Restricted box -->
           <rect x="340" y="28" width="240" height="80" rx="8" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.5"/>
           <text x="460" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#116329">tools: [Read, Grep]</text>
           <!-- Tool icons row - only 2 -->
-          <rect x="385" y="62" width="55" height="20" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <rect x="385" y="62" width="55" height="20" rx="4" fill="var(--accent-g)" opacity="0.8"/>
           <text x="412" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#fff">Read</text>
-          <rect x="445" y="62" width="55" height="20" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <rect x="445" y="62" width="55" height="20" rx="4" fill="var(--accent-g)" opacity="0.8"/>
           <text x="472" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#fff">Grep</text>
           <!-- Grayed out tools -->
           <rect x="385" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
@@ -937,23 +952,23 @@ EOF</pre>
           <text x="460" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#116329">공격 표면: 좁음</text>
 
           <!-- Bottom comparison bar -->
-          <rect x="30" y="148" width="220" height="16" rx="4" fill="#cf222e" opacity="0.3"/>
-          <rect x="30" y="148" width="220" height="16" rx="4" fill="#cf222e" opacity="0.6"/>
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-r)" opacity="0.3"/>
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-r)" opacity="0.6"/>
           <text x="140" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="700" fill="#fff">위험 범위: 100%</text>
 
-          <rect x="340" y="148" width="88" height="16" rx="4" fill="#1a7f37" opacity="0.6"/>
+          <rect x="340" y="148" width="88" height="16" rx="4" fill="var(--accent-g)" opacity="0.6"/>
           <text x="384" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="700" fill="#fff">위험: 33%</text>
 
           <!-- Reduction arrow -->
-          <text x="300" y="178" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#1a7f37">위험 범위 67% 감소</text>
-          <text x="300" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">reviewer는 애초에 쓸 수 없으므로 실수가 발생하지 않는다</text>
+          <text x="300" y="178" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent-g)">위험 범위 67% 감소</text>
+          <text x="300" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">reviewer는 애초에 쓸 수 없으므로 실수가 발생하지 않는다</text>
         </svg>
       </div>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 설정과 같은 요청 문장이 그대로 동작한다. CLI에서만 <code>teammateMode: "tmux"</code>를 추가로 선택할 수 있어, tmux 분할 창으로 각 팀메이트의 화면을 나란히 볼 수 있다는 점이 Desktop App과 다르다.</p>
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> <a href="02_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행 (4가지 도구 비교)</a>
+        <strong>함께 보기:</strong> <a href="04_Practice_Manual.html#section-3">4장 §1 레퍼런스 — 병렬 실행 (4가지 도구 비교)</a>
       </div>
 
     </div>
@@ -974,7 +989,7 @@ EOF</pre>
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="../intro/04_Intro_Chapter.html#s3">모델 티어 (5장)</a>
+          <a class="cmd-chip" href="../intro/05_Intro_Chapter.html#s3">모델 티어 (5장)</a>
         </div>
       </div>
 
@@ -983,61 +998,61 @@ EOF</pre>
         <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <!-- Table header -->
           <rect x="0" y="0" width="520" height="30" rx="6" fill="#eef1f4"/>
-          <text x="52" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">모델</text>
-          <text x="178" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">속도</text>
-          <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">비용</text>
-          <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">품질</text>
+          <text x="52" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">모델</text>
+          <text x="178" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">속도</text>
+          <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">비용</text>
+          <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">품질</text>
 
           <!-- Row 1: haiku -->
           <rect x="0" y="34" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
-          <text x="52" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="#0969da">haiku</text>
+          <text x="52" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent)">haiku</text>
           <!-- Speed bar: 빠름 -->
-          <rect x="110" y="46" width="135" height="16" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-g)" opacity="0.8"/>
           <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">빠름</text>
           <!-- Cost bar: 낮음 -->
-          <rect x="270" y="46" width="68" height="16" rx="4" fill="#1a7f37" opacity="0.6"/>
+          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-g)" opacity="0.6"/>
           <text x="304" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">낮음</text>
           <!-- Quality bar: 기본 -->
-          <rect x="400" y="46" width="65" height="16" rx="4" fill="#d4a72c" opacity="0.6"/>
+          <rect x="400" y="46" width="65" height="16" rx="4" fill="var(--accent-amber)" opacity="0.6"/>
           <text x="433" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">기본</text>
           <!-- Quality description -->
-          <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">정형 작업</text>
-          <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">오탈자 검토</text>
+          <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">정형 작업</text>
+          <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">오탈자 검토</text>
 
           <!-- Row 2: sonnet -->
           <rect x="0" y="88" width="520" height="50" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.5"/>
-          <text x="52" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="#6639ba">sonnet</text>
+          <text x="52" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-p)">sonnet</text>
           <!-- Speed bar: 중간 -->
-          <rect x="110" y="100" width="90" height="16" rx="4" fill="#d4a72c" opacity="0.7"/>
+          <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
           <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">중간</text>
           <!-- Cost bar: 중간 -->
-          <rect x="270" y="100" width="90" height="16" rx="4" fill="#d4a72c" opacity="0.7"/>
+          <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
           <text x="315" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">중간</text>
           <!-- Quality bar: 양호 -->
-          <rect x="400" y="100" width="100" height="16" rx="4" fill="#6639ba" opacity="0.6"/>
+          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-p)" opacity="0.6"/>
           <text x="450" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">양호</text>
           <!-- Quality description -->
-          <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">일반 검토</text>
-          <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">코드 리뷰</text>
+          <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">일반 검토</text>
+          <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">코드 리뷰</text>
 
           <!-- Row 3: opus -->
           <rect x="0" y="142" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
-          <text x="52" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="#cf222e">opus</text>
+          <text x="52" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-r)">opus</text>
           <!-- Speed bar: 느림 -->
-          <rect x="110" y="154" width="45" height="16" rx="4" fill="#cf222e" opacity="0.7"/>
+          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-r)" opacity="0.7"/>
           <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">느림</text>
           <!-- Cost bar: 높음 -->
-          <rect x="270" y="154" width="135" height="16" rx="4" fill="#cf222e" opacity="0.6"/>
+          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-r)" opacity="0.6"/>
           <text x="338" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">높음</text>
           <!-- Quality bar: 우수 -->
-          <rect x="400" y="154" width="135" height="16" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-g)" opacity="0.8"/>
           <text x="468" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">우수</text>
           <!-- Quality description -->
-          <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">복잡 논리</text>
-          <text x="490" y="173" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">아키텍처</text>
+          <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">복잡 논리</text>
+          <text x="490" y="173" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">아키텍처</text>
 
           <!-- Bottom note -->
-          <text x="260" y="212" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 가벼운 역할=빠른 모델, 무거운 판단=높은 모델 — 적재적소에 배정</text>
+          <text x="260" y="212" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 가벼운 역할=빠른 모델, 무거운 판단=높은 모델 — 적재적소에 배정</text>
         </svg>
       </div>
 
@@ -1091,13 +1106,44 @@ EOF</pre>
         <div class="tip-box">
           매번 Claude App에 "model 필드를 바꿔줘"라고 요청하면 된다 — 정의 파일을 직접 열 필요 없고, Claude App이 알아서 수정 후 검토를 수행한다.
         </div>
+        <div class="warning-box">
+          <strong>흔한 실패</strong> — model 필드에 존재하지 않는 값(오타, 대문자 등)이 들어가면 호출이 실패하거나 기본 모델로 조용히 대체될 수 있다. ②③④를 마친 뒤에는 <code>.claude/agents/reviewer.md</code>를 직접 열어 <code>model:</code> 값이 <code>haiku</code>/<code>sonnet</code>/<code>opus</code> 중 의도한 값과 정확히 일치하는지 확인한다.
+        </div>
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> <a href="../intro/04_Intro_Chapter.html#s3">5장 §templates와 variant — 모델 티어링</a>
+        <strong>함께 보기:</strong> <a href="../intro/05_Intro_Chapter.html#s3">5장 §templates와 variant — 모델 티어링</a>
       </div>
 
     </div>
+  </div>
+
+  <!-- ══════════════════════════════ 실습 마무리 정리 ══════════════════════════════ -->
+  <h2 id="cleanup">실습 마무리 정리</h2>
+  <p>5개 시나리오를 모두 마쳤다면, <code>harness-lab/</code> 폴더를 어떻게 할지 정리한다. 다음 장(5장)에서 새 실습 폴더를 쓰기 때문에 반드시 남겨둘 필요는 없지만, 지금까지 만든 <code>AGENTS.md</code>·서브에이전트 정의를 비교해보고 싶다면 삭제 전에 한 번 훑어보는 것을 권장한다.</p>
+
+  <div class="platform-block" style="border-top:3px solid #d4a72c;">
+    <div class="platform-block-title">🧹 harness-lab 폴더 정리</div>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">더 이상 필요 없다면 폴더 전체를 삭제한다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+rm -rf harness-lab</pre>
+      <button class="copy-btn" onclick="copyCode(this)">복사</button>
+    </div>
+    <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong></p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+Remove-Item -Recurse -Force harness-lab</pre>
+      <button class="copy-btn" onclick="copyCode(this)">복사</button>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>보존하고 싶다면</strong> — 폴더를 지우는 대신 <code>git init && git add -A && git commit -m "harness-lab 실습 기록"</code>으로 로컬 커밋만 남겨두는 방법도 있다. 이후 참고자료로 두고, 다음 장 실습은 별도의 새 폴더에서 시작해도 된다.
+  </div>
+
+  <div class="warning-box">
+    P-1에서 <code>.claude/settings.json</code>에 켜둔 <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code> 플래그는 <code>harness-lab/</code> 폴더에만 적용되는 설정이므로, 폴더를 삭제하면 함께 사라진다. 다른 프로젝트에서도 Agent Teams를 계속 쓰고 싶다면 그 프로젝트의 <code>.claude/settings.json</code>에 같은 설정을 별도로 추가해야 한다.
   </div>
 
 <div class="video-refs">
@@ -1111,11 +1157,11 @@ EOF</pre>
   <hr>
   <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
     Claude Code/App 2026-07 기준 | 2026년 7월 14일 작성<br>
-    <a href="02_Practice_Manual.html">← 4장 §1 멀티 에이전트 팀 활용 레퍼런스</a> &nbsp;·&nbsp; <a href="02_Practice_Examples_B.html">4장 §2-B Antigravity 중심 실습</a> &nbsp;·&nbsp; <a href="../intro/04_Intro_Chapter.html">5장 ai-workspace-standards 소개 →</a>
+    <a href="04_Practice_Manual.html">← 4장 §1 멀티 에이전트 팀 활용 레퍼런스</a> &nbsp;·&nbsp; <a href="04_Practice_Examples_B.html">4장 §2-B Antigravity 중심 실습</a> &nbsp;·&nbsp; <a href="../intro/05_Intro_Chapter.html">5장 ai-workspace-standards 소개 →</a>
   </p>
   <div class="chapter-nav">
-    <a href="02_Practice_Manual.html" class="prev"><div class="dir">← 이전</div><div class="ttl">4장 §1 · 레퍼런스</div></a>
-    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards 소개</div></a>
+    <a href="04_Practice_Manual.html" class="prev"><div class="dir">← 이전</div><div class="ttl">4장 §1 · 레퍼런스</div></a>
+    <a href="../intro/05_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards 소개</div></a>
   </div>
 </main>
 

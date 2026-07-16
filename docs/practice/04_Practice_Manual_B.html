@@ -305,21 +305,21 @@
   <div class="nav-section">참고</div>
   <a href="#refs">참고 링크</a>
   <div class="nav-section">형제 문서</div>
-  <a href="02_Practice_Manual.html">4장 §1 · 공통 레퍼런스</a>
-  <a href="02_Practice_Manual_A.html">4장 §1-A · Claude 중심</a>
+  <a href="04_Practice_Manual.html">4장 §1 · 공통 레퍼런스</a>
+  <a href="04_Practice_Manual_A.html">4장 §1-A · Claude 중심</a>
   <div class="nav-section">다른 장</div>
-  <a href="../guardrails/00_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
-  <a href="../intro/04_Intro_Chapter.html">5장 · 도입</a>
+  <a href="../guardrails/03_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
+  <a href="../intro/05_Intro_Chapter.html">5장 · 도입</a>
 </nav>
 
 <!-- ── 본문 ── -->
 <main>
   <div class="chapter-eyebrow">4장 §1-B</div>
   <h1>서브에이전트 활용 상세 (Antigravity 중심)</h1>
-  <p class="subtitle">Antigravity CLI (agy) / Antigravity(Desktop)에서 서브에이전트를 정의하고, 호출하고, 병렬·자동화 단위로 확장하는 방법을 Antigravity 계열에 한정해 정리한 상세 문서 &nbsp;|&nbsp; 공통 개념은 <a href="02_Practice_Manual.html">4장 §1 레퍼런스</a>에서, Claude 계열은 <a href="02_Practice_Manual_A.html">4장 §1-A Claude 중심</a>에서 다룬다.</p>
+  <p class="subtitle">Antigravity CLI (agy) / Antigravity(Desktop)에서 서브에이전트를 정의하고, 호출하고, 병렬·자동화 단위로 확장하는 방법을 Antigravity 계열에 한정해 정리한 상세 문서 &nbsp;|&nbsp; 공통 개념은 <a href="04_Practice_Manual.html">4장 §1 레퍼런스</a>에서, Claude 계열은 <a href="04_Practice_Manual_A.html">4장 §1-A Claude 중심</a>에서 다룬다.</p>
 
   <div class="version-box">
-    <div class="version-row"><span class="vlabel">대상 버전</span><span class="vvalue">Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0 — Claude 대응은 <a href="02_Practice_Manual_A.html">§1-A</a> 참조</span></div>
+    <div class="version-row"><span class="vlabel">대상 버전</span><span class="vvalue">Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0 — Claude 대응은 <a href="04_Practice_Manual_A.html">§1-A</a> 참조</span></div>
     <div class="version-row"><span class="vlabel">참조 문서 URL</span><span class="vvalue"><a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">antigravity.google/docs/cli-using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google/docs/agent-manager</a></span></div>
     <div class="version-row"><span class="vlabel">문서 수집일</span><span class="vvalue">2026-07-14</span></div>
     <div class="version-row"><span class="vlabel">버전 확인 방법</span><span class="vvalue">Antigravity CLI: <code>agy --version</code> 또는 세션 안에서 <code>/usage</code> · Antigravity Desktop: 앱 내 정보 화면</span></div>
@@ -358,7 +358,7 @@
 
   <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent6); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — /goal, /agent, /agents</h3>
-    <p>Claude Code의 <code>Agent</code>/<code>Task</code> 툴과 같은 "동적으로 필요한 서브에이전트를 스폰한다"는 동작을, <code>agy</code>는 슬래시 커맨드로 부른다는 차이일 뿐이다(<a href="02_Practice_Manual_A.html#section-2">§1-A 섹션 2</a> 참조). <code>agy</code> 세션에서 <code>/goal</code>로 목표를 주면 중간 확인 없이 끝까지 실행하고(주지 않으면 주요 단계마다 확인을 위해 멈춘다), <code>/agent</code>로 장기 작업을 백그라운드에 맡긴 채 계속 다른 프롬프트를 이어갈 수 있다. <code>/agents</code>는 실행 중/완료/막힌 서브에이전트 목록을 보여주는 패널이다.</p>
+    <p>Claude Code의 <code>Agent</code>/<code>Task</code> 툴과 같은 "동적으로 필요한 서브에이전트를 스폰한다"는 동작을, <code>agy</code>는 슬래시 커맨드로 부른다는 차이일 뿐이다(<a href="04_Practice_Manual_A.html#section-2">§1-A 섹션 2</a> 참조). <code>agy</code> 세션에서 <code>/goal</code>로 목표를 주면 중간 확인 없이 끝까지 실행하고(주지 않으면 주요 단계마다 확인을 위해 멈춘다), <code>/agent</code>로 장기 작업을 백그라운드에 맡긴 채 계속 다른 프롬프트를 이어갈 수 있다. <code>/agents</code>는 실행 중/완료/막힌 서브에이전트 목록을 보여주는 패널이다.</p>
     <pre class="code-block">agy                      # TUI 세션 시작
 /goal notes.txt 파일을 검토하고 개선점을 요약해줘
 /agents                  # 실행 중/완료된 서브에이전트 목록</pre>
@@ -430,21 +430,21 @@ agy inspect
     <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using AGY CLI 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager 공식 문서</a></li>
-    <li>⚙️ <a href="02_Practice_Manual.html">4장 §1 공통 레퍼런스 — 02_Practice_Manual.html</a></li>
-    <li>⚙️ <a href="02_Practice_Manual_A.html">4장 §1-A Claude 중심 — 02_Practice_Manual_A.html</a></li>
-    <li>⚙️ <a href="02_Practice_Examples.html">4장 §2 실습 예시 — 02_Practice_Examples.html</a></li>
+    <li>⚙️ <a href="04_Practice_Manual.html">4장 §1 공통 레퍼런스 — 04_Practice_Manual.html</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_A.html">4장 §1-A Claude 중심 — 04_Practice_Manual_A.html</a></li>
+    <li>⚙️ <a href="04_Practice_Examples.html">4장 §2 실습 예시 — 04_Practice_Examples.html</a></li>
   </ul>
 
   <hr>
   <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Antigravity CLI 1.1.0+ · Antigravity 2.0 기준 | 2026년 7월</p>
   <div class="chapter-nav">
-    <a href="02_Practice_Manual.html" class="prev"><div class="dir">← 이전</div><div class="ttl">4장 §1 · 레퍼런스</div></a>
+    <a href="04_Practice_Manual.html" class="prev"><div class="dir">← 이전</div><div class="ttl">4장 §1 · 레퍼런스</div></a>
     <div class="branch">
       <div class="branch-label">4장 §1</div>
-      <a href="02_Practice_Manual_A.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
-      <a href="02_Practice_Manual_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
+      <a href="04_Practice_Manual_A.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
+      <a href="04_Practice_Manual_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
     </div>
-    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards</div></a>
+    <a href="../intro/05_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards</div></a>
   </div>
 </main>
 

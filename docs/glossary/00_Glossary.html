@@ -66,47 +66,47 @@
   <dl>
     <dt>하네스 엔지니어링 <span class="en">Harness Engineering</span></dt>
     <dd>모델이 어떤 도구·규칙·검증 장치를 통해 일하게 할지 설계하는 일. 프롬프트 엔지니어링(무엇을 말할지) → 컨텍스트 엔지니어링(무엇을 알게 할지)에 이어지는 세 번째 단계.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s1">2장 §1</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s1">2장 §1</a></span></dd>
 
     <dt>서브에이전트 <span class="en">Subagent</span></dt>
     <dd>메인 세션과 독립된 컨텍스트 창을 가지고 좁은 작업을 처리한 뒤 요약만 돌려주는 보조 에이전트. 스페셜리스트 개념을 실제 도구에서 구현하는 메커니즘.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3b">2장 §3b</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s3b">2장 §3b</a></span></dd>
 
     <dt>핸드오프 <span class="en">Handoff</span></dt>
     <dd>에이전트 사이에 작업을 넘기는 행위 또는 그 지점. 핸드오프 계약(Handoff Contract)은 주고받는 정보의 형식을 구조화한 것으로, 목적·범위·이전 단계 산출물을 명시하면 다음 에이전트가 다시 물어볼 필요 없이 바로 시작할 수 있다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s3">2장 §3</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s3">2장 §3</a></span></dd>
 
     <dt>동적 팀 구성 <span class="en">Dynamic Team Composition</span></dt>
     <dd>오케스트레이터가 매 요청마다 실제로 어떤 서브에이전트를 몇 번, 어떤 순서로 투입할지 새로 판단하는 것. 정의된 팀 명단은 고정이어도 실제 투입 구성은 작업마다 달라진다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4b">2장 §4b</a> · 실습: <a href="../practice/02_Practice_Examples.html#scenario-2b">4장 D-2</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s4b">2장 §4b</a> · 실습: <a href="../practice/04_Practice_Examples.html#scenario-2b">4장 D-2</a></span></dd>
 
     <dt>오케스트레이션 패턴 <span class="en">Orchestration Pattern</span></dt>
     <dd>Anthropic이 정리한 다섯 가지가 대표적이다. 프롬프트 체이닝(단계별 순차 처리), 라우팅(요청을 분류해 적합한 에이전트/모델로 분배), 병렬화(팬아웃으로 독립 작업 동시 실행, 또는 투표로 같은 작업을 반복해 다수결), 오케스트레이터-워커(하위 작업을 미리 정하지 않고 동적으로 분해), 평가자-최적화(초안을 독립 검증한 뒤에만 반영, 검증-후-적용). 한 워크플로우 안에서 자유롭게 조합해 쓸 수 있다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4">2장 §4</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s4">2장 §4</a></span></dd>
 
     <dt>컨텍스트 윈도우 / 컨텍스트 과부하 <span class="en">Context Window / Context Overload</span></dt>
     <dd>AI 모델이 한 번에 처리할 수 있는 토큰(텍스트)의 한계를 컨텍스트 윈도우라 한다. 이 한계 안에 역할 정의·과거 대화·작업 지시·결과물을 모두 담아야 하는데, 내용이 많아지면 앞부분의 정보가 희미해지는 현상을 컨텍스트 과부하라고 한다. 멀티 에이전트팀은 이를 역할별로 분산해 해결하는 핵심 동기 중 하나다.
-      <span class="see">자세히: <a href="../intro/00_Why_AI_Chapter.html#s3">1장 §멀티 에이전트: 전문가 팀의 원리</a></span></dd>
+      <span class="see">자세히: <a href="../intro/01_Why_AI_Chapter.html#s3">1장 §멀티 에이전트: 전문가 팀의 원리</a></span></dd>
 
     <dt>프론트매터 <span class="en">Frontmatter</span></dt>
     <dd>에이전트 정의 파일(<code>agents/*.md</code>) 맨 위에 YAML 형식으로 작성하는 메타데이터 블록. 에이전트 이름·역할·허용 도구(<code>tools</code>)·모델 티어(<code>tier</code>) 등을 기계적으로 파싱할 수 있도록 정의한다. <code>extends</code> 필드로 다른 에이전트 파일을 상속받을 수도 있다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Deploy.html#s1">10장 §1 배포와 SSOT</a></span></dd>
+      <span class="see">자세히: <a href="../intro/10_Intro_Advanced_Deploy.html#s1">10장 §1 배포와 SSOT</a></span></dd>
 
     <dt>스캐폴딩 <span class="en">Scaffolding</span></dt>
     <dd><code>bun scripts/new-project.ts</code>로 variant 템플릿의 전체 구성(에이전트·스킬·커맨드·거버넌스 파이프라인)을 독립 git 저장소로 복제하는 작업. "프로젝트를 처음부터 만드는 게 아니라, 미리 설계된 뼈대 위에서 시작한다"는 의미.
-      <span class="see">자세히: <a href="../variant-practice/04_VariantPractice_Manual.html#section-2">6장 §2</a></span></dd>
+      <span class="see">자세히: <a href="../variant-practice/06_VariantPractice_Manual.html#section-2">6장 §2</a></span></dd>
 
     <dt>훅 <span class="en">Hook</span></dt>
     <dd>에이전트가 특정 도구를 호출하기 전·후에 자동으로 실행되는 스크립트. 예: <code>PostToolUse</code> 훅으로 파일 수정 후 자동 감사(audit) 검사. Claude Code(CLI)에서는 <code>.claude/hooks/</code>에 정의된 훅이 발화하지만, Claude App(Desktop)에서는 동작하지 않으므로 도구별 동작 차이에 주의해야 한다.
-      <span class="see">자세히: <a href="../guardrails/00_Guardrails_Chapter.html#s6">3장 §감사 로그와 관측성</a></span></dd>
+      <span class="see">자세히: <a href="../guardrails/03_Guardrails_Chapter.html#s6">3장 §감사 로그와 관측성</a></span></dd>
 
     <dt>칸반 / WIP 한계 <span class="en">Kanban / WIP Limit</span></dt>
     <dd>동시에 진행 중인 작업(Work In Progress)의 수를 제한하는 병렬성 통제 방법. 팬아웃으로 에이전트를 여러 개 동시에 투입할 때, WIP 한계를 설정해 두면 동시 실행이 너무 많아져 발생하는 자원 경합이나 컨텍스트 누락을 방지할 수 있다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s4">2장 §오케스트레이션 패턴</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s4">2장 §오케스트레이션 패턴</a></span></dd>
 
     <dt>서비스 티켓 모델 <span class="en">Service Ticket Model</span></dt>
     <dd>AI를 "요청을 받으면 처리해 주는 서비스"로만 사용하는 운영 방식. 기존 IT 조직의 티켓 시스템과 유사하다. 사용자가 일일이 요청 형태로 지시해야 하며, 에이전트 팀의 자율성이 제한된다. 이 핸드북이 제안하는 "개발 도구 + variant 모델"과 대비되는 접근법.
-      <span class="see">자세히: <a href="../enterprise/03_Enterprise_Chapter.html">8장 · 기업 내 운영 전략 비교</a></span></dd>
+      <span class="see">자세히: <a href="../enterprise/08_Enterprise_Chapter.html">8장 · 기업 내 운영 전략 비교</a></span></dd>
   </dl>
 
   <h2 id="team">멀티 에이전트팀 구성요소</h2>
@@ -119,58 +119,58 @@
 
     <dt>모델 티어 <span class="en">Model Tier</span></dt>
     <dd>에이전트 역할별로 배정하는 모델 비용 등급(<code>high</code>/<code>medium</code>/<code>low</code>). 판단이 무거운 역할에는 high, 정형화된 반복 작업에는 low를 배정해 비용과 품질의 균형을 맞춘다. <code>agents/*.md</code> frontmatter의 <code>tier</code> 필드로 지정하며, 실제 모델명은 <code>model: inherit</code>로 플랫폼이 번역한다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §3</a>. L0→L1→L2의 "3-tier"와는 다른 개념이니 혼동 주의</span></dd>
+      <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s3">5장 §3</a>. L0→L1→L2의 "3-tier"와는 다른 개념이니 혼동 주의</span></dd>
   </dl>
 
   <h2 id="workspace">ai-workspace-standards 구조</h2>
   <dl>
     <dt>SSOT <span class="en">Single Source of Truth</span></dt>
     <dd>어떤 정보의 원본이 오직 한 곳에만 존재한다는 원칙. 예: CONSTITUTION.md는 워크스페이스 전체 규칙의 SSOT, context.md는 개별 프로젝트의 SSOT.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s4">5장 §4</a></span></dd>
+      <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s4">5장 §4</a></span></dd>
 
     <dt>L0 / L1 / L2</dt>
     <dd>워크스페이스 루트(L0, 유일한 원본) → 공통 템플릿 스냅샷(L1, <code>templates/common/</code>) → variant/프로젝트(L2, <code>templates/co-*/</code> 또는 <code>Projects/*/</code>)로 이어지는 3단 계층. 흐름은 항상 위에서 아래로만 가고, L1→L2는 스캐폴딩 시점에 딱 한 번만 전달되는 "포크"다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Deploy.html#s1">10장 §1 배포와 SSOT</a></span></dd>
+      <span class="see">자세히: <a href="../intro/10_Intro_Advanced_Deploy.html#s1">10장 §1 배포와 SSOT</a></span></dd>
 
     <dt>포크 모델 <span class="en">Fork Model</span></dt>
     <dd>L1에서 L2가 갈라져 나온 뒤에는 자동 역동기화 없이 독립적으로 진화하는 방식. 공식 템플릿으로 승격하려면 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다.</dd>
 
     <dt>variant</dt>
     <dd><code>templates/</code> 아래에 있는, 특정 도메인을 위한 완결된 멀티 에이전트팀 구성(PM·전문 에이전트·거버넌스 파이프라인 묶음). co-develop, co-design, co-work 등이 예시다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Chapter.html#s3">5장 §3</a></span></dd>
+      <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s3">5장 §3</a></span></dd>
 
     <dt>Phase A / Phase B</dt>
     <dd>새 variant를 만드는 두 단계. Phase A는 <code>Projects/</code> 아래 독립 프로토타입으로 자유롭게 실험하는 단계, Phase B는 <code>promote-variant</code>로 정식 <code>templates/</code> variant로 승격하는 단계.
-      <span class="see">자세히: <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a></span></dd>
+      <span class="see">자세히: <a href="../variant-advanced/11_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a></span></dd>
 
     <dt>보일러플레이트 <span class="en">Boilerplate</span></dt>
     <dd>매 프로젝트마다 처음부터 다시 작성해야 할 PM 역할 정의·거버넌스 파이프라인·커맨드/스킬 배선을 미리 갖춰 둔 출발점. ai-workspace-standards가 배포하는 것의 본질.</dd>
 
     <dt>컨테이너 연계 <span class="en">Container Integration</span></dt>
     <dd>ai-workspace-standards의 고도화 방향 중 하나. 스캐폴딩된 프로젝트가 Docker/Kubernetes 환경에서 Open WebUI 같은 서비스와 연계되어 개인 단위로 지원될 수 있어야 한다는 요구. 현재는 로컬 AI 코딩 도구와 직접 연동되는 방식만 지원된다.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Architecture.html#container">10장 §4 아키텍처 심화</a></span></dd>
+      <span class="see">자세히: <a href="../intro/10_Intro_Advanced_Architecture.html#container">10장 §4 아키텍처 심화</a></span></dd>
 
     <dt>메모리 취합 <span class="en">Memory Consolidation</span></dt>
     <dd>ai-workspace-standards의 고도화 방향 중 하나. 개별 프로젝트 단위로 흩어져 있는 <code>memory/MEMORY.md</code> 파일들을 워크스페이스 수준에서 취합·정리하여 전체 트렌드를 파악할 수 있는 기능.
-      <span class="see">자세히: <a href="../intro/04_Intro_Advanced_Architecture.html#memory">10장 §4 아키텍처 심화</a></span></dd>
+      <span class="see">자세히: <a href="../intro/10_Intro_Advanced_Architecture.html#memory">10장 §4 아키텍처 심화</a></span></dd>
   </dl>
 
   <h2 id="tools">도구·플랫폼</h2>
   <dl>
     <dt>AGENTS.md</dt>
     <dd>30개 이상의 AI 코딩 도구가 공통으로 읽는 개방형 표준 파일. 빌드·테스트 명령, 코드 스타일 등 도구 중립적 규칙을 정의한다. 이 저장소에서는 추가로 "에이전트 로스터" 역할도 겸한다.
-      <span class="see">자세히: <a href="../concepts/01_Concepts_Chapter.html#s5">2장 §도구를 넘나드는 하네스, AGENTS.md</a></span></dd>
+      <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s5">2장 §도구를 넘나드는 하네스, AGENTS.md</a></span></dd>
 
     <dt>teammateMode</dt>
     <dd>Agent Teams(실험적 기능)의 병렬 실행 모드. Claude App(Desktop)은 <code>in-process</code>만 지원하고, Claude Code(CLI)는 <code>tmux</code> 분할 창 모드도 추가로 지원한다.
-      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-1">7장 §1</a></span></dd>
+      <span class="see">자세히: <a href="../tools/07_Tools_Manual.html#section-1">7장 §1</a></span></dd>
 
     <dt>Agent Manager</dt>
     <dd>Antigravity(Desktop)에서 여러 워크스페이스를 한 화면에서 감독하는 상위 인터페이스. Workspace마다 에이전트 하나씩 배정하는 것이 원칙이다.</dd>
 
     <dt><code>/goal</code> / <code>/agent</code> / <code>/agents</code></dt>
     <dd>Antigravity CLI(<code>agy</code>)에서 동적 서브에이전트 오케스트레이션을 부르는 슬래시 커맨드. <code>/goal</code>은 목표를 끝까지 실행, <code>/agent</code>는 백그라운드 장기 작업 위임, <code>/agents</code>는 지금까지 생성된 서브에이전트 상태 목록 확인. 이 능력 자체는 agy만의 것이 아니다 — Claude Code/App은 같은 동적 오케스트레이션을 <code>Agent</code>(Task) 툴과 자연어 요청으로, Antigravity(Desktop)는 Agent Manager GUI로 수행한다. 이 세 명령은 그 동작을 CLI 화면에서 부르는 이름일 뿐이다.
-      <span class="see">자세히: <a href="../tools/03_Tools_Manual.html#section-2">7장 §2</a></span></dd>
+      <span class="see">자세히: <a href="../tools/07_Tools_Manual.html#section-2">7장 §2</a></span></dd>
   </dl>
 
 </main>

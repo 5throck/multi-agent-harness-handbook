@@ -108,6 +108,15 @@
       main { padding: 40px 18px 60px; }
       .chapter-nav { flex-direction: column; }
     }
+    /* ── 참고 영상 ── */
+    .video-refs { margin: 28px 0; padding: 16px 20px; background: #f0f6ff; border: 1px solid #d0e8ff; border-radius: 8px; }
+    .video-refs h3 { font-size: 15px; font-weight: 700; color: var(--accent6); margin: 0 0 12px; }
+    .video-refs ul { list-style: none; padding: 0; margin: 0; }
+    .video-refs li { padding: 6px 0; line-height: 1.6; }
+    .video-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; color: #fff; vertical-align: middle; margin-right: 6px; }
+    .video-badge.en { background: #0969da; }
+    .video-badge.ko { background: #1a7f37; }
+    .video-meta { font-size: 12px; color: var(--text-dim); }
   </style>
 </head>
 <body>
@@ -210,6 +219,14 @@
     </div>
   </div>
   <p>결국 선택 기준은 하나로 요약된다. 참고할 선례가 전혀 없는 새로운 도메인이라면 처음부터 설계하는 경로가 자연스럽다. 반대로 조직 안에 이미 한 번 이상 검증되어 다들 베껴 쓰고 있는 프로젝트가 있다면, 그 검증된 결과물을 존중해 승격 경로로 정식화하는 편이 더 안전하고 효율적이다. 두 경로 모두 결국 같은 <code>templates/co-&lt;name&gt;/</code> 형태로 수렴한다는 점에서, 이는 "어떤 산으로 오를 것인가"의 문제이지 "다른 산에 도착하는가"의 문제는 아니다.</p>
+
+  <div class="video-refs">
+    <h3 id="videos">참고 영상</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=kFey6jjUeJQ" target="_blank">Simple AI Agent Workflow in 14 min</a><span class="video-meta">(14:38)</span> — 14분 만에 AI 에이전트 워크플로우를 처음부터 구축하는 실전 튜토리얼</li>
+      <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=OydayHQWknI" target="_blank">실제로 작동하는 AI 디자인 에이전트</a><span class="video-meta">(13:58)</span> — 한국어로 AI 에이전트와 UX 도구를 결합한 프로토타입 제작 데모</li>
+    </ul>
+  </div>
 
   <div class="chapter-nav">
     <a href="../enterprise/03_Enterprise_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">8장 · 엔터프라이즈 연계</div></a>

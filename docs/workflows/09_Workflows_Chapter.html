@@ -143,6 +143,9 @@
   <a href="#s1">워크플로우란 무엇인가</a>
   <a href="#s2">워크플로우 구성요소</a>
   <a href="#s3">실제 워크플로우 사례</a>
+  <a href="#subagent-roster">서브에이전트 로스터</a>
+  <a href="#role-boundary">역할 경계 매트릭스</a>
+  <a href="#pm-phases">PM 페이즈 파이프라인</a>
   <a href="#s4">워크플로우 선택 가이드</a>
   <div class="nav-section">다른 장</div>
   <a href="../tools/00_Tools_Manual.html">공통 참고 · 도구 비교</a>
@@ -164,6 +167,9 @@
       <li>오케스트레이션 패턴과 워크플로우의 관계 — 패턴은 블록, 워크플로우는 완성된 조립품</li>
       <li>워크플로우를 구성하는 6가지 요소: 단계·분기·병렬·취합·게이트·루프</li>
       <li>5가지 실제 도메인 워크플로우 사례와 흐름도</li>
+      <li>서브에이전트 로스터 — 각 에이전트의 티어, 병렬 가능성, 쓰기 권한</li>
+      <li>역할 경계 매트릭스 — 어떤 시나리오에 어떤 에이전트를 써야 하는지</li>
+      <li>PM 페이즈 파이프라인 — Phase 0부터 Phase 6까지의 실행 워크플로우</li>
       <li>업무 성격에 따라 어떤 패턴을 선택하고 조합할지를 결정하는 가이드</li>
     </ul>
   </div>
@@ -441,6 +447,61 @@
   </ul>
 
 
+  <h2 id="subagent-roster">서브에이전트 로스터 — 워크플로우를 구성하는 에이전트 목록</h2>
+
+  <p>2장에서 "에이전트"를 역할(role)로 모델링한다는 것을 배웠다. 실제 워크스페이스에서는 이 역할들이 <strong>구체적인 파일과 티어 배정</strong>으로 정의되어 로스터에 등록된다. AGENTS.md의 서브에이전트 로스터는 이 정의를 한눈에 볼 수 있는 테이블이다.</p>
+
+  <table>
+    <thead><tr><th>에이전트</th><th>파일</th><th>티어</th><th>병렬 실행</th><th>쓰기 권한</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PM Orchestrator</strong></td><td><code>agents/pm.md</code></td><td>High</td><td>—</td><td>오케스트레이션만</td></tr>
+      <tr><td>Consistency Auditor</td><td><code>agents/auditor.md</code></td><td>Medium</td><td>독립 QA</td><td>없음</td></tr>
+      <tr><td>Lifecycle Manager</td><td><code>agents/lifecycle-manager.md</code></td><td>Medium</td><td>온디맨드 거버넌스</td><td>거버넌스 문서만 (L0 전용)</td></tr>
+      <tr><td>Template Architect</td><td><code>agents/architect.md</code></td><td>High</td><td>설계 단계</td><td>없음</td></tr>
+      <tr><td>Automation Engineer</td><td><code>agents/automation-engineer.md</code></td><td>Low</td><td>순차</td><td>TypeScript (.ts) 자동화 스크립트</td></tr>
+      <tr><td>Documentation Writer</td><td><code>agents/docs-writer.md</code></td><td><strong>Medium</strong></td><td>설계 이후</td><td>.md 파일만</td></tr>
+      <tr><td>Scaffolding Expert</td><td><code>agents/scaffolding-expert.md</code></td><td>Low</td><td>리서치 단계</td><td>설치 스크립트만 (승인 후)</td></tr>
+      <tr><td>Security &amp; Git Expert</td><td><code>agents/security-expert.md</code></td><td>Medium</td><td>리뷰 단계</td><td>훅 설정만</td></tr>
+    </tbody>
+  </table>
+
+  <p>이 테이블의 "병렬 실행" 열은 8장 §4에서 다룬 Tier Adjustment Rules과 함께 해석해야 한다. 예를 들어 docs-writer는 "설계 이후"에만 병렬 실행 가능한데, 이것은 설계가 확정되지 않은 상태에서 문서를 병렬로 작성하면 나중에 전부 갈아 엎야 할 위험이 있기 때문이다. 반면 Auditor는 "독립 QA"로, 다른 에이전트의 작업과 무관하게 언제든 독립적으로 실행될 수 있다.</p>
+
+  <h2 id="role-boundary">역할 경계 매트릭스 — "누가 이 작업을 해야 하는가"</h2>
+
+  <p>에이전트가 여럿일 때, "누가 이 작업을 맡아야 하는가"가 모호해질 수 있다. 다음 매트릭스는 그 모호함을 해소하는 역할 경계(role boundary)를 정의한다.</p>
+
+  <table>
+    <thead><tr><th>시나리오</th><th>사용해야 할 에이전트</th><th>사용하면 안 되는 에이전트</th></tr></thead>
+    <tbody>
+      <tr><td>구현 방법과 폴더 구조 설계</td><td><code>architect</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>자동화 스크립트(.ts) 작성/수정</td><td><code>automation-engineer</code></td><td><code>architect</code></td></tr>
+      <tr><td>문서 업데이트</td><td><code>docs-writer</code></td><td><code>architect</code></td></tr>
+      <tr><td>프로젝트를 템플릿에서 새로 만들기</td><td><code>scaffolding-expert</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>보안 리뷰, Git 훅 설정</td><td><code>security-expert</code></td><td><code>architect</code></td></tr>
+      <tr><td>문서 일관성 교차 검증</td><td><code>auditor</code></td><td><code>docs-writer</code></td></tr>
+      <tr><td>여러 에이전트 간 작업 오케스트레이션</td><td><code>pm</code></td><td>어떤 실행 에이전트도</td></tr>
+    </tbody>
+  </table>
+
+  <p>이 매트릭스의 핵심 원칙은 <strong>"설계와 실행을 분리"</strong>한다는 것이다. architect는 설계만 하고 스크립트를 직접 작성하지 않으며, automation-engineer는 스크립트를 작성하지만 구조를 설계하지 않는다. docs-writer가 문서를 검증하는 것이 아니라 auditor가 검증하고, docs-writer는 auditor가 쓴 피드백을 반영해 문서를 수정하는 식이다.</p>
+
+  <h2 id="pm-phases">PM 페이즈 파이프라인 — 워크플로우의 거버넌스 관점</h2>
+
+  <p>이 장에서 다룬 워크플로우 패턴(라우팅, 팬아웃, 파이프라인 등)은 <strong>기술적 구성요소</strong>의 관점이다. 실제 워크스페이스에서는 이 기술적 패턴 위에 <strong>거버넌스 페이즈</strong>가 겹쳐진다. PM이 관리하는 7단계 페이즈를 워크플로우 관점에서 정리하면 다음과 같다.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">Phase 0</span><span><strong>프로젝트 초기화</strong>(PM 전담) — 워크스페이스 요구사항 평가, 에이전트/스킬 동적 생성, AGENTS.md 갱신. <em>워크플로우: 오케스트레이터 단독</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 1~2</span><span><strong>기획·아키텍처</strong>(전문가 자율) — PM이 요청 분류, Architect가 구현 계획+ADR 작성, 리서치 에이전트를 병렬 디스패치. <em>워크플로우: 라우팅 → 팬아웃(병렬 리서치)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 3</span><span><strong>설계 인계</strong>(variant별) — Architect가 승인된 계획을 실행 에이전트에 인계. 에이전트 간 자율 핸드오프. <em>워크플로우: 오케스트레이터-워커(핸드오프)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 4</span><span><strong>실행</strong>(전문가 자율) — Automation Engineer가 승인된 계획대로 구현, Docs Writer가 문서 업데이트. <em>워크플로우: 파이프라인(순차 실행)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 5</span><span><strong>라이프사이클 종료</strong>(PM 전담) — PM이 변경된 아티팩트의 거버넌스 기록 업데이트. <em>워크플로우: 오케스트레이터 단독(기록)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 6</span><span><strong>품질 보증</strong>(워크스페이스 자율) — Auditor가 <code>qa-gate.ts</code> 자동 실행. 최대 2회 반복 후 PM 에스컬레이션. <em>워크플로우: 검증-후-적용(루프)</em></span></div>
+  </div>
+
+  <p>이 7단계 페이즈는 §3의 워크플로우 사례와 직접 대응된다. 예를 들어 "코드 리뷰" 사례의 전체 흐름은 Phase 1~2(분석) → Phase 4(검토 실행) → Phase 6(QA)의 축소판이다. 실무에서 새 워크플로우를 설계할 때 이 페이즈를 염두에 두면 "어디에 인간 게이트를 둘 것인가"와 "병렬 실행이 안전한 단계는 어디인가"를 더 체계적으로 결정할 수 있다.</p>
+
+
   <h2 id="s4">워크플로우 선택 가이드</h2>
 
   <p>새로운 업무에 멀티 에이전트 워크플로우를 도입하려면, 어떤 패턴으로 시작하고 어떻게 확장해 나갈지 결정해야 한다. 다음 의사결정 나무는 첫 단계를 고르는 데 도움이 된다.</p>
@@ -563,17 +624,17 @@
   </div>
 
   <div class="note">
-    이 장의 워크플로우 사례는 <a href="../practice/04_Practice_Examples_A.html">4장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="../variant-practice/06_VariantPractice_Examples.html">6장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="../capstone/12_Capstone.html">12장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
+    이 장의 워크플로우 사례는 <a href="../practice/04_Practice_Examples_A.html">4장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="../variant-practice/06_VariantPractice_Examples.html">6장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="../capstone/13_Capstone.html">13장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
   </div>
 
   <div class="chapter-nav">
     <a href="../intro/08_Intro_Advanced_Roadmap.html" class="prev">
       <div class="dir">← 이전 장</div>
-      <div class="ttl">8장 §6 · 고도화 로드맵</div>
+      <div class="ttl">8장 §5 · 고도화 로드맵</div>
     </a>
-    <a href="../variant-advanced/10_VariantAdvanced_Chapter.html" class="next">
+    <a href="../intro/10_ProjectUpgrade_Chapter.html" class="next">
       <div class="dir">다음 장 →</div>
-      <div class="ttl">10장 · 신규 variant 생성</div>
+      <div class="ttl">10장 · L2 프로젝트 업그레이드</div>
     </a>
   </div>
 

@@ -87,6 +87,9 @@
     }
     .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
     .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th, td { padding: 8px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: var(--bg2); font-weight: 600; font-size: 13px; color: var(--text-dim); }
     code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -120,17 +123,18 @@
   <a href="#extends">extends 프론트매터 해석 순서</a>
   <a href="#boilerplate-example">보일러플레이트 전략 실전 예시</a>
   <a href="#tier-example">모델 티어 전략 실전 예시</a>
+  <a href="#tier-strategy-deep">3-티어 전략 심화</a>
+  <a href="#execution-plan-templates">실행 계획 템플릿</a>
   <a href="#platform-parity">플랫폼 패리티</a>
   <div class="nav-section">8장 다른 절</div>
   <a href="08_Intro_Advanced_Deploy.html">8장 §1 · 배포와 SSOT</a>
   <a href="08_Intro_Advanced_Chapter.html">8장 §2 · 생애주기 관리</a>
   <a href="08_Intro_Advanced_AGENTS.html">8장 §3 · AGENTS.md 심화</a>
-  <a href="08_Intro_Advanced_ProjectUpgrade.html">8장 §5 · L2 프로젝트 업그레이드</a>
-  <a href="08_Intro_Advanced_Roadmap.html">8장 §6 · 고도화 로드맵</a>
+  <a href="08_Intro_Advanced_Roadmap.html">8장 §5 · 고도화 로드맵</a>
   <div class="nav-section">다른 장</div>
   <a href="05_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
   <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 기업 내부 멀티 에이전트팀 운영</a>
-  <a href="../variant-advanced/10_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
 </nav>
 
 <main>
@@ -146,6 +150,8 @@
       <li><code>extends</code> 프론트매터가 실제로 해석되는 순서</li>
       <li>LOCKED/MERGE/PRESERVE 분류를 실제 파일에 적용한 예시</li>
       <li>tier 배정을 실제 agents/*.md에 적용한 예시와 비용 영향</li>
+      <li>3-티어 전략의 심화 — High/Medium/Low 정의, Tier Adjustment Rules, Tier Ceiling Rule</li>
+      <li>실행 계획 템플릿 — Design Gate(Row 0), 예외 카테고리, 플랫폼 패리티 고려</li>
       <li><code>.claude/</code>·<code>.gemini/</code> 플랫폼 패리티가 강제되는 방법</li>
     </ul>
   </div>
@@ -200,15 +206,91 @@ tier:
 
   <h2 id="platform-parity">플랫폼 패리티 — .claude/와 .gemini/를 구조적으로 동일하게 유지하는 법</h2>
   <p>이 저장소는 Claude 계열(<code>.claude/</code>)과 Antigravity/Gemini 계열(<code>.gemini/</code>) 두 플랫폼을 동시에 지원한다. 두 디렉터리가 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 이걸 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
-  <p>이 검사는 두 디렉터리를 구조적으로 대조해 한쪽에만 존재하는 에이전트·스킬·커맨드가 없는지 확인한다. 10장에서 다루는 승격(promote) 파이프라인도 이 검사를 승격 전 필수 게이트로 포함하고 있어서, "Claude용으로만 만들고 Antigravity용은 깜빡한" 상태로는 애초에 정식 variant가 될 수 없다. 두 플랫폼이 서로 다른 실행 방식(§1의 CLAUDE.md/GEMINI.md MERGE 예시 참고)을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
+  <p>이 검사는 두 디렉터리를 구조적으로 대조해 한쪽에만 존재하는 에이전트·스킬·커맨드가 없는지 확인한다. 11장에서 다루는 승격(promote) 파이프라인도 이 검사를 승격 전 필수 게이트로 포함하고 있어서, "Claude용으로만 만들고 Antigravity용은 깜빡한" 상태로는 애초에 정식 variant가 될 수 없다. 두 플랫폼이 서로 다른 실행 방식(§1의 CLAUDE.md/GEMINI.md MERGE 예시 참고)을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
+
+  <h2 id="tier-strategy-deep">3-티어 전략 심화 — 비용 최적화를 실행 시점에 적용하기</h2>
+
+  <p>앞 절에서 tier 배정이 <code>agents/*.md</code> frontmatter에 정적으로 정의된다는 것을 확인했다. 이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다.</p>
+
+  <h3>티어 정의와 모델 매핑</h3>
+  <p>AGENTS.md에 정의된 3-티어 전략은 각 티어를 역할의 복잡도 기준으로 분류한다.</p>
+  <table>
+    <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th></tr></thead>
+    <tbody>
+      <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-4-7</td><td>gemini-3.1-pro</td></tr>
+      <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-4-6</td><td>gemini-3.5-flash</td></tr>
+      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-4-5</td><td>gemini-3.5-flash</td></tr>
+    </tbody>
+  </table>
+  <p>기준선이 high인 에이전트(architect, pm)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
+
+  <h3>Tier Adjustment Rules — 실행 시 비용 최적화</h3>
+  <p>PM이 실행 계획을 세울 때 기준선에서 벗어나는 티어 조정이 가능하다. 규칙은 간단하다.</p>
+  <ul>
+    <li><strong>다운그레이드 허용</strong> — PM은 단순한 작업의 경우 에이전트의 티어를 기준선보다 낮출 수 있다. 예를 들어 기준선이 medium인 docs-writer가 "README.md 오타 하나 수정" 작업을 받을 때 low로 낮춰 비용을 절감할 수 있다.</li>
+    <li><strong>업그레이드 금지</strong> — 반대로 기준선보다 높은 티어로 올리는 것은 <strong>항상 금지</strong>다. low인 automation-engineer를 high로 올려 복잡한 아키텍처를 설계하게 하는 것은 거버넌스 위반이다.</li>
+    <li><strong>실패 시 복원</strong> — 다운그레이드한 작업이 실패하면, PM은 반드시 해당 에이전트의 기준선 티어를 복원하고 재시도해야 한다.</li>
+  </ul>
+  <p>이 규칙의 핵심은 <strong>"에이전트 역할의 복잡도 상한은 고정되지만, 하한은 상황에 맞춰 조정할 수 있다"</strong>는 원칙이다. PM은 비용 절감을 위해 low로 내릴 수 있지만, 그 작업이 low의 역량을 넘어서면 즉시 기준선으로 되돌아간다.</p>
+
+  <h3>Tier Ceiling Rule</h3>
+  <p>AGENTS.md의 Phase Determination 테이블(§3.5)은 각 산출물 유형에 허용된 티어 상한을 명시한다. 예를 들어 "스크립트 구현(승인된 계획 존재)"은 Phase 4이며 담당 에이전트는 automation-engineer(low)다 — 여기에 high를 배정하면 Tier Ceiling 위반이 된다. 반면 "새 파일 설계, 스키마 정의"는 Phase 1-2이며 architect(high)가 담당한다.</p>
+  <div class="pullquote">
+    Tier Ceiling Rule은 "이 작업에 가장 적합한 티어 이상은 배정하지 마라"가 아니라 "이 에이전트의 정의된 티어 이상은 사용하지 마라"이다. 역할 기반이 작업 기반이다.
+  </div>
+
+  <h3 id="execution-plan-templates">실행 계획 템플릿 — 다중 에이전트 작업의 구조화된 실행 설계</h3>
+
+  <p>PM이 복잡한 작업을 여러 에이전트에 분배할 때 <strong>실행 계획(Execution Plan)</strong> 형식을 사용한다. 이 계획은 "누가 무엇을 어떤 티어로, 어떤 순서로"를 테이블로 명시하여 실행의 일관성을 보장한다.</p>
+
+  <h3>표준 실행 계획 형식</h3>
+  <table>
+    <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Create/update design doc → <code>docs/designs/&lt;spec-id&gt;-design.md</code></td><td>architect</td><td>High</td><td>[model]</td><td>NEW</td></tr>
+      <tr><td>1</td><td>[task description]</td><td>[specialist]</td><td>High/Medium/Low</td><td>[model]</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>N</td><td><code>/sync "type(scope): message"</code></td><td>pm</td><td>Medium</td><td>[model]</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Design Gate (Row 0)</h3>
+  <p>Row 0은 <strong>L0(워크스페이스 루트)과 L1(공통 템플릿)에만 강제</strong>된다. architect가 설계 문서를 먼저 작성하고, PM이 이를 검증한 뒤에야 구현 단계(Row 1 이후)로 진행할 수 있다. L2 variant 프로젝트는 자체 워크플로우를 관리하므로 이 게이트가 적용되지 않는다.</p>
+
+  <h3>Design Gate 예외 카테고리</h3>
+  <p>Row 0이 부담스러운 단순 작업에는 다음 5가지 예외 카테고리(E1~E5)만 인정한다. 예외는 PM이 임의로 만들 수 없고, 아래 정의된 카테고리만 사용해야 한다.</p>
+  <table>
+    <thead><tr><th>ID</th><th>카테고리</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>E1</td><td>memory-log</td><td><code>memory/YYYY-MM-DD.md</code> 세션 로그 작성</td></tr>
+      <tr><td>E2</td><td>changelog</td><td><code>CHANGELOG.md</code> 업데이트만</td></tr>
+      <tr><td>E3</td><td>hotfix-typo</td><td>오타 수정, 한 줄 변경, 사소한 수정</td></tr>
+      <tr><td>E4</td><td>pure-readme</td><td>README.md 본문 텍스트만(구조/설계 변경 없음)</td></tr>
+      <tr><td>E5</td><td>sync-only</td><td><code>/sync</code> 실행만(라이프사이클 종료)</td></tr>
+    </tbody>
+  </table>
+  <p>예외 적용 시 Row 0의 Agent/Tier/Model 컬럼은 빈칸(<code>—</code>)으로 표시한다.</p>
+
+  <h3>실전 예시: PM이 작성한 실행 계획</h3>
+  <p>다음은 "agents/pm.md와 스크립트를 업데이트하는 플랫폼 패리티 작업"의 실제 실행 계획 예시다.</p>
+  <table>
+    <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Update agents/pm.md</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>2</td><td>Update scripts/audit.ts</td><td>automation-engineer</td><td>Low</td><td>haiku</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>3</td><td>Update CLAUDE.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>4</td><td>Update GEMINI.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>sonnet</td><td></td></tr>
+    </tbody>
+  </table>
+  <p><strong>실행 순서</strong>: Sequential — 플랫폼 패리티를 위해 CLAUDE.md와 GEMINI.md를 함께 업데이트해야 하므로 순차 실행이다. 이 예시에서 automation-engineer에 low 티어가 배정된 것은 "정형화된 스크립트 수정"이라는 단순 작업에 Tier Adjustment Rule을 적용한 결과다.</p>
 
   <div class="note">
-    이 절은 §1에서 소개한 개념(L0→L1→L2, 포크 모델, LOCKED/MERGE/PRESERVE)의 <strong>실제 동작 방식과 구체적 예시</strong>를 다룬다 — 여기 나온 내용은 모두 현재 구현이다. 아직 구현되지 않은 고도화 방향(컨테이너 연계, 메모리 취합, 보일러플레이트/티어 전략의 향후 확장 등)은 <a href="08_Intro_Advanced_Roadmap.html">§6 고도화 로드맵</a>에서 별도로 다룬다.
+    이 절은 §1에서 소개한 개념(L0→L1→L2, 포크 모델, LOCKED/MERGE/PRESERVE)의 <strong>실제 동작 방식과 구체적 예시</strong>를 다룬다 — 여기 나온 내용은 모두 현재 구현이다. 아직 구현되지 않은 고도화 방향(컨테이너 연계, 메모리 취합, 보일러플레이트/티어 전략의 향후 확장 등)은 <a href="08_Intro_Advanced_Roadmap.html">§5 고도화 로드맵</a>에서 별도로 다룬다.
   </div>
 
   <div class="chapter-nav">
     <a href="08_Intro_Advanced_AGENTS.html" class="prev"><div class="dir">← 이전</div><div class="ttl">8장 §3 · AGENTS.md 심화</div></a>
-    <a href="08_Intro_Advanced_ProjectUpgrade.html" class="next"><div class="dir">다음 →</div><div class="ttl">8장 §5 · L2 프로젝트 업그레이드</div></a>
+    <a href="08_Intro_Advanced_Roadmap.html" class="next"><div class="dir">다음 →</div><div class="ttl">8장 §5 · 고도화 로드맵</div></a>
   </div>
  </article>
 </main>

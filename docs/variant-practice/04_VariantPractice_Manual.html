@@ -250,6 +250,8 @@
     .warning-box::before { content: '⚠️  '; }
     /* ── 권한 모드 표 ── */
     .mode-table td:first-child { font-family: monospace; color: #ff7b72; font-size: 12px; }
+    /* ── 노트 박스 ── */
+    .note { background: #e8f4fd; border-left: 3px solid #0969da; padding: 10px 16px; border-radius: 4px; font-size: 14px; margin: 14px 0; }
   </style>
 </head>
 <body>
@@ -259,6 +261,7 @@
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
   <div class="nav-title">6장 §1 · Variant 실습 레퍼런스</div>
   <a href="#tree">전체 구조 개요</a>
+  <a href="#repository-walk">저장소 구조 둘러보기</a>
   <div class="nav-section">설치 및 확인</div>
   <a href="#section-1">1. 로컬 환경 준비</a>
   <a href="#section-2">2. 프로젝트 스캐폴딩 명령</a>
@@ -267,7 +270,7 @@
   <a href="#section-3">참고 링크</a>
   <div class="nav-section">다른 장</div>
   <a href="../intro/04_Intro_Chapter.html">5장 §1 · ai-workspace-standards 소개</a>
-  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7장 §1 · 새 variant 만들기 vs 승격</a>
+  <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
 </nav>
 
 <main>
@@ -296,6 +299,17 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
 ├── scripts/                           new-project.ts 등 운영 스크립트(TypeScript, bun으로 실행)
 └── Projects/                          &lt;프로젝트명&gt;/ 형태의 개별 프로젝트(각자 독립 git 저장소)
 </pre></div>
+
+  <h3 id="repository-walk">저장소 구조 둘러보기 — clone 후 처음 확인할 곳 5곳</h3>
+  <p><code>git clone</code>으로 워크스페이스 루트에 저장소를 복제한 뒤, 가장 먼저 확인할 핵심 디렉터리 5곳을 순서대로 짚어본다. 이 순서는 5장에서 다룬 "런타임 흐름"과 일치한다.</p>
+  <ol style="margin:0 0 16px 20px;line-height:2.2;">
+    <li><strong><code>CONSTITUTION.md</code></strong> — 가장 먼저 읽을 파일. 워크스페이스 전체의 공유 표준(거버넌스, PR 워크플로우, 멀티 에이전트 원칙)이 정의되어 있다.</li>
+    <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — 사용하는 AI 코딩 도구에 맞는 파일을 확인. 각 플랫폼별 동작 방식(훅, 슬래시 커맨드, 에이전트 디스패치 규칙)이 정의되어 있다.</li>
+    <li><strong><code>AGENTS.md</code></strong> — 이 워크스페이스에서 호출 가능한 에이전트 로스터. "누가 어떤 역할을 하는가"를 한눈에 확인할 수 있다.</li>
+    <li><strong><code>templates/</code></strong> — 사용 가능한 variant 7종이 이 디렉터리 아래에 있다. 각 variant 폴더를 열어 에이전트 구성과 거버넌스 파이프라인을 살펴본다.</li>
+    <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code>가 여기에 있다. 이 스크립트가 variant를 실제 프로젝트로 복제하는 핵심 명령이다.</li>
+  </ol>
+  <div class="note">이 둘러보기는 4장 실습에서 에이전트를 직접 만지기 전에, "이 저장소가 무엇을 담고 있는지"를 감을 잡기 위한 짧은 안내다. 실습 시간에는 이 5곳만 먼저 열어보고, 나머지 구조는 필요할 때마다 돌아와서 확인하는 방식으로 진행한다.</div>
 
   <hr>
 
@@ -363,7 +377,7 @@ git --version</pre>
   <div class="warning-box">스캐폴딩된 프로젝트는 워크스페이스 루트와는 별개의 독립 git 저장소로 생성된다. 워크스페이스 루트 파일과 새 프로젝트 파일을 같은 작업/커밋에서 섞어 수정하지 않도록 주의한다.</div>
 
   <h3>새 variant를 직접 만들고 싶다면</h3>
-  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> variant로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 6장 §2 실습과 7장 §1에서 각각 다룬다.</p>
+  <p>기존 variant로는 부족하고 완전히 새로운 도메인 팀 구성이 필요하다면, <code>create-variant</code> 스킬과 <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> 명령으로 <code>Projects/&lt;variant-name&gt;/</code> 아래에 독립된 Phase A 프로토타입을 먼저 만들 수 있다. 이 프로토타입은 정식 <code>templates/</code> variant로 승격(promote)되기 전까지 자유롭게 발전시킬 수 있다. 이 흐름의 자세한 단계와 승격 절차는 6장 §2 실습과 10장에서 각각 다룬다.</p>
 
   <hr>
 
@@ -371,7 +385,7 @@ git --version</pre>
   <ul style="list-style: none; padding: 0; line-height: 2.2;">
     <li>📖 <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></li>
     <li>⚙️ <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습. co-marketing variant 만들어보기</a></li>
-    <li>⚙️ <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">7장 §1. 새 variant 만들기 vs 기존 프로젝트 승격하기</a></li>
+    <li>⚙️ <a href="../variant-advanced/05_VariantAdvanced_Chapter.html">10장. 신규 variant 생성</a></li>
   </ul>
 
   <hr>

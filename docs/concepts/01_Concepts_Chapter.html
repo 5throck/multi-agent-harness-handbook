@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</title>
+  <title>2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -101,7 +101,8 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">1장 · 개념 이해</div>
+  <div class="nav-title">2장 · 개념 이해</div>
+  <a href="#agent-definition">에이전트란 무엇인가</a>
   <a href="#s0">Prompt → Context → Harness</a>
   <a href="#s1">하네스 엔지니어링이란</a>
   <a href="#s2">단일 에이전트의 한계</a>
@@ -111,16 +112,16 @@
   <a href="#s4b">동적 팀 구성과 다양한 워크플로우</a>
   <a href="#s5">도구를 넘나드는 하네스 — AGENTS.md</a>
   <div class="nav-section">다른 장</div>
-  <a href="../guardrails/00_Guardrails_Chapter.html">1.5 · 가드레일과 권한 모델</a>
-  <a href="../practice/02_Practice_Manual.html">2.0 · Claude Code 실습</a>
+  <a href="../intro/00_Why_AI_Chapter.html">1장 · 도입</a>
+  <a href="../guardrails/00_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
   <a href="../glossary/00_Glossary.html">용어집</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">1장</div>
+  <div class="chapter-eyebrow">2장</div>
   <h1>하네스 엔지니어링과 멀티 에이전트팀 개념</h1>
-  <p class="lead">AI 에이전트가 실제 업무에서 신뢰할 수 있게 동작하려면 "무엇을 시킬지"보다 "어떤 틀 안에서 움직이게 할지"가 더 중요해진다. 이 장에서는 하네스 엔지니어링이라는 관점과, 하나의 에이전트가 아니라 여러 에이전트가 팀으로 협업하는 멀티 에이전트팀의 기본 구조를 살펴본다.</p>
+  <p class="lead">AI 에이전트가 실제 업무에서 신뢰할 수 있게 동작하려면 "무엇을 시킬지"보다 "어떤 틀 안에서 움직이게 할지"가 더 중요해진다. 1장에서 AI 에이전트의 필요성을 살펴보았다. 이 장에서는 하네스 엔지니어링이라는 관점과, 하나의 에이전트가 아니라 여러 에이전트가 팀으로 협업하는 멀티 에이전트팀의 기본 구조를 살펴본다.</p>
   <p class="source-line">출처: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code 공식 문서 — Subagents</a>, <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards 저장소</a>, <a href="https://www.faros.ai/blog/harness-engineering" target="_blank">Faros AI — Harness Engineering</a>, <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank">Anthropic — Building Effective Agents</a></p>
 
   <div class="keypoints">
@@ -136,6 +137,19 @@
       <li>Claude Code/App, Antigravity CLI/Desktop처럼 서로 다른 도구가 같은 하네스를 공유하게 해 주는 AGENTS.md 표준</li>
     </ul>
   </div>
+
+  <h2 id="agent-definition">에이전트란 무엇인가</h2>
+  <p>이 장에서 본격적으로 하네스 엔지니어링을 다루기 전에, "에이전트"가 정확히 무엇인지 짚고 넘어가자. AI 에이전트는 단순한 챗봇과 구별되는 <strong>목적이 부여된 AI 시스템</strong>이다.</p>
+
+  <p>챗봇은 "질문에 답하는" 것이 전부다. 사용자가 프롬프트를 입력하면 응답을 생성하고, 대화가 끝나면 아무것도 남지 않는다. 반면 에이전트는 세 가지 차이가 있다.</p>
+
+  <ul>
+    <li><strong>목적 지속성:</strong> 에이전트는 "역할"로 정의된 목적을 가진다. 대화가 길어져도 자기 역할(리서처, 검토자, 작성자 등)을 잃지 않고 일관되게 행동한다.</li>
+    <li><strong>도구 사용:</strong> 에이전트는 텍스트 생성뿐 아니라 파일을 읽고, 코드를 검색하고, 명령을 실행할 수 있다. 4장에서 이 도구를 <code>tools</code> 필드로 제어하는 방법을 실습한다.</li>
+    <li><strong>자율적 행동:</strong> 에이전트는 단일 프롬프트에 대한 단일 응답이 아니라, 목적을 달성하기 위해 여러 단계를 자율적으로 수행할 수 있다. 조건 분기, 오류 재시도, 결과 검증까지 스스로 판단한다.</li>
+  </ul>
+
+  <div class="note">1장에서 소개한 "멀티 에이전트"는 이러한 에이전트를 여러 역할로 나누어 협업하게 만드는 시스템이다. 이 장에서는 그 협업의 구조(오케스트레이터·스페셜리스트·핸드오프)를 다룬다.</div>
 
   <h2 id="s0">Prompt → Context → Harness — 여기까지 오게 된 흐름</h2>
   <p>하네스 엔지니어링은 어느 날 갑자기 등장한 개념이 아니라, AI를 다루는 방식이 세 단계를 거치며 쌓아 올린 결과다. 각 단계는 이전 단계를 대체한 것이 아니라, "이전 단계만으로는 부족하다"는 걸 드러내며 그 위에 새로운 층을 얹었다.</p>
@@ -257,10 +271,101 @@
 
   <h3>언제 서브에이전트를 쓰는가</h3>
   <p>모든 작업을 서브에이전트로 쪼갤 필요는 없다. 경계가 분명하고(무엇을 받아 무엇을 내놓는지 명확) 반복적이거나 병렬화가 가능한 작업. 코드 리뷰, 테스트 실행, 문서 검토 같은 것이 좋은 후보다. 반대로 메인 세션과 계속 맥락을 주고받아야 하는 탐색적 작업은 서브에이전트로 분리하면 오히려 핸드오프 비용만 늘어난다.</p>
-  <div class="note">서브에이전트는 스페셜리스트라는 "역할" 개념을 실제 도구에서 실행 가능하게 만드는 "구현"이다. 2장에서는 이 정의 방식과 호출 방법을 Claude App/Antigravity Desktop을 중심으로 직접 손으로 만들어본다.</div>
+  <div class="note">서브에이전트는 스페셜리스트라는 "역할" 개념을 실제 도구에서 실행 가능하게 만드는 "구현"이다. 4장에서는 이 정의 방식과 호출 방법을 Claude App/Antigravity Desktop을 중심으로 직접 손으로 만들어본다.</div>
 
   <h2 id="s4">오케스트레이션 패턴</h2>
   <p>Anthropic이 2024년 12월 "Building Effective Agents"에서 정리한 다섯 가지 워크플로 패턴이 실무에서 가장 널리 쓰인다. 프롬프트 체이닝(파이프라인), 라우팅, 병렬화(팬아웃·투표), 오케스트레이터-워커, 평가자-최적화(검증-후-적용)다. 다섯 패턴은 서로 대체 관계가 아니라, "작업 사이에 의존 관계가 있는가", "미리 하위 작업을 예측할 수 있는가", "검증이 필요한가"에 따라 골라 쓰거나 조합하는 도구 상자다.</p>
+
+  <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+        </marker>
+        <marker id="pat-arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+        </marker>
+        <marker id="pat-arrow-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#22c55e"/>
+        </marker>
+        <marker id="pat-arrow-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/>
+        </marker>
+        <marker id="pat-arrow-p" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8b5cf6"/>
+        </marker>
+        <marker id="pat-arrow-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/>
+        </marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,sans-serif">
+
+        <!-- Column 1: 체이닝 (blue) center=78 -->
+        <text x="78" y="16" text-anchor="middle" font-size="12" fill="#3b82f6" font-weight="700">체이닝</text>
+        <rect x="30" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="46" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">A</text>
+        <line x1="62" y1="36" x2="76" y2="36" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#pat-arrow-b)"/>
+        <rect x="78" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="94" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">B</text>
+        <line x1="110" y1="36" x2="124" y2="36" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#pat-arrow-b)"/>
+        <rect x="126" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="142" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">C</text>
+        <text x="78" y="64" text-anchor="middle" font-size="9" fill="#6b7280">A → B → C</text>
+
+        <!-- Column 2: 라우팅 (orange) center=234 -->
+        <text x="234" y="16" text-anchor="middle" font-size="12" fill="#f59e0b" font-weight="700">라우팅</text>
+        <rect x="186" y="26" width="32" height="20" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+        <text x="202" y="40" text-anchor="middle" font-size="9" fill="#92400e" font-weight="600">A</text>
+        <line x1="218" y1="36" x2="226" y2="36" stroke="#f59e0b" stroke-width="1.2"/>
+        <rect x="226" y="26" width="40" height="20" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+        <text x="246" y="40" text-anchor="middle" font-size="8" fill="#92400e" font-weight="600">B 또는 C</text>
+        <line x1="218" y1="40" x2="226" y2="44" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <text x="234" y="64" text-anchor="middle" font-size="9" fill="#6b7280">A→{B 또는 C}</text>
+
+        <!-- Column 3: 팬아웃 (green) center=390 -->
+        <text x="390" y="16" text-anchor="middle" font-size="12" fill="#22c55e" font-weight="700">팬아웃</text>
+        <rect x="342" y="26" width="32" height="20" rx="5" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="358" y="40" text-anchor="middle" font-size="9" fill="#166534" font-weight="600">A</text>
+        <line x1="358" y1="46" x2="344" y2="56" stroke="#22c55e" stroke-width="1.2" marker-end="url(#pat-arrow-g)"/>
+        <line x1="358" y1="46" x2="390" y2="56" stroke="#22c55e" stroke-width="1.2" marker-end="url(#pat-arrow-g)"/>
+        <rect x="330" y="58" width="28" height="18" rx="4" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="344" y="71" text-anchor="middle" font-size="8" fill="#166534" font-weight="600">B</text>
+        <rect x="376" y="58" width="28" height="18" rx="4" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="390" y="71" text-anchor="middle" font-size="8" fill="#166534" font-weight="600">C</text>
+        <text x="390" y="92" text-anchor="middle" font-size="9" fill="#6b7280">A→B,C (병렬)</text>
+
+        <!-- Column 4: 오케스트레이터-워커 (purple) center=546 -->
+        <text x="546" y="16" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="700">오케스트레이터</text>
+        <text x="546" y="28" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="700">-워커</text>
+        <rect x="504" y="36" width="42" height="22" rx="5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="525" y="50" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">Orch</text>
+        <line x1="546" y1="58" x2="522" y2="64" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#pat-arrow-p)"/>
+        <line x1="546" y1="58" x2="570" y2="64" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#pat-arrow-p)"/>
+        <rect x="510" y="66" width="36" height="18" rx="4" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="528" y="79" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">W1</text>
+        <rect x="554" y="66" width="36" height="18" rx="4" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="572" y="79" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">W2</text>
+        <text x="546" y="100" text-anchor="middle" font-size="9" fill="#6b7280">Orch→Worker</text>
+
+        <!-- Column 5: 평가자-최적화 (red/rose) center=702 -->
+        <text x="702" y="16" text-anchor="middle" font-size="11" fill="#ef4444" font-weight="700">평가자</text>
+        <text x="702" y="28" text-anchor="middle" font-size="11" fill="#ef4444" font-weight="700">-최적화</text>
+        <rect x="674" y="34" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="47" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Draft</text>
+        <line x1="702" y1="52" x2="702" y2="58" stroke="#ef4444" stroke-width="1.2" marker-end="url(#pat-arrow-r)"/>
+        <rect x="674" y="60" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="73" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Evaluate</text>
+        <line x1="702" y1="78" x2="702" y2="84" stroke="#ef4444" stroke-width="1.2" marker-end="url(#pat-arrow-r)"/>
+        <rect x="674" y="86" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="99" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Revise</text>
+        <path d="M702,104 C730,120 730,30 702,34" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#pat-arrow-r)"/>
+        <text x="740" y="68" font-size="8" fill="#ef4444" transform="rotate(90 740 68)">반복</text>
+        <text x="702" y="122" text-anchor="middle" font-size="9" fill="#6b7280">Draft→Eval→Revise</text>
+
+      </g>
+    </svg>
+  </div>
+
   <ul>
     <li><strong>프롬프트 체이닝 / 파이프라인(Prompt Chaining).</strong> 한 작업을 순서가 정해진 여러 단계로 쪼개고, 각 단계 사이에 검증 게이트를 둔다. 여러 항목을 동시에 흘려보내면 항목 간에는 서로 기다리지 않는 파이프라인이 된다. 항목 A가 3단계에 있는 동안 항목 B는 아직 1단계에 있을 수 있어 전체 처리량이 늘어난다. <br><span style="color:var(--text-dim);font-size:14px;">예: 공장의 조립 라인과 같다. 제품 A가 도색 단계를 지나는 동안 제품 B는 이미 조립 단계에 있다. 문서 3개를 "초안 작성 → 검토 → 교정" 3단계로 처리한다면, 문서 1이 검토 단계로 넘어가자마자 문서 2가 초안 작성을 시작할 수 있다.</span></li>
     <li><strong>라우팅(Routing).</strong> 들어온 요청을 먼저 분류한 뒤, 그 성격에 맞는 전문 에이전트나 모델로 갈라 보낸다. 5장에서 다루는 모델 티어링이 대표적인 예다. 쉬운 질문은 저비용 모델(haiku)로, 어렵고 드문 질문은 고성능 모델(opus)로 보내 비용과 품질의 균형을 맞춘다. <br><span style="color:var(--text-dim);font-size:14px;">예: 고객 문의가 들어오면 먼저 "단순 FAQ인가, 복잡한 기술 문의인가"를 분류하는 에이전트가 판단하고, 전자는 정형화된 응답 에이전트로, 후자는 더 깊이 조사할 수 있는 에이전트로 넘긴다.</span></li>
@@ -337,10 +442,10 @@
   <p>세 패턴 모두 "정상적으로 끝났을 때"를 전제로 설명했지만, 실무에서는 서브에이전트가 잘못된 결과를 내거나 아예 실패로 끝나는 일이 생긴다. 검증-후-적용은 "실행 전에 걸러내는" 장치인 반면, 이미 실행된 뒤에 문제를 발견했을 때 무엇을 할지는 별개의 문제다. 대표적으로 세 가지 대응이 있다.</p>
   <ul>
     <li><strong>재시도(Retry).</strong> 일시적 오류(네트워크 타임아웃, 도구 호출 실패 등)라면 같은 작업을 다시 시도한다. 다만 같은 프롬프트로 무한정 재시도하면 같은 실수를 반복할 뿐이므로, 보통 재시도 횟수에 상한을 둔다.</li>
-    <li><strong>롤백(Rollback).</strong> 잘못된 결과가 이미 파일이나 저장소에 반영됐다면, 변경 이전 상태로 되돌린다. 1.5장에서 다룬 "쓰기 단계는 git으로 되돌릴 수 있는 범위"라는 원칙이 여기서 실제로 힘을 발휘한다. 커밋 단위로 작업이 쪼개져 있어야 롤백도 정확한 지점으로 되돌릴 수 있다.</li>
+    <li><strong>롤백(Rollback).</strong> 잘못된 결과가 이미 파일이나 저장소에 반영됐다면, 변경 이전 상태로 되돌린다. 3장에서 다룬 "쓰기 단계는 git으로 되돌릴 수 있는 범위"라는 원칙이 여기서 실제로 힘을 발휘한다. 커밋 단위로 작업이 쪼개져 있어야 롤백도 정확한 지점으로 되돌릴 수 있다.</li>
     <li><strong>에스컬레이션(Escalation).</strong> 재시도해도 반복 실패하거나, 애초에 오케스트레이터가 판단하기 애매한 상황이라면 사람에게 넘긴다. "3번 실패하면 자동 재시도를 멈추고 사람에게 보고한다" 같은 상한선을 미리 정해 두지 않으면, 실패한 작업을 계속 재시도하며 시간과 비용만 소모하는 상황이 생긴다.</li>
   </ul>
-  <div class="note">세 대응의 선택 기준은 결국 "이 실패가 일시적인가, 이미 되돌릴 수 없는 상태까지 갔는가, 판단 자체가 애매한가"다. 재시도는 첫 번째, 롤백은 두 번째, 에스컬레이션은 세 번째 상황에 대응한다. 위험 작업일수록 자동 재시도보다 에스컬레이션 쪽으로 기준을 낮춰 잡는 것이 안전하다(1.5장 §2의 위험 단계 분류를 함께 참고).</div>
+  <div class="note">세 대응의 선택 기준은 결국 "이 실패가 일시적인가, 이미 되돌릴 수 없는 상태까지 갔는가, 판단 자체가 애매한가"다. 재시도는 첫 번째, 롤백은 두 번째, 에스컬레이션은 세 번째 상황에 대응한다. 위험 작업일수록 자동 재시도보다 에스컬레이션 쪽으로 기준을 낮춰 잡는 것이 안전하다(3장 §2의 위험 단계 분류를 함께 참고).</div>
 
   <h2 id="s4b">동적 팀 구성과 다양한 워크플로우</h2>
   <p>지금까지 오케스트레이터·스페셜리스트·핸드오프·오케스트레이션 패턴을 각각 따로 설명했지만, 하네스 엔지니어링이 실제로 강력한 이유는 이 요소들이 <strong>고정된 하나의 조합으로 굳어 있지 않다</strong>는 데 있다. 재래식 자동화 스크립트는 "A 다음 B, 항상 B 다음 C"처럼 순서와 참여자가 코드에 하드코딩돼 있지만, 하네스로 짜인 멀티 에이전트팀은 오케스트레이터가 매 요청마다 "이번엔 누가 필요하고 어떤 순서로 움직일지"를 그때그때 다시 판단한다.</p>
@@ -352,7 +457,7 @@
   <h3>같은 하네스 위에서 다양한 워크플로우를 구현할 수 있다</h3>
   <p>하네스 엔지니어링이 정해 두는 것은 "오케스트레이터가 있고, 스페셜리스트를 부르고, 핸드오프로 정보를 넘긴다"는 <em>뼈대</em>뿐이다. 그 뼈대 위에 몇 단계짜리 파이프라인을 몇 명으로 구성할지는 도메인마다 완전히 다르게 설계할 수 있다. 5장에서 다룰 ai-workspace-standards의 variant들이 이를 실증한다. 같은 하네스 원리로 만들어졌는데도 <code>co-develop</code>은 PM·Architect·Designer·Code Writer·Test Runner·Security Monitor가 참여하는 6단계 거버넌스 파이프라인이고, <code>co-design</code>은 5단계 반복 워크플로우, <code>co-deck</code>은 11단계 워크플로우로 완전히 다른 모양을 하고 있다. 하나의 "정답 워크플로우"를 강요하지 않고, 도메인이 요구하는 단계 수·참여자·검증 강도에 맞춰 워크플로우 자체를 새로 설계할 수 있다는 것이 하네스 엔지니어링의 핵심 장점이다.</p>
   <p>이는 §4의 다섯 오케스트레이션 패턴(프롬프트 체이닝·라우팅·병렬화·오케스트레이터-워커·평가자-최적화)이 서로 배타적이지 않고 <strong>한 워크플로우 안에서 자유롭게 조합</strong>될 수 있다는 뜻이기도 하다. 예를 들어 코드 리뷰 워크플로우는 먼저 라우팅으로 변경 규모가 작은지 큰지 분류하고, 큰 변경이면 오케스트레이터-워커가 영향받는 파일들을 동적으로 나눠 각각 팬아웃으로 네 관점을 동시에 검토한 뒤, 그 결과를 순서대로 파이프라인 처리하며 문서화하고, 마지막에는 평가자-최적화(검증-후-적용)로 실제 반영 여부를 결정하는 식으로 다섯 패턴을 한 흐름 안에 섞어 쓸 수 있다.</p>
-  <div class="note">동적 팀 구성과 워크플로우 다양성은 결국 같은 원칙의 두 얼굴이다. 하네스는 "무엇을 지킬지"만 고정하고, "누가 언제 어떻게 움직일지"는 작업과 도메인이 결정하게 비워 둔다. 이 유연성이 없었다면 variant마다 처음부터 완전히 다른 자동화 시스템을 새로 짜야 했을 것이다. 이 내용을 직접 손으로 확인해보고 싶다면 <a href="../practice/02_Practice_Examples.html#scenario-2b">2.1 실습의 D-2 시나리오</a>에서 같은 서브에이전트 팀으로 요청만 바꿔가며 팀 구성과 워크플로우가 실제로 달라지는 것을 관찰한다.</div>
+  <div class="note">동적 팀 구성과 워크플로우 다양성은 결국 같은 원칙의 두 얼굴이다. 하네스는 "무엇을 지킬지"만 고정하고, "누가 언제 어떻게 움직일지"는 작업과 도메인이 결정하게 비워 둔다. 이 유연성이 없었다면 variant마다 처음부터 완전히 다른 자동화 시스템을 새로 짜야 했을 것이다. 이 내용을 직접 손으로 확인해보고 싶다면 <a href="../practice/02_Practice_Examples.html#scenario-2b">4장 §2 실습의 D-2 시나리오</a>에서 같은 서브에이전트 팀으로 요청만 바꿔가며 팀 구성과 워크플로우가 실제로 달라지는 것을 관찰한다.</div>
 
   <h2 id="s5">도구를 넘나드는 하네스 — AGENTS.md</h2>
   <p>지금까지 설명한 오케스트레이터·스페셜리스트·핸드오프는 특정 도구에 종속된 개념이 아니다. 문제는 그동안 도구마다 이 하네스를 설정하는 방식이 제각각이었다는 점이다. Claude Code는 <code>CLAUDE.md</code>를, Cursor는 <code>.cursorrules</code>를, GitHub Copilot은 <code>.github/copilot-instructions.md</code>를 읽는 식이어서, 여러 도구를 함께 쓰는 팀은 같은 내용을 파일마다 중복해서 유지해야 했다.</p>
@@ -361,10 +466,11 @@
   <p>이 핸드북이 계속 강조하는 "네 도구 모두 지원"이라는 원칙도 결국 같은 문제의식에서 나온다. 팀이 Claude App을 쓰든 Antigravity Desktop을 쓰든, 저장소 루트의 공유 규칙(AGENTS.md)과 도구별 세부 설정(<code>CLAUDE.md</code>, <code>GEMINI.md</code> 등)을 나눠 두면 도구를 바꾸거나 섞어 써도 하네스 자체는 흔들리지 않는다. 5장에서 살펴볼 ai-workspace-standards 저장소는 이 원칙을 실제로 구현한 사례다. 루트의 <code>AGENTS.md</code> 파일이 워크스페이스 전체 에이전트의 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적(engine-agnostic) 커맨드·스킬을 담는다.</p>
   <div class="note">AGENTS.md는 "무엇을 지켜야 하는가"를 도구 중립적으로 정의하고, CLAUDE.md/GEMINI.md 같은 도구별 파일은 "그것을 이 도구에서 어떻게 실행하는가"만 추가로 정의한다. 중복을 줄이는 계층 분리다.</div>
 
-  <p>다음 장으로 넘어가기 전에, 이 팀에게 실제로 도구를 쥐여 줄 때 지켜야 할 안전장치부터 짚어야 한다. 1.5장은 서브에이전트에게 무엇을 허용하고 무엇을 막을지, 사람이 반드시 확인해야 하는 지점은 어디인지를 다룬다. 그 뒤 2장에서 이 개념들을 실제로 Claude App/Antigravity Desktop을 중심으로 만들어 보면서(Claude Code·Antigravity CLI 절차도 함께), 오케스트레이터·스페셜리스트·핸드오프가 도구마다 어떻게 표현되는지 확인한다.</p>
+  <p>다음 장으로 넘어가기 전에, 이 팀에게 실제로 도구를 쥐여 줄 때 지켜야 할 안전장치부터 짚어야 한다. 3장은 서브에이전트에게 무엇을 허용하고 무엇을 막을지, 사람이 반드시 확인해야 하는 지점은 어디인지를 다룬다. 그 뒤 4장에서 이 개념들을 실제로 Claude App/Antigravity Desktop을 중심으로 만들어 보면서(Claude Code·Antigravity CLI 절차도 함께), 오케스트레이터·스페셜리스트·핸드오프가 도구마다 어떻게 표현되는지 확인한다.</p>
 
   <div class="chapter-nav">
-    <a href="../guardrails/00_Guardrails_Chapter.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">1.5 · 가드레일과 권한 모델</div></a>
+    <a href="../intro/00_Why_AI_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">1장 · 도입</div></a>
+    <a href="../guardrails/00_Guardrails_Chapter.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">3장 · 가드레일과 권한 모델</div></a>
   </div>
  </article>
 </main>

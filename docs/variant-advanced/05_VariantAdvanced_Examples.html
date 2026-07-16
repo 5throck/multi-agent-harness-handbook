@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>7.1 · 새 variant vs 승격 실습 예시 — 시나리오별 학습 가이드</title>
+  <title>11장 §2 · 새 variant vs 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -235,7 +235,7 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">7.1 · 새 variant vs 승격 실습</div>
+  <div class="nav-title">11장 §2 · 새 variant vs 신규 variant 승격 실습</div>
   <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
 
   <div class="nav-group">초급 시나리오</div>
@@ -248,17 +248,17 @@
   <a href="#scenario-3"><span class="dot dot-p"></span>P-1 승격 파이프라인 실행과 검증</a>
 
   <div class="nav-group">바로가기</div>
-  <a href="05_VariantAdvanced_Chapter.html">📖 7장 §1 — 새 variant vs 승격 →</a>
-  <a href="../capstone/00_Capstone.html">🎓 8장 — 캡스톤 실습 →</a>
+  <a href="05_VariantAdvanced_Chapter.html">📖 10장 §1 — 새 variant vs 승격 →</a>
+  <a href="../capstone/00_Capstone.html">🎓 12장 — 캡스톤 실습 →</a>
 </nav>
 
 <main>
-  <h1>새 variant vs 승격 실습 예시</h1>
+  <h1>새 variant vs 신규 variant 승격 실습 예시</h1>
   <p class="subtitle">co-marketing 프로토타입을 기준으로 두 경로를 손으로 비교해보는 실습 가이드 &nbsp;|&nbsp; <a href="05_VariantAdvanced_Chapter.html">← 레퍼런스 문서로 돌아가기</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>7장 §1에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-marketing 프로토타입에 적용해보는 실습</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>10장 §1에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-marketing 프로토타입에 적용해보는 실습</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="05_VariantAdvanced_Chapter.html">05_VariantAdvanced_Chapter.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
@@ -426,6 +426,43 @@
         D-1까지 마쳐 승격 준비가 끝났다고 판단한 숙련자가, 실제로 <code>l2-to-variant-pipeline.ts</code>를 실행해 co-marketing을 정식 <code>templates/co-marketing/</code>로 전환하려 한다. 이 단계부터는 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다.
       </div>
 
+      <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+          </defs>
+          <!-- Top row: Phase A prototype -->
+          <rect x="14" y="18" width="130" height="36" rx="8" fill="#f59e0b"/>
+          <text x="79" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">Phase A 프로토타입</text>
+          <!-- Arrow -->
+          <line x1="144" y1="36" x2="172" y2="36" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- agent:verify -->
+          <rect x="176" y="18" width="100" height="36" rx="8" fill="#3b82f6"/>
+          <text x="226" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">agent:verify</text>
+          <!-- Arrow -->
+          <line x1="276" y1="36" x2="304" y2="36" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- validate-templates.ts -->
+          <rect x="308" y="18" width="130" height="36" rx="8" fill="#3b82f6"/>
+          <text x="373" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">validate-templates.ts</text>
+          <!-- Arrow -->
+          <line x1="438" y1="36" x2="466" y2="36" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- 체크리스트 -->
+          <rect x="470" y="18" width="156" height="36" rx="8" fill="#6b7280"/>
+          <text x="548" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">승격 체크리스트 작성</text>
+          <!-- Arrow down from 체크리스트 -->
+          <line x1="548" y1="54" x2="548" y2="76" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- Bottom row: l2-to-variant-pipeline.ts -->
+          <rect x="308" y="80" width="180" height="36" rx="8" fill="#22c55e"/>
+          <text x="398" y="103" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">l2-to-variant-pipeline.ts</text>
+          <!-- Arrow -->
+          <line x1="488" y1="98" x2="516" y2="98" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- Final variant -->
+          <rect x="520" y="80" width="106" height="36" rx="8" fill="#8b5cf6"/>
+          <text x="573" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">templates/</text>
+          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#e0d5f7" text-anchor="middle">co-marketing/ (정식)</text>
+        </svg>
+      </div>
+
       <div class="warning-box">
         이 시나리오는 실제 git 추적 워크스페이스에 실질적인 변화를 일으키는 작업이다. 정말로 variant를 공개(publish)할 의도가 있을 때만 실행하고, 단순히 흐름을 구경하려는 목적이라면 명령을 직접 실행하지 말고 읽기만 하라.
       </div>
@@ -477,6 +514,40 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
         파이프라인의 reconcile 단계는 <code>Projects/co-marketing/</code>에 있던 파일 중 공통 파일(L0/common)과 동일한 것은 제거해 중복을 없앤다. 다만 스킬 디렉터리는 이 reconcile 대상에서 의도적으로 제외되므로, 승격 후 <code>.claude/skills/</code>와 <code>.gemini/skills/</code>에 스킬이 그대로 남아 있는지 별도로 확인해야 한다.
       </div>
 
+      <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+          </defs>
+          <!-- Left: 프로토타입 파일 -->
+          <rect x="14" y="50" width="120" height="40" rx="8" fill="#3b82f6"/>
+          <text x="74" y="75" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">프로토타입 파일</text>
+          <!-- Arrow to diamond -->
+          <line x1="134" y1="70" x2="218" y2="70" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <!-- Center diamond: 공통 파일과 비교 -->
+          <polygon points="280,34 340,70 280,106 220,70" fill="#6b7280" stroke="#d0d7de" stroke-width="1"/>
+          <text x="280" y="67" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">공통 파일과</text>
+          <text x="280" y="80" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">비교</text>
+          <!-- Arrow from diamond to outcomes -->
+          <line x1="340" y1="70" x2="380" y2="70" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <!-- Branch lines to 3 outcomes -->
+          <line x1="414" y1="70" x2="414" y2="28" stroke="#6b7280" stroke-width="1"/>
+          <line x1="414" y1="28" x2="448" y2="28" stroke="#6b7280" stroke-width="1" marker-end="url(#arrow3)"/>
+          <line x1="414" y1="70" x2="448" y2="70" stroke="#6b7280" stroke-width="1" marker-end="url(#arrow3)"/>
+          <line x1="414" y1="70" x2="414" y2="112" stroke="#6b7280" stroke-width="1"/>
+          <line x1="414" y1="112" x2="448" y2="112" stroke="#6b7280" stroke-width="1" marker-end="url(#arrow3)"/>
+          <!-- Outcome 1: 동일 → extends 참조 -->
+          <rect x="452" y="12" width="174" height="32" rx="8" fill="#22c55e"/>
+          <text x="539" y="33" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">동일 → extends 참조 변환</text>
+          <!-- Outcome 2: 누락 → 복사 -->
+          <rect x="452" y="54" width="174" height="32" rx="8" fill="#3b82f6"/>
+          <text x="539" y="75" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">누락 → 복사</text>
+          <!-- Outcome 3: 도메인 전용 → _ORIGIN.md -->
+          <rect x="452" y="96" width="174" height="32" rx="8" fill="#f59e0b"/>
+          <text x="539" y="117" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">도메인 전용 → _ORIGIN.md 이관</text>
+        </svg>
+      </div>
+
       <div class="tip-box">
         <code>_ORIGIN.md</code>의 "Manual Phase B Steps" 절이 있다면, 파이프라인이 자동으로 옮기지 못한 도메인 전용 디렉터리 목록이 거기 적혀 있다 — 이 목록을 빠짐없이 수동으로 옮겼는지 마지막으로 대조한다. 예를 들어 co-marketing의 <code>_ORIGIN.md</code>라면 아래처럼 적혀 있을 수 있다.
         <div style="position:relative;margin-top:10px;">
@@ -489,7 +560,7 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">7장 §1 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
+        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">10장 §1 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
       </div>
 
     </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2.0 · 하네스 기반 멀티 에이전트 팀 활용</title>
+  <title>4장 §1 · 하네스 기반 멀티 에이전트 팀 활용</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -286,7 +286,7 @@
 <!-- ── 사이드바 네비게이션 ── -->
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">2.0 · 하네스 기반 멀티 에이전트 팀 활용</div>
+  <div class="nav-title">4장 §1 · 하네스 기반 멀티 에이전트 팀 활용</div>
   <a href="#tree">개요 — 전체 구조</a>
   <div class="nav-section">단일 서브에이전트</div>
   <a href="#section-1">1. 서브에이전트 정의하기 — 사전 정의 vs 동적 생성</a>
@@ -297,13 +297,13 @@
   <div class="nav-section">참고</div>
   <a href="#refs">참고 링크</a>
   <div class="nav-section">다른 장</div>
-  <a href="../guardrails/00_Guardrails_Chapter.html">1.5 · 가드레일과 권한 모델</a>
-  <a href="../concepts/01_Concepts_Chapter.html">1장 · 개념 이해</a>
+  <a href="../guardrails/00_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
+  <a href="../intro/04_Intro_Chapter.html">5장 · 도입</a>
 </nav>
 
 <!-- ── 본문 ── -->
 <main>
-  <h1>2.0 · 하네스 기반 멀티 에이전트 팀 활용</h1>
+  <h1>4장 §1 · 하네스 기반 멀티 에이전트 팀 활용</h1>
   <p class="subtitle">Claude Code / Claude App / Antigravity CLI / Antigravity(Desktop) 네 도구에서 서브에이전트를 정의하고, 호출하고, 병렬·자동화 단위로 확장하는 방법을 나란히 정리한 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager</a></p>
 
   <div class="version-box">
@@ -314,7 +314,7 @@
     <div class="version-row"><span class="vlabel">개정 시 확인 사항</span><span class="vvalue">Claude Code Agent Teams와 Antigravity CLI/Agent Manager 모두 빠르게 변화하는 기능이라 플래그명·명령·UI 구성이 릴리스마다 바뀔 수 있으니 최신 릴리스 노트를 우선 확인</span></div>
   </div>
 
-  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 Gemini CLI 서비스를 종료했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 장은 그 이전에는 Gemini CLI를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI/Desktop으로 전면 갱신했다. 자세한 도구별 특성 비교는 <a href="../tools/03_Tools_Manual.html">3장 · 도구 비교</a>를 참고한다.</div>
+  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 Gemini CLI 서비스를 종료했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 장은 그 이전에는 Gemini CLI를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI/Desktop으로 전면 갱신했다. 자세한 도구별 특성 비교는 <a href="../tools/03_Tools_Manual.html">도구 비교</a>를 참고한다.</div>
 
   <!-- ── 개념/명령 트리 ── -->
   <h2 id="tree">개요 — 전체 구조</h2>
@@ -539,7 +539,7 @@ agy inspect
     <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using AGY CLI 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager 공식 문서</a></li>
-    <li>⚙️ <a href="02_Practice_Examples.html">2.1 실습 예시 — 02_Practice_Examples.html</a></li>
+    <li>⚙️ <a href="02_Practice_Examples.html">4장 §2 실습 예시 — 02_Practice_Examples.html</a></li>
   </ul>
 
   <hr>

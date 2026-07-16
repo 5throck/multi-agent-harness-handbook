@@ -221,6 +221,79 @@
   </div>
 
   <h2 id="s3">나란히 놓고 비교하기</h2>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Title -->
+        <text x="300" y="22" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">도입 검사 매트릭스 — 두 모델 비교</text>
+
+        <!-- Header row -->
+        <rect x="10" y="34" width="580" height="30" rx="6" fill="#eef1f4" stroke="#d0d7de" stroke-width="1"/>
+        <text x="140" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">평가 항목</text>
+        <text x="340" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">티켓 모델</text>
+        <text x="510" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">variant 모델</text>
+
+        <!-- Column dividers -->
+        <line x1="240" y1="34" x2="240" y2="238" stroke="#d0d7de" stroke-width="1"/>
+        <line x1="430" y1="34" x2="430" y2="238" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Row 1: 초기 비용 — 낮음(green) vs 높음(orange) -->
+        <rect x="10" y="68" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="102" x2="590" y2="102" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="90" font-size="11" fill="#1f2328" font-weight="600">초기 비용</text>
+        <rect x="290" y="76" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="316" y="90" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">낮음</text>
+        <rect x="470" y="76" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="496" y="90" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">높음</text>
+
+        <!-- Row 2: 운영 자율성 — 낮음(orange) vs 높음(green) -->
+        <rect x="10" y="104" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="138" x2="590" y2="138" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="126" font-size="11" fill="#1f2328" font-weight="600">운영 자율성</text>
+        <rect x="290" y="112" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="316" y="126" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">낮음</text>
+        <rect x="470" y="112" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="496" y="126" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">높음</text>
+
+        <!-- Row 3: 확장성 — 제한적(orange) vs 좋음(green) -->
+        <rect x="10" y="140" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="174" x2="590" y2="174" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="162" font-size="11" fill="#1f2328" font-weight="600">확장성</text>
+        <rect x="276" y="148" width="72" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="312" y="162" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">제한적</text>
+        <rect x="480" y="148" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="162" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">좋음</text>
+
+        <!-- Row 4: 거버넌스 — 중앙 통제(green) vs 분산(orange) -->
+        <rect x="10" y="176" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="210" x2="590" y2="210" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="198" font-size="11" fill="#1f2328" font-weight="600">거버넌스</text>
+        <rect x="276" y="184" width="72" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="312" y="198" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">중앙 통제</text>
+        <rect x="450" y="184" width="106" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="503" y="198" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">분산(표준 필요)</text>
+
+        <!-- Row 5: 맥락 유지 — 끊김(orange) vs 깊음(green) -->
+        <rect x="10" y="212" width="580" height="34" rx="0" fill="#fff"/>
+        <text x="30" y="234" font-size="11" fill="#1f2328" font-weight="600">맥락 유지</text>
+        <rect x="284" y="220" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="310" y="234" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">끊김</text>
+        <rect x="480" y="220" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="234" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">깊음</text>
+
+        <!-- Table outer border -->
+        <rect x="10" y="34" width="580" height="212" rx="6" fill="none" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Legend -->
+        <rect x="140" y="252" width="12" height="12" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.5"/>
+        <text x="157" y="262" font-size="9" fill="#636c76">장점(우위)</text>
+        <rect x="240" y="252" width="12" height="12" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.5"/>
+        <text x="257" y="262" font-size="9" fill="#636c76">트레이드오프</text>
+      </g>
+    </svg>
+  </div>
+
   <div class="compare-grid">
     <div class="compare-col">
       <h4>서비스 티켓 모델</h4>

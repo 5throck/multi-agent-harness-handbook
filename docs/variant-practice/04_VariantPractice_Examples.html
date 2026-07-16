@@ -802,6 +802,58 @@ required_skills: [copywriting]
         </li>
       </ol>
 
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 760 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="arrowMk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+            </marker>
+          </defs>
+          <g font-family="-apple-system,Segoe UI,sans-serif">
+            <!-- Step 1: scaffold command -->
+            <rect x="4" y="38" width="180" height="54" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+            <text x="94" y="58" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">스캐폴드 생성</text>
+            <text x="94" y="74" text-anchor="middle" font-size="8.5" fill="#0969da">create-l2-scaffold.ts</text>
+            <text x="94" y="86" text-anchor="middle" font-size="8" fill="#636c76">co-marketing --domain marketing</text>
+            <line x1="184" y1="65" x2="204" y2="65" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowMk)"/>
+            <!-- Step 2: project dir created -->
+            <rect x="206" y="38" width="140" height="54" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+            <text x="276" y="58" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">프로젝트 생성</text>
+            <text x="276" y="74" text-anchor="middle" font-size="9" fill="#1a7f37">Projects/co-marketing/</text>
+            <text x="276" y="86" text-anchor="middle" font-size="8" fill="#636c76">디렉토리 구조 완성</text>
+            <line x1="346" y1="65" x2="366" y2="65" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowMk)"/>
+            <!-- Step 3: roster update -->
+            <rect x="368" y="38" width="140" height="54" rx="8" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
+            <text x="438" y="58" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">로스터 갱신</text>
+            <text x="438" y="74" text-anchor="middle" font-size="9" fill="#953800">AGENTS.md 수정</text>
+            <text x="438" y="86" text-anchor="middle" font-size="8" fill="#636c76">researcher + writer 등록</text>
+            <line x1="508" y1="65" x2="528" y2="65" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowMk)"/>
+            <!-- Step 4: agent definitions -->
+            <rect x="530" y="38" width="110" height="54" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+            <text x="585" y="58" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">에이전트 정의</text>
+            <text x="585" y="74" text-anchor="middle" font-size="9" fill="#6639ba">researcher.md</text>
+            <text x="585" y="86" text-anchor="middle" font-size="9" fill="#6639ba">writer.md</text>
+            <line x1="640" y1="65" x2="660" y2="65" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowMk)"/>
+            <!-- Step 5: verify -->
+            <rect x="662" y="38" width="90" height="54" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+            <text x="707" y="58" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">검증</text>
+            <text x="707" y="74" text-anchor="middle" font-size="9" fill="#1a7f37">agent:verify</text>
+            <text x="707" y="86" text-anchor="middle" font-size="8" fill="#636c76">완결성 확인</text>
+            <!-- Checkmark icon for verify -->
+            <circle cx="742" cy="46" r="7" fill="#1a7f37"/>
+            <polyline points="738,46 741,49 746,43" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Step numbers -->
+            <text x="94" y="120" text-anchor="middle" font-size="8" fill="#636c76">①</text>
+            <text x="276" y="120" text-anchor="middle" font-size="8" fill="#636c76">②</text>
+            <text x="438" y="120" text-anchor="middle" font-size="8" fill="#636c76">③</text>
+            <text x="585" y="120" text-anchor="middle" font-size="8" fill="#636c76">④</text>
+            <text x="707" y="120" text-anchor="middle" font-size="8" fill="#636c76">⑤</text>
+            <!-- Title -->
+            <text x="380" y="18" text-anchor="middle" font-size="11.5" fill="#0550ae" font-weight="700">co-marketing Phase A 스캐폴딩 파이프라인</text>
+          </g>
+        </svg>
+      </div>
+
       <div class="flow-box">
         Phase A 프로토타입은 <code>templates/</code>가 아니라 <code>Projects/co-marketing/</code>에 독립적으로 존재한다. 이 상태에서는 아직 다른 사람이 <code>new-project.ts --variant co-marketing</code>로 스캐폴딩할 수 없다 — 그러려면 나중에 신규 variant 승격을 거쳐야 한다(10장에서 다룸).
       </div>
@@ -871,6 +923,59 @@ bun run agent:verify</pre>
           </div>
         </li>
       </ol>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 760 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="arrowPf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+            </marker>
+          </defs>
+          <g font-family="-apple-system,Segoe UI,sans-serif">
+            <!-- Title -->
+            <text x="380" y="18" text-anchor="middle" font-size="11.5" fill="#0550ae" font-weight="700">검증 → 승격 준비 흐름</text>
+            <!-- Step 1: Phase A prototype -->
+            <rect x="6" y="44" width="120" height="48" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+            <text x="66" y="63" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Phase A</text>
+            <text x="66" y="78" text-anchor="middle" font-size="9" fill="#0969da">프로토타입</text>
+            <line x1="126" y1="68" x2="148" y2="68" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowPf)"/>
+            <!-- Step 2: checklist validation with checkmark -->
+            <rect x="150" y="44" width="120" height="48" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+            <text x="210" y="63" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">체크리스트 검증</text>
+            <text x="210" y="78" text-anchor="middle" font-size="9" fill="#1a7f37">validate-templates.ts</text>
+            <circle cx="264" cy="52" r="7" fill="#1a7f37"/>
+            <polyline points="260,52 263,55 268,49" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="270" y1="68" x2="292" y2="68" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowPf)"/>
+            <!-- Step 3: required items check with checkmark -->
+            <rect x="294" y="44" width="120" height="48" rx="8" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
+            <text x="354" y="63" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">필수 항목 점검</text>
+            <text x="354" y="78" text-anchor="middle" font-size="9" fill="#953800">agent:verify</text>
+            <circle cx="408" cy="52" r="7" fill="#1a7f37"/>
+            <polyline points="404,52 407,55 412,49" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="414" y1="68" x2="436" y2="68" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowPf)"/>
+            <!-- Step 4: parity check with checkmark -->
+            <rect x="438" y="44" width="120" height="48" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+            <text x="498" y="63" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">패리티 확보</text>
+            <text x="498" y="78" text-anchor="middle" font-size="9" fill="#6639ba">기존 variant 대비</text>
+            <circle cx="552" cy="52" r="7" fill="#1a7f37"/>
+            <polyline points="548,52 551,55 556,49" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="558" y1="68" x2="580" y2="68" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowPf)"/>
+            <!-- Step 5: Phase B ready -->
+            <rect x="582" y="44" width="170" height="48" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="2"/>
+            <text x="667" y="63" text-anchor="middle" font-size="10.5" fill="#1f2328" font-weight="700">Phase B 승격 준비 완료</text>
+            <text x="667" y="78" text-anchor="middle" font-size="9" fill="#1a7f37">PROMOTION_CHECKLIST.md</text>
+            <!-- Star icon for ready -->
+            <circle cx="740" cy="52" r="7" fill="#0969da"/>
+            <text x="740" y="56" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">★</text>
+            <!-- Step numbers -->
+            <text x="66" y="115" text-anchor="middle" font-size="8.5" fill="#636c76">①</text>
+            <text x="210" y="115" text-anchor="middle" font-size="8.5" fill="#636c76">②</text>
+            <text x="354" y="115" text-anchor="middle" font-size="8.5" fill="#636c76">③</text>
+            <text x="498" y="115" text-anchor="middle" font-size="8.5" fill="#636c76">④</text>
+            <text x="667" y="115" text-anchor="middle" font-size="8.5" fill="#636c76">⑤</text>
+          </g>
+        </svg>
+      </div>
 
       <div class="flow-box">
         <code>validate-templates.ts</code>는 프로토타입 단계에서도 구조적 규정 준수 여부를 미리 잡아낼 수 있게 해준다. 여기서 나온 결과는 이후 <code>PROMOTION_CHECKLIST.md</code>를 채울 때 그대로 근거 자료가 된다.

@@ -154,6 +154,83 @@
   <p>현재 variant 배포는 <code>new-project.ts</code>에 의한 로컬 스캐폴딩 중심이고, 템플릿 갱신이 L2에 자동으로 전파되지 않는 포크 모델을 따른다. 이 방식은 의도한 차이를 보존한다는 장점이 있지만, 운영 관점에서는 템플릿의 버그 수정이나 보안 패치가 각 프로젝트에 일일이 수동 반영되어야 한다는 부담을 만든다.</p>
   <p>고도화 방향으로는 (a) 포크 모델의 장점을 유지하면서도 보안 패치나 중요 버그 수정만 선택적으로 L2에 전파할 수 있는 **동의 기반(consent-based) 수신 모델**, (b) variant를 중앙 레지스트리에서 관리하고 <code>new-project.ts</code>가 네트워크를 통해 최신 버전을 끌어오는 **비동기 배포 파이프라인**이 거론된다.</p>
 
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="roadmapArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Timeline base line -->
+        <line x1="50" y1="100" x2="630" y2="100" stroke="#d0d7de" stroke-width="2" stroke-dasharray="6,4"/>
+
+        <!-- Node 1: 현재 -->
+        <circle cx="80" cy="100" r="14" fill="#0969da" stroke="#fff" stroke-width="2"/>
+        <text x="80" y="104" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">현재</text>
+        <text x="80" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">로컬 스캐폴딩</text>
+        <text x="80" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">new-project.ts 중심</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="96" y1="100" x2="200" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="148" y="90" text-anchor="middle" font-size="9" fill="#636c76">1단계</text>
+
+        <!-- Node 2: 컨테이너 서비스 통합 -->
+        <circle cx="220" cy="100" r="14" fill="#6639ba" stroke="#fff" stroke-width="2"/>
+        <text x="220" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">①</text>
+        <text x="220" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="220" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">컨테이너 서비스</text>
+        <text x="220" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">Docker / K8s 연계</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="236" y1="100" x2="340" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="288" y="90" text-anchor="middle" font-size="9" fill="#636c76">2단계</text>
+
+        <!-- Node 3: 메모리 집계 -->
+        <circle cx="360" cy="100" r="14" fill="#1a7f37" stroke="#fff" stroke-width="2"/>
+        <text x="360" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">②</text>
+        <text x="360" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="360" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">메모리 집계</text>
+        <text x="360" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">워크스페이스 수준</text>
+
+        <!-- Arrow 3→4 -->
+        <line x1="376" y1="100" x2="480" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="428" y="90" text-anchor="middle" font-size="9" fill="#636c76">3단계</text>
+
+        <!-- Node 4: variant 배포 자동화 -->
+        <circle cx="500" cy="100" r="14" fill="#953800" stroke="#fff" stroke-width="2"/>
+        <text x="500" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">③</text>
+        <text x="500" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="500" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">variant 배포</text>
+        <text x="500" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">자동화 파이프라인</text>
+
+        <!-- Final goal badge -->
+        <line x1="516" y1="100" x2="572" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <rect x="578" y="82" width="100" height="36" rx="18" fill="#0969da" stroke="#0550ae" stroke-width="1"/>
+        <text x="628" y="104" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">비전 완성</text>
+
+        <!-- Milestone labels above -->
+        <rect x="56" y="52" width="48" height="20" rx="4" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="1"/>
+        <text x="80" y="66" text-anchor="middle" font-size="9" fill="#0550ae" font-weight="600">v1.0</text>
+
+        <rect x="196" y="52" width="48" height="20" rx="4" fill="#fbefff" stroke="#d2b9ff" stroke-width="1"/>
+        <text x="220" y="66" text-anchor="middle" font-size="9" fill="#6639ba" font-weight="600">v1.x</text>
+
+        <rect x="336" y="52" width="48" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="360" y="66" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">v2.0</text>
+
+        <rect x="476" y="52" width="48" height="20" rx="4" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
+        <text x="500" y="66" text-anchor="middle" font-size="9" fill="#7d4e00" font-weight="600">v3.0</text>
+
+        <!-- Dashed lines from milestones to nodes -->
+        <line x1="80" y1="72" x2="80" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="220" y1="72" x2="220" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="360" y1="72" x2="360" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="500" y1="72" x2="500" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+      </g>
+    </svg>
+  </div>
+
   <div class="note">
     이 핸드북은 ai-workspace-standards의 <strong>현재 구현 상태</strong>(main 브랜치, 2026년 7월 기준)를 기준으로 작성되었다. 위에 언급된 고도화 방향은 저장소의 로드맵에 반영된 계획이며, 실제 구현 시점과 형태는 달라질 수 있다.
   </div>

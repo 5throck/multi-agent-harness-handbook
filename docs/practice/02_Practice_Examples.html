@@ -659,6 +659,87 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
         2장 §4b에서 다룬 "동적 팀 구성"과 "다양한 워크플로우 조합"을 직접 눈으로 확인하는 시나리오다. D-1에서 만든 <code>writer</code>·<code>reviewer</code> 두 서브에이전트는 그대로 두고, 요청의 성격만 바꿔가며 오케스트레이터가 실제로 누구를, 몇 번, 어떤 순서로 호출하는지 관찰한다 — 서브에이전트 정의는 한 번도 새로 만들지 않는다는 점이 핵심이다.
       </div>
 
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">동적 라우팅 분기 흐름도 — 같은 팀, 다른 요청</div>
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+            <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+            <marker id="drArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+            <marker id="drArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+          </defs>
+
+          <!-- Row 1: Request A → reviewer only -->
+          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#636c76">요청 A</text>
+          <rect x="15" y="30" width="80" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">단순 검토</text>
+          <line x1="95" y1="46" x2="145" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- reviewer box -->
+          <rect x="150" y="30" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">×1</text>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- Result -->
+          <rect x="325" y="30" width="80" height="32" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1"/>
+          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">결과</text>
+          <!-- Label: simple -->
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#1a7f37" font-weight="600">단일 패스</text>
+
+          <!-- Row 2: Request B → writer → reviewer (pipeline) -->
+          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#636c76">요청 B</text>
+          <rect x="15" y="105" width="80" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">초안+검토</text>
+          <line x1="95" y1="121" x2="145" y2="121" stroke="#636c76" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- writer box -->
+          <rect x="150" y="105" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">×1</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="#6639ba" stroke-width="1.2" marker-end="url(#drArrowP)"/>
+          <!-- reviewer box -->
+          <rect x="325" y="105" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">×1</text>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- Result -->
+          <rect x="485" y="105" width="80" height="32" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1"/>
+          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">결과</text>
+          <!-- Label: pipeline -->
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#6639ba" font-weight="600">파이프라인</text>
+
+          <!-- Row 3: Request C → writer → reviewer×2 (fan-out) -->
+          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#636c76">요청 C</text>
+          <rect x="15" y="180" width="80" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#0969da">초안+다중</text>
+          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#0969da">검토</text>
+          <line x1="95" y1="196" x2="145" y2="196" stroke="#636c76" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- writer box -->
+          <rect x="150" y="180" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">×1</text>
+          <!-- Fan-out to 2 reviewers -->
+          <line x1="260" y1="190" x2="310" y2="185" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- reviewer 1 (문법) -->
+          <rect x="315" y="170" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="370" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">문법 관점</text>
+          <!-- reviewer 2 (논리) -->
+          <rect x="315" y="206" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">논리 관점</text>
+          <!-- Merge to result -->
+          <line x1="425" y1="185" x2="480" y2="196" stroke="#1a7f37" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="#1a7f37" stroke-width="1"/>
+          <rect x="485" y="182" width="80" height="30" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1"/>
+          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#0969da">결과</text>
+          <!-- Label: fan-out -->
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#1a7f37" font-weight="600">팬아웃</text>
+
+          <!-- Bottom note -->
+          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 서브에이전트 정의는 1회 — 오케스트레이터가 요청마다 동적으로 라우팅</text>
+        </svg>
+      </div>
+
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
@@ -790,6 +871,71 @@ EOF</pre>
         <div class="tip-box">
           작업 목록이 서로 얽히지 않도록, 병렬로 스폰하는 팀메이트에게는 처음부터 완전히 분리된 파일이나 디렉터리를 배정하는 것이 안전하다.
         </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">권한 설정 전후 비교 — 최소 권한 원칙</div>
+        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+          </defs>
+
+          <!-- BEFORE section -->
+          <text x="140" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#cf222e">Before — 모든 도구 허용</text>
+          <!-- Wide open box -->
+          <rect x="30" y="28" width="220" height="80" rx="8" fill="#ffebe9" stroke="#ff8182" stroke-width="1.5"/>
+          <text x="140" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#cf222e">tools: [모든 도구]</text>
+          <!-- Tool icons row -->
+          <rect x="50" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="72" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Read</text>
+          <rect x="100" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="122" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Write</text>
+          <rect x="150" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="172" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Bash</text>
+          <rect x="50" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="72" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Edit</text>
+          <rect x="100" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="122" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Grep</text>
+          <rect x="150" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="172" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Push</text>
+          <!-- Attack surface label -->
+          <text x="140" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#cf222e">공격 표면: 넓음</text>
+
+          <!-- Arrow between -->
+          <line x1="260" y1="68" x2="325" y2="68" stroke="#636c76" stroke-width="2" marker-end="url(#paArrow)"/>
+          <text x="293" y="60" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#0969da">최소 권한</text>
+
+          <!-- AFTER section -->
+          <text x="460" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1a7f37">After — 필요한 도구만</text>
+          <!-- Restricted box -->
+          <rect x="340" y="28" width="240" height="80" rx="8" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.5"/>
+          <text x="460" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#116329">tools: [Read, Grep]</text>
+          <!-- Tool icons row - only 2 -->
+          <rect x="385" y="62" width="55" height="20" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <text x="412" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#fff">Read</text>
+          <rect x="445" y="62" width="55" height="20" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <text x="472" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#fff">Grep</text>
+          <!-- Grayed out tools -->
+          <rect x="385" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
+          <text x="412" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Write</text>
+          <rect x="445" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
+          <text x="472" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Bash</text>
+          <text x="508" y="100" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="14" fill="#d0d7de">…</text>
+          <!-- Attack surface label -->
+          <text x="460" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#116329">공격 표면: 좁음</text>
+
+          <!-- Bottom comparison bar -->
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="#cf222e" opacity="0.3"/>
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="#cf222e" opacity="0.6"/>
+          <text x="140" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="700" fill="#fff">위험 범위: 100%</text>
+
+          <rect x="340" y="148" width="88" height="16" rx="4" fill="#1a7f37" opacity="0.6"/>
+          <text x="384" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="700" fill="#fff">위험: 33%</text>
+
+          <!-- Reduction arrow -->
+          <text x="300" y="178" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#1a7f37">위험 범위 67% 감소</text>
+          <text x="300" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">reviewer는 애초에 쓸 수 없으므로 실수가 발생하지 않는다</text>
+        </svg>
+      </div>
         <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 설정과 같은 요청 문장이 그대로 동작한다. CLI에서만 <code>teammateMode: "tmux"</code>를 추가로 선택할 수 있어, tmux 분할 창으로 각 팀메이트의 화면을 나란히 볼 수 있다는 점이 Desktop App과 다르다.</p>
       </div>
 
@@ -817,6 +963,69 @@ EOF</pre>
         <div class="cmd-chips">
           <a class="cmd-chip" href="../intro/04_Intro_Chapter.html#s3">모델 티어 (5장)</a>
         </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">모델 티어 비교 차트</div>
+        <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0 auto;">
+          <!-- Table header -->
+          <rect x="0" y="0" width="560" height="30" rx="6" fill="#eef1f4"/>
+          <text x="90" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">모델</text>
+          <text x="230" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">속도</text>
+          <text x="360" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">비용</text>
+          <text x="490" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0550ae">품질</text>
+
+          <!-- Row 1: haiku -->
+          <rect x="0" y="34" width="560" height="50" rx="0" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="90" y="56" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="#0969da">haiku</text>
+          <!-- Speed bar: 빠름 -->
+          <rect x="155" y="44" width="150" height="16" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <text x="230" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">빠름</text>
+          <!-- Cost bar: 낮음 -->
+          <rect x="295" y="44" width="60" height="16" rx="4" fill="#1a7f37" opacity="0.6"/>
+          <text x="325" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">낮음</text>
+          <!-- Quality bar: 기본 -->
+          <rect x="415" y="44" width="60" height="16" rx="4" fill="#d4a72c" opacity="0.6"/>
+          <text x="445" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">기본</text>
+          <!-- Quality description -->
+          <text x="490" y="56" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">정형 작업</text>
+          <text x="490" y="68" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">오탈자 검토</text>
+
+          <!-- Row 2: sonnet -->
+          <rect x="0" y="88" width="560" height="50" rx="0" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="90" y="110" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="#6639ba">sonnet</text>
+          <!-- Speed bar: 중간 -->
+          <rect x="155" y="98" width="100" height="16" rx="4" fill="#d4a72c" opacity="0.7"/>
+          <text x="205" y="110" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">중간</text>
+          <!-- Cost bar: 중간 -->
+          <rect x="295" y="98" width="100" height="16" rx="4" fill="#d4a72c" opacity="0.7"/>
+          <text x="345" y="110" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">중간</text>
+          <!-- Quality bar: 양호 -->
+          <rect x="415" y="98" width="120" height="16" rx="4" fill="#6639ba" opacity="0.6"/>
+          <text x="475" y="110" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">양호</text>
+          <!-- Quality description -->
+          <text x="490" y="110" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">일반 검토</text>
+          <text x="490" y="122" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">코드 리뷰</text>
+
+          <!-- Row 3: opus -->
+          <rect x="0" y="142" width="560" height="50" rx="0" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="90" y="164" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="#cf222e">opus</text>
+          <!-- Speed bar: 느림 -->
+          <rect x="155" y="152" width="50" height="16" rx="4" fill="#cf222e" opacity="0.7"/>
+          <text x="180" y="164" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">느림</text>
+          <!-- Cost bar: 높음 -->
+          <rect x="295" y="152" width="150" height="16" rx="4" fill="#cf222e" opacity="0.6"/>
+          <text x="370" y="164" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">높음</text>
+          <!-- Quality bar: 우수 -->
+          <rect x="415" y="152" width="150" height="16" rx="4" fill="#1a7f37" opacity="0.8"/>
+          <text x="490" y="164" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">우수</text>
+          <!-- Quality description -->
+          <text x="490" y="164" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">복잡 논리</text>
+          <text x="490" y="176" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">아키텍처</text>
+
+          <!-- Bottom note -->
+          <text x="280" y="208" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 가벼운 역할=빠른 모델, 무거운 판단=높은 모델 — 적재적소에 배정</text>
+        </svg>
       </div>
 
       <div class="platform-block claudeapp">

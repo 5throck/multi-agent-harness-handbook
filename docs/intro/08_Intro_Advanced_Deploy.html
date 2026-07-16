@@ -12,7 +12,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>10장 §1 · 배포와 SSOT</title>
+  <title>8장 §1 · 배포와 SSOT</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -115,20 +115,21 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">10장 · 아키텍처 심화</div>
+  <div class="nav-title">8장 · 아키텍처 심화</div>
   <a href="#s1" style="color:#0969da;border-left-color:#0969da;">§1 · 배포와 SSOT</a>
-  <a href="10_Intro_Advanced_Chapter.html">§2 · 생애주기 관리</a>
-  <a href="10_Intro_Advanced_AGENTS.html">§3 · AGENTS.md 심화</a>
-  <a href="10_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
+  <a href="08_Intro_Advanced_Chapter.html">§2 · 생애주기 관리</a>
+  <a href="08_Intro_Advanced_AGENTS.html">§3 · AGENTS.md 심화</a>
+  <a href="08_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
+  <a href="08_Intro_Advanced_ProjectUpgrade.html">§5 · L2 프로젝트 업그레이드</a>
   <div class="nav-section">다른 장</div>
   <a href="05_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
-  <a href="../enterprise/08_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
+  <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../variant-advanced/10_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">10장 §1</div>
+  <div class="chapter-eyebrow">8장 §1</div>
   <h1>배포와 SSOT</h1>
   <p class="lead">이 절에서는 ai-workspace-standards의 L0→L1→L2 3-tier 계층 구조, 포크 모델의 설계 이유, 그리고 파일별 SSOT(Single Source of Truth) 흐름을 다룬다. 원본은 항상 위에서 아래로만 흐르며, 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다.</p>
 
@@ -202,7 +203,7 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
   </div>
 
   <h3>L1 → L2가 "포크"로 끝나는 이유</h3>
-  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 variant에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. variant가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 새 variant를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 variant를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(11장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다.</p>
+  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 variant에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. variant가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 새 variant를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 variant를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(10장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다. 반대 방향 — 이미 만든 L2 프로젝트에 L1의 최신 변경을 실제로 반영하는 절차는 <a href="08_Intro_Advanced_ProjectUpgrade.html">§5 L2 프로젝트 업그레이드</a>에서 다룬다.</p>
 
   <h3>파일별 SSOT — 무엇이 어디서 어디로 흐르는가</h3>
   <table style="width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;">
@@ -224,8 +225,8 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
   <div class="note">L0→L1→L2를 한 문장으로: <strong>원본은 위에서만 고친다. 아래 계층은 원본의 스냅샷이거나, 스캐폴딩 시점의 복사본이다. 흐름은 언제나 위에서 아래로만 간다.</strong> 이 원칙을 어기는 대표적인 실수가 "새 프로젝트(L2)에서 에이전트 파일을 고쳐 놓고 워크스페이스 루트(L0)에는 반영하지 않는 것"이다 — L2에서 L0로 거슬러 올라가는 역방향 흐름은 애초에 존재하지 않으므로, 그 수정은 그 프로젝트 안에서만 유효하고 다른 곳에는 영영 반영되지 않는다.</div>
 
   <div class="chapter-nav">
-    <a href="../enterprise/08_Enterprise_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">8장 · 기업 내부 멀티 에이전트팀 운영</div></a>
-    <a href="10_Intro_Advanced_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">10장 §2 · 생애주기 관리</div></a>
+    <a href="../enterprise/07_Enterprise_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">7장 · 기업 내부 멀티 에이전트팀 운영</div></a>
+    <a href="08_Intro_Advanced_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">8장 §2 · 생애주기 관리</div></a>
   </div>
  </article>
 </main>

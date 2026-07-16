@@ -80,6 +80,14 @@
   <p class="a"><code>tools</code> 필드에 <code>Write</code>가 포함돼 있지 않은지 확인한다. reviewer 같은 읽기 전용 역할은 애초에 <code>tools: Read, Grep</code>처럼 필요한 최소 권한만 부여해, 프롬프트 해석이 애매해도 수정 자체가 불가능하게 막아야 한다.</p>
   <span class="see">자세히: <a href="../guardrails/03_Guardrails_Chapter.html#s3">3장 §최소 권한 원칙</a></span>
 
+  <div class="q">에이전트가 같은 작업을 반복하며 끝나지 않는다.</div>
+  <p class="a">평가자-최적화(Evaluator-Optimizer) 루프에서 평가자가 계속 "부족하다"고 판단하고 최적화자가 다시 시도하는 <strong>공회전(spin)</strong> 상태다. 해결법: 최대 반복 횟수를 미리 정해두고, 지정한 횟수 안에 기준을 통과하지 못하면 자동 종료하도록 한다. <a href="../concepts/02_Concepts_Chapter.html#s4">2장 §오케스트레이션 패턴</a>에서 설명하는 대로 패턴 단위로 풀지 말고, 전체 워크플로우를 <a href="../workflows/09_Workflows_Chapter.html">9장</a>의 실행 계획(Execution Plan)으로 구조화하면 예방하기 쉽다.</p>
+  <span class="see">자세히: <a href="../concepts/02_Concepts_Chapter.html#s4">2장 §오케스트레이션 패턴</a>, <a href="../workflows/09_Workflows_Chapter.html">9장 · 워크플로우 디자인 패턴</a></span>
+
+  <div class="q">서브에이전트가 도구를 호출하다 실패하고 멈춘다.</div>
+  <p class="a">가장 흔한 원인 두 가지다. 첫째, <strong>네트워크 타임아웃</strong> — API 호출이나 MCP 서버 연결이 일시적으로 끊겼다. Claude Code의 경우 <code>/cost</code> 명령으로 세션 상태를 확인하고, Antigravity의 경우 Agent Manager에서 에이전트 상태를 점검한 뒤 재시도한다. 둘째, <strong>MCP 서버 미연결</strong> — 로컬 MCP 서버가 실행 중인지 <code>claude mcp list</code>(Claude Code) 또는 해당 플랫폼의 서버 상태 명령어로 확인한다. 일시적 오류는 <a href="#cost">비용·성능</a> 카테고리의 타임아웃 해결법을 참고하라.</p>
+  <span class="see">자세히: <a href="#cost">FAQ · 비용·성능</a>, <a href="../guardrails/03_Guardrails_Chapter.html#s6">3장 §감사 로그와 관측성</a></span>
+
   <h2 id="parallel">병렬·팀 협업</h2>
 
   <div class="q">Antigravity Agent Manager에서 에이전트 두 개가 서로 다른 파일을 수정 중인데 결과가 뒤섞인다.</div>

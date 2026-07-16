@@ -130,6 +130,7 @@
   <a href="#s2-agent-lifecycle">에이전트 생애주기</a>
   <a href="#s2-skill-lifecycle">스킬 생애주기</a>
   <a href="#s2-script-lifecycle">스크립트 생애주기</a>
+  <a href="#state-vs-lifecycle">상태(State)와 생애주기(Lifecycle)</a>
   <div class="nav-section">이 장의 다른 절</div>
   <a href="08_Intro_Advanced_AGENTS.html">§3 · AGENTS.md 심화</a>
   <a href="08_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
@@ -152,6 +153,7 @@
       <li>에이전트 생애주기: create → verify → operate → improve → deprecate</li>
       <li>스킬 생애주기: define → test → deploy → version → retire</li>
       <li>스크립트 생애주기: write → lint → test → register → deprecate</li>
+      <li>상태(State)와 생애주기(Lifecycle)의 구분</li>
       <li>생애주기 관리가 왜 필요한지</li>
     </ul>
   </div>
@@ -465,6 +467,17 @@
   <!-- ─── 세 생애주기의 관계 ─── -->
 
   <h2 id="s2-lifecycle-summary">세 생애주기의 공통 원칙과 상호 의존성</h2>
+
+  <h3 id="state-vs-lifecycle">상태(State)와 생애주기(Lifecycle)의 구분</h3>
+  <p>지금까지 세 종류의 생애주기를 파이프라인으로 설명했다. 여기서 헷갈리지 않아야 할 구분이 하나 있다 — <strong>생애주기(lifecycle)</strong>와 <strong>상태(state)</strong>는 다른 개념이다.</p>
+  <ul>
+    <li><strong>생애주기</strong>는 구성요소가 거치는 <strong>순차적 단계</strong> 전체를 말한다. 에이전트라면 Create → Verify → Operate → Improve → Deprecate의 5단계 파이프라인 자체가 생애주기다.</li>
+    <li><strong>상태</strong>는 특정 시점에 그 구성요소가 <strong>어디에 있는지</strong>를 나타내는 스냅샷이다. YAML frontmatter의 <code>status</code> 필드(<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>)가 바로 이 상태 값을 저장하는 메커니즘이다.</li>
+  </ul>
+  <p>비유하면 생애주기는 "지하철 노선도"이고 상태는 "현재 열차가 어느 역에 있는지"를 보여주는 실시간 표시판이다. 열차가 어디로 가야 하는지(노선)는 고정되어 있지만, 지금 어디에 있는지(역)는 시시각각 변한다.</p>
+  <div class="note">워크플로우 실행 차원의 상태 — 예를 들어 PM이 <a href="../workflows/09_Workflows_Chapter.html">9장</a>에서 정의하는 Phase Pipeline(Phase 0: 요청 수신 → Phase 1: 설계 → … → Phase 6: 동기화 완료) — 은 개별 구성요소의 <code>status</code> 필드와는 또 다른 차원의 상태다. 전자는 "작업이 어느 단계에 있는가"이고, 후자는 "이 구성요소 자체가 생애주기의 어디에 있는가"이다.</div>
+
+  <p>에이전트·스킬·스크립트의 생애주기는 각각 독립적으로 정의되어 있지만, 실제 워크스페이스에서는 밀접하게 연결되어 있다.</p>
 
   <p>에이전트·스킬·스크립트의 생애주기는 각각 독립적으로 정의되어 있지만, 실제 워크스페이스에서는 밀접하게 연결되어 있다.</p>
 

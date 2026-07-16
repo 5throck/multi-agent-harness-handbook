@@ -114,6 +114,7 @@
   <div class="nav-title">2장 · 개념 이해</div>
   <a href="#agent-definition">에이전트란 무엇인가</a>
   <a href="#s0">Prompt → Context → Harness</a>
+  <a href="#architecture-diagram">하네스 아키텍처 전체도</a>
   <a href="#s1">하네스 엔지니어링이란</a>
   <a href="#s2">단일 에이전트의 한계</a>
   <a href="#s3">멀티 에이전트팀의 구성요소</a>
@@ -264,6 +265,91 @@
   <p>같은 프롬프트, 같은 컨텍스트를 줘도 매번 다른 품질의 결과가 나온다면 실무에 쓸 수 없다. 하네스 엔지니어링은 "이 결과를 자동으로 검증할 방법이 있는가", "위험한 작업(파일 삭제, 결제 실행 등)은 사람 승인 없이 못 하게 막았는가", "실패했을 때 무엇이 잘못됐는지 로그로 추적할 수 있는가" 같은, 모델의 대답 자체가 아니라 그 대답을 둘러싼 시스템을 설계하는 일이다.</p>
   <div class="note">세 단계는 각각 <strong>행동(모델이 무엇을 하게 만들 것인가) → 이해(모델이 무엇을 알게 할 것인가) → 신뢰성(그 결과를 어떻게 반복 가능하고 검증 가능하게 만들 것인가)</strong>으로 초점이 옮겨간 것이다. 이 핸드북이 다루는 멀티 에이전트팀은 세 번째 단계, 하네스 엔지니어링의 산물이다.</div>
 
+  <h2 id="architecture-diagram">하네스 아키텍처 전체도</h2>
+  <p>하네스 엔지니어링은 모델과 사용자 사이에 놓이는 5층 구조로 생각할 수 있다. 아래 다이어그램은 이 핸드북 전체를 관통하는 아키텍처를 한눈에 보여준다 — 각 장이 이 5층 중 어느 계층을 다루는지는 <a href="#s1">다음 절</a>에서 연결한다.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <defs>
+      <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
+        <path d="M0,0 L10,3 L0,6 Z" fill="#636c76"/>
+      </marker>
+    </defs>
+    <g font-family="-apple-system,Segoe UI,sans-serif">
+      <!-- Layer 1: Workspace -->
+      <rect x="40" y="10" width="600" height="48" rx="10" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="340" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#6639ba">워크스페이스 (Workspace)</text>
+      <text x="610" y="40" text-anchor="end" font-size="10" fill="#636c76">5장, 8장, 10~12장</text>
+      <!-- Arrow 1 -->
+      <line x1="340" y1="58" x2="340" y2="78" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Layer 2: Harness (5 sub-layers) -->
+      <rect x="40" y="80" width="600" height="170" rx="10" fill="#e8f4fd" stroke="#0969da" stroke-width="1.5"/>
+      <text x="60" y="102" font-size="13" font-weight="700" fill="#0550ae">하네스 (Harness) — 5층</text>
+      <!-- Sub-layer 1 -->
+      <rect x="60" y="110" width="108" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="114" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">도구 오케스트레이션</text>
+      <!-- Sub-layer 2 -->
+      <rect x="176" y="110" width="80" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="216" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">검증 루프</text>
+      <!-- Sub-layer 3 -->
+      <rect x="264" y="110" width="116" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="322" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">컨텍스트·메모리</text>
+      <!-- Sub-layer 4 -->
+      <rect x="388" y="110" width="80" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="428" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">가드레일</text>
+      <!-- Sub-layer 5 -->
+      <rect x="476" y="110" width="72" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="512" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">관측성</text>
+      <!-- Sub-layer descriptions -->
+      <text x="114" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">도구 호출·훅·스킬</text>
+      <text x="114" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">자동 실행 절차</text>
+      <text x="216" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">평가-개선 루프</text>
+      <text x="216" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">QA 게이트</text>
+      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">MEMORY.md·핸드오프</text>
+      <text x="322" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">계약·상태 관리</text>
+      <text x="428" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">최소 권한·승인</text>
+      <text x="428" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">격리·감사 로그</text>
+      <text x="512" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">실행 추적·비용</text>
+      <text x="512" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">타임라인·재생</text>
+      <!-- Chapter refs -->
+      <text x="114" y="195" text-anchor="middle" font-size="9" fill="#0969da">4장</text>
+      <text x="216" y="195" text-anchor="middle" font-size="9" fill="#0969da">4장, 9장</text>
+      <text x="322" y="195" text-anchor="middle" font-size="9" fill="#0969da">8장 §2</text>
+      <text x="428" y="195" text-anchor="middle" font-size="9" fill="#0969da">3장</text>
+      <text x="512" y="195" text-anchor="middle" font-size="9" fill="#0969da">3장 §6</text>
+      <!-- Sub-layer connectors -->
+      <line x1="60" y1="210" x2="640" y2="210" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="60" y="228" font-size="9" fill="#636c76">→ 이 5층이 합쳐져야 에이전트가 "일을 맡길 만한" 수준이 된다</text>
+      <!-- Arrow 2 -->
+      <line x1="340" y1="250" x2="340" y2="270" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Layer 3: Agent -->
+      <rect x="40" y="272" width="285" height="48" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="182" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="#116329">에이전트 (Agent)</text>
+      <text x="200" y="301" font-size="10" fill="#636c76">  2장, 4장, 8장 §3</text>
+      <!-- Layer 4: Tool (right side) -->
+      <rect x="355" y="272" width="285" height="48" rx="10" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+      <text x="497" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="#7d4e00">도구 (Tool)</text>
+      <text x="510" y="301" font-size="10" fill="#636c76">  4장, AGENTS.md</text>
+      <!-- Bidirectional arrow between Agent and Tool -->
+      <line x1="325" y1="296" x2="355" y2="296" stroke="#636c76" stroke-width="1.5" marker-start="url(#archArrow)" marker-end="url(#archArrow)"/>
+      <!-- Arrow 3 down from Agent -->
+      <line x1="182" y1="320" x2="182" y2="340" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Arrow 4 down from Tool -->
+      <line x1="497" y1="320" x2="497" y2="340" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Layer 5: Model -->
+      <rect x="40" y="342" width="600" height="48" rx="10" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+      <text x="340" y="371" text-anchor="middle" font-size="14" font-weight="700" fill="#cf222e">모델 (Model)</text>
+      <text x="610" y="371" text-anchor="end" font-size="10" fill="#636c76">Claude / Gemini</text>
+      <!-- Tier labels -->
+      <text x="20" y="34" font-size="10" font-weight="700" fill="#6639ba">L0</text>
+      <text x="20" y="165" font-size="10" font-weight="700" fill="#0550ae">L0/L1</text>
+      <text x="20" y="301" font-size="10" font-weight="700" fill="#116329">L1/L2</text>
+      <text x="20" y="371" font-size="10" font-weight="700" fill="#cf222e">런타임</text>
+    </g>
+  </svg>
+  <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">그림 2-1. 하네스 엔지니어링의 5층 구조 — 워크스페이스부터 모델까지, 이 핸드북 전체를 관통하는 아키텍처</p>
+  </div>
+
   <h2 id="s1">하네스 엔지니어링이란</h2>
   <p>프롬프트 엔지니어링이 "모델에게 어떤 말을 건넬 것인가"에 집중한다면, 하네스 엔지니어링은 한 걸음 물러나 "모델이 어떤 도구·규칙·검증 장치를 통해 일하게 할 것인가"를 설계하는 일이다. 여기서 하네스(harness)는 승마에서 말에게 씌우는 마구에서 온 표현으로, AI가 마음대로 아무 방향으로나 달리지 않고 정해진 절차·도구·권한 범위 안에서 예측 가능하게 움직이도록 잡아 주는 틀을 뜻한다.</p>
   <p>실제로 이 틀은 몇 가지 구체적인 장치로 나타난다. 에이전트가 호출할 수 있는 도구의 목록과 각 도구의 위험도에 따른 승인 정책, 특정 이벤트(파일 저장 직후, 작업 완료 시점 등)에 자동으로 실행되는 훅(hook), 반복되는 작업 절차를 표준화해 재사용하는 스킬(skill), 그리고 이 모든 것을 조합해 여러 에이전트를 정해진 순서·조건으로 실행시키는 오케스트레이션 스크립트가 그것이다. 이런 장치들이 쌓이면, 같은 요청을 몇 번을 반복해도 결과의 품질과 형식이 흔들리지 않는 "재현 가능한 AI 워크플로"가 만들어진다.</p>
@@ -354,6 +440,34 @@
   <h3>핸드오프 계약(Handoff Contract)</h3>
   <p>에이전트 사이에 작업을 넘길 때 주고받는 정보의 형식이다. 자연어로만 넘기면 다음 에이전트가 맥락을 다시 추측해야 하지만, 구조화된 입력(예: JSON)으로 "이 작업의 목적·범위·이전 단계 산출물"을 명시하면 다음 에이전트가 바로 작업에 들어갈 수 있다.</p>
   <p>택배 인수인계를 떠올리면 된다. "이거 저기 갖다 줘"라고만 하면 받는 사람이 주소·수량·주의사항을 다시 물어봐야 하지만, 송장(운송장 번호·수령인·수량·특이사항이 적힌 문서)을 같이 넘기면 받는 사람이 바로 배송을 시작할 수 있다. 핸드오프 계약은 에이전트 사이의 "송장"이다. writer가 reviewer에게 "이 파일을, 이런 기준으로, 이 형식으로 검토해줘"라고 명시적으로 넘기면 reviewer는 다시 물어볼 필요 없이 바로 시작한다.</p>
+  <p>실제로는 다음과 같은 구조화된 문서로 넘긴다.</p>
+  <pre class="code-block">{
+  "task": "코드 리뷰",
+  "agent": "reviewer",
+  "scope": {
+    "target_file": "src/api/handler.ts",
+    "change_description": "인증 미들웨어 추가 — JWT 토큰 검증 로직"
+  },
+  "deliverables": {
+    "from": "code-writer",
+    "files": ["src/api/handler.ts", "src/auth/verify.ts"],
+    "commit_hash": "a3f7c21"
+  },
+  "review_criteria": [
+    "보안: 토큰 만료 처리가 있는가",
+    "오류 처리: 잘못된 토큰에 대한 401 응답이 있는가",
+    "테스트: 관련 테스트가 추가되었는가"
+  ],
+  "output_format": {
+    "type": "structured_comment",
+    "fields": ["pass_fail", "findings", "suggestions"]
+  },
+  "failure_conditions": [
+    "target_file이 존재하지 않으면 즉시 보고",
+    "보안 기준 미충족 시 block으로 표시"
+  ]
+}</pre>
+  <p>이 예시에서 <code>task</code>, <code>scope</code>, <code>review_criteria</code>가 "무엇을 검토할지"를 정하고, <code>output_format</code>이 "결과를 어떤 형식으로 줄지"를 정한다. <code>failure_conditions</code>은 검토 대상 자체에 문제가 있을 때의 처리 방식이다. 이처럼 핸드오프 계약은 <strong>목적·범위·기준·형식·예외 처리</strong>를 명시적으로 정의해 다음 에이전트가 다시 물어볼 필요 없이 바로 작업에 들어갈 수 있게 한다.</p>
   <div class="note">세 요소 중 어느 하나라도 빠지면 팀이 아니라 "각자 따로 일하는 에이전트 여러 개"가 된다. 조율(오케스트레이터)과 계약(핸드오프)이 팀을 팀답게 만든다.</div>
 
   <h2 id="s3b">서브에이전트란 무엇인가</h2>

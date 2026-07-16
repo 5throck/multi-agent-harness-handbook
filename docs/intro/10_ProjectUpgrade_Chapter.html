@@ -7,6 +7,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="10장 · L2 프로젝트 업그레이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>10장 · L2 프로젝트 업그레이드</title>
   <style>
@@ -172,7 +173,7 @@
   <h2 id="vs-promotion">승격과의 방향 차이</h2>
   <p>11장에서 다루는 "승격"과 이번 장의 "업그레이드"는 이름이 비슷해 보이지만 방향이 정반대다.</p>
   <ul>
-    <li><strong>승격</strong>(<code>l2-to-variant-pipeline.ts</code>, 11장) — <strong>L2 → L1</strong>. 내가 만든 프로젝트의 변경을 공식 템플릿으로 끌어올려, 다른 사람도 쓸 수 있는 variant로 만드는 작업.</li>
+    <li><strong>승격</strong>(<code>l2-to-variant-pipeline.ts</code>, 11장) — <strong>L2 → L1</strong>. 내가 만든 프로젝트의 변경을 공식 템플릿으로 끌어올려, 다른 사람도 쓸 수 있는 베리언트(variant)로 만드는 작업.</li>
     <li><strong>업그레이드</strong>(<code>upgrade-project.ts</code>, 이 장) — <strong>L1 → L2</strong>. 공식 템플릿의 최신 변경을 이미 만들어진 내 프로젝트에 끌어오는 작업.</li>
   </ul>
   <p>두 스크립트는 서로 반대 방향으로 파일을 흘려보낼 뿐, 어느 한쪽이 다른 쪽을 대체하지 않는다. 템플릿에 기여하고 싶다면 승격을, 이미 만든 프로젝트를 최신 상태로 유지하고 싶다면 업그레이드를 쓴다.</p>

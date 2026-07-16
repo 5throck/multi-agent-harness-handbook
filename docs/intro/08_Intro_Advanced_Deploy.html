@@ -11,6 +11,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="8장 §1 · 배포와 SSOT - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>8장 §1 · 배포와 SSOT</title>
   <style>
@@ -146,7 +147,7 @@
   <p>지금까지 나온 CONSTITUTION.md·templates/·variant·new-project.ts는 모두 하나의 큰 원칙 위에서 움직인다. 저장소는 <strong>L0(워크스페이스 루트) → L1(공통 템플릿) → L2(variant/프로젝트)</strong>라는 3단 계층(3-tier)으로 설계돼 있고, 신뢰할 수 있는 원본(Single Source of Truth)은 항상 위에서 아래로만 흐른다. 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다. 앞 절에서 다룬 보일러플레이트가 바로 이 3-tier 중 L1에 해당한다. 이 보일러플레이트는 L0에서 발행되고, L2가 태어날 때 딱 한 번 전달되는 스냅샷이다.</p>
 
   <h3>세 계층이 각각 담당하는 것</h3>
-  <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 variant를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 실제 만들어진 살아있는 프로젝트 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다.</p>
+  <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 베리언트(variant)를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 실제 만들어진 살아있는 프로젝트 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다.</p>
 
   <div class="tree-box" style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">L0 — 워크스페이스 루트 (C:\git\, 유일한 원본)
@@ -203,7 +204,7 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
   </div>
 
   <h3>L1 → L2가 "포크"로 끝나는 이유</h3>
-  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 variant에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. variant가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 신규 variant를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 variant를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(11장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다. 반대 방향 — 이미 만든 L2 프로젝트에 L1의 최신 변경을 실제로 반영하는 절차는 <a href="10_ProjectUpgrade_Chapter.html">10장 · L2 프로젝트 업그레이드</a>에서 다룬다.</p>
+  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 베리언트(variant)에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. 베리언트(variant)가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 신규 베리언트(variant)를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 베리언트(variant)를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(11장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다. 반대 방향 — 이미 만든 L2 프로젝트에 L1의 최신 변경을 실제로 반영하는 절차는 <a href="10_ProjectUpgrade_Chapter.html">10장 · L2 프로젝트 업그레이드</a>에서 다룬다.</p>
 
   <h3>파일별 SSOT — 무엇이 어디서 어디로 흐르는가</h3>
   <table style="width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;">
@@ -216,7 +217,7 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
       <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>CLAUDE.md</code> / <code>GEMINI.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">워크스페이스 루트</td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">수동 전파 + <code>validate-templates.ts</code></td></tr>
       <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>agents/*.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;">워크스페이스 루트 <code>agents/</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>bun run agent:verify</code></td></tr>
       <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>AGENTS.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">워크스페이스 루트</td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;"><code>bun run agent:verify</code></td></tr>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>variant.json</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>templates/co-&lt;name&gt;/</code> 자신</td><td style="padding:8px 12px;border:1px solid #d0d7de;">해당 variant가 곧 원본</td></tr>
+      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>variant.json</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>templates/co-&lt;name&gt;/</code> 자신</td><td style="padding:8px 12px;border:1px solid #d0d7de;">해당 베리언트(variant)가 곧 원본</td></tr>
     </tbody>
   </table>
 
@@ -231,14 +232,14 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
     <li><strong>MERGE로 절반만 여는 것</strong>(<code>CLAUDE.md</code>/<code>GEMINI.md</code>, <code>.gitignore</code>, <code>agents/pm.md</code>) — <code>WORKSPACE-MANAGED</code> 마커로 감싼 구간만 L1이 계속 관리하고, 마커 밖 나머지는 프로젝트가 자유롭게 쓴다. "공통 규칙은 위에서, 프로젝트 맥락은 아래에서"를 한 파일 안에서 동시에 만족시키는 절충안이다.</li>
     <li><strong>PRESERVE로 완전히 여는 것</strong>(<code>README.md</code>, <code>docs/context.md</code>, <code>src/</code>) — L1은 이 파일들의 존재를 확인만 할 뿐 내용에는 관여하지 않는다. 프로젝트의 정체성을 담는 영역이기 때문이다.</li>
   </ul>
-  <p>신규 variant를 설계할 때(6장·11장) 이 세 범주 중 어디에 새 파일을 배치할지 미리 정해 두면, 나중에 "이 파일은 왜 업그레이드할 때마다 덮어써지는가" 같은 질문이 애초에 생기지 않는다. 판단 기준은 단순하다 — <strong>보안·거버넌스처럼 조직 전체가 반드시 같아야 하는 것은 LOCKED, 조직 규칙과 프로젝트 맥락이 공존해야 하는 것은 MERGE, 프로젝트 고유의 것은 PRESERVE</strong>로 분류한다.</p>
+  <p>신규 베리언트(variant)를 설계할 때(6장·11장) 이 세 범주 중 어디에 새 파일을 배치할지 미리 정해 두면, 나중에 "이 파일은 왜 업그레이드할 때마다 덮어써지는가" 같은 질문이 애초에 생기지 않는다. 판단 기준은 단순하다 — <strong>보안·거버넌스처럼 조직 전체가 반드시 같아야 하는 것은 LOCKED, 조직 규칙과 프로젝트 맥락이 공존해야 하는 것은 MERGE, 프로젝트 고유의 것은 PRESERVE</strong>로 분류한다.</p>
 
   <h3>모델 티어 전략 — 조직 규모에서 티어를 운영하는 법</h3>
   <p>5장에서 <code>tier: high/medium/low</code>가 개별 에이전트 역할에 어떻게 배정되는지 봤다. 여기서는 그 배정을 <strong>변경하고 유지하는 흐름</strong>을 아키텍처 관점에서 짚는다. tier 값은 <code>agents/*.md</code>의 frontmatter에 있고, 이 파일은 위 SSOT 표에서 본 것처럼 L0가 원본이며 §5의 <code>upgrade-project.ts</code>가 <strong>SYNC_IF_NEWER</strong>로 관리한다 — 즉 tier 전략 자체도 L0→L1→L2 원칙을 그대로 따른다.</p>
   <ul>
-    <li><strong>기본 배정은 L0에서 한 번 정한다.</strong> PM·Architect류는 high, code-writer·docs-writer류는 medium, automation-engineer류는 low라는 원칙을 워크스페이스 루트의 <code>agents/*.md</code>에서 확정하면, 모든 variant의 L1 템플릿이 이를 상속한다.</li>
+    <li><strong>기본 배정은 L0에서 한 번 정한다.</strong> PM·Architect류는 high, code-writer·docs-writer류는 medium, automation-engineer류는 low라는 원칙을 워크스페이스 루트의 <code>agents/*.md</code>에서 확정하면, 모든 베리언트(variant)의 L1 템플릿이 이를 상속한다.</li>
     <li><strong>티어 기준이 바뀌면 버전을 올린다.</strong> "이 역할은 이제 medium이 아니라 high여야 한다" 같은 조직 차원의 재판단은 L0의 <code>agents/*.md</code>를 고치고 <code>@version</code>(또는 frontmatter <code>version:</code>)을 올리는 형태로 이루어진다. 이미 만들어진 L2 프로젝트에는 자동으로 반영되지 않고, 각 프로젝트가 <code>upgrade-project.ts</code>를 실행해야 새 티어를 받는다(10장) — 티어 변경도 예외 없이 포크 모델을 따른다.</li>
-    <li><strong>프로젝트별 예외는 L2에서만 남긴다.</strong> 특정 variant의 특정 역할만 다른 티어가 필요하다면(예: 유난히 복잡한 도메인 로직을 다루는 code-writer를 medium 대신 high로), 그 프로젝트의 <code>agents/*.md</code>를 로컬에서 직접 수정한다. 다만 이 파일은 SYNC_IF_NEWER 대상이므로, 다음 업그레이드 때 L1 쪽 버전이 더 높으면 <code>⚠️ CONFLICT</code> 경고와 함께 덮어써질 수 있다는 점을 감안해야 한다(§5의 안전장치 참고).</li>
+    <li><strong>프로젝트별 예외는 L2에서만 남긴다.</strong> 특정 베리언트(variant)의 특정 역할만 다른 티어가 필요하다면(예: 유난히 복잡한 도메인 로직을 다루는 code-writer를 medium 대신 high로), 그 프로젝트의 <code>agents/*.md</code>를 로컬에서 직접 수정한다. 다만 이 파일은 SYNC_IF_NEWER 대상이므로, 다음 업그레이드 때 L1 쪽 버전이 더 높으면 <code>⚠️ CONFLICT</code> 경고와 함께 덮어써질 수 있다는 점을 감안해야 한다(§5의 안전장치 참고).</li>
   </ul>
   <div class="note">보일러플레이트 전략과 티어 전략은 결국 같은 질문의 두 가지 답이다 — <strong>"조직 전체가 동일해야 하는 것은 L0/L1에서 강제하고, 프로젝트마다 달라도 되는 것은 L2에 위임한다."</strong> 두 전략 모두 그 경계를 파일 단위(LOCKED/MERGE/PRESERVE)와 필드 단위(tier)로 명시적으로 그어 둔다는 공통점이 있다.</div>
 

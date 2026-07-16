@@ -11,8 +11,9 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="11장 · 신규 variant 만들기 vs 기존 프로젝트를 variant로 승격하기 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>11장 · 신규 variant 만들기 vs 기존 프로젝트를 variant로 승격하기</title>
+  <title>11장 · 신규 variant 만들기 vs 기존 프로젝트를 베리언트(variant)로 승격하기</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -138,8 +139,8 @@
 <main>
  <article class="reading">
   <div class="chapter-eyebrow">11장</div>
-  <h1>신규 variant 만들기 vs 기존 프로젝트를 variant로 승격하기</h1>
-  <p class="lead">6장 §2에서는 co-marketing이라는 신규 variant를 처음부터 스캐폴딩하는 과정을 실습했다. 그런데 ai-workspace-standards에는 이것과는 결이 다른 두 번째 경로가 하나 더 있다. 이미 잘 돌아가고 있는, 템플릿으로 만들 생각 없이 시작했던 프로젝트를 나중에 정식 variant로 "승격"시키는 경로다. 이 장에서는 두 경로가 개념적으로 어떻게 다른지, 그리고 어떤 상황에 어느 쪽을 택해야 하는지를 다룬다.</p>
+  <h1>신규 variant 만들기 vs 기존 프로젝트를 베리언트(variant)로 승격하기</h1>
+  <p class="lead">6장 §2에서는 co-marketing이라는 신규 베리언트(variant)를 처음부터 스캐폴딩하는 과정을 실습했다. 그런데 ai-workspace-standards에는 이것과는 결이 다른 두 번째 경로가 하나 더 있다. 이미 잘 돌아가고 있는, 템플릿으로 만들 생각 없이 시작했던 프로젝트를 나중에 정식 베리언트(variant)로 "승격"시키는 경로다. 이 장에서는 두 경로가 개념적으로 어떻게 다른지, 그리고 어떤 상황에 어느 쪽을 택해야 하는지를 다룬다.</p>
   <p class="source-line">출처: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></p>
 
   <div class="keypoints">
@@ -153,7 +154,7 @@
   </div>
 
   <h2 id="s1">두 경로의 차이</h2>
-  <p>새로운 variant를 워크스페이스에 추가하는 방법은 하나가 아니다. ai-workspace-standards는 두 가지 서로 다른 출발점을 인정한다. 하나는 "아직 아무 프로젝트도 없는 상태에서, 처음부터 템플릿이 될 것을 염두에 두고 설계하는" 경로다. 다른 하나는 "원래 템플릿으로 만들 생각이 전혀 없이 시작했던 프로젝트가, 시간이 지나며 여러 팀이 손으로 복사해 쓸 만큼 검증된 뒤에야 뒤늦게 템플릿으로 승격되는" 경로다.</p>
+  <p>새로운 베리언트(variant)를 워크스페이스에 추가하는 방법은 하나가 아니다. ai-workspace-standards는 두 가지 서로 다른 출발점을 인정한다. 하나는 "아직 아무 프로젝트도 없는 상태에서, 처음부터 템플릿이 될 것을 염두에 두고 설계하는" 경로다. 다른 하나는 "원래 템플릿으로 만들 생각이 전혀 없이 시작했던 프로젝트가, 시간이 지나며 여러 팀이 손으로 복사해 쓸 만큼 검증된 뒤에야 뒤늦게 템플릿으로 승격되는" 경로다.</p>
   <p>이 둘의 차이는 단순히 "명령어가 다르다"는 수준이 아니다. 전자는 설계가 먼저고 사용은 나중이며, 후자는 사용(그리고 검증)이 먼저고 템플릿화는 나중이다. 워크스페이스가 이 두 경로를 모두 지원하는 이유는, 새로운 도메인의 에이전트팀을 만드는 실제 상황이 이 두 형태 중 하나로 수렴하기 때문이다.</p>
 
   <div class="pullquote">처음부터 만들기는 설계가 사용에 앞서고, 승격은 사용이 검증을 거쳐 설계에 앞선다.
@@ -192,10 +193,10 @@
   </div>
 
   <h2 id="s3">기존 프로젝트를 승격하는 경로</h2>
-  <p>두 번째 경로는 출발점 자체가 다르다. 어떤 팀이 특정 도메인 문제를 풀기 위해 프로젝트를 하나 만들었는데, 그 프로젝트가 다른 템플릿을 원형으로 삼지도 않았고 애초에 재사용을 염두에 두지도 않았다. 그런데 시간이 지나면서 그 프로젝트의 구성이 워낙 잘 작동해서, 사내 다른 팀들이 파일을 손으로 복사해가며 비슷한 걸 만들기 시작한다. 이런 "이미 검증된, 하지만 템플릿으로는 태어나지 않은" 프로젝트를 정식 variant로 전환하는 것이 승격의 목적이다.</p>
+  <p>두 번째 경로는 출발점 자체가 다르다. 어떤 팀이 특정 도메인 문제를 풀기 위해 프로젝트를 하나 만들었는데, 그 프로젝트가 다른 템플릿을 원형으로 삼지도 않았고 애초에 재사용을 염두에 두지도 않았다. 그런데 시간이 지나면서 그 프로젝트의 구성이 워낙 잘 작동해서, 사내 다른 팀들이 파일을 손으로 복사해가며 비슷한 걸 만들기 시작한다. 이런 "이미 검증된, 하지만 템플릿으로는 태어나지 않은" 프로젝트를 정식 베리언트(variant)로 전환하는 것이 승격의 목적이다.</p>
   <p>이 경로도 결국 같은 <code>promote-variant</code> 스킬과 <code>bun scripts/l2-to-variant-pipeline.ts --source Projects/&lt;name&gt; --variant co-&lt;name&gt; --variantType &lt;type&gt;</code> 파이프라인을 사용한다는 점에서 처음부터 만드는 경로의 Phase B와 메커니즘은 같다. 승격 전에는 <code>PROMOTION_CHECKLIST.md</code>의 조건들(<code>bun run agent:verify</code>, <code>bun scripts/validate-skills.ts</code>, <code>bun scripts/audit.ts</code> 통과 여부 등)을 모두 충족해야 한다는 게이트가 있다. 파이프라인 실행 후에는 <code>variant.json</code>의 <code>inherits_common</code> 버전 확인, 공통 파일과 중복되는 부분을 제거하는 "reconcile" 단계, 그리고 <code>.claude/</code>와 <code>.gemini/</code> 사이의 플랫폼 패리티 검증이 뒤따른다. 이 파이프라인이 자동으로 처리하지 못하는 도메인 고유 디렉터리(예: workflows/, regulations/ 같은)는 <code>_ORIGIN.md</code>가 지정한 대로 수동으로 옮겨야 한다.</p>
   <div class="note">기계적 절차는 두 경로가 같지만, "무엇을 검증하는가"는 다르다. 승격 경로에서는 이미 실전에서 쓰이고 있었다는 사실 자체가 품질의 근거가 되고, 파이프라인은 그것을 재사용 가능한 형태로 정리하는 역할을 한다.</div>
-  <p>"reconcile"과 "<code>_ORIGIN.md</code> 수동 이관"이 실제로 무엇을 하는지 구체적인 예로 풀어보자. 재무팀이 만든 <code>Projects/budget-review/</code>를 승격한다고 하면, 이 프로젝트에는 두 종류의 파일이 섞여 있다. ① PM 정의나 세션 체크리스트처럼 <code>templates/common/</code>에 이미 있는 공통 파일을 그대로 복사해 온 것, ② <code>regulations/</code> 폴더 안 사내 회계 규정 문서처럼 이 프로젝트만의 고유 자산. reconcile 단계는 ①에 해당하는 파일들을 "복사본"에서 "공통 파일을 상속하는 참조"로 되돌려, 나중에 <code>templates/common/</code>이 갱신될 때 이 variant도 함께 최신화되게 만든다. 반면 ②는 파이프라인이 그 존재 자체를 알 방법이 없으므로, 원 프로젝트에 남겨 둔 <code>_ORIGIN.md</code>의 "Manual Phase B Steps" 목록에 "regulations/ 폴더를 신규 variant로 수동 복사할 것"처럼 명시해 두고, 승격 담당자가 체크리스트를 보며 하나씩 직접 옮긴다.</p>
+  <p>"reconcile"과 "<code>_ORIGIN.md</code> 수동 이관"이 실제로 무엇을 하는지 구체적인 예로 풀어보자. 재무팀이 만든 <code>Projects/budget-review/</code>를 승격한다고 하면, 이 프로젝트에는 두 종류의 파일이 섞여 있다. ① PM 정의나 세션 체크리스트처럼 <code>templates/common/</code>에 이미 있는 공통 파일을 그대로 복사해 온 것, ② <code>regulations/</code> 폴더 안 사내 회계 규정 문서처럼 이 프로젝트만의 고유 자산. reconcile 단계는 ①에 해당하는 파일들을 "복사본"에서 "공통 파일을 상속하는 참조"로 되돌려, 나중에 <code>templates/common/</code>이 갱신될 때 이 variant도 함께 최신화되게 만든다. 반면 ②는 파이프라인이 그 존재 자체를 알 방법이 없으므로, 원 프로젝트에 남겨 둔 <code>_ORIGIN.md</code>의 "Manual Phase B Steps" 목록에 "regulations/ 폴더를 신규 베리언트(variant)로 수동 복사할 것"처럼 명시해 두고, 승격 담당자가 체크리스트를 보며 하나씩 직접 옮긴다.</p>
 
   <h2 id="s4">어느 경로를 언제 선택할 것인가</h2>
   <div class="compare-grid">

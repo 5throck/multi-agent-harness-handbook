@@ -10,6 +10,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="8장 §5 · 고도화 로드맵 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>8장 §5 · 고도화 로드맵</title>
   <style>
@@ -139,7 +140,7 @@
   </div>
 
   <h2 id="container">컨테이너 기반 서비스 연계</h2>
-  <p>현재 각 variant로 스캐폴딩된 프로젝트는 로컬 워크스페이스 안에서 Claude Code/App, Antigravity 같은 AI 코딩 도구와 직접 연동되는 방식으로만 동작한다. 하지만 실제 기업 환경에서는 프로젝트 단위로 <strong>독립적인 서비스</strong>로 배포되어야 하는 경우가 많다.</p>
+  <p>현재 각 베리언트(variant)로 스캐폴딩된 프로젝트는 로컬 워크스페이스 안에서 Claude Code/App, Antigravity 같은 AI 코딩 도구와 직접 연동되는 방식으로만 동작한다. 하지만 실제 기업 환경에서는 프로젝트 단위로 <strong>독립적인 서비스</strong>로 배포되어야 하는 경우가 많다.</p>
   <p>고도화의 핵심은, 스캐폴딩된 프로젝트가 Docker 또는 Kubernetes 환경에서 **Open WebUI 같은 프론트엔드 서비스와 연계되어 개인 단위로 지원**될 수 있어야 한다는 점이다. 각 사용자가 자신에게 할당된 에이전트 팀을 브라우저 인터페이스를 통해 호출하고, 결과를 확인하고, 세션 간 컨텍스트를 유지할 수 있는 형태다.</p>
 
   <h2 id="memory">메모리 취합과 정리</h2>
@@ -148,7 +149,7 @@
 
   <h2 id="variant-deploy">variant 배포 방식의 진화</h2>
   <p>현재 variant 배포는 <code>new-project.ts</code>에 의한 로컬 스캐폴딩 중심이고, 템플릿 갱신이 L2에 자동으로 전파되지 않는 포크 모델을 따른다. 이 방식은 의도한 차이를 보존한다는 장점이 있지만, 운영 관점에서는 템플릿의 버그 수정이나 보안 패치가 각 프로젝트에 일일이 수동 반영되어야 한다는 부담을 만든다.</p>
-  <p>고도화 방향으로는 (a) 포크 모델의 장점을 유지하면서도 보안 패치나 중요 버그 수정만 선택적으로 L2에 전파할 수 있는 **동의 기반(consent-based) 수신 모델**, (b) variant를 중앙 레지스트리에서 관리하고 <code>new-project.ts</code>가 네트워크를 통해 최신 버전을 끌어오는 **비동기 배포 파이프라인**이 거론된다.</p>
+  <p>고도화 방향으로는 (a) 포크 모델의 장점을 유지하면서도 보안 패치나 중요 버그 수정만 선택적으로 L2에 전파할 수 있는 **동의 기반(consent-based) 수신 모델**, (b) 베리언트(variant)를 중앙 레지스트리에서 관리하고 <code>new-project.ts</code>가 네트워크를 통해 최신 버전을 끌어오는 **비동기 배포 파이프라인**이 거론된다.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">

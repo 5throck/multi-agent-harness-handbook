@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="12장 · 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>12장 · 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드</title>
   <style>
@@ -427,7 +428,7 @@
       </ol>
 
       <div class="flow-box">
-        <code>variant.json</code>은 정식 variant가 스캐폴딩 대상으로 등록되기 위한 메타데이터(버전, skill_manifest, script_manifest)를 담는다. Phase A 프로토타입 단계에서는 아직 이 파일이 없거나 최소한으로만 존재하는 게 정상이다 — 이 차이 자체가 "아직 승격되지 않았다"는 신호다.
+        <code>variant.json</code>은 정식 베리언트(variant)가 스캐폴딩 대상으로 등록되기 위한 메타데이터(버전, skill_manifest, script_manifest)를 담는다. Phase A 프로토타입 단계에서는 아직 이 파일이 없거나 최소한으로만 존재하는 게 정상이다 — 이 차이 자체가 "아직 승격되지 않았다"는 신호다.
       </div>
 
       <div class="tip-box">
@@ -476,7 +477,7 @@
               <pre class="code-block">bun run agent:verify</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② 스킬 매니페스트 검사</strong> — variant가 참조하는 스킬이 실제로 존재하고 세 플랫폼(.claude/.gemini/.agents)에 고르게 배포돼 있는지 확인한다.</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② 스킬 매니페스트 검사</strong> — 베리언트(variant)가 참조하는 스킬이 실제로 존재하고 세 플랫폼(.claude/.gemini/.agents)에 고르게 배포돼 있는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
@@ -503,7 +504,7 @@
       </ol>
 
       <div class="flow-box">
-        <code>skill_manifest.variant_specific</code>은 이 variant가 공통 스킬 외에 추가로 필요로 하는 스킬을 선언하는 자리다. 여기 등록되지 않은 스킬은 승격 파이프라인의 reconcile 단계에서 누락될 위험이 있다.
+        <code>skill_manifest.variant_specific</code>은 이 베리언트(variant)가 공통 스킬 외에 추가로 필요로 하는 스킬을 선언하는 자리다. 여기 등록되지 않은 스킬은 승격 파이프라인의 reconcile 단계에서 누락될 위험이 있다.
       </div>
 
       <div class="warning-box">
@@ -570,7 +571,7 @@
       </div>
 
       <div class="warning-box">
-        이 시나리오는 실제 git 추적 워크스페이스에 실질적인 변화를 일으키는 작업이다. 정말로 variant를 공개(publish)할 의도가 있을 때만 실행하고, 단순히 흐름을 구경하려는 목적이라면 명령을 직접 실행하지 말고 읽기만 하라.
+        이 시나리오는 실제 git 추적 워크스페이스에 실질적인 변화를 일으키는 작업이다. 정말로 베리언트(variant)를 공개(publish)할 의도가 있을 때만 실행하고, 단순히 흐름을 구경하려는 목적이라면 명령을 직접 실행하지 말고 읽기만 하라.
       </div>
 
       <div class="cmd-list">
@@ -607,7 +608,7 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
         <li>
           <div class="step-content">
             <strong>최종 게이트 — validate-templates.ts</strong>
-            <p>모든 절차가 끝난 뒤 마지막으로 구조 검증을 한 번 더 돌려, 신규 variant가 워크스페이스 전체 규정을 만족하는지 확인한다.</p>
+            <p>모든 절차가 끝난 뒤 마지막으로 구조 검증을 한 번 더 돌려, 신규 베리언트(variant)가 워크스페이스 전체 규정을 만족하는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-templates.ts</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
@@ -746,7 +747,7 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> 처음부터 신규 variant를 설계하는 경로의 개념은 <a href="11_VariantAdvanced_Chapter.html#s2">11장 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/06_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
+        <strong>함께 보기:</strong> 처음부터 신규 베리언트(variant)를 설계하는 경로의 개념은 <a href="11_VariantAdvanced_Chapter.html#s2">11장 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/06_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
       </div>
 
     </div>

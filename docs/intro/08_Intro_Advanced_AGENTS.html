@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!--
-  10장 §3 · AGENTS.md 심화 — 에이전트 로스터 명세의 구조, 작성 가이드, 도구별 구현 매핑, 검증과 생애주기 연결
+  8장 §3 · AGENTS.md 심화 — 에이전트 로스터 명세의 구조, 작성 가이드, 도구별 구현 매핑, 검증과 생애주기 연결
 -->
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>10장 §3 · AGENTS.md 심화</title>
+  <title>8장 §3 · AGENTS.md 심화</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -79,24 +79,25 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">10장 §3 · AGENTS.md 심화</div>
+  <div class="nav-title">8장 §3 · AGENTS.md 심화</div>
   <a href="#spec-format" style="color:#0969da;border-left-color:#0969da;">명세 포맷</a>
   <a href="#impl-mapping">도구별 구현 매핑</a>
   <a href="#authoring-guide">작성 가이드</a>
   <a href="#verify-lifecycle">검증과 생애주기</a>
-  <div class="nav-section">10장 다른 절</div>
-  <a href="10_Intro_Advanced_Deploy.html">§1 · 배포와 SSOT</a>
-  <a href="10_Intro_Advanced_Chapter.html">§2 · 생애주기 관리</a>
-  <a href="10_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
+  <div class="nav-section">8장 다른 절</div>
+  <a href="08_Intro_Advanced_Deploy.html">§1 · 배포와 SSOT</a>
+  <a href="08_Intro_Advanced_Chapter.html">§2 · 생애주기 관리</a>
+  <a href="08_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
+  <a href="08_Intro_Advanced_ProjectUpgrade.html">§5 · L2 프로젝트 업그레이드</a>
   <div class="nav-section">다른 장</div>
   <a href="05_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
-  <a href="../enterprise/08_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
+  <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../variant-advanced/10_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">10장 §3</div>
+  <div class="chapter-eyebrow">8장 §3</div>
   <h1>AGENTS.md 심화</h1>
   <p class="lead">AGENTS.md의 명세 포맷, 도구별 구현 방식, 작성 원칙, 검증 절차를 정리한다. 5장에서 개념적으로 소개한 AGENTS.md를 실무 관점에서 심화한다.</p>
   <p class="source-line">표준 명세: <a href="https://agents.md/" target="_blank">agents.md</a> · 실습 예시: <a href="../practice/04_Practice_Examples.html">4장 §2-A</a> / <a href="../practice/04_Practice_Examples_B.html">4장 §2-B</a></p>
@@ -290,7 +291,7 @@ handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
        ═══════════════════════════════════════════════════════ -->
   <h2 id="verify-lifecycle">검증과 생애주기</h2>
 
-  <p>AGENTS.md에 에이전트를 등록하는 것은 <strong>생애주기의 Create 단계</strong>에 해당한다(10장 §2 참조). 등록된 에이전트는 다음 단계를 거친다.</p>
+  <p>AGENTS.md에 에이전트를 등록하는 것은 <strong>생애주기의 Create 단계</strong>에 해당한다(8장 §2 참조). 등록된 에이전트는 다음 단계를 거친다.</p>
 
   <table>
     <thead><tr><th>생애주기 단계</th><th>AGENTS.md에서의 동작</th><th>검증</th></tr></thead>
@@ -325,13 +326,13 @@ handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
 
   <p>에이전트를 새로 만들거나 변경할 때마다 <code>agent:verify</code>를 실행하는 것을 습관화하면, "로스터에는 있는데 실제 정의 파일이 없는" 또는 "handoff_to가 가리키는 에이전트가 삭제된" 같은 불일치를 조기에 발견할 수 있다.</p>
 
-  <p>이 검증 흐름의 자동화는 10장 §1(배포와 SSOT)에서 다루는 CI/CD 파이프라인에 <code>validate-templates.ts</code> 단계로 통합할 수 있다.</p>
+  <p>이 검증 흐름의 자동화는 8장 §1(배포와 SSOT)에서 다루는 CI/CD 파이프라인에 <code>validate-templates.ts</code> 단계로 통합할 수 있다.</p>
 
   <div class="note"><strong>FAQ:</strong> <code>bun run agent:verify</code> 실행 시 "AGENTS.md 표와 실제 <code>agents/*.md</code> 파일 목록이 어긋난다"는 오류가 나면, AGENTS.md의 에이전트 이름과 <code>.claude/agents/</code> 폴더의 파일명을 대조하고 누락된 항목을 추가하거나 불필요한 파일을 제거한다. → <a href="../faq/00_FAQ.html">FAQ</a></div>
 
   <div class="chapter-nav">
-    <a href="10_Intro_Advanced_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">10장 §2 · 생애주기 관리</div></a>
-    <a href="10_Intro_Advanced_Architecture.html" class="next"><div class="dir">다음 →</div><div class="ttl">10장 §4 · 아키텍처 심화</div></a>
+    <a href="08_Intro_Advanced_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">8장 §2 · 생애주기 관리</div></a>
+    <a href="08_Intro_Advanced_Architecture.html" class="next"><div class="dir">다음 →</div><div class="ttl">8장 §4 · 아키텍처 심화</div></a>
   </div>
  </article>
 </main>

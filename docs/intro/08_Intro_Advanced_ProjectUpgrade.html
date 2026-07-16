@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  Manual(레퍼런스)/Examples(실습)과 달리 버전 박스·코드 강조가 아니라 본문 흐름 중심이다.
+  수정할 곳: (1) <title>/장 번호/제목/리드  (2) nav(이 장의 절 + 다른 장)  (3) '이 장의 요점'
+            (4) <h2 id>/<h3> 절과 본문  (5) 이전/다음 장 링크
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8장 §5 · L2 프로젝트 업그레이드</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f6f8fa;
+      --bg3: #eef1f4;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --text-dim: #636c76;
+      --accent: #0969da;
+      --accent2: #1a7f37;
+      --accent4: #6639ba;
+      --accent6: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    nav {
+      width: 260px; min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+      padding: 20px 0;
+    }
+    nav .nav-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-dim); padding: 0 16px 8px;
+    }
+    nav a {
+      display: block; padding: 6px 16px; color: var(--text-dim);
+      text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s;
+    }
+    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
+    nav .nav-section {
+      margin-top: 12px; padding: 6px 16px 4px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim);
+    }
+    main { flex: 1; display: flex; justify-content: center; padding: 56px 48px 96px; overflow-x: hidden; }
+    .reading { width: 100%; max-width: 720px; }
+    .chapter-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 1.12rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+    .source-line { font-size: 13px; color: var(--text-dim); margin-bottom: 30px; }
+    .source-line a { color: var(--accent); text-decoration: none; }
+    .keypoints {
+      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 18px 22px; margin: 0 0 40px;
+    }
+    .keypoints .kp-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
+    .keypoints ul { margin: 0 0 0 18px; font-size: 14.5px; line-height: 1.85; }
+    h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--text);
+      margin: 52px 0 14px; scroll-margin-top: 20px; line-height: 1.35;
+    }
+    h3 { font-size: 1.12rem; font-weight: 700; color: var(--accent6); margin: 30px 0 8px; scroll-margin-top: 20px; }
+    p { margin: 14px 0; }
+    p + p { margin-top: 16px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin: 6px 0; }
+    .pullquote {
+      border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 28px 0;
+      font-size: 1.22rem; line-height: 1.6; color: #2b3138; font-weight: 600;
+    }
+    .pullquote .by { display: block; font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 8px; }
+    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    .warn { background: #fff8c5; border-left: 3px solid #d4a72c; padding: 10px 16px; border-radius: 4px; font-size: 15px; margin: 18px 0; }
+    code { font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
+    pre.code-block { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 12px 16px; overflow-x: auto; font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace; font-size: 13px; line-height: 1.55; color: #116329; margin: 6px 0 16px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th, td { padding: 8px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: var(--bg2); font-weight: 600; font-size: 13px; color: var(--text-dim); }
+    .chapter-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; border-top: 1px solid var(--border); padding-top: 24px; }
+    .chapter-nav a {
+      display: block; flex: 1; padding: 14px 18px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text); transition: border-color .15s;
+    }
+    .chapter-nav a:hover { border-color: var(--accent); text-decoration: none; }
+    .chapter-nav .dir { font-size: 12px; color: var(--text-dim); }
+    .chapter-nav .ttl { font-weight: 600; margin-top: 2px; }
+    .chapter-nav .next { text-align: right; }
+    @media (max-width: 640px) {
+      main { padding: 40px 18px 60px; }
+      .chapter-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">8장 §5 · L2 프로젝트 업그레이드</div>
+  <a href="#why">왜 필요한가 — 포크 모델의 이면</a>
+  <a href="#usage">upgrade-project.ts 사용법</a>
+  <a href="#categories">파일 처리 5분류</a>
+  <a href="#safety">안전장치 — 스냅샷과 롤백</a>
+  <a href="#vs-promotion">승격과의 방향 차이</a>
+  <div class="nav-section">8장 다른 절</div>
+  <a href="08_Intro_Advanced_Deploy.html">8장 §1 · 배포와 SSOT</a>
+  <a href="08_Intro_Advanced_Chapter.html">8장 §2 · 생애주기 관리</a>
+  <a href="08_Intro_Advanced_AGENTS.html">8장 §3 · AGENTS.md 심화</a>
+  <a href="08_Intro_Advanced_Architecture.html">8장 §4 · 아키텍처 심화</a>
+  <div class="nav-section">다른 장</div>
+  <a href="05_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
+  <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../variant-advanced/10_VariantAdvanced_Chapter.html">10장 · 신규 variant 생성</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">8장 §5</div>
+  <h1>L2 프로젝트 업그레이드</h1>
+  <p class="lead">L2 프로젝트를 만든 뒤 상위 표준(L0/L1)이 바뀌면 무슨 일이 일어날까 — 정답은 "아무 일도 안 일어난다"이다. §1에서 다룬 포크 모델 때문에, 이미 태어난 프로젝트에 새 변경을 실제로 반영하려면 <code>upgrade-project.ts</code>를 사람이 명시적으로 실행해야 한다. 이 절은 그 절차를 다룬다.</p>
+  <p class="source-line">소스: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.6.0 기준) · 관련: <a href="08_Intro_Advanced_Deploy.html#s1">§1 배포와 SSOT</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 절에서 다루는 것</div>
+    <ul>
+      <li>포크 모델에서 "업그레이드"가 왜 자동이 아니라 명령을 실행해야 하는 작업인지</li>
+      <li><code>upgrade-project.ts</code>의 기본 사용법과 <code>--dry-run</code> 우선 원칙</li>
+      <li>LOCKED·MERGE·PRESERVE·SYNC_IF_NEWER·PRUNE 5가지 파일 처리 방식</li>
+      <li>자동 git stash 스냅샷과 <code>--rollback</code>으로 되돌리는 안전장치</li>
+      <li>10장에서 다루는 "승격"과 방향이 정반대라는 점</li>
+    </ul>
+  </div>
+
+  <h2 id="why">왜 필요한가 — 포크 모델의 이면</h2>
+  <p><a href="08_Intro_Advanced_Deploy.html#s1">§1</a>에서 확인했듯, L1은 <code>new-project.ts</code>로 프로젝트를 스캐폴딩하는 시점에 딱 한 번만 내용을 전달한다. 그 이후 L2는 완전히 독립적으로 진화하며, L1이 아무리 바뀌어도 이미 만들어진 L2에는 아무것도 자동으로 반영되지 않는다.</p>
+  <p>문제는 시간이 지날수록 L1 쪽에서 훅 스크립트가 고쳐지고, 새 스킬이 추가되고, 보안 설정이 강화된다는 점이다. 이런 변경을 개별 L2 프로젝트에 반영하고 싶을 때 파일을 하나하나 손으로 대조하는 건 현실적이지 않다. <code>upgrade-project.ts</code>는 이 반영 작업을 자동화하되, 포크 모델의 핵심 원칙 — "L2가 의도적으로 다르게 고친 부분은 함부로 덮어쓰지 않는다" — 은 그대로 지킨다.</p>
+
+  <h2 id="usage">upgrade-project.ts 사용법</h2>
+  <p>가장 먼저 <code>--dry-run</code>으로 무엇이 바뀔지 미리 확인한다. 실제로 파일을 건드리지 않고 콘솔에 계획만 출력한다.</p>
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
+  <p>출력 내용에 문제가 없으면 <code>--dry-run</code>을 빼고 다시 실행한다.</p>
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
+# 선택 플래그: --variant &lt;variant&gt;  --platform claude|antigravity|both
+#            --prune-removed  --rollback</pre>
+  <p><code>--variant</code>는 프로젝트의 <code>.claude/template-version.txt</code>에 기록된 값을 자동으로 읽어오므로 대부분 생략해도 된다. 이 파일이 없는 오래된 프로젝트라면 실행 시 확인 프롬프트가 뜨고, <code>--variant</code>를 직접 지정해야 한다.</p>
+
+  <h2 id="categories">파일 처리 5분류</h2>
+  <p>스크립트는 파일을 성격에 따라 다르게 다룬다 — 전부 똑같이 "새 걸로 덮어쓰기"가 아니다.</p>
+  <table>
+    <thead><tr><th>분류</th><th>동작</th><th>대상 예시</th></tr></thead>
+    <tbody>
+      <tr><td><strong>LOCKED</strong></td><td>항상 템플릿 내용으로 덮어씀</td><td><code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code></td></tr>
+      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code> 마커로 감싼 구간만 병합, 나머지 로컬 내용은 그대로 보존</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>에 따라), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>목록에만 표시, 전혀 손대지 않음</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>docs/context.md</code>, <code>src/</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>템플릿 버전이 프로젝트 버전보다 높을 때만 복사</td><td><code>scripts/*.ts</code>(<code>@version</code> 주석), <code>agents/*.md</code>(frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRUNE(선택)</strong></td><td><code>--prune-removed</code> 지정 시, 템플릿에서 사라진 scripts/agents/skills 파일을 프로젝트에서도 제거</td><td>위 SYNC_IF_NEWER 대상과 동일한 디렉터리</td></tr>
+    </tbody>
+  </table>
+  <p>SYNC_IF_NEWER 대상 파일을 로컬에서 직접 고쳐 쓴 상태인데 템플릿 쪽 버전이 더 높으면, 스크립트는 <code>⚠️ CONFLICT</code>로 표시하면서도 결국 템플릿 내용으로 덮어쓴다. "덮어쓰기 전에 물어봐 주는" 동작이 아니라 "경고만 하고 진행하는" 동작이라는 점을 기억해야 한다 — 그래서 아래 안전장치가 중요하다.</p>
+
+  <h2 id="safety">안전장치 — 스냅샷과 롤백</h2>
+  <p>실행 전(<code>--dry-run</code>이 아닐 때) 스크립트는 자동으로 <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code>를 실행해 현재 작업 트리 상태를 스냅샷으로 남긴다. 업그레이드 결과가 마음에 들지 않으면 다음 명령으로 즉시 되돌릴 수 있다.</p>
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
+  <p>이 명령은 방금 만든 <code>pre-upgrade-snapshot-*</code> 스태시를 찾아 <code>git stash pop</code>으로 복원한다. 업그레이드 자체는 커밋을 만들지 않으므로, 결과를 확인한 뒤에는 평소처럼 <code>git diff</code>로 변경 내용을 검토하고 직접 커밋해야 한다.</p>
+  <p>마무리 단계로 <code>.claude/template-version.txt</code>가 새 버전으로 갱신되고, <code>.gitleaks.toml</code>·pre-commit 훅·<code>.gitattributes</code>(eol=lf)·<code>.gitignore</code>(.env 패턴)·<code>git core.hooksPath</code> 같은 보안 부트스트랩 항목이 자동으로 점검된다(3장 가드레일 원칙과 동일한 항목들이다). <code>core.hooksPath</code>가 잘못돼 있으면 스크립트가 스스로 고쳐준다.</p>
+
+  <h2 id="vs-promotion">승격과의 방향 차이</h2>
+  <p>10장에서 다루는 "승격"과 이번 절의 "업그레이드"는 이름이 비슷해 보이지만 방향이 정반대다.</p>
+  <ul>
+    <li><strong>승격</strong>(<code>l2-to-variant-pipeline.ts</code>, 10장) — <strong>L2 → L1</strong>. 내가 만든 프로젝트의 변경을 공식 템플릿으로 끌어올려, 다른 사람도 쓸 수 있는 variant로 만드는 작업.</li>
+    <li><strong>업그레이드</strong>(<code>upgrade-project.ts</code>, 이 절) — <strong>L1 → L2</strong>. 공식 템플릿의 최신 변경을 이미 만들어진 내 프로젝트에 끌어오는 작업.</li>
+  </ul>
+  <p>두 스크립트는 서로 반대 방향으로 파일을 흘려보낼 뿐, 어느 한쪽이 다른 쪽을 대체하지 않는다. 템플릿에 기여하고 싶다면 승격을, 이미 만든 프로젝트를 최신 상태로 유지하고 싶다면 업그레이드를 쓴다.</p>
+
+  <div class="note">
+    이 절의 스크립트 동작(플래그, 파일 분류, 안전장치)은 <code>ai-workspace-standards</code> 저장소의 <code>scripts/upgrade-project.ts</code>(v1.6.0) 소스를 직접 확인해 작성했다. 이 핸드북 저장소에는 해당 스크립트가 포함돼 있지 않으므로, 실제 실행 결과는 반드시 최신 소스와 대조해 확인한다.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Architecture.html" class="prev"><div class="dir">← 이전</div><div class="ttl">8장 §4 · 아키텍처 심화</div></a>
+    <a href="../workflows/09_Workflows_Chapter.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">9장 · 워크플로우 디자인 패턴</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+</body>
+</html>

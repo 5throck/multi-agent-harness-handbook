@@ -272,6 +272,15 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
     hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    /* ── 장 이동 ── */
+    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
+    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
+    .chapter-nav a:hover { background: var(--bg2); }
+    .chapter-nav .prev { text-align: left; }
+    .chapter-nav .next { text-align: right; }
+    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
+    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -299,6 +308,7 @@
 </nav>
 
 <main>
+  <div class="chapter-eyebrow">6장 §2</div>
   <h1>Variant 실습 예시</h1>
   <p class="subtitle">기존 variant로 실무 프로젝트를 진행해보고, 새 variant를 직접 만들어보는 실습 가이드 &nbsp;|&nbsp; <a href="04_VariantPractice_Manual.html">← 레퍼런스 문서로 돌아가기</a></p>
 
@@ -882,6 +892,11 @@ bun run agent:verify</pre>
     ai-workspace-standards main 브랜치 기준 | 2026년 7월 16일 작성<br>
     <a href="04_VariantPractice_Manual.html">← 6장 §1 · 레퍼런스로 돌아가기</a>
   </p>
+
+  <div class="chapter-nav">
+    <a href="04_VariantPractice_Manual.html" class="prev"><div class="dir">← 이전</div><div class="ttl">6장 §1 · 레퍼런스</div></a>
+    <a href="../tools/03_Tools_Manual.html" class="next"><div class="dir">다음 →</div><div class="ttl">7장 · 네 도구 비교</div></a>
+  </div>
 </main>
 
 </div>

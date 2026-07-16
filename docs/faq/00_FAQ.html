@@ -60,7 +60,7 @@
 
   <div class="q">4장 §2 실습 준비 스크립트를 돌렸는데 일부 항목이 ❌로 나온다.</div>
   <p class="a">운영체제와 무관하게 <code>setup-common.ts</code>가 체크리스트를 다시 검증해준다. Windows는 스크립트를 <strong>관리자 권한</strong>으로 실행했는지, macOS/Linux는 <code>--wezterm</code>/<code>--docker</code> 같은 선택 플래그를 빠뜨리지 않았는지 먼저 확인한다. 설치 로그는 Windows 기준 <code>%USERPROFILE%\workshop-setup-logs\</code>에 남는다.</p>
-  <span class="see">자세히: <a href="../practice/02_Practice_Examples.html#setup">4장 §준비</a></span>
+  <span class="see">자세히: <a href="../practice/02_Practice_Examples.html#setup">4장 §2-A 준비</a></span>
 
   <div class="q">Antigravity CLI를 npm으로 전역 설치하려는데 안 된다.</div>
   <p class="a">2026-06-18부로 Gemini CLI 서비스가 종료되고 Antigravity CLI(<code>agy</code>)로 대체됐다. <code>agy</code>는 별도 런타임 설치가 필요 없는 단일 컴파일 바이너리로, 압축 해제 후 PATH에 넣기만 하면 된다. npm 설치 안내는 옛 자료다.</p>
@@ -70,7 +70,7 @@
 
   <div class="q">writer 서브에이전트로 파일을 쓰게 했는데, reviewer가 "파일이 없다"고 한다.</div>
   <p class="a">writer와 reviewer를 한 메시지에서 동시에(병렬로) 호출했을 가능성이 높다. writer가 파일을 만들기도 전에 reviewer가 검토를 시도해 실패한 것이다. 의존 관계가 있는 작업은 "두 단계를 순서대로 진행해"처럼 순차 실행을 명시적으로 요청해야 한다.</p>
-  <span class="see">자세히: <a href="../practice/02_Practice_Examples.html#scenario-2">4장 D-1</a></span>
+  <span class="see">자세히: <a href="../practice/02_Practice_Examples.html#scenario-2">4장 §2-A D-1</a></span>
 
   <div class="q">Claude App에서 파일 저장 후 감사 스크립트가 자동으로 안 돈다.</div>
   <p class="a">정상이다. <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 같은 훅은 Claude App(Desktop)에서는 발화하지 않고 Claude Code(CLI) 세션에서만 자동 실행된다. Desktop App을 쓰는 팀은 훅이 하던 작업을 세션이 끝난 뒤 수동으로 실행해야 한다. 이걸 모르고 지나가면 "감사가 도는 줄 알았는데 안 돌았다"는 사고로 이어질 수 있다.</p>

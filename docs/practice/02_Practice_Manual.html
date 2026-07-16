@@ -278,6 +278,18 @@
     .platform-col h3 { margin-top: 0; }
     .platform-pair.quad { grid-template-columns: 1fr 1fr; }
     @media (max-width: 760px) { .platform-pair.quad { grid-template-columns: 1fr; } }
+    /* ── 장 이동 ── */
+    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
+    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
+    .chapter-nav a:hover { background: var(--bg2); }
+    .chapter-nav .prev { text-align: left; }
+    .chapter-nav .next { text-align: right; }
+    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
+    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
   </style>
 </head>
 <body>
@@ -303,6 +315,7 @@
 
 <!-- ── 본문 ── -->
 <main>
+  <div class="chapter-eyebrow">4장 §1</div>
   <h1>4장 §1 · 하네스 기반 멀티 에이전트 팀 활용</h1>
   <p class="subtitle">Claude Code / Claude App / Antigravity CLI / Antigravity(Desktop) 네 도구에서 서브에이전트를 정의하고, 호출하고, 병렬·자동화 단위로 확장하는 방법을 나란히 정리한 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager</a></p>
 
@@ -544,6 +557,15 @@ agy inspect
 
   <hr>
   <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 기준 | 2026년 7월</p>
+  <div class="chapter-nav">
+    <a href="../guardrails/00_Guardrails_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">3장 · 가드레일</div></a>
+    <div class="branch">
+      <div class="branch-label">4장 실습</div>
+      <a href="02_Practice_Examples.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
+      <a href="02_Practice_Examples_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
+    </div>
+    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards</div></a>
+  </div>
 </main>
 
 </div>

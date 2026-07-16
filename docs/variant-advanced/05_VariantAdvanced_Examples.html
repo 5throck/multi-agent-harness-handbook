@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>11장 §2 · 새 variant vs 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드</title>
+  <title>11장 · 새 variant vs 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -228,6 +228,15 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
     hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    /* ── 장 이동 ── */
+    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
+    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
+    .chapter-nav a:hover { background: var(--bg2); }
+    .chapter-nav .prev { text-align: left; }
+    .chapter-nav .next { text-align: right; }
+    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
+    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -235,7 +244,7 @@
 
 <nav>
   <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
-  <div class="nav-title">11장 §2 · 새 variant vs 신규 variant 승격 실습</div>
+  <div class="nav-title">11장 · 새 variant vs 신규 variant 승격 실습</div>
   <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
 
   <div class="nav-group">초급 시나리오</div>
@@ -253,12 +262,13 @@
 </nav>
 
 <main>
+  <div class="chapter-eyebrow">11장</div>
   <h1>새 variant vs 신규 variant 승격 실습 예시</h1>
   <p class="subtitle">co-marketing 프로토타입을 기준으로 두 경로를 손으로 비교해보는 실습 가이드 &nbsp;|&nbsp; <a href="05_VariantAdvanced_Chapter.html">← 레퍼런스 문서로 돌아가기</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span>ai-workspace-standards, main 브랜치</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>10장 §1에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-marketing 프로토타입에 적용해보는 실습</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>11장에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-marketing 프로토타입에 적용해보는 실습</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="05_VariantAdvanced_Chapter.html">05_VariantAdvanced_Chapter.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
@@ -560,7 +570,7 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       </div>
 
       <div class="related-cmds">
-        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">10장 §1 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
+        <strong>함께 보기:</strong> 처음부터 새 variant를 설계하는 경로의 개념은 <a href="05_VariantAdvanced_Chapter.html#s2">11장 · 처음부터 만드는 경로</a>에서, Phase A 프로토타입을 만드는 실습은 <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습</a>에서 다뤘다.
       </div>
 
     </div>
@@ -571,6 +581,11 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
     ai-workspace-standards main 브랜치 기준 | 2026년 7월 14일 작성<br>
     <a href="../index.html">← 핸드북 홈으로</a>
   </p>
+
+  <div class="chapter-nav">
+    <a href="05_VariantAdvanced_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">10장 §1 · 새 variant vs 승격</div></a>
+    <a href="../capstone/00_Capstone.html" class="next"><div class="dir">다음 →</div><div class="ttl">12장 · 통합 실습</div></a>
+  </div>
 </main>
 
 </div>

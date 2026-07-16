@@ -122,10 +122,9 @@
   <a href="#layout-reconstruction">Layout Reconstruction</a>
   <a href="#extends">extends 프론트매터 해석 순서</a>
   <a href="#boilerplate-example">보일러플레이트 전략 실전 예시</a>
-  <a href="#tier-example">모델 티어 전략 실전 예시</a>
   <a href="#tier-strategy-deep">3-티어 전략 심화</a>
-  <a href="#execution-plan-templates">실행 계획 템플릿</a>
   <a href="#platform-parity">플랫폼 패리티</a>
+  <a href="#execution-plan-templates">실행 계획 템플릿</a>
   <div class="nav-section">8장 다른 절</div>
   <a href="08_Intro_Advanced_Deploy.html">8장 §1 · 배포와 SSOT</a>
   <a href="08_Intro_Advanced_Chapter.html">8장 §2 · 생애주기 관리</a>
@@ -149,10 +148,9 @@
       <li>L2 파일이 L1을 그대로 복사하지 않고 "재생성"되는 이유(Layout Reconstruction)</li>
       <li><code>extends</code> 프론트매터가 실제로 해석되는 순서</li>
       <li>LOCKED/MERGE/PRESERVE 분류를 실제 파일에 적용한 예시</li>
-      <li>tier 배정을 실제 agents/*.md에 적용한 예시와 비용 영향</li>
-      <li>3-티어 전략의 심화 — High/Medium/Low 정의, Tier Adjustment Rules, Tier Ceiling Rule</li>
-      <li>실행 계획 템플릿 — Design Gate(Row 0), 예외 카테고리, 플랫폼 패리티 고려</li>
+      <li>3-티어 전략 — High/Medium/Low 정의, frontmatter 예시, Tier Adjustment Rules, Tier Ceiling Rule</li>
       <li><code>.claude/</code>·<code>.gemini/</code> 플랫폼 패리티가 강제되는 방법</li>
+      <li>실행 계획 템플릿 — Design Gate(Row 0), 예외 카테고리(E1~E5), 실전 예시</li>
     </ul>
   </div>
 
@@ -179,8 +177,10 @@
   </ul>
   <p>세 예시를 나란히 보면 분류 기준이 명확해진다 — <strong>바뀌면 보안·거버넌스 사고로 이어지는가(LOCKED), 조직 규칙과 프로젝트 맥락이 한 파일 안에 공존해야 하는가(MERGE), 프로젝트의 정체성 그 자체인가(PRESERVE)</strong>. 새 파일을 이 저장소의 boilerplate에 추가할 때도 이 세 질문을 순서대로 던져보면 어디에 속하는지 대부분 바로 판단된다.</p>
 
-  <h2 id="tier-example">모델 티어 전략 실전 예시</h2>
-  <p>5장에서 소개한 tier 배정을 실제 <code>agents/*.md</code> frontmatter로 보면 이렇다.</p>
+  <h2 id="tier-strategy-deep">3-티어 전략 심화 — 비용 최적화를 실행 시점에 적용하기</h2>
+  <p>5장에서 소개한 tier 배정은 <code>agents/*.md</code> frontmatter에 정적으로 정의된다. 각 에이전트 파일의 <code>tier</code> 필드는 플랫폼별 모델 별칭으로 번역되어 실행 시점에 적용된다.</p>
+
+  <h3>frontmatter 예시</h3>
   <pre class="code-block">---
 name: pm
 tier:
@@ -201,19 +201,9 @@ tier:
   claude: low
   antigravity: low
 ---</pre>
-  <p>실행 시점에는 각 플랫폼이 이 tier 값을 자기 쪽 모델 별칭으로 번역한다 — Claude 계열은 <code>high→opus</code>, <code>medium→sonnet</code>, <code>low→haiku</code>로, Antigravity 계열은 자체 모델 별칭으로 매핑한다. 이 번역이 <code>model: inherit</code> 뒤에서 자동으로 일어나기 때문에, agents/*.md를 작성하는 사람은 구체적인 모델 이름을 전혀 몰라도 되고 "이 역할이 얼마나 무거운 판단을 하는가"만 신경 쓰면 된다.</p>
-  <p>비용 영향은 체감으로 확인할 수 있다(4장 §2-A P-2 실습 참고). 정형화된 검토 작업 하나를 high로 돌리면 haiku 대비 응답이 눈에 띄게 느려지고 비용도 커지지만, 논증 구조의 허점처럼 깊은 판단이 필요한 작업에서는 낮은 티어가 표면적인 지적에 그치는 경향이 뚜렷해진다. 이 저장소가 PM·Architect에는 high, code-writer·docs-writer에는 medium, automation-engineer에는 low를 기본값으로 못박아 둔 것도 바로 이 트레이드오프를 역할 단위로 미리 조정해 둔 결과다.</p>
-
-  <h2 id="platform-parity">플랫폼 패리티 — .claude/와 .gemini/를 구조적으로 동일하게 유지하는 법</h2>
-  <p>이 저장소는 Claude 계열(<code>.claude/</code>)과 Antigravity/Gemini 계열(<code>.gemini/</code>) 두 플랫폼을 동시에 지원한다. 두 디렉터리가 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 이걸 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
-  <p>이 검사는 두 디렉터리를 구조적으로 대조해 한쪽에만 존재하는 에이전트·스킬·커맨드가 없는지 확인한다. 11장에서 다루는 승격(promote) 파이프라인도 이 검사를 승격 전 필수 게이트로 포함하고 있어서, "Claude용으로만 만들고 Antigravity용은 깜빡한" 상태로는 애초에 정식 variant가 될 수 없다. 두 플랫폼이 서로 다른 실행 방식(§1의 CLAUDE.md/GEMINI.md MERGE 예시 참고)을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
-
-  <h2 id="tier-strategy-deep">3-티어 전략 심화 — 비용 최적화를 실행 시점에 적용하기</h2>
-
-  <p>앞 절에서 tier 배정이 <code>agents/*.md</code> frontmatter에 정적으로 정의된다는 것을 확인했다. 이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다.</p>
+  <p>이 번역이 <code>model: inherit</code> 뒤에서 자동으로 일어나기 때문에, agents/*.md를 작성하는 사람은 구체적인 모델 이름을 전혀 몰라도 되고 "이 역할이 얼마나 무거운 판단을 하는가"만 신경 쓰면 된다.</p>
 
   <h3>티어 정의와 모델 매핑</h3>
-  <p>AGENTS.md에 정의된 3-티어 전략은 각 티어를 역할의 복잡도 기준으로 분류한다.</p>
   <table>
     <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th></tr></thead>
     <tbody>
@@ -222,7 +212,7 @@ tier:
       <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-4-5</td><td>gemini-3.5-flash</td></tr>
     </tbody>
   </table>
-  <p>기준선이 high인 에이전트(architect, pm)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
+  <p>이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다. 기준선이 high인 에이전트(architect, pm)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
 
   <h3>Tier Adjustment Rules — 실행 시 비용 최적화</h3>
   <p>PM이 실행 계획을 세울 때 기준선에서 벗어나는 티어 조정이 가능하다. 규칙은 간단하다.</p>
@@ -231,7 +221,7 @@ tier:
     <li><strong>업그레이드 금지</strong> — 반대로 기준선보다 높은 티어로 올리는 것은 <strong>항상 금지</strong>다. low인 automation-engineer를 high로 올려 복잡한 아키텍처를 설계하게 하는 것은 거버넌스 위반이다.</li>
     <li><strong>실패 시 복원</strong> — 다운그레이드한 작업이 실패하면, PM은 반드시 해당 에이전트의 기준선 티어를 복원하고 재시도해야 한다.</li>
   </ul>
-  <p>이 규칙의 핵심은 <strong>"에이전트 역할의 복잡도 상한은 고정되지만, 하한은 상황에 맞춰 조정할 수 있다"</strong>는 원칙이다. PM은 비용 절감을 위해 low로 내릴 수 있지만, 그 작업이 low의 역량을 넘어서면 즉시 기준선으로 되돌아간다.</p>
+  <p>이 규칙의 핵심은 <strong>"에이전트 역할의 복잡도 상한은 고정되지만, 하한은 상황에 맞춰 조정할 수 있다"</strong>는 원칙이다. PM은 비용 절감을 위해 low로 내릴 수 있지만, 그 작업이 low의 역량을 넘어서면 즉시 기준선으로 되돌아간다. 비용 영향에 대해서는 4장 §2-A P-2 실습에서 체감으로 확인할 수 있다.</p>
 
   <h3>Tier Ceiling Rule</h3>
   <p>AGENTS.md의 Phase Determination 테이블(§3.5)은 각 산출물 유형에 허용된 티어 상한을 명시한다. 예를 들어 "스크립트 구현(승인된 계획 존재)"은 Phase 4이며 담당 에이전트는 automation-engineer(low)다 — 여기에 high를 배정하면 Tier Ceiling 위반이 된다. 반면 "새 파일 설계, 스키마 정의"는 Phase 1-2이며 architect(high)가 담당한다.</p>
@@ -239,8 +229,11 @@ tier:
     Tier Ceiling Rule은 "이 작업에 가장 적합한 티어 이상은 배정하지 마라"가 아니라 "이 에이전트의 정의된 티어 이상은 사용하지 마라"이다. 역할 기반이 작업 기반이다.
   </div>
 
-  <h3 id="execution-plan-templates">실행 계획 템플릿 — 다중 에이전트 작업의 구조화된 실행 설계</h3>
+  <h2 id="platform-parity">플랫폼 패리티 — .claude/와 .gemini/를 구조적으로 동일하게 유지하는 법</h2>
+  <p>이 저장소는 Claude 계열(<code>.claude/</code>)과 Antigravity/Gemini 계열(<code>.gemini/</code>) 두 플랫폼을 동시에 지원한다. 두 디렉터리가 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 이걸 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
+  <p>이 검사는 두 디렉터리를 구조적으로 대조해 한쪽에만 존재하는 에이전트·스킬·커맨드가 없는지 확인한다. 11장에서 다루는 승격(promote) 파이프라인도 이 검사를 승격 전 필수 게이트로 포함하고 있어서, "Claude용으로만 만들고 Antigravity용은 깜빡한" 상태로는 애초에 정식 variant가 될 수 없다. 두 플랫폼이 서로 다른 실행 방식(§1의 CLAUDE.md/GEMINI.md MERGE 예시 참고)을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
 
+  <h2 id="execution-plan-templates">실행 계획 템플릿 — 다중 에이전트 작업의 구조화된 실행 설계</h2>
   <p>PM이 복잡한 작업을 여러 에이전트에 분배할 때 <strong>실행 계획(Execution Plan)</strong> 형식을 사용한다. 이 계획은 "누가 무엇을 어떤 티어로, 어떤 순서로"를 테이블로 명시하여 실행의 일관성을 보장한다.</p>
 
   <h3>표준 실행 계획 형식</h3>
@@ -282,7 +275,7 @@ tier:
       <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>sonnet</td><td></td></tr>
     </tbody>
   </table>
-  <p><strong>실행 순서</strong>: Sequential — 플랫폼 패리티를 위해 CLAUDE.md와 GEMINI.md를 함께 업데이트해야 하므로 순차 실행이다. 이 예시에서 automation-engineer에 low 티어가 배정된 것은 "정형화된 스크립트 수정"이라는 단순 작업에 Tier Adjustment Rule을 적용한 결과다.</p>
+  <p><strong>실행 순서</strong>: Sequential — <a href="#platform-parity">플랫폼 패리티</a>를 위해 CLAUDE.md와 GEMINI.md를 함께 업데이트해야 하므로 순차 실행이다. automation-engineer에 low가 배정된 것은 Tier Adjustment Rule에 따른 것이다.</p>
 
   <div class="note">
     이 절은 §1에서 소개한 개념(L0→L1→L2, 포크 모델, LOCKED/MERGE/PRESERVE)의 <strong>실제 동작 방식과 구체적 예시</strong>를 다룬다 — 여기 나온 내용은 모두 현재 구현이다. 아직 구현되지 않은 고도화 방향(컨테이너 연계, 메모리 취합, 보일러플레이트/티어 전략의 향후 확장 등)은 <a href="08_Intro_Advanced_Roadmap.html">§5 고도화 로드맵</a>에서 별도로 다룬다.

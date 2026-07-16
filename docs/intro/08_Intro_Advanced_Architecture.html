@@ -182,24 +182,10 @@
 
   <h3>frontmatter 예시</h3>
   <pre class="code-block">---
-name: pm
-tier:
-  claude: high
-  antigravity: high
----
-
----
-name: code-writer
-tier:
-  claude: medium
-  antigravity: medium
----
-
----
-name: automation-engineer
-tier:
-  claude: low
-  antigravity: low
+name: pm                       # pm, code-writer, automation-engineer ...
+tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨)
+  claude: high                 #   high = claude-opus-4-7
+  antigravity: high            #   high = gemini-3.1-pro
 ---</pre>
   <p>이 번역이 <code>model: inherit</code> 뒤에서 자동으로 일어나기 때문에, agents/*.md를 작성하는 사람은 구체적인 모델 이름을 전혀 몰라도 되고 "이 역할이 얼마나 무거운 판단을 하는가"만 신경 쓰면 된다.</p>
 

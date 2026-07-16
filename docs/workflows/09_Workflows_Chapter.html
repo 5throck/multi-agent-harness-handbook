@@ -145,9 +145,9 @@
   <a href="#s3">실제 워크플로우 사례</a>
   <a href="#s4">워크플로우 선택 가이드</a>
   <div class="nav-section">다른 장</div>
-  <a href="../tools/03_Tools_Manual.html">7장 · 도구 비교</a>
-  <a href="../enterprise/03_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
-  <a href="../intro/04_Intro_Advanced_Chapter.html">10장 · 배포와 SSOT</a>
+  <a href="../tools/07_Tools_Manual.html">7장 · 도구 비교</a>
+  <a href="../enterprise/08_Enterprise_Chapter.html">8장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../intro/10_Intro_Advanced_Chapter.html">10장 · 배포와 SSOT</a>
   <a href="../glossary/00_Glossary.html">용어집</a>
   <a href="../faq/00_FAQ.html">FAQ</a>
 </nav>
@@ -251,7 +251,7 @@
     </svg>
   </div>
 
-  <p>이 장에서는 2장의 패턴을 이미 알고 있다고 전제한다. 모르는 용어가 나오면 <a href="../concepts/01_Concepts_Chapter.html#s4">2장 §4 오케스트레이션 패턴</a>과 <a href="../concepts/01_Concepts_Chapter.html#s4b">§4b 동적 팀 구성</a>을 먼저 읽고 오자. 다음 절에서는 패턴을 넘어, 워크플로우를 구성하는 6가지 요소를 정리한다.</p>
+  <p>이 장에서는 2장의 패턴을 이미 알고 있다고 전제한다. 모르는 용어가 나오면 <a href="../concepts/02_Concepts_Chapter.html#s4">2장 §4 오케스트레이션 패턴</a>과 <a href="../concepts/02_Concepts_Chapter.html#s4b">§4b 동적 팀 구성</a>을 먼저 읽고 오자. 다음 절에서는 패턴을 넘어, 워크플로우를 구성하는 6가지 요소를 정리한다.</p>
 
 
   <h2 id="s2">워크플로우 구성요소</h2>
@@ -263,7 +263,7 @@
     <div class="variant-row"><span class="variant-name">분기 (Branch)</span><span>조건에 따라 경로가 갈라지는 지점. 라우팅 패턴의 실제 적용 — 예를 들어 "변경 규모가 작으면 빠른 리뷰, 크면 전체 검토"처럼 요청의 성질에 따라 다른 에이전트나 다음 단계로 보낸다.</span></div>
     <div class="variant-row"><span class="variant-name">병렬 (Fan-out)</span><span>독립적인 하위 작업을 동시에 실행하는 지점. 팬아웃 패턴의 구조적 표현이다. 실행 시간은 가장 느린 하위 작업에 수렴한다. 예: 보안·성능·가독성 세 관점을 동시에 검토.</span></div>
     <div class="variant-row"><span class="variant-name">취합 (Fan-in)</span><span>병렬로 나뉘어 실행된 여러 결과를 하나로 모으는 단계. <strong>2장에서 다루지 않은 개념</strong>이다. 취합 시 어떤 결과를 우선할지(투표), 어떻게 병합할지(합산/선택)를 결정하는 규칙이 필요하다. 예: 세 리뷰어의 의견을 종합해 최종 피드백으로 작성.</span></div>
-    <div class="variant-row"><span class="variant-name">게이트 (Gate)</span><span>다음 단계로 넘어가기 전에 검증 또는 인간 승인을 요구하는 지점. <a href="../guardrails/00_Guardrails_Chapter.html">3장 가드레일</a>의 실제 적용 지점이다. 되돌리기 어려운 작업(파일 수정·배포·PR 병합) 앞에 둔다.</span></div>
+    <div class="variant-row"><span class="variant-name">게이트 (Gate)</span><span>다음 단계로 넘어가기 전에 검증 또는 인간 승인을 요구하는 지점. <a href="../guardrails/03_Guardrails_Chapter.html">3장 가드레일</a>의 실제 적용 지점이다. 되돌리기 어려운 작업(파일 수정·배포·PR 병합) 앞에 둔다.</span></div>
     <div class="variant-row"><span class="variant-name">루프 (Loop)</span><span>검증 단계에서 거부(reject)된 경우 이전 단계로 돌아가는 반복 구조. 평가자-최적화 패턴(검증-후-적용)의 구조적 표현이다. 최대 반복 횟수를 정해두어야 무한 루프를 방지할 수 있다.</span></div>
   </div>
 
@@ -305,7 +305,7 @@
         <text x="460" y="96" text-anchor="middle" font-size="9" fill="#636c76">거부 시 루프</text>
       </g>
     </svg>
-    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-develop</code>의 6단계 거버넌스 파이프라인과 구조적으로 유사하다. <a href="../variant-practice/04_VariantPractice_Manual.html">6장 §1</a> 참조.</p>
+    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-develop</code>의 6단계 거버넌스 파이프라인과 구조적으로 유사하다. <a href="../variant-practice/06_VariantPractice_Manual.html">6장 §1</a> 참조.</p>
   </div>
 
   <!-- 사례 2: 시장 조사 보고서 -->
@@ -334,7 +334,7 @@
         <text x="370" y="96" text-anchor="middle" font-size="9" fill="#636c76">보완 필요 시</text>
       </g>
     </svg>
-    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-consult</code>의 7단계(Phase 0~6) 파이프라인 구조를 기반으로 한다. <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습(G-1)</a>에서 직접 경험할 수 있다.</p>
+    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-consult</code>의 7단계(Phase 0~6) 파이프라인 구조를 기반으로 한다. <a href="../variant-practice/06_VariantPractice_Examples.html">6장 §2 실습(G-1)</a>에서 직접 경험할 수 있다.</p>
   </div>
 
   <!-- 사례 3: 프레젠테이션 제작 -->
@@ -372,7 +372,7 @@
         <rect x="575" y="32" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">사람</text>
       </g>
     </svg>
-    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-deck</code>의 11단계(Stage 0~11) 파이프라인 그대로다. <a href="../variant-practice/04_VariantPractice_Examples.html">6장 §2 실습(G-2)</a>에서 한식 세계화 프레젠테이션으로 직접 경험할 수 있다.</p>
+    <p style="font-size:13px;color:var(--text-dim)">variant: <code>co-deck</code>의 11단계(Stage 0~11) 파이프라인 그대로다. <a href="../variant-practice/06_VariantPractice_Examples.html">6장 §2 실습(G-2)</a>에서 한식 세계화 프레젠테이션으로 직접 경험할 수 있다.</p>
   </div>
 
   <!-- 사례 4: 이슈 트리아지 -->
@@ -428,7 +428,7 @@
         <text x="117" y="93" text-anchor="middle" font-size="9" fill="#636c76">위반 시 루프</text>
       </g>
     </svg>
-    <p style="font-size:13px;color:var(--text-dim)">ai-workspace-standards의 CONSTITUTION.md에 정의된 PR 워크플로우를 에이전트가 자동화하는 구조다. <a href="../intro/04_Intro_Chapter.html#s2">10장 §2 핵심 파일</a>와 <a href="../intro/04_Intro_Advanced_Deploy.html">10장 §1 배포와 SSOT</a>에서 배포 파이프라인과 함께 다룬다.</p>
+    <p style="font-size:13px;color:var(--text-dim)">ai-workspace-standards의 CONSTITUTION.md에 정의된 PR 워크플로우를 에이전트가 자동화하는 구조다. <a href="../intro/05_Intro_Chapter.html#s2">10장 §2 핵심 파일</a>와 <a href="../intro/10_Intro_Advanced_Deploy.html">10장 §1 배포와 SSOT</a>에서 배포 파이프라인과 함께 다룬다.</p>
   </div>
 
   <h3 id="s3-note">사례에서 보이는 공통 패턴</h3>
@@ -563,15 +563,15 @@
   </div>
 
   <div class="note">
-    이 장의 워크플로우 사례는 <a href="practice/02_Practice_Examples.html">4장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="variant-practice/04_VariantPractice_Examples.html">6장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="capstone/00_Capstone.html">13장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
+    이 장의 워크플로우 사례는 <a href="../practice/04_Practice_Examples.html">4장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="../variant-practice/06_VariantPractice_Examples.html">6장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="../capstone/13_Capstone.html">13장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
   </div>
 
   <div class="chapter-nav">
-    <a href="../tools/03_Tools_Manual.html" class="prev">
+    <a href="../tools/07_Tools_Manual.html" class="prev">
       <div class="dir">← 이전 장</div>
       <div class="ttl">7장 · 네 도구 비교</div>
     </a>
-    <a href="../intro/04_Intro_Advanced_Chapter.html" class="next">
+    <a href="../intro/10_Intro_Advanced_Chapter.html" class="next">
       <div class="dir">다음 장 →</div>
       <div class="ttl">10장 · 배포와 SSOT</div>
     </a>

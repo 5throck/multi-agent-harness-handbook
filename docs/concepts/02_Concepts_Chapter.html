@@ -122,8 +122,8 @@
   <a href="#s4b">동적 팀 구성과 다양한 워크플로우</a>
   <a href="#s5">도구를 넘나드는 하네스 — AGENTS.md</a>
   <div class="nav-section">다른 장</div>
-  <a href="../intro/00_Why_AI_Chapter.html">1장 · 도입</a>
-  <a href="../guardrails/00_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
+  <a href="../intro/01_Why_AI_Chapter.html">1장 · 도입</a>
+  <a href="../guardrails/03_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
   <a href="../glossary/00_Glossary.html">용어집</a>
 </nav>
 
@@ -603,7 +603,7 @@
   <h3>같은 하네스 위에서 다양한 워크플로우를 구현할 수 있다</h3>
   <p>하네스 엔지니어링이 정해 두는 것은 "오케스트레이터가 있고, 스페셜리스트를 부르고, 핸드오프로 정보를 넘긴다"는 <em>뼈대</em>뿐이다. 그 뼈대 위에 몇 단계짜리 파이프라인을 몇 명으로 구성할지는 도메인마다 완전히 다르게 설계할 수 있다. 5장에서 다룰 ai-workspace-standards의 variant들이 이를 실증한다. 같은 하네스 원리로 만들어졌는데도 <code>co-develop</code>은 PM·Architect·Designer·Code Writer·Test Runner·Security Monitor가 참여하는 6단계 거버넌스 파이프라인이고, <code>co-design</code>은 5단계 반복 워크플로우, <code>co-deck</code>은 11단계 워크플로우로 완전히 다른 모양을 하고 있다. 하나의 "정답 워크플로우"를 강요하지 않고, 도메인이 요구하는 단계 수·참여자·검증 강도에 맞춰 워크플로우 자체를 새로 설계할 수 있다는 것이 하네스 엔지니어링의 핵심 장점이다.</p>
   <p>이는 §4의 다섯 오케스트레이션 패턴(프롬프트 체이닝·라우팅·병렬화·오케스트레이터-워커·평가자-최적화)이 서로 배타적이지 않고 <strong>한 워크플로우 안에서 자유롭게 조합</strong>될 수 있다는 뜻이기도 하다. 예를 들어 코드 리뷰 워크플로우는 먼저 라우팅으로 변경 규모가 작은지 큰지 분류하고, 큰 변경이면 오케스트레이터-워커가 영향받는 파일들을 동적으로 나눠 각각 팬아웃으로 네 관점을 동시에 검토한 뒤, 그 결과를 순서대로 파이프라인 처리하며 문서화하고, 마지막에는 평가자-최적화(검증-후-적용)로 실제 반영 여부를 결정하는 식으로 다섯 패턴을 한 흐름 안에 섞어 쓸 수 있다.</p>
-  <div class="note">동적 팀 구성과 워크플로우 다양성은 결국 같은 원칙의 두 얼굴이다. 하네스는 "무엇을 지킬지"만 고정하고, "누가 언제 어떻게 움직일지"는 작업과 도메인이 결정하게 비워 둔다. 이 유연성이 없었다면 variant마다 처음부터 완전히 다른 자동화 시스템을 새로 짜야 했을 것이다. 이 내용을 직접 손으로 확인해보고 싶다면 <a href="../practice/02_Practice_Examples.html#scenario-2b">4장 §2 실습의 D-2 시나리오</a>에서 같은 서브에이전트 팀으로 요청만 바꿔가며 팀 구성과 워크플로우가 실제로 달라지는 것을 관찰한다.</div>
+  <div class="note">동적 팀 구성과 워크플로우 다양성은 결국 같은 원칙의 두 얼굴이다. 하네스는 "무엇을 지킬지"만 고정하고, "누가 언제 어떻게 움직일지"는 작업과 도메인이 결정하게 비워 둔다. 이 유연성이 없었다면 variant마다 처음부터 완전히 다른 자동화 시스템을 새로 짜야 했을 것이다. 이 내용을 직접 손으로 확인해보고 싶다면 <a href="../practice/04_Practice_Examples.html#scenario-2b">4장 §2 실습의 D-2 시나리오</a>에서 같은 서브에이전트 팀으로 요청만 바꿔가며 팀 구성과 워크플로우가 실제로 달라지는 것을 관찰한다.</div>
 
   <h2 id="s5">도구를 넘나드는 하네스 — AGENTS.md</h2>
   <p>지금까지 설명한 오케스트레이터·스페셜리스트·핸드오프는 특정 도구에 종속된 개념이 아니다. 문제는 그동안 도구마다 이 하네스를 설정하는 방식이 제각각이었다는 점이다. Claude Code는 <code>CLAUDE.md</code>를, Cursor는 <code>.cursorrules</code>를, GitHub Copilot은 <code>.github/copilot-instructions.md</code>를 읽는 식이어서, 여러 도구를 함께 쓰는 팀은 같은 내용을 파일마다 중복해서 유지해야 했다.</p>
@@ -664,8 +664,8 @@
   <p>다음 장으로 넘어가기 전에, 이 팀에게 실제로 도구를 쥐여 줄 때 지켜야 할 안전장치부터 짚어야 한다. 3장은 서브에이전트에게 무엇을 허용하고 무엇을 막을지, 사람이 반드시 확인해야 하는 지점은 어디인지를 다룬다. 그 뒤 4장에서 이 개념들을 실제로 Claude App/Antigravity Desktop을 중심으로 만들어 보면서(Claude Code·Antigravity CLI 절차도 함께), 오케스트레이터·스페셜리스트·핸드오프가 도구마다 어떻게 표현되는지 확인한다.</p>
 
   <div class="chapter-nav">
-    <a href="../intro/00_Why_AI_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">1장 · 도입</div></a>
-    <a href="../guardrails/00_Guardrails_Chapter.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">3장 · 가드레일과 권한 모델</div></a>
+    <a href="../intro/01_Why_AI_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">1장 · 도입</div></a>
+    <a href="../guardrails/03_Guardrails_Chapter.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">3장 · 가드레일과 권한 모델</div></a>
   </div>
 
 <div class="video-refs">

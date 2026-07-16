@@ -285,11 +285,11 @@
   <div class="nav-section">참고</div>
   <a href="#refs">참고 링크</a>
   <div class="nav-section">형제 문서</div>
-  <a href="02_Practice_Manual_A.html">4장 §1-A · Claude 중심</a>
-  <a href="02_Practice_Manual_B.html">4장 §1-B · Antigravity 중심</a>
+  <a href="04_Practice_Manual_A.html">4장 §1-A · Claude 중심</a>
+  <a href="04_Practice_Manual_B.html">4장 §1-B · Antigravity 중심</a>
   <div class="nav-section">다른 장</div>
-  <a href="../guardrails/00_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
-  <a href="../intro/04_Intro_Chapter.html">5장 · 도입</a>
+  <a href="../guardrails/03_Guardrails_Chapter.html">3장 · 가드레일과 권한 모델</a>
+  <a href="../intro/05_Intro_Chapter.html">5장 · 도입</a>
 </nav>
 
 <!-- ── 본문 ── -->
@@ -306,7 +306,7 @@
     <div class="version-row"><span class="vlabel">개정 시 확인 사항</span><span class="vvalue">Claude Code Agent Teams와 Antigravity CLI/Agent Manager 모두 빠르게 변화하는 기능이라 플래그명·명령·UI 구성이 릴리스마다 바뀔 수 있으니 최신 릴리스 노트를 우선 확인</span></div>
   </div>
 
-  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 Gemini CLI 서비스를 종료했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 장은 그 이전에는 Gemini CLI를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI/Desktop으로 전면 갱신했다. 자세한 도구별 특성 비교는 <a href="../tools/03_Tools_Manual.html">도구 비교</a>를 참고한다.</div>
+  <div class="warning-box">2026-06-18을 기점으로 Google은 개인(Free/Pro/Ultra) 사용자 대상 Gemini CLI 서비스를 종료했고, 그 자리를 <strong>Antigravity CLI(<code>agy</code>)</strong>가 대체했다. 이 장은 그 이전에는 Gemini CLI를 기준으로 작성됐으나, 현재 시점 기준으로 Antigravity CLI/Desktop으로 전면 갱신했다. 자세한 도구별 특성 비교는 <a href="../tools/07_Tools_Manual.html">도구 비교</a>를 참고한다.</div>
 
   <!-- ── 개념/명령 트리 ── -->
   <h2 id="tree">개요 — 전체 구조</h2>
@@ -382,8 +382,8 @@
   <p>Anthropic 계열(Claude App/Claude Code)은 프로젝트 폴더 아래에 마크다운 파일 하나로 서브에이전트 하나를 미리 정의해 둔다. Google 계열(Antigravity Desktop/CLI)은 별도의 정의 파일이 없다 — 오케스트레이터가 주어진 목표를 보고 그때그때 서브에이전트를 만든다. 아래에서는 Claude App과 Antigravity(Desktop)를 기준으로 먼저 설명하고, 각각의 CLI 대응을 이어서 소개한다.</p>
 
   <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
-    Claude 계열의 구체적인 정의·호출 방식은 <a href="02_Practice_Manual_A.html">§1-A Claude 중심</a>에서,
-    Antigravity 계열의 구체적인 방식은 <a href="02_Practice_Manual_B.html">§1-B Antigravity 중심</a>에서 다룬다.
+    Claude 계열의 구체적인 정의·호출 방식은 <a href="04_Practice_Manual_A.html">§1-A Claude 중심</a>에서,
+    Antigravity 계열의 구체적인 방식은 <a href="04_Practice_Manual_B.html">§1-B Antigravity 중심</a>에서 다룬다.
   </p>
 
   <table>
@@ -419,8 +419,8 @@
   <p>Anthropic 계열(Claude App/Claude Code)은 <code>Agent</code>/<code>Task</code> 툴로 별도 컨텍스트의 서브에이전트를 스폰한다. Google 계열(Antigravity Desktop/CLI)은 Agent Manager UI 또는 슬래시 커맨드로 에이전트에게 목표를 위임한다.</p>
 
   <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
-    Claude 계열의 구체적인 호출 방식은 <a href="02_Practice_Manual_A.html#section-2">§1-A 섹션 2</a>에서,
-    Antigravity 계열의 구체적인 방식은 <a href="02_Practice_Manual_B.html#section-2">§1-B 섹션 2</a>에서 다룬다.
+    Claude 계열의 구체적인 호출 방식은 <a href="04_Practice_Manual_A.html#section-2">§1-A 섹션 2</a>에서,
+    Antigravity 계열의 구체적인 방식은 <a href="04_Practice_Manual_B.html#section-2">§1-B 섹션 2</a>에서 다룬다.
   </p>
 
   <hr>
@@ -433,8 +433,8 @@
   <div class="warning-box">같은 디렉터리·Workspace에서 여러 에이전트를 동시에 돌리면 "인지적 중첩(cognitive overlap)"이 발생할 수 있다 — 한 에이전트가 같은 폴더에서 작업 중인 다른 에이전트의 결과를 자기 작업 맥락으로 착각(hallucination)하는 문제다. Workspace나 worktree로 에이전트를 분리하는 것이 권장 관행이며, 예외적으로 넘어갈 수 있는 사소한 문제가 아니다.</div>
 
   <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
-    Claude 계열의 병렬 실행 방식은 <a href="02_Practice_Manual_A.html#section-3">§1-A 섹션 3</a>에서,
-    Antigravity 계열의 병렬 실행 방식은 <a href="02_Practice_Manual_B.html#section-3">§1-B 섹션 3</a>에서 다룬다.
+    Claude 계열의 병렬 실행 방식은 <a href="04_Practice_Manual_A.html#section-3">§1-A 섹션 3</a>에서,
+    Antigravity 계열의 병렬 실행 방식은 <a href="04_Practice_Manual_B.html#section-3">§1-B 섹션 3</a>에서 다룬다.
   </p>
 
   <table>
@@ -458,8 +458,8 @@
   <p>Claude Code(CLI)는 이벤트 훅(PostToolUse/TeammateIdle/TaskCompleted)을 자동 발화하지만, Claude App과 Antigravity Desktop은 훅을 자동 발화하지 않는다. Antigravity CLI는 <code>agy -p</code>로 비대화형 실행, <code>agy inspect</code>로 설정 점검을 제공한다.</p>
 
   <p style="background:#f0f7ff;border-left:3px solid #0969da;padding:8px 14px;border-radius:4px;font-size:13.5px;">
-    Claude 계열의 자동화/훅 세부는 <a href="02_Practice_Manual_A.html#section-4">§1-A 섹션 4</a>에서,
-    Antigravity 계열의 자동화/훅 세부는 <a href="02_Practice_Manual_B.html#section-4">§1-B 섹션 4</a>에서 다룬다.
+    Claude 계열의 자동화/훅 세부는 <a href="04_Practice_Manual_A.html#section-4">§1-A 섹션 4</a>에서,
+    Antigravity 계열의 자동화/훅 세부는 <a href="04_Practice_Manual_B.html#section-4">§1-B 섹션 4</a>에서 다룬다.
   </p>
 
   <p style="background:#fff8c5;border-left:3px solid #d4a72c;padding:8px 14px;border-radius:4px;font-size:13.5px;color:#5c3900;">실무 팁: Antigravity에는 계산된 작업량(work done)에 기반한, 주기적으로 갱신되는 사용량 쿼터가 있다. 정확한 수치는 계정·플랜마다 다를 수 있으므로 여러 에이전트를 장시간 병렬로 돌리는 작업을 계획할 때는 이 점을 감안하는 편이 안전하다.</p>
@@ -475,19 +475,19 @@
     <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using AGY CLI 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager 공식 문서</a></li>
-    <li>⚙️ <a href="02_Practice_Examples.html">4장 §2 실습 예시 — 02_Practice_Examples.html</a></li>
+    <li>⚙️ <a href="04_Practice_Examples.html">4장 §2 실습 예시 — 04_Practice_Examples.html</a></li>
   </ul>
 
   <hr>
   <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 기준 | 2026년 7월</p>
   <div class="chapter-nav">
-    <a href="../guardrails/00_Guardrails_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">3장 · 가드레일</div></a>
+    <a href="../guardrails/03_Guardrails_Chapter.html" class="prev"><div class="dir">← 이전</div><div class="ttl">3장 · 가드레일</div></a>
     <div class="branch">
       <div class="branch-label">4장 실습</div>
-      <a href="02_Practice_Examples.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
-      <a href="02_Practice_Examples_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
+      <a href="04_Practice_Examples.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
+      <a href="04_Practice_Examples_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
     </div>
-    <a href="../intro/04_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards</div></a>
+    <a href="../intro/05_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards</div></a>
   </div>
 </main>
 

@@ -61,7 +61,7 @@
 
 <!-- ── 사이드바 ── -->
 <nav>
-  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">4장 §2-A · Claude 중심 실습</div>
   <a href="#setup">🛠 준비: 필요한 프로그램 설치</a>
   <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
@@ -96,7 +96,7 @@
     <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
   </div>
 
-  <div class="note" style="background:#f0f7ff;border-left:3px solid #0969da;padding:12px 18px;border-radius:4px;font-size:14px;margin:0 0 32px;">
+  <div class="note" >
     <strong>이 과정 전체가 따르는 원칙</strong> — 아래 모든 시나리오는 먼저 서브에이전트의 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 적고, 그 명세를 Claude 계열에서는 사전 정의 서브에이전트 파일로 "구현"하는 순서를 따른다(2장 §5 AGENTS.md 참고). 정의는 하나, 실행 방식만 도구별로 다르다는 원칙을 손으로 확인하는 것이 이 실습의 핵심 목표다. Antigravity에서의 대응 방법은 <a href="04_Practice_Examples_B.html">4장 §2-B</a>를 참조한다.
   </div>
 
@@ -104,7 +104,7 @@
   <h2 id="setup">준비: 필요한 프로그램 설치</h2>
   <p>아래 실습은 Claude App(Desktop)과 Claude Code(CLI) 위주로 진행된다. 로컬 환경에 이 도구들이 아직 없다면, 이 핸드북에 함께 담아 둔 환경 설정 자동화 도구인 <a href="../setup/SETUP_ko.html">setup 가이드</a>가 이 장의 실습에 정확히 필요한 구성을 자동으로 설치해준다. 안내에 따라 스크립트를 내려받아 로컬에서 실행하면 된다.</p>
 
-  <div class="platform-block" style="border-top:3px solid #d4a72c;">
+  <div class="platform-block" >
     <div class="platform-block-title">📦 설치 전 확인 사항</div>
     <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">스크립트를 실행하기 전에 <a href="../setup/SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>를 먼저 읽어본다. 이 문서에는 다음 전제 조건이 정리되어 있다.</p>
     <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
@@ -317,7 +317,7 @@ EOF</pre>
         G-1을 마친 실무자가 같은 <code>harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>에 먼저 명세한 뒤, Claude App에 사전 정의 서브에이전트로 구현한다. writer가 먼저 초안을 쓰고 reviewer가 그 결과를 비평하는 파이프라인을 순서를 지켜 지휘하게 한다.
       </div>
 
-      <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+      <div class="note">
         <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
@@ -453,7 +453,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
       </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">동적 라우팅 분기 흐름도 — 같은 팀, 다른 요청</div>
+        <div >동적 라우팅 분기 흐름도 — 같은 팀, 다른 요청</div>
         <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
           <defs>
             <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
@@ -675,7 +675,7 @@ EOF</pre>
         </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">권한 설정 전후 비교 — 최소 권한 원칙</div>
+        <div >권한 설정 전후 비교 — 최소 권한 원칙</div>
         <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <defs>
             <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
@@ -768,7 +768,7 @@ EOF</pre>
       </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <div style="text-align:center;font-size:14px;font-weight:700;color:#1f2328;margin-bottom:16px;">모델 티어 비교 차트</div>
+        <div >모델 티어 비교 차트</div>
         <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <!-- Table header -->
           <rect x="0" y="0" width="520" height="30" rx="6" fill="#eef1f4"/>
@@ -896,7 +896,7 @@ EOF</pre>
   <h2 id="cleanup">실습 마무리 정리</h2>
   <p>5개 시나리오를 모두 마쳤다면, <code>harness-lab/</code> 폴더를 어떻게 할지 정리한다. 다음 장(5장)에서 새 실습 폴더를 쓰기 때문에 반드시 남겨둘 필요는 없지만, 지금까지 만든 <code>AGENTS.md</code>·서브에이전트 정의를 비교해보고 싶다면 삭제 전에 한 번 훑어보는 것을 권장한다.</p>
 
-  <div class="platform-block" style="border-top:3px solid #d4a72c;">
+  <div class="platform-block" >
     <div class="platform-block-title">🧹 harness-lab 폴더 정리</div>
     <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">더 이상 필요 없다면 폴더 전체를 삭제한다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
     <div style="position:relative">
@@ -937,8 +937,8 @@ Remove-Item -Recurse -Force harness-lab</pre>
     <a href="04_Practice_Manual_A.html" class="prev"><div class="dir">← 이전</div><div class="ttl">4장 §1-A · Claude 상세</div></a>
     <div class="branch">
       <div class="branch-label">4장 §2</div>
-      <a href="04_Practice_Examples_A.html" style="border-color:#1a7f37;color:#1a7f37;">Claude (A)</a>
-      <a href="04_Practice_Examples_B.html" style="border-color:#6639ba;color:#6639ba;">Antigravity (B)</a>
+      <a href="04_Practice_Examples_A.html" >Claude (A)</a>
+      <a href="04_Practice_Examples_B.html" >Antigravity (B)</a>
     </div>
     <a href="../intro/05_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">5장 · ai-workspace-standards 소개</div></a>
   </div>
@@ -957,6 +957,6 @@ function copyCode(btn) {
 }
 </script>
   <script src="../assets/inpage-search.js" defer></script>
-<script src="assets/dark-mode-toggle.js"></script>
+<script src="../assets/dark-mode-toggle.js"></script>
 </body>
 </html>

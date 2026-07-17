@@ -24,7 +24,7 @@
 <div class="layout">
 
 <nav>
-  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">5장 · ai-workspace-standards 소개</div>
   <a href="#s1">저장소가 무엇인가</a>
   <a href="#s1b">전체 아키텍처 한눈에 보기</a>
@@ -64,9 +64,9 @@
   <h2 id="s1b">전체 아키텍처 한눈에 보기</h2>
   <p>이후 절에서 4대 핵심 파일, variant, L0→L1→L2를 하나씩 뜯어보기 전에, 이 조각들이 실제로 저장소 안 어디에 어떤 이름으로 앉아 있는지부터 통째로 보고 시작하는 게 방향을 잃지 않는 데 도움이 된다. 워크스페이스 루트를 클론하면 아래와 같은 최상위 구조가 나온다.</p>
 
-  <div class="tree-box" style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
-  <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">C:\git\  (워크스페이스 루트 = L0)
+  <pre style="font-family:var(--font-mono);font-size:13px;line-height:1.7;color:var(--text);white-space:pre;">C:\git\  (워크스페이스 루트 = L0)
 ├── CONSTITUTION.md          ← §2: 무엇을 지켜야 하는가 (마스터 표준, L0 원본)
 ├── CLAUDE.md                ← §2: Claude Code/App에서 어떻게 실행하는가
 ├── GEMINI.md                ← §2: Antigravity CLI/Desktop에서 어떻게 실행하는가
@@ -138,8 +138,8 @@
     <div class="variant-row"><span class="variant-name">co-work</span><span>일반 협업/문서 작업용. Analyst·Technical Writer·Content Writer 등 6단계 비동기 워크플로우.</span></div>
     <div class="variant-row"><span class="variant-name">co-security</span><span>레드팀/침투 테스트용. Red Team Lead·Pentester·Threat Modeler 등 6단계 파이프라인.</span></div>
     <div class="variant-row"><span class="variant-name">co-consult</span><span>전략 컨설팅용. PM(Engagement Leader)이 지휘하는 7단계(Phase 0~6) 워크플로우. Strategy Analyst·Change Management Partner·Industry Expert·SME 등 10명의 전문 에이전트로 구성. 시장 분석 → 조직 진단 → 교차 검증(Phase 1.5) → 제안 승인 게이트(Phase 2) → 실무 솔루션 설계 → 납품 → PR/인도까지 컨설팅 프로젝트 전 과정을 다룬다.</span></div>
-    <div class="variant-row"><span class="variant-name">co-deck <span class="badge" style="font-size:10px;background:#fff8c5;color:#953800;border:1px solid #f5c518;border-radius:10px;padding:1px 6px;">beta</span></span><span>강의·발표 자료 제작용. PM이 지휘하는 11단계(Stage 0~11) 파이프라인. Research → Source Verifier(신뢰도 검증) → Storyline → Design → Image Curation + Diagram Generation(병렬) → HTML Build → Layout Measure → PDF Export까지, 연구부터 인쇄용 PDF 출력까지 전 과정을 자동화한다. 5종 테마(outline, pitch, pitch-enhanced, vertical, zen)와 5종 스타일(premium-dark, classic, minimal, visual-heavy, academic)을 지원한다.</span></div>
-    <div class="variant-row"><span class="variant-name">co-game <span class="badge" style="font-size:10px;background:#fff8c5;color:#953800;border:1px solid #f5c518;border-radius:10px;padding:1px 6px;">beta</span></span><span>HTML5 Canvas 게임 개발용.</span></div>
+    <div class="variant-row"><span class="variant-name">co-deck <span class="badge" >beta</span></span><span>강의·발표 자료 제작용. PM이 지휘하는 11단계(Stage 0~11) 파이프라인. Research → Source Verifier(신뢰도 검증) → Storyline → Design → Image Curation + Diagram Generation(병렬) → HTML Build → Layout Measure → PDF Export까지, 연구부터 인쇄용 PDF 출력까지 전 과정을 자동화한다. 5종 테마(outline, pitch, pitch-enhanced, vertical, zen)와 5종 스타일(premium-dark, classic, minimal, visual-heavy, academic)을 지원한다.</span></div>
+    <div class="variant-row"><span class="variant-name">co-game <span class="badge" >beta</span></span><span>HTML5 Canvas 게임 개발용.</span></div>
   </div>
 
   <p>각 베리언트(variant)는 git 태그 <code>template-vX.Y.Z</code>로 버전이 관리되며, <code>bun scripts/validate-templates.ts</code>가 에이전트 frontmatter의 완결성, 필수 섹션, AGENTS.md 로스터와의 정합성, <code>.claude/</code>·<code>.gemini/</code> 간 플랫폼 패리티 등 구조적 규정 준수를 검사한다.</p>
@@ -152,7 +152,7 @@
   <p>CONSTITUTION.md는 모든 세션이 시작할 때 따라야 할 순서를 정의한다. 먼저 <code>git config core.hooksPath .githooks</code>로 git 훅 경로를 설정하고, CONSTITUTION.md 자체를 읽은 뒤, 작업 중인 프로젝트의 <code>docs/context.md</code>를 읽는다. 이어서 AGENTS.md로 사용 가능한 에이전트를 확인하고, <code>memory/MEMORY.md</code>에 이전 세션의 맥락이 남아 있는지 점검한 다음, docs/context.md가 지정한 스킬들을 로드한다.</p>
   <p>새 프로젝트를 만드는 흐름은 개념적으로 단순하다. <code>bun scripts/new-project.ts</code> 스크립트에 프로젝트 이름과 원하는 베리언트(variant)를 지정해 실행하면, 그 베리언트(variant)의 전체 구성이 복제되어 완전히 독립된 git 저장소가 된다. 이 저장소는 워크스페이스 루트와 분리되어 있지만, 태어날 때부터 CONSTITUTION.md의 공유 표준을 상속한 상태로 시작한다. 팀은 그 안에서 프로젝트 고유의 <code>docs/context.md</code>와 프로젝트 레벨 CLAUDE.md/GEMINI.md 오버라이드를 채워나가며 팀을 발전시킨다. 이 명령의 정확한 문법과 옵션은 6장 §1에서 직접 실습한다.</p>
 
-  <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="note">
     <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
       <defs>
         <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
@@ -208,6 +208,6 @@ function copyCode(btn) {
 }
 </script>
 
-<script src="assets/dark-mode-toggle.js"></script>
+<script src="../assets/dark-mode-toggle.js"></script>
 </body>
 </html>

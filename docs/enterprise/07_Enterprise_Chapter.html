@@ -25,7 +25,7 @@
 <div class="layout">
 
 <nav>
-  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">7장 · 두 모델 비교</div>
   <a href="#s1">서비스 티켓 모델</a>
   <a href="#s1">↳ 왜 칸반 기반인가</a>
@@ -231,7 +231,7 @@
   <h3>서비스 티켓 모델</h3>
   <div class="compare-grid">
     <div class="compare-col">
-      <h4 style="color:#1a7f37;">장점</h4>
+      <h4 >장점</h4>
       <ul>
         <li><strong>진입 장벽이 낮다.</strong> 새 팀도 별도 셋업 없이 곧바로 같은 창구를 쓸 수 있다.</li>
         <li><strong>거버넌스가 단순하다.</strong> 운영이 한 팀에 집중돼 있어 규칙 위반 여부를 한곳에서만 통제·감사하면 된다(3장의 감사 로그 원칙이 적용될 지점도 하나뿐이다).</li>
@@ -240,7 +240,7 @@
       </ul>
     </div>
     <div class="compare-col">
-      <h4 style="color:#cf222e;">단점</h4>
+      <h4 >단점</h4>
       <ul>
         <li><strong>맥락이 매번 끊긴다.</strong> 요청자가 매번 배경을 다시 설명해야 하고, 깊은 도메인 지식이 쌓이지 않는다.</li>
         <li><strong>병목이 구조적이다.</strong> 그 범위(회사 전체 또는 본부)가 커질수록 단일 창구가 처리 속도를 좌우한다. 본부 단위로 창구를 쪼개면 회사 전체가 하나의 창구를 쓸 때보다는 병목이 완화되지만, 각 본부 안에서는 여전히 같은 문제가 재현된다. §1의 칸반 없이는 이 병목이 훨씬 빨리, 훨씬 심하게 온다.</li>
@@ -253,7 +253,7 @@
   <h3>개발 도구 + variant 모델</h3>
   <div class="compare-grid">
     <div class="compare-col">
-      <h4 style="color:#1a7f37;">장점</h4>
+      <h4 >장점</h4>
       <ul>
         <li><strong>맥락이 깊게 유지된다.</strong> 프로젝트 저장소·메모리 로그를 계속 참조하므로 반복될수록 결과 품질이 오히려 좋아진다.</li>
         <li><strong>팀 자율성이 높다.</strong> 자기 도메인에 맞는 워크플로우를 베리언트(variant)로 직접 설계·커스터마이징할 수 있다.</li>
@@ -262,7 +262,7 @@
       </ul>
     </div>
     <div class="compare-col">
-      <h4 style="color:#cf222e;">단점</h4>
+      <h4 >단점</h4>
       <ul>
         <li><strong>초기 셋업 비용이 든다.</strong> 팀마다 스캐폴딩·에이전트 정의·거버넌스 파이프라인을 갖춰야 한다.</li>
         <li><strong>거버넌스가 파편화될 위험이 있다.</strong> 공유 표준(CONSTITUTION.md)이 없거나 지켜지지 않으면 팀마다 다른 규칙으로 표류한다. 포크 모델(5장 §3)이 주는 자유의 대가다.</li>
@@ -283,6 +283,6 @@
 
 </div>
   <script src="../assets/inpage-search.js" defer></script>
-<script src="assets/dark-mode-toggle.js"></script>
+<script src="../assets/dark-mode-toggle.js"></script>
 </body>
 </html>

@@ -40,7 +40,7 @@
 <div class="layout">
 
 <nav>
-  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">12장 · 신규 variant 승격 실습</div>
   <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
 
@@ -329,7 +329,7 @@
         D-1까지 마쳐 승격 준비가 끝났다고 판단한 숙련자가, 실제로 <code>l2-to-variant-pipeline.ts</code>를 실행해 co-marketing을 정식 <code>templates/co-marketing/</code>로 전환하려 한다. 이 단계부터는 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다.
       </div>
 
-      <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+      <div class="note">
         <svg viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
@@ -417,7 +417,7 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
         파이프라인의 reconcile 단계는 <code>Projects/co-marketing/</code>에 있던 파일 중 공통 파일(L0/common)과 동일한 것은 제거해 중복을 없앤다. 다만 스킬 디렉터리는 이 reconcile 대상에서 의도적으로 제외되므로, 승격 후 <code>.claude/skills/</code>와 <code>.gemini/skills/</code>에 스킬이 그대로 남아 있는지 별도로 확인해야 한다.
       </div>
 
-      <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+      <div class="note">
         <svg viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
@@ -577,6 +577,6 @@ function copyCode(btn) {
 }
 </script>
   <script src="../assets/inpage-search.js" defer></script>
-<script src="assets/dark-mode-toggle.js"></script>
+<script src="../assets/dark-mode-toggle.js"></script>
 </body>
 </html>

@@ -98,6 +98,16 @@ nav .nav-group {
   border-bottom: 1px solid var(--border);
 }
 
+/* Sidebar "← Handbook Home" link */
+nav .nav-home {
+  display: block;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
 nav a {
   display: block;
   padding: 6px 16px;

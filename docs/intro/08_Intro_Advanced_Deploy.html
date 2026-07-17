@@ -24,9 +24,9 @@
 <div class="layout">
 
 <nav>
-  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">8장 · 아키텍처 심화</div>
-  <a href="#s1" style="color:#0969da;border-left-color:#0969da;">§1 · 배포와 SSOT</a>
+  <a href="#s1" >§1 · 배포와 SSOT</a>
   <a href="08_Intro_Advanced_Chapter.html">§2 · 생애주기 관리</a>
   <a href="08_Intro_Advanced_AGENTS.html">§3 · AGENTS.md 심화</a>
   <a href="08_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
@@ -58,9 +58,9 @@
   <h3>세 계층이 각각 담당하는 것</h3>
   <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 베리언트(variant)를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 실제 만들어진 살아있는 프로젝트 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다.</p>
 
-  <div class="tree-box" style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
-  <pre style="font-family:'SFMono-Regular','Consolas',monospace;font-size:13px;line-height:1.7;color:#1f2328;white-space:pre;">L0 — 워크스페이스 루트 (C:\git\, 유일한 원본)
+  <pre style="font-family:var(--font-mono);font-size:13px;line-height:1.7;color:var(--text);white-space:pre;">L0 — 워크스페이스 루트 (C:\git\, 유일한 원본)
   │  L0→L1: publish-to-template.ts (dev-sync 때마다 자동·지속)
   ▼
 L1 — templates/common/ (공통 템플릿 스냅샷)
@@ -73,7 +73,7 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
 </div>
   </div>
 
-  <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:0 0 28px;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:0 0 28px;">
     <svg viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -121,15 +121,15 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
   <h3>파일별 SSOT — 무엇이 어디서 어디로 흐르는가</h3>
   <table style="width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;">
     <thead><tr>
-      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">파일</th>
-      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">원본(SSOT)</th>
-      <th style="background:#eef1f4;color:#0550ae;text-align:left;padding:9px 12px;border:1px solid #d0d7de;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;">동기화 방식</th>
+      <th >파일</th>
+      <th >원본(SSOT)</th>
+      <th >동기화 방식</th>
     </tr></thead>
     <tbody>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>CLAUDE.md</code> / <code>GEMINI.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">워크스페이스 루트</td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">수동 전파 + <code>validate-templates.ts</code></td></tr>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>agents/*.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;">워크스페이스 루트 <code>agents/</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>bun run agent:verify</code></td></tr>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>AGENTS.md</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;">워크스페이스 루트</td><td style="padding:8px 12px;border:1px solid #d0d7de;background:#f6f8fa;"><code>bun run agent:verify</code></td></tr>
-      <tr><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>variant.json</code></td><td style="padding:8px 12px;border:1px solid #d0d7de;"><code>templates/co-&lt;name&gt;/</code> 자신</td><td style="padding:8px 12px;border:1px solid #d0d7de;">해당 베리언트(variant)가 곧 원본</td></tr>
+      <tr><td ><code>CLAUDE.md</code> / <code>GEMINI.md</code></td><td >워크스페이스 루트</td><td >수동 전파 + <code>validate-templates.ts</code></td></tr>
+      <tr><td ><code>agents/*.md</code></td><td >워크스페이스 루트 <code>agents/</code></td><td ><code>bun run agent:verify</code></td></tr>
+      <tr><td ><code>AGENTS.md</code></td><td >워크스페이스 루트</td><td ><code>bun run agent:verify</code></td></tr>
+      <tr><td ><code>variant.json</code></td><td ><code>templates/co-&lt;name&gt;/</code> 자신</td><td >해당 베리언트(variant)가 곧 원본</td></tr>
     </tbody>
   </table>
 
@@ -176,6 +176,6 @@ function copyCode(btn) {
 }
 </script>
 
-<script src="assets/dark-mode-toggle.js"></script>
+<script src="../assets/dark-mode-toggle.js"></script>
 </body>
 </html>

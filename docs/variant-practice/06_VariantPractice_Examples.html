@@ -16,12 +16,12 @@
     .scenario-card .card-body { padding: 22px 26px; font-size: 14px; line-height: 1.7; }
     /* Area header variants */
     .area-header { display: flex; align-items: center; gap: 14px; margin: 52px 0 24px; padding: 16px 22px; border-radius: 10px; }
-    .area-header.area-existing { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #86efac; }
-    .area-header.area-new { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #93c5fd; }
+    .area-header.area-existing { background: var(--bg-success); border: 1px solid var(--border-success); }
+    .area-header.area-new { background: var(--bg-info); border: 1px solid var(--border-info); }
     .area-icon { font-size: 1.6rem; }
     .area-title { font-size: 1.35rem; font-weight: 700; }
-    .area-title-existing { color: #15803d; }
-    .area-title-new { color: #1d4ed8; }
+    .area-title-existing { color: var(--accent-green); }
+    .area-title-new { color: var(--accent); }
     /* Level header with border-bottom */
     .level-header { border-bottom: 2px solid var(--border); padding-bottom: 10px; }
     .level-header .badge { flex-shrink: 0; }
@@ -35,7 +35,7 @@
     .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
     .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
     /* Prompt box (user input) */
-    .prompt-box { background: #f0fdf4; border: 1px solid #86efac; border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px; overflow-wrap: break-word; }
+    .prompt-box { background: var(--bg-success); border: 1px solid var(--border-success); border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px; overflow-wrap: break-word; }
     .prompt-box::before { content: '📝 사용자 입력'; display: block; font-weight: 700; color: var(--accent-green); margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
     .prompt-box .prompt-text { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px; margin-top: 6px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre-wrap; position: relative; }
     .prompt-box .copy-btn { position: absolute; top: 6px; right: 6px; }

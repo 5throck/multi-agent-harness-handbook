@@ -23,6 +23,7 @@
 </nav>
 
 <main>
+ <article class="reading">
   <h1>FAQ · 자주 나는 오류와 해결법</h1>
   <p class="lead">각 장에 흩어져 있는 경고·팁 박스를 실습 중 자주 나는 순서대로 한곳에 모았습니다. 증상으로 먼저 찾고, 필요하면 "자세히" 링크로 원래 설명을 확인하세요.</p>
 
@@ -130,6 +131,7 @@
   <p class="faq-answer">ai-workspace-standards의 스크립트는 Node.js/Bun 런타임에서 <code>path</code> 모듈로 플랫폼별 경로를 처리하므로 기본적으로 Windows와 macOS/Linux 모두 호환된다. 하지만 Claude Code 세션 안에서 <code>git clone</code> 명령을 직접 실행할 때 Git Bash가 아닌 PowerShell 경로(<code>C:\Users\...</code>)가 섞이면 문제가 생길 수 있다. Claude Code에서는 항상 <code>/</code> 스타일 경로나 Git Bash 형식을 사용하고, 워크스페이스 루트는 <code>C:\git</code>처럼 짧고 깊지 않은 위치에 클론하는 것을 권장한다.</p>
   <span class="see">자세히: <a href="../variant-practice/06_VariantPractice_Manual.html#section-1">6장 §1</a></span>
 
+ </article>
 </main>
 </div>
 <script src="../assets/dark-mode-toggle.js"></script>

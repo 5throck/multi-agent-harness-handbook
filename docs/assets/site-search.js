@@ -11,6 +11,7 @@
     { path: 'intro/01_Why_AI_Chapter.html', title: '1장 · AI 시대의 업무 혁신' },
     { path: 'concepts/02_Concepts_Chapter.html', title: '2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념' },
     { path: 'guardrails/03_Guardrails_Chapter.html', title: '3장 · 가드레일과 권한 모델' },
+    { path: 'warm-up/Warmup_Tetris_Pacman.html', title: '워밍업 실습 · 테트리스에서 팩맨까지' },
     { path: 'practice/04_Practice_Manual.html', title: '4장 §1 · 하네스 기반 멀티 에이전트 팀 활용' },
     { path: 'practice/04_Practice_Manual_A.html', title: '4장 §1-A · 서브에이전트 활용 상세 — Claude 중심' },
     { path: 'practice/04_Practice_Manual_B.html', title: '4장 §1-B · 서브에이전트 활용 상세 — Antigravity 중심' },

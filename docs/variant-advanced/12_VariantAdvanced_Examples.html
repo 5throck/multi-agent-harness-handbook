@@ -22,7 +22,13 @@
     /* Step list variant (li instead of .step) */
     .step-list { list-style: none; }
     .step-list li { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
-    .step-list li::before { min-width: 26px; height: 26px; flex-shrink: 0; margin-top: 1px; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
     .step-content { flex: 1; min-width: 0; }
     .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
     .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }

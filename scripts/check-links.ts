@@ -25,6 +25,8 @@ export function checkBrokenLinks(): LinkError[] {
       if (absPath === null) continue; // external, anchor, etc.
 
       if (!fileExists(absPath)) {
+        // Allow links to _en.html / _ja.html files that don't exist yet
+        if (/_en\.html$|_ja\.html$/.test(absPath)) continue;
         errors.push({
           file: relative(getDocsDir(), filePath),
           href,

@@ -787,6 +787,45 @@ A/B 파일 상호 간에는 prev/next 링크로 순차 연결한다.
 
 ---
 
+## §23. 다국어 버전 관리 (i18n)
+
+### 23-1. 파일명 규칙
+
+| 언어 | 접미사 | 예시 |
+|------|--------|------|
+| 한국어 (기본) | *(없음)* | `01_Why_AI_Chapter.html` |
+| English | `_en` | `01_Why_AI_Chapter_en.html` |
+| 日本語 | `_ja` | `01_Why_AI_Chapter_ja.html` |
+
+index 페이지도 동일: `index.html` / `index_en.html` / `index_ja.html`.
+
+### 23-2. 페이지 구조 요구사항
+
+번역 파일은 한국어 원본의 **전체 복사본**이어야 한다. 각 파일에:
+- `<html lang="en">` 또는 `<html lang="ja">` 속성
+- 자체 사이드바 네비게이션 (같은 언어의 다른 파일로 링크)
+- `<script src="../assets/lang-switcher.js">` 포함
+- 코드 블록, 파일 경로, URL, 기술 식별자는 번역하지 않음
+
+### 23-3. 번역 vs 번역하지 않을 것
+
+**번역 대상:** 제목, h1, 본문 텍스트, 사이드바 라벨, 메타 description, 카드 설명, 주의/경고 상자 텍스트
+**번역하지 않음:** 코드 블록 내용, 파일/디렉토리 경로, CLI 명령어, URL, CSS 클래스명, 기술 식별자(오케스트레이터, 핸드오프 계약 등), SVG 다이어그램 내부 텍스트
+
+### 23-4. site-search.js DOCS 등록
+
+번역 파일을 생성한 후 `docs/assets/site-search.js`의 DOCS 배열에 해당 항목을 추가한다:
+
+```js
+{ path: 'intro/01_Why_AI_Chapter_en.html', title: 'Ch.1 · Business Innovation in the AI Era', lang: 'en' },
+```
+
+### 23-5. 검증
+
+`bun run scripts/validate-nav.ts`로 링크 무결성을 자동 검증한다. 언어별 파일 간의 번역 누락은 수동으로 확인한다 (각 장마다 ko/en/ja 3파일이 모두 존재하는지).
+
+---
+
 *본 가이드라인은 하네스 엔지니어링 핸드북 작성 세션의 실제 리뷰 피드백에서 추출되었습니다.
 새로운 과정을 만들 때 같은 실수를 반복하지 않도록, 그리고 검토자의 시간을 아끼기 위해
 작성되었습니다. 원칙이 추가·수정되면 이 파일을 갱신합니다.*

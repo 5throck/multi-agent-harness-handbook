@@ -5,300 +5,31 @@
   <meta name="description" content="4장 §1-A · 서브에이전트 활용 상세 — Claude 중심 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §1-A · 서브에이전트 활용 상세 — Claude 중심</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
-    :root {
-      --bg: #ffffff;
-      --bg2: #f6f8fa;
-      --bg3: #eef1f4;
-      --border: #d0d7de;
-      --text: #1f2328;
-      --text-dim: #636c76;
-      --accent: #0969da;
-      --accent2: #1a7f37;
-      --accent3: #953800;
-      --accent4: #6639ba;
-      --accent5: #cf222e;
-      --accent6: #0550ae;
-      --tag-bg: #ddf4ff;
-      --tag-text: #0550ae;
-      --code-bg: #f6f8fa;
-      --code-border: #d0d7de;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
-    /* ── 사이드바 ── */
-    nav {
-      width: 260px;
-      min-width: 260px;
-      background: var(--bg2);
-      border-right: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      padding: 20px 0;
-    }
-    nav .nav-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-dim);
-      padding: 0 16px 8px;
-    }
-    nav a {
-      display: block;
-      padding: 6px 16px;
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: 13px;
-      border-left: 2px solid transparent;
-      transition: all .15s;
-    }
-    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
-    nav .nav-section {
-      margin-top: 12px;
-      padding: 6px 16px 4px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--text-dim);
-    }
-    /* ── 본문 ── */
-    main {
-      flex: 1;
-      max-width: 900px;
-      padding: 40px 48px;
-      overflow-x: hidden;
-    }
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #1f2328;
-      margin-bottom: 6px;
-    }
-    .subtitle {
-      color: var(--text-dim);
-      font-size: 13px;
-      margin-bottom: 32px;
-    }
-    .subtitle a { color: var(--accent); text-decoration: none; }
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--accent6);
-      margin: 48px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      scroll-margin-top: 20px;
-    }
-    h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--accent3);
-      margin: 28px 0 8px;
-      scroll-margin-top: 20px;
-    }
-    p { margin: 8px 0; color: var(--text); }
-    /* ── 트리 ── */
-    .tree-box {
-      background: #f6f8fa;
-      border: 1px solid var(--code-border);
-      border-radius: 8px;
-      padding: 20px 24px;
-      overflow-x: auto;
-      margin: 16px 0 24px;
-    }
-    .tree-box pre {
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #1f2328;
-      white-space: pre;
-    }
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
     .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
     .tree-box pre .desc { color: var(--text-dim); }
-    /* ── 코드 블록 ── */
-    pre.code-block {
-      background: var(--code-bg);
-      border: 1px solid var(--code-border);
-      border-radius: 6px;
-      padding: 14px 18px;
-      overflow-x: auto;
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 13px;
-      line-height: 1.5;
-      color: #116329;
-      margin: 8px 0 16px;
-    }
-    /* ── 인라인 코드 ── */
-    code {
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 12px;
-      background: #f6f8fa;
-      border: 1px solid #d0d7de;
-      border-radius: 4px;
-      padding: 2px 6px;
-      color: #cf222e;
-    }
-    /* ── 테이블 ── */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0 20px;
-      font-size: 13.5px;
-    }
-    th {
-      background: var(--bg3);
-      color: var(--accent6);
-      text-align: left;
-      padding: 10px 14px;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-    td {
-      padding: 9px 14px;
-      border: 1px solid var(--border);
-      vertical-align: top;
-      color: var(--text);
-    }
-    tr:nth-child(even) td { background: #f6f8fa; }
     td code { font-size: 11.5px; }
-    /* ── 배지 ── */
-    .badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      margin-right: 6px;
-    }
-    .badge-alias { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-skill { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-    .badge-workflow { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-new { background: #fff8c5; color: #953800; border: 1px solid #f5c518; }
-    .badge-claude { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-claudeapp { background: #e6ffec; color: #1a7f37; border: 1px solid #a2d9b1; }
-    .badge-agy { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-antigravity { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-    /* ── 구분선 ── */
-    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-    /* ── 섹션 헤더 ── */
-    .section-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--tag-bg);
-      color: var(--tag-text);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    /* ── 버전 박스 ── */
-    .version-box {
-      background: #f0f7ff;
-      border: 1px solid #a5d5f7;
-      border-left: 4px solid #0969da;
-      border-radius: 6px;
-      padding: 14px 18px;
-      margin: 16px 0 32px;
-      font-size: 13px;
-    }
-    .version-row {
-      display: flex;
-      gap: 12px;
-      padding: 3px 0;
-      border-bottom: 1px solid #d0e8ff;
-    }
-    .version-row:last-child { border-bottom: none; }
-    .vlabel {
-      min-width: 180px;
-      font-weight: 600;
-      color: #0550ae;
-      flex-shrink: 0;
-    }
-    .vvalue { color: #1f2328; }
-    /* ── 링크 ── */
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    /* ── 경고 박스 ── */
-    .warning-box {
-      background: #fff8c5;
-      border: 1px solid #d4a72c;
-      border-radius: 6px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: #7d4e00;
-      margin: 12px 0;
-    }
-    .warning-box::before { content: '⚠️  '; }
-    /* ── 권한 모드 표 ── */
     .mode-table td:first-child { font-family: monospace; color: #ff7b72; font-size: 12px; }
-    /* ── 플랫폼 비교 블록 ── */
-    .platform-pair {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin: 12px 0 20px;
-    }
-    @media (max-width: 760px) {
-      .platform-pair { grid-template-columns: 1fr; }
-    }
-    .platform-col {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      min-width: 0;
-    }
+    .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
+    @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
+    .platform-col { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
     .platform-col pre.code-block { max-width: 100%; }
-    .platform-col.claude { border-top: 3px solid var(--accent2); }
-    .platform-col.claudeapp { border-top: 3px dashed var(--accent2); }
-    .platform-col.agy { border-top: 3px solid var(--accent6); }
-    .platform-col.antigravity { border-top: 3px dashed var(--accent6); }
+    .platform-col.claude { border-top: 3px solid var(--accent-green); }
+    .platform-col.claudeapp { border-top: 3px dashed var(--accent-green); }
+    .platform-col.agy { border-top: 3px solid var(--accent-dark); }
+    .platform-col.antigravity { border-top: 3px dashed var(--accent-dark); }
     .platform-col h3 { margin-top: 0; }
     .platform-pair.quad { grid-template-columns: 1fr 1fr; }
     @media (max-width: 760px) { .platform-pair.quad { grid-template-columns: 1fr; } }
-    /* ── 장 이동 ── */
-    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
-    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
-    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
-    .chapter-nav a:hover { background: var(--bg2); }
-    .chapter-nav .prev { text-align: left; }
-    .chapter-nav .next { text-align: right; }
-    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
-    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
     .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
     .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
-  
-    .copy-btn {
-      position: absolute; top: 8px; right: 10px;
-      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
-      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
-    }
-    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
-    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
-</style>
+  </style>
 </head>
 <body>
 <div class="layout">
@@ -341,7 +72,7 @@
 
   <p>Claude App과 Claude Code는 프로젝트 폴더 아래에 마크다운 파일 하나로 서브에이전트 하나를 미리 정의한다. <strong>Claude App과 Claude Code는 같은 파일을 공유한다</strong> — 둘 다 <code>.claude/agents/*.md</code>를 완전히 같은 방식으로 인식한다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> .claude/agents/*.md</h3>
     <p>프로젝트 루트의 <code>.claude/agents/</code> 폴더에 마크다운 파일을 두면 Claude App에서도 자동으로 커스텀 서브에이전트로 인식된다. <code>name</code>이 나중에 <code>subagent_type</code>으로 참조하는 식별자가 된다. <strong>Claude Code(CLI)에서도 완전히 같은 파일이 완전히 같은 방식으로 동작한다</strong> — 둘은 같은 서브에이전트 정의 포맷을 공유한다.</p>
     <div style="position:relative">
@@ -359,7 +90,7 @@ model: sonnet
 </div>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude App과 동일한 .claude/agents/*.md</h3>
     <p>Claude App에서 쓴 것과 완전히 같은 <code>.claude/agents/*.md</code> 파일을 그대로 인식한다. Desktop App과 CLI 사이에 서브에이전트 정의 방식의 차이는 없다.</p>
   </div>
@@ -393,7 +124,7 @@ model: sonnet
 
   <p>Claude App과 Claude Code 모두 <code>Agent</code> 툴(문서에서는 <code>Task</code> 툴로도 불림)을 호출해 별도의 컨텍스트를 가진 서브에이전트를 띄운다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent(Task) 툴</h3>
     <p>Claude App에서도 메인 세션은 <code>Agent</code> 툴(문서에서는 <code>Task</code> 툴로도 불림)을 호출해 별도의 컨텍스트를 가진 서브에이전트를 띄운다. 서브에이전트는 메인 세션의 대화 기록을 보지 못하므로, <code>prompt</code>에 필요한 배경을 자족적으로 담아야 한다. <strong>Claude Code(CLI)도 같은 <code>Agent</code>/<code>Task</code> 툴을 그대로 쓴다</strong> — 채팅창에 자연어로 요청하면 내부적으로 아래와 같은 형태로 호출된다.</p>
     <div style="position:relative">
@@ -407,7 +138,7 @@ model: sonnet
 </div>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude App과 동일한 Agent(Task) 툴</h3>
     <p>Claude App과 완전히 같은 <code>Agent</code>/<code>Task</code> 툴 호출 방식이다. 터미널에서 자연어로 요청하면 동일한 방식으로 서브에이전트가 스폰된다.</p>
   </div>
@@ -419,14 +150,14 @@ model: sonnet
 
   <p>Claude 계열은 두 가지 방식으로 병렬 실행을 지원한다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent Teams — in-process</h3>
     <p>Claude App에서도 실험적 기능인 Agent Teams를 켜면 여러 팀메이트가 병렬로 작업한다. 다만 Desktop App에서는 <code>teammateMode: in-process</code>만 쓸 수 있고, 일부 키보드 내비게이션(Shift+Down 등)이 제한된다. <strong>Claude Code(CLI)에서도 같은 <code>in-process</code> 모드가 그대로 동작</strong>하며, CLI에서는 추가로 tmux 분할 창을 쓰는 <code>tmux</code> 모드도 고를 수 있다.</p>
   </div>
 
   <div class="warning-box">같은 디렉터리·Workspace에서 여러 에이전트를 동시에 돌리면 "인지적 중첩(cognitive overlap)"이 발생할 수 있다 — 한 에이전트가 같은 폴더에서 작업 중인 다른 에이전트의 결과를 자기 작업 맥락으로 착각(hallucination)하는 문제다. 작업 디렉터리나 worktree로 에이전트를 분리하는 것이 권장 관행이다.</div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — 한 메시지에 여러 Agent 호출</h3>
     <p>서로 의존성이 없는 작업이 여러 개 있다면, 한 메시지 안에 <code>Agent</code> 호출을 여러 개 나란히 담아 동시에 실행할 수 있다. Claude Code는 이 호출들을 병렬로 디스패치한다.</p>
     <div style="position:relative">
@@ -456,12 +187,12 @@ Agent(description="테스트 커버리지 점검",
 
   <p>Claude 계열에서 자동화·훅의 차이점은 App과 Code 사이에 있다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 훅 미발화</h3>
     <p><code>.claude/settings.json</code>에 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅을 정의해도 Claude App에서는 자동으로 발화하지 않는다. 훅이 하던 일(예: 감사 스크립트 실행)은 세션이 끝난 뒤 수동으로 실행해야 한다. <strong>Claude Code(CLI)에서는 같은 설정 파일의 훅이 이벤트에 맞춰 자동으로 발화한다</strong> — 자동화 게이트가 필요한 팀은 이 지점에서 명령줄 인터페이스(CLI)를 선택하는 것이 합리적이다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent2); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — 훅 자동 발화</h3>
     <p><code>.claude/settings.json</code>의 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅이 파일 저장·작업 완료 같은 이벤트에 맞춰 자동으로 실행된다.</p>
     <div style="position:relative">
@@ -517,5 +248,6 @@ function copyCode(btn) {
 }
 </script>
 
+<script src="assets/dark-mode-toggle.js"></script>
 </body>
 </html>

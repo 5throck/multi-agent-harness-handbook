@@ -5,300 +5,31 @@
   <meta name="description" content="4장 §1-B · 서브에이전트 활용 상세 — Antigravity 중심 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §1-B · 서브에이전트 활용 상세 — Antigravity 중심</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
-    :root {
-      --bg: #ffffff;
-      --bg2: #f6f8fa;
-      --bg3: #eef1f4;
-      --border: #d0d7de;
-      --text: #1f2328;
-      --text-dim: #636c76;
-      --accent: #0969da;
-      --accent2: #1a7f37;
-      --accent3: #953800;
-      --accent4: #6639ba;
-      --accent5: #cf222e;
-      --accent6: #0550ae;
-      --tag-bg: #ddf4ff;
-      --tag-text: #0550ae;
-      --code-bg: #f6f8fa;
-      --code-border: #d0d7de;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
-    /* ── 사이드바 ── */
-    nav {
-      width: 260px;
-      min-width: 260px;
-      background: var(--bg2);
-      border-right: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      padding: 20px 0;
-    }
-    nav .nav-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-dim);
-      padding: 0 16px 8px;
-    }
-    nav a {
-      display: block;
-      padding: 6px 16px;
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: 13px;
-      border-left: 2px solid transparent;
-      transition: all .15s;
-    }
-    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
-    nav .nav-section {
-      margin-top: 12px;
-      padding: 6px 16px 4px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--text-dim);
-    }
-    /* ── 본문 ── */
-    main {
-      flex: 1;
-      max-width: 900px;
-      padding: 40px 48px;
-      overflow-x: hidden;
-    }
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #1f2328;
-      margin-bottom: 6px;
-    }
-    .subtitle {
-      color: var(--text-dim);
-      font-size: 13px;
-      margin-bottom: 32px;
-    }
-    .subtitle a { color: var(--accent); text-decoration: none; }
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--accent6);
-      margin: 48px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      scroll-margin-top: 20px;
-    }
-    h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--accent3);
-      margin: 28px 0 8px;
-      scroll-margin-top: 20px;
-    }
-    p { margin: 8px 0; color: var(--text); }
-    /* ── 트리 ── */
-    .tree-box {
-      background: #f6f8fa;
-      border: 1px solid var(--code-border);
-      border-radius: 8px;
-      padding: 20px 24px;
-      overflow-x: auto;
-      margin: 16px 0 24px;
-    }
-    .tree-box pre {
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #1f2328;
-      white-space: pre;
-    }
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
     .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
     .tree-box pre .desc { color: var(--text-dim); }
-    /* ── 코드 블록 ── */
-    pre.code-block {
-      background: var(--code-bg);
-      border: 1px solid var(--code-border);
-      border-radius: 6px;
-      padding: 14px 18px;
-      overflow-x: auto;
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 13px;
-      line-height: 1.5;
-      color: #116329;
-      margin: 8px 0 16px;
-    }
-    /* ── 인라인 코드 ── */
-    code {
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 12px;
-      background: #f6f8fa;
-      border: 1px solid #d0d7de;
-      border-radius: 4px;
-      padding: 2px 6px;
-      color: #cf222e;
-    }
-    /* ── 테이블 ── */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0 20px;
-      font-size: 13.5px;
-    }
-    th {
-      background: var(--bg3);
-      color: var(--accent6);
-      text-align: left;
-      padding: 10px 14px;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-    td {
-      padding: 9px 14px;
-      border: 1px solid var(--border);
-      vertical-align: top;
-      color: var(--text);
-    }
-    tr:nth-child(even) td { background: #f6f8fa; }
     td code { font-size: 11.5px; }
-    /* ── 배지 ── */
-    .badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      margin-right: 6px;
-    }
-    .badge-alias { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-skill { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-    .badge-workflow { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-new { background: #fff8c5; color: #953800; border: 1px solid #f5c518; }
-    .badge-claude { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-claudeapp { background: #e6ffec; color: #1a7f37; border: 1px solid #a2d9b1; }
-    .badge-agy { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-antigravity { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-    /* ── 구분선 ── */
-    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-    /* ── 섹션 헤더 ── */
-    .section-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--tag-bg);
-      color: var(--tag-text);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    /* ── 버전 박스 ── */
-    .version-box {
-      background: #f0f7ff;
-      border: 1px solid #a5d5f7;
-      border-left: 4px solid #0969da;
-      border-radius: 6px;
-      padding: 14px 18px;
-      margin: 16px 0 32px;
-      font-size: 13px;
-    }
-    .version-row {
-      display: flex;
-      gap: 12px;
-      padding: 3px 0;
-      border-bottom: 1px solid #d0e8ff;
-    }
-    .version-row:last-child { border-bottom: none; }
-    .vlabel {
-      min-width: 180px;
-      font-weight: 600;
-      color: #0550ae;
-      flex-shrink: 0;
-    }
-    .vvalue { color: #1f2328; }
-    /* ── 링크 ── */
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    /* ── 경고 박스 ── */
-    .warning-box {
-      background: #fff8c5;
-      border: 1px solid #d4a72c;
-      border-radius: 6px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: #7d4e00;
-      margin: 12px 0;
-    }
-    .warning-box::before { content: '⚠️  '; }
-    /* ── 권한 모드 표 ── */
     .mode-table td:first-child { font-family: monospace; color: #ff7b72; font-size: 12px; }
-    /* ── 플랫폼 비교 블록 ── */
-    .platform-pair {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin: 12px 0 20px;
-    }
-    @media (max-width: 760px) {
-      .platform-pair { grid-template-columns: 1fr; }
-    }
-    .platform-col {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      min-width: 0;
-    }
+    .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
+    @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
+    .platform-col { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
     .platform-col pre.code-block { max-width: 100%; }
-    .platform-col.claude { border-top: 3px solid var(--accent2); }
-    .platform-col.claudeapp { border-top: 3px dashed var(--accent2); }
-    .platform-col.agy { border-top: 3px solid var(--accent6); }
-    .platform-col.antigravity { border-top: 3px dashed var(--accent6); }
+    .platform-col.claude { border-top: 3px solid var(--accent-green); }
+    .platform-col.claudeapp { border-top: 3px dashed var(--accent-green); }
+    .platform-col.agy { border-top: 3px solid var(--accent-dark); }
+    .platform-col.antigravity { border-top: 3px dashed var(--accent-dark); }
     .platform-col h3 { margin-top: 0; }
     .platform-pair.quad { grid-template-columns: 1fr 1fr; }
     @media (max-width: 760px) { .platform-pair.quad { grid-template-columns: 1fr; } }
-    /* ── 장 이동 ── */
-    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
-    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
-    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
-    .chapter-nav a:hover { background: var(--bg2); }
-    .chapter-nav .prev { text-align: left; }
-    .chapter-nav .next { text-align: right; }
-    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
-    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
     .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
     .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
-  
-    .copy-btn {
-      position: absolute; top: 8px; right: 10px;
-      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
-      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
-    }
-    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
-    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
-</style>
+  </style>
 </head>
 <body>
 <div class="layout">
@@ -346,7 +77,7 @@
     <p>Antigravity 데스크톱(Desktop)의 Agent Manager는 에이전트를 사전에 정의된 파일 단위가 아니라 Workspace 단위로 다룬다. 사용자가 목표를 주면 그 Workspace를 맡은 에이전트(오케스트레이터)가 스스로 하위 작업을 쪼개고 필요한 서브에이전트를 즉석에서 만든다. 즉 "reviewer.md 같은 파일을 미리 준비한다"는 개념 자체가 없다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent6); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 오케스트레이터가 동적으로 생성</h3>
     <p>Antigravity 데스크톱(Desktop)과 마찬가지로 <code>agy</code>도 사전 정의 파일 없이, 목표(goal)를 받으면 오케스트레이터 에이전트가 작업을 어떻게 쪼갤지 스스로 판단해 서브에이전트를 즉석에서 만들어 병렬로 실행한다. 각 서브에이전트는 독립된 컨텍스트 창을 가져 메인 세션의 맥락이 흐려지는 것을 막는다.</p>
   </div>
@@ -365,7 +96,7 @@
     <p>Antigravity Desktop에서는 Agent Manager 화면에서 Workspace를 고르고, 그 Workspace를 맡을 에이전트를 스폰(Local Mode 또는 New Worktree Mode)한 뒤 자연어로 목표를 준다. 승인·피드백이 필요한 시점에는 Inbox에 메시지가 쌓인다. "서브에이전트를 호출한다"는 개념보다는 "에이전트에게 목표를 맡기고 진행 상황을 지켜본다"에 가깝다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent6); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — /goal, /agent, /agents</h3>
     <p>Claude Code의 <code>Agent</code>/<code>Task</code> 툴과 같은 "동적으로 필요한 서브에이전트를 스폰한다"는 동작을, <code>agy</code>는 슬래시 커맨드로 부른다는 차이일 뿐이다(<a href="04_Practice_Manual_A.html#section-2">§1-A 섹션 2</a> 참조). <code>agy</code> 세션에서 <code>/goal</code>로 목표를 주면 중간 확인 없이 끝까지 실행하고(주지 않으면 주요 단계마다 확인을 위해 멈춘다), <code>/agent</code>로 장기 작업을 백그라운드에 맡긴 채 계속 다른 프롬프트를 이어갈 수 있다. <code>/agents</code>는 실행 중/완료/막힌 서브에이전트 목록을 보여주는 패널이다.</p>
     <div style="position:relative">
@@ -392,7 +123,7 @@
 
   <div class="warning-box">같은 디렉터리·Workspace에서 여러 에이전트를 동시에 돌리면 "인지적 중첩(cognitive overlap)"이 발생할 수 있다 — 한 에이전트가 같은 폴더에서 작업 중인 다른 에이전트의 결과를 자기 작업 맥락으로 착각(hallucination)하는 문제다. Workspace나 worktree로 에이전트를 분리하는 것이 권장 관행이며, 예외적으로 넘어갈 수 있는 사소한 문제가 아니다.</div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent6); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 세션 내부 + 세션 간 병렬</h3>
     <p><code>agy</code>는 두 층위의 병렬성을 지원한다. 한 세션 안에서는 오케스트레이터가 여러 서브에이전트를 동시에 실행하고, 세션 간에는 터미널을 여러 개 띄워 서로 다른 <code>agy</code> 세션을 독립적으로 병렬 실행할 수 있다 — 서로 다른 파일을 건드리는 한 안전하다. Antigravity 데스크톱(Desktop)의 Agent Manager를 못 쓰는 환경에서 이 세션 간 병렬이 대안이 된다.</p>
   </div>
@@ -420,7 +151,7 @@
     <p>Antigravity 데스크톱(Desktop)은 GUI로 승인·진행을 관리하는 구조라, Claude Code의 훅에 대응하는 자동 발화 장치가 없다. 자동화가 필요한 반복 작업은 Antigravity CLI 쪽으로 옮기는 것이 현실적이다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent6); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 비대화형 실행 + 설정 점검</h3>
     <p><code>agy -p "프롬프트"</code>는 한 번 실행하고 종료하는 비대화형 모드로, CI 파이프라인 같은 자동화에 적합하다. <code>agy inspect</code>는 프로젝트에 로드된 설정·스킬·플러그인·훅 구성을 보여준다 — Claude Code의 훅 자동 발화에 대응하는 것은 아니지만, "지금 어떤 설정이 실제로 적용돼 있는지" 확인하는 역할은 같다.</p>
     <div style="position:relative">
@@ -477,5 +208,6 @@ function copyCode(btn) {
 }
 </script>
 
+<script src="assets/dark-mode-toggle.js"></script>
 </body>
 </html>

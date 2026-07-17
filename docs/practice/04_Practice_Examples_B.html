@@ -5,280 +5,52 @@
   <meta name="description" content="4장 §2-B · 멀티 에이전트 팀 실습 — Antigravity 중심 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §2-B · 멀티 에이전트 팀 실습 — Antigravity 중심 시나리오별 학습 가이드</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
-    :root {
-      --bg: #ffffff;
-      --bg2: #f6f8fa;
-      --bg3: #eef1f4;
-      --border: #d0d7de;
-      --text: #1f2328;
-      --text-dim: #636c76;
-      --accent: #0969da;
-      --accent-g: #1a7f37;
-      --accent-o: #953800;
-      --accent-p: #6639ba;
-      --accent-r: #cf222e;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-      font-size: 15px;
-    }
-    .layout { display: flex; min-height: 100vh; }
-
-    /* ── 사이드바 ── */
-    nav {
-      width: 270px; min-width: 270px;
-      background: var(--bg2);
-      border-right: 1px solid var(--border);
-      position: sticky; top: 0; height: 100vh;
-      overflow-y: auto; padding: 20px 0;
-    }
-    nav .nav-title {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--text-dim);
-      padding: 0 16px 10px;
-    }
-    nav a {
-      display: flex; align-items: center; gap: 8px;
-      padding: 6px 16px;
-      color: var(--text-dim); text-decoration: none;
-      font-size: 13px; border-left: 2px solid transparent;
-      transition: all .15s;
-    }
-    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
-    nav .nav-group {
-      margin-top: 10px; padding: 7px 16px 4px;
-      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .07em; color: var(--text-dim);
-      border-top: 1px solid var(--border);
-    }
-    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dot-g { background: #1a7f37; }
-    .dot-b { background: #0969da; }
-    .dot-p { background: #6639ba; }
-
-    /* ── 본문 ── */
-    main { flex: 1; max-width: 880px; padding: 40px 52px; overflow-x: hidden; }
-    h1 { font-size: 1.9rem; font-weight: 700; color: #1f2328; margin-bottom: 6px; }
-    .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
-    .subtitle a { color: var(--accent); text-decoration: none; }
-
-    /* ── 버전 박스 ── */
-    .version-box {
-      background: #f0f7ff; border: 1px solid #a5d5f7;
-      border-left: 4px solid #0969da; border-radius: 6px;
-      padding: 14px 18px; margin-bottom: 36px; font-size: 13px;
-    }
-    .version-row { display: flex; gap: 12px; padding: 3px 0; border-bottom: 1px solid #d0e8ff; }
-    .version-row:last-child { border-bottom: none; }
-    .vlabel { min-width: 160px; font-weight: 600; color: #0550ae; flex-shrink: 0; }
-
-    /* ── 레벨 섹션 헤더 ── */
-    .level-header {
-      display: flex; align-items: center; gap: 12px;
-      margin: 48px 0 20px; padding-bottom: 10px;
-      border-bottom: 2px solid var(--border);
-    }
-    .level-header .badge { flex-shrink: 0; }
-    .level-header .level-title { flex-shrink: 0; }
-    .level-header .level-desc { flex: 1; }
-    .level-title { font-size: 1.3rem; font-weight: 700; }
-    .level-title-g { color: #1a7f37; }
-    .level-title-b { color: #0969da; }
-    .level-title-p { color: #6639ba; }
-    .level-desc { font-size: 13px; color: var(--text-dim); }
-
-    /* ── 레벨 배지 ── */
-    .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 10.5px; font-weight: 700; padding: 3px 10px;
-      border-radius: 20px; text-transform: uppercase; letter-spacing: .05em;
-    }
-    .badge-g { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-b { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-p { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-    .badge-claude { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-claudeapp { background: #e6ffec; color: #1a7f37; border: 1px solid #a2d9b1; }
-    .badge-agy { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-antigravity { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-
-    /* ── 시나리오 카드 ── */
-    .scenario-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-bottom: 36px;
-      overflow: hidden;
-    }
-    .card-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 22px;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-    }
-    .card-id {
-      font-family: 'SFMono-Regular', 'Consolas', monospace;
-      font-size: 11px; font-weight: 700;
-      color: var(--text-dim); min-width: 34px;
-    }
-    .card-title { font-size: 1.05rem; font-weight: 700; color: #1f2328; }
-    .card-body { padding: 22px 26px; }
-
-    /* ── 플랫폼 구획 ── */
-    .platform-block {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-    }
-    .platform-block .flow-box,
-    .platform-block .tip-box,
-    .platform-block .warning-box {
-      margin-left: -10px;
-      margin-right: -10px;
-    }
-    .platform-block.claude { border-top: 3px solid #1a7f37; }
-    .platform-block.claudeapp { border-top: 3px dashed #1a7f37; }
-    .platform-block.agy { border-top: 3px solid #0550ae; }
-    .platform-block.antigravity { border-top: 3px dashed #6639ba; }
-    .platform-block-title {
-      font-size: 13.5px; font-weight: 700; margin-bottom: 10px;
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    /* ── 상황 설명 ── */
-    .situation {
-      background: #fffbf0; border-left: 3px solid #d4a72c;
-      border-radius: 0 6px 6px 0;
-      padding: 12px 16px; margin-bottom: 20px;
-      font-size: 14px; line-height: 1.7;
-    }
+    /* Page-specific overrides for practice examples */
+    .subtitle { font-size: 13px; margin-bottom: 24px; }
     .situation::before {
       content: '📌 상황'; display: block;
       font-weight: 700; color: #7d4e00; margin-bottom: 6px;
       font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
-
-    /* ── 명령어 목록 ── */
-    .cmd-list { margin-bottom: 20px; }
-    .cmd-list-title {
-      font-size: 12px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 8px;
-    }
-    .cmd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .cmd-chip {
-      font-family: 'SFMono-Regular', 'Consolas', monospace;
-      font-size: 12px; font-weight: 600;
-      background: #f6f8fa; border: 1px solid #d0d7de;
-      border-radius: 6px; padding: 4px 10px;
-      color: #cf222e; text-decoration: none;
-      transition: background .15s;
-    }
-    .cmd-chip:hover { background: #ddf4ff; border-color: #a5d5f7; color: #0550ae; }
-
-    /* ── 단계별 실행 ── */
-    .steps-title {
-      font-size: 12px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 12px;
-    }
-    .step-list { list-style: none; counter-reset: step-counter; margin-bottom: 20px; }
-    .step-list li {
-      counter-increment: step-counter;
-      display: flex; gap: 14px;
-      margin-bottom: 18px; align-items: flex-start;
-    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
     .step-list li::before {
       content: counter(step-counter);
       min-width: 26px; height: 26px;
-      background: #0969da; color: #fff;
+      background: var(--accent); color: var(--text-inverse);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
     }
     .step-content { flex: 1; min-width: 0; }
-    .step-content strong { display: block; margin-bottom: 6px; color: #1f2328; font-size: 14px; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
     .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
-
-    /* ── 코드 블록 ── */
-    pre.code-block {
-      background: #f6f8fa; border: 1px solid #d0d7de;
-      border-radius: 6px; padding: 12px 16px; overflow-x: auto;
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 13px; line-height: 1.55; color: #116329;
-      margin: 6px 0 0; position: relative;
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
     }
-    .copy-btn {
-      position: absolute; top: 8px; right: 10px;
-      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
-      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
-    }
-    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
-    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
-
-    /* ── 흐름 설명 ── */
-    .flow-box {
-      background: #f0f7ff; border: 1px solid #a5d5f7;
-      border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px;
-      overflow-wrap: break-word;
-    }
+    .cmd-chip:hover { background: #ddf4ff; border-color: #a5d5f7; color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
     .flow-box::before {
       content: '⚙️ 내부 동작'; display: block;
-      font-weight: 700; color: #0550ae; margin-bottom: 8px;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
       font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
-
-    /* ── 팁 박스 ── */
-    .tip-box {
-      background: #dafbe1; border: 1px solid #a2d9b1; border-radius: 6px;
-      padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; color: #0a3622;
-      overflow-wrap: break-word;
-    }
     .tip-box::before {
-      content: '💡 팁'; display: block; font-weight: 700; color: #116329;
+      content: '💡 팁'; display: block; font-weight: 700; color: var(--accent-green);
       margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
-    }
-
-    /* ── 경고 박스 ── */
-    .warning-box {
-      background: #fff8c5; border: 1px solid #d4a72c;
-      border-radius: 6px; padding: 12px 16px; margin-bottom: 14px;
-      font-size: 13.5px; color: #5c3900;
-      overflow-wrap: break-word;
     }
     .warning-box::before {
       content: '⚠️ 주의'; display: block; font-weight: 700; color: #7d4e00;
       margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
-
-    /* ── 관련 명령어 조합 ── */
-    .related-cmds {
-      border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px;
-      font-size: 13px; color: var(--text-dim);
-    }
-    .related-cmds strong { color: #1f2328; }
-
-    /* ── 인라인 코드 ── */
-    code {
-      font-family: 'SFMono-Regular', 'Consolas', monospace;
-      font-size: 12px; background: #f6f8fa;
-      border: 1px solid #d0d7de; border-radius: 4px;
-      padding: 2px 6px; color: #cf222e;
-    }
-
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
-    /* ── 장 이동 ── */
-    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
-    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
-    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
-    .chapter-nav a:hover { background: var(--bg2); }
-    .chapter-nav .prev { text-align: left; }
-    .chapter-nav .next { text-align: right; }
-    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
-    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
     .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
     .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
     .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
@@ -822,5 +594,6 @@ function copyCode(btn) {
 }
 </script>
   <script src="../assets/inpage-search.js" defer></script>
+<script src="assets/dark-mode-toggle.js"></script>
 </body>
 </html>

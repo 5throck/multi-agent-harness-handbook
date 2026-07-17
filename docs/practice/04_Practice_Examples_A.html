@@ -5,294 +5,55 @@
   <meta name="description" content="4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
-    :root {
-      --bg: #ffffff;
-      --bg2: #f6f8fa;
-      --bg3: #eef1f4;
-      --border: #d0d7de;
-      --text: #1f2328;
-      --text-dim: #636c76;
-      --accent: #0969da;
-      --accent-g: #1a7f37;
-      --accent-o: #953800;
-      --accent-p: #6639ba;
-      --accent-r: #cf222e;
-      --accent-amber: #d4a72c;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-      font-size: 15px;
-    }
-    .layout { display: flex; min-height: 100vh; }
-
-    /* ── 사이드바 ── */
-    nav {
-      width: 270px; min-width: 270px;
-      background: var(--bg2);
-      border-right: 1px solid var(--border);
-      position: sticky; top: 0; height: 100vh;
-      overflow-y: auto; padding: 20px 0;
-    }
-    nav .nav-title {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--text-dim);
-      padding: 0 16px 10px;
-    }
-    nav a {
-      display: flex; align-items: center; gap: 8px;
-      padding: 6px 16px;
-      color: var(--text-dim); text-decoration: none;
-      font-size: 13px; border-left: 2px solid transparent;
-      transition: all .15s;
-    }
-    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
-    nav .nav-group {
-      margin-top: 10px; padding: 7px 16px 4px;
-      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .07em; color: var(--text-dim);
-      border-top: 1px solid var(--border);
-    }
-    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dot-g { background: #1a7f37; }
-    .dot-b { background: #0969da; }
-    .dot-p { background: #6639ba; }
-
-    /* ── 본문 ── */
-    main { flex: 1; max-width: 880px; padding: 40px 52px; overflow-x: hidden; }
-    h1 { font-size: 1.9rem; font-weight: 700; color: #1f2328; margin-bottom: 6px; }
-    .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
-    .subtitle a { color: var(--accent); text-decoration: none; }
-
-    /* ── 버전 박스 ── */
-    .version-box {
-      background: #f0f7ff; border: 1px solid #a5d5f7;
-      border-left: 4px solid #0969da; border-radius: 6px;
-      padding: 14px 18px; margin-bottom: 36px; font-size: 13px;
-    }
-    .version-row { display: flex; gap: 12px; padding: 3px 0; border-bottom: 1px solid #d0e8ff; }
-    .version-row:last-child { border-bottom: none; }
-    .vlabel { min-width: 160px; font-weight: 600; color: #0550ae; flex-shrink: 0; }
-
-    /* ── 레벨 섹션 헤더 ── */
-    .level-header {
-      display: flex; align-items: center; gap: 12px;
-      margin: 48px 0 20px; padding-bottom: 10px;
-      border-bottom: 2px solid var(--border);
-    }
-    .level-header .badge { flex-shrink: 0; }
-    .level-header .level-title { flex-shrink: 0; }
-    .level-header .level-desc { flex: 1; }
-    .level-title { font-size: 1.3rem; font-weight: 700; }
-    .level-title-g { color: #1a7f37; }
-    .level-title-b { color: #0969da; }
-    .level-title-p { color: #6639ba; }
-    .level-desc { font-size: 13px; color: var(--text-dim); }
-
-    /* ── 레벨 배지 ── */
-    .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 10.5px; font-weight: 700; padding: 3px 10px;
-      border-radius: 20px; text-transform: uppercase; letter-spacing: .05em;
-    }
-    .badge-g { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-b { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-p { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-    .badge-claude { background: #dafbe1; color: #116329; border: 1px solid #a2d9b1; }
-    .badge-claudeapp { background: #e6ffec; color: #1a7f37; border: 1px solid #a2d9b1; }
-    .badge-agy { background: #ddf4ff; color: #0550ae; border: 1px solid #a5d5f7; }
-    .badge-antigravity { background: #fbefff; color: #6639ba; border: 1px solid #d2b9ff; }
-
-    /* ── 시나리오 카드 ── */
-    .scenario-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-bottom: 36px;
-      overflow: hidden;
-    }
-    .card-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 22px;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-    }
-    .card-id {
-      font-family: 'SFMono-Regular', 'Consolas', monospace;
-      font-size: 11px; font-weight: 700;
-      color: var(--text-dim); min-width: 34px;
-    }
-    .card-title { font-size: 1.05rem; font-weight: 700; color: #1f2328; }
-    .card-body { padding: 22px 26px; }
-
-    /* ── 플랫폼 구획 ── */
-    .platform-block {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-    }
-    .platform-block .flow-box,
-    .platform-block .tip-box,
-    .platform-block .warning-box {
-      margin-left: -10px;
-      margin-right: -10px;
-    }
-    .platform-block.claude { border-top: 3px solid #1a7f37; }
-    .platform-block.claudeapp { border-top: 3px dashed #1a7f37; }
-    .platform-block.agy { border-top: 3px solid #0550ae; }
-    .platform-block.antigravity { border-top: 3px dashed #6639ba; }
-    .platform-block-title {
-      font-size: 13.5px; font-weight: 700; margin-bottom: 10px;
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    /* ── 상황 설명 ── */
-    .situation {
-      background: #fffbf0; border-left: 3px solid #d4a72c;
-      border-radius: 0 6px 6px 0;
-      padding: 12px 16px; margin-bottom: 20px;
-      font-size: 14px; line-height: 1.7;
-    }
+    /* Page-specific overrides for practice examples */
+    .subtitle { font-size: 13px; margin-bottom: 24px; }
     .situation::before {
       content: '📌 상황'; display: block;
       font-weight: 700; color: #7d4e00; margin-bottom: 6px;
       font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
-
-    /* ── 명령어 목록 ── */
-    .cmd-list { margin-bottom: 20px; }
-    .cmd-list-title {
-      font-size: 12px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 8px;
-    }
-    .cmd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .cmd-chip {
-      font-family: 'SFMono-Regular', 'Consolas', monospace;
-      font-size: 12px; font-weight: 600;
-      background: #f6f8fa; border: 1px solid #d0d7de;
-      border-radius: 6px; padding: 4px 10px;
-      color: #cf222e; text-decoration: none;
-      transition: background .15s;
-    }
-    .cmd-chip:hover { background: #ddf4ff; border-color: #a5d5f7; color: #0550ae; }
-
-    /* ── 단계별 실행 ── */
-    .steps-title {
-      font-size: 12px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .05em; color: var(--text-dim); margin-bottom: 12px;
-    }
-    .step-list { list-style: none; counter-reset: step-counter; margin-bottom: 20px; }
-    .step-list li {
-      counter-increment: step-counter;
-      display: flex; gap: 14px;
-      margin-bottom: 18px; align-items: flex-start;
-    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
     .step-list li::before {
       content: counter(step-counter);
       min-width: 26px; height: 26px;
-      background: #0969da; color: #fff;
+      background: var(--accent); color: var(--text-inverse);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
     }
     .step-content { flex: 1; min-width: 0; }
-    .step-content strong { display: block; margin-bottom: 6px; color: #1f2328; font-size: 14px; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
     .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
-
-    /* ── 코드 블록 ── */
-    pre.code-block {
-      background: #f6f8fa; border: 1px solid #d0d7de;
-      border-radius: 6px; padding: 12px 16px; overflow-x: auto;
-      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
-      font-size: 13px; line-height: 1.55; color: #116329;
-      margin: 6px 0 0; position: relative;
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
     }
-    .copy-btn {
-      position: absolute; top: 8px; right: 10px;
-      background: #fff; border: 1px solid #d0d7de; border-radius: 5px;
-      padding: 3px 9px; font-size: 11px; cursor: pointer; color: #636c76;
-    }
-    .copy-btn:hover { background: #f6f8fa; color: #0969da; }
-    .copy-btn.copied { color: #1a7f37; border-color: #a2d9b1; }
-
-    /* ── 흐름 설명 ── */
-    .flow-box {
-      background: #f0f7ff; border: 1px solid #a5d5f7;
-      border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px;
-      overflow-wrap: break-word;
-    }
+    .cmd-chip:hover { background: #ddf4ff; border-color: #a5d5f7; color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
     .flow-box::before {
       content: '⚙️ 내부 동작'; display: block;
-      font-weight: 700; color: #0550ae; margin-bottom: 8px;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
       font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
-
-    /* ── 팁 박스 ── */
-    .tip-box {
-      background: #dafbe1; border: 1px solid #a2d9b1; border-radius: 6px;
-      padding: 12px 16px; margin-bottom: 14px; font-size: 13.5px; color: #0a3622;
-      overflow-wrap: break-word;
-    }
     .tip-box::before {
-      content: '💡 팁'; display: block; font-weight: 700; color: #116329;
+      content: '💡 팁'; display: block; font-weight: 700; color: var(--accent-green);
       margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
-    }
-
-    /* ── 경고 박스 ── */
-    .warning-box {
-      background: #fff8c5; border: 1px solid #d4a72c;
-      border-radius: 6px; padding: 12px 16px; margin-bottom: 14px;
-      font-size: 13.5px; color: #5c3900;
-      overflow-wrap: break-word;
     }
     .warning-box::before {
       content: '⚠️ 주의'; display: block; font-weight: 700; color: #7d4e00;
       margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
-
-    /* ── 관련 명령어 조합 ── */
-    .related-cmds {
-      border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px;
-      font-size: 13px; color: var(--text-dim);
-    }
-    .related-cmds strong { color: #1f2328; }
-
-    /* ── 인라인 코드 ── */
-    code {
-      font-family: 'SFMono-Regular', 'Consolas', monospace;
-      font-size: 12px; background: #f6f8fa;
-      border: 1px solid #d0d7de; border-radius: 4px;
-      padding: 2px 6px; color: #cf222e;
-    }
-
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
-    /* ── 장 이동 ── */
-    .chapter-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); margin-bottom: 8px; }
-    .chapter-nav { display: flex; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
-    .chapter-nav a { flex: 1; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; transition: background .15s; }
-    .chapter-nav a:hover { background: var(--bg2); }
-    .chapter-nav .prev { text-align: left; }
-    .chapter-nav .next { text-align: right; }
-    .chapter-nav .dir { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin-bottom: 4px; }
-    .chapter-nav .ttl { font-size: 14px; font-weight: 700; }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
     .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
     .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
     .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
-
-    /* ── 참고 영상 ── */
-    .video-refs { margin: 28px 0; padding: 16px 20px; background: #f0f6ff; border: 1px solid #d0e8ff; border-radius: 8px; }
-    .video-refs h3 { font-size: 15px; font-weight: 700; color: var(--accent); margin: 0 0 12px; }
-    .video-refs ul { list-style: none; padding: 0; margin: 0; }
-    .video-refs li { padding: 6px 0; line-height: 1.6; }
-    .video-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; color: #fff; vertical-align: middle; margin-right: 6px; }
-    .video-badge.en { background: #0969da; }
-    .video-badge.ko { background: #1a7f37; }
-    .video-meta { font-size: 12px; color: var(--text-dim); }
   </style>
 </head>
 <body>
@@ -561,8 +322,8 @@ EOF</pre>
           <defs>
             <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
-            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-g)"/></marker>
-            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-p)"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
           </defs>
           <!-- Box 1: 사용자 요청 (gray) -->
           <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="var(--text-dim)" stroke-width="1.5"/>
@@ -574,21 +335,21 @@ EOF</pre>
           <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent)">writer.md</text>
           <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent)">초안 작성</text>
           <!-- Arrow 2 -->
-          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-g)" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#arrow1g)"/>
           <!-- Return arrow (curved, below) -->
           <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="var(--accent-amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
           <polygon points="197,63 200,55 203,63" fill="var(--accent-amber)"/>
           <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-amber)">수정 요청 시 writer로 되돌아감</text>
           <!-- Box 3: reviewer.md (green) -->
-          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-g)" stroke-width="1.5"/>
-          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-g)">reviewer.md</text>
-          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-g)">피드백/승인</text>
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-green)" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-green)">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-green)">피드백/승인</text>
           <!-- Arrow 3 -->
-          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-p)" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-purple)" stroke-width="1.5" marker-end="url(#arrow1p)"/>
           <!-- Box 4: 최종 결과물 (purple) -->
-          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-p)" stroke-width="1.5"/>
-          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-p)">최종 결과물</text>
-          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-p)">완성</text>
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-purple)" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-purple)">최종 결과물</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-purple)">완성</text>
         </svg>
       </div>
 
@@ -696,8 +457,8 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
         <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
           <defs>
             <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
-            <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-p)"/></marker>
-            <marker id="drArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-g)"/></marker>
+            <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+            <marker id="drArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
             <marker id="drArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
           </defs>
 
@@ -710,12 +471,12 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
           <rect x="150" y="30" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
           <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
           <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">×1</text>
-          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
           <!-- Result -->
           <rect x="325" y="30" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
           <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
           <!-- Label: simple -->
-          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-g)" font-weight="600">단일 패스</text>
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">단일 패스</text>
 
           <!-- Row 2: Request B → writer → reviewer (pipeline) -->
           <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 B</text>
@@ -724,19 +485,19 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
           <line x1="95" y1="121" x2="145" y2="121" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
           <!-- writer box -->
           <rect x="150" y="105" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
-          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-p)">writer</text>
-          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-p)">×1</text>
-          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-p)" stroke-width="1.2" marker-end="url(#drArrowP)"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-purple)">×1</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-purple)" stroke-width="1.2" marker-end="url(#drArrowP)"/>
           <!-- reviewer box -->
           <rect x="325" y="105" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
           <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
           <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">×1</text>
-          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
           <!-- Result -->
           <rect x="485" y="105" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
           <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
           <!-- Label: pipeline -->
-          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-p)" font-weight="600">파이프라인</text>
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-purple)" font-weight="600">파이프라인</text>
 
           <!-- Row 3: Request C → writer → reviewer×2 (fan-out) -->
           <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 C</text>
@@ -746,11 +507,11 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
           <line x1="95" y1="196" x2="145" y2="196" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
           <!-- writer box -->
           <rect x="150" y="180" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
-          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-p)">writer</text>
-          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-p)">×1</text>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-purple)">×1</text>
           <!-- Fan-out to 2 reviewers -->
-          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
-          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-g)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
           <!-- reviewer 1 (문법) -->
           <rect x="315" y="170" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
           <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
@@ -760,12 +521,12 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
           <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
           <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#116329">논리 관점</text>
           <!-- Merge to result -->
-          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-g)" stroke-width="1"/>
-          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-g)" stroke-width="1"/>
+          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
           <rect x="485" y="182" width="80" height="30" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
           <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
           <!-- Label: fan-out -->
-          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-g)" font-weight="600">팬아웃</text>
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">팬아웃</text>
 
           <!-- Bottom note -->
           <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 서브에이전트 정의는 1회 — 오케스트레이터가 요청마다 동적으로 라우팅</text>
@@ -921,10 +682,10 @@ EOF</pre>
           </defs>
 
           <!-- BEFORE section -->
-          <text x="140" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-r)">Before — 모든 도구 허용</text>
+          <text x="140" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-red)">Before — 모든 도구 허용</text>
           <!-- Wide open box -->
           <rect x="30" y="28" width="220" height="80" rx="8" fill="#ffebe9" stroke="#ff8182" stroke-width="1.5"/>
-          <text x="140" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="var(--accent-r)">tools: [모든 도구]</text>
+          <text x="140" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="var(--accent-red)">tools: [모든 도구]</text>
           <!-- Tool icons row -->
           <rect x="50" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
           <text x="72" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Read</text>
@@ -939,21 +700,21 @@ EOF</pre>
           <rect x="150" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
           <text x="172" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="600" fill="#fff">Push</text>
           <!-- Attack surface label -->
-          <text x="140" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--accent-r)">공격 표면: 넓음</text>
+          <text x="140" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--accent-red)">공격 표면: 넓음</text>
 
           <!-- Arrow between -->
           <line x1="260" y1="68" x2="325" y2="68" stroke="var(--text-dim)" stroke-width="2" marker-end="url(#paArrow)"/>
           <text x="293" y="60" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--accent)">최소 권한</text>
 
           <!-- AFTER section -->
-          <text x="460" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-g)">After — 필요한 도구만</text>
+          <text x="460" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-green)">After — 필요한 도구만</text>
           <!-- Restricted box -->
           <rect x="340" y="28" width="240" height="80" rx="8" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.5"/>
           <text x="460" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#116329">tools: [Read, Grep]</text>
           <!-- Tool icons row - only 2 -->
-          <rect x="385" y="62" width="55" height="20" rx="4" fill="var(--accent-g)" opacity="0.8"/>
+          <rect x="385" y="62" width="55" height="20" rx="4" fill="var(--accent-green)" opacity="0.8"/>
           <text x="412" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#fff">Read</text>
-          <rect x="445" y="62" width="55" height="20" rx="4" fill="var(--accent-g)" opacity="0.8"/>
+          <rect x="445" y="62" width="55" height="20" rx="4" fill="var(--accent-green)" opacity="0.8"/>
           <text x="472" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#fff">Grep</text>
           <!-- Grayed out tools -->
           <rect x="385" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
@@ -965,15 +726,15 @@ EOF</pre>
           <text x="460" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#116329">공격 표면: 좁음</text>
 
           <!-- Bottom comparison bar -->
-          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-r)" opacity="0.3"/>
-          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-r)" opacity="0.6"/>
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-red)" opacity="0.3"/>
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
           <text x="140" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="700" fill="#fff">위험 범위: 100%</text>
 
-          <rect x="340" y="148" width="88" height="16" rx="4" fill="var(--accent-g)" opacity="0.6"/>
+          <rect x="340" y="148" width="88" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
           <text x="384" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" font-weight="700" fill="#fff">위험: 33%</text>
 
           <!-- Reduction arrow -->
-          <text x="300" y="178" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent-g)">위험 범위 67% 감소</text>
+          <text x="300" y="178" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent-green)">위험 범위 67% 감소</text>
           <text x="300" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">reviewer는 애초에 쓸 수 없으므로 실수가 발생하지 않는다</text>
         </svg>
       </div>
@@ -1020,10 +781,10 @@ EOF</pre>
           <rect x="0" y="34" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
           <text x="52" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent)">haiku</text>
           <!-- Speed bar: 빠름 -->
-          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-g)" opacity="0.8"/>
+          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
           <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">빠름</text>
           <!-- Cost bar: 낮음 -->
-          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-g)" opacity="0.6"/>
+          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
           <text x="304" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">낮음</text>
           <!-- Quality bar: 기본 -->
           <rect x="400" y="46" width="65" height="16" rx="4" fill="var(--accent-amber)" opacity="0.6"/>
@@ -1034,7 +795,7 @@ EOF</pre>
 
           <!-- Row 2: sonnet -->
           <rect x="0" y="88" width="520" height="50" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.5"/>
-          <text x="52" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-p)">sonnet</text>
+          <text x="52" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-purple)">sonnet</text>
           <!-- Speed bar: 중간 -->
           <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
           <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">중간</text>
@@ -1042,7 +803,7 @@ EOF</pre>
           <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
           <text x="315" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">중간</text>
           <!-- Quality bar: 양호 -->
-          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-p)" opacity="0.6"/>
+          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-purple)" opacity="0.6"/>
           <text x="450" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">양호</text>
           <!-- Quality description -->
           <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">일반 검토</text>
@@ -1050,15 +811,15 @@ EOF</pre>
 
           <!-- Row 3: opus -->
           <rect x="0" y="142" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
-          <text x="52" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-r)">opus</text>
+          <text x="52" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-red)">opus</text>
           <!-- Speed bar: 느림 -->
-          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-r)" opacity="0.7"/>
+          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
           <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">느림</text>
           <!-- Cost bar: 높음 -->
-          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-r)" opacity="0.6"/>
+          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
           <text x="338" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">높음</text>
           <!-- Quality bar: 우수 -->
-          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-g)" opacity="0.8"/>
+          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
           <text x="468" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#fff">우수</text>
           <!-- Quality description -->
           <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">복잡 논리</text>
@@ -1196,5 +957,6 @@ function copyCode(btn) {
 }
 </script>
   <script src="../assets/inpage-search.js" defer></script>
+<script src="assets/dark-mode-toggle.js"></script>
 </body>
 </html>

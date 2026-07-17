@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview — Multilingual Handbook (Original Theme + Lang Switcher)</title>
+  <link rel="stylesheet" href="assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="assets/css/handbook-components.css">
+  <style>
+    /* Lang switcher styling — top-right floating */
+    .lang-switcher {
+      position: fixed; top: 12px; right: 16px; z-index: 1000;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .lang-switcher label { font-size: 12px; color: var(--text-dim); font-weight: 600; }
+    .lang-switcher select {
+      font-size: 13px; padding: 4px 8px; border-radius: 4px;
+      border: 1px solid var(--border); background: var(--bg);
+      color: var(--text); cursor: pointer;
+    }
+    #dark-toggle {
+      font-size: 16px; cursor: pointer; background: none; border: none;
+      padding: 2px 4px; border-radius: 4px;
+    }
+    #dark-toggle:hover { background: var(--bg3); }
+
+    /* Preview info banner */
+    .preview-banner {
+      background: var(--bg-note); border: 1px solid var(--border); border-left: 4px solid var(--accent);
+      border-radius: 8px; padding: 16px 20px; margin-bottom: 32px;
+    }
+    .preview-banner h3 { font-size: 15px; color: var(--accent-dark); margin-bottom: 8px; }
+    .preview-banner ul { font-size: 14px; line-height: 1.8; color: var(--text); margin-left: 18px; }
+
+    /* Translation comparison table */
+    .lang-compare { margin: 24px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .lang-compare table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .lang-compare th { background: var(--bg3); color: var(--accent-dark); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; padding: 12px 16px; text-align: left; }
+    .lang-compare td { border-top: 1px solid var(--border); padding: 12px 16px; vertical-align: top; line-height: 1.7; }
+    .lang-compare td:first-child { font-weight: 600; color: var(--accent-dark); white-space: nowrap; width: 100px; }
+  </style>
+</head>
+<body>
+
+<!-- Lang Switcher + Dark Mode Toggle -->
+<div class="lang-switcher">
+  <label for="lang-select">🌐</label>
+  <select id="lang-select">
+    <option value="" selected>한국어</option>
+    <option value="en">English</option>
+    <option value="ja">日本語</option>
+  </select>
+  <button id="dark-toggle" title="Toggle dark mode">☀️</button>
+</div>
+
+<div class="layout">
+<nav>
+  <a href="#top" style="font-weight:700;color:var(--accent);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:10px;">← 핸드북 홈</a>
+  <div class="nav-title">1장 · 도입</div>
+  <a href="#s0">지금 왜 AI인가</a>
+  <a href="#s1">AI 활용의 세 단계</a>
+  <a href="#s2">하네스 엔지니어링의 필요성</a>
+  <a href="#s3">멀티 에이전트: 전문가 팀의 원리</a>
+  <a href="#s4">어디에 활용할 수 있나</a>
+  <a href="#s5">오늘 이 워크숍에서 얻는 것</a>
+  <a href="#preview-sample">번역 샘플 비교</a>
+  <div class="nav-section">다른 장</div>
+  <a href="#preview-index">다국어 목차 구조</a>
+</nav>
+
+<main>
+<article class="reading" id="top">
+  <div class="chapter-eyebrow">Preview — Multilingual Handbook</div>
+  <h1>Azure Theme + Lang Switcher 미리보기</h1>
+
+  <div class="preview-banner">
+    <h3>📋 이 미리보기의 목적</h3>
+    <ul>
+      <li><strong>기존 GitHub 스타일 팔레트 유지</strong> — 기존 색상(#0969da 등) 그대로 사용</li>
+      <li><strong>3-Layer 다크모드 추가</strong> — OS 자동 감지 + 수동 토글 (☀️ 클릭)</li>
+      <li><strong>언어 전환기(lang-switcher)</strong>의 위치와 동작 방식 확인</li>
+      <li>한국어/영어/일본어 <strong>번역 샘플</strong> 비교</li>
+    </ul>
+  </div>
+
+  <h2 id="s0">기존 스타일 유지 + 다크모드 추가</h2>
+  <p>기존 GitHub 스타일 CSS 변수는 <strong>그대로 유지</strong>합니다. 다크모드만 GitHub Dark 팔레트로 추가:</p>
+
+  <div class="lang-compare">
+    <table>
+      <tr><th>요소</th><th>Light (기존, 유지)</th><th>Dark (신규 추가)</th></tr>
+      <tr><td>Primary Accent</td><td style="color:#0969da">#0969da</td><td style="color:#58a6ff">#58a6ff</td></tr>
+      <tr><td>Dark Accent</td><td style="color:#0550ae">#0550ae</td><td style="color:#1f6feb">#1f6feb</td></tr>
+      <tr><td>Background</td><td style="color:#f6f8fa">#f6f8fa</td><td style="color:#161b22">#161b22</td></tr>
+      <tr><td>Border</td><td style="color:#d0d7de">#d0d7de</td><td style="color:#30363d">#30363d</td></tr>
+      <tr><td>Text</td><td style="color:#1f2328">#1f2328</td><td style="color:#e6edf3">#e6edf3</td></tr>
+    </table>
+  </div>
+
+  <p>상단 우측의 <strong>☀️ 버튼</strong>을 클릭하면 GitHub Dark 스타일의 다크모드가 전환됩니다. OS 시스템 설정의 다크모드도 자동 감지합니다.</p>
+
+  <h2 id="s1">언어 전환기 동작</h2>
+  <p>상단 우측의 <strong>🌐 드롭다운</strong>에서 언어를 선택하면:</p>
+  <ul>
+    <li><code>01_Why_AI_Chapter.html</code> → 한국어 (기존)</li>
+    <li><code>01_Why_AI_Chapter_en.html</code> → English (신규)</li>
+    <li><code>01_Why_AI_Chapter_ja.html</code> → 日本語 (신규)</li>
+  </ul>
+  <p>선택된 언어는 <strong>localStorage</strong>에 저장되어 다른 페이지로 이동해도 유지됩니다.</p>
+
+  <h2 id="s2">파일명 규칙</h2>
+  <p>모든 기존 파일은 그대로 유지되며, 접미사로 언어 변형이 추가됩니다:</p>
+
+  <div class="lang-compare">
+    <table>
+      <tr><th>언어</th><th>파일명 패턴</th><th>예시</th></tr>
+      <tr><td>🇰🇷 한국어</td><td><code>chapter.html</code></td><td><code>01_Why_AI_Chapter.html</code></td></tr>
+      <tr><td>🇺🇸 English</td><td><code>chapter_en.html</code></td><td><code>01_Why_AI_Chapter_en.html</code></td></tr>
+      <tr><td>🇯🇵 日本語</td><td><code>chapter_ja.html</code></td><td><code>01_Why_AI_Chapter_ja.html</code></td></tr>
+    </table>
+  </div>
+
+  <h2 id="preview-sample">번역 샘플 비교</h2>
+  <p>실제 1장 도입부의 번역 예시입니다:</p>
+
+  <div class="lang-compare">
+    <table>
+      <tr><th>🇰🇷 한국어</th><th>🇺🇸 English</th><th>🇯🇵 日本語</th></tr>
+      <tr>
+        <td>AI 시대의 업무 혁신</td>
+        <td>Business Innovation in the AI Era</td>
+        <td>AI時代の業務イノベーション</td>
+      </tr>
+      <tr>
+        <td>ChatGPT가 등장한 지 3년 반. AI는 더 이상 "써보는" 도구가 아니라 "함께 일하는" 협업자가 되었다.</td>
+        <td>It has been three and a half years since ChatGPT emerged. AI is no longer a tool we "try out" — it has become a "collaborator" we work with.</td>
+        <td>ChatGPTが登場してから3年半。AIはもはや「試してみる」ツールではなく、「一緒に働く」協働者となった。</td>
+      </tr>
+      <tr>
+        <td>AI 활용의 세 단계 — 사용자, 활용자, 설계자</td>
+        <td>Three stages of AI adoption — User, Practitioner, Designer</td>
+        <td>AI活用の3つの段階 — ユーザー、実践者、設計者</td>
+      </tr>
+      <tr>
+        <td>하네스 엔지니어링은 AI에게 역할·규칙·검증 기준을 부여하는 설계 기술이다.</td>
+        <td>Harness engineering is the design discipline of assigning roles, rules, and validation criteria to AI agents.</td>
+        <td>ハーネスエンジニアリングとは、AIに役割・ルール・検証基準を与える設計技術である。</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2 id="s3">전체 구조 (96개 HTML 파일)</h2>
+
+  <div class="lang-compare">
+    <table>
+      <tr><th>디렉토리</th><th>파일 수 (×3 언어)</th><th>내용</th></tr>
+      <tr><td><code>intro/</code></td><td>8 × 3 = 24</td><td>1장, 5장, 8장(5분할), 10장</td></tr>
+      <tr><td><code>concepts/</code></td><td>1 × 3 = 3</td><td>2장 하네스 엔지니어링 개념</td></tr>
+      <tr><td><code>guardrails/</code></td><td>1 × 3 = 3</td><td>3장 가드레일과 권한</td></tr>
+      <tr><td><code>practice/</code></td><td>5 × 3 = 15</td><td>실습 매뉴얼/예시</td></tr>
+      <tr><td><code>tools/</code></td><td>1 × 3 = 3</td><td>도구 비교 매뉴얼</td></tr>
+      <tr><td><code>variant-practice/</code></td><td>2 × 3 = 6</td><td>6장 베리언트 실습</td></tr>
+      <tr><td><code>enterprise/</code></td><td>1 × 3 = 3</td><td>7장 엔터프라이즈 전략</td></tr>
+      <tr><td><code>workflows/</code></td><td>1 × 3 = 3</td><td>9장 워크플로우 패턴</td></tr>
+      <tr><td><code>variant-advanced/</code></td><td>2 × 3 = 6</td><td>11-12장 베리언트 생성/승격</td></tr>
+      <tr><td><code>capstone/</code></td><td>1 × 3 = 3</td><td>13장 캡스톤</td></tr>
+      <tr><td><code>faq/</code></td><td>1 × 3 = 3</td><td>FAQ</td></tr>
+      <tr><td><code>glossary/</code></td><td>1 × 3 = 3</td><td>용어집</td></tr>
+      <tr><td><code>lecture-guide/</code></td><td>2 × 3 = 6</td><td>강의 개요/강의 가이드</td></tr>
+      <tr><td><code>warm-up/</code></td><td>1 × 3 = 3</td><td>워밍업 (테트리스→팩맨)</td></tr>
+      <tr><td colspan="2" style="text-align:right;font-weight:700;color:var(--accent6)">합계: 96개</td><td>+ index.html, assets</td></tr>
+    </table>
+  </div>
+
+  <h2 id="preview-index">다국어 index.html 구조</h2>
+  <p>기존 index.html은 다음과 같이 업데이트됩니다:</p>
+  <ul>
+    <li>다국어 TOC — 각 장 제목을 3개 언어로 표시</li>
+    <li>언어 전환 드롭다운 (lang-switcher.js)</li>
+    <li>다크모드 토글 버튼</li>
+    <li>site-search.js 업데이트 — _en.html, _ja.html 포함</li>
+  </ul>
+
+  <div class="pullquote">
+    기존 한국어 핸드북의 내용·스타일·구조를 그대로 유지하면서, GitHub Dark 다크모드와 3개 언어 지원을 추가합니다.
+    <span class="by">Multilingual Handbook Design</span>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="#" style="pointer-events:none;opacity:0.4"><div class="dir">← 이전 장</div><div class="ttl">(이 파일은 미리보기입니다)</div></a>
+    <a href="#" style="pointer-events:none;opacity:0.4" class="next"><div class="dir">다음 장 →</div><div class="ttl">(이 파일은 미리보기입니다)</div></a>
+  </div>
+</article>
+</main>
+</div>
+
+<script>
+// Dark mode toggle
+(function() {
+  var btn = document.getElementById('dark-toggle');
+  var isDark = localStorage.getItem('darkMode') === 'true';
+  function applyDark(dark) {
+    document.documentElement.classList.toggle('dark', dark);
+    btn.textContent = dark ? '🌙' : '☀️';
+    localStorage.setItem('darkMode', dark);
+  }
+  applyDark(isDark);
+  btn.addEventListener('click', function() {
+    applyDark(!document.documentElement.classList.contains('dark'));
+  });
+
+  // Lang switcher (demo only — shows alert)
+  var sel = document.getElementById('lang-select');
+  var labels = { '': '한국어', 'en': 'English', 'ja': '日本語' };
+  sel.addEventListener('change', function() {
+    var lang = sel.value;
+    // In real implementation, this navigates to the variant file.
+    // For preview, we just show a notification.
+    var base = '01_Why_AI_Chapter';
+    var suffix = lang ? '_' + lang : '';
+    var target = base + suffix + '.html';
+    alert('🌐 Language switch demo\n\n' +
+          'In the actual handbook, clicking "' + labels[lang] + '" would navigate to:\n\n' +
+          target + '\n\n' +
+          'The preference would be saved to localStorage.');
+  });
+})();
+</script>
+<script src="assets/dark-mode-toggle.js"></script>
+</body>
+</html>

@@ -5,73 +5,23 @@
   <meta name="description" content="강의 소개 · 멀티 에이전트팀 하네스 엔지니어링 핸드북 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>강의 소개 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
-    :root {
-      --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f4; --border: #d0d7de;
-      --text: #1f2328; --text-dim: #636c76; --accent: #0969da;
-      --accent2: #1a7f37; --accent4: #6639ba; --accent6: #0550ae;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-      background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px;
-      -webkit-font-smoothing: antialiased;
-    }
-    .wrap { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; overflow-x: hidden; }
-
-    /* ── 헤더 ── */
-    header { margin-bottom: 6px; }
-    h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 10px; }
-    .subtitle { color: var(--text-dim); font-size: 15px; margin-bottom: 10px; }
-    .subtitle a { color: var(--accent); text-decoration: none; }
-    .subtitle a:hover { text-decoration: underline; }
-    .hero {
-      background: linear-gradient(135deg, #eaf3ff 0%, #f0f0ff 100%);
-      border: 1px solid #c8daf5; border-radius: 12px;
-      padding: 28px 32px; margin: 24px 0 36px;
-    }
+    /* Page-specific overrides */
     .hero p { font-size: 15.5px; line-height: 1.85; margin: 0; }
-
-    /* ── 뱃지·태그 ── */
     .tag {
       display: inline-block; font-size: 11px; font-weight: 700;
       padding: 2px 10px; border-radius: 20px; letter-spacing: .04em;
       margin-right: 6px; margin-bottom: 6px;
     }
-    .tag-lecture { background: #f1e8fd; color: var(--accent4); border: 1px solid #d4bdf5; }
-    .tag-lab { background: #dafbe1; color: var(--accent2); border: 1px solid #a2d9b1; }
-    .tag-discuss { background: #fff8c5; color: #7a5c00; border: 1px solid #f0dc5e; }
-    .tag-demo { background: #ffebe9; color: #cf222e; border: 1px solid #ffc1bc; }
-
-    /* ── 섹션 ── */
     h2 {
       font-size: 1.4rem; font-weight: 700; margin: 44px 0 14px;
       scroll-margin-top: 20px;
       display: flex; align-items: center; gap: 10px;
     }
     h2 .icon { font-size: 1.2rem; }
-    h3 { font-size: 1.08rem; font-weight: 700; color: var(--accent6); margin: 24px 0 8px; }
-    p { margin: 10px 0; }
-    ul, ol { margin: 10px 0 14px 22px; }
-    li { margin: 5px 0; }
-    code { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
-
-    /* ── 강조 박스 ── */
-    .note { background: #e8f4fd; border-left: 3px solid var(--accent); padding: 12px 18px; border-radius: 4px; margin: 18px 0; font-size: 14px; }
-    .warn { background: #fff8c5; border-left: 3px solid #d4a72c; padding: 12px 18px; border-radius: 4px; margin: 18px 0; font-size: 14px; }
-    .highlight {
-      background: #f0f7ff; border: 1px solid #a5d5f7; border-left: 4px solid var(--accent);
-      border-radius: 8px; padding: 18px 22px; margin: 18px 0;
-    }
-    .highlight .hl-title { font-weight: 700; color: var(--accent6); font-size: 14px; margin-bottom: 8px; }
-
-    /* ── 표 ── */
-    table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 13.8px; }
-    th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
-    th { background: #eef1f4; color: var(--accent6); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
-    tr.total td { font-weight: 700; background: #f6f8fa; }
-
-    /* ── 학습 목표 카드 ── */
+    tr.schedule-total td { font-weight: 700; background: var(--bg2); }
     .obj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0 22px; }
     .obj-card {
       background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
@@ -79,57 +29,36 @@
     }
     .obj-card .obj-num {
       font-size: 11px; font-weight: 700; color: var(--accent);
-      background: #ddf4ff; border-radius: 10px; padding: 2px 8px; margin-bottom: 8px; display: inline-block;
+      background: var(--tag-bg); border-radius: 10px; padding: 2px 8px; margin-bottom: 8px; display: inline-block;
     }
-    .obj-card strong { color: var(--accent6); }
-
-    /* ── 사전 준비물 체크리스트 ── */
-    .chk { margin: 5px 0; font-size: 14px; }
-
-    /* ── Takeaway ── */
+    .obj-card strong { color: var(--accent-dark); }
     .takeaway-list { list-style: none; padding: 0; margin: 14px 0 22px; }
     .takeaway-list li {
       padding: 10px 16px 10px 42px; position: relative; margin-bottom: 8px;
-      background: #f6fff6; border: 1px solid #a2d9b1; border-radius: 8px; font-size: 14px;
+      background: var(--bg-success); border: 1px solid var(--badge-green-border); border-radius: 8px; font-size: 14px;
     }
     .takeaway-list li::before {
       content: "✓"; position: absolute; left: 14px; top: 10px;
-      color: var(--accent2); font-weight: 700; font-size: 15px;
-    }
-
-    /* ── 강사 정보 ── */
-    .instructor-box {
-      border: 2px dashed var(--border); border-radius: 12px; padding: 24px; margin: 18px 0;
-      color: var(--text-dim); text-align: center;
+      color: var(--accent-green); font-weight: 700; font-size: 15px;
     }
     .instructor-box p { margin: 6px 0; font-size: 14px; }
-    .instructor-box .placeholder { font-style: italic; }
-
-    /* ── 일정 블록 ── */
     .schedule-block {
       display: flex; align-items: flex-start; gap: 16px;
       padding: 14px 0; border-bottom: 1px solid var(--bg3);
     }
     .schedule-block:last-child { border-bottom: none; }
     .schedule-time {
-      min-width: 70px; font-weight: 700; font-size: 13px; color: var(--accent6);
+      min-width: 70px; font-weight: 700; font-size: 13px; color: var(--accent-dark);
       text-align: right; padding-top: 2px;
     }
     .schedule-body { flex: 1; }
     .schedule-body h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
     .schedule-body p { font-size: 13px; color: var(--text-dim); margin: 2px 0; }
-    .schedule-break {
-      background: var(--bg3); border-radius: 6px; padding: 8px 16px;
-      text-align: center; font-size: 13px; color: var(--text-dim); margin: 4px 0;
-    }
-
-    /* ── 푸터 ── */
     footer {
       margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
       color: var(--text-dim); font-size: 12px; line-height: 1.9;
     }
     footer a { color: var(--accent); text-decoration: none; }
-
     @media (max-width: 640px) {
       .wrap { padding: 32px 18px 60px; }
       h1 { font-size: 1.7rem; }
@@ -521,5 +450,6 @@
 </footer>
 
 </div>
+<script src="assets/dark-mode-toggle.js"></script>
 </body>
 </html>

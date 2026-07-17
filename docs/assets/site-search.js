@@ -19,31 +19,64 @@
     { path: 'practice/04_Practice_Examples_B.html', title: '4장 §2-B · 멀티 에이전트 팀 실습 — Antigravity 중심 시나리오별 학습 가이드', lang: 'ko' },
     { path: 'intro/05_Intro_Chapter.html', title: '5장 · ai-workspace-standards 소개', lang: 'ko' },
     { path: 'variant-practice/06_VariantPractice_Manual.html', title: '6장 §1 · ai-workspace-standards 로컬 설치와 프로젝트 스캐폴딩', lang: 'ko' },
-    { path: 'variant-practice/06_VariantPractice_Examples.html', title: '6장 §2 · Variant 실습 예시 — 시나리오별 학습 가이드' },
-    { path: 'enterprise/07_Enterprise_Chapter.html', title: '7장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교' },
-    { path: 'intro/08_Intro_Advanced_Deploy.html', title: '8장 §1 · 배포와 SSOT' },
-    { path: 'intro/08_Intro_Advanced_Chapter.html', title: '8장 §2 · 생애주기 관리' },
-    { path: 'intro/08_Intro_Advanced_AGENTS.html', title: '8장 §3 · AGENTS.md 심화' },
-    { path: 'intro/08_Intro_Advanced_Architecture.html', title: '8장 §4 · 아키텍처 심화' },
-    { path: 'intro/08_Intro_Advanced_Roadmap.html', title: '8장 §5 · 고도화 로드맵' },
-    { path: 'workflows/09_Workflows_Chapter.html', title: '9장 · 워크플로우 디자인 패턴' },
-    { path: 'intro/10_ProjectUpgrade_Chapter.html', title: '10장 · L2 프로젝트 업그레이드' },
-    { path: 'variant-advanced/11_VariantAdvanced_Chapter.html', title: '11장 · 신규 variant 만들기 vs 기존 프로젝트를 variant로 승격하기' },
-    { path: 'variant-advanced/12_VariantAdvanced_Examples.html', title: '12장 · 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드' },
-    { path: 'capstone/13_Capstone.html', title: '13장 · 캡스톤 실습 — 나만의 워크플로우 설계하기' },
-    { path: 'tools/00_Tools_Manual.html', title: '공통 참고 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity' },
-    { path: 'glossary/00_Glossary.html', title: '용어집' },
-    { path: 'faq/00_FAQ.html', title: 'FAQ · 자주 나는 오류와 해결법' },
-    { path: 'setup/SETUP_ko.html', title: '워크숍 환경 설치 가이드' },
-    { path: 'setup/SETUP_CHECKLIST_ko.html', title: '워크숍 사전 설치 체크리스트' },
-    { path: 'lecture-guide/00_Course_Overview.html', title: '강의 소개' },
-    { path: 'lecture-guide/00_Lecture_Guide.html', title: '강의 진행 가이드' }
+    { path: 'variant-practice/06_VariantPractice_Examples.html', title: '6장 §2 · Variant 실습 예시 — 시나리오별 학습 가이드', lang: 'ko' },
+    { path: 'enterprise/07_Enterprise_Chapter.html', title: '7장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교', lang: 'ko' },
+    { path: 'intro/08_Intro_Advanced_Deploy.html', title: '8장 §1 · 배포와 SSOT', lang: 'ko' },
+    { path: 'intro/08_Intro_Advanced_Chapter.html', title: '8장 §2 · 생애주기 관리', lang: 'ko' },
+    { path: 'intro/08_Intro_Advanced_AGENTS.html', title: '8장 §3 · AGENTS.md 심화', lang: 'ko' },
+    { path: 'intro/08_Intro_Advanced_Architecture.html', title: '8장 §4 · 아키텍처 심화', lang: 'ko' },
+    { path: 'intro/08_Intro_Advanced_Roadmap.html', title: '8장 §5 · 고도화 로드맵', lang: 'ko' },
+    { path: 'workflows/09_Workflows_Chapter.html', title: '9장 · 워크플로우 디자인 패턴', lang: 'ko' },
+    { path: 'intro/10_ProjectUpgrade_Chapter.html', title: '10장 · L2 프로젝트 업그레이드', lang: 'ko' },
+    { path: 'variant-advanced/11_VariantAdvanced_Chapter.html', title: '11장 · 신규 variant 만들기 vs 기존 프로젝트를 variant로 승격하기', lang: 'ko' },
+    { path: 'variant-advanced/12_VariantAdvanced_Examples.html', title: '12장 · 신규 variant 승격 실습 예시 — 시나리오별 학습 가이드', lang: 'ko' },
+    { path: 'capstone/13_Capstone.html', title: '13장 · 캡스톤 실습 — 나만의 워크플로우 설계하기', lang: 'ko' },
+    { path: 'tools/00_Tools_Manual.html', title: '공통 참고 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity', lang: 'ko' },
+    { path: 'glossary/00_Glossary.html', title: '용어집', lang: 'ko' },
+    { path: 'faq/00_FAQ.html', title: 'FAQ · 자주 나는 오류와 해결법', lang: 'ko' },
+    { path: 'setup/SETUP_ko.html', title: '워크숍 환경 설치 가이드', lang: 'ko' },
+    { path: 'setup/SETUP_CHECKLIST_ko.html', title: '워크숍 사전 설치 체크리스트', lang: 'ko' },
+    { path: 'lecture-guide/00_Course_Overview.html', title: '강의 소개', lang: 'ko' },
+    { path: 'lecture-guide/00_Lecture_Guide.html', title: '강의 진행 가이드', lang: 'ko' }
   ];
+
+  var LABELS = {
+    ko: {
+      placeholder: '핸드북 전체 검색 — 섹션·항목·시나리오…',
+      section: '섹션', scenario: '시나리오', item: '항목',
+      noResult: '결과 없음',
+      hint: function(n){ return n + '개 문서 전체에서 찾아 해당 위치로 이동합니다.'; },
+      building: '색인 준비 중…'
+    },
+    en: {
+      placeholder: 'Search entire handbook — sections, items, scenarios…',
+      section: 'Section', scenario: 'Scenario', item: 'Item',
+      noResult: 'No results',
+      hint: function(n){ return n + ' documents searched. Navigates to exact position.'; },
+      building: 'Building index…'
+    },
+    ja: {
+      placeholder: 'ハンドブック全体検索 — セクション・項目・シナリオ…',
+      section: 'セクション', scenario: 'シナリオ', item: '項目',
+      noResult: '結果なし',
+      hint: function(n){ return n + '文書から検索し、該当箇所に移動します。'; },
+      building: 'インデックス準備中…'
+    }
+  };
+
   function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   function strip(s){ return (s || '').replace(/\s+/g, ' ').trim(); }
   function escHtml(s){ return s.replace(/[&<>"]/g, function (c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
 
   ready(function () {
+    var pageLang = (document.documentElement.lang || 'ko').split('-')[0];
+    var labels = LABELS[pageLang] || LABELS.ko;
+
+    // Filter DOCS to current language
+    var filteredDocs = DOCS.filter(function (d) {
+      return !d.lang || d.lang === pageLang;
+    });
+
     var firstGroup = document.querySelector('.group');
     if (!firstGroup) return;
 
@@ -67,9 +100,9 @@
     var wrap = document.createElement('div');
     wrap.className = 'ss-wrap';
     wrap.innerHTML =
-      '<input type="search" placeholder="핸드북 전체 검색 — 섹션·항목·시나리오…" aria-label="핸드북 전체 검색">' +
+      '<input type="search" placeholder="' + labels.placeholder + '" aria-label="핸드북 전체 검색">' +
       '<div class="ss-results" role="listbox"></div>' +
-      '<div class="ss-hint">' + DOCS.length + '개 문서 전체에서 찾아 해당 위치로 이동합니다.</div>';
+      '<div class="ss-hint">' + labels.hint(filteredDocs.length) + '</div>';
     firstGroup.parentNode.insertBefore(wrap, firstGroup);
 
     var input = wrap.querySelector('input');
@@ -85,7 +118,7 @@
         var el = nodes[i];
         if (el.tagName === 'H2'){
           curId = el.id; curTitle = strip(el.textContent);
-          out.push({ doc: doc, id: curId, heading: curTitle, section: curTitle, type: '섹션' });
+          out.push({ doc: doc, id: curId, heading: curTitle, section: curTitle, type: labels.section });
         } else if (el.classList && el.classList.contains('scenario-card')){
           var ti = el.querySelector('strong');
           var lv = el.querySelector('span');
@@ -93,14 +126,14 @@
             doc: doc, id: el.id,
             heading: ti ? strip(ti.textContent) : el.id,
             section: lv ? strip(lv.textContent) : '',
-            type: el.getAttribute('data-kind') || '시나리오'   // 문제/Q&A 등. 없으면 시나리오(하위호환)
+            type: el.getAttribute('data-kind') || labels.scenario   // 문제/Q&A 등. 없으면 시나리오(하위호환)
           });
         } else { // h3
           var code = el.querySelector('code');
           out.push({
             doc: doc, id: curId,
             heading: code ? strip(code.textContent) : strip(el.textContent),
-            section: curTitle, type: '항목'
+            section: curTitle, type: labels.item
           });
         }
       }
@@ -110,9 +143,9 @@
     function build(){
       if (index || building) return;
       building = true;
-      results.innerHTML = '<div class="ss-msg">색인 준비 중…</div>';
+      results.innerHTML = '<div class="ss-msg">' + labels.building + '</div>';
       results.classList.add('show');
-      Promise.all(DOCS.map(function (doc){
+      Promise.all(filteredDocs.map(function (doc){
         return fetch(doc.path).then(function (r){ return r.text(); })
           .then(function (html){ return parseDoc(doc, html); })
           .catch(function (){ return []; });
@@ -146,7 +179,7 @@
       current = scored.slice(0, 12).map(function (x){ return x.e; });
       activeIdx = -1;
       if (!current.length){
-        results.innerHTML = '<div class="ss-msg">결과 없음</div>';
+        results.innerHTML = '<div class="ss-msg">' + labels.noResult + '</div>';
         results.classList.add('show'); return;
       }
       results.innerHTML = current.map(function (e){

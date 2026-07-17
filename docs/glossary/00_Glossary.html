@@ -5,39 +5,14 @@
   <meta name="description" content="용어집 · 멀티 에이전트팀 하네스 엔지니어링 핸드북 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>용어집 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
-    :root {
-      --bg: #ffffff; --bg2: #f6f8fa; --bg3: #eef1f4; --border: #d0d7de;
-      --text: #1f2328; --text-dim: #636c76; --accent: #0969da;
-      --accent2: #1a7f37; --accent4: #6639ba; --accent6: #0550ae;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-      background: var(--bg); color: var(--text); line-height: 1.8; font-size: 15.5px;
-    }
-    .layout { display: flex; min-height: 100vh; }
-    nav {
-      width: 240px; min-width: 240px; background: var(--bg2); border-right: 1px solid var(--border);
-      position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 20px 0;
-    }
-    nav a { display: block; padding: 5px 16px; color: var(--text-dim); text-decoration: none; font-size: 12.5px; border-left: 2px solid transparent; }
-    nav a:hover { color: var(--accent); background: var(--bg3); border-left-color: var(--accent); }
-    nav .nav-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); padding: 0 16px 8px; }
-    main { flex: 1; max-width: 860px; padding: 48px 52px 96px; overflow-x: hidden; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
-    .lead { color: var(--text-dim); font-size: 1.02rem; margin-bottom: 30px; }
-    h2 { font-size: 1.2rem; font-weight: 700; margin: 40px 0 12px; color: var(--accent6); scroll-margin-top: 20px; }
     dl { margin: 0 0 8px; }
-    dt { font-weight: 700; font-family: 'SFMono-Regular','Consolas',monospace; font-size: 14.5px; margin-top: 18px; color: var(--text); }
+    dt { font-weight: 700; font-family: var(--font-mono); font-size: 14.5px; margin-top: 18px; color: var(--text); }
     dt .en { color: var(--text-dim); font-weight: 400; font-size: 12.5px; }
     dd { margin: 4px 0 0 0; color: var(--text); font-size: 14.5px; }
     dd .see { display: block; margin-top: 4px; font-size: 12.5px; color: var(--text-dim); }
-    code { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 13px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px; padding: 1px 6px; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
-    .jump a { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 13px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -180,5 +155,6 @@
 
 </main>
 </div>
+<script src="assets/dark-mode-toggle.js"></script>
 </body>
 </html>

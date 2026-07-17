@@ -31,6 +31,8 @@ export function checkSearchIndex(): SearchIndexError[] {
   // Check: every DOCS entry points to an existing file
   for (const entry of docsEntries) {
     if (!actualFiles.has(entry.path)) {
+      // Skip non-ko entries (translation may not exist yet)
+      if (entry.lang && entry.lang !== 'ko') continue;
       errors.push({
         type: "missing-file",
         path: entry.path,
@@ -44,6 +46,9 @@ export function checkSearchIndex(): SearchIndexError[] {
     // Skip: index.html, assets/ (JS files only, no HTML there currently)
     if (file === "index.html") continue;
     if (file.startsWith("assets/")) continue;
+
+    // Allow _en.html and _ja.html files to be missing from DOCS (not yet translated)
+    if (/_en\.html$|_ja\.html$/.test(file)) continue;
 
     if (!docsPaths.has(file)) {
       errors.push({

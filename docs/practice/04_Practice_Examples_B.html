@@ -12,7 +12,7 @@
     .subtitle { font-size: 13px; margin-bottom: 24px; }
     .situation::before {
       content: '📌 상황'; display: block;
-      font-weight: 700; color: #7d4e00; margin-bottom: 6px;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
       font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
     .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
@@ -33,7 +33,7 @@
       color: var(--accent-red); text-decoration: none;
       transition: background .15s;
     }
-    .cmd-chip:hover { background: #ddf4ff; border-color: #a5d5f7; color: var(--accent-dark); }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
     .platform-block .flow-box,
     .platform-block .tip-box,
     .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
@@ -47,7 +47,7 @@
       margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
     .warning-box::before {
-      content: '⚠️ 주의'; display: block; font-weight: 700; color: #7d4e00;
+      content: '⚠️ 주의'; display: block; font-weight: 700; color: var(--accent-amber);
       margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
     }
     .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }

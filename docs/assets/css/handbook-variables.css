@@ -1,6 +1,7 @@
 /* handbook-variables.css — Native theme */
 /* Source project original color values (GitHub-style with lighter callouts) */
-/* 3-layer dark mode: :root (light) → @media prefers-color-scheme: dark → .dark (manual toggle) */
+/* 2-layer dark mode: :root (light) → .dark (toggle via dark-mode-toggle.js) */
+/* dark-mode-toggle.js reads OS preference and localStorage to apply/remove .dark on <html> */
 /* Structural rules live in handbook-components.css (never overwritten) */
 
 :root {
@@ -89,42 +90,6 @@
   --accent4: var(--accent-purple);
   --accent5: var(--accent-red);
   --accent6: var(--accent-dark);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --badge-green-bg: #0a2e14; --badge-green-fg: #2ea44f; --badge-green-border: #1a5c2e;
-    --badge-blue-bg: #0c2d5a; --badge-blue-fg: #58a6ff; --badge-blue-border: #1f6feb;
-    --badge-purple-bg: #2d1045; --badge-purple-fg: #bc8cff; --badge-purple-border: #6e40c9;
-    --badge-amber-bg: #3d2600; --badge-amber-fg: #e3b341; --badge-amber-border: #6e5c1a;
-    --badge-orange-bg: #3d1a00; --badge-orange-fg: #f0883e; --badge-orange-border: #6e3c1a;
-    --badge-indigo-bg: #0c2d5a; --badge-indigo-fg: #58a6ff; --badge-indigo-border: #1f6feb;
-    --badge-violet-bg: #2d1045; --badge-violet-fg: #bc8cff; --badge-violet-border: #6e40c9;
-    --badge-red-bg: #3d0a0a; --badge-red-fg: #f85149;
-    --badge-lab-bg: #0a2e14; --badge-lab-fg: #2ea44f; --badge-lab-border: #1a5c2e;
-    --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
-    --border: #30363d;
-    --text: #e6edf3; --text-dim: #8b949e; --text-inverse: #fff;
-    --accent: #58a6ff; --accent-green: #3fb950; --accent-purple: #bc8cff;
-    --accent-dark: #1f6feb; --accent-amber: #d29922; --accent-red: #f85149;
-    --bg-info: #0d2240; --bg-note: #3b2e00; --bg-warn: #3b1219;
-    --bg-success: #0f5323; --bg-error: #490202;
-    --bg-situation: #3b2e00; --bg-video: #0d2240;
-    --border-info: #58a6ff; --border-note: #d29922; --border-warn: #f85149;
-    --border-success: #3fb950; --border-error: #f85149;
-    --border-situation: #d29922; --border-video: #58a6ff;
-    --code-bg: #161b22; --code-border: #30363d;
-    --tag-bg: #0d2240; --tag-text: #58a6ff;
-    --platform-claude: #f0883e; --platform-claudeapp: #f59e0b;
-    --platform-agy: #58a6ff; --platform-antigravity: #bc8cff;
-    --compare-without-bg: #3b1219; --compare-without-border: #f85149;
-    --compare-with-bg: #0f5323; --compare-with-border: #3fb950;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
-    --shadow-md: 0 4px 14px rgba(0,0,0,.3);
-    --accent2: var(--accent-green); --accent3: var(--accent-amber);
-    --accent4: var(--accent-purple); --accent5: var(--accent-red);
-    --accent6: var(--accent-dark);
-  }
 }
 
 .dark {

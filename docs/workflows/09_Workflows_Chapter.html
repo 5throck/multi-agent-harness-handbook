@@ -39,7 +39,7 @@
 <div class="layout">
 
 <nav>
-  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">9장 · 워크플로우 디자인 패턴</div>
   <a href="#s1">워크플로우란 무엇인가</a>
   <a href="#s2">워크플로우 구성요소</a>
@@ -185,7 +185,7 @@
 
   <!-- 사례 1: 코드 리뷰 -->
   <div class="wf-card">
-    <h3>코드 리뷰 <span class="wf-domain" style="background:#0969da">소프트웨어 개발</span></h3>
+    <h3>코드 리뷰 <span class="wf-domain" style="background:var(--accent)">소프트웨어 개발</span></h3>
     <p class="wf-patterns">핵심 패턴: <code>라우팅</code> → <code>팬아웃</code> → <code>취합</code> → <code>파이프라인</code> → <code>검증-후-적용</code>(루프)</p>
     <p class="wf-stages">
       <strong>① 변경 분석(라우팅)</strong>: 변경된 파일의 규모와 유형을 분석하여 검토 범위를 결정한다. 단순 오타 수정이면 빠른 경로, 큰 기능 변경이면 전체 검토 경로로 분기한다.<br>
@@ -217,7 +217,7 @@
 
   <!-- 사례 2: 시장 조사 보고서 -->
   <div class="wf-card">
-    <h3>시장 조사 보고서 <span class="wf-domain" style="background:#6639ba">컨설팅 · 리서치</span></h3>
+    <h3>시장 조사 보고서 <span class="wf-domain" style="background:var(--accent-purple)">컨설팅 · 리서치</span></h3>
     <p class="wf-patterns">핵심 패턴: <code>오케스트레이터-워커</code> → <code>팬아웃</code> → <code>파이프라인</code> → <code>검증-후-적용</code></p>
     <p class="wf-stages">
       <strong>① 오케스트레이션(PM)</strong>: PM 에이전트가 조사 범위, 타겟 시장, 산출물 형식을 정의하고 워커에게 위임한다.<br>
@@ -246,7 +246,7 @@
 
   <!-- 사례 3: 프레젠테이션 제작 -->
   <div class="wf-card">
-    <h3>프레젠테이션 제작 <span class="wf-domain" style="background:#1a7f37">강의 · 발표</span></h3>
+    <h3>프레젠테이션 제작 <span class="wf-domain" style="background:var(--accent-green)">강의 · 발표</span></h3>
     <p class="wf-patterns">핵심 패턴: <code>파이프라인</code>(장파이프라인) + <code>팬아웃</code>(중간 병렬)</p>
     <p class="wf-stages">
       <strong>① 리서치</strong>: 주제에 관련된 자료를 수집하고 출처를 검증한다.<br>
@@ -284,7 +284,7 @@
 
   <!-- 사례 4: 이슈 트리아지 -->
   <div class="wf-card">
-    <h3>이슈 트리아지 <span class="wf-domain" style="background:#e16f24">운영 · 인시던트</span></h3>
+    <h3>이슈 트리아지 <span class="wf-domain" style="background:var(--accent-amber)">운영 · 인시던트</span></h3>
     <p class="wf-patterns">핵심 패턴: <code>라우팅</code> → <code>오케스트레이터-워커</code> → <code>에스컬레이션</code></p>
     <p class="wf-stages">
       <strong>① 분류(라우팅)</strong>: 들어온 이슈의 긴급도와 유형을 분석하여 경로를 결정한다. 버그면 수정 경로, 기능 요청이면 기획 경로, 보안이면 긴급 경로로 분기한다.<br>
@@ -311,7 +311,7 @@
 
   <!-- 사례 5: PR 생성과 검증 -->
   <div class="wf-card">
-    <h3>PR 생성과 검증 <span class="wf-domain" style="background:#cf222e">거버넌스</span></h3>
+    <h3>PR 생성과 검증 <span class="wf-domain" style="background:var(--accent-red)">거버넌스</span></h3>
     <p class="wf-patterns">핵심 패턴: <code>파이프라인</code> → <code>검증-후-적용</code>(루프) → <code>게이트</code></p>
     <p class="wf-stages">
       <strong>① 변경사항 수집</strong>: 커밋 히스토리와 diff를 수집해 PR 초안(제목·본문)을 작성한다.<br>
@@ -542,6 +542,6 @@
  </article>
 </main>
 </div>
-<script src="assets/dark-mode-toggle.js"></script>
+<script src="../assets/dark-mode-toggle.js"></script>
 </body>
 </html>

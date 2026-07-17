@@ -12,7 +12,7 @@
 <div class="layout">
 
 <nav>
-  <a href="../index.html" style="font-weight:700;color:#0969da;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:10px;">← 핸드북 홈</a>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">2장 · 개념 이해</div>
   <a href="#agent-definition">에이전트란 무엇인가</a>
   <a href="#s0">Prompt → Context → Harness</a>
@@ -389,7 +389,7 @@
   <h2 id="s4">오케스트레이션 패턴</h2>
   <p>Anthropic이 2024년 12월 "Building Effective Agents"에서 정리한 다섯 가지 워크플로 패턴이 실무에서 가장 널리 쓰인다. 프롬프트 체이닝(파이프라인), 라우팅, 병렬화(팬아웃·투표), 오케스트레이터-워커, 평가자-최적화(검증-후-적용)다. 다섯 패턴은 서로 대체 관계가 아니라, "작업 사이에 의존 관계가 있는가", "미리 하위 작업을 예측할 수 있는가", "검증이 필요한가"에 따라 골라 쓰거나 조합하는 도구 상자다.</p>
 
-  <div style="background:#f6f8fa;border:1px solid #d0d7de;border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="note">
     <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
       <defs>
         <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -712,6 +712,6 @@ function copyCode(btn) {
 }
 </script>
 
-<script src="assets/dark-mode-toggle.js"></script>
+<script src="../assets/dark-mode-toggle.js"></script>
 </body>
 </html>

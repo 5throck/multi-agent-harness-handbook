@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="マルチエージェントチームハーネスエンジニアリングハンドブック — マルチエージェントチームハーネスエンジニアリングの包括的な学習資料。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>マルチエージェントチームハーネスエンジニアリングハンドブック</title>
+  <link rel="stylesheet" href="assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="assets/css/handbook-components.css">
+  <style>
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    .tag-ref { background: var(--tag-bg); color: var(--tag-text); border: 1px solid var(--border-info); }
+    .tag-ex  { background: var(--bg-success); color: var(--accent-green); border: 1px solid var(--border-success); }
+    .tag-ch  { background: var(--bg-info); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+    .card h2 {
+      font-size: 1.06rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>マルチエージェントチームハーネスエンジニアリングハンドブック</h1>
+      <p class="subtitle">基礎概念の理解から、Claude Code / Claude App / Antigravity の実習、企業導入戦略、ai-workspace-standards による独自バリアント構築まで</p>
+    </header>
+
+    <div class="meta">
+      対象バージョン <strong>Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08 基準)</strong> &nbsp;|&nbsp; 公式資料:
+      <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code Subagents ドキュメント</a>,
+      <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity Agent Manager ドキュメント</a>,
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards リポジトリ</a>
+      &nbsp;|&nbsp; 各ドキュメントは <strong>レファレンス</strong>(クイック参照)・<strong>実習</strong>(シナリオ学習)・<strong>解説型チャプター</strong>(概念解説)に分類されています。
+      <br>最終更新日 <strong>2026年7月17日</strong>
+    </div>
+
+    <!-- ─── 講師資料 ─── -->
+    <div class="group">
+      <p class="section-label">講師資料</p>
+      <div class="grid">
+        <a class="card" href="lecture-guide/00_Course_Overview_ja.html">
+          <span class="tag tag-ref">講座紹介</span>
+          <h2>講座紹介 -- 学習目標・受講対象・スケジュール・習得できるスキル</h2>
+          <p>このワークショップの内容、対象者、2日間のスケジュール構成、受講後に身につくスキルを一目で確認できる紹介資料です。</p>
+          <div class="go">紹介資料を開く →</div>
+        </a>
+        <a class="card" href="lecture-guide/00_Lecture_Guide_ja.html">
+          <span class="tag tag-ref">講義ガイド</span>
+          <h2>講義進行ガイド -- 事前準備物・時間配分表・チャプター別講師ノート・確認問題</h2>
+          <p>本ハンドブック全体を講義形式で進行する際の統合チェックリスト、セクション別時間配分、実習中のデモ専用区間の案内、チャプター別確認問題をまとめました。</p>
+          <div class="go">ガイドを開く →</div>
+        </a>
+        <a class="card" href="setup/SETUP_ja.html">
+          <span class="tag tag-ref">セットアップガイド</span>
+          <h2>ワークショップ環境セットアップガイド -- OS別スクリプトとツール一覧</h2>
+          <p>実習に必要なツール（bun, git, gh, claude, agy）をOS別スクリプトで一括インストールし、インストールツール一覧とトラブルシューティングまでまとめました。</p>
+          <div class="go">セットアップガイドを開く →</div>
+        </a>
+        <a class="card" href="setup/SETUP_CHECKLIST_ja.html">
+          <span class="tag tag-ref">チェックリスト</span>
+          <h2>事前インストールチェックリスト -- サブスクリプション・アカウント・システム要件</h2>
+          <p>インストールスクリプトを実行する前に確認が必要なサブスクリプションプラン、アカウント、システム要件、Git/GitHub設定をチェックリストとしてまとめました。</p>
+          <div class="go">チェックリストを開く →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── 1日目: 概念 ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day">1日目</span> <span class="type">概念</span> 一般ユーザー -- 基礎概念の学習</p>
+      <div class="grid">
+        <a class="card" href="intro/01_Why_AI_Chapter_ja.html">
+          <span class="tag tag-ch">1章</span>
+          <h2>AI時代の業務イノベーション</h2>
+          <p>なぜ今AIを学ぶべきなのか、AI活用の3段階（ユーザー→活用者→設計者）、ハーネスエンジニアリングの必要性、マルチエージェントの原理、実務での時間短縮事例、本ワークショップのロードマップを読んでモチベーションを確立する。</p>
+          <div class="go">1章を読む →</div>
+        </a>
+        <a class="card" href="concepts/02_Concepts_Chapter_ja.html">
+          <span class="tag tag-ch">2章</span>
+          <h2>ハーネスエンジニアリングとマルチエージェントチームの概念</h2>
+          <p>ハーネスエンジニアリングがなぜ必要なのか、単一エージェントの限界、オーケストレーター・スペシャリスト・ハンドオフ契約というマルチエージェントチームの骨組み、5つのオーケストレーションパターンを読んで理解する。</p>
+          <div class="go">2章を読む →</div>
+        </a>
+        <a class="card" href="guardrails/03_Guardrails_Chapter_ja.html">
+          <span class="tag tag-ch">3章</span>
+          <h2>ガードレールと権限モデル</h2>
+          <p>サブエージェントに何を許可し、何を制限するのか、リスク作業の3段階分類（読取/書込/破壊的）、最小権限の原則、人間承認ゲート、分離と監査ログを扱う。</p>
+          <div class="go">3章を読む →</div>
+        </a>
+        <a class="card" href="warm-up/Warmup_Tetris_Pacman_ja.html">
+          <span class="tag tag-ex">ウォームアップ</span> <span class="tag" style="background:var(--bg-note);color:var(--accent-amber);border:1px solid var(--border-warn);">必須</span>
+          <h2>テトリスからパックマンまで -- 複雑さによるアプローチの違いを体験</h2>
+          <p>バイブコーディングでテトリスを作り、単一プロンプトでパックマンに失敗した後、計画・開発・QAの3段階マルチエージェントで再挑戦し、「複雑さが高いほど役割分担の価値は指数関数的に増加する」ことを体験する。</p>
+          <div class="go">ウォームアップ開始 →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── 1日目: 実習 ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day">1日目</span> <span class="type">実習</span> 一般ユーザー -- エージェントチームを実際に稼働</p>
+      <div class="grid">
+        <a class="card" href="practice/04_Practice_Manual_ja.html">
+          <span class="tag tag-ref">4章 §1</span>
+          <h2>ハーネスベースのマルチエージェントチーム活用</h2>
+          <p>サブエージェントの定義・呼び出し・並列実行・自動化を、Claude Code、Claude App、Antigravity CLI、Antigravity Desktopの4つのツールで並べて参照する。</p>
+          <div class="go">読む →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Manual_A_ja.html">
+          <span class="tag tag-ref">4章 §1-A</span>
+          <h2>サブエージェント活用詳細 -- Claude中心</h2>
+          <p>Claude App/Codeでのサブエージェント定義(.claude/agents)、Agent(Task)ツール呼び出し、Agent Teams並列実行、フック自動発火を扱う。</p>
+          <div class="go">Claude詳細 →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Manual_B_ja.html">
+          <span class="tag tag-ref">4章 §1-B</span>
+          <h2>サブエージェント活用詳細 -- Antigravity中心</h2>
+          <p>Antigravity Desktop/CLIでの動的サブエージェント生成、Agent Manager、/goal・/agentコマンド、セッション間並列実行を扱う。</p>
+          <div class="go">Antigravity詳細 →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Examples_A_ja.html">
+          <span class="tag tag-ex">4章 §2-A</span>
+          <h2>マルチエージェントチーム実習 -- Claude中心</h2>
+          <p>レビュアー・ライターサブエージェント、パイプライン、Agent Teams並列実行、モデルティア比較までClaude App/Codeで実際に体験する。</p>
+          <div class="go">実習開始 →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Examples_B_ja.html">
+          <span class="tag tag-ex">4章 §2-B</span>
+          <h2>マルチエージェントチーム実習 -- Antigravity中心</h2>
+          <p>同じAGENTS.md仕様をAntigravity Desktop/CLIで自然言語ゴールで実装する実習。</p>
+          <div class="go">実習開始 →</div>
+        </a>
+        <a class="card" href="intro/05_Intro_Chapter_ja.html">
+          <span class="tag tag-ch">5章</span>
+          <h2>ai-workspace-standardsの紹介</h2>
+          <p>バリアント開発ツール型モデルを実装するai-workspace-standardsリポジトリの構造、コアドキュメント4種、7つのバリアント、セッション開始チェックリストとスキャフォールディングの流れを確認する。</p>
+          <div class="go">5章を読む →</div>
+        </a>
+        <a class="card" href="variant-practice/06_VariantPractice_Manual_ja.html">
+          <span class="tag tag-ref">6章 §1</span>
+          <h2>既存バリアントの活用</h2>
+          <p>ワークスペースクローン、bunインストール、new-project.tsの使い方、セッション開始チェックリストを素早く参照する。</p>
+          <div class="go">読む →</div>
+        </a>
+        <a class="card" href="variant-practice/06_VariantPractice_Examples_ja.html">
+          <span class="tag tag-ex">6章 §2</span>
+          <h2>既存バリアントの活用（実習）</h2>
+          <p>co-consultで市場調査コンサルティングプロジェクトを進行し、co-deckでプレゼン資料を自動生成する。</p>
+          <div class="go">実習開始 →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── 2日目: 概念 ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day day2">2日目</span> <span class="type">概念</span> IT専門家 -- アーキテクチャ深化と戦略</p>
+      <div class="grid">
+        <a class="card" href="enterprise/07_Enterprise_Chapter_ja.html">
+          <span class="tag tag-ch">7章</span>
+          <h2>企業導入戦略の比較</h2>
+          <p>全社サービスチケット型運用とバリアント開発ツール型運用を並べて比較し、それぞれの強みと限界を読む。</p>
+          <div class="go">7章を読む →</div>
+        </a>
+        <a class="card" href="intro/08_Intro_Advanced_Deploy_ja.html">
+          <span class="tag tag-ch">8章</span>
+          <h2>ai-workspace-standardsアーキテクチャ深化</h2>
+          <p>デプロイとSSOT（L0→L1→L2の3階層）、エージェント・スキル・スクリプトのライフサイクル管理、AGENTS.md深化、Layout Reconstruction・プラットフォームパリティなどアーキテクチャの実践動作、および未実装の高度化ロードマップ（§5）まで扱う。L2プロジェクトアップグレードは<strong>10章</strong>で独立して扱う。</p>
+          <div class="go">8章を読む →</div>
+        </a>
+        <a class="card" href="workflows/09_Workflows_Chapter_ja.html">
+          <span class="tag tag-ch">9章</span>
+          <h2>ワークフローデザインパターン</h2>
+          <p>様々なドメインで実際に使われているマルチエージェントワークフロー事例 -- コードレビュー・市場調査・プレゼンテーション・課題トリアージ・PR検証 -- とパターンカタログ、選択ガイドを扱う。</p>
+          <div class="go">9章を読む →</div>
+        </a>
+        <a class="card" href="intro/10_ProjectUpgrade_Chapter_ja.html">
+          <span class="tag tag-ch">10章</span>
+          <h2>L2プロジェクトアップグレード</h2>
+          <p>既存のL2プロジェクトを最新テンプレートにアップグレードする手順（upgrade-project.ts）とファイル処理5分類、安全装置を扱う。</p>
+          <div class="go">10章を読む →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── 2日目: 実習 ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day day2">2日目</span> <span class="type">実習</span> IT専門家 -- 新規作成と昇格</p>
+      <div class="grid">
+        <a class="card" href="variant-advanced/11_VariantAdvanced_Chapter_ja.html">
+          <span class="tag tag-ch">11章</span>
+          <h2>新規バリアント作成（フェーズA）</h2>
+          <p>co-marketingという新規バリアントをフェーズAプロトタイプとしてゼロから設計する。create-l2-scaffold.tsでエージェントチーム構成を作る過程を体験する。</p>
+          <div class="go">11章を読む →</div>
+        </a>
+        <a class="card" href="variant-advanced/12_VariantAdvanced_Examples_ja.html">
+          <span class="tag tag-ex">12章</span>
+          <h2>新規バリアント昇格（フェーズB）</h2>
+          <p>co-marketingプロトタイプを正式なtemplates/バリアントに昇格させるパイプラインをステップごとに追う。PROMOTION_CHECKLISTとreconcileプロセスを確認する。</p>
+          <div class="go">実習開始 →</div>
+        </a>
+        <a class="card" href="capstone/13_Capstone_ja.html">
+          <span class="tag tag-ex">13章</span>
+          <h2>キャップストーン -- 自分だけのワークフローを設計する</h2>
+          <p>自分が繰り返している実際の作業を一つ選び、概念からガードレール・サブエージェント実装・検証まで最初から最後まで自分で設計する仕上げ実習。</p>
+          <div class="go">キャップストーン開始 →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── 共通参考 ─── -->
+    <div class="group">
+      <p class="section-label">共通参考</p>
+      <div class="grid">
+        <a class="card" href="tools/00_Tools_Manual_ja.html">
+          <span class="tag tag-ref">ツール比較</span>
+          <h2>ツール比較 -- Claude Code / Claude App / Antigravity CLI / Antigravity</h2>
+          <p>同じマルチエージェントチーム概念が4つのツールでそれぞれどのように異なって実装されているか、フック・並列実行・分離方式の違いを比較する。</p>
+          <div class="go">比較表を見る →</div>
+        </a>
+        <a class="card" href="glossary/00_Glossary_ja.html">
+          <span class="tag tag-ref">用語集</span>
+          <h2>用語集 -- 各チャプターの用語を一箇所で探す</h2>
+          <p>オーケストレーター・ハンドオフ・SSOT・ティア・L0/L1/L2・バリアント・スキャフォールディング・フォークモデルなど、ハンドブック全体で繰り返される用語を定義とともにまとめた。</p>
+          <div class="go">用語集を開く →</div>
+        </a>
+        <a class="card" href="faq/00_FAQ_ja.html">
+          <span class="tag tag-ref">FAQ</span>
+          <h2>FAQ -- よくあるエラーと解決法</h2>
+          <p>実習中によく遭遇する問題（順次呼び出しの失敗、フック不発、認知的オーバーロード、スキャフォールディングエラー、コスト・タイムアウトなど）を症状別にまとめ、原因と解決策を紐付ける。</p>
+          <div class="go">FAQを開く →</div>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08) 基準 &middot; 日本語教育資料<br>
+      公式資料: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> &middot;
+      <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google</a> &middot;
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a><br>
+      Built with the Teach Me skill for Claude Code.
+    </footer>
+  </div>
+  <script src="assets/site-search.js" defer></script>
+<script src="assets/dark-mode-toggle.js"></script>
+<script src="assets/lang-switcher.js"></script>
+</body>
+</html>

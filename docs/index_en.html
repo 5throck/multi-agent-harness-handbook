@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Multi-Agent Team Harness Engineering Handbook - comprehensive materials for understanding and applying multi-agent team harness engineering.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Agent Team Harness Engineering Handbook</title>
+  <link rel="stylesheet" href="assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="assets/css/handbook-components.css">
+  <style>
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    .tag-ref { background: var(--tag-bg); color: var(--tag-text); border: 1px solid var(--border-info); }
+    .tag-ex  { background: var(--bg-success); color: var(--accent-green); border: 1px solid var(--border-success); }
+    .tag-ch  { background: var(--bg-info); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+    .card h2 {
+      font-size: 1.06rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Multi-Agent Team Harness Engineering Handbook</h1>
+      <p class="subtitle">From core concepts to hands-on exercises with Claude Code, Claude App, and Antigravity -- enterprise deployment strategy, and building your own variant with ai-workspace-standards</p>
+    </header>
+
+    <div class="meta">
+      Based on <strong>Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (as of 2026-07-08)</strong> &nbsp;|&nbsp; Official resources:
+      <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code Subagents docs</a>,
+      <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity Agent Manager docs</a>,
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards repository</a>
+      &nbsp;|&nbsp; Each document is classified as <strong>Reference</strong> (quick lookup), <strong>Hands-on</strong> (scenario-based learning), or <strong>Narrative Chapter</strong> (conceptual reading).
+      <br>Last updated <strong>July 17, 2026</strong>
+    </div>
+
+    <!-- ─── Instructor Materials ─── -->
+    <div class="group">
+      <p class="section-label">Instructor Materials</p>
+      <div class="grid">
+        <a class="card" href="lecture-guide/00_Course_Overview_en.html">
+          <span class="tag tag-ref">Course Overview</span>
+          <h2>Course Overview -- Learning Objectives, Audience, Schedule, and Outcomes</h2>
+          <p>An at-a-glance introduction covering what this workshop covers, who it is for, how the two-day schedule is structured, and the competencies participants will gain upon completion.</p>
+          <div class="go">Open Overview →</div>
+        </a>
+        <a class="card" href="lecture-guide/00_Lecture_Guide_en.html">
+          <span class="tag tag-ref">Lecture Guide</span>
+          <h2>Lecture Delivery Guide -- Preparation Checklist, Time Allocation, Per-Chapter Instructor Notes, and Check Questions</h2>
+          <p>A comprehensive guide for delivering the full handbook: integrated checklist, per-section time allocation, demonstration-only segments during exercises, and chapter-by-chapter review questions.</p>
+          <div class="go">Open Guide →</div>
+        </a>
+        <a class="card" href="setup/SETUP_en.html">
+          <span class="tag tag-ref">Setup Guide</span>
+          <h2>Workshop Environment Setup Guide -- OS-Specific Scripts and Tool List</h2>
+          <p>One-command installation of all tools needed for exercises (bun, git, gh, claude, agy) via OS-specific scripts, plus a tool inventory and troubleshooting guide.</p>
+          <div class="go">Open Setup →</div>
+        </a>
+        <a class="card" href="setup/SETUP_CHECKLIST_en.html">
+          <span class="tag tag-ref">Checklist</span>
+          <h2>Pre-Installation Checklist -- Subscriptions, Accounts, and System Requirements</h2>
+          <p>A checklist of subscription plans, accounts, system requirements, and Git/GitHub configuration to verify before running the installation scripts.</p>
+          <div class="go">Open Checklist →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Day 1: Concepts ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day">Day 1</span> <span class="type">Concepts</span> General Users -- Foundational Concepts</p>
+      <div class="grid">
+        <a class="card" href="intro/01_Why_AI_Chapter_en.html">
+          <span class="tag tag-ch">Ch.1</span>
+          <h2>Workplace Innovation in the AI Era</h2>
+          <p>Understand why AI matters now, the three stages of AI adoption (User → Practitioner → Designer), the need for harness engineering, multi-agent principles, real-world time-saving examples, and this workshop's roadmap to build motivation.</p>
+          <div class="go">Read Ch.1 →</div>
+        </a>
+        <a class="card" href="concepts/02_Concepts_Chapter_en.html">
+          <span class="tag tag-ch">Ch.2</span>
+          <h2>Harness Engineering and Multi-Agent Team Concepts</h2>
+          <p>Learn why harness engineering is necessary, the limitations of single agents, the multi-agent team framework (orchestrator, specialist, handoff contracts), and five orchestration patterns.</p>
+          <div class="go">Read Ch.2 →</div>
+        </a>
+        <a class="card" href="guardrails/03_Guardrails_Chapter_en.html">
+          <span class="tag tag-ch">Ch.3</span>
+          <h2>Guardrails and Permission Models</h2>
+          <p>Explore what to allow and restrict for sub-agents, the three-tier risk classification (read/write/destructive), the principle of least privilege, human approval gates, isolation, and audit logging.</p>
+          <div class="go">Read Ch.3 →</div>
+        </a>
+        <a class="card" href="warm-up/Warmup_Tetris_Pacman_en.html">
+          <span class="tag tag-ex">Warm-up</span> <span class="tag" style="background:var(--bg-note);color:var(--accent-amber);border:1px solid var(--border-warn);">Required</span>
+          <h2>From Tetris to Pac-Man -- Experiencing the Impact of Complexity on Approach</h2>
+          <p>Build Tetris via vibe coding, fail to build Pac-Man with a single prompt, then retry with a three-stage multi-agent team (planning, development, QA) to experience that the value of role separation grows exponentially with complexity.</p>
+          <div class="go">Start Warm-up →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Day 1: Practice ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day">Day 1</span> <span class="type">Hands-on</span> General Users -- Running Agent Teams Hands-on</p>
+      <div class="grid">
+        <a class="card" href="practice/04_Practice_Manual_en.html">
+          <span class="tag tag-ref">Ch.4 §1</span>
+          <h2>Using Multi-Agent Teams with Harnesses</h2>
+          <p>A side-by-side reference for defining, invoking, parallel-executing, and automating sub-agents across Claude Code, Claude App, Antigravity CLI, and Antigravity Desktop.</p>
+          <div class="go">Read →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Manual_A_en.html">
+          <span class="tag tag-ref">Ch.4 §1-A</span>
+          <h2>Sub-Agent Usage in Detail -- Claude-Focused</h2>
+          <p>Defining sub-agents (.claude/agents), invoking Agent(Task) tools, running Agent Teams in parallel, and automatic hook triggers in Claude App/Code.</p>
+          <div class="go">Claude Details →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Manual_B_en.html">
+          <span class="tag tag-ref">Ch.4 §1-B</span>
+          <h2>Sub-Agent Usage in Detail -- Antigravity-Focused</h2>
+          <p>Dynamic sub-agent creation, Agent Manager, /goal and /agent commands, and cross-session parallelism in Antigravity Desktop and CLI.</p>
+          <div class="go">Antigravity Details →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Examples_A_en.html">
+          <span class="tag tag-ex">Ch.4 §2-A</span>
+          <h2>Multi-Agent Team Exercises -- Claude-Focused</h2>
+          <p>Hands-on practice with reviewer and writer sub-agents, pipelines, Agent Teams parallel execution, and model tier comparison in Claude App/Code.</p>
+          <div class="go">Start Exercise →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Examples_B_en.html">
+          <span class="tag tag-ex">Ch.4 §2-B</span>
+          <h2>Multi-Agent Team Exercises -- Antigravity-Focused</h2>
+          <p>Hands-on exercise implementing the same AGENTS.md specification using natural language goals in Antigravity Desktop and CLI.</p>
+          <div class="go">Start Exercise →</div>
+        </a>
+        <a class="card" href="intro/05_Intro_Chapter_en.html">
+          <span class="tag tag-ch">Ch.5</span>
+          <h2>Introduction to ai-workspace-standards</h2>
+          <p>Explore the ai-workspace-standards repository structure: four core documents, seven variants, session-start checklists, and scaffolding workflows for implementing variant-type development tool models.</p>
+          <div class="go">Read Ch.5 →</div>
+        </a>
+        <a class="card" href="variant-practice/06_VariantPractice_Manual_en.html">
+          <span class="tag tag-ref">Ch.6 §1</span>
+          <h2>Using Existing Variants</h2>
+          <p>Quick reference for workspace cloning, bun installation, new-project.ts usage, and session-start checklists.</p>
+          <div class="go">Read →</div>
+        </a>
+        <a class="card" href="variant-practice/06_VariantPractice_Examples_en.html">
+          <span class="tag tag-ex">Ch.6 §2</span>
+          <h2>Using Existing Variants (Hands-on)</h2>
+          <p>Run a market research consulting project with co-consult, then automatically generate presentation materials with co-deck.</p>
+          <div class="go">Start Exercise →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Day 2: Concepts ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day day2">Day 2</span> <span class="type">Concepts</span> IT Professionals -- Advanced Architecture and Strategy</p>
+      <div class="grid">
+        <a class="card" href="enterprise/07_Enterprise_Chapter_en.html">
+          <span class="tag tag-ch">Ch.7</span>
+          <h2>Enterprise Operations Strategy Comparison</h2>
+          <p>A side-by-side comparison of company-wide service ticket operations versus variant development tool operations, examining the strengths and limitations of each approach.</p>
+          <div class="go">Read Ch.7 →</div>
+        </a>
+        <a class="card" href="intro/08_Intro_Advanced_Deploy_en.html">
+          <span class="tag tag-ch">Ch.8</span>
+          <h2>Advanced ai-workspace-standards Architecture</h2>
+          <p>Covers deployment and SSOT (L0→L1→L2 three-tier), agent/skill/script lifecycle management, advanced AGENTS.md, Layout Reconstruction, platform parity, and the future enhancement roadmap (§5). L2 project upgrades are covered independently in <strong>Ch.10</strong>.</p>
+          <div class="go">Read Ch.8 →</div>
+        </a>
+        <a class="card" href="workflows/09_Workflows_Chapter_en.html">
+          <span class="tag tag-ch">Ch.9</span>
+          <h2>Workflow Design Patterns</h2>
+          <p>Real-world multi-agent workflow case studies across various domains -- code review, market research, presentations, issue triage, PR verification -- plus a pattern catalog and selection guide.</p>
+          <div class="go">Read Ch.9 →</div>
+        </a>
+        <a class="card" href="intro/10_ProjectUpgrade_Chapter_en.html">
+          <span class="tag tag-ch">Ch.10</span>
+          <h2>L2 Project Upgrade</h2>
+          <p>The upgrade procedure (upgrade-project.ts) for bringing existing L2 projects to the latest templates, including the five file classification categories and safety mechanisms.</p>
+          <div class="go">Read Ch.10 →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Day 2: Practice ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day day2">Day 2</span> <span class="type">Hands-on</span> IT Professionals -- New Variant Creation and Promotion</p>
+      <div class="grid">
+        <a class="card" href="variant-advanced/11_VariantAdvanced_Chapter_en.html">
+          <span class="tag tag-ch">Ch.11</span>
+          <h2>Creating a New Variant (Phase A)</h2>
+          <p>Design a new variant called co-marketing from scratch as a Phase A prototype. Experience the process of building an agent team composition using create-l2-scaffold.ts.</p>
+          <div class="go">Read Ch.11 →</div>
+        </a>
+        <a class="card" href="variant-advanced/12_VariantAdvanced_Examples_en.html">
+          <span class="tag tag-ex">Ch.12</span>
+          <h2>Promoting a New Variant (Phase B)</h2>
+          <p>Follow the step-by-step pipeline for promoting the co-marketing prototype to an official templates/ variant, including the PROMOTION_CHECKLIST and reconciliation process.</p>
+          <div class="go">Start Exercise →</div>
+        </a>
+        <a class="card" href="capstone/13_Capstone_en.html">
+          <span class="tag tag-ex">Ch.13</span>
+          <h2>Capstone -- Design Your Own Workflow</h2>
+          <p>A culminating exercise where you choose a real recurring task and design a complete solution from concept through guardrails, sub-agent implementation, and verification.</p>
+          <div class="go">Start Capstone →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Shared References ─── -->
+    <div class="group">
+      <p class="section-label">Shared References</p>
+      <div class="grid">
+        <a class="card" href="tools/00_Tools_Manual_en.html">
+          <span class="tag tag-ref">Tools</span>
+          <h2>Tool Comparison -- Claude Code / Claude App / Antigravity CLI / Antigravity</h2>
+          <p>Compare how the same multi-agent team concepts are implemented differently across four tools, including differences in hooks, parallel execution, and isolation approaches.</p>
+          <div class="go">View Comparison →</div>
+        </a>
+        <a class="card" href="glossary/00_Glossary_en.html">
+          <span class="tag tag-ref">Glossary</span>
+          <h2>Glossary -- Look Up Terms from Every Chapter in One Place</h2>
+          <p>Definitions for recurring terms across the handbook: orchestrator, handoff, SSOT, tier, L0/L1/L2, variant, scaffolding, fork model, and more.</p>
+          <div class="go">Open Glossary →</div>
+        </a>
+        <a class="card" href="faq/00_FAQ_en.html">
+          <span class="tag tag-ref">FAQ</span>
+          <h2>FAQ -- Common Errors and Solutions</h2>
+          <p>Troubleshooting guide for frequently encountered issues during exercises: sequential invocation failures, hooks not firing, cognitive overload, scaffolding errors, cost and timeout problems -- organized by symptom with root cause and resolution.</p>
+          <div class="go">Open FAQ →</div>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      Based on Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08) &middot; English training materials<br>
+      Official resources: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> &middot;
+      <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google</a> &middot;
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a><br>
+      Built with the Teach Me skill for Claude Code.
+    </footer>
+  </div>
+  <script src="assets/site-search.js" defer></script>
+<script src="assets/dark-mode-toggle.js"></script>
+<script src="assets/lang-switcher.js"></script>
+</body>
+</html>

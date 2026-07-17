@@ -732,8 +732,8 @@ A/B 파일 상호 간에는 prev/next 링크로 순차 연결한다.
     # 둘 다 Python 스크립트 한 번으로 확인 가능 — 재번호 PR마다 실행 권장
     ```
 
-    수작업 대신 `scripts/validate-nav.ts` 같은 검증 스크립트를 저장소에 두고 CI(Pages 배포 전)에
-    돌리면 이 항목 전체가 리뷰 없이도 자동으로 잡힌다.
+    `scripts/validate-nav.ts` 자동 검증 스크립트로 위 네 가지를 CI에서 자동 검증함
+    (`bun run scripts/validate-nav.ts`).
 
 ---
 

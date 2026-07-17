@@ -1,0 +1,8 @@
+{
+  "name": "multi-agent-harness-handbook",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate-nav": "bun run scripts/validate-nav.ts"
+  }
+}

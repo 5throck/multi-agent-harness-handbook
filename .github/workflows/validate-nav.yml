@@ -1,0 +1,16 @@
+# .github/workflows/validate-nav.yml
+name: Validate Navigation
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'scripts/**'
+
+jobs:
+  validate-nav:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun run scripts/validate-nav.ts

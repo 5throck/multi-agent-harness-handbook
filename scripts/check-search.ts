@@ -2,8 +2,8 @@
 // Check ④: site-search.js DOCS array must contain all HTML files in docs/,
 // and every DOCS entry must point to an existing file.
 
-import { findAllHtmlFiles, readFile, parseDocsArray, fileExists, getDocsDir, join } from "./nav-utils.ts";
-import { relative } from "node:path";
+import { findAllHtmlFiles, readFile, parseDocsArray, fileExists, getDocsDir } from "./nav-utils.ts";
+import { relative, join } from "node:path";
 
 export interface SearchIndexError {
   type: "missing-from-docs" | "missing-file" | "extra-in-docs";

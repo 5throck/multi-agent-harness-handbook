@@ -46,20 +46,52 @@ export function extractChapterNav(html: string): {
 } {
   const result: { prev?: { href: string; label: string }; next?: { href: string; label: string }; others: { href: string; label: string }[] } = { others: [] };
 
-  // Match <div class="chapter-nav">...</div> block
-  const navMatch = html.match(/<div\s+class="chapter-nav"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/);
-  if (!navMatch) return result;
+  // Extract <div class="chapter-nav">...</div> block using depth-aware parsing
+  // (simple regex can't handle nested divs reliably)
+  const openIdx = html.indexOf('<div class="chapter-nav"');
+  if (openIdx === -1) return result;
 
-  const navHtml = navMatch[1];
+  // Find the end of the opening tag
+  const tagEnd = html.indexOf('>', openIdx);
+  if (tagEnd === -1) return result;
 
-  // Match all <a href="..." class="prev|next|..."> blocks
-  const linkRe = /<a\s+href="([^"]*)"\s*(?:class="([^"]*)")?\s*(?:style="[^"]*")?\s*>[\s\S]*?<div\s+class="ttl">(.*?)<\/div>[\s\S]*?<\/a>/g;
+  let depth = 1;
+  let pos = tagEnd + 1;
+  while (pos < html.length && depth > 0) {
+    const nextOpen = html.indexOf('<div', pos);
+    const nextClose = html.indexOf('</div>', pos);
+    if (nextClose === -1) break; // malformed
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      // Check it's a proper opening tag (not <divsomething without space or >)
+      const charAfter = html[nextOpen + 4];
+      if (charAfter === ' ' || charAfter === '>') {
+        depth++;
+        pos = nextOpen + 4;
+        continue;
+      }
+    }
+    depth--;
+    pos = nextClose + 6; // length of '</div>'
+  }
+
+  const navHtml = html.slice(tagEnd + 1, pos - 6); // exclude the final </div>
+
+  // Extract individual <a ...>...</a> tags from the nav block
+  const aTagRe = /<a\s+href="([^"]*)"\s*((?:class="[^"]*")?\s*(?:style="[^"]*")?\s*)>([\s\S]*?)<\/a>/g;
   let m: RegExpExecArray | null;
 
-  while ((m = linkRe.exec(navHtml)) !== null) {
+  while ((m = aTagRe.exec(navHtml)) !== null) {
     const href = m[1];
-    const cls = m[2] || "";
-    const label = m[3].trim();
+    const attrs = m[2] || "";
+    const inner = m[3];
+
+    // Extract class from attributes
+    const classMatch = attrs.match(/class="([^"]*)"/);
+    const cls = classMatch ? classMatch[1] : "";
+
+    // Extract label: prefer <div class="ttl"> content, fall back to plain text
+    const ttlMatch = inner.match(/<div\s+class="ttl">([\s\S]*?)<\/div>/);
+    const label = ttlMatch ? ttlMatch[1].trim() : inner.trim();
     const entry = { href, label };
 
     if (cls.includes("prev")) result.prev = entry;

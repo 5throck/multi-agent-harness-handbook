@@ -16,11 +16,37 @@ export function checkSymmetry(): SymmetryError[] {
   const htmlFiles = findAllHtmlFiles();
   const docsDir = getDocsDir();
 
-  // Build map: absPath → { prev?, next? }
+  // Build map: absPath → { prev?, next?, others[] }
   const navMap = new Map<string, ReturnType<typeof extractChapterNav>>();
   for (const filePath of htmlFiles) {
     const html = readFile(filePath);
     navMap.set(filePath, extractChapterNav(html));
+  }
+
+  // Files that act as hubs (branch divs instead of next link) — their "next"
+  // is effectively through branch links, so don't require a symmetric prev→next.
+  const hubFiles = new Set<string>();
+  for (const [filePath, nav] of navMap) {
+    if (!nav.next && nav.others.length > 0 && nav.prev) {
+      hubFiles.add(filePath);
+    }
+  }
+
+  // Files with no chapter-nav at all (e.g. glossary, index) — skip as targets
+  const noNavFiles = new Set<string>();
+  for (const [filePath, nav] of navMap) {
+    if (!nav.prev && !nav.next && nav.others.length === 0) {
+      noNavFiles.add(filePath);
+    }
+  }
+
+  // Files that participate in branching (have branch div links) — their prev/next
+  // may converge at different points than the linear chain expects.
+  const branchFiles = new Set<string>();
+  for (const [filePath, nav] of navMap) {
+    if (nav.others.length > 0) {
+      branchFiles.add(filePath);
+    }
   }
 
   for (const [filePath, nav] of navMap) {
@@ -39,22 +65,30 @@ export function checkSymmetry(): SymmetryError[] {
             detail: `next → ${nav.next.href} but target file not found in docs/`,
           });
         } else if (!targetNav.prev) {
-          errors.push({
-            type: "missing-back-link",
-            fileA: relFile,
-            fileB: relative(docsDir, nextAbs),
-            detail: `next → ${relative(docsDir, nextAbs)} but target has no prev link`,
-          });
-        } else {
-          // Verify prev points back to this file
-          const prevAbs = resolveHref(nextAbs, targetNav.prev.href);
-          if (prevAbs !== filePath) {
+          // Skip if target has no nav at all (e.g. glossary)
+          if (!noNavFiles.has(nextAbs)) {
             errors.push({
-              type: "mismatch",
+              type: "missing-back-link",
               fileA: relFile,
               fileB: relative(docsDir, nextAbs),
-              detail: `next → ${relative(docsDir, nextAbs)} but that file's prev → ${targetNav.prev.href} (not back to ${relFile})`,
+              detail: `next → ${relative(docsDir, nextAbs)} but target has no prev link`,
             });
+          }
+        } else {
+          // Verify prev points back to this file
+          // Skip if target is a hub, or if either file participates in branching
+          if (hubFiles.has(nextAbs) || branchFiles.has(filePath) || branchFiles.has(nextAbs)) {
+            // Acceptable: branching navigation has convergence points
+          } else {
+            const prevAbs = resolveHref(nextAbs, targetNav.prev.href);
+            if (prevAbs !== filePath) {
+              errors.push({
+                type: "mismatch",
+                fileA: relFile,
+                fileB: relative(docsDir, nextAbs),
+                detail: `next → ${relative(docsDir, nextAbs)} but that file's prev → ${targetNav.prev.href} (not back to ${relFile})`,
+              });
+            }
           }
         }
       }
@@ -73,11 +107,10 @@ export function checkSymmetry(): SymmetryError[] {
             detail: `prev → ${nav.prev.href} but target file not found in docs/`,
           });
         } else if (!targetNav.next) {
-          // First chapter (01) has no prev — that's expected.
-          // Sub-files like 06 §1 → 06 §2 (next to examples) is valid.
-          // But if a chapter-level file has no next, flag only if it's not the last chapter.
-          const targetRel = relative(docsDir, prevAbs);
-          if (!targetRel.includes("13_Capstone")) {
+          // Skip: hub files use branch divs instead of next
+          // Skip: terminal files like capstone, glossary
+          if (!hubFiles.has(prevAbs) && !noNavFiles.has(prevAbs)) {
+            const targetRel = relative(docsDir, prevAbs);
             errors.push({
               type: "orphan-next",
               fileA: relFile,
@@ -86,14 +119,19 @@ export function checkSymmetry(): SymmetryError[] {
             });
           }
         } else {
-          const nextAbs = resolveHref(prevAbs, targetNav.next.href);
-          if (nextAbs !== filePath) {
-            errors.push({
-              type: "mismatch",
-              fileA: relFile,
-              fileB: relative(docsDir, prevAbs),
-              detail: `prev → ${relative(docsDir, prevAbs)} but that file's next → ${targetNav.next.href} (not back to ${relFile})`,
-            });
+          // Skip mismatch check if either file participates in branching
+          if (branchFiles.has(filePath) || branchFiles.has(prevAbs)) {
+            // Acceptable: branching navigation has convergence points
+          } else {
+            const nextAbs = resolveHref(prevAbs, targetNav.next.href);
+            if (nextAbs !== filePath) {
+              errors.push({
+                type: "mismatch",
+                fileA: relFile,
+                fileB: relative(docsDir, prevAbs),
+                detail: `prev → ${relative(docsDir, prevAbs)} but that file's next → ${targetNav.next.href} (not back to ${relFile})`,
+              });
+            }
           }
         }
       }

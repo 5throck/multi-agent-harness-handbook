@@ -401,22 +401,28 @@ col.w-label  { width: 16ch; }  /* agent names, model names */
 .table-plan table {
   table-layout: fixed;
   margin: 0;
-  /* Sum of the fixed columns' ch widths below + a floor for Task (20ch,
-     enough for an unwrapped short task name). Without this, a viewport
-     narrower than that sum makes browsers proportionally shrink EVERY
-     column — including the ones with an explicit width — squeezing
-     Tier/Model/Spec first since they're already the narrowest. min-width
-     forces horizontal scroll (.table-plan already has overflow-x: auto)
-     instead of breaking the fixed-column contract. */
-  min-width: calc(4ch + 20ch + 20ch + 9ch + 9ch + 11ch);
+  /* Sum of every column's ch width below. All six columns carry an
+     explicit width on purpose — when they don't sum to the table's own
+     100% width, browsers distribute the remainder proportionally across
+     ALL of them, so every column keeps the same relative weight whether
+     the table renders at 720px or 375px. Leaving one column (e.g. Task)
+     unwidthed instead makes it alone absorb 100% of the remainder — it
+     visually swallows the row (Task ballooned to ~51% of the table) while
+     the still-narrow columns look "squeezed" by comparison, even though
+     none of them actually overflow. min-width matches this sum so a
+     narrower viewport scrolls (.table-plan has overflow-x: auto) instead
+     of shrinking below it. */
+  min-width: calc(4ch + 34ch + 20ch + 9ch + 9ch + 11ch);
 }
 .table-plan { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
 /* Agent/Tier/Model/Spec are fixed English vocabulary regardless of locale
    (agent names from AGENTS.md's roster, tier labels, model aliases, spec
    IDs) — sized in `ch` to their actual longest value instead of a guessed
-   `%`, so the Task column (no width set) absorbs all remaining space and
-   never needs re-tuning when a row's Task text changes. */
+   `%`. Task gets a reasonable multi-line budget (34ch — a short task name
+   fits on one line, the long /sync example wraps to 2) rather than the
+   rest of the table, so it scales proportionally with the others. */
 .table-plan th:nth-child(1) { width: 4ch; }   /* # */
+.table-plan th:nth-child(2) { width: 34ch; }  /* Task */
 .table-plan th:nth-child(3) { width: 20ch; }  /* Agent — "automation-engineer" */
 .table-plan th:nth-child(4) { width: 9ch; }   /* Tier — "Medium"/"Low"/"High" */
 .table-plan th:nth-child(5) { width: 9ch; }   /* Model — "sonnet"/"haiku"/"opus" */

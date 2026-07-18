@@ -119,7 +119,8 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
   <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 베리언트(variant)에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. 베리언트(variant)가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 신규 베리언트(variant)를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 베리언트(variant)를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(11장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다. 반대 방향 — 이미 만든 L2 프로젝트에 L1의 최신 변경을 실제로 반영하는 절차는 <a href="10_ProjectUpgrade_Chapter.html">10장 · L2 프로젝트 업그레이드</a>에서 다룬다.</p>
 
   <h3>파일별 SSOT — 무엇이 어디서 어디로 흐르는가</h3>
-  <table style="width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;">
+  <div class="table-compare">
+  <table>
     <thead><tr>
       <th >파일</th>
       <th >원본(SSOT)</th>
@@ -132,6 +133,7 @@ L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
       <tr><td ><code>variant.json</code></td><td ><code>templates/co-&lt;name&gt;/</code> 자신</td><td >해당 베리언트(variant)가 곧 원본</td></tr>
     </tbody>
   </table>
+  </div>
 
   <p><code>agents/pm.md</code>는 L0→L1 관계를 가장 잘 보여주는 사례다. L0의 <code>agents/pm.md</code>가 완전한 원본이고, L1의 <code>templates/common/agents/pm.md</code>는 <code>extends: ../../../agents/pm.md</code> 프론트매터로 L0를 참조하되 워크스페이스 전용 섹션(예: Auto-Mode, 라이프사이클 상태 필드)은 제거한 "순수 확장" 파일이다. L2의 <code>templates/co-*/agents/pm.md</code>는 L1을 이어받되 내용을 그대로 복사하지 않고, variant 고유의 오버라이드로부터 필요한 내용을 처음부터 다시 생성한다("Layout Reconstruction"). 그래서 L0의 <code>agents/pm.md</code>가 300줄이 넘어도 L2의 pm.md는 50~100줄 남짓으로 유지된다.</p>
 

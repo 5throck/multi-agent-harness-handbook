@@ -75,6 +75,7 @@ Google 계열
   <h3><code>teammateMode</code> — Claude App은 <code>in-process</code>만, Claude Code는 <code>tmux</code>도 가능</h3>
   <p>실험적 기능인 Agent Teams는 여러 Claude 인스턴스를 병렬로 띄우는데, Claude App은 같은 프로세스 안에서 병렬 처리하는 <code>in-process</code> 모드만 쓸 수 있고 일부 키보드 내비게이션(Shift+Down 등)이 제한된다. 터미널 분할(tmux split-pane)을 쓰는 <code>tmux</code> 모드는 Claude Code(CLI)에서만 추가로 지원된다.</p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>기능</th><th>Claude App (Desktop)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
@@ -105,6 +106,7 @@ Google 계열
       </tr>
     </tbody>
   </table>
+  </div>
 
   <div class="warning-box">Desktop App에서 Agent Teams를 쓰려면 <code>teammateMode</code>를 명시적으로 <code>in-process</code>로 지정해야 한다. 훅이 발화하지 않는다는 점도 팀 규칙에 반영해야 한다. 자동 감사가 조용히 건너뛰어지는 것을 "통과"로 착각하지 않도록 주의한다.</div>
 
@@ -123,6 +125,7 @@ Google 계열
   <p>비유하면 Claude Code/App은 "미리 뽑아 둔 정규직 팀원 명단"을 갖고 일하는 쪽이고, Antigravity 명령줄 인터페이스(CLI)는 "일이 생길 때마다 그 일에 맞는 프리랜서를 그 자리에서 섭외하는" 쪽에 가깝다. 전자는 팀원이 누구인지 항상 알 수 있어 권한 통제가 쉽고, 후자는 매번 새 인력을 구하는 유연함이 있지만 "이번엔 누가 투입됐는지" 사후에 확인할 방법이 필요하다. 그 확인 창구가 아래 <code>/agents</code>다.</p>
   <div class="note">여기서 유의할 점: <strong>동적으로 서브에이전트를 만드는 능력 자체는 Antigravity CLI만의 것이 아니다.</strong> Claude Code/App도 자연어 요청만으로 <code>Agent</code>(Task) 툴이 그때그때 필요한 작업을 판단해 서브에이전트를 스폰하며(1장 §3b), Antigravity(Desktop)도 Agent Manager에서 사전 정의 파일 없이 목표를 자연어로 주는 방식은 동일하다(§1). 이 절에서 소개하는 <code>/goal</code>·<code>/agent</code>·<code>/agents</code>는 그 <em>같은 동적 오케스트레이션 능력</em>을 <strong>CLI 화면에서 슬래시 커맨드로 다루기 위한 문법</strong>일 뿐이다. Claude Code/App은 이 문법 대신 채팅 문장으로, Antigravity 데스크톱(Desktop)은 이 문법 대신 GUI 버튼(Inbox 승인, Playground 등)으로 같은 일을 한다.</div>
   <p>다음은 <code>agy</code>를 실제로 쓸 때 자주 쓰는 CLI 전용 슬래시 커맨드 네 가지다. 아래 표는 "Antigravity CLI에만 있는 기능 목록"이 아니라 "같은 기능을 명령줄 인터페이스(CLI)에서 부르는 이름"으로 읽는다.</p>
+  <div class="table-compare">
   <table>
     <thead><tr><th>명령</th><th>동작</th></tr></thead>
     <tbody>
@@ -132,6 +135,7 @@ Google 계열
       <tr><td><code>/agents</code></td><td>지금까지 생성된 서브에이전트의 실행 중/완료/막힘 상태 목록을 보여준다.</td></tr>
     </tbody>
   </table>
+  </div>
   <p>세션을 시작하고 목표를 실행하는 실제 흐름은 다음과 같다.</p>
   <div style="position:relative">
     <div style="position:relative">
@@ -158,6 +162,7 @@ Google 계열
   <hr>
 
   <h2 id="section-3">3. 멀티 에이전트 지원 범위 비교표</h2>
+  <div class="table-compare">
   <table>
     <thead><tr><th>항목</th><th>Claude App</th><th>Antigravity (Desktop)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th></tr></thead>
     <tbody>
@@ -219,6 +224,7 @@ Google 계열
       </tr>
     </tbody>
   </table>
+  </div>
   <p>
     <span class="badge badge-workflow">Desktop 우선 안내</span>
     <span class="badge badge-alias">CLI 완전 병행 지원</span>
@@ -343,6 +349,7 @@ Google 계열
   <h2 id="section-5">5. 네 도구를 묶어 주는 AGENTS.md</h2>
   <p>지금까지 비교한 훅·병렬 실행·서브에이전트 정의 방식은 도구마다 다르지만, 저장소 루트 설정만큼은 하나로 합칠 수 있다. <strong>AGENTS.md</strong>는 2025년 8월 OpenAI 주도로 Google·Cursor·Factory가 함께 만들고 2025년 12월 리눅스 재단 Agentic AI Foundation에 기증된 개방형 표준으로, Codex·Cursor·GitHub Copilot·Google Jules는 물론 Claude Code(가져오기 방식)와 Antigravity 계열을 포함해 30개 이상의 도구가 지원한다.</p>
   <p>저장소 루트에 <code>AGENTS.md</code> 하나를 두면 네 도구 모두 세션 시작 시 이를 읽어 빌드/테스트 명령, 코드 스타일, 손대면 안 되는 영역 같은 공통 규칙을 공유한다. 도구별 세부 동작(훅, teammateMode, 서브에이전트 정의 위치 등)은 이 표에서 비교한 대로 여전히 <code>CLAUDE.md</code>·<code>GEMINI.md</code> 같은 도구별 파일에 따로 적는다. AGENTS.md가 공통분모를, 도구별 파일이 차이점을 맡는 구조다.</p>
+  <div class="table-compare">
   <table>
     <thead><tr><th>파일</th><th>역할</th><th>읽는 도구</th></tr></thead>
     <tbody>
@@ -363,6 +370,7 @@ Google 계열
       </tr>
     </tbody>
   </table>
+  </div>
   <p >💡 <strong>핵심 한 줄:</strong> 5장 §1에서 다루는 ai-workspace-standards 저장소는 이 구조를 그대로 구현한다. 루트 <code>AGENTS.md</code>가 에이전트 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적 커맨드·스킬을 담아 둔다.</p>
 
   <hr>

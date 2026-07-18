@@ -30,7 +30,7 @@
     }
     .wf-card .wf-patterns { font-size: 13px; color: var(--text-dim); margin: 6px 0 12px; }
     .wf-card .wf-patterns code { background: var(--bg-note); border-color: var(--border-note); color: var(--accent-amber); }
-    .wf-card .wf-stages { font-size: 13.5px; line-height: 1.8; }
+    .wf-card .wf-stages { font-size: var(--font-size-small); line-height: 1.8; }
     .wf-card .wf-stages strong { color: var(--accent-dark); }
     .wf-card svg { margin: 14px 0 8px; }
   </style>
@@ -352,6 +352,7 @@
 
   <p>2장에서 "에이전트"를 역할(role)로 모델링한다는 것을 배웠다. 실제 워크스페이스에서는 이 역할들이 <strong>구체적인 파일과 티어 배정</strong>으로 정의되어 로스터에 등록된다. AGENTS.md의 서브에이전트 로스터는 이 정의를 한눈에 볼 수 있는 테이블이다.</p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>에이전트</th><th>파일</th><th>티어</th><th>병렬 실행</th><th>쓰기 권한</th></tr></thead>
     <tbody>
@@ -365,6 +366,7 @@
       <tr><td>Security &amp; Git Expert</td><td><code>agents/security-expert.md</code></td><td>Medium</td><td>리뷰 단계</td><td>훅 설정만</td></tr>
     </tbody>
   </table>
+  </div>
 
   <p>이 테이블의 "병렬 실행" 열은 8장 §4에서 다룬 Tier Adjustment Rules과 함께 해석해야 한다. 예를 들어 docs-writer는 "설계 이후"에만 병렬 실행 가능한데, 이것은 설계가 확정되지 않은 상태에서 문서를 병렬로 작성하면 나중에 전부 갈아 엎야 할 위험이 있기 때문이다. 반면 Auditor는 "독립 QA"로, 다른 에이전트의 작업과 무관하게 언제든 독립적으로 실행될 수 있다.</p>
 
@@ -372,6 +374,7 @@
 
   <p>에이전트가 여럿일 때, "누가 이 작업을 맡아야 하는가"가 모호해질 수 있다. 다음 매트릭스는 그 모호함을 해소하는 역할 경계(role boundary)를 정의한다.</p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>시나리오</th><th>사용해야 할 에이전트</th><th>사용하면 안 되는 에이전트</th></tr></thead>
     <tbody>
@@ -384,6 +387,7 @@
       <tr><td>여러 에이전트 간 작업 오케스트레이션</td><td><code>pm</code></td><td>어떤 실행 에이전트도</td></tr>
     </tbody>
   </table>
+  </div>
 
   <p>이 매트릭스의 핵심 원칙은 <strong>"설계와 실행을 분리"</strong>한다는 것이다. architect는 설계만 하고 스크립트를 직접 작성하지 않으며, automation-engineer는 스크립트를 작성하지만 구조를 설계하지 않는다. docs-writer가 문서를 검증하는 것이 아니라 auditor가 검증하고, docs-writer는 auditor가 쓴 피드백을 반영해 문서를 수정하는 식이다.</p>
 
@@ -497,6 +501,7 @@
   <h3>업무 유형별 시작 패턴</h3>
   <p>의사결정 나무의 결과를 업무 유형별로 정리하면 다음과 같다.</p>
 
+  <div class="table-compare">
   <table>
     <thead>
       <tr><th>업무 유형</th><th>의존 관계</th><th>병렬 가능</th><th>검증 필요</th><th>권장 시작 패턴</th></tr>
@@ -512,6 +517,7 @@
       <tr><td>다국어 콘텐츠 생성</td><td>없음</td><td>○</td><td>보통</td><td><code>팬아웃 + 취합</code></td></tr>
     </tbody>
   </table>
+  </div>
 
   <h3>패턴 조합 가이드</h3>
   <p>어떤 패턴을 함께 쓰면 시너지가 나는지 정리한다.</p>

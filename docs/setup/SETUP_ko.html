@@ -11,7 +11,7 @@
     /* Page-specific overrides */
     .flow-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 16px 0; overflow-x: auto; }
     .flow-box::before { content: none; }
-    .flow-box pre { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; color: var(--text); white-space: pre; }
+    .flow-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre; }
   </style>
 </head>
 <body>
@@ -129,7 +129,9 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>설치된 도구의 검증 표를 출력한다. <strong>모든 항목이 ✅로 표시되면 준비 완료이다.</strong></p>
 
   <h2 id="tools">설치 도구 목록</h2>
-  <table>
+  <div class="table-code">
+  <table class="wide">
+    <colgroup><col class="col-tool"><col class="col-use"><col class="col-os"><col class="col-os"><col class="col-os"></colgroup>
     <thead><tr><th>도구</th><th>용도</th><th>macOS</th><th>Linux</th><th>Windows</th></tr></thead>
     <tbody>
       <tr><td><strong>bun</strong></td><td>런타임 &amp; 패키지 매니저</td><td><code>bun.sh/install</code></td><td><code>bun.sh/install</code></td><td><code>bun.sh/install.ps1</code></td></tr>
@@ -149,7 +151,8 @@ bash setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>curl</strong></td><td>HTTP 클라이언트</td><td>— (기본 내장)</td><td><code>apt install curl</code></td><td>— (기본 내장)</td></tr>
     </tbody>
   </table>
-  <p style="font-size:12.5px;color:var(--text-dim);">⚠️ 항목은 직접 다운로드 및 수동 설치가 필요한다.</p>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim);">⚠️ 항목은 직접 다운로드 및 수동 설치가 필요한다.</p>
 
   <h3>선택 도구 (<code>--wezterm</code>, <code>--docker</code>)</h3>
   <table>

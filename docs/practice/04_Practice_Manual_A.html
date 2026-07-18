@@ -12,8 +12,8 @@
     .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
     .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
     .tree-box pre .desc { color: var(--text-dim); }
-    td code { font-size: 11.5px; }
-    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: 12px; }
+    td code { font-size: var(--font-size-label); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
     .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
     @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
     .platform-col { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
@@ -96,6 +96,7 @@ model: sonnet
     <p>Claude App에서 쓴 것과 완전히 같은 <code>.claude/agents/*.md</code> 파일을 그대로 인식한다. Desktop App과 CLI 사이에 서브에이전트 정의 방식의 차이는 없다.</p>
   </div>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>frontmatter 필드</th><th>Claude App / Claude Code (.claude/agents)</th></tr></thead>
     <tbody>
@@ -117,6 +118,7 @@ model: sonnet
       </tr>
     </tbody>
   </table>
+  </div>
 
   <hr>
 
@@ -170,6 +172,7 @@ Agent(description="테스트 커버리지 점검",
 </div>
   </div>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>항목</th><th>Claude App (Desktop)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
@@ -180,6 +183,7 @@ Agent(description="테스트 커버리지 점검",
       </tr>
     </tbody>
   </table>
+  </div>
 
   <hr>
 

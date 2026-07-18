@@ -1013,10 +1013,16 @@ pre.code-block {
   margin: 16px 0;
 }
 
-.variant-list { margin: 12px 0; }
-.variant-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.variant-row:last-child { border-bottom: none; }
-.variant-name { font-weight: 700; font-size: var(--font-size-compact); font-family: var(--font-mono); color: var(--accent-dark); flex-shrink: 0; }
+/* Grid (not flex) so the name column shares one width across ALL rows —
+   flex would size each row's name box to its own content independently,
+   leaving badge-bearing rows (co-deck, co-game) out of alignment with the
+   rest. .variant-row is display:contents so its children become direct
+   grid items of .variant-list. */
+.variant-list { display: grid; grid-template-columns: max-content 1fr; column-gap: 12px; margin: 12px 0; }
+.variant-row { display: contents; }
+.variant-row > * { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.variant-row:last-child > * { border-bottom: none; }
+.variant-name { font-weight: 700; font-size: var(--font-size-compact); font-family: var(--font-mono); color: var(--accent-dark); white-space: nowrap; }
 
 /* ==========================================================================
    T. Search & Utilities

@@ -9,14 +9,14 @@
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
     /* Page-specific overrides */
-    .hero p { font-size: 15.5px; line-height: 1.85; margin: 0; }
+    .hero p { font-size: 14px; line-height: 1.75; margin: 0; }
     .tag {
       display: inline-block; font-size: 11px; font-weight: 700;
       padding: 2px 10px; border-radius: 20px; letter-spacing: .04em;
       margin-right: 6px; margin-bottom: 6px;
     }
     h2 {
-      font-size: 1.4rem; font-weight: 700; margin: 44px 0 14px;
+      font-weight: 700; margin: 44px 0 14px;
       scroll-margin-top: 20px;
       display: flex; align-items: center; gap: 10px;
     }
@@ -25,7 +25,7 @@
     .obj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0 22px; }
     .obj-card {
       background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
-      padding: 16px 18px; font-size: 14px; line-height: 1.65;
+      padding: 16px 18px; font-size: 14px; line-height: 1.65; text-align: left;
     }
     .obj-card .obj-num {
       font-size: 11px; font-weight: 700; color: var(--accent);
@@ -39,21 +39,21 @@
     }
     .takeaway-list li::before {
       content: "✓"; position: absolute; left: 14px; top: 10px;
-      color: var(--accent-green); font-weight: 700; font-size: 15px;
+      color: var(--accent-green); font-weight: 700; font-size: 14px;
     }
-    .instructor-box p { margin: 6px 0; font-size: 14px; }
+    .instructor-box p { margin: 6px 0; }
     .schedule-block {
       display: flex; align-items: flex-start; gap: 16px;
-      padding: 14px 0; border-bottom: 1px solid var(--bg3);
+      padding: 6px 0; border-bottom: 1px solid var(--bg3);
     }
     .schedule-block:last-child { border-bottom: none; }
     .schedule-time {
-      min-width: 70px; font-weight: 700; font-size: 13px; color: var(--accent-dark);
+      min-width: 70px; font-weight: 700; color: var(--accent-dark);
       text-align: right; padding-top: 2px;
     }
     .schedule-body { flex: 1; }
-    .schedule-body h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
-    .schedule-body p { font-size: 13px; color: var(--text-dim); margin: 2px 0; }
+    .schedule-body h4 { font-size: 14px; font-weight: 700; margin: 0 0 3px; }
+    .schedule-body p { font-size: 13px; color: var(--text-dim); margin: 2px 0; line-height: 1.6; }
     footer {
       margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
       color: var(--text-dim); font-size: 12px; line-height: 1.9;
@@ -164,6 +164,7 @@
 
 <!-- ────────────────── 4. 강의 형태 ────────────────── -->
 <h2 id="format"><span class="icon">📖</span>강의 형태</h2>
+<div class="table-schedule">
 <table>
   <thead><tr><th>형태</th><th>내용</th><th>1일차 비율</th><th>2일차 비율</th></tr></thead>
   <tbody>
@@ -173,6 +174,7 @@
     <tr><td><span class="tag tag-demo">시연</span></td><td>강사 화면 공유(승격 파이프라인 등 비가역적 작업만)</td><td>—</td><td>약 5%</td></tr>
   </tbody>
 </table>
+</div>
 <div class="highlight">
   <div class="hl-title">실습 환경</div>
   <p>네 도구(Claude App, Claude Code, Antigravity Desktop, Antigravity CLI)를 모두 설치한 뒤 참가자를 4개 그룹으로 나누어 각자 다른 도구로 같은 시나리오를 진행한다. 마지막에 결과를 비교하며 "도구 비교" 챕터 내용이 직접 체감됩니다.</p>
@@ -391,6 +393,7 @@
 
 <!-- ────────────────── 6. 다루는 주제 ────────────────── -->
 <h2 id="topics"><span class="icon">📚</span>다루는 주제</h2>
+<div class="table-schedule">
 <table>
   <thead><tr><th>블록</th><th>주제</th><th>관련 장</th><th>일정</th></tr></thead>
   <tbody>
@@ -410,6 +413,7 @@
 	    <tr><td>종합</td><td>캡스톤: 본인 업무에 멀티 에이전트팀 적용하기</td><td>13장</td><td>2일차</td></tr>
   </tbody>
 </table>
+</div>
 
 <!-- ────────────────── 7. 수료 후 얻게 되는 것 ────────────────── -->
 <h2 id="takeaways"><span class="icon">✅</span>수료 후 얻게 되는 것</h2>

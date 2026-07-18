@@ -100,6 +100,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <p>이 번역이 <code>model: inherit</code> 뒤에서 자동으로 일어나기 때문에, agents/*.md를 작성하는 사람은 구체적인 모델 이름을 전혀 몰라도 되고 "이 역할이 얼마나 무거운 판단을 하는가"만 신경 쓰면 된다.</p>
 
   <h3>티어 정의와 모델 매핑</h3>
+  <div class="table-compare">
   <table>
     <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th></tr></thead>
     <tbody>
@@ -108,6 +109,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
       <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-4-5</td><td>gemini-3.5-flash</td></tr>
     </tbody>
   </table>
+  </div>
   <p>이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다. 기준선이 high인 에이전트(architect, pm)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
 
   <h3>Tier Adjustment Rules — 실행 시 비용 최적화</h3>
@@ -133,6 +135,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <p>PM이 복잡한 작업을 여러 에이전트에 분배할 때 <strong>실행 계획(Execution Plan)</strong> 형식을 사용한다. 이 계획은 "누가 무엇을 어떤 티어로, 어떤 순서로"를 테이블로 명시하여 실행의 일관성을 보장한다.</p>
 
   <h3>표준 실행 계획 형식</h3>
+  <div class="table-compare">
   <table>
     <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
     <tbody>
@@ -141,12 +144,14 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
       <tr><td>N</td><td><code>/sync "type(scope): message"</code></td><td>pm</td><td>Medium</td><td>[model]</td><td></td></tr>
     </tbody>
   </table>
+  </div>
 
   <h3>Design Gate (Row 0)</h3>
   <p>Row 0은 <strong>L0(워크스페이스 루트)과 L1(공통 템플릿)에만 강제</strong>된다. architect가 설계 문서를 먼저 작성하고, PM이 이를 검증한 뒤에야 구현 단계(Row 1 이후)로 진행할 수 있다. L2 variant 프로젝트는 자체 워크플로우를 관리하므로 이 게이트가 적용되지 않는다.</p>
 
   <h3>Design Gate 예외 카테고리</h3>
   <p>Row 0이 부담스러운 단순 작업에는 다음 5가지 예외 카테고리(E1~E5)만 인정한다. 예외는 PM이 임의로 만들 수 없고, 아래 정의된 카테고리만 사용해야 한다.</p>
+  <div class="table-compare">
   <table>
     <thead><tr><th>ID</th><th>카테고리</th><th>설명</th></tr></thead>
     <tbody>
@@ -157,10 +162,12 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
       <tr><td>E5</td><td>sync-only</td><td><code>/sync</code> 실행만(라이프사이클 종료)</td></tr>
     </tbody>
   </table>
+  </div>
   <p>예외 적용 시 Row 0의 Agent/Tier/Model 컬럼은 빈칸(<code>—</code>)으로 표시한다.</p>
 
   <h3>실전 예시: PM이 작성한 실행 계획</h3>
   <p>다음은 "agents/pm.md와 스크립트를 업데이트하는 플랫폼 패리티 작업"의 실제 실행 계획 예시다.</p>
+  <div class="table-compare">
   <table>
     <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
     <tbody>
@@ -171,6 +178,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
       <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>sonnet</td><td></td></tr>
     </tbody>
   </table>
+  </div>
   <p><strong>실행 순서</strong>: Sequential — <a href="#platform-parity">플랫폼 패리티</a>를 위해 CLAUDE.md와 GEMINI.md를 함께 업데이트해야 하므로 순차 실행이다. automation-engineer에 low가 배정된 것은 Tier Adjustment Rule에 따른 것이다.</p>
 
   <div class="note">

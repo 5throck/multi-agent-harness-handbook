@@ -12,8 +12,8 @@
     .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
     .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
     .tree-box pre .desc { color: var(--text-dim); }
-    td code { font-size: 11.5px; }
-    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: 12px; }
+    td code { font-size: var(--font-size-label); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
     hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
     .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
     .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
@@ -142,6 +142,7 @@
     Antigravity 계열의 구체적인 방식은 <a href="04_Practice_Manual_B.html">§1-B Antigravity 중심</a>에서 다룬다.
   </p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>frontmatter 필드</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
     <tbody>
@@ -164,6 +165,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <div class="warning-box">Antigravity(Desktop/CLI)에는 "서브에이전트 정의 파일"이라는 개념 자체가 없다 — 초급 실습에서 Antigravity 쪽에 Claude App/Code의 <code>reviewer.md</code>와 똑같은 예제를 억지로 만들면 사실과 어긋난다. Antigravity의 "입문 실습"은 파일을 만드는 것이 아니라 목표를 주고 오케스트레이터가 알아서 작업을 쪼개는 과정을 관찰하는 것이다.</div>
 
@@ -193,6 +195,7 @@
     Antigravity 계열의 병렬 실행 방식은 <a href="04_Practice_Manual_B.html#section-3">§1-B 섹션 3</a>에서 다룬다.
   </p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>항목</th><th>Antigravity (Desktop)</th><th>Claude App (Desktop)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
@@ -205,6 +208,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <hr>
 

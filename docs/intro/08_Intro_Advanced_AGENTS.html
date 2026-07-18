@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
-    td code { font-size: 12.5px; }
+    td code { font-size: var(--font-size-label); }
   </style>
 </head>
 <body>
@@ -59,6 +59,7 @@
 
   <p>AGENTS.md의 각 에이전트 항목은 <code>## Agent: {이름}</code>으로 시작하는 마크다운 섹션이다. 이 섹션 안에 역할·입력·출력·권한·handoff 등의 필드를 자유 형식으로 기술한다. 표준 명세는 strict schema를 강제하지 않고, 도구가 공통으로 인식하는 관례(convention)에 의존한다.</p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>필드</th><th>의미</th><th>필수 여부</th><th>4장 실습 예시</th></tr></thead>
     <tbody>
@@ -100,6 +101,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <h3>완성 예시</h3>
   <p>4장 실습(G-1, D-1)에서 작성한 두 에이전트가 들어간 AGENTS.md 전체 모습이다.</p>
@@ -130,6 +132,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
 
   <p>AGENTS.md는 도구 중립적인 공통 명세다. 하지만 실제로 서브에이전트를 "구현"하는 방식은 Claude 계열과 Antigravity 계열에서 근본적으로 다르다.</p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>층위</th><th>Claude App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
     <tbody>
@@ -160,6 +163,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
       </tr>
     </tbody>
   </table>
+  </div>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div >AGENTS.md → 도구별 구현 흐름</div>
@@ -239,6 +243,7 @@ handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
 
   <p>AGENTS.md에 에이전트를 등록하는 것은 <strong>생애주기의 Create 단계</strong>에 해당한다(8장 §2 참조). 등록된 에이전트는 다음 단계를 거친다.</p>
 
+  <div class="table-compare">
   <table>
     <thead><tr><th>생애주기 단계</th><th>AGENTS.md에서의 동작</th><th>검증</th></tr></thead>
     <tbody>
@@ -269,6 +274,7 @@ handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
       </tr>
     </tbody>
   </table>
+  </div>
 
   <p>에이전트를 새로 만들거나 변경할 때마다 <code>agent:verify</code>를 실행하는 것을 습관화하면, "로스터에는 있는데 실제 정의 파일이 없는" 또는 "handoff_to가 가리키는 에이전트가 삭제된" 같은 불일치를 조기에 발견할 수 있다.</p>
 

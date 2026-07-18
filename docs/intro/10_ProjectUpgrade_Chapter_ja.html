@@ -69,6 +69,7 @@
 
   <h2 id="categories">ファイル処理の5分類</h2>
   <p>スクリプトは性質に応じてファイルを異なる方法で扱う — すべてを一律に「新しい内容で上書き」するわけではない。</p>
+  <div class="table-compare">
   <table>
     <thead><tr><th>分類</th><th>動作</th><th>対象例</th></tr></thead>
     <tbody>
@@ -79,6 +80,7 @@
       <tr><td><strong>PRUNE(任意)</strong></td><td><code>--prune-removed</code>を指定した場合、テンプレートから削除されたscripts/agents/skillsファイルをプロジェクトからも削除する</td><td>上記SYNC_IF_NEWER対象と同じディレクトリ</td></tr>
     </tbody>
   </table>
+  </div>
   <p>SYNC_IF_NEWER対象のファイルをローカルで直接修正済みの状態で、かつテンプレート側のバージョンがより新しい場合、スクリプトは<code>⚠️ CONFLICT</code>と表示しつつも、最終的にはテンプレートの内容で上書きする。「上書き前に確認する」動作ではなく、「警告のみして進める」動作である点を覚えておく必要がある — だからこそ、以下の安全装置が重要になる。</p>
 
   <h2 id="safety">安全装置 — スナップショットとロールバック</h2>

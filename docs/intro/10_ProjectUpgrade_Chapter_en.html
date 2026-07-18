@@ -69,6 +69,7 @@
 
   <h2 id="categories">The 5 file-handling categories</h2>
   <p>The script treats files differently depending on their nature — it isn't a blanket "overwrite everything with the new version."</p>
+  <div class="table-compare">
   <table>
     <thead><tr><th>Category</th><th>Behavior</th><th>Example targets</th></tr></thead>
     <tbody>
@@ -79,6 +80,7 @@
       <tr><td><strong>PRUNE (optional)</strong></td><td>When <code>--prune-removed</code> is specified, scripts/agents/skills files that were removed from the template are also removed from the project</td><td>Same directories as the SYNC_IF_NEWER targets above</td></tr>
     </tbody>
   </table>
+  </div>
   <p>If a SYNC_IF_NEWER target has been edited locally but the template's version is newer, the script marks it as <code>⚠️ CONFLICT</code> but still overwrites it with the template's content in the end. Keep in mind that this is "warn and proceed," not "ask before overwriting" — which is exactly why the safety net described below matters.</p>
 
   <h2 id="safety">Safety nets — snapshots and rollback</h2>

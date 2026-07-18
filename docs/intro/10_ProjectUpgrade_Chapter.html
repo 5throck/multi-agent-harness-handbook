@@ -69,6 +69,7 @@
 
   <h2 id="categories">파일 처리 5분류</h2>
   <p>스크립트는 파일을 성격에 따라 다르게 다룬다 — 전부 똑같이 "새 걸로 덮어쓰기"가 아니다.</p>
+  <div class="table-compare">
   <table>
     <thead><tr><th>분류</th><th>동작</th><th>대상 예시</th></tr></thead>
     <tbody>
@@ -79,6 +80,7 @@
       <tr><td><strong>PRUNE(선택)</strong></td><td><code>--prune-removed</code> 지정 시, 템플릿에서 사라진 scripts/agents/skills 파일을 프로젝트에서도 제거</td><td>위 SYNC_IF_NEWER 대상과 동일한 디렉터리</td></tr>
     </tbody>
   </table>
+  </div>
   <p>SYNC_IF_NEWER 대상 파일을 로컬에서 직접 고쳐 쓴 상태인데 템플릿 쪽 버전이 더 높으면, 스크립트는 <code>⚠️ CONFLICT</code>로 표시하면서도 결국 템플릿 내용으로 덮어쓴다. "덮어쓰기 전에 물어봐 주는" 동작이 아니라 "경고만 하고 진행하는" 동작이라는 점을 기억해야 한다 — 그래서 아래 안전장치가 중요하다.</p>
 
   <h2 id="safety">안전장치 — 스냅샷과 롤백</h2>

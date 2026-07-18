@@ -440,7 +440,17 @@ col.w-label  { width: 16ch; }  /* agent names, model names */
 .table-schedule table { table-layout: auto; margin: calc(var(--spacing-unit) * 2) 0; }
 .table-schedule th,
 .table-schedule td { padding: var(--table-cell-padding-compact); }
-.table-schedule td:nth-child(1),
+/* Format/Estimated Time (3rd+ columns) are short, fixed vocabulary
+   ("Lecture", "10 min") — nowrap keeps them compact. Item (1st column,
+   a chapter label) must NOT be nowrap: translated labels vary a lot in
+   length (e.g. ko "6장 (① 기존 활용 G-1)" vs en "Ch. 6 (① existing-variant
+   usage G-1)"), and nowrap forces auto layout to size the column to the
+   longest untranslated label, starving the Content column in longer
+   locales. `width` (not max-width alone — that let auto layout collapse
+   the column to its single-word min-content, e.g. 59px) gives auto
+   layout a real target of ~18ch to aim for, wrapping the longer labels
+   to 2-3 lines instead of either ballooning or collapsing. */
+.table-schedule td:nth-child(1) { width: 18ch; }
 .table-schedule td:nth-child(n+3) { white-space: nowrap; }
 
 /* Table type: Code (code cell handling) */

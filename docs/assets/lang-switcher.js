@@ -100,18 +100,42 @@
    * @param {string} langCode — '', 'en', or 'ja'
    * @returns {string}
    */
-  // Pages like docs/setup/ have no suffix-less Korean file: the Korean
-  // variant itself carries an explicit `_ko` suffix. Remember which scheme
-  // the current page family uses so Korean targets resolve correctly.
-  var koreanSuffix = /_ko(?=\.html$)/.test(window.location.pathname) ? '_ko' : '';
-
   function buildTargetUrl(langCode) {
     var base = stripSuffix(window.location.pathname);
-    var suffix = langCode ? '_' + langCode : koreanSuffix;
-    if (suffix) {
-      base = base.replace(/\.html$/, suffix + '.html');
+    if (langCode) {
+      base = base.replace(/\.html$/, '_' + langCode + '.html');
     }
     return base;
+  }
+
+  /**
+   * Resolves the URL to use for Korean. Most page families have a
+   * suffix-less file for Korean, but some (docs/setup/SETUP_*,
+   * SETUP_CHECKLIST_*) ship only `_en`/`_ja`/`_ko` variants with no
+   * suffix-less file. Deriving the scheme from the CURRENT page's own
+   * suffix breaks when switching directly from `_en`/`_ja` to Korean (e.g.
+   * from SETUP_CHECKLIST_en.html the plain SETUP_CHECKLIST.html 404s), so
+   * instead probe the plain file first and fall back to the `_ko` file.
+   * @param {function(string)} callback — invoked with the resolved URL
+   */
+  var koreanTargetCache = {};
+  function resolveKoreanTargetUrl(callback) {
+    var plainUrl = buildTargetUrl('');
+    if (koreanTargetCache.hasOwnProperty(plainUrl)) {
+      callback(koreanTargetCache[plainUrl]);
+      return;
+    }
+    fetch(plainUrl, { method: 'HEAD' })
+      .then(function (response) {
+        var resolved = response.ok ? plainUrl : buildTargetUrl('ko');
+        koreanTargetCache[plainUrl] = resolved;
+        callback(resolved);
+      })
+      .catch(function () {
+        var resolved = buildTargetUrl('ko');
+        koreanTargetCache[plainUrl] = resolved;
+        callback(resolved);
+      });
   }
 
   /**
@@ -204,12 +228,19 @@
     if (stored !== null && stored !== detectedLang &&
         !sessionStorage.getItem('langRedirected') &&
         findLanguage(stored)) {
-      checkAvailability(stored, function (available) {
-        if (available) {
+      if (stored === '') {
+        resolveKoreanTargetUrl(function (url) {
           sessionStorage.setItem('langRedirected', '1');
-          window.location.replace(buildTargetUrl(stored));
-        }
-      });
+          window.location.replace(url);
+        });
+      } else {
+        checkAvailability(stored, function (available) {
+          if (available) {
+            sessionStorage.setItem('langRedirected', '1');
+            window.location.replace(buildTargetUrl(stored));
+          }
+        });
+      }
     }
 
     // 3. Check which language variants are available
@@ -222,13 +253,17 @@
 
   selectEl.addEventListener('change', function () {
     var newLang = selectEl.value;
-    var targetUrl = buildTargetUrl(newLang);
 
     // Persist preference
     localStorage.setItem(STORAGE_KEY, newLang);
 
-    // Navigate
-    window.location.href = targetUrl;
+    if (newLang === '') {
+      resolveKoreanTargetUrl(function (url) {
+        window.location.href = url;
+      });
+    } else {
+      window.location.href = buildTargetUrl(newLang);
+    }
   });
 
 })();

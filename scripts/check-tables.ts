@@ -28,14 +28,23 @@ interface CssRule {
   startLine: number;
 }
 
+// Blanks out comment contents (keeping line breaks, so line numbers stay
+// accurate) so documentation prose can't be mistaken for real selectors —
+// e.g. a comment explaining why `nowrap` + `:nth-child(1)` is unsafe would
+// otherwise itself get flagged as the violation it's warning against.
+function stripCssComments(css: string): string {
+  return css.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
+}
+
 function parseCssRules(css: string): CssRule[] {
+  const stripped = stripCssComments(css);
   const rules: CssRule[] = [];
   const ruleRegex = /([^{}]+)\{([^{}]*)\}/g;
-  for (const match of css.matchAll(ruleRegex)) {
+  for (const match of stripped.matchAll(ruleRegex)) {
     const selector = match[1].trim();
     const body = match[2];
-    const startLine = css.slice(0, match.index).split("\n").length;
-    rules.push({ selector, body, startLine });
+    const startLine = stripped.slice(0, match.index).split("\n").length;
+    if (selector) rules.push({ selector, body, startLine });
   }
   return rules;
 }
@@ -74,10 +83,17 @@ export function checkTables(): TableError[] {
     const isTableContext = selectors.some((s) => /\btable\b|\.table-|[\s>.]t[dh]\b/.test(s));
     if (!isTableContext) continue;
 
+    // A selector combining 2+ classes on the table wrapper (e.g.
+    // `.table-compare.narrow-first-col`) is a deliberate, scoped opt-in —
+    // it only affects instances that explicitly opt in via markup, unlike
+    // a single-class selector (`.table-schedule`) that silently applies to
+    // every table of that type regardless of whether nowrap is safe there.
+    const isExplicitOptIn = selectors.every((s) => (s.match(/\.[\w-]+/g) || []).length >= 2);
+
     const targetsFirstColumnTd = selectors.some(
       (s) => /\btd\b/.test(s) && /:nth-child\(\s*1\s*\)|:first-child/.test(s)
     );
-    if (targetsFirstColumnTd && /white-space\s*:\s*nowrap/.test(rule.body)) {
+    if (targetsFirstColumnTd && !isExplicitOptIn && /white-space\s*:\s*nowrap/.test(rule.body)) {
       errors.push({
         file: cssRelPath,
         line: rule.startLine,

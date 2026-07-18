@@ -401,18 +401,18 @@ col.w-label  { width: 16ch; }  /* agent names, model names */
 .table-plan table {
   table-layout: fixed;
   margin: 0;
-  /* Sum of every column's ch width below. All six columns carry an
-     explicit width on purpose — when they don't sum to the table's own
-     100% width, browsers distribute the remainder proportionally across
-     ALL of them, so every column keeps the same relative weight whether
-     the table renders at 720px or 375px. Leaving one column (e.g. Task)
-     unwidthed instead makes it alone absorb 100% of the remainder — it
-     visually swallows the row (Task ballooned to ~51% of the table) while
-     the still-narrow columns look "squeezed" by comparison, even though
-     none of them actually overflow. min-width matches this sum so a
-     narrower viewport scrolls (.table-plan has overflow-x: auto) instead
-     of shrinking below it. */
-  min-width: calc(4ch + 34ch + 20ch + 9ch + 9ch + 11ch);
+  /* Sum of every column's ch width below, plus each column's own
+     horizontal padding (see the box-sizing note under th:nth-child(1)).
+     All six columns carry an explicit width on purpose — when they don't
+     sum to the table's own 100% width, browsers distribute the remainder
+     proportionally across ALL of them, so every column keeps the same
+     relative weight whether the table renders at 720px or 375px. Leaving
+     one column (e.g. Task) unwidthed instead makes it alone absorb 100%
+     of the remainder — it visually swallows the row while the still-
+     narrow columns look "squeezed" by comparison. min-width matches this
+     sum so a narrower viewport scrolls (.table-plan has overflow-x: auto)
+     instead of shrinking below it. */
+  min-width: calc(4ch + 34ch + 20ch + 9ch + 9ch + 11ch + 12 * var(--table-cell-padding));
 }
 .table-plan { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
 /* Agent/Tier/Model/Spec are fixed English vocabulary regardless of locale
@@ -420,13 +420,20 @@ col.w-label  { width: 16ch; }  /* agent names, model names */
    IDs) — sized in `ch` to their actual longest value instead of a guessed
    `%`. Task gets a reasonable multi-line budget (34ch — a short task name
    fits on one line, the long /sync example wraps to 2) rather than the
-   rest of the table, so it scales proportionally with the others. */
-.table-plan th:nth-child(1) { width: 4ch; }   /* # */
-.table-plan th:nth-child(2) { width: 34ch; }  /* Task */
-.table-plan th:nth-child(3) { width: 20ch; }  /* Agent — "automation-engineer" */
-.table-plan th:nth-child(4) { width: 9ch; }   /* Tier — "Medium"/"Low"/"High" */
-.table-plan th:nth-child(5) { width: 9ch; }   /* Model — "sonnet"/"haiku"/"opus" */
-.table-plan th:nth-child(6) { width: 11ch; }  /* Spec — "<spec-id>" */
+   rest of the table, so it scales proportionally with the others.
+
+   Every width below adds `2 * var(--table-cell-padding)` (left + right
+   cell padding). The page sets `* { box-sizing: border-box }`, so a plain
+   `width: 9ch` on th/td is the OUTER box including that padding, leaving
+   less than 9ch of actual text room — enough to wrap even short words
+   like "Medium" or the uppercase, letter-spaced "MODEL" header. Adding
+   the padding back keeps the ch value equal to the actual text budget. */
+.table-plan th:nth-child(1) { width: calc(4ch + 2 * var(--table-cell-padding)); }   /* # */
+.table-plan th:nth-child(2) { width: calc(34ch + 2 * var(--table-cell-padding)); }  /* Task */
+.table-plan th:nth-child(3) { width: calc(20ch + 2 * var(--table-cell-padding)); }  /* Agent — "automation-engineer" */
+.table-plan th:nth-child(4) { width: calc(9ch + 2 * var(--table-cell-padding)); }   /* Tier — "Medium"/"Low"/"High" */
+.table-plan th:nth-child(5) { width: calc(9ch + 2 * var(--table-cell-padding)); }   /* Model — "sonnet"/"haiku"/"opus" */
+.table-plan th:nth-child(6) { width: calc(11ch + 2 * var(--table-cell-padding)); }  /* Spec — "<spec-id>" */
 .table-plan td code { word-break: break-word; }
 
 /* Table type: Schedule (compact, content-driven column sizing) */

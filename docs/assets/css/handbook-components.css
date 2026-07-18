@@ -400,12 +400,16 @@ col.w-label  { width: 16ch; }  /* agent names, model names */
    command that would otherwise dominate auto layout's column sizing. */
 .table-plan table { table-layout: fixed; margin: 0; }
 .table-plan { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
-.table-plan th:nth-child(1) { width: 6%; }   /* # */
-.table-plan th:nth-child(2) { width: 32%; }  /* Task */
-.table-plan th:nth-child(3) { width: 18%; }  /* Agent */
-.table-plan th:nth-child(4) { width: 12%; }  /* Tier */
-.table-plan th:nth-child(5) { width: 12%; }  /* Model */
-.table-plan th:nth-child(6) { width: 20%; }  /* Spec */
+/* Agent/Tier/Model/Spec are fixed English vocabulary regardless of locale
+   (agent names from AGENTS.md's roster, tier labels, model aliases, spec
+   IDs) — sized in `ch` to their actual longest value instead of a guessed
+   `%`, so the Task column (no width set) absorbs all remaining space and
+   never needs re-tuning when a row's Task text changes. */
+.table-plan th:nth-child(1) { width: 4ch; }   /* # */
+.table-plan th:nth-child(3) { width: 20ch; }  /* Agent — "automation-engineer" */
+.table-plan th:nth-child(4) { width: 9ch; }   /* Tier — "Medium"/"Low"/"High" */
+.table-plan th:nth-child(5) { width: 9ch; }   /* Model — "sonnet"/"haiku"/"opus" */
+.table-plan th:nth-child(6) { width: 11ch; }  /* Spec — "<spec-id>" */
 .table-plan td code { word-break: break-word; }
 
 /* Table type: Schedule (compact, content-driven column sizing) */

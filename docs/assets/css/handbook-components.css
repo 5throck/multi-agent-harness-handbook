@@ -367,10 +367,21 @@ p + table,
 h2 + table, h3 + table { margin-top: calc(var(--spacing-unit) * 1.5); }
 table + table { margin-top: calc(var(--spacing-unit) * 3); }
 
-/* Table layout: fixed — 비교표, 코드표, 비율 고정표 공통 */
+/* Table layout policy:
+   Default is `table-layout: auto` — the browser sizes columns from content,
+   so per-table (and per-locale) ratio tuning is unnecessary. Never hardcode
+   per-table percentage widths in CSS or inline <colgroup> markup.
+   `.table-fixed` is the ONLY opt-in exception that forces fixed layout.
+   For columns that need a width hint, use the semantic utilities below
+   (auto layout treats them as minimum preferred widths). */
+.table-fixed table { table-layout: fixed; }
 .table-fixed table,
 .table-compare table,
-.table-code table { table-layout: fixed; margin: 0; }
+.table-code table { margin: 0; }
+
+/* Semantic column-width hints — reusable across all tables (auto layout) */
+col.w-narrow { width: 10ch; }  /* icons, numbers, tier badges */
+col.w-label  { width: 16ch; }  /* agent names, model names */
 
 /* Table type: Compare (4-6 columns, balanced columns) */
 .table-compare { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
@@ -388,9 +399,6 @@ table + table { margin-top: calc(var(--spacing-unit) * 3); }
 .table-code th,
 .table-code td { padding: var(--table-cell-padding-compact); }
 .table-code code { font-size: var(--font-size-label); white-space: normal; word-break: break-all; }
-.table-code col.col-tool { width: 13%; }
-.table-code col.col-use  { width: 15%; }
-.table-code col.col-os   { width: 24%; }
 
 /* ==========================================================================
    E. Chapter Navigation

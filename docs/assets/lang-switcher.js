@@ -33,7 +33,7 @@
   var STORAGE_KEY    = 'lang';
   var SWITCHER_ID    = 'lang-switcher';
   var SELECT_ID      = 'lang-select';
-  var SUFFIX_REGEX   = /(?:_en|_ja)(?=\.html$)/;
+  var SUFFIX_REGEX   = /(?:_en|_ja|_ko)(?=\.html$)/;
   var LANGUAGES      = [
     { value: '',  label: '한국어',  suffix: ''    },
     { value: 'en', label: 'English', suffix: '_en' },
@@ -80,7 +80,8 @@
     var url = window.location.pathname;
     var match = url.match(SUFFIX_REGEX);
     if (match) {
-      return match[0].replace('_', '');
+      var code = match[0].replace('_', '');
+      return code === 'ko' ? '' : code; // Korean maps to the default value ''
     }
     return '';
   }
@@ -99,10 +100,16 @@
    * @param {string} langCode — '', 'en', or 'ja'
    * @returns {string}
    */
+  // Pages like docs/setup/ have no suffix-less Korean file: the Korean
+  // variant itself carries an explicit `_ko` suffix. Remember which scheme
+  // the current page family uses so Korean targets resolve correctly.
+  var koreanSuffix = /_ko(?=\.html$)/.test(window.location.pathname) ? '_ko' : '';
+
   function buildTargetUrl(langCode) {
     var base = stripSuffix(window.location.pathname);
-    if (langCode) {
-      base = base.replace(/\.html$/, '_' + langCode + '.html');
+    var suffix = langCode ? '_' + langCode : koreanSuffix;
+    if (suffix) {
+      base = base.replace(/\.html$/, suffix + '.html');
     }
     return base;
   }
@@ -187,12 +194,22 @@
     var detectedLang = detectCurrentLang();
     selectEl.value = detectedLang;
 
-    // 2. If a stored preference exists, use it (but only if the page
-    //    isn't already showing that language)
+    // 2. If a stored preference exists and differs from the current page,
+    //    redirect to the preferred variant (once per session, and only if
+    //    it actually exists). The dropdown must always reflect the page
+    //    actually shown — setting it to the stored value without navigating
+    //    made the stored language unselectable (no change event fires when
+    //    the value is already selected).
     var stored = localStorage.getItem(STORAGE_KEY);
-    if (stored !== null && stored !== detectedLang) {
-      // Use stored preference, but don't navigate — just set the dropdown
-      selectEl.value = stored;
+    if (stored !== null && stored !== detectedLang &&
+        !sessionStorage.getItem('langRedirected') &&
+        findLanguage(stored)) {
+      checkAvailability(stored, function (available) {
+        if (available) {
+          sessionStorage.setItem('langRedirected', '1');
+          window.location.replace(buildTargetUrl(stored));
+        }
+      });
     }
 
     // 3. Check which language variants are available

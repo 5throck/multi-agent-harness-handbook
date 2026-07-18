@@ -371,9 +371,16 @@ table + table { margin-top: calc(var(--spacing-unit) * 3); }
    Default is `table-layout: auto` — the browser sizes columns from content,
    so per-table (and per-locale) ratio tuning is unnecessary. Never hardcode
    per-table percentage widths in CSS or inline <colgroup> markup.
-   `.table-fixed` is the ONLY opt-in exception that forces fixed layout.
-   For columns that need a width hint, use the semantic utilities below
-   (auto layout treats them as minimum preferred widths). */
+   `.table-fixed` and `.table-plan` are the only opt-in exceptions that
+   force fixed layout, and both are shared, named table TYPES (not
+   per-instance overrides) — a single content shape with wildly uneven
+   column-length needs (e.g. a 1-digit "#" column next to a full CLI
+   command) that `auto` cannot balance well, since one long unbroken cell
+   inflates its column's preferred width and starves the rest regardless
+   of locale. If a new recurring table shape needs this, add another named
+   type here rather than reaching for `.table-fixed` or inline widths.
+   For columns that need a width hint under `auto` layout, use the
+   semantic utilities below (treated as minimum preferred widths). */
 .table-fixed table { table-layout: fixed; }
 .table-fixed table,
 .table-compare table,
@@ -386,6 +393,20 @@ col.w-label  { width: 16ch; }  /* agent names, model names */
 /* Table type: Compare (4-6 columns, balanced columns) */
 .table-compare { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
 .table-compare th:first-child { width: auto; }
+
+/* Table type: Plan — PM execution plan table (AGENTS.md §5.1 Standard
+   Execution Plan Template: # | Task | Agent | Tier | Model | Spec). Fixed
+   layout because the Task column routinely holds a long inline <code>
+   command that would otherwise dominate auto layout's column sizing. */
+.table-plan table { table-layout: fixed; margin: 0; }
+.table-plan { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
+.table-plan th:nth-child(1) { width: 6%; }   /* # */
+.table-plan th:nth-child(2) { width: 32%; }  /* Task */
+.table-plan th:nth-child(3) { width: 18%; }  /* Agent */
+.table-plan th:nth-child(4) { width: 12%; }  /* Tier */
+.table-plan th:nth-child(5) { width: 12%; }  /* Model */
+.table-plan th:nth-child(6) { width: 20%; }  /* Spec */
+.table-plan td code { word-break: break-word; }
 
 /* Table type: Schedule (compact, content-driven column sizing) */
 .table-schedule table { table-layout: auto; margin: calc(var(--spacing-unit) * 2) 0; }

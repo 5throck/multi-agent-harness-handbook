@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 4 §1-A · Subagent Usage in Detail — Claude Focus - Reference material for the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch. 4 §1-A · Subagent Usage in Detail — Claude Focus</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+    .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
+    @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
+    .platform-col { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+    .platform-col pre.code-block { max-width: 100%; }
+    .platform-col.claude { border-top: 3px solid var(--accent-green); }
+    .platform-col.claudeapp { border-top: 3px dashed var(--accent-green); }
+    .platform-col.agy { border-top: 3px solid var(--accent-dark); }
+    .platform-col.antigravity { border-top: 3px dashed var(--accent-dark); }
+    .platform-col h3 { margin-top: 0; }
+    .platform-pair.quad { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 760px) { .platform-pair.quad { grid-template-columns: 1fr; } }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar navigation ── -->
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Ch. 4 §1-A · Claude Focus in Detail</div>
+  <a href="#section-1">1. Defining Subagents</a>
+  <a href="#section-2">2. Invoking/Delegating to Subagents</a>
+  <a href="#section-3">3. Parallel Execution</a>
+  <a href="#section-4">4. Automation/Hooks</a>
+  <div class="nav-section">References</div>
+  <a href="#refs">Reference Links</a>
+  <div class="nav-section">Sibling Documents</div>
+  <a href="04_Practice_Manual_en.html">Ch. 4 §1 · Common Reference</a>
+  <a href="04_Practice_Manual_B_en.html">Ch. 4 §1-B · Antigravity Focus</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter_en.html">Chapter 3 · Guardrails and Permission Model</a>
+  <a href="../intro/05_Intro_Chapter_en.html">Chapter 5 · Introduction</a>
+</nav>
+
+<!-- ── Body ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Ch. 4 §1-A</div>
+  <h1>Subagent Usage in Detail (Claude Focus)</h1>
+  <p class="subtitle">A detailed document, limited to the Claude family, covering how to define, invoke, and scale subagents into parallel and automated units in Claude Code / Claude App &nbsp;|&nbsp; See the <a href="04_Practice_Manual_en.html">Ch. 4 §1 reference</a> for common concepts, and <a href="04_Practice_Manual_B_en.html">Ch. 4 §1-B Antigravity Focus</a> for the Antigravity family.</p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target Version</span><span class="vvalue">Claude Code / Claude App 2026-07 release — see <a href="04_Practice_Manual_B_en.html">§1-B</a> for the Antigravity counterpart</span></div>
+    <div class="version-row"><span class="vlabel">Reference Document URL</span><span class="vvalue"><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com/en/docs/claude-code/sub-agents</a></span></div>
+    <div class="version-row"><span class="vlabel">Document Collection Date</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">How to Check Version</span><span class="vvalue">Claude Code/App: <code>claude --version</code></span></div>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 1 ── -->
+  <h2 id="section-1">1. Defining Subagents</h2>
+
+  <p>Claude App and Claude Code both predefine a single subagent using one Markdown file placed under the project folder. <strong>Claude App and Claude Code share the same files</strong> — both recognize <code>.claude/agents/*.md</code> in exactly the same way.</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> .claude/agents/*.md</h3>
+    <p>Placing a Markdown file in the project root's <code>.claude/agents/</code> folder is automatically recognized as a custom subagent in Claude App as well. The <code>name</code> becomes the identifier referenced later as <code>subagent_type</code>. <strong>The exact same file works exactly the same way in Claude Code (CLI)</strong> — the two share the same subagent definition format.</p>
+    <div style="position:relative">
+  <pre class="code-block">---
+name: reviewer
+description: Reviews text files for typos
+  and logical gaps.
+tools: Read, Grep
+model: sonnet
+---
+
+You are acting as a reviewer. Read the given
+file and report a list of improvements.</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Same .claude/agents/*.md as Claude App</h3>
+    <p>It recognizes the exact same <code>.claude/agents/*.md</code> files written for Claude App, as-is. There is no difference in how subagents are defined between the Desktop App and the CLI.</p>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Frontmatter Field</th><th>Claude App / Claude Code (.claude/agents)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td>Required. Must match the <code>subagent_type</code> value to be callable</td>
+      </tr>
+      <tr>
+        <td><code>description</code></td>
+        <td>Describes when this agent should be used; referenced for automatic trigger decisions</td>
+      </tr>
+      <tr>
+        <td><code>tools</code></td>
+        <td>List of available tools; inherits the default set if omitted</td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td>Specifies an alias such as <code>sonnet</code> / <code>opus</code> / <code>haiku</code></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 2 ── -->
+  <h2 id="section-2">2. Invoking/Delegating to Subagents</h2>
+
+  <p>Both Claude App and Claude Code invoke the <code>Agent</code> tool (also referred to as the <code>Task</code> tool in documentation) to spin up a subagent with its own separate context.</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent(Task) Tool</h3>
+    <p>In Claude App as well, the main session invokes the <code>Agent</code> tool (also referred to as the <code>Task</code> tool in documentation) to spin up a subagent with its own separate context. Since the subagent cannot see the main session's conversation history, the <code>prompt</code> must self-sufficiently contain all the necessary background. <strong>Claude Code (CLI) uses the exact same <code>Agent</code>/<code>Task</code> tool</strong> — when you make a natural-language request in the chat window, it is internally invoked in a form like the one below.</p>
+    <div style="position:relative">
+  <pre class="code-block">Agent(
+  description   = "Review authentication module",
+  prompt         = "Review the session expiration
+    handling logic in src/auth/login.ts and find bugs.",
+  subagent_type  = "reviewer"
+)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Same Agent(Task) Tool as Claude App</h3>
+    <p>This is the exact same <code>Agent</code>/<code>Task</code> tool invocation method as Claude App. Making a natural-language request in the terminal spawns a subagent in the same way.</p>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 3 ── -->
+  <h2 id="section-3">3. Parallel Execution</h2>
+
+  <p>The Claude family supports parallel execution in two ways.</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent Teams — in-process</h3>
+    <p>Turning on the experimental Agent Teams feature in Claude App also lets multiple teammates work in parallel. However, the Desktop App only supports <code>teammateMode: in-process</code>, and some keyboard navigation (such as Shift+Down) is restricted. <strong>Claude Code (CLI) supports the same <code>in-process</code> mode as well</strong>, and additionally the CLI lets you choose <code>tmux</code> mode, which uses tmux split panes.</p>
+  </div>
+
+  <div class="warning-box">Running multiple agents simultaneously in the same directory or workspace can cause "cognitive overlap" — a problem where one agent mistakes (hallucinates) the results of another agent working in the same folder as its own work context. Separating agents by working directory or worktree is the recommended practice.</div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Multiple Agent Calls in One Message</h3>
+    <p>When there are multiple independent tasks with no dependencies between them, you can place multiple <code>Agent</code> calls side by side within a single message to run them concurrently. Claude Code dispatches these calls in parallel.</p>
+    <div style="position:relative">
+  <pre class="code-block">Agent(description="Draft API documentation",
+  prompt="...", subagent_type="writer")
+Agent(description="Check test coverage",
+  prompt="...", subagent_type="reviewer")</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Item</th><th>Claude App (Desktop)</th><th>Claude Code (CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Parallel execution unit</td>
+        <td>Agent Teams (in-process only)</td>
+        <td>Multiple Agent calls in one message / Agent Teams (in-process + tmux)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 4 ── -->
+  <h2 id="section-4">4. Automation/Hooks</h2>
+
+  <p>In the Claude family, the difference in automation and hooks lies between App and Code.</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Hooks Do Not Fire</h3>
+    <p>Even if you define <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> hooks in <code>.claude/settings.json</code>, they do not fire automatically in Claude App. Whatever the hook would have done (e.g., running an audit script) must be run manually after the session ends. <strong>In Claude Code (CLI), hooks in the same configuration file fire automatically in response to events</strong> — teams that need an automation gate should reasonably choose the command-line interface (CLI) at this point.</p>
+  </div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Hooks Fire Automatically</h3>
+    <p>The <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> hooks in <code>.claude/settings.json</code> run automatically in response to events such as file saves or task completion.</p>
+    <div style="position:relative">
+  <pre class="code-block">{
+  "hooks": {
+    "PostToolUse": [
+      { "matcher": "Write|Edit",
+        "hooks": [{ "type": "command", "command": "bun scripts/audit.ts" }] }
+    ]
+  }
+}</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div class="warning-box">Agent Teams is a rapidly evolving feature — flag names, default behavior, and UI composition may change with each release, so check the latest release notes before relying on it for a production workflow.</div>
+
+  <hr>
+
+  <!-- ── Reference Links ── -->
+  <h2 id="refs">Reference Links</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Official Subagents Documentation</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_en.html">Ch. 4 §1 Common Reference — 04_Practice_Manual_en.html</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_B_en.html">Ch. 4 §1-B Antigravity Focus — 04_Practice_Manual_B_en.html</a></li>
+    <li>⚙️ <a href="04_Practice_Examples_A_en.html">Ch. 4 §2 Practice Examples — 04_Practice_Examples_A_en.html</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Based on Claude Code/App 2026-07 | July 2026</p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch. 4 §1 · Reference</div></a>
+    <div class="branch">
+      <div class="branch-label">Ch. 4 §1</div>
+      <a href="04_Practice_Manual_A_en.html" >Claude (A)</a>
+      <a href="04_Practice_Manual_B_en.html" >Antigravity (B)</a>
+    </div>
+    <a href="04_Practice_Examples_A_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Ch. 4 §2-A · Practice</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

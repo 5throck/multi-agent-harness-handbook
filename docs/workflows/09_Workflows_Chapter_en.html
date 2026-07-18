@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on exercises. Reading width (720px), generous line height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Where to edit: (1) <title>/chapter number/title/lead (2) nav (this chapter's sections + other chapters) (3) 'Key points of this chapter'
+                 (4) <h2 id>/<h3> sections and body (5) previous/next chapter links
+  Colors use design tokens only — the theme is applied at deployment time via references/apply-theme.sh, which substitutes the brand colors in docs/.
+  Search index premise: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 9 · Workflow Design Patterns - material from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 9 · Workflow Design Patterns</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+    .variant-name { min-width: 130px; }
+    /* ── Case cards ── */
+    .wf-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px 22px; margin: 24px 0;
+    }
+    .wf-card h3 { margin-top: 0; font-size: 1.15rem; color: var(--text); }
+    .wf-card h3 .wf-domain {
+      display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+      border-radius: 10px; color: var(--text-inverse); vertical-align: middle; margin-left: 8px;
+    }
+    .wf-card .wf-patterns { font-size: 13px; color: var(--text-dim); margin: 6px 0 12px; }
+    .wf-card .wf-patterns code { background: var(--bg-note); border-color: var(--border-note); color: var(--accent-amber); }
+    .wf-card .wf-stages { font-size: var(--font-size-small); line-height: 1.8; }
+    .wf-card .wf-stages strong { color: var(--accent-dark); }
+    .wf-card svg { margin: 14px 0 8px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 9 · Workflow Design Patterns</div>
+  <a href="#s1">What Is a Workflow</a>
+  <a href="#s2">Workflow Components</a>
+  <a href="#s3">Real-World Workflow Cases</a>
+  <a href="#subagent-roster">Subagent Roster</a>
+  <a href="#role-boundary">Role Boundary Matrix</a>
+  <a href="#pm-phases">PM Phase Pipeline</a>
+  <a href="#s4">Workflow Selection Guide</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../tools/00_Tools_Manual_en.html">Common Reference · Tool Comparison</a>
+  <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Running Multi-Agent Teams in the Enterprise</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_en.html">Chapter 8 §1 · Deployment and SSOT</a>
+  <a href="../glossary/00_Glossary_en.html">Glossary</a>
+  <a href="../faq/00_FAQ_en.html">FAQ</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 9</div>
+  <h1>Workflow Design Patterns</h1>
+  <p class="lead">This chapter covers how to combine orchestration patterns to design complete workflows used in real-world domains, along with a variety of case studies.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Chapter Covers</div>
+    <ul>
+      <li>The relationship between orchestration patterns and workflows — patterns are the blocks, workflows are the finished assembly</li>
+      <li>The six components that make up a workflow: stage, branch, fan-out, fan-in, gate, loop</li>
+      <li>Five real-world domain workflow cases with flow diagrams</li>
+      <li>The subagent roster — each agent's tier, parallelizability, and write permissions</li>
+      <li>The role boundary matrix — which agent to use for which scenario</li>
+      <li>The PM phase pipeline — the execution workflow from Phase 0 through Phase 6</li>
+      <li>A guide for deciding which patterns to select and combine based on the nature of the work</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">What Is a Workflow</h2>
+
+  <p>The five orchestration patterns learned in Chapter 2 §4 — prompt chaining (pipeline), routing, parallelization (fan-out/voting), orchestrator-worker, and evaluator-optimizer (verify-then-apply) — are <strong>fundamental building blocks</strong> for structuring cooperation between agents within a single unit of work. In practice, however, it is far more common to connect and layer multiple blocks into one complete flow than to complete a task with just a single block.</p>
+
+  <p>A <strong>workflow</strong> refers to "the entire process by which one or more agents cooperate to complete a complex task." If orchestration patterns answer <em>how agents cooperate</em>, workflows answer <em>in what order and structure the whole process proceeds</em>. Workflows typically combine the following three elements.</p>
+
+  <ul>
+    <li><strong>A combination of orchestration patterns</strong> — some stages are sequential (pipeline), some are parallel (fan-out), and some branches are conditional (routing).</li>
+    <li><strong>Domain rules</strong> — rules required by the specific business domain, such as "code review must separately examine security and performance perspectives."</li>
+    <li><strong>Human approval gates</strong> — following the guardrail principles learned in Chapter 3, a step where a person must confirm before an irreversible point.</li>
+  </ul>
+
+  <div class="pullquote">
+    Orchestration patterns are Lego blocks. A single one works on its own, but assembling several together produces far more complex and useful shapes. A workflow is the result of that assembly.
+  </div>
+
+  <!-- §1 SVG: Pattern → Workflow relationship -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
+    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif">
+        <!-- Title -->
+        <text x="340" y="22" text-anchor="middle" font-size="13" fill="#636c76" font-weight="600">Orchestration Patterns (Blocks) → Workflow (Assembly)</text>
+
+        <!-- Pattern blocks -->
+        <rect x="20" y="50" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.5"/>
+        <text x="70" y="73" text-anchor="middle" font-size="11" fill="#0969da" font-weight="700">Pipeline</text>
+
+        <rect x="130" y="50" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="170" y="73" text-anchor="middle" font-size="11" fill="#1a7f37" font-weight="700">Routing</text>
+
+        <rect x="220" y="50" width="90" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="265" y="73" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">Fan-out</text>
+
+        <rect x="320" y="50" width="120" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="380" y="73" text-anchor="middle" font-size="11" fill="#cf5800" font-weight="700">Orchestrator</text>
+
+        <rect x="450" y="50" width="110" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="505" y="73" text-anchor="middle" font-size="11" fill="#cf222e" font-weight="700">Verify-Then-Apply</text>
+
+        <!-- Arrow down -->
+        <line x1="340" y1="95" x2="340" y2="125" stroke="#636c76" stroke-width="1.5" marker-end="url(#wfArrow)"/>
+        <text x="355" y="115" font-size="10" fill="#636c76">Combine</text>
+
+        <!-- Workflow assembly -->
+        <rect x="40" y="130" width="600" height="70" rx="10" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="340" y="150" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">Workflow (e.g., Code Review)</text>
+
+        <!-- Stage flow inside workflow box -->
+        <rect x="65" y="158" width="70" height="28" rx="5" fill="#e16f24" opacity="0.2" stroke="#e16f24" stroke-width="1"/>
+        <text x="100" y="177" text-anchor="middle" font-size="9.5" fill="#cf5800" font-weight="600">Routing</text>
+
+        <line x1="135" y1="172" x2="160" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="165" y="158" width="80" height="28" rx="5" fill="#6639ba" opacity="0.2" stroke="#6639ba" stroke-width="1"/>
+        <text x="205" y="177" text-anchor="middle" font-size="9.5" fill="#6639ba" font-weight="600">Fan-out</text>
+
+        <line x1="245" y1="172" x2="270" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="275" y="158" width="70" height="28" rx="5" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1"/>
+        <text x="310" y="177" text-anchor="middle" font-size="9.5" fill="#1a7f37" font-weight="600">Fan-in</text>
+
+        <line x1="345" y1="172" x2="370" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="375" y="158" width="90" height="28" rx="5" fill="#0969da" opacity="0.2" stroke="#0969da" stroke-width="1"/>
+        <text x="420" y="177" text-anchor="middle" font-size="9.5" fill="#0969da" font-weight="600">Pipeline</text>
+
+        <line x1="465" y1="172" x2="490" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="495" y="158" width="80" height="28" rx="5" fill="#cf222e" opacity="0.2" stroke="#cf222e" stroke-width="1"/>
+        <text x="535" y="177" text-anchor="middle" font-size="9.5" fill="#cf222e" font-weight="600">Verify</text>
+
+        <!-- Loop arrow -->
+        <path d="M575,172 Q595,172 595,150 Q595,130 575,130 L420,130" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="500" y="126" text-anchor="middle" font-size="9" fill="#636c76">Loop if rejected</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>This chapter assumes you already know the patterns from Chapter 2. If any term is unfamiliar, first read <a href="../concepts/02_Concepts_Chapter_en.html#s4">Chapter 2 §4 Orchestration Patterns</a> and <a href="../concepts/02_Concepts_Chapter_en.html#s4b">§4b Dynamic Team Composition</a>. The next section goes beyond patterns and lays out the six components that make up a workflow.</p>
+
+
+  <h2 id="s2">Workflow Components</h2>
+
+  <p>Breaking down a complex workflow reveals a few recurring structural elements. Chapter 2's five patterns focused on how agents cooperate with each other, but here we focus on the <em>structural skeleton</em> of the workflow.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">Stage</span><span>A unit of work executed sequentially. The most basic building block of a workflow. The output of the previous stage becomes the input of the next.</span></div>
+    <div class="variant-row"><span class="variant-name">Branch</span><span>A point where the path splits based on a condition. The practical application of the routing pattern — for example, sending a request to a different agent or next stage depending on its nature, such as "a quick review for small changes, a full review for large ones."</span></div>
+    <div class="variant-row"><span class="variant-name">Fan-out</span><span>A point where independent subtasks run simultaneously. The structural expression of the fan-out pattern. Execution time converges to the slowest subtask. Example: reviewing security, performance, and readability perspectives at the same time.</span></div>
+    <div class="variant-row"><span class="variant-name">Fan-in</span><span>A stage that gathers multiple results, executed in parallel, into one. <strong>A concept not covered in Chapter 2.</strong> Fan-in requires rules for deciding which result to prioritize (voting) and how to merge them (aggregate/select). Example: synthesizing the opinions of three reviewers into final feedback.</span></div>
+    <div class="variant-row"><span class="variant-name">Gate</span><span>A point that requires verification or human approval before moving to the next stage. The practical application point of <a href="../guardrails/03_Guardrails_Chapter_en.html">Chapter 3's guardrails</a>. Placed before hard-to-reverse actions (file modification, deployment, PR merge).</span></div>
+    <div class="variant-row"><span class="variant-name">Loop</span><span>A repeating structure that returns to a previous stage when rejected at a verification stage. The structural expression of the evaluator-optimizer pattern (verify-then-apply). A maximum retry count must be set to prevent infinite loops.</span></div>
+  </div>
+
+  <div class="note">These six components do not map 1:1 to Chapter 2's five patterns. A single pattern can include multiple components (e.g., the fan-out pattern = fan-out + fan-in), and a single component can appear in multiple patterns (e.g., a gate appears in both verify-then-apply and pipeline).</div>
+
+  <p>Combining these elements can express nearly every real-world workflow. The next section walks through case studies of how these elements are arranged in actual domains.</p>
+
+
+  <h2 id="s3">Real-World Workflow Cases</h2>
+
+  <p>Five domain workflows are organized by case. Each case shows the core pattern combination, stage flow, responsible agents, and the location of the human gate. Cases already connected to variants implemented in ai-workspace-standards are also included.</p>
+
+  <!-- Case 1: Code Review -->
+  <div class="wf-card">
+    <h3>Code Review <span class="wf-domain" style="background:var(--accent)">Software Development</span></h3>
+    <p class="wf-patterns">Core patterns: <code>Routing</code> → <code>Fan-out</code> → <code>Fan-in</code> → <code>Pipeline</code> → <code>Verify-Then-Apply</code>(loop)</p>
+    <p class="wf-stages">
+      <strong>① Change Analysis (Routing)</strong>: Analyzes the scale and type of the changed files to determine the review scope. Simple typo fixes branch to a fast path; major feature changes branch to a full review path.<br>
+      <strong>② Multi-Perspective Review (Fan-out)</strong>: Specialized reviewer agents simultaneously examine security, performance, and readability perspectives.<br>
+      <strong>③ Opinion Aggregation (Fan-in)</strong>: A synthesis agent compiles the three reviewers' feedback into a single feedback report.<br>
+      <strong>④ Fix Proposal (Pipeline)</strong>: Generates code fix proposals based on the feedback.<br>
+      <strong>⑤ Final Approval (Verify-Then-Apply)</strong>: Re-reviews the modified code. If it passes, goes to the <span class="wf-gate">human approval gate</span>; if rejected, loops back to ④.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="100" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① Change Analysis</text>
+        <line x1="105" y1="48" x2="125" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="180" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② Multi-Perspective</text>
+        <line x1="230" y1="48" x2="250" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="30" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="295" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ Fan-in</text>
+        <line x1="335" y1="48" x2="355" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="30" width="90" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="405" y="53" text-anchor="middle" font-weight="700" fill="#0969da">④ Fix Proposal</text>
+        <line x1="450" y1="48" x2="470" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="475" y="30" width="80" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="515" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">⑤ Approval</text>
+        <!-- gate -->
+        <rect x="555" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="580" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+        <!-- loop -->
+        <path d="M515,66 L515,85 L405,85 L405,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="460" y="96" text-anchor="middle" font-size="9" fill="#636c76">Loop if rejected</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variant: structurally similar to <code>co-develop</code>'s 6-stage governance pipeline. See <a href="../variant-practice/06_VariantPractice_Manual_en.html">Chapter 6 §1</a>.</p>
+  </div>
+
+  <!-- Case 2: Market Research Report -->
+  <div class="wf-card">
+    <h3>Market Research Report <span class="wf-domain" style="background:var(--accent-purple)">Consulting · Research</span></h3>
+    <p class="wf-patterns">Core patterns: <code>Orchestrator-Worker</code> → <code>Fan-out</code> → <code>Pipeline</code> → <code>Verify-Then-Apply</code></p>
+    <p class="wf-stages">
+      <strong>① Orchestration (PM)</strong>: The PM agent defines the research scope, target market, and deliverable format, then delegates to workers.<br>
+      <strong>② Parallel Research (Fan-out)</strong>: Three agents simultaneously perform market-size analysis, competitor analysis, and technology-trend research.<br>
+      <strong>③ Aggregation and Drafting (Pipeline)</strong>: Synthesizes the three research results into a draft report and generates visualizations (charts).<br>
+      <strong>④ Cross-Verification (Verify-Then-Apply)</strong>: A specialist reviewer checks data sources, logical consistency, and omissions. After the <span class="wf-gate">human approval gate</span>, the final report is confirmed.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="110" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① PM Orchestration</text>
+        <line x1="115" y1="48" x2="135" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="140" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="190" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② Parallel ×3</text>
+        <line x1="240" y1="48" x2="260" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="265" y="30" width="90" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="310" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ Aggregate/Draft</text>
+        <line x1="355" y1="48" x2="375" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="380" y="30" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="430" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">④ Cross-Verify</text>
+        <line x1="480" y1="48" x2="500" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="505" y="30" width="70" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="540" y="53" text-anchor="middle" font-weight="700" fill="#0969da">⑤ Finalize</text>
+        <rect x="575" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+        <path d="M430,66 L430,85 L310,85 L310,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="370" y="96" text-anchor="middle" font-size="9" fill="#636c76">If revisions needed</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variant: based on <code>co-consult</code>'s 7-stage (Phase 0-6) pipeline structure. You can experience it directly in <a href="../variant-practice/06_VariantPractice_Examples_en.html">Chapter 6 §2 exercise (G-1)</a>.</p>
+  </div>
+
+  <!-- Case 3: Presentation Production -->
+  <div class="wf-card">
+    <h3>Presentation Production <span class="wf-domain" style="background:var(--accent-green)">Lecture · Presentation</span></h3>
+    <p class="wf-patterns">Core patterns: <code>Pipeline</code>(long pipeline) + <code>Fan-out</code>(intermediate parallelism)</p>
+    <p class="wf-stages">
+      <strong>① Research</strong>: Collects material relevant to the topic and verifies sources.<br>
+      <strong>② Storyline</strong>: Plans the overall content flow and slide structure.<br>
+      <strong>③ Design</strong>: Selects the visual layout and theme.<br>
+      <strong>④ Image Curation + Diagram Generation (Fan-out)</strong>: Generates illustrations and diagrams <em>simultaneously</em> to save time.<br>
+      <strong>⑤⑥⑦ Build · Measure · Export (Pipeline)</strong>: Sequential processing from HTML build → layout measurement → PDF export.<br>
+      <strong>⑧⑨⑩⑩ Final Review (Verify-Then-Apply)</strong>: Cross-reviews the completed PDF, then the <span class="wf-gate">human approval gate</span>.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="#1f2328">
+        <rect x="5" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="#0969da">① Research</text>
+        <line x1="65" y1="46" x2="80" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="85" y="30" width="65" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="117" y="50" text-anchor="middle" font-weight="700" fill="#0969da">② Story</text>
+        <line x1="150" y1="46" x2="165" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="170" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="197" y="50" text-anchor="middle" font-weight="700" fill="#0969da">③ Design</text>
+        <line x1="225" y1="46" x2="240" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <!-- Fan-out split -->
+        <rect x="245" y="15" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="35" text-anchor="middle" font-weight="700" fill="#6639ba">Image</text>
+        <rect x="245" y="52" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="72" text-anchor="middle" font-weight="700" fill="#6639ba">Diagram</text>
+        <!-- Fan-in merge -->
+        <line x1="320" y1="30" x2="345" y2="46" stroke="#636c76" stroke-width="1"/>
+        <line x1="320" y1="67" x2="345" y2="50" stroke="#636c76" stroke-width="1"/>
+        <rect x="350" y="30" width="55" height="32" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="377" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37">Merge</text>
+        <line x1="405" y1="46" x2="420" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="425" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="455" y="50" text-anchor="middle" font-weight="700" fill="#0969da">Build</text>
+        <line x1="485" y1="46" x2="495" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="500" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="527" y="50" text-anchor="middle" font-weight="700" fill="#0969da">PDF</text>
+        <line x1="555" y1="46" x2="570" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="575" y="32" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variant: this is exactly <code>co-deck</code>'s 11-stage (Stage 0-11) pipeline. You can experience it directly with a Korean-food-globalization presentation in <a href="../variant-practice/06_VariantPractice_Examples_en.html">Chapter 6 §2 exercise (G-2)</a>.</p>
+  </div>
+
+  <!-- Case 4: Issue Triage -->
+  <div class="wf-card">
+    <h3>Issue Triage <span class="wf-domain" style="background:var(--accent-amber)">Operations · Incident</span></h3>
+    <p class="wf-patterns">Core patterns: <code>Routing</code> → <code>Orchestrator-Worker</code> → <code>Escalation</code></p>
+    <p class="wf-stages">
+      <strong>① Classification (Routing)</strong>: Analyzes the urgency and type of an incoming issue to determine the path. Bugs branch to a fix path, feature requests to a planning path, and security issues to an urgent path.<br>
+      <strong>② Automated Investigation (Orchestrator-Worker)</strong>: Worker agents investigate the classified issue by breaking it into subtasks — relevant log search, reproduction attempts, impact-scope assessment.<br>
+      <strong>③ Priority Determination</strong>: Recommends priority and an assignee based on the investigation results.<br>
+      <strong>④ Escalation or Auto-Resolution</strong>: Minor issues that can be resolved automatically (e.g., configuration errors) are fixed immediately; complex issues are escalated to the <span class="wf-gate">human approval gate</span>.
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="80" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="#cf5800">① Classify</text>
+        <line x1="85" y1="46" x2="105" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="110" y="28" width="120" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="170" y="51" text-anchor="middle" font-weight="700" fill="#6639ba">② Auto-Investigate</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="110" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="310" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ Prioritize</text>
+        <line x1="365" y1="46" x2="385" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <!-- Branch -->
+        <rect x="390" y="8" width="80" height="30" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="430" y="28" text-anchor="middle" font-weight="700" fill="#1a7f37">Auto-Resolve</text>
+        <rect x="390" y="52" width="80" height="30" rx="5" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1"/><text x="430" y="72" text-anchor="middle" font-weight="700" fill="#cf222e">Escalate</text>
+        <rect x="475" y="57" width="50" height="22" rx="11" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="500" y="73" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">There is no variant dedicated to incident management yet, but it can be implemented by combining <code>co-develop</code>'s PM role with Chapter 2's failure-handling patterns (retry, rollback, escalation).</p>
+  </div>
+
+  <!-- Case 5: PR Creation and Verification -->
+  <div class="wf-card">
+    <h3>PR Creation and Verification <span class="wf-domain" style="background:var(--accent-red)">Governance</span></h3>
+    <p class="wf-patterns">Core patterns: <code>Pipeline</code> → <code>Verify-Then-Apply</code>(loop) → <code>Gate</code></p>
+    <p class="wf-stages">
+      <strong>① Change Collection</strong>: Collects commit history and diffs to draft the PR (title, body).<br>
+      <strong>② Rule Verification (Verify-Then-Apply)</strong>: Automatically checks whether the PR complies with CONSTITUTION.md rules (English title, specific format, etc.). If any violation exists, loops back to ① for correction.<br>
+      <strong>③ Impact Analysis</strong>: Analyzes how the change affects other files/features and adds the findings to the PR body.<br>
+      <strong>④ Final Review + Approval</strong>: Re-reviews the entire PR, then the <span class="wf-gate">human approval gate</span>. Once approved, transitions to a merge-pending state.
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="#0969da">① Collect Changes</text>
+        <line x1="105" y1="46" x2="125" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="28" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="180" y="51" text-anchor="middle" font-weight="700" fill="#cf222e">② Verify Rules</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="295" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ Impact Analysis</text>
+        <line x1="335" y1="46" x2="355" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="400" y="51" text-anchor="middle" font-weight="700" fill="#0969da">④ Review</text>
+        <line x1="440" y1="46" x2="460" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="465" y="33" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="490" y="51" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+        <!-- loop -->
+        <path d="M180,64 L180,82 L55,82 L55,64" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="117" y="93" text-anchor="middle" font-size="9" fill="#636c76">Loop if violated</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">A structure where agents automate the PR workflow defined in ai-workspace-standards's CONSTITUTION.md. Covered together with the deployment pipeline in <a href="../intro/05_Intro_Chapter_en.html#s2">Chapter 5 §2 Core Files</a> and <a href="../intro/08_Intro_Advanced_Deploy_en.html">Chapter 8 §1 Deployment and SSOT</a>.</p>
+  </div>
+
+  <h3 id="s3-note">Common Patterns Across the Cases</h3>
+  <p>A few common structures emerge from the five cases.</p>
+  <ul>
+    <li><strong>Every workflow has a human gate.</strong> No matter how far automation progresses, human approval is required before irreversible decisions such as finalizing deliverables, merging, or deploying. This is the practical application point of the guardrails learned in Chapter 3.</li>
+    <li><strong>A fan-out is always followed by a fan-in.</strong> If results split into parallel branches are simply left side by side, the consumer (the agent in the next stage, or a person) must synthesize them manually. An explicit fan-in stage is needed to produce a single deliverable that can move cleanly into the next pipeline stage.</li>
+    <li><strong>Whether a verification stage loops or escalates determines a workflow's complexity.</strong> Problems that can be auto-fixed (format violations, typos) are resolved via a loop, while problems that require judgment (design flaws, security vulnerabilities) are handed off to a person via escalation.</li>
+    <li><strong>Simple pipelines are rarely used.</strong> None of the five cases are "purely sequential" workflows. At least one point includes routing (branching) or fan-out (parallelism).</li>
+  </ul>
+
+
+  <h2 id="subagent-roster">Subagent Roster — the List of Agents That Make Up a Workflow</h2>
+
+  <p>Chapter 2 taught you to model an "agent" as a role. In an actual workspace, these roles are defined with <strong>concrete files and tier assignments</strong> and registered in a roster. The subagent roster in AGENTS.md is a table that shows this definition at a glance.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Agent</th><th>File</th><th>Tier</th><th>Parallel Execution</th><th>Write Permission</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PM Orchestrator</strong></td><td><code>agents/pm.md</code></td><td>High</td><td>—</td><td>Orchestration only</td></tr>
+      <tr><td>Consistency Auditor</td><td><code>agents/auditor.md</code></td><td>Medium</td><td>Independent QA</td><td>None</td></tr>
+      <tr><td>Lifecycle Manager</td><td><code>agents/lifecycle-manager.md</code></td><td>Medium</td><td>On-demand governance</td><td>Governance docs only (L0 only)</td></tr>
+      <tr><td>Template Architect</td><td><code>agents/architect.md</code></td><td>High</td><td>Design phase</td><td>None</td></tr>
+      <tr><td>Automation Engineer</td><td><code>agents/automation-engineer.md</code></td><td>Low</td><td>Sequential</td><td>TypeScript (.ts) automation scripts</td></tr>
+      <tr><td>Documentation Writer</td><td><code>agents/docs-writer.md</code></td><td><strong>Medium</strong></td><td>Post-design</td><td>.md files only</td></tr>
+      <tr><td>Scaffolding Expert</td><td><code>agents/scaffolding-expert.md</code></td><td>Low</td><td>Research phase</td><td>Install scripts only (post-approval)</td></tr>
+      <tr><td>Security &amp; Git Expert</td><td><code>agents/security-expert.md</code></td><td>Medium</td><td>Review phase</td><td>Hook configuration only</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The "Parallel Execution" column of this table must be interpreted together with the Tier Adjustment Rules covered in Chapter 8 §4. For example, docs-writer can run in parallel only "post-design," because writing documentation in parallel before the design is finalized risks having to redo it all later. In contrast, Auditor is "independent QA" and can run independently at any time, regardless of other agents' work.</p>
+
+  <h2 id="role-boundary">Role Boundary Matrix — "Who Should Do This Task"</h2>
+
+  <p>When there are multiple agents, "who should handle this task" can become ambiguous. The following matrix defines the role boundaries that resolve that ambiguity.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Scenario</th><th>Agent to Use</th><th>Agent Not to Use</th></tr></thead>
+    <tbody>
+      <tr><td>Designing implementation approach and folder structure</td><td><code>architect</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>Writing/modifying automation scripts (.ts)</td><td><code>automation-engineer</code></td><td><code>architect</code></td></tr>
+      <tr><td>Updating documentation</td><td><code>docs-writer</code></td><td><code>architect</code></td></tr>
+      <tr><td>Scaffolding a new project from a template</td><td><code>scaffolding-expert</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>Security review, Git hook configuration</td><td><code>security-expert</code></td><td><code>architect</code></td></tr>
+      <tr><td>Cross-verifying documentation consistency</td><td><code>auditor</code></td><td><code>docs-writer</code></td></tr>
+      <tr><td>Orchestrating work across multiple agents</td><td><code>pm</code></td><td>Any execution agent</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The core principle of this matrix is <strong>"separating design from execution."</strong> architect only designs and does not write scripts directly, while automation-engineer writes scripts but does not design the structure. docs-writer does not verify documentation — auditor verifies it, and docs-writer revises the documentation to reflect auditor's feedback.</p>
+
+  <h2 id="pm-phases">PM Phase Pipeline — the Governance View of a Workflow</h2>
+
+  <p>The workflow patterns covered in this chapter (routing, fan-out, pipeline, etc.) represent the <strong>technical component</strong> viewpoint. In an actual workspace, <strong>governance phases</strong> are layered on top of these technical patterns. The seven phases managed by the PM, organized from a workflow perspective, are as follows.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">Phase 0</span><span><strong>Project Initialization</strong> (PM-exclusive) — assess workspace requirements, dynamically generate agents/skills, update AGENTS.md. <em>Workflow: orchestrator alone</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 1-2</span><span><strong>Planning · Architecture</strong> (specialist autonomy) — PM classifies the request, Architect writes an implementation plan + ADR, and research agents are dispatched in parallel. <em>Workflow: routing → fan-out (parallel research)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 3</span><span><strong>Design Handoff</strong> (per variant) — Architect hands off the approved plan to execution agents. Autonomous handoff between agents. <em>Workflow: orchestrator-worker (handoff)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 4</span><span><strong>Execution</strong> (specialist autonomy) — Automation Engineer implements per the approved plan, Docs Writer updates documentation. <em>Workflow: pipeline (sequential execution)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 5</span><span><strong>Lifecycle Closure</strong> (PM-exclusive) — PM updates the governance record of the changed artifacts. <em>Workflow: orchestrator alone (recording)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Phase 6</span><span><strong>Quality Assurance</strong> (workspace autonomy) — Auditor automatically runs <code>qa-gate.ts</code>. Escalates to the PM after a maximum of 2 iterations. <em>Workflow: verify-then-apply (loop)</em></span></div>
+  </div>
+
+  <p>These seven phases correspond directly to the workflow cases in §3. For example, the overall flow of the "code review" case is a miniature of Phase 1-2 (analysis) → Phase 4 (review execution) → Phase 6 (QA). Keeping these phases in mind when designing a new workflow in practice makes it easier to systematically decide "where to place the human gate" and "which stages are safe for parallel execution."</p>
+
+
+  <h2 id="s4">Workflow Selection Guide</h2>
+
+  <p>To introduce a multi-agent workflow for a new task, you need to decide which pattern to start with and how to expand from there. The following decision tree helps you choose the first step.</p>
+
+  <!-- Decision tree SVG -->
+  <div class="decision-box">
+    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#636c76"/></marker>
+        <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/></marker>
+        <marker id="dtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <!-- Q1 -->
+        <rect x="220" y="5" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="30" text-anchor="middle" font-weight="700">Are there dependencies between subtasks?</text>
+        <!-- Yes branch -->
+        <line x1="330" y1="45" x2="330" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="58" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No branch -->
+        <line x1="440" y1="25" x2="530" y2="25" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="530" y1="25" x2="530" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="480" y="20" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Q2 (Yes from Q1) -->
+        <rect x="220" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="95" text-anchor="middle" font-weight="700">Can they run in sequential order?</text>
+        <!-- Yes → Pipeline -->
+        <line x1="220" y1="90" x2="140" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="90" x2="140" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="85" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No → Orchestrator -->
+        <line x1="330" y1="110" x2="330" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="125" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Pipeline result -->
+        <rect x="60" y="135" width="160" height="40" rx="8" fill="#0969da" opacity="0.1" stroke="#0969da" stroke-width="1.5"/>
+        <text x="140" y="153" text-anchor="middle" font-weight="700" fill="#0969da">Pipeline</text>
+        <text x="140" y="166" text-anchor="middle" font-size="9" fill="#636c76">Design sequential stages</text>
+
+        <!-- Q3 (No from Q2) -->
+        <rect x="220" y="135" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="160" text-anchor="middle" font-weight="700">Is verification required?</text>
+        <!-- Yes → Verify -->
+        <line x1="220" y1="155" x2="140" y2="155" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="155" x2="140" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="150" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No → Orchestrator-Worker -->
+        <line x1="330" y1="175" x2="330" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="190" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Verify result -->
+        <rect x="60" y="200" width="160" height="40" rx="8" fill="#cf222e" opacity="0.1" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="140" y="218" text-anchor="middle" font-weight="700" fill="#cf222e">Verify-Then-Apply + Pipeline</text>
+        <text x="140" y="231" text-anchor="middle" font-size="9" fill="#636c76">Design stages with a loop</text>
+
+        <!-- Orchestrator-Worker result -->
+        <rect x="230" y="200" width="200" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="330" y="218" text-anchor="middle" font-weight="700" fill="#cf5800">Orchestrator-Worker</text>
+        <text x="330" y="231" text-anchor="middle" font-size="9" fill="#636c76">PM dynamically distributes work</text>
+
+        <!-- Q4 (No from Q1) -->
+        <rect x="430" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="540" y="95" text-anchor="middle" font-weight="700">Can they run simultaneously?</text>
+        <!-- Yes → Fan-out -->
+        <line x1="540" y1="110" x2="540" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="555" y="125" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No → Routing -->
+        <line x1="540" y1="90" x2="620" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="620" y1="90" x2="620" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="575" y="85" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Fan-out result -->
+        <rect x="460" y="135" width="160" height="40" rx="8" fill="#6639ba" opacity="0.1" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="540" y="153" text-anchor="middle" font-weight="700" fill="#6639ba">Fan-out + Fan-in</text>
+        <text x="540" y="166" text-anchor="middle" font-size="9" fill="#636c76">Parallel work + result aggregation</text>
+
+        <!-- Routing result -->
+        <rect x="540" y="135" width="110" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="595" y="153" text-anchor="middle" font-weight="700" fill="#cf5800">Routing</text>
+        <text x="595" y="166" text-anchor="middle" font-size="9" fill="#636c76">Conditional branching</text>
+
+        <!-- Combination note -->
+        <rect x="60" y="265" width="540" height="55" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+        <text x="330" y="285" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">💡 In practice, multiple patterns are combined</text>
+        <text x="330" y="302" text-anchor="middle" font-size="10" fill="#636c76">Code review = Routing + Fan-out + Fan-in + Pipeline + Verify-Then-Apply (this chapter's §3 Case 1)</text>
+        <text x="330" y="315" text-anchor="middle" font-size="10" fill="#636c76">The decision tree is meant only for <strong>choosing the first pattern</strong>. For complex tasks, design stages top-down, adding patterns naturally as you go.</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>Starting Pattern by Task Type</h3>
+  <p>Organizing the decision tree's results by task type gives the following.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead>
+      <tr><th>Task Type</th><th>Dependency</th><th>Parallelizable</th><th>Verification Needed</th><th>Recommended Starting Pattern</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Document translation/summarization</td><td>Sequential</td><td>×</td><td>Moderate</td><td><code>Pipeline</code></td></tr>
+      <tr><td>Code review</td><td>Partial</td><td>○</td><td>Required</td><td><code>Routing → Fan-out → Verify</code></td></tr>
+      <tr><td>Market research</td><td>Partial</td><td>○</td><td>Required</td><td><code>Orchestrator-Worker → Fan-out</code></td></tr>
+      <tr><td>Bug fix</td><td>Sequential</td><td>×</td><td>Required</td><td><code>Pipeline + Verify-Then-Apply</code></td></tr>
+      <tr><td>Issue triage</td><td>None</td><td>Conditional</td><td>Moderate</td><td><code>Routing → Orchestrator-Worker</code></td></tr>
+      <tr><td>Presentation production</td><td>Partial</td><td>○</td><td>Required</td><td><code>Pipeline(long) + Fan-out(mid)</code></td></tr>
+      <tr><td>PR creation</td><td>Sequential</td><td>×</td><td>Required</td><td><code>Pipeline + Verify-Then-Apply</code></td></tr>
+      <tr><td>Multilingual content generation</td><td>None</td><td>○</td><td>Moderate</td><td><code>Fan-out + Fan-in</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Pattern Combination Guide</h3>
+  <p>Here is a summary of which patterns produce synergy when used together.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">Fan-out + Pipeline</span><span>Parallel review, multilingual translation followed by post-processing. Fan-out provides speed, and pipeline guarantees order.</span></div>
+    <div class="variant-row"><span class="variant-name">Routing + Fan-out</span><span>Issue triage, size-based review. Routing classifies, and each path then performs a different parallel task.</span></div>
+    <div class="variant-row"><span class="variant-name">Orchestrator-Worker + Verify</span><span>Complex analysis, design review. The PM distributes dynamically, then the result is verified.</span></div>
+    <div class="variant-row"><span class="variant-name">Pipeline + Verify (loop)</span><span>Code generation, PR creation. Write sequentially, but revert to a previous stage when the quality bar isn't met.</span></div>
+    <div class="variant-row"><span class="variant-name">Routing + Orchestrator</span><span>Model tiering. Easy tasks are distributed to a lighter model, difficult tasks to a stronger one.</span></div>
+  </div>
+
+  <div class="note">
+    You can directly experience the workflow cases in this chapter through D-1 (sequential pipeline) and D-2 (dynamic team composition) in <a href="../practice/04_Practice_Examples_A_en.html">Chapter 4 exercises</a>, and G-1 (co-consult), G-2 (co-deck) in <a href="../variant-practice/06_VariantPractice_Examples_en.html">Chapter 6 exercises</a>. In <a href="../capstone/13_Capstone_en.html">Chapter 13's capstone exercise</a>, you will design "your own workflow" based on the principles from this chapter.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../intro/08_Intro_Advanced_Roadmap_en.html" class="prev">
+      <div class="dir">← Previous Chapter</div>
+      <div class="ttl">Chapter 8 §5 · Advanced Roadmap</div>
+    </a>
+    <a href="../intro/10_ProjectUpgrade_Chapter_en.html" class="next">
+      <div class="dir">Next Chapter →</div>
+      <div class="ttl">Chapter 10 · L2 Project Upgrade</div>
+    </a>
+  </div>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

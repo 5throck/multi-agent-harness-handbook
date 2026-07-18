@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 4 §2-B · Multi-Agent Team Practice — An Antigravity-Focused Scenario-Based Learning Guide - Part of the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 4 §2-B · Multi-Agent Team Practice — An Antigravity-Focused Scenario-Based Learning Guide</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 Situation'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ Under the Hood'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 Tip'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ Warning'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar ── -->
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 4 §2-B · Multi-Agent Team Practice (Antigravity-Focused)</div>
+  <a href="#setup">🛠 Setup: Installing Required Programs</a>
+  <a href="#beginner"><span class="dot dot-g"></span>Beginner (Getting Started)</a>
+
+  <div class="nav-group">Beginner Scenarios</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 Creating and Invoking Your First Custom Subagent</a>
+
+  <div class="nav-group">Intermediate Scenarios</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer Two-Stage Pipeline</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 Observing How Team Composition and Workflow Change per Request</a>
+
+  <div class="nav-group">Advanced Scenarios</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 Parallel Execution of Independent Tasks — Agent Manager</a>
+
+  <div class="nav-group">Shortcuts</div>
+  <a href="04_Practice_Manual_en.html">📖 Chapter 4 §1 Reference →</a>
+  <a href="04_Practice_Examples_A_en.html">🖥 Chapter 4 §2-A Claude-Focused Practice →</a>
+</nav>
+
+<!-- ── Main content ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 4 §2-B</div>
+  <h1>Chapter 4 §2-B · Multi-Agent Team Practice</h1>
+  <p class="subtitle">A practice guide that starts from an empty lab folder and walks through scenarios focused on Antigravity (Desktop)/Antigravity CLI — guidance is given from the Desktop app's perspective first, followed by the CLI counterpart &nbsp;|&nbsp; <a href="04_Practice_Manual_en.html">← Back to the Chapter 4 §1 reference document</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target version/scope</span><span class="vvalue">Antigravity CLI (agy) 1.1.0+, Antigravity 2.0 — focused on Antigravity; for the Claude App/Code counterpart, see Chapter 4 §2-A</span></div>
+    <div class="version-row"><span class="vlabel">Purpose of this file</span><span class="vvalue">A hands-on 4-stage practice covering subagent definition/invocation, sequential pipelines, dynamic team composition/workflow combination, and parallel execution, focused on Antigravity (Desktop)/Antigravity CLI</span></div>
+    <div class="version-row"><span class="vlabel">Reference documents</span><span class="vvalue"><a href="04_Practice_Manual_en.html">Chapter 4 §1 Common</a> · <a href="04_Practice_Manual_A_en.html">Chapter 4 §1-A Claude Details</a> · <a href="04_Practice_Manual_B_en.html">Chapter 4 §1-B Antigravity Details</a> — linked from each scenario</span></div>
+    <div class="version-row"><span class="vlabel">Date written</span><span class="vvalue">July 14, 2026</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>The principle behind this entire course</strong> — if you learn practice around a single tool, you'll have to relearn everything from scratch when you move to a different tool. That's why every scenario below first writes the subagent's role as a tool-neutral <code>AGENTS.md</code> specification, then "implements" that <em>same</em> specification as a natural-language goal in the Antigravity family (see Chapter 2 §5 AGENTS.md). The corresponding approach in the Claude family is covered in <a href="04_Practice_Examples_A_en.html">Chapter 4 §2-A</a>. Confirming hands-on that there is one definition but the execution method differs per tool is the core goal of this practice.
+  </div>
+
+  <!-- ══════════════════════════════ Pre-practice setup ══════════════════════════════ -->
+  <h2 id="setup">Setup: Installing Required Programs</h2>
+  <p>The practice below focuses on Antigravity (Desktop) and the Antigravity CLI (<code>agy</code>). If your local environment doesn't have these tools yet, the environment setup automation tool bundled with this handbook — the <a href="../setup/SETUP_en.html">setup guide</a> — will automatically install exactly what this chapter's practice needs. Follow the instructions to download and run the script locally.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 Things to Check Before Installing</div>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Before running the script, first read the <a href="../setup/SETUP_CHECKLIST_en.html">pre-installation checklist</a>. This document lists the following prerequisites.</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>A Google account for using Antigravity (must be a subscription/account-based plan, not an individual API key)</li>
+      <li>A GitHub account that can complete <code>gh auth login</code></li>
+      <li>At least 5GB of free disk space</li>
+      <li>Administrator (admin) or sudo privileges</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>If you don't have a GitHub account yet</strong><br>
+    ① Go to <a href="https://github.com/signup" target="_blank">github.com/signup</a> in your browser.<br>
+    ② Enter your email address, password, and username — the username will be used as-is in the repository URL (<code>github.com/&lt;username&gt;/...</code>), so choose it carefully.<br>
+    ③ Complete the puzzle/code verification to prevent automated signups.<br>
+    ④ Open the verification email sent to the address you signed up with and complete <strong>email verification</strong> — skipping this step can later block <code>gh auth login</code> or repository creation.<br>
+    ⑤ Signing up for the Free plan is sufficient — this handbook's practice/PR exercises don't require a paid plan.<br>
+    Once signup is done, the <a href="https://cli.github.com/" target="_blank">GitHub CLI (<code>gh</code>)</a> is included and installed together by the setup script above, and you connect your terminal to that account with the <code>gh auth login</code> command below.
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# Follow the prompts: choose GitHub.com → HTTPS → Log in with a browser (recommended)
+# When the browser opens, log in with the account you just created and confirm the verification code</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <h3>Installing on Windows</h3>
+  <p>Since this handbook's path notation is Windows-based, Windows users should download <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>, place it in a dedicated practice folder (e.g., <code>harness-lab/setup/</code>), open PowerShell <strong>as an administrator</strong>, and run the following command.</p>
+  <div class="tip-box">
+    <strong>How to open PowerShell as an administrator</strong><br>
+    ① Open the Start menu and search for <code>PowerShell</code>.<br>
+    ② <strong>Right-click</strong> "Windows PowerShell" in the search results.<br>
+    ③ Select <strong>"Run as administrator"</strong> from the menu that appears.<br>
+    ④ When the User Account Control (UAC) prompt appears, click <strong>"Yes"</strong> to approve.<br>
+    If the title bar shows something like <code>Administrator: Windows PowerShell</code> with "Administrator" attached, it's opened correctly. Some steps, such as winget installation, may error out or silently skip without administrator privileges.
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup
+.\setup-windows.ps1
+# Optional flags: -WSL2, -WezTerm, -Docker, -Force (reinstall already-installed tools too)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>After the script finishes, fully close and reopen your terminal for the PATH changes to take effect.</p>
+
+  <h3>Installing on macOS / Linux</h3>
+  <p>On macOS, download and use <a href="../setup/setup-mac.sh">setup-mac.sh</a>; on Linux, use <a href="../setup/setup-linux.sh">setup-linux.sh</a>. Both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
+  <div style="position:relative">
+  <pre class="code-block"># macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <h3>Verifying the Installation</h3>
+  <p>Regardless of operating system, running <a href="../setup/setup-common.ts">setup-common.ts</a> with <code>bun</code> prints a checklist table verifying the installation status. If every item shows ✅, you're ready to proceed with the practice below.</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <p>Among the tools this project installs, the ones directly relevant to this chapter's practice are as follows: Antigravity (Desktop), <code>agy</code> (Antigravity CLI), and also <code>gh</code> (GitHub CLI), which is used in later chapters.</p>
+
+  <div class="tip-box">
+    The Antigravity CLI (<code>agy</code>) is a single compiled binary that requires no separate runtime installation — just unzip it and put it on your PATH to run it immediately. Older guidance still floating around, such as "install the Gemini command-line interface (CLI) globally via npm," is no longer valid. Check the latest installation method at <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>.
+  </div>
+
+  <div class="tip-box">
+    If a problem occurs during installation, logs are left in the <code>%USERPROFILE%\workshop-setup-logs\</code> folder on Windows. Check these logs first when troubleshooting.
+  </div>
+
+  <!-- ══════════════════════════════ Beginner ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● Beginner</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">The first step: giving a goal in Antigravity (Desktop) and observing dynamic generation</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">Beginner</span>
+      <strong class="card-title">Creating and Invoking Your First Custom Subagent</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        A developer trying the harness for the first time creates a new empty practice folder, <code>harness-lab/</code>, first writes the <code>reviewer</code> role as a tool-neutral <code>AGENTS.md</code> specification, and then "implements" it as a natural-language goal in Antigravity (Desktop) to invoke it. Since this folder is dedicated to practice, it won't mix with other project files.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Chapter 2)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-1">Defining a Subagent</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-2">Invoking a Subagent</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Step-by-Step Execution</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① Create and enter the practice folder</strong>
+            <p>Create a new <code>harness-lab</code> folder under the current folder and move into it. Run all subsequent commands inside this folder.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② Write the common role spec — <code>AGENTS.md</code></strong>
+            <p>Write the <code>reviewer</code> role as plain text, free of tool-specific expressions, so that it reads with the same meaning whether opened in Claude, Antigravity, or any other tool that supports the AGENTS.md standard. This single file becomes the sole source of truth for "what this role does," and Antigravity below merely implements this source as a natural-language goal. On macOS/Linux/Git Bash, use the command below as-is.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement points
+Permissions: Read-only — does not modify the file directly.
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>On Windows PowerShell</strong>, the <code>cat</code> command itself is an alias for <code>Get-Content</code> and can be used as-is for reading files. However, the heredoc syntax for entering multiple lines directly, like <code>&lt;&lt; 'EOF'</code>, isn't supported, so write the same content as a quoted here-string (<code>@'...'@</code>) and write it to the file with <code>Set-Content</code>.</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement points
+Permissions: Read-only — does not modify the file directly.
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — Implementing the same AGENTS.md spec as a natural-language goal</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity has no concept of predefined files like <code>.claude/agents</code>. Instead, keep the <code>AGENTS.md</code> you just wrote in the workspace as-is, and provide the same specification in your goal prompt.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Prepare the file to review beforehand (terminal)</strong>
+              <div style="position:relative">
+                <pre class="code-block">echo "This project is very good. This is really great." > notes.txt</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Create a Workspace in Antigravity Agent Manager</strong>
+              <p>Open Agent Manager and create a new Workspace pointing at the <code>harness-lab/</code> folder (which already contains AGENTS.md).</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Give the goal — paste the sentence below into the Workspace chat and send it</strong>
+              <div style="position:relative">
+                <pre class="code-block">Review notes.txt according to the reviewer role spec written in AGENTS.md.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                The agent handling the Workspace reads AGENTS.md, takes the role/input/output/permissions spec inside it as its goal, and decides on its own the tasks required (reading the file, compiling improvement points). Since AGENTS.md is the sole source of truth for "what criteria to review by," the review criteria (typos, logical gaps, improvement points) are determined by this spec.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>The Antigravity CLI (<code>agy</code>)</strong> also lets you practice the same concept — give only the goal via <code>/goal</code>, with no predefined file.</p>
+        <div style="position:relative">
+          <pre class="code-block">cd harness-lab && agy
+/goal Review the notes.txt file and summarize the improvement points</pre>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        Since Antigravity has no definition file, you can't restrict permissions in advance with a <code>tools</code> field like in the Claude family. Instead, it's safer to narrow the goal prompt itself clearly, such as "just read and summarize." The <code>Permissions: Read-only</code> spec written in AGENTS.md also serves to communicate the permission boundary to the orchestrator.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Intermediate ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● Intermediate</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">A practical pattern where the main session becomes an orchestrator directing two specialist agents, writer and reviewer, in sequence</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">Intermediate</span>
+      <strong class="card-title">writer → reviewer Two-Stage Pipeline</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        A practitioner who has completed G-1 first specifies a second role, <code>writer</code>, in the same <code>harness-lab/</code> folder, in <code>AGENTS.md</code> the same way as in G-1, and then implements it in Antigravity (Desktop) as a natural-language goal. The orchestrator is made to keep to the order in a pipeline where writer drafts first and reviewer critiques the result.
+      </div>
+
+      <div class="note">
+        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+          </defs>
+          <!-- Box 1: User request (gray) -->
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="#6b7280">User request</text>
+          <!-- Arrow 1 -->
+          <line x1="115" y1="43" x2="150" y2="43" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <!-- Box 2: writer.md (blue) -->
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#3b82f6">writer.md</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#3b82f6">Draft writing</text>
+          <!-- Arrow 2 -->
+          <line x1="295" y1="43" x2="330" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <!-- Return arrow (curved, below) -->
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="#f59e0b"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#f59e0b">Returns to writer if revision requested</text>
+          <!-- Box 3: reviewer.md (green) -->
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#22c55e">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">Feedback/approval</text>
+          <!-- Arrow 3 -->
+          <line x1="475" y1="43" x2="510" y2="43" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <!-- Box 4: Final output (purple) -->
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#8b5cf6">Final output</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">Complete</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Chapter 2)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-1">Defining a Subagent</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-2">Invoking a Subagent</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Step-by-Step Execution</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>Add a common role spec — appending the writer entry to <code>AGENTS.md</code></strong>
+            <p>Continue writing the <code>writer</code> role in the same <code>AGENTS.md</code> created in G-1. Leave the reviewer entry as-is and only add the content below. On macOS/Linux/Git Bash, use the command below as-is.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+Role: Write a short 3–5 sentence draft on a given topic.
+Input: Topic, path to save the file
+Output: A draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (proceeds to review once the draft is complete)
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>On Windows PowerShell</strong>, append the here-string with <code>Add-Content</code> (you must use <code>Add-Content</code>, since <code>Set-Content</code> overwrites the file and would erase the reviewer entry).</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+Role: Write a short 3–5 sentence draft on a given topic.
+Input: Topic, path to save the file
+Output: A draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (proceeds to review once the draft is complete)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — the orchestrator decomposes two of the same AGENTS.md specs into a single goal on its own</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity doesn't split <code>writer</code>/<code>reviewer</code> into separate predefined files in advance. Instead, have it simply reference the two role specs already written in AGENTS.md (reviewer in G-1, writer just now). Continue in the chat of the same Workspace created in G-1.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Give the two-stage goal — paste the sentence below into the Workspace chat and send it</strong>
+              <div style="position:relative">
+                <pre class="code-block">Following the writer spec in AGENTS.md, first write a draft in draft.txt on the topic 'The advantages of remote work', and once it's done, review that draft following the reviewer spec in AGENTS.md. Proceed through the two stages in order.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                The orchestrator reads the <code>handoff_to: reviewer</code> relationship in AGENTS.md and splits the goal on its own into two subtasks, "write draft → review," starting the review task only after the draft writing is complete. The distinctive point is that the responsibility for sequencing lies inside the orchestrator, not with the user — though "what criteria to review by" still has AGENTS.md as the sole source of truth.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>The Antigravity CLI (<code>agy</code>)</strong> also lets you give the same goal at once. Put the whole pipeline into a single sentence with <code>/goal</code> and the orchestrator will decompose it on its own; if needed, you can also hand off the review stage to the background with <code>/agent</code> and continue other work.</p>
+        <div style="position:relative">
+          <pre class="code-block">agy
+/goal First write a draft in draft.txt on the topic 'The advantages of remote work',
+then once it's done, review that draft and summarize the improvement points</pre>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">Intermediate</span>
+      <strong class="card-title">Observing How Team Composition and Workflow Change per Request</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        This scenario lets you directly see the "dynamic team composition" and "diverse workflow combinations" covered in Chapter 2 §4b. Leave the two role specs <code>writer</code> and <code>reviewer</code> created in D-1 as-is, and vary only the nature of the request to observe exactly what tasks the orchestrator actually performs, how many times, and in what order — the key point being that a subagent definition is never newly created.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s4b">Dynamic Team Composition and Diverse Workflows</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — the same flexibility shows up even from natural-language goals alone</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Since Antigravity generates subagents dynamically from the start, this flexibility shows up more directly. Continue in the same Workspace chat used in D-1.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① A simple goal instruction</strong>
+              <div style="position:relative">
+                <pre class="code-block">Just skim draft.txt for typos.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                The orchestrator judges that this request doesn't need a writing role and assembles only a review role on the spot. This is the simplest example showing that even though both roles are defined in AGENTS.md, the actual composition deployed is decided by the orchestrator each time, per request.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② A compound goal instruction</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a new draft in draft2.txt on the topic 'The four-day workweek' first, and once it's done, review that draft independently and simultaneously from both a grammar perspective and a logic perspective.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                The orchestrator assembled only a single review role on the spot in ①, and in ② assembles a new team of one writing role and two review roles (with different perspectives). Since there are no predefined subagent files at all, the principle "assemble a new team fitted to this task every time" stands out more clearly.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          Comparing ① and ② side by side makes clear that "which roles are defined in AGENTS.md" and "what composition is actually deployed for this task" are different layers. The former is fixed in advance in AGENTS.md, but the latter is decided anew by the orchestrator with every request.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See also:</strong> <a href="../concepts/02_Concepts_Chapter_en.html#s4b">Chapter 2 §4b — Dynamic Team Composition and Diverse Workflows</a>, <a href="04_Practice_Manual_en.html#section-3">Chapter 4 §1 Reference — Parallel Execution</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Advanced ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● Advanced</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">Parallel operation running writer and reviewer simultaneously against two independent files — using Agent Manager</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">Advanced</span>
+      <strong class="card-title">Parallel Execution of Independent Tasks — Agent Manager</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        An experienced practitioner who has finished through D-1 runs two mutually independent tasks (drafting <code>topic-a.txt</code> and <code>topic-b.txt</code>) in parallel in Antigravity (Desktop) Agent Manager.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-3">Parallel Execution — Scaling to the Team Level</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-3">Parallel Execution</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — Agent Manager, one agent per Workspace</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Open Antigravity and prepare a Project pointing at <code>harness-lab/</code> in Agent Manager. This time, instead of cramming two agents into one Workspace, create <strong>two separate Workspaces</strong> and assign one agent to each.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Create Workspace A</strong>
+              <p>Create a Workspace using New Worktree Mode.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Paste the sentence below into the Workspace A chat and send it</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a 3–5 sentence draft in topic-a.txt on the topic 'Working from home'.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Create Workspace B</strong>
+              <p>Create one more separate Workspace (New Worktree Mode recommended). It's a completely separate instance from Workspace A's agent.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ Paste the sentence below into the Workspace B chat and send it</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a 3–5 sentence draft in topic-b.txt on the topic 'The four-day workweek'.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>⑤ Check the two agents' progress in the Inbox</strong>
+              <p>While both agents work simultaneously in their own Workspaces, check the Inbox to see if any messages need approval or feedback, and respond as needed.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          Do not assign the two agents to the <strong>same Workspace</strong> — sharing the same folder can cause "cognitive overlap," where one agent mistakes another agent's work context for its own. Always separating them via Workspace or worktree is Antigravity's recommended practice.
+        </div>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>The Antigravity CLI (<code>agy</code>)</strong> can achieve the same effect by opening multiple terminals instead of the desktop's Agent Manager — work on topic-a.txt with <code>agy</code> in one terminal, and topic-b.txt with a separate <code>agy</code> session in another terminal, simultaneously (parallel across sessions). As long as the two sessions touch different files, they won't conflict.</p>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See also:</strong> <a href="04_Practice_Manual_en.html#section-3">Chapter 4 §1 Reference — Parallel Execution</a>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+    Based on Antigravity CLI (agy) 1.1.0+ · Antigravity 2.0 | Written July 14, 2026<br>
+    <a href="04_Practice_Examples_A_en.html">← To Chapter 4 §2-A Claude-Focused Practice</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_B_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 4 §1-B · Antigravity Details</div></a>
+    <div class="branch">
+      <div class="branch-label">Chapter 4 §2</div>
+      <a href="04_Practice_Examples_A_en.html" >Claude (A)</a>
+      <a href="04_Practice_Examples_B_en.html" >Antigravity (B)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 5 · ai-workspace-standards</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

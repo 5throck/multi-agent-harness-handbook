@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 10 - L2 Project Upgrade - part of the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 10 - L2 Project Upgrade</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 10 - L2 Project Upgrade</div>
+  <a href="#why">Why it's needed — the flip side of the fork model</a>
+  <a href="#usage">How to use upgrade-project.ts</a>
+  <a href="#categories">The 5 file-handling categories</a>
+  <a href="#safety">Safety nets — snapshots and rollback</a>
+  <a href="#vs-promotion">How this differs from promotion</a>
+  <div class="nav-section">Other chapters</div>
+  <a href="08_Intro_Advanced_Deploy_en.html">Ch.8 §1 - Deployment and SSOT</a>
+  <a href="../workflows/09_Workflows_Chapter_en.html">Ch.9 - Workflow Design Patterns</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Ch.11 - Creating a New Variant</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 10</div>
+  <h1>L2 Project Upgrade</h1>
+  <p class="lead">Once you've created an L2 project, what happens when the upstream standards (L0/L1) change? The answer is: "nothing happens at all." Because of the fork model discussed in Chapter 8 §1, actually bringing new upstream changes into an already-created project requires a human to explicitly run <code>upgrade-project.ts</code>. This chapter covers that procedure.</p>
+  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.6.0) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and SSOT</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">What this chapter covers</div>
+    <ul>
+      <li>Why "upgrading" in the fork model is a command you run, not something that happens automatically</li>
+      <li>Basic usage of <code>upgrade-project.ts</code> and the principle of running <code>--dry-run</code> first</li>
+      <li>The 5 file-handling modes: LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER, and PRUNE</li>
+      <li>The automatic git stash snapshot and the <code>--rollback</code> safety net</li>
+      <li>How this is the exact opposite direction from the "promotion" covered in Chapter 11</li>
+    </ul>
+  </div>
+
+  <h2 id="why">Why it's needed — the flip side of the fork model</h2>
+  <p>As established in <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1</a>, L1 delivers its content to a project exactly once — at the moment <code>new-project.ts</code> scaffolds it. From that point on, L2 evolves completely independently, and no matter how much L1 changes afterward, nothing is automatically reflected in an L2 project that already exists.</p>
+  <p>The problem is that, over time, hook scripts get fixed on the L1 side, new skills get added, and security settings get hardened. When you want to bring those changes into an individual L2 project, manually comparing files one by one isn't realistic. <code>upgrade-project.ts</code> automates this reflection process while still honoring the core principle of the fork model — "never blindly overwrite parts that L2 has deliberately changed."</p>
+
+  <h2 id="usage">How to use upgrade-project.ts</h2>
+  <p>Start by running <code>--dry-run</code> to preview what will change. It doesn't touch any files — it just prints the plan to the console.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>If the output looks fine, run it again without <code>--dry-run</code>.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
+# Optional flags: --variant &lt;variant&gt;  --platform claude|antigravity|both
+#            --prune-removed  --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly.</p>
+
+  <h2 id="categories">The 5 file-handling categories</h2>
+  <p>The script treats files differently depending on their nature — it isn't a blanket "overwrite everything with the new version."</p>
+  <table>
+    <thead><tr><th>Category</th><th>Behavior</th><th>Example targets</th></tr></thead>
+    <tbody>
+      <tr><td><strong>LOCKED</strong></td><td>Always overwritten with the template's content</td><td><code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code></td></tr>
+      <tr><td><strong>MERGE</strong></td><td>Only the sections wrapped in <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code> markers are merged; the rest of the local content is preserved as-is</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code> (depending on <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>Listed only, never touched</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>docs/context.md</code>, <code>src/</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copied only when the template version is newer than the project's version</td><td><code>scripts/*.ts</code> (<code>@version</code> comment), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRUNE (optional)</strong></td><td>When <code>--prune-removed</code> is specified, scripts/agents/skills files that were removed from the template are also removed from the project</td><td>Same directories as the SYNC_IF_NEWER targets above</td></tr>
+    </tbody>
+  </table>
+  <p>If a SYNC_IF_NEWER target has been edited locally but the template's version is newer, the script marks it as <code>⚠️ CONFLICT</code> but still overwrites it with the template's content in the end. Keep in mind that this is "warn and proceed," not "ask before overwriting" — which is exactly why the safety net described below matters.</p>
+
+  <h2 id="safety">Safety nets — snapshots and rollback</h2>
+  <p>Before running (when not in <code>--dry-run</code> mode), the script automatically runs <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code> to snapshot the current state of your working tree. If you're not happy with the upgrade result, you can revert it immediately with the following command.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>This command finds the <code>pre-upgrade-snapshot-*</code> stash that was just created and restores it via <code>git stash pop</code>. The upgrade itself does not create a commit, so after reviewing the result, you'll need to check the changes with <code>git diff</code> as usual and commit them yourself.</p>
+  <p>As a final step, <code>.claude/template-version.txt</code> is updated to the new version, and security bootstrap items — <code>.gitleaks.toml</code>, pre-commit hooks, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (.env patterns), and <code>git core.hooksPath</code> — are automatically checked (these are the same items covered by the Chapter 3 guardrail principles). If <code>core.hooksPath</code> is misconfigured, the script fixes it on its own.</p>
+
+  <h2 id="vs-promotion">How this differs from promotion</h2>
+  <p>The "promotion" covered in Chapter 11 and this chapter's "upgrade" sound similar, but they run in exactly opposite directions.</p>
+  <ul>
+    <li><strong>Promotion</strong> (<code>l2-to-variant-pipeline.ts</code>, Chapter 11) — <strong>L2 → L1</strong>. Elevates changes from a project you created into the official template, turning them into a variant others can use.</li>
+    <li><strong>Upgrade</strong> (<code>upgrade-project.ts</code>, this chapter) — <strong>L1 → L2</strong>. Pulls the latest changes from the official template into a project you've already created.</li>
+  </ul>
+  <p>The two scripts simply move files in opposite directions — neither replaces the other. If you want to contribute back to the template, use promotion; if you want to keep an existing project up to date, use upgrade.</p>
+
+  <div class="note">
+    The script behavior described in this chapter (flags, file categories, safety nets) was written by directly examining the source of <code>scripts/upgrade-project.ts</code> (v1.6.0) in the <code>ai-workspace-standards</code> repository. This handbook repository does not include that script, so always cross-check actual execution results against the latest source.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../workflows/09_Workflows_Chapter_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Ch.9 - Workflow Design Patterns</div></a>
+    <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch.11 - Creating a New Variant</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

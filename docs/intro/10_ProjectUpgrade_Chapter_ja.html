@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第10章・L2プロジェクトのアップグレード - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第10章・L2プロジェクトのアップグレード</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第10章・L2プロジェクトのアップグレード</div>
+  <a href="#why">なぜ必要か — フォークモデルの裏側</a>
+  <a href="#usage">upgrade-project.ts の使い方</a>
+  <a href="#categories">ファイル処理の5分類</a>
+  <a href="#safety">安全装置 — スナップショットとロールバック</a>
+  <a href="#vs-promotion">昇格との方向の違い</a>
+  <div class="nav-section">他の章</div>
+  <a href="08_Intro_Advanced_Deploy_ja.html">第8章 §1・デプロイとSSOT</a>
+  <a href="../workflows/09_Workflows_Chapter_ja.html">第9章・ワークフローデザインパターン</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章・新規variantの作成</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第10章</div>
+  <h1>L2プロジェクトのアップグレード</h1>
+  <p class="lead">L2プロジェクトを作成した後に上位標準(L0/L1)が変更されると何が起きるのか — 答えは「何も起きない」である。第8章 §1で扱ったフォークモデルのため、すでに生まれたプロジェクトに新しい変更を実際に反映するには、人が明示的に<code>upgrade-project.ts</code>を実行する必要がある。本章ではその手順を扱う。</p>
+  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.6.0時点) ・関連: <a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">本章で扱う内容</div>
+    <ul>
+      <li>フォークモデルにおいて「アップグレード」がなぜ自動ではなくコマンド実行を要する作業なのか</li>
+      <li><code>upgrade-project.ts</code>の基本的な使い方と<code>--dry-run</code>を先に行う原則</li>
+      <li>LOCKED・MERGE・PRESERVE・SYNC_IF_NEWER・PRUNEの5つのファイル処理方式</li>
+      <li>自動のgit stashスナップショットと<code>--rollback</code>による復元という安全装置</li>
+      <li>第11章で扱う「昇格」とは方向が正反対である点</li>
+    </ul>
+  </div>
+
+  <h2 id="why">なぜ必要か — フォークモデルの裏側</h2>
+  <p><a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1</a>で確認したように、L1は<code>new-project.ts</code>でプロジェクトをスキャフォールディングする時点で一度だけ内容を渡す。それ以降L2は完全に独立して進化し、L1がどれだけ変わろうと、すでに作成されたL2には何も自動的に反映されない。</p>
+  <p>問題は、時間が経つにつれてL1側のフックスクリプトが修正され、新しいスキルが追加され、セキュリティ設定が強化されていくことである。こうした変更を個々のL2プロジェクトに反映したいとき、ファイルを一つひとつ手作業で照合するのは現実的ではない。<code>upgrade-project.ts</code>はこの反映作業を自動化しつつ、フォークモデルの核心原則 — 「L2が意図的に変更した部分をむやみに上書きしない」— はそのまま守る。</p>
+
+  <h2 id="usage">upgrade-project.ts の使い方</h2>
+  <p>まず<code>--dry-run</code>で何が変わるかを事前に確認する。実際にファイルを操作せず、コンソールに計画のみを出力する。</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>出力内容に問題がなければ、<code>--dry-run</code>を外して再度実行する。</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
+# 任意フラグ: --variant &lt;variant&gt;  --platform claude|antigravity|both
+#            --prune-removed  --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p><code>--variant</code>はプロジェクトの<code>.claude/template-version.txt</code>に記録された値を自動で読み込むため、多くの場合省略できる。このファイルが存在しない古いプロジェクトでは、実行時に確認プロンプトが表示され、<code>--variant</code>を直接指定する必要がある。</p>
+
+  <h2 id="categories">ファイル処理の5分類</h2>
+  <p>スクリプトは性質に応じてファイルを異なる方法で扱う — すべてを一律に「新しい内容で上書き」するわけではない。</p>
+  <table>
+    <thead><tr><th>分類</th><th>動作</th><th>対象例</th></tr></thead>
+    <tbody>
+      <tr><td><strong>LOCKED</strong></td><td>常にテンプレートの内容で上書きする</td><td><code>.githooks/*</code>、<code>.gitattributes</code>、<code>.gitleaks.toml</code></td></tr>
+      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>マーカーで囲まれた区間のみをマージし、それ以外のローカル内容はそのまま保持する</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>による)、<code>.gitignore</code>、<code>agents/pm.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>一覧に表示するのみで、一切手を加えない</td><td><code>README.md</code>、<code>README_ko.md</code>、<code>docs/context.md</code>、<code>src/</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>テンプレートのバージョンがプロジェクトのバージョンより新しい場合のみコピーする</td><td><code>scripts/*.ts</code>(<code>@version</code>コメント)、<code>agents/*.md</code>(frontmatterの<code>version:</code>)、<code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRUNE(任意)</strong></td><td><code>--prune-removed</code>を指定した場合、テンプレートから削除されたscripts/agents/skillsファイルをプロジェクトからも削除する</td><td>上記SYNC_IF_NEWER対象と同じディレクトリ</td></tr>
+    </tbody>
+  </table>
+  <p>SYNC_IF_NEWER対象のファイルをローカルで直接修正済みの状態で、かつテンプレート側のバージョンがより新しい場合、スクリプトは<code>⚠️ CONFLICT</code>と表示しつつも、最終的にはテンプレートの内容で上書きする。「上書き前に確認する」動作ではなく、「警告のみして進める」動作である点を覚えておく必要がある — だからこそ、以下の安全装置が重要になる。</p>
+
+  <h2 id="safety">安全装置 — スナップショットとロールバック</h2>
+  <p>実行前(<code>--dry-run</code>でない場合)、スクリプトは自動的に<code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code>を実行し、現在の作業ツリーの状態をスナップショットとして残す。アップグレードの結果が気に入らない場合は、次のコマンドで即座に元に戻せる。</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>このコマンドは、直前に作成された<code>pre-upgrade-snapshot-*</code>スタッシュを探し出し、<code>git stash pop</code>で復元する。アップグレード自体はコミットを作成しないため、結果を確認した後は通常どおり<code>git diff</code>で変更内容を確認し、自分でコミットする必要がある。</p>
+  <p>仕上げの段階として、<code>.claude/template-version.txt</code>が新しいバージョンに更新され、<code>.gitleaks.toml</code>・pre-commitフック・<code>.gitattributes</code>(eol=lf)・<code>.gitignore</code>(.envパターン)・<code>git core.hooksPath</code>といったセキュリティブートストラップ項目が自動でチェックされる(第3章のガードレール原則と同じ項目である)。<code>core.hooksPath</code>が誤っている場合、スクリプトが自動で修正する。</p>
+
+  <h2 id="vs-promotion">昇格との方向の違い</h2>
+  <p>第11章で扱う「昇格」と本章の「アップグレード」は名前こそ似ているが、方向は正反対である。</p>
+  <ul>
+    <li><strong>昇格</strong>(<code>l2-to-variant-pipeline.ts</code>、第11章) — <strong>L2 → L1</strong>。自分が作成したプロジェクトの変更を公式テンプレートへ引き上げ、他の人も使えるバリアント(variant)にする作業。</li>
+    <li><strong>アップグレード</strong>(<code>upgrade-project.ts</code>、本章) — <strong>L1 → L2</strong>。公式テンプレートの最新の変更を、すでに作成した自分のプロジェクトに取り込む作業。</li>
+  </ul>
+  <p>両スクリプトは互いに逆方向へファイルを流すだけで、どちらか一方が他方を代替するものではない。テンプレートに貢献したいなら昇格を、すでに作成したプロジェクトを最新の状態に保ちたいならアップグレードを使う。</p>
+
+  <div class="note">
+    本章で扱ったスクリプトの動作(フラグ、ファイル分類、安全装置)は、<code>ai-workspace-standards</code>リポジトリの<code>scripts/upgrade-project.ts</code>(v1.6.0)のソースを直接確認して執筆した。このハンドブックのリポジトリには該当スクリプトが含まれていないため、実際の実行結果は必ず最新のソースと照らし合わせて確認すること。
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../workflows/09_Workflows_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第9章・ワークフローデザインパターン</div></a>
+    <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第11章・新規variantの作成</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

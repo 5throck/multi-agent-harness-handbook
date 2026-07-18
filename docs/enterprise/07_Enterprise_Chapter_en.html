@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template - for "reading" topics without hands-on exercises. Reading width (720px), generous line-height, chapter navigation flow.
+  Unlike Manual (reference)/Examples (hands-on), the focus is body-text flow rather than version boxes or code emphasis.
+  Edit here: (1) <title>/chapter number/title/lead (2) nav (this chapter's sections + other chapters) (3) 'What this chapter covers'
+             (4) <h2 id>/<h3> sections and body (5) previous/next chapter links
+  Fill {{double braces}}/[description: ...] with actual content. All links are relative paths.
+  Colors use design tokens only - the theme is swapped at deploy time by references/apply-theme.sh substituting the brand colors in docs/.
+  Search index precondition: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 7 - Running multi-agent teams inside the enterprise, comparing two models - material from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 7 - Running Multi-Agent Teams Inside the Enterprise: Comparing Two Models</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Ch. 7 - Comparing Two Models</div>
+  <a href="#s1">The Service Ticket Model</a>
+  <a href="#s1">↳ Why It Must Be Kanban-Based</a>
+  <a href="#s2">The Dev Tool + Variant Model</a>
+  <a href="#s3">Side-by-Side Comparison</a>
+  <a href="#s3b">Pros and Cons of Each Model</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../tools/00_Tools_Manual_en.html">Shared Reference - Harness Tools Reference</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_en.html">Chapter 8 - Further Reading</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 7</div>
+  <h1>Running Multi-Agent Teams Inside the Enterprise: Comparing Two Models</h1>
+  <p class="lead">Organizations adopting a multi-agent development environment generally end up choosing one of two paths. One is centralized: a single team receives all requests as tickets. The other is distributed: every team is handed the tooling to build its own team. This chapter simply lays the two models side by side and identifies what differs.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What this chapter covers</div>
+    <ul>
+      <li>A brief look at what the service ticket model is and how it works</li>
+      <li>Why the service ticket model needs to run on a Kanban foundation</li>
+      <li>A brief look at what the dev-tool + variant model is and how it works</li>
+      <li>A side-by-side comparison of the two models on centralization, context continuity, setup cost, governance burden, and suitable use cases</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">The Service Ticket Model</h2>
+  <p>A single multi-agent team continuously accepts requests, within a defined scope, as tickets. An agent acting as PM serves as the intake point, receiving requests through Slack or an internal ticketing system, routing the work to the appropriate specialist agent, and returning the result. Users install nothing on their own machines - they simply leave a message in a familiar internal tool.</p>
+  <p>Here, "defined scope" doesn't always mean the entire company. In a small organization, it's fine for the whole company to share this one team; but as the organization grows, it becomes more practical for each division or business unit to run its own separate ticket intake. Marketing gets its own dedicated agent team, Finance gets its own, and so on. Either way, the essence of the model is the same: <strong>within that scope</strong>, requests funnel into a single intake point rather than multiple teams.</p>
+  <p>Concretely: in a small organization, Marketing team A's "polish the copy on this campaign's landing page" and Finance team B's "clean up last month's expense data" both arrive at the same single PM agent/ticket intake, which then assigns each to a document-writing agent and a data-analysis agent respectively. In a large organization, requests from teams under the Marketing division funnel into a Marketing-only intake, and requests from teams under the Finance division funnel into a Finance-only intake. Each division runs its own separate agent team, but within each division the principle of "everything funnels into one intake" still holds. The appeal of this model is that a requester doesn't need to know about other requesters sharing the same intake, and within that scope, only a single agent team needs to be operated and maintained.</p>
+
+  <h3>Why It Must Run on Kanban</h3>
+  <p>The problem arises precisely from that "everything within scope funnels into one intake" characteristic. When requests from different teams and of different natures pour in simultaneously, and they're handled in raw arrival order, non-urgent requests crowd out urgent ones, work in progress gets interrupted by new requests, and no one can tell what's currently being handled versus what's backed up. It's the same reason a human-staffed help desk collapses once ticket volume grows.</p>
+  <p>Kanban solves this with three mechanisms. First, a <strong>visualized queue</strong>. Putting every request on a board sorted into columns such as "Waiting → In Progress → Review → Done" lets anyone see at a glance how many items are backed up and which ones have been stuck the longest. Second, a <strong>work-in-progress (WIP) limit</strong>. Deliberately capping how many tasks the PM agent (or the specialist agents behind it) handles at once prevents the "context overload" problem discussed in Chapter 2 §2 from re-emerging at the organizational level. Without a cap, an agent ends up juggling and blending the context of multiple requests at once, degrading quality. Third, <strong>priority-based pull</strong>. Pulling the next task by priority rather than by arrival order prevents an urgent finance deadline request from getting buried for days behind a low-priority copy-polishing request.</p>
+  <p>In the end, the service ticket model carries both the advantage of a "single intake" and the risk that "every request in scope funnels into one place," and Kanban is the minimum operating discipline that keeps the latter under control. Adopt the ticket model without Kanban, and while it may look convenient at first, the moment request volume grows, processing delays, priority inversion, and context mixing appear almost inevitably.</p>
+
+  <h2 id="s2">The Dev Tool + Variant Model</h2>
+  <p>Instead of a company handling every request on a team's behalf, each team is handed "development tooling that lets them build their own dedicated multi-agent team." A team picks one of the ready-made project templates (variants), scaffolds its own project from it, and the resulting project becomes an independent repository that the team owns and operates going forward. How ai-workspace-standards actually implements this model is covered in detail in Chapter 5 §3.</p>
+  <p>Using the same example makes the contrast clear. The Marketing team scaffolds its own dedicated project with the <code>co-work</code> variant and continues refining campaign copy inside it, while the Finance team equips itself with a dedicated data-analysis pipeline using the <code>co-develop</code> or <code>co-consult</code> variant. Neither team shares a request queue with the other; each independently owns its own repository, memory logs, and agent configuration. The "single-intake queue" problem of the ticket model simply never arises here - but in exchange, each team must shoulder its own initial setup and ongoing operational burden.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowE" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="150" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">Service Ticket Model — Centralized</text>
+        <circle cx="150" cy="110" r="42" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="150" y="106" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">PM /</text>
+        <text x="150" y="120" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">Agent Team</text>
+
+        <rect x="18" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="54" text-anchor="middle" font-size="10" fill="#116329">Marketing</text>
+        <line x1="70" y1="65" x2="115" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="18" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="169" text-anchor="middle" font-size="10" fill="#116329">Finance</text>
+        <line x1="70" y1="150" x2="115" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="54" text-anchor="middle" font-size="10" fill="#116329">Sales</text>
+        <line x1="230" y1="65" x2="185" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="169" text-anchor="middle" font-size="10" fill="#116329">HR</text>
+        <line x1="230" y1="150" x2="185" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <text x="150" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">All requests funnel into one intake</text>
+
+        <rect x="328" y="10" width="1" height="210" fill="#d0d7de"/>
+
+        <text x="480" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">Dev Tool + Variant Model — Distributed</text>
+
+        <rect x="345" y="60" width="90" height="70" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="390" y="88" text-anchor="middle" font-size="10.5" fill="#116329" font-weight="700">Marketing</text>
+        <text x="390" y="104" text-anchor="middle" font-size="9.5" fill="#116329">co-work</text>
+        <text x="390" y="118" text-anchor="middle" font-size="9.5" fill="#116329">dedicated agent team</text>
+
+        <rect x="450" y="60" width="90" height="70" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="495" y="88" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">Finance</text>
+        <text x="495" y="104" text-anchor="middle" font-size="9.5" fill="#0550ae">co-consult</text>
+        <text x="495" y="118" text-anchor="middle" font-size="9.5" fill="#0550ae">dedicated agent team</text>
+
+        <rect x="555" y="60" width="70" height="70" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="590" y="88" text-anchor="middle" font-size="10.5" fill="#6639ba" font-weight="700">HR</text>
+        <text x="590" y="104" text-anchor="middle" font-size="9.5" fill="#6639ba">co-work</text>
+        <text x="590" y="118" text-anchor="middle" font-size="9.5" fill="#6639ba">dedicated agent team</text>
+
+        <text x="480" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">Each team: its own repo, queue, and configuration</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2 id="s3">Side-by-Side Comparison</h2>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Title -->
+        <text x="300" y="22" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Adoption Checklist Matrix — Comparing Two Models</text>
+
+        <!-- Header row -->
+        <rect x="10" y="34" width="580" height="30" rx="6" fill="#eef1f4" stroke="#d0d7de" stroke-width="1"/>
+        <text x="140" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Criterion</text>
+        <text x="340" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Ticket Model</text>
+        <text x="510" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Variant Model</text>
+
+        <!-- Column dividers -->
+        <line x1="240" y1="34" x2="240" y2="238" stroke="#d0d7de" stroke-width="1"/>
+        <line x1="430" y1="34" x2="430" y2="238" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Row 1: Initial cost — Low(green) vs High(orange) -->
+        <rect x="10" y="68" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="102" x2="590" y2="102" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="90" font-size="11" fill="#1f2328" font-weight="600">Initial Cost</text>
+        <rect x="290" y="76" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="316" y="90" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Low</text>
+        <rect x="470" y="76" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="496" y="90" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">High</text>
+
+        <!-- Row 2: Operational autonomy — Low(orange) vs High(green) -->
+        <rect x="10" y="104" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="138" x2="590" y2="138" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="126" font-size="11" fill="#1f2328" font-weight="600">Operational Autonomy</text>
+        <rect x="290" y="112" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="316" y="126" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Low</text>
+        <rect x="470" y="112" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="496" y="126" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">High</text>
+
+        <!-- Row 3: Scalability — Limited(orange) vs Good(green) -->
+        <rect x="10" y="140" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="174" x2="590" y2="174" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="162" font-size="11" fill="#1f2328" font-weight="600">Scalability</text>
+        <rect x="276" y="148" width="72" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="312" y="162" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Limited</text>
+        <rect x="480" y="148" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="162" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Good</text>
+
+        <!-- Row 4: Governance — Central(green) vs Distributed(orange) -->
+        <rect x="10" y="176" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="210" x2="590" y2="210" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="198" font-size="11" fill="#1f2328" font-weight="600">Governance</text>
+        <rect x="276" y="184" width="72" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="312" y="198" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Centralized</text>
+        <rect x="450" y="184" width="106" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="503" y="198" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Distributed (needs standards)</text>
+
+        <!-- Row 5: Context retention — Fragmented(orange) vs Deep(green) -->
+        <rect x="10" y="212" width="580" height="34" rx="0" fill="#fff"/>
+        <text x="30" y="234" font-size="11" fill="#1f2328" font-weight="600">Context Retention</text>
+        <rect x="284" y="220" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="310" y="234" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Broken</text>
+        <rect x="480" y="220" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="234" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Deep</text>
+
+        <!-- Table outer border -->
+        <rect x="10" y="34" width="580" height="212" rx="6" fill="none" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Legend -->
+        <rect x="140" y="252" width="12" height="12" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.5"/>
+        <text x="157" y="262" font-size="9" fill="#636c76">Advantage</text>
+        <rect x="240" y="252" width="12" height="12" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.5"/>
+        <text x="257" y="262" font-size="9" fill="#636c76">Trade-off</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>Service Ticket Model</h4>
+      <ul>
+        <li><strong>Centralization:</strong> a single team, single intake. Shared by the whole company in a small organization, or by division/business unit in a large one</li>
+        <li><strong>Context continuity:</strong> context breaks frequently between requests as unrelated projects pass through the same queue</li>
+        <li><strong>Setup cost:</strong> low. New teams can use the same intake immediately</li>
+        <li><strong>Governance burden:</strong> low. Operations are concentrated in one place, making control easy</li>
+        <li><strong>Best fit:</strong> narrow, repetitive requests (internal help-desk style)</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>Dev Tool + Variant Model</h4>
+      <ul>
+        <li><strong>Centralization:</strong> distributed. Each team owns its own agent team</li>
+        <li><strong>Context continuity:</strong> excellent, since it continuously references the project's own repository and memory logs</li>
+        <li><strong>Setup cost:</strong> each team incurs its own initial scaffolding and configuration cost</li>
+        <li><strong>Governance burden:</strong> high. Without shared standards (a CONSTITUTION.md-type document), teams drift apart</li>
+        <li><strong>Best fit:</strong> cases where a team must operate its own project deeply over the long term</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pullquote">The real dividing line between the two models isn't how repetitive the requests are, but how deeply those requests need project context.
+    <span class="by">— The fundamental difference between centralized and distributed operating models</span></div>
+
+  <p>If requests are narrow, repetitive, and don't require deep domain context, the ticket model is efficient. Conversely, if each team must operate its own project deeply over a long period, owning a dedicated agent team per team is more sustainable, even at the cost of higher upfront investment.</p>
+  <div class="note">The two models aren't mutually exclusive. Within a single organization, it's entirely possible to run help-desk-style work under the ticket model while running product development teams under the variant model in parallel.</div>
+
+  <h2 id="s3b">Pros and Cons of Each Model</h2>
+  <p>Where the table in §3 laid out "what differs" attribute by attribute, this section organizes those differences into the concrete gains and costs each model produces in actual operation.</p>
+
+  <h3>Service Ticket Model</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >Pros</h4>
+      <ul>
+        <li><strong>Low barrier to entry.</strong> A new team can start using the same intake immediately, with no separate setup.</li>
+        <li><strong>Simple governance.</strong> Operations are concentrated in one team, so rule violations can be controlled and audited from a single point (the only place Chapter 3's audit-log principle needs to apply).</li>
+        <li><strong>Standardized response quality.</strong> Every request passes through the same PM/agent team, so the format and quality of output stay uniform.</li>
+        <li><strong>Minimized initial adoption cost.</strong> Only a single agent team needs to be built and operated within the scope covered (whole company or a division).</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >Cons</h4>
+      <ul>
+        <li><strong>Context breaks every time.</strong> Requesters must re-explain background each time, and deep domain knowledge never accumulates.</li>
+        <li><strong>The bottleneck is structural.</strong> The larger the scope (whole company or division) grows, the more a single intake dictates processing speed. Splitting the intake by division eases the bottleneck compared with the whole company sharing one intake, but the same problem still reproduces within each division. Without the Kanban discipline of §1, this bottleneck arrives much sooner and much more severely.</li>
+        <li><strong>No team ownership.</strong> The requesting team can't directly refine the workflow, and accountability for the output tends to blur.</li>
+        <li><strong>Limits to scaling.</strong> If request volume grows faster than headcount can be added, the queue can't keep up.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Dev Tool + Variant Model</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >Pros</h4>
+      <ul>
+        <li><strong>Context stays deep.</strong> Since it continuously references the project's own repository and memory logs, output quality actually improves with repetition.</li>
+        <li><strong>Higher team autonomy.</strong> A team can design and customize a workflow suited to its own domain directly, as a variant.</li>
+        <li><strong>Scales well.</strong> As more teams are added, they don't share each other's queues, so no team becomes a bottleneck for the whole organization.</li>
+        <li><strong>Easy to reuse.</strong> A variant built once can be cloned as-is by other teams to get started (the boilerplate concept from Chapter 5 §3).</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >Cons</h4>
+      <ul>
+        <li><strong>Incurs initial setup cost.</strong> Each team must put its own scaffolding, agent definitions, and governance pipeline in place.</li>
+        <li><strong>Governance risks fragmenting.</strong> Without a shared standard (CONSTITUTION.md) that's actually followed, teams drift toward their own rules. This is the price of the freedom the fork model (Chapter 5 §3) provides.</li>
+        <li><strong>Infrastructure gets duplicated.</strong> Multiple projects must each maintain a similar configuration. The L0→L1→L2 structure mitigates this but doesn't eliminate it entirely.</li>
+        <li><strong>Requires proficiency.</strong> Team members need some understanding of the harness setup itself (concepts from Chapter 2 §1 and Chapter 3) to use it effectively.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">In the end, the trade-off compresses into one sentence. <strong>The ticket model buys "a low barrier to entry and simple control," and pays for it with "broken context and scaling limits." The variant model buys "deep context and scalability," and pays for it with "initial cost and the need for proficiency."</strong> Neither is the "better" model - the real question is which cost the organization can afford to pay right now.</div>
+
+  <div class="chapter-nav">
+    <a href="../tools/00_Tools_Manual_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Shared Reference - Tool Comparison</div></a>
+    <a href="../intro/08_Intro_Advanced_Deploy_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch. 8 §1 - Deployment and SSOT</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

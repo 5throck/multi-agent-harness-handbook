@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+  ウォームアップ実習 — 章番号のない独立した実習ページ。
+  1日目 第3章(ガードレール) → 休憩1 → ウォームアップ(40分) → 第4章(本格実習)の順で進行する。
+  色はデザイントークンのみ使用 — テーマは配布時に references/apply-theme.sh が docs/ のブランドカラーを置換する。
+  検索インデックスの前提: 本文の節は必ず <h2 id="..."> 構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="ウォームアップ実習 · テトリスからパックマンまで - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ウォームアップ実習 · テトリスからパックマンまで</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .step {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 20px; margin: 16px 0;
+    }
+    .quiz ol { margin: 0 0 0 20px; font-size: var(--font-size-compact); line-height: 1.85; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">ウォームアップ · テトリスからパックマンまで</div>
+  <a href="#tetris">テトリス — バイブコーディングで十分な複雑さ</a>
+  <a href="#pacman">パックマン — 複雑さが生んだ限界</a>
+  <a href="#takeaway">示唆</a>
+  <a href="#quiz">確認質問</a>
+  <div class="nav-section">続く章</div>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章 · ガードレールと権限モデル</a>
+  <a href="../practice/04_Practice_Manual_ja.html">第4章 · ハーネスベースのマルチエージェントチーム活用</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">ウォームアップ実習 · 1日目 休憩1 直後</div>
+  <h1>テトリスからパックマンまで</h1>
+  <p class="lead">同じ「ゲームを作る」課題でも、複雑さが変わればアプローチも変わらなければならない。バイブコーディングでテトリスを作ってみて、単一プロンプトでパックマンに失敗した後、企画・開発・QAの3段階マルチエージェントで再挑戦し、その違いを体感する。</p>
+  <p class="source-line">プラットフォーム: claude.ai または Claude Code · 所要時間: 40分(テトリス10分 + パックマン25分 + 示唆5分) · 関連: <a href="../concepts/02_Concepts_Chapter_ja.html">第2章 §2 単一エージェントの限界</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">このウォームアップで体験すること</div>
+    <ul>
+      <li><strong>テトリス(10分)</strong> — バイブコーディングの一度のプロンプトで完成、修正も問題なく反映</li>
+      <li><strong>パックマン(25分)</strong> — 単一プロンプトでの失敗体験 → 企画・開発・QAの3段階マルチエージェントで成功</li>
+      <li><strong>示唆(5分)</strong> — 複雑さが高いほど役割分離の価値は指数関数的に増大する</li>
+    </ul>
+  </div>
+
+  <h2 id="tetris">テトリス — バイブコーディングで十分な複雑さ (10分)</h2>
+
+  <p>第4章の実習では参加者をClaude / Antigravityなど4つのグループに分けるが、このウォームアップでは<strong>全員が同じプラットフォーム</strong>(claude.ai または Claude Code)を使用する。ハーネスツールの違いではなく<strong>アプローチの違い</strong>に集中するためである。</p>
+
+  <h3>進め方</h3>
+
+  <ol>
+    <li><strong>講師デモ(1分)</strong>: claude.ai(または Claude Code)に次のプロンプトを入力する。</li>
+  </ol>
+  <div style="position:relative">
+  <pre class="code-block">HTML Canvasでテトリスゲームを作って</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>10~20秒で操作可能なテトリスができあがる。</p>
+
+  <ol start="2">
+    <li><strong>参加者による実践(5分)</strong>: 各自が同じプロンプトを入力し、自分のテトリスを作る。</li>
+    <li><strong>修正依頼(4分)</strong>: 完成したテトリスに自由に修正を依頼してみる。</li>
+  </ol>
+  <div style="position:relative">
+  <pre class="code-block">背景色を暗い色に変えて
+スコアボードを大きくして
+次のブロックのプレビューを追加して</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <div class="note">
+    <strong>核心メッセージ:</strong> テトリスは~200行程度のコードで完成する比較的単純なゲームである。この程度の複雑さでは、ハーネスなしでもバイブコーディングの単一プロンプトで十分動作する結果物が得られ、修正依頼も問題なく反映される。
+  </div>
+
+  <h2 id="pacman">パックマン — 複雑さが生んだ限界 (25分)</h2>
+
+  <p>今度は似ているように見えるが、はるかに複雑なゲームを作ってみる。パックマンはキャラクター移動・幽霊AI・衝突判定・マップ設計・アイテムシステムなど要素がはるかに多く、完成すると<strong>~1,000~1,500行</strong>に達する。</p>
+
+  <h3>ステップ1: 失敗体験 (2~3分)</h3>
+
+  <p>まずテトリスと同じ方法で試してみる。</p>
+  <div style="position:relative">
+  <pre class="code-block">HTML Canvasでパックマンゲームを作って</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>キャラクター移動・幽霊AI・衝突判定・マップ設計が同時に一つのプロンプトに詰め込まれると、コードが絡み合い意図通りに動作しない。この「失敗」がこのウォームアップの核心体験である。</p>
+
+  <div class="note">
+    <strong>なぜ失敗するのか?</strong> 一つのエージェントに一度に多すぎる役割を与えると、<a href="../concepts/02_Concepts_Chapter_ja.html">第2章 §2</a>で扱う<strong>コンテキスト過負荷</strong>が発生する。各機能は個別には実装可能でも、同時に調整すると衝突と抜け漏れが生じる。
+  </div>
+
+  <h3>ステップ2: マルチエージェントで再挑戦 (各ステップ約7~8分)</h3>
+
+  <p>今度は一つのエージェントではなく、<strong>3つの役割</strong>に分けて順次進める。</p>
+
+  <div class="step">
+    <div class="step-label">ステップ1 — 企画エージェント</div>
+    <p>パックマンの機能リストとマップ構造を仕様書として作成する。どのキャラクターがいて、マップがどう構成され、ゲームルールが何かを定義する段階である。</p>
+    <div style="position:relative">
+  <pre class="code-block">パックマンゲームの機能リストとマップ構造を仕様書として作成して。次の項目を含めて:
+- キャラクター(パックマン、幽霊4種)の動作方式
+- マップ構造(壁、ドット、パワーアップの位置)
+- ゲームルール(スコア、ライフ、レベル)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <div class="step">
+    <div class="step-label">ステップ2 — 開発エージェント</div>
+    <p>ステップ1で作成した仕様書をもとに、実際のHTMLパックマンコードを書く。企画が明確なので、開発エージェントは「何を作るか」を悩む必要なく実装に専念できる。</p>
+    <div style="position:relative">
+  <pre class="code-block">以下の仕様書をもとに、HTML Canvasでパックマンゲームのコードを書いて:
+[ステップ1の結果をここに貼り付け]</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <div class="step">
+    <div class="step-label">ステップ3 — QAエージェント</div>
+    <p>完成したコードのバグを見つけて修正する。実際にゲームを実行してみて、キャラクターが壁をすり抜けないか、幽霊AIが正常に動作するか、スコアが正しく計算されるかを検証する。</p>
+    <div style="position:relative">
+  <pre class="code-block">このパックマンゲームコードのバグを見つけて修正して:
+[ステップ2の結果をここに貼り付け]
+特に次を確認して:
+- 壁の衝突判定が正確か
+- 幽霊AIがそれぞれ異なるパターンで動くか
+- スコアとライフが正しく計算されるか</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <div class="warn">
+    <strong>注意:</strong> 各ステップで前のステップの結果をそのままコピーして貼り付ける必要がある。第4章で学ぶサブエージェント呼び出しのような自動ハンドオフではなく、今は<strong>手動ハンドオフ</strong>として直接体験するものである。
+  </div>
+
+  <h2 id="takeaway">示唆 — 複雑さが高いほど役割分離の価値は指数関数的に増大する (5分)</h2>
+
+  <table>
+    <thead><tr><th></th><th>テトリス</th><th>パックマン</th></tr></thead>
+    <tbody>
+      <tr><td>コード量</td><td>~200行</td><td>~1,000~1,500行</td></tr>
+      <tr><td>核心要素</td><td>ブロック落下、回転、ライン消去</td><td>キャラクター移動、幽霊AI、衝突判定、マップ設計、アイテム</td></tr>
+      <tr><td>単一プロンプト</td><td>✅ 成功</td><td>❌ 失敗</td></tr>
+      <tr><td>マルチエージェント3段階</td><td>不要</td><td>✅ 成功</td></tr>
+    </tbody>
+  </table>
+
+  <p>テトリスのように単純な作業はバイブコーディング(単一プロンプト)だけで十分である。しかしパックマンのように複雑さが高まると、一つのエージェントにすべての役割を任せることには限界がある。</p>
+
+  <p>これが<a href="../concepts/02_Concepts_Chapter_ja.html">第2章 §2</a>で学んだ<strong>単一エージェントの限界</strong>を直接体験したものである。コンテキスト過負荷、役割の衝突、抜け漏れ — これらすべての問題が役割を分けることで解決される。</p>
+
+  <p><strong>核心メッセージ:</strong></p>
+  <div class="note" style="font-weight:600;">
+    「複雑さが高いほど役割分離の価値は指数関数的に増大する」
+  </div>
+
+  <p>このウォームアップで手動で体験したハンドオフ(企画→開発→QA)を、続く<a href="../practice/04_Practice_Manual_ja.html">第4章</a>ではClaude Code・Claude App・Antigravityの<strong>サブエージェント機能</strong>による自動化された方式でさらに深く体験することになる。</p>
+
+  <h2 id="quiz">確認質問</h2>
+  <div class="quiz">
+    <div class="quiz-title">ウォームアップ実習 確認質問</div>
+    <ol>
+      <li>テトリスはバイブコーディングでうまく作れたが、パックマンはなぜ単一プロンプトで作りにくかったのか?</li>
+      <li>パックマンを企画→開発→QAに分けたことと、一つのエージェントにすべて任せたことの違いは何か? (<a href="../concepts/02_Concepts_Chapter_ja.html">→ 第2章 §2 役割の衝突</a>)</li>
+    </ol>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../guardrails/03_Guardrails_Chapter_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第3章 · ガードレールと権限モデル</div></a>
+    <a href="../practice/04_Practice_Manual_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第4章 · ハーネスベースのマルチエージェントチーム活用</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

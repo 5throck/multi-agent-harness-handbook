@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on exercises. Reading width (720px), generous line height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Edit points: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) 'Key points of this chapter'
+            (4) <h2 id>/<h3> sections and body  (5) prev/next chapter links
+  Fill in the {{double braces}}/[description: ...] with actual content. All links are relative.
+  Colors use design tokens only — theming is applied at deploy time by references/apply-theme.sh substituting the brand color in docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 8 §4 · Advanced Architecture - Material from the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 8 §4 · Advanced Architecture</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 8 §4 · Advanced Architecture</div>
+  <a href="#layout-reconstruction">Layout Reconstruction</a>
+  <a href="#extends">extends Frontmatter Resolution Order</a>
+  <a href="#boilerplate-example">Boilerplate Strategy in Practice</a>
+  <a href="#tier-strategy-deep">3-Tier Strategy Deep Dive</a>
+  <a href="#platform-parity">Platform Parity</a>
+  <a href="#execution-plan-templates">Execution Plan Templates</a>
+  <div class="nav-section">Other Sections in Chapter 8</div>
+  <a href="08_Intro_Advanced_Deploy_en.html">Ch. 8 §1 · Deployment & SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_en.html">Ch. 8 §2 · Lifecycle Management</a>
+  <a href="08_Intro_Advanced_AGENTS_en.html">Ch. 8 §3 · AGENTS.md Deep Dive</a>
+  <a href="08_Intro_Advanced_Roadmap_en.html">Ch. 8 §5 · Advanced Roadmap</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="05_Intro_Chapter_en.html">Ch. 5 · Introducing ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_en.html">Ch. 7 · Running Multi-Agent Teams Inside an Enterprise</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Ch. 11 · Creating a New Variant</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Ch. 8 §4</div>
+  <h1>Advanced Architecture</h1>
+  <p class="lead">Where §1 covered "what flows where" across L0→L1→L2, this section digs into <strong>how that flow is actually implemented</strong> — why files are regenerated rather than copied verbatim, the order in which inherited frontmatter is resolved, concrete examples of how boilerplate and tier strategy are applied in practice, and how the two platforms (.claude/.gemini) are kept from structurally drifting apart.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Section Covers</div>
+    <ul>
+      <li>Why L2 files are "regenerated" rather than copied verbatim from L1 (Layout Reconstruction)</li>
+      <li>The actual resolution order of the <code>extends</code> frontmatter field</li>
+      <li>Examples of applying the LOCKED/MERGE/PRESERVE classification to real files</li>
+      <li>The 3-tier strategy — High/Medium/Low definitions, frontmatter examples, Tier Adjustment Rules, and the Tier Ceiling Rule</li>
+      <li>How <code>.claude/</code>/<code>.gemini/</code> platform parity is enforced</li>
+      <li>Execution plan templates — the Design Gate (Row 0), exception categories (E1–E5), and a worked example</li>
+    </ul>
+  </div>
+
+  <h2 id="layout-reconstruction">Layout Reconstruction — Why L2 Doesn't Copy L1 Verbatim</h2>
+  <p>Let's dig deeper into the <code>agents/pm.md</code> case briefly mentioned in §1. L0's <code>agents/pm.md</code> holds workspace-wide governance and runs over 300 lines. It mixes in <strong>sections that only make sense at the workspace root</strong>, such as Auto-Mode behavior and lifecycle state fields. If L1's <code>templates/common/agents/pm.md</code> copied this verbatim, every time a new variant was scaffolded it would drag along workspace-only content that has nothing to do with the project.</p>
+  <p>That's why L1 performs <strong>filtered reconstruction</strong> instead of copying — it picks out from the L0 original only the sections actually needed for variant scaffolding, strips the workspace-only sections, and links the rest via an <code>extends</code> reference. The same principle repeats on the way down to L2. Variant-specific overrides (for example, co-marketing's marketing-domain-specific PM rules) are layered on top of L1 and <strong>regenerated from scratch</strong>, rather than patching the L1 file via diff. As a result, even though L0's pm.md exceeds 300 lines, L2's pm.md stays around 50–100 lines — because the approach is "build fresh with only what's needed," not "copy and delete the leftovers."</p>
+  <p>This design matters because of the failure mode it prevents. If L1→L2 were a simple copy, every time L0 added a single workspace-only section, <strong>every L2 project's pm.md would bloat unnecessarily</strong>. Layout Reconstruction blocks this at the root by always placing a filter between "what L0 knows" and "what L2 needs to know."</p>
+
+  <h2 id="extends">extends Frontmatter — The Order in Which Inheritance Is Resolved</h2>
+  <p>A frontmatter field like <code>extends: ../../../agents/pm.md</code> is a declaration that "this file references that file" — it is not a macro that merges files. The resolution order is as follows.</p>
+  <ol>
+    <li><strong>When a tool reads the file</strong> (for example, when Claude Code loads <code>agents/pm.md</code>), it first checks the frontmatter's <code>extends</code> path.</li>
+    <li>It reads the referenced original (L0 or L1) and <strong>inherits the body</strong>, but if the current file explicitly rewrites a section, only that section is <strong>overridden</strong>.</li>
+    <li>Sections that exist only in the current file and not in the original (e.g., variant-specific rules) are <strong>appended as-is</strong>.</li>
+  </ol>
+  <p>In other words, <code>extends</code> is resolved in three stages — "inherit + selective override + append" — not by concatenating two files as text. Because of this structure, L1's <code>templates/common/agents/pm.md</code> can contain almost no actual content (mostly just an <code>extends</code> pointer back to L0) and still function as a valid file, and when a shared rule changes in L0, every downstream file using <code>extends</code> automatically reflects the latest content the next time it's read — <strong>however, this is "resolved at read time," a different mechanism from the "file sync (SYNC_IF_NEWER)" covered in §1</strong>. <code>extends</code> is a live reference resolved the moment a tool opens the file, while SYNC_IF_NEWER is a static file copy that only updates when <code>upgrade-project.ts</code> is run. Both mechanisms look like "inheritance," but you must not confuse the fact that they update at different times.</p>
+
+  <h2 id="boilerplate-example">Boilerplate Strategy in Practice</h2>
+  <p>Let's walk through, one by one, how the LOCKED/MERGE/PRESERVE classification covered in §1 is applied to actual files.</p>
+  <ul>
+    <li><strong>LOCKED example — <code>.githooks/pre-commit</code></strong>: this file runs security gates such as secret scanning and commit message validation. If this validation differed per project, the organization's overall security bar would vary project by project — so <code>upgrade-project.ts</code> always overwrites this file with the latest L1 version regardless of local modifications.</li>
+    <li><strong>MERGE example — <code>CLAUDE.md</code></strong>: this file contains a block wrapped in <code>&lt;!-- WORKSPACE-MANAGED --&gt;...&lt;!-- /WORKSPACE-MANAGED --&gt;</code> (e.g., PM gateway rules) alongside project-specific rules outside that block (e.g., "this project always writes commit messages in Korean"). On upgrade, only the inside of the marker is replaced with the latest L1 version, while the project-specific rules outside the marker are left untouched.</li>
+    <li><strong>PRESERVE example — <code>docs/context.md</code></strong>: this file documents what the project is, so L1 only checks that it exists and never touches its contents.</li>
+  </ul>
+  <p>Looking at the three examples side by side clarifies the classification criteria — <strong>would a change lead to a security/governance incident (LOCKED)? Must organizational rules and project context coexist in one file (MERGE)? Is it the project's identity itself (PRESERVE)?</strong> When adding a new file to this repository's boilerplate, asking these three questions in order will usually make the category obvious right away.</p>
+
+  <h2 id="tier-strategy-deep">3-Tier Strategy Deep Dive — Applying Cost Optimization at Runtime</h2>
+  <p>The tier assignment introduced in Chapter 5 is statically defined in <code>agents/*.md</code> frontmatter. The <code>tier</code> field of each agent file is translated into a platform-specific model alias and applied at execution time.</p>
+
+  <h3>Frontmatter Example</h3>
+  <div style="position:relative">
+  <pre class="code-block">---
+name: pm                       # pm, code-writer, automation-engineer ...
+tier:                          # platform-specific model alias (translated at runtime)
+  claude: high                 #   high = claude-opus-4-7
+  antigravity: high            #   high = gemini-3.1-pro
+---</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>Because this translation happens automatically behind <code>model: inherit</code>, whoever writes agents/*.md never needs to know a concrete model name — they only need to think about "how heavy is the judgment this role makes."</p>
+
+  <h3>Tier Definitions and Model Mapping</h3>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Tier</th><th>Purpose</th><th>Claude-family Example</th><th>Antigravity-family Example</th></tr></thead>
+    <tbody>
+      <tr><td><strong>High</strong></td><td>Complex reasoning, architecture design, planning</td><td>claude-opus-4-7</td><td>gemini-3.1-pro</td></tr>
+      <tr><td><strong>Medium</strong></td><td>Code review, testing, PR review, quality gates</td><td>claude-sonnet-4-6</td><td>gemini-3.5-flash</td></tr>
+      <tr><td><strong>Low</strong></td><td>Fast, repetitive coding, script maintenance</td><td>claude-haiku-4-5</td><td>gemini-3.5-flash</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>This static assignment forms the baseline, but at actual execution time the PM applies <strong>Tier Adjustment Rules</strong> to dynamically optimize cost. An agent with a high baseline (architect, pm) needs the strongest model because it must make complex design judgments. automation-engineer, on the other hand, writes standardized scripts per ADR-0036, so the low tier is sufficient — the only question that matters is whether "heavy judgment" is required.</p>
+
+  <h3>Tier Adjustment Rules — Cost Optimization at Execution Time</h3>
+  <p>When the PM builds an execution plan, tier adjustments away from the baseline are allowed. The rules are simple.</p>
+  <ul>
+    <li><strong>Downgrades are allowed</strong> — for simple tasks, the PM may lower an agent's tier below its baseline. For example, when docs-writer (baseline medium) receives a task like "fix a single typo in README.md," it can be dropped to low to save cost.</li>
+    <li><strong>Upgrades are forbidden</strong> — conversely, raising an agent above its baseline tier is <strong>always forbidden</strong>. Raising automation-engineer (low) to high to design complex architecture is a governance violation.</li>
+    <li><strong>Restore on failure</strong> — if a downgraded task fails, the PM must restore the agent's baseline tier and retry.</li>
+  </ul>
+  <p>The core of this rule is the principle that <strong>"an agent role's complexity ceiling is fixed, but its floor can be adjusted to the situation."</strong> The PM can lower the tier to low to save cost, but the moment a task exceeds low's capability, it immediately reverts to the baseline. The cost impact can be felt directly in the Chapter 4 §2-A P-2 exercise.</p>
+
+  <h3>Tier Ceiling Rule</h3>
+  <p>AGENTS.md's Phase Determination table (§3.5) specifies the allowed tier ceiling for each deliverable type. For example, "script implementation (with an approved plan already in place)" is Phase 4, and the responsible agent is automation-engineer (low) — assigning high here would be a Tier Ceiling violation. By contrast, "designing new files, defining schemas" is Phase 1-2, handled by architect (high).</p>
+  <div class="pullquote">
+    The Tier Ceiling Rule is not "never assign more than the tier best suited to this task" — it is "never use more than this agent's defined tier." It is role-based, not task-based.
+  </div>
+
+  <h2 id="platform-parity">Platform Parity — Keeping .claude/ and .gemini/ Structurally Identical</h2>
+  <p>This repository supports two platforms simultaneously — the Claude family (<code>.claude/</code>) and the Antigravity/Gemini family (<code>.gemini/</code>). If the two directories drift apart over time (for example, if <code>.claude/agents/reviewer.md</code> exists but <code>.gemini/agents/reviewer.md</code> is missing), users of one tool end up unable to use a given feature. The mechanism that prevents this is the <strong>platform parity check</strong> in <code>validate-templates.ts</code>.</p>
+  <p>This check structurally cross-references the two directories to confirm there is no agent, skill, or command that exists on only one side. The promotion pipeline covered in Chapter 11 also includes this check as a mandatory gate before promotion, so a state where something was "built only for Claude and Antigravity was forgotten" can never become an official variant in the first place. Even though the two platforms use different execution mechanisms (see the CLAUDE.md/GEMINI.md MERGE example in §1), the principle that <strong>the set of features provided must always be the same</strong> is enforced through this structural check.</p>
+
+  <h2 id="execution-plan-templates">Execution Plan Templates — Structured Execution Design for Multi-Agent Work</h2>
+  <p>When the PM distributes complex work across multiple agents, it uses the <strong>Execution Plan</strong> format. This plan spells out "who does what, at what tier, in what order" in a table, guaranteeing consistency of execution.</p>
+
+  <h3>Standard Execution Plan Format</h3>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Create/update design doc → <code>docs/designs/&lt;spec-id&gt;-design.md</code></td><td>architect</td><td>High</td><td>[model]</td><td>NEW</td></tr>
+      <tr><td>1</td><td>[task description]</td><td>[specialist]</td><td>High/Medium/Low</td><td>[model]</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>N</td><td><code>/sync "type(scope): message"</code></td><td>pm</td><td>Medium</td><td>[model]</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Design Gate (Row 0)</h3>
+  <p>Row 0 is <strong>mandatory only for L0 (workspace root) and L1 (common templates)</strong>. Architect must first write the design document, and only after the PM verifies it can implementation (Row 1 onward) proceed. L2 variant projects manage their own workflow, so this gate does not apply to them.</p>
+
+  <h3>Design Gate Exception Categories</h3>
+  <p>For simple tasks where Row 0 is excessive overhead, only the following 5 exception categories (E1–E5) are recognized. The PM cannot invent exceptions on its own — only the categories defined below may be used.</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>ID</th><th>Category</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>E1</td><td>memory-log</td><td>Writing a <code>memory/YYYY-MM-DD.md</code> session log</td></tr>
+      <tr><td>E2</td><td>changelog</td><td><code>CHANGELOG.md</code> update only</td></tr>
+      <tr><td>E3</td><td>hotfix-typo</td><td>Typo fix, single-line change, minor correction</td></tr>
+      <tr><td>E4</td><td>pure-readme</td><td>README.md body text only (no structural/design change)</td></tr>
+      <tr><td>E5</td><td>sync-only</td><td><code>/sync</code> run only (lifecycle closeout)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>When an exception applies, the Agent/Tier/Model columns of Row 0 are shown blank (<code>—</code>).</p>
+
+  <h3>Worked Example: An Execution Plan Written by the PM</h3>
+  <p>Below is an actual execution plan example for "a platform parity task updating agents/pm.md and scripts."</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Update agents/pm.md</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>2</td><td>Update scripts/audit.ts</td><td>automation-engineer</td><td>Low</td><td>haiku</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>3</td><td>Update CLAUDE.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>4</td><td>Update GEMINI.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>sonnet</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Execution order</strong>: Sequential — because CLAUDE.md and GEMINI.md must be updated together for <a href="#platform-parity">platform parity</a>, execution is sequential. automation-engineer being assigned low follows from the Tier Adjustment Rule.</p>
+
+  <div class="note">
+    This section covers the <strong>actual behavior and concrete examples</strong> of the concepts introduced in §1 (L0→L1→L2, the fork model, LOCKED/MERGE/PRESERVE) — everything here is the current implementation. Advanced directions not yet implemented (container integration, memory consolidation, future expansion of boilerplate/tier strategy, etc.) are covered separately in <a href="08_Intro_Advanced_Roadmap_en.html">§5 Advanced Roadmap</a>.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_AGENTS_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch. 8 §3 · AGENTS.md Deep Dive</div></a>
+    <a href="08_Intro_Advanced_Roadmap_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Ch. 8 §5 · Advanced Roadmap</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

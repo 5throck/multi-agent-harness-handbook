@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+  章（読み物形式）テンプレート — 実習のない「読む文章」向けテーマ用。読みやすい幅（720px）、ゆったりした行間、章移動導線。
+  Manual（リファレンス）/Examples（実習）とは異なり、バージョンボックスやコード強調ではなく本文の流れを中心に構成する。
+  修正箇所: (1) <title>/章番号/タイトル/リード  (2) nav（この章の節＋他の章）  (3) 「この節で扱う内容」
+            (4) <h2 id>/<h3> 節と本文  (5) 前/次章リンク
+  {{二重中括弧}}・[説明: ...] を実際の内容で埋める。リンクはすべて相対パス。
+  色はデザイントークンのみ使用 — テーマは配布時に references/apply-theme.sh が docs/ のブランドカラーを置換する。
+  検索索引の前提: 本文節は必ず <h2 id="..."> （必要に応じて <h3>）構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第8章 §4・アーキテクチャ深掘り - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第8章 §4・アーキテクチャ深掘り</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第8章 §4・アーキテクチャ深掘り</div>
+  <a href="#layout-reconstruction">Layout Reconstruction</a>
+  <a href="#extends">extends フロントマターの解釈順序</a>
+  <a href="#boilerplate-example">ボイラープレート戦略の実例</a>
+  <a href="#tier-strategy-deep">3ティア戦略の深掘り</a>
+  <a href="#platform-parity">プラットフォームパリティ</a>
+  <a href="#execution-plan-templates">実行計画テンプレート</a>
+  <div class="nav-section">第8章の他の節</div>
+  <a href="08_Intro_Advanced_Deploy_ja.html">第8章 §1・デプロイとSSOT</a>
+  <a href="08_Intro_Advanced_Chapter_ja.html">第8章 §2・ライフサイクル管理</a>
+  <a href="08_Intro_Advanced_AGENTS_ja.html">第8章 §3・AGENTS.md深掘り</a>
+  <a href="08_Intro_Advanced_Roadmap_ja.html">第8章 §5・高度化ロードマップ</a>
+  <div class="nav-section">他の章</div>
+  <a href="05_Intro_Chapter_ja.html">第5章・ai-workspace-standards紹介</a>
+  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章・企業内マルチエージェントチーム運用</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章・新規variant作成</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第8章 §4</div>
+  <h1>アーキテクチャ深掘り</h1>
+  <p class="lead">§1でL0→L1→L2の「何がどこからどこへ流れるか」を扱ったのに対し、この節ではその流れが<strong>実際にどのように実装されているか</strong>を掘り下げる — ファイルがそのままコピーされずに再生成される理由、継承フロントマターが解釈される順序、ボイラープレート・ティア戦略が実践でどのように適用されるかの具体例、そして2つのプラットフォーム（.claude/.gemini）が構造的にずれないよう保たれる方法までを扱う。</p>
+
+  <div class="keypoints">
+    <div class="kp-title">この節で扱う内容</div>
+    <ul>
+      <li>L2ファイルがL1をそのままコピーせず「再生成」される理由（Layout Reconstruction）</li>
+      <li><code>extends</code> フロントマターが実際に解釈される順序</li>
+      <li>LOCKED/MERGE/PRESERVE分類を実際のファイルに適用した例</li>
+      <li>3ティア戦略 — High/Medium/Lowの定義、frontmatter例、Tier Adjustment Rules、Tier Ceiling Rule</li>
+      <li><code>.claude/</code>・<code>.gemini/</code>のプラットフォームパリティが強制される仕組み</li>
+      <li>実行計画テンプレート — Design Gate（Row 0）、例外カテゴリ（E1〜E5）、実践例</li>
+    </ul>
+  </div>
+
+  <h2 id="layout-reconstruction">Layout Reconstruction — L2がL1をそのままコピーしない理由</h2>
+  <p>§1で簡単に触れた<code>agents/pm.md</code>の事例をもう少し掘り下げてみよう。L0の<code>agents/pm.md</code>はワークスペース全体のガバナンスを含んでおり、300行を超える。ここにはAuto-Modeの動作やライフサイクル状態フィールドのような、<strong>ワークスペースルートでのみ意味を持つセクション</strong>が混在している。L1の<code>templates/common/agents/pm.md</code>がこれをそのままコピーすると、variant（バリアント）を新規作成するたびにプロジェクトとは無関係なワークスペース専用の内容まで一緒についてきてしまう。</p>
+  <p>そのためL1はコピーの代わりに<strong>フィルタリングされた再構成</strong>を行う — L0の原本からvariantのスキャフォールディングに実際に必要なセクションだけを選び出し、ワークスペース専用セクションを除去したうえで<code>extends</code>参照によって残りをつなぐ。L2に降りる際も同じ原理が繰り返される。variant固有のオーバーライド（例えばco-marketingであればマーケティングドメイン特化のPMルール）をL1の上に載せて<strong>最初から作り直す</strong>のであり、L1ファイルをdiff-patch方式で修正するわけではない。その結果、L0のpm.mdが300行を超えていても、L2のpm.mdは50〜100行程度に保たれる — 「コピーして余分を削る」方式ではなく「必要なものだけを選んで新たに作る」方式だからである。</p>
+  <p>この設計が重要な理由は失敗モードにある。もしL1→L2が単純なコピーだったなら、L0でワークスペース専用セクションを1つ追加するたびに<strong>すべてのL2プロジェクトのpm.mdが不必要に膨れ上がる</strong>。Layout Reconstructionは「L0が知っていること」と「L2が知る必要があること」の間に常にフィルターを置くことで、この問題を根本から遮断している。</p>
+
+  <h2 id="extends">extends フロントマター — 継承が解釈される順序</h2>
+  <p><code>extends: ../../../agents/pm.md</code>のようなフロントマターフィールドは「このファイルはあのファイルを参照する」という宣言であり、ファイルを統合するマクロではない。解釈順序は次の通りである。</p>
+  <ol>
+    <li><strong>ツールがファイルを読み込む際</strong>（例えばClaude Codeが<code>agents/pm.md</code>を読み込む際）、まずfrontmatterの<code>extends</code>パスを確認する。</li>
+    <li>参照された原本（L0またはL1）を読み込んで<strong>本文を継承</strong>するが、現在のファイルに明示的に再記述されたセクションがあれば、そのセクションのみを<strong>オーバーライド</strong>する。</li>
+    <li>原本にはなく現在のファイルにのみ存在するセクション（例：variant固有のルール）は<strong>そのまま追加</strong>される。</li>
+  </ol>
+  <p>つまり<code>extends</code>は「継承＋選択的オーバーライド＋追加」の3段階で解釈されるのであり、2つのファイルをテキストとして繋ぎ合わせるものではない。この構造のおかげで、L1の<code>templates/common/agents/pm.md</code>は実質的な内容をほとんど持たなくても（大部分は<code>extends</code>でL0を指すのみ）有効なファイルとして機能し、L0で共通ルールが変更されれば<code>extends</code>を使うすべての下位ファイルが次回参照時に自動的に最新内容を反映する — <strong>ただし、これは「読み込み時に解釈される」ものであり、§1で扱った「ファイル同期（SYNC_IF_NEWER）」とは異なる仕組みである</strong>。<code>extends</code>はツールがファイルを開く瞬間のリアルタイム参照であり、SYNC_IF_NEWERは<code>upgrade-project.ts</code>を実行して初めて更新される静的なファイルコピーである。両者は同じ「継承のように見える動作」をするが、更新タイミングが異なる点を混同してはならない。</p>
+
+  <h2 id="boilerplate-example">ボイラープレート戦略の実例</h2>
+  <p>§1で扱ったLOCKED/MERGE/PRESERVE分類が実際のファイルにどのように適用されるかを1つずつ例で確認してみよう。</p>
+  <ul>
+    <li><strong>LOCKEDの例 — <code>.githooks/pre-commit</code></strong>：このファイルはシークレットスキャンやコミットメッセージ検証といったセキュリティゲートを実行する。プロジェクトごとにこの検証を変えてしまうと組織全体のセキュリティ基準がプロジェクトごとに異なってしまうため、<code>upgrade-project.ts</code>はローカルの修正有無にかかわらず、このファイルを常にL1最新版で上書きする。</li>
+    <li><strong>MERGEの例 — <code>CLAUDE.md</code></strong>：このファイルには<code>&lt;!-- WORKSPACE-MANAGED --&gt;...&lt;!-- /WORKSPACE-MANAGED --&gt;</code>で囲まれた区間（例：PMゲートウェイルール）と、その外側のプロジェクト固有ルール（例：「このプロジェクトは常に韓国語でコミットメッセージを書く」）が共存している。アップグレード時にはマーカーの内側だけがL1最新版に置き換えられ、マーカー外側の韓国語コミットルールはそのまま残る。</li>
+    <li><strong>PRESERVEの例 — <code>docs/context.md</code></strong>：このファイルはプロジェクトが何であるかを説明する文書であるため、L1は存在確認のみを行い、内容には一切関与しない。</li>
+  </ul>
+  <p>3つの例を並べて見ると分類基準が明確になる — <strong>変更されるとセキュリティ・ガバナンス事故につながるか（LOCKED）、組織ルールとプロジェクトの文脈が1つのファイル内で共存すべきか（MERGE）、プロジェクトのアイデンティティそのものか（PRESERVE）</strong>。この3つの問いを順に投げかけてみれば、この分類はほとんどすぐに判断できる。</p>
+
+  <h2 id="tier-strategy-deep">3ティア戦略の深掘り — コスト最適化を実行時に適用する</h2>
+  <p>第5章で紹介したtier割り当ては<code>agents/*.md</code>のfrontmatterに静的に定義される。各エージェントファイルの<code>tier</code>フィールドはプラットフォームごとのモデルエイリアスに変換され、実行時に適用される。</p>
+
+  <h3>frontmatter例</h3>
+  <div style="position:relative">
+  <pre class="code-block">---
+name: pm                       # pm, code-writer, automation-engineer ...
+tier:                          # プラットフォームごとのモデルエイリアス（実行時に変換される）
+  claude: high                 #   high = claude-opus-4-7
+  antigravity: high            #   high = gemini-3.1-pro
+---</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>この変換は<code>model: inherit</code>の裏で自動的に行われるため、agents/*.mdを書く人は具体的なモデル名をまったく知らなくてよく、「この役割がどれほど重い判断を行うか」だけを気にすればよい。</p>
+
+  <h3>ティアの定義とモデルマッピング</h3>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>ティア</th><th>目的</th><th>Claude系の例</th><th>Antigravity系の例</th></tr></thead>
+    <tbody>
+      <tr><td><strong>High</strong></td><td>複雑な推論、アーキテクチャ設計、計画立案</td><td>claude-opus-4-7</td><td>gemini-3.1-pro</td></tr>
+      <tr><td><strong>Medium</strong></td><td>コードレビュー、テスト、PRレビュー、品質ゲート</td><td>claude-sonnet-4-6</td><td>gemini-3.5-flash</td></tr>
+      <tr><td><strong>Low</strong></td><td>高速で反復的なコーディング、スクリプト保守</td><td>claude-haiku-4-5</td><td>gemini-3.5-flash</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>この静的な割り当てが基準線（ベースライン）となるが、実際の実行時にはPMが<strong>Tier Adjustment Rules</strong>を適用して動的にコストを最適化する。基準線がhighのエージェント（architect、pm）は複雑な設計判断を下す必要があるため、最も強力なモデルが必要となる。一方automation-engineerはADR-0036に基づく定型化されたスクリプトを書く役割であるため、lowティアで十分である — 「重い判断」が必要かどうかだけを見ればよいためだ。</p>
+
+  <h3>Tier Adjustment Rules — 実行時のコスト最適化</h3>
+  <p>PMが実行計画を立てる際、基準線から外れるティア調整が可能である。ルールは単純だ。</p>
+  <ul>
+    <li><strong>ダウングレードは許可される</strong> — PMは単純な作業の場合、エージェントのティアを基準線より下げることができる。例えば基準線がmediumのdocs-writerが「README.mdの誤字を1つ修正する」作業を受けた場合、lowに下げてコストを削減できる。</li>
+    <li><strong>アップグレードは禁止される</strong> — 逆に基準線より高いティアに上げることは<strong>常に禁止</strong>される。lowのautomation-engineerをhighに上げて複雑なアーキテクチャを設計させることはガバナンス違反である。</li>
+    <li><strong>失敗時の復元</strong> — ダウングレードした作業が失敗した場合、PMは必ず該当エージェントの基準線ティアを復元して再試行しなければならない。</li>
+  </ul>
+  <p>このルールの核心は<strong>「エージェント役割の複雑度の上限は固定だが、下限は状況に応じて調整できる」</strong>という原則である。PMはコスト削減のためにlowに下げることができるが、その作業がlowの能力を超えれば直ちに基準線に戻る。コストへの影響は第4章 §2-A P-2の実習で体感的に確認できる。</p>
+
+  <h3>Tier Ceiling Rule</h3>
+  <p>AGENTS.mdのPhase Determinationテーブル（§3.5）は、各成果物タイプに許可されたティアの上限を明示している。例えば「スクリプト実装（承認済み計画が存在する）」はPhase 4であり、担当エージェントはautomation-engineer（low）である — ここにhighを割り当てるとTier Ceiling違反となる。一方「新規ファイル設計、スキーマ定義」はPhase 1-2であり、architect（high）が担当する。</p>
+  <div class="pullquote">
+    Tier Ceiling Ruleは「この作業に最も適したティア以上を割り当てるな」ではなく、「このエージェントの定義されたティア以上を使うな」である。役割ベースであって作業ベースではない。
+  </div>
+
+  <h2 id="platform-parity">プラットフォームパリティ — .claude/と.gemini/を構造的に同一に保つ方法</h2>
+  <p>この リポジトリはClaude系（<code>.claude/</code>）とAntigravity/Gemini系（<code>.gemini/</code>）の2つのプラットフォームを同時にサポートする。この2つのディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。これを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
+  <p>この検査は2つのディレクトリを構造的に照合し、片方にしか存在しないエージェント・スキル・コマンドがないかを確認する。第11章で扱う昇格（promote）パイプラインもこの検査を昇格前の必須ゲートとして含んでおり、「Claude用だけ作ってAntigravity用を忘れた」状態では、そもそも正式なvariant（バリアント）になることができない。2つのプラットフォームが異なる実行方式（§1のCLAUDE.md/GEMINI.md MERGE例を参照）を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
+
+  <h2 id="execution-plan-templates">実行計画テンプレート — マルチエージェント作業の構造化された実行設計</h2>
+  <p>PMが複雑な作業を複数のエージェントに分配する際、<strong>実行計画（Execution Plan）</strong>形式を使用する。この計画は「誰が何をどのティアで、どの順序で」行うかをテーブルで明示し、実行の一貫性を保証する。</p>
+
+  <h3>標準実行計画フォーマット</h3>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Create/update design doc → <code>docs/designs/&lt;spec-id&gt;-design.md</code></td><td>architect</td><td>High</td><td>[model]</td><td>NEW</td></tr>
+      <tr><td>1</td><td>[task description]</td><td>[specialist]</td><td>High/Medium/Low</td><td>[model]</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>N</td><td><code>/sync "type(scope): message"</code></td><td>pm</td><td>Medium</td><td>[model]</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Design Gate（Row 0）</h3>
+  <p>Row 0は<strong>L0（ワークスペースルート）とL1（共通テンプレート）にのみ強制</strong>される。architectがまず設計文書を作成し、PMがこれを検証した後にのみ実装段階（Row 1以降）に進むことができる。L2 variantプロジェクトは自身のワークフローを管理するため、このゲートは適用されない。</p>
+
+  <h3>Design Gate 例外カテゴリ</h3>
+  <p>Row 0が負担となる単純な作業には、次の5つの例外カテゴリ（E1〜E5）のみが認められる。例外はPMが任意に作ることはできず、以下に定義されたカテゴリのみを使用しなければならない。</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>ID</th><th>カテゴリ</th><th>説明</th></tr></thead>
+    <tbody>
+      <tr><td>E1</td><td>memory-log</td><td><code>memory/YYYY-MM-DD.md</code>セッションログの作成</td></tr>
+      <tr><td>E2</td><td>changelog</td><td><code>CHANGELOG.md</code>更新のみ</td></tr>
+      <tr><td>E3</td><td>hotfix-typo</td><td>誤字修正、1行変更、些細な修正</td></tr>
+      <tr><td>E4</td><td>pure-readme</td><td>README.md本文テキストのみ（構造/設計変更なし）</td></tr>
+      <tr><td>E5</td><td>sync-only</td><td><code>/sync</code>実行のみ（ライフサイクル終了）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>例外を適用する場合、Row 0のAgent/Tier/Model列は空欄（<code>—</code>）で表示する。</p>
+
+  <h3>実践例：PMが作成した実行計画</h3>
+  <p>以下は「agents/pm.mdとスクリプトを更新するプラットフォームパリティ作業」の実際の実行計画例である。</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Update agents/pm.md</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>2</td><td>Update scripts/audit.ts</td><td>automation-engineer</td><td>Low</td><td>haiku</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>3</td><td>Update CLAUDE.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>4</td><td>Update GEMINI.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>sonnet</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>実行順序</strong>：Sequential（逐次実行） — <a href="#platform-parity">プラットフォームパリティ</a>のためにCLAUDE.mdとGEMINI.mdを一緒に更新する必要があるため、逐次実行となる。automation-engineerにlowが割り当てられているのはTier Adjustment Ruleに基づくものである。</p>
+
+  <div class="note">
+    この節は§1で紹介した概念（L0→L1→L2、フォークモデル、LOCKED/MERGE/PRESERVE）の<strong>実際の動作方式と具体例</strong>を扱う — ここに記載された内容はすべて現行の実装である。まだ実装されていない高度化の方向性（コンテナ連携、メモリ統合、ボイラープレート/ティア戦略の今後の拡張など）は<a href="08_Intro_Advanced_Roadmap_ja.html">§5 高度化ロードマップ</a>で別途扱う。
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_AGENTS_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §3・AGENTS.md深掘り</div></a>
+    <a href="08_Intro_Advanced_Roadmap_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第8章 §5・高度化ロードマップ</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

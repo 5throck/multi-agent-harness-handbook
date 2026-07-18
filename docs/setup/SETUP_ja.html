@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="ワークショップ環境セットアップガイド · マルチエージェントチームハーネスエンジニアリングハンドブック - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ワークショップ環境セットアップガイド · マルチエージェントチームハーネスエンジニアリングハンドブック</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .flow-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 16px 0; overflow-x: auto; }
+    .flow-box::before { content: none; }
+    .flow-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">ワークショップ環境セットアップガイド</div>
+  <a href="#flow">セットアップの流れ</a>
+  <a href="#step1">Step 1 — チェックリスト</a>
+  <a href="#step2">Step 2 — OS別スクリプト</a>
+  <a href="#step3">Step 3 — インストール確認</a>
+  <a href="#tools">インストールツール一覧</a>
+  <a href="#terminal">おすすめターミナルアプリ</a>
+  <a href="#trouble">トラブルシューティング</a>
+  <div class="nav-section">その他の文書</div>
+  <a href="SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>
+  <a href="../practice/04_Practice_Examples_A_ja.html#setup">第4章 §2 実習準備セクション</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>ワークショップ環境セットアップガイド</h1>
+  <p class="subtitle">ワークショップ<strong>開始前</strong>にインストールを完了させてください — セッション開始時に別途の環境構築なしですぐ実習に入れる状態を作ることが目標です。</p>
+
+  <h2 id="flow">セットアップの流れ</h2>
+  <div class="flow-box"><div style="position:relative">
+  <pre>1. OSアップデート
+   └─ Windows: winget upgrade --all
+   └─ macOS:   brew update &amp;&amp; brew upgrade
+   └─ Linux:   apt update &amp;&amp; apt upgrade
+
+2. 基盤ツール
+   └─ Windows: PowerShell 7+, Windows Terminal, Git (+ Git Bash)
+   └─ macOS / Linux: curl, git
+
+3. ランタイム
+   └─ bun  (デフォルトランタイム &amp; パッケージマネージャー)
+   └─ python3
+   └─ uv   (Pythonパッケージマネージャー)
+
+4. CLIツール
+   └─ gh  (GitHub CLI)
+   └─ claude  (Claude Code CLI)
+   └─ agy  (Antigravity CLI)
+
+5. デスクトップアプリ
+   └─ Google Chrome
+   └─ Claudeデスクトップアプリ
+   └─ Antigravityデスクトップアプリ
+   └─ Mark  (Markdownビューア)
+
+6. 最終確認 ✅
+   └─ bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div></div>
+
+  <h2 id="step1">Step 1 — チェックリストの完了</h2>
+  <p>スクリプトを実行する前に、<a href="SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>を先に読んで完了させてください。</p>
+  <p><strong>主な確認事項</strong></p>
+  <ul>
+    <li><strong>Claude Pro/Max</strong>および<strong>Gemini Advanced</strong>の購読完了（APIキーではなく購読プラン）</li>
+    <li><strong>GitHubアカウント</strong>の作成と<code>gh auth login</code>の準備</li>
+    <li>空きディスク容量<strong>5 GB以上</strong>、<strong>管理者/sudo権限</strong>の保有確認</li>
+  </ul>
+
+  <h2 id="step2">Step 2 — OS別スクリプトの実行</h2>
+  <p>ターミナルを管理者 / sudo権限で開き、ご自身のOSに合ったスクリプトを実行してください。</p>
+
+  <h3>macOS</h3>
+  <div style="position:relative">
+    <pre class="code-block">bash setup-mac.sh
+# オプション: WezTerm (GPUアクセラレーションターミナル) も一緒にインストール
+bash setup-mac.sh --wezterm
+# オプション: Docker Desktopも一緒にインストール
+bash setup-mac.sh --docker
+# 両方:
+bash setup-mac.sh --wezterm --docker</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+
+  <h3>Linux (Ubuntu / Debian)</h3>
+  <div style="position:relative">
+    <pre class="code-block">bash setup-linux.sh
+# オプション: WezTermも一緒にインストール
+bash setup-linux.sh --wezterm
+# オプション: Dockerも一緒にインストール
+bash setup-linux.sh --docker
+# 両方:
+bash setup-linux.sh --wezterm --docker</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+
+  <h3>Windows</h3>
+  <p><strong>PowerShellを管理者権限で実行</strong>し、以下のコマンドを入力してください。</p>
+  <div style="position:relative">
+    <pre class="code-block"># 基本実行 (Execution Policyはスクリプトが自動で設定します)
+.\setup-windows.ps1
+
+# オプション:
+.\setup-windows.ps1 -WSL2             # WSL2も一緒にインストール (再起動が必要)
+.\setup-windows.ps1 -WezTerm          # WezTermも一緒にインストール
+.\setup-windows.ps1 -Docker           # Docker Desktopも一緒にインストール
+.\setup-windows.ps1 -Force            # 既にインストール済みのツールもすべて再インストール
+.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # オプションをすべてインストール</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <div class="note"><strong>実行後</strong>: ターミナルを閉じて再度開き、PATHの変更を反映してください。</div>
+
+  <h2 id="step3">Step 3 — インストール確認</h2>
+  <div style="position:relative">
+    <pre class="code-block">bun setup-common.ts</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <p>インストール済みツールの検証表を出力します。<strong>すべての項目が✅と表示されれば準備完了です。</strong></p>
+
+  <h2 id="tools">インストールツール一覧</h2>
+  <div class="table-code">
+  <table class="wide">
+    <colgroup><col class="col-tool"><col class="col-use"><col class="col-os"><col class="col-os"><col class="col-os"></colgroup>
+    <thead><tr><th>ツール</th><th>用途</th><th>macOS</th><th>Linux</th><th>Windows</th></tr></thead>
+    <tbody>
+      <tr><td><strong>bun</strong></td><td>ランタイム &amp; パッケージマネージャー</td><td><code>bun.sh/install</code></td><td><code>bun.sh/install</code></td><td><code>bun.sh/install.ps1</code></td></tr>
+      <tr><td><strong>git</strong></td><td>バージョン管理</td><td><code>brew install git</code></td><td><code>apt install git</code></td><td><code>winget Git.Git</code></td></tr>
+      <tr><td><strong>gh</strong></td><td>GitHub CLI</td><td><code>brew install gh</code></td><td>apt (公式リポジトリ)</td><td><code>winget GitHub.cli</code></td></tr>
+      <tr><td><strong>python3</strong></td><td>Pythonランタイム</td><td><code>brew install python3</code></td><td><code>apt install python3</code></td><td><code>winget Python.Python.3.13</code></td></tr>
+      <tr><td><strong>uv</strong></td><td>Pythonパッケージマネージャー</td><td><code>brew install uv</code></td><td><code>astral.sh/uv/install.sh</code></td><td><code>winget astral-sh.uv</code></td></tr>
+      <tr><td><strong>claude</strong></td><td>Claude Code CLI</td><td colspan="3"><code>bun install -g @anthropic-ai/claude-code</code></td></tr>
+      <tr><td><strong>agy</strong></td><td>Antigravity CLI</td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.ps1</code></td></tr>
+      <tr><td><strong>Google Chrome</strong></td><td>ブラウザ</td><td><code>brew install --cask google-chrome</code></td><td>.debを直接ダウンロード</td><td><code>winget Google.Chrome</code></td></tr>
+      <tr><td><strong>Claude Desktop</strong></td><td>Claudeデスクトップアプリ</td><td><code>brew install --cask claude</code></td><td>⚠️ 手動インストール</td><td><code>winget Anthropic.Claude</code></td></tr>
+      <tr><td><strong>Antigravity Desktop</strong></td><td>Antigravityデスクトップアプリ</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td></tr>
+      <tr><td><strong>Mark</strong></td><td>Markdownビューア</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td></tr>
+      <tr><td><strong>PowerShell 7+</strong></td><td>シェル</td><td>—</td><td>—</td><td><code>winget Microsoft.PowerShell</code></td></tr>
+      <tr><td><strong>Windows Terminal</strong></td><td>ターミナル</td><td>—</td><td>—</td><td><code>winget Microsoft.WindowsTerminal</code></td></tr>
+      <tr><td><strong>unzip</strong></td><td>解凍</td><td>— (標準搭載)</td><td><code>apt install unzip</code></td><td>— (標準搭載)</td></tr>
+      <tr><td><strong>curl</strong></td><td>HTTPクライアント</td><td>— (標準搭載)</td><td><code>apt install curl</code></td><td>— (標準搭載)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim);">⚠️ の項目は直接ダウンロードして手動でインストールする必要があります。</p>
+
+  <h3>オプションツール (<code>--wezterm</code>, <code>--docker</code>)</h3>
+  <table>
+    <thead><tr><th>ツール</th><th>macOS</th><th>Linux</th><th>Windows</th></tr></thead>
+    <tbody>
+      <tr><td><strong>WezTerm</strong> (<code>--wezterm</code>)</td><td><code>brew install --cask wezterm</code></td><td>apt (fury.ioリポジトリ)</td><td><code>winget wez.wezterm</code></td></tr>
+      <tr><td><strong>Docker</strong> (<code>--docker</code>)</td><td><code>brew install --cask docker</code></td><td><code>get.docker.com</code> スクリプト</td><td><code>winget Docker.DockerDesktop</code></td></tr>
+      <tr><td><strong>WSL2</strong> (<code>-WSL2</code>, Windows専用)</td><td>—</td><td>—</td><td><code>wsl --install</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="terminal">おすすめターミナルアプリ (Windows)</h2>
+  <table>
+    <thead><tr><th>アプリ</th><th>説明</th><th>インストール</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Windows Terminal</strong> ⭐</td><td>Microsoft公式、タブ・WSL統合 — 基本の推奨アプリ</td><td><code>winget install Microsoft.WindowsTerminal</code></td></tr>
+      <tr><td><strong>WezTerm</strong></td><td>GPUアクセラレーション・マルチプレクサ内蔵・クロスプラットフォーム — パワーユーザー向け</td><td><code>winget install wez.wezterm</code></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;color:var(--text-dim);">WezTermの自動インストール: <code>.\setup-windows.ps1 -WezTerm</code></p>
+
+  <h2 id="trouble">トラブルシューティング</h2>
+
+  <p><strong>インストール後に<code>bun: command not found</code></strong></p>
+  <p>ターミナルを再起動してください。Windowsでは、bunはユーザー環境変数に自動的に登録されます。macOS/Linux:</p>
+  <div style="position:relative">
+  <pre class="code-block">export PATH="$HOME/.bun/bin:$PATH"</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <p><strong><code>bun install -g</code>後に<code>claude: command not found</code></strong></p>
+  <p>スクリプトはbunが失敗した場合、npmフォールバックで自動的に再試行します。それでも問題が解決しない場合は、<code>bun pm ls -g</code>でパスを確認し、PATHに追加してください。</p>
+
+  <p><strong>インストール後に<code>agy: command not found</code></strong></p>
+  <p>Antigravity CLIのインストールスクリプトは、バイナリを<code>~/.local/bin</code>または<code>/usr/local/bin</code>に保存します。<code>source ~/.bashrc</code>を実行するか、ターミナルを再起動してください。</p>
+
+  <p><strong>Windows: 「このシステムではスクリプトの実行が無効になっています」</strong></p>
+  <p>スクリプトが自動的に<code>RemoteSigned</code>に設定します。手動で変更する場合:</p>
+  <div style="position:relative">
+  <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <div class="warn"><strong>Windows: 管理者権限なしで実行した場合</strong> — スクリプトは警告を表示しますが、そのまま処理を続行します。wingetなど一部のインストールでエラーが発生する可能性があるため、PowerShellを管理者権限で再実行することを推奨します。</div>
+
+  <p><strong>インストールログの確認</strong></p>
+  <p>Windowsスクリプトの実行ログは<code>%USERPROFILE%\workshop-setup-logs\</code>に自動的に保存されます。</p>
+
+  <hr>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun setup-common.ts</code>を実行し、すべての項目が✅と表示されればワークショップの準備完了です。</p>
+ </article>
+</main>
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了！';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

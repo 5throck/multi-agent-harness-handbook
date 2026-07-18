@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="用語集 · マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用語集 · マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    dl { margin: 0 0 8px; }
+    dt { font-weight: 700; font-family: var(--font-mono); font-size: var(--font-size-compact); margin-top: 18px; color: var(--text); }
+    dt .en { color: var(--text-dim); font-weight: 400; font-size: var(--font-size-label); }
+    dd { margin: 4px 0 0 0; color: var(--text); font-size: var(--font-size-compact); }
+    dd .see { display: block; margin-top: 4px; font-size: var(--font-size-label); color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">用語集</div>
+  <a href="#core">中核概念</a>
+  <a href="#team">マルチエージェントチーム構成要素</a>
+  <a href="#workspace">ai-workspace-standards 構造</a>
+  <a href="#tools">ツール・プラットフォーム</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>用語集</h1>
+  <p class="lead">このハンドブック全体で繰り返し使われる用語を一箇所にまとめました。各項目の「詳細」は、その用語を最初に詳しく説明した章にリンクしています。</p>
+
+  <div class="jump">
+    <a href="#core">中核概念</a>
+    <a href="#team">チーム構成要素</a>
+    <a href="#workspace">ワークスペース構造</a>
+    <a href="#tools">ツール・プラットフォーム</a>
+  </div>
+
+  <h2 id="core">中核概念</h2>
+  <dl>
+    <dt>ハーネスエンジニアリング <span class="en">Harness Engineering</span></dt>
+    <dd>モデルがどのツール・ルール・検証装置を通じて働くかを設計すること。プロンプトエンジニアリング(何を伝えるか)→コンテキストエンジニアリング(何を知らせるか)に続く第三段階にあたる。
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s1">第2章 §1</a></span></dd>
+
+    <dt>サブエージェント <span class="en">Subagent</span></dt>
+    <dd>メインセッションとは独立したコンテキストウィンドウを持ち、狭い範囲のタスクを処理したのち要約だけを返す補助エージェント。「スペシャリスト」という概念を実際のツールで実装する仕組みである。
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s3b">第2章 §3b</a></span></dd>
+
+    <dt>ハンドオフ <span class="en">Handoff</span></dt>
+    <dd>エージェント間で作業を引き継ぐ行為、またはその地点。ハンドオフ契約(Handoff Contract)は、やり取りする情報の形式を構造化したもので、目的・範囲・前段階の成果物を明示することで、次のエージェントが聞き返すことなくすぐに作業を開始できるようにする。
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s3">第2章 §3</a></span></dd>
+
+    <dt>動的チーム編成 <span class="en">Dynamic Team Composition</span></dt>
+    <dd>オーケストレーターがリクエストのたびに、実際にどのサブエージェントを何回、どの順序で投入するかをその都度判断すること。定義されたチーム名簿は固定であっても、実際の投入構成はタスクごとに変化する。
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s4b">第2章 §4b</a> · 実習: <a href="../practice/04_Practice_Examples_A_ja.html#scenario-2b">第4章 D-2</a></span></dd>
+
+    <dt>オーケストレーションパターン <span class="en">Orchestration Pattern</span></dt>
+    <dd>Anthropicが整理した5つの代表的パターン。プロンプトチェイニング(段階的な逐次処理)、ルーティング(リクエストを分類し適切なエージェント/モデルへ振り分け)、並列化(ファンアウトによる独立タスクの同時実行、または投票による同一タスクの反復実行と多数決)、オーケストレーター・ワーカー(サブタスクを事前に固定せず動的に分解)、評価者・最適化(下書きを独立に検証してからのみ反映する「検証してから適用」方式)がある。これらは一つのワークフローの中で自由に組み合わせて使うことができる。
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s4">第2章 §4</a></span></dd>
+
+    <dt>コンテキストウィンドウ / コンテキスト過負荷 <span class="en">Context Window / Context Overload</span></dt>
+    <dd>AIモデルが一度に処理できるトークン(テキスト)の上限をコンテキストウィンドウと呼ぶ。この上限の中に、役割定義・過去の会話・作業指示・成果物のすべてを収めなければならず、内容が増えるにつれて前半の情報が薄れていく現象をコンテキスト過負荷と呼ぶ。マルチエージェントチームは、これを役割ごとに分散して解決することを主な動機の一つとしている。
+      <span class="see">詳細: <a href="../intro/01_Why_AI_Chapter_ja.html#s3">第1章 §マルチエージェント:専門家チームの原理</a></span></dd>
+
+    <dt>フロントマター <span class="en">Frontmatter</span></dt>
+    <dd>エージェント定義ファイル(<code>agents/*.md</code>)の先頭にYAML形式で記述するメタデータブロック。エージェント名・役割・許可されたツール(<code>tools</code>)・モデルティア(<code>tier</code>)などを機械的にパースできるよう定義する。<code>extends</code>フィールドによって他のエージェントファイルを継承することもできる。
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></span></dd>
+
+    <dt>スキャフォールディング <span class="en">Scaffolding</span></dt>
+    <dd><code>bun scripts/new-project.ts</code>によって、variantテンプレートの全体構成(エージェント・スキル・コマンド・ガバナンスパイプライン)を独立したgitリポジトリとして複製する作業。「プロジェクトをゼロから作るのではなく、あらかじめ設計された骨組みの上から始める」という意味を持つ。
+      <span class="see">詳細: <a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-2">第6章 §2</a></span></dd>
+
+    <dt>フック <span class="en">Hook</span></dt>
+    <dd>エージェントが特定のツールを呼び出す前後に自動実行されるスクリプト。例: <code>PostToolUse</code>フックによるファイル修正後の自動監査(audit)チェック。Claude Code(CLI)では<code>.claude/hooks/</code>に定義されたフックが発火するが、Claude App(Desktop)では動作しないため、ツールごとの挙動の違いに注意する必要がある。
+      <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">第3章 §監査ログと可観測性</a></span></dd>
+
+    <dt>かんばん / WIP制限 <span class="en">Kanban / WIP Limit</span></dt>
+    <dd>同時に進行中の作業(Work In Progress)の数を制限する並列性の制御方法。ファンアウトによってエージェントを複数同時に投入する際、WIP制限を設定しておくことで、同時実行数が多くなりすぎることによるリソース競合やコンテキスト欠落を防ぐことができる。
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s4">第2章 §オーケストレーションパターン</a></span></dd>
+
+    <dt>サービスチケットモデル <span class="en">Service Ticket Model</span></dt>
+    <dd>AIを「リクエストを受けたら処理してくれるサービス」としてのみ利用する運用方式。既存のIT組織のチケットシステムに似ている。ユーザーが一つひとつリクエストの形で指示する必要があり、エージェントチームの自律性が制限される。本ハンドブックが提案する「開発ツール+variantモデル」と対比される考え方である。
+      <span class="see">詳細: <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 企業内運用戦略の比較</a></span></dd>
+
+    <dt>ライフサイクル / 状態 <span class="en">Lifecycle / State</span></dt>
+    <dd>ライフサイクルとは、エージェント・スキル・スクリプトが経る一連の段階全体(例: Create→Verify→Operate→Improve→Deprecate)を指す。状態とは、ある時点でその構成要素がライフサイクルのどの段階にあるかを示すスナップショットである。YAMLフロントマターの<code>status</code>フィールド(<code>draft</code>、<code>active</code>、<code>deprecated</code>、<code>retired</code>)が状態の値を保持する。ライフサイクルは「路線図」、状態は「今どの駅に列車がいるか」を示す表示板に例えられる。
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#state-vs-lifecycle">第8章 §2 · 状態とライフサイクルの区別</a></span></dd>
+  </dl>
+
+  <h2 id="team">マルチエージェントチーム構成要素</h2>
+  <dl>
+    <dt>オーケストレーター <span class="en">Orchestrator</span></dt>
+    <dd>全体の作業を段階に分け、スペシャリストを呼び出し、ユーザー確認が必要な地点で止まる役割。しばしば「PMエージェント」と呼ばれる。</dd>
+
+    <dt>スペシャリスト <span class="en">Specialist</span></dt>
+    <dd>設計・実装・テスト・セキュリティレビューのように、狭く明確な責任を持つエージェント。入力と出力が明確に定義されている。</dd>
+
+    <dt>モデルティア <span class="en">Model Tier</span></dt>
+    <dd>エージェントの役割ごとに割り当てるモデルのコスト等級(<code>high</code>/<code>medium</code>/<code>low</code>)。判断の重い役割にはhigh、定型的な反復作業にはlowを割り当て、コストと品質のバランスを取る。<code>agents/*.md</code>フロントマターの<code>tier</code>フィールドで指定し、実際のモデル名は<code>model: inherit</code>によってプラットフォームが変換する。
+      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">第5章 §3</a>。L0→L1→L2の「3層(3-tier)」とは別の概念なので混同に注意。</span></dd>
+  </dl>
+
+  <h2 id="workspace">ai-workspace-standards 構造</h2>
+  <dl>
+    <dt>SSOT <span class="en">Single Source of Truth</span></dt>
+    <dd>ある情報の原本がただ一箇所にのみ存在するという原則。例: CONSTITUTION.mdはワークスペース全体のルールのSSOTであり、context.mdは個々のプロジェクトのSSOTである。
+      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s4">第5章 §4</a></span></dd>
+
+    <dt>L0 / L1 / L2</dt>
+    <dd>ワークスペースルート(L0、唯一の原本)→共通テンプレートスナップショット(L1、<code>templates/common/</code>)→variant/プロジェクト(L2、<code>templates/co-*/</code>または<code>Projects/*/</code>)へと続く3層構造。流れは常に上から下へのみ進み、L1→L2はスキャフォールディング時点で一度だけ行われる「フォーク」である。
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></span></dd>
+
+    <dt>フォークモデル <span class="en">Fork Model</span></dt>
+    <dd>L1からL2が分岐したのちは、自動的な逆同期を行わず独立して進化していく方式。正式テンプレートへ昇格させるには、<code>l2-to-variant-pipeline.ts</code>を人が明示的に実行する必要がある。</dd>
+
+    <dt>variant</dt>
+    <dd><code>templates/</code>配下にある、特定のドメイン向けに完結したマルチエージェントチーム構成(PM・専門エージェント・ガバナンスパイプラインの一式)。co-develop、co-design、co-workなどが例である。
+      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">第5章 §3</a></span></dd>
+
+    <dt>Phase A / Phase B</dt>
+    <dd>新規variantを作成する際の2段階。Phase Aは<code>Projects/</code>配下で独立したプロトタイプとして自由に実験する段階、Phase Bは<code>promote-variant</code>によって正式な<code>templates/</code>variantへ昇格させる段階である。
+      <span class="see">詳細: <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variant作成</a></span></dd>
+
+    <dt>ボイラープレート <span class="en">Boilerplate</span></dt>
+    <dd>プロジェクトごとに最初から書き直す必要のあるPM役割定義・ガバナンスパイプライン・コマンド/スキル配線をあらかじめ揃えておいた出発点。ai-workspace-standardsが提供するものの本質である。</dd>
+
+    <dt>コンテナ連携 <span class="en">Container Integration</span></dt>
+    <dd>ai-workspace-standardsの高度化の方向性の一つ。スキャフォールディングされたプロジェクトが、Docker/Kubernetes環境でOpen WebUIのようなサービスと連携し、個人単位でサポートされるべきだという要求。現時点ではローカルのAIコーディングツールと直接連携する方式のみがサポートされている。
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#container">第8章 §5 高度化ロードマップ</a></span></dd>
+
+    <dt>メモリ統合 <span class="en">Memory Consolidation</span></dt>
+    <dd>ai-workspace-standardsの高度化の方向性の一つ。個々のプロジェクトごとに散在する<code>memory/MEMORY.md</code>ファイルをワークスペースレベルで統合・整理し、全体的な傾向を把握できるようにする機能。
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#memory">第8章 §5 高度化ロードマップ</a></span></dd>
+  </dl>
+
+  <h2 id="tools">ツール・プラットフォーム</h2>
+  <dl>
+    <dt>AGENTS.md</dt>
+    <dd>30以上のAIコーディングツールが共通して読み込むオープンスタンダードファイル。ビルド・テストコマンドやコードスタイルなど、ツールに依存しない規則を定義する。本リポジトリでは、これに加えて「エージェントロースター」の役割も兼ねている。
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s5">第2章 §ツールを横断するハーネス、AGENTS.md</a></span></dd>
+
+    <dt>teammateMode</dt>
+    <dd>Agent Teams(実験的機能)の並列実行モード。Claude App(Desktop)は<code>in-process</code>のみをサポートし、Claude Code(CLI)は<code>tmux</code>分割ペインモードも追加でサポートする。
+      <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-1">共通参考 §1</a></span></dd>
+
+    <dt>Agent Manager</dt>
+    <dd>Antigravity(Desktop)で複数のワークスペースを一画面で統括する上位インターフェース。ワークスペースごとにエージェントを一つずつ割り当てることを原則とする。</dd>
+
+    <dt><code>/goal</code> / <code>/agent</code> / <code>/agents</code></dt>
+    <dd>Antigravity CLI(<code>agy</code>)で動的サブエージェントオーケストレーションを呼び出すスラッシュコマンド。<code>/goal</code>は目標を最後まで実行し、<code>/agent</code>はバックグラウンドでの長時間タスクを委任し、<code>/agents</code>はこれまでに生成されたサブエージェントの状態一覧を確認する。この能力自体はagyだけのものではない — Claude Code/Appは同じ動的オーケストレーションを<code>Agent</code>(Task)ツールと自然言語のリクエストによって、Antigravity(Desktop)はAgent ManagerのGUIによって実行する。この3つのコマンドは、その動作をCLI画面上で呼ぶ際の名称にすぎない。
+      <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-2">共通参考 §2</a></span></dd>
+  </dl>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

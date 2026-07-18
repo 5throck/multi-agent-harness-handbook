@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+  Warm-up exercise — a standalone practice page without a chapter number.
+  Sequence: Day 1 Chapter 3 (Guardrails) → Break 1 → Warm-up (40 min) → Chapter 4 (hands-on practice).
+  Colors use design tokens only — the theme is swapped at deploy time by references/apply-theme.sh replacing the brand colors under docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Warm-up exercise · From Tetris to Pac-Man - material for the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warm-up Exercise · From Tetris to Pac-Man</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .step {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 20px; margin: 16px 0;
+    }
+    .quiz ol { margin: 0 0 0 20px; font-size: var(--font-size-compact); line-height: 1.85; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Warm-up · From Tetris to Pac-Man</div>
+  <a href="#tetris">Tetris — Complexity manageable with vibe coding</a>
+  <a href="#pacman">Pac-Man — Limits created by complexity</a>
+  <a href="#takeaway">Takeaway</a>
+  <a href="#quiz">Review Questions</a>
+  <div class="nav-section">Next Chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter_en.html">Chapter 3 · Guardrails and the Permission Model</a>
+  <a href="../practice/04_Practice_Manual_en.html">Chapter 4 · Working with a Harness-Based Multi-Agent Team</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Warm-up Exercise · Right after Day 1, Break 1</div>
+  <h1>From Tetris to Pac-Man</h1>
+  <p class="lead">Even when the task is the same — "build a game" — the right approach changes as complexity grows. You'll build Tetris with vibe coding, then fail at Pac-Man with a single prompt, retry it with a three-stage plan/build/QA multi-agent approach, and feel the difference firsthand.</p>
+  <p class="source-line">Platform: claude.ai or Claude Code · Duration: 40 minutes (Tetris 10 min + Pac-Man 25 min + takeaway 5 min) · Related: <a href="../concepts/02_Concepts_Chapter_en.html">Chapter 2 §2 Single-Agent Limits</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">What this warm-up teaches</div>
+    <ul>
+      <li><strong>Tetris (10 min)</strong> — completed with a single vibe-coding prompt; edits apply cleanly too</li>
+      <li><strong>Pac-Man (25 min)</strong> — experience failure with a single prompt → succeed with a three-stage plan/build/QA multi-agent approach</li>
+      <li><strong>Takeaway (5 min)</strong> — the higher the complexity, the more exponentially valuable role separation becomes</li>
+    </ul>
+  </div>
+
+  <h2 id="tetris">Tetris — Complexity manageable with vibe coding (10 min)</h2>
+
+  <p>In the Chapter 4 exercise, participants are split into 4 groups such as Claude / Antigravity, but in this warm-up <strong>everyone uses the same platform</strong> (claude.ai or Claude Code). This keeps the focus on the <strong>difference in approach</strong> rather than differences between harness tools.</p>
+
+  <h3>How to run it</h3>
+
+  <ol>
+    <li><strong>Instructor demo (1 min)</strong>: Enter the following prompt into claude.ai (or Claude Code).</li>
+  </ol>
+  <div style="position:relative">
+  <pre class="code-block">Build a Tetris game using HTML Canvas</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>Within 10-20 seconds, a playable Tetris game appears.</p>
+
+  <ol start="2">
+    <li><strong>Participants follow along (5 min)</strong>: Each participant enters the same prompt to build their own Tetris game.</li>
+    <li><strong>Request edits (4 min)</strong>: Freely request modifications to the finished Tetris game.</li>
+  </ol>
+  <div style="position:relative">
+  <pre class="code-block">Change the background to a darker color
+Make the scoreboard bigger
+Add a next-block preview</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <div class="note">
+    <strong>Key message:</strong> Tetris is a relatively simple game that can be completed in roughly 200 lines of code. At this level of complexity, a single vibe-coding prompt — without a harness — is enough to produce a working result, and edit requests are applied without issue.
+  </div>
+
+  <h2 id="pacman">Pac-Man — Limits created by complexity (25 min)</h2>
+
+  <p>This time you'll build a game that looks similar but is far more complex. Pac-Man has many more elements — character movement, ghost AI, collision detection, map design, an item system — and reaches roughly <strong>1,000-1,500 lines</strong> once complete.</p>
+
+  <h3>Stage 1: Experience failure (2-3 min)</h3>
+
+  <p>First, try it the exact same way you did with Tetris.</p>
+  <div style="position:relative">
+  <pre class="code-block">Build a Pac-Man game using HTML Canvas</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>When character movement, ghost AI, collision detection, and map design are all packed into a single prompt at once, the code gets tangled and doesn't work as intended. This "failure" is the core experience of this warm-up.</p>
+
+  <div class="note">
+    <strong>Why does it fail?</strong> Giving one agent too many roles at once causes the <strong>context overload</strong> discussed in <a href="../concepts/02_Concepts_Chapter_en.html">Chapter 2 §2</a>. Each feature may be implementable on its own, but coordinating them all simultaneously produces conflicts and omissions.
+  </div>
+
+  <h3>Stage 2: Retry with multiple agents (about 7-8 min per step)</h3>
+
+  <p>This time, instead of a single agent, split the work into <strong>three roles</strong> and proceed sequentially.</p>
+
+  <div class="step">
+    <div class="step-label">Step 1 — Planning agent</div>
+    <p>Write a spec for Pac-Man's feature list and map structure. This step defines which characters exist, what the map looks like, and what the game rules are.</p>
+    <div style="position:relative">
+  <pre class="code-block">Write a spec for the feature list and map structure of a Pac-Man game. Include the following:
+- How the characters (Pac-Man, 4 ghost types) behave
+- Map structure (walls, dots, power-up locations)
+- Game rules (score, lives, levels)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div class="step">
+    <div class="step-label">Step 2 — Development agent</div>
+    <p>Based on the spec produced in Step 1, write the actual HTML Pac-Man code. Since the plan is now clear, the development agent can focus purely on implementation without needing to figure out "what" to build.</p>
+    <div style="position:relative">
+  <pre class="code-block">Based on the spec below, write the Pac-Man game code using HTML Canvas:
+[Paste the Step 1 result here]</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div class="step">
+    <div class="step-label">Step 3 — QA agent</div>
+    <p>Find and fix bugs in the finished code. Actually run the game to verify whether characters pass through walls, whether the ghost AI behaves correctly, and whether scoring is calculated correctly.</p>
+    <div style="position:relative">
+  <pre class="code-block">Find and fix bugs in this Pac-Man game code:
+[Paste the Step 2 result here]
+In particular, check the following:
+- Whether wall collision detection is accurate
+- Whether each ghost's AI moves with a distinct pattern
+- Whether score and lives are calculated correctly</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div class="warn">
+    <strong>Note:</strong> At each step, you must copy and paste the previous step's result as-is. Unlike the automatic handoff you'll learn about via subagent invocation in Chapter 4, right now you're experiencing a <strong>manual handoff</strong> firsthand.
+  </div>
+
+  <h2 id="takeaway">Takeaway — the higher the complexity, the more exponentially valuable role separation becomes (5 min)</h2>
+
+  <table>
+    <thead><tr><th></th><th>Tetris</th><th>Pac-Man</th></tr></thead>
+    <tbody>
+      <tr><td>Code volume</td><td>~200 lines</td><td>~1,000-1,500 lines</td></tr>
+      <tr><td>Core elements</td><td>Block falling, rotation, line clearing</td><td>Character movement, ghost AI, collision detection, map design, items</td></tr>
+      <tr><td>Single prompt</td><td>✅ Succeeds</td><td>❌ Fails</td></tr>
+      <tr><td>3-stage multi-agent</td><td>Unnecessary</td><td>✅ Succeeds</td></tr>
+    </tbody>
+  </table>
+
+  <p>Simple tasks like Tetris are perfectly handled by vibe coding (a single prompt). But as complexity rises, as with Pac-Man, leaving every role to a single agent has its limits.</p>
+
+  <p>This is a firsthand experience of the <strong>limits of a single agent</strong> covered in <a href="../concepts/02_Concepts_Chapter_en.html">Chapter 2 §2</a>. Context overload, role conflicts, omissions — all of these problems are resolved once roles are separated.</p>
+
+  <p><strong>Key message:</strong></p>
+  <div class="note" style="font-weight:600;">
+    "The higher the complexity, the more exponentially valuable role separation becomes"
+  </div>
+
+  <p>The handoff (plan → build → QA) you experienced manually in this warm-up will be experienced more deeply in the upcoming <a href="../practice/04_Practice_Manual_en.html">Chapter 4</a>, automated through the <strong>subagent features</strong> of Claude Code, Claude App, and Antigravity.</p>
+
+  <h2 id="quiz">Review Questions</h2>
+  <div class="quiz">
+    <div class="quiz-title">Warm-up Exercise Review Questions</div>
+    <ol>
+      <li>Tetris was built well with vibe coding, but why was Pac-Man hard to build with a single prompt?</li>
+      <li>What is the difference between splitting Pac-Man into plan → build → QA and leaving everything to a single agent? (<a href="../concepts/02_Concepts_Chapter_en.html">→ Chapter 2 §2 Role Conflicts</a>)</li>
+    </ol>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../guardrails/03_Guardrails_Chapter_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 3 · Guardrails and the Permission Model</div></a>
+    <a href="../practice/04_Practice_Manual_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 4 · Working with a Harness-Based Multi-Agent Team</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

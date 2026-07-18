@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--
+  章（叙述型）テンプレート — 実習を伴わない「読み物」テーマ用。読みやすい幅（720px）・ゆとりある行間・章移動の導線。
+  Manual（リファレンス）/Examples（実習）と異なり、バージョンボックスやコード強調ではなく本文の流れを中心に構成する。
+  編集箇所: (1) <title>/章番号/タイトル/リード (2) nav（この章の節＋他の章） (3) 「この節で扱う内容」
+            (4) <h2 id>/<h3> 節と本文 (5) 前後の章へのリンク
+  {{二重中括弧}}・[説明: ...] を実際の内容に置き換える。リンクはすべて相対パス。
+  色はデザイントークンのみを使用 — テーマは配布時に references/apply-theme.sh が docs/ 内のブランドカラーを置換する。
+  検索インデックスの前提: 本文の各節は必ず <h2 id="..."> （必要に応じて <h3>）構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第8章 §2 · ライフサイクル管理 - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第8章 §2 · ライフサイクル管理</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第8章 · アーキテクチャ深掘り</div>
+  <a href="08_Intro_Advanced_Deploy_ja.html">§1 · デプロイとSSOT</a>
+  <a href="#s2-lifecycle-why">ライフサイクル管理が必要な理由</a>
+  <a href="#s2-agent-lifecycle">エージェントのライフサイクル</a>
+  <a href="#s2-skill-lifecycle">スキルのライフサイクル</a>
+  <a href="#s2-script-lifecycle">スクリプトのライフサイクル</a>
+  <a href="#state-vs-lifecycle">状態（State）とライフサイクル（Lifecycle）</a>
+  <div class="nav-section">この章の他の節</div>
+  <a href="08_Intro_Advanced_AGENTS_ja.html">§3 · AGENTS.md 深掘り</a>
+  <a href="08_Intro_Advanced_Architecture_ja.html">§4 · アーキテクチャ深掘り</a>
+  <a href="08_Intro_Advanced_Roadmap_ja.html">§5 · 高度化ロードマップ</a>
+  <div class="nav-section">他の章</div>
+  <a href="../intro/05_Intro_Chapter_ja.html">第5章 · ai-workspace-standards の紹介</a>
+  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 企業内マルチエージェントチームの運用</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variantの作成</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第8章 §2</div>
+  <h1>ライフサイクル管理</h1>
+  <p class="lead">エージェント、スキル、スクリプトのそれぞれが生成から廃棄までどのような段階を経るのか、そしてこれらの段階が実際のワークスペースでどのように管理されているのかを扱います。</p>
+
+  <div class="keypoints">
+    <div class="kp-title">この節で扱う内容</div>
+    <ul>
+      <li>エージェントのライフサイクル: create → verify → operate → improve → deprecate</li>
+      <li>スキルのライフサイクル: define → test → deploy → version → retire</li>
+      <li>スクリプトのライフサイクル: write → lint → test → register → deprecate</li>
+      <li>状態（State）とライフサイクル（Lifecycle）の区別</li>
+      <li>ライフサイクル管理がなぜ必要なのか</li>
+    </ul>
+  </div>
+
+  <h2 id="s2-lifecycle-why">ライフサイクル管理が必要な理由</h2>
+
+  <p>マルチエージェントシステムを運用していると、ワークスペース内のエージェント、スキル、スクリプトは増え続けます。新しいものを作るだけでは十分ではありません。各コンポーネントが<strong>どの段階にあるか</strong>を明確にする必要があります。そうすることで、次のような問題を回避できます。</p>
+
+  <ul>
+    <li><strong>未検証のコンポーネントが本番に投入される問題。</strong> エージェントが <code>agent:verify</code> を通過せずにデプロイされると、フロントマターの欠落フィールドや誤った役割定義により、実際のセションでエラーが発生します。</li>
+    <li><strong>廃止対象が依然として呼び出される問題。</strong> 有効でなくなったスキルがレジストリに残っていると、エージェントが意図せずそのスキルを選択して失敗します。</li>
+    <li><strong>バージョンの不一致による再現不能の問題。</strong> スクリプトが更新されたのに、あるvariantでは旧バージョンを参照したままだと、同じ入力に対して異なる結果が生じます。</li>
+  </ul>
+
+  <p>こうした問題を体系的に防ぐため、ai-workspace-standards はエージェント・スキル・スクリプトそれぞれについて<strong>名前付きの段階（named stages）</strong>を定義し、各段階で実施すべき検証と遷移条件を規定しています。この節では、この3つのライフサイクルをそれぞれ説明し、ワークスペースで実際にどのように管理されているかを扱います。</p>
+
+  <!-- ─── エージェントのライフサイクル ─── -->
+
+  <h2 id="s2-agent-lifecycle">エージェントのライフサイクル</h2>
+
+  <p>エージェントは <code>agents/</code> ディレクトリ配下に <code>.md</code> ファイルとして定義されます。エージェントは誕生してから運用され、最終的に廃止されるまで、次の5段階を経ます。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6639ba"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Create -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Create</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">agents/*.md 作成</text>
+        <!-- Verify -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Verify</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">agent:verify</text>
+        <!-- Operate -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Operate</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">セションで実行</text>
+        <!-- Improve -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Improve</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">フィードバック反映</text>
+        <!-- Deprecate -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecate</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">利用停止</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+
+        <!-- Feedback loop: Improve → Verify -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowA)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">再検証ループ</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s2-agent-create">Create — エージェントの生成</h3>
+  <p>エージェントのライフサイクルは、<code>agents/</code> ディレクトリに新しい <code>.md</code> ファイルを作成することから始まります。このファイルには、フロントマター（name、role、model などのフィールド）と本文（system prompt）が含まれます。生成時には次の点を確認します。</p>
+  <ul>
+    <li>ファイル名がエージェントの役割を明確に示しているか（例: <code>pm.md</code>、<code>reviewer.md</code>）</li>
+    <li>フロントマターに <code>name</code>、<code>role</code>、<code>model</code>、<code>status</code> フィールドがすべて含まれているか</li>
+    <li>本文に当該エージェントの動作原則と制約条件が明示されているか</li>
+  </ul>
+  <p>初期の <code>status</code> フィールド値は <code>draft</code> に設定します。この状態では、エージェントは運用セションで自動的に選択されません。</p>
+
+  <h3 id="s2-agent-verify">Verify — エージェントの検証</h3>
+  <p>生成されたエージェントファイルがワークスペースの規格に適合しているかを <code>bun run agent:verify</code> で検証します。このコマンドは次の点を確認します。</p>
+  <ul>
+    <li>フロントマターフィールドの欠落や型の不一致がないか</li>
+    <li><code>AGENTS.md</code> に当該エージェントが正しく登録されているか</li>
+    <li>参照しているスキルやスクリプトが実際に存在するか</li>
+    <li>他のエージェントと役割が重複していないか</li>
+  </ul>
+  <p>検証に合格すると、<code>status</code> を <code>active</code> に変更します。合格しない場合は <code>draft</code> の状態を維持し、エラーメッセージをもとに修正して再検証します。</p>
+
+  <h3 id="s2-agent-operate">Operate — エージェントの運用</h3>
+  <p><code>active</code> 状態のエージェントは実際のセションで呼び出されるようになります。運用段階では、エージェントの実際の動作を観察し、セションログで次の点をモニタリングします。</p>
+  <ul>
+    <li>エージェントが定義された役割どおりに動作しているか</li>
+    <li>他のエージェントとの協働において干渉や衝突がないか</li>
+    <li>応答品質が期待水準に達しているか</li>
+  </ul>
+  <p>運用中に発見された問題は記録し、Improve 段階の入力として使用します。</p>
+
+  <h3 id="s2-agent-improve">Improve — エージェントの改善</h3>
+  <p>運用フィードバックをもとにエージェントファイルを更新します。改善内容は次のとおりです。</p>
+  <ul>
+    <li>system prompt の曖昧な指示を明確に修正する</li>
+    <li>欠落していた制約条件や例外処理ルールを追加する</li>
+    <li>モデル変更（<code>model</code> フィールド）が必要な場合は更新する</li>
+  </ul>
+  <p>ファイルを修正した後は、必ずもう一度 <code>bun run agent:verify</code> を実行して<strong>再検証</strong>する必要があります。この Verify 段階に戻るループは、エージェントのライフサイクルにおける中核的なフィードバックサイクルです。検証に合格すると、再び Operate 段階に入ります。</p>
+
+  <h3 id="s2-agent-deprecate">Deprecate — エージェントの廃止</h3>
+  <p>エージェントが不要になった場合、<code>status</code> を <code>deprecated</code> に変更します。廃止時には次を実施します。</p>
+  <ul>
+    <li><code>AGENTS.md</code> から当該エージェントの項目を削除するか、コメントアウトする</li>
+    <li>当該エージェントを参照していたvariantやスクリプトから依存関係を除去する</li>
+    <li>ファイル自体は削除せず、<code>status: deprecated</code> として保存する（必要に応じて復元可能）</li>
+  </ul>
+  <p>一定期間（例: 30日）が経過し、参照が残っていないことが確認できたら、ファイルをアーカイブディレクトリへ移動するか、最終的に削除します。</p>
+
+  <div class="note">
+    <code>bun run agent:verify</code> は、エージェントのライフサイクルにおける Verify 段階の中核となるツールです。このコマンドは単なる文法チェックにとどまらず、エージェントがワークスペースの他のコンポーネントと整合的に連携しているかまで確認します。CI/CDパイプラインにこの検証を組み込むことで、未検証のエージェントが本番に投入されることをシステム的に防止できます。
+  </div>
+
+  <!-- ─── スキルのライフサイクル ─── -->
+
+  <h2 id="s2-skill-lifecycle">スキルのライフサイクル</h2>
+
+  <p>スキルは、エージェントがセション中に呼び出せる再利用可能な動作単位です。<code>SKILL.md</code> ファイルとして定義され、プラグインやワークスペースの <code>.zcode/skills/</code> に配置されます。スキルのライフサイクルは次の5段階で構成されます。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Define -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Define</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">SKILL.md 作成</text>
+        <!-- Test -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Test</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">validate-skills.ts</text>
+        <!-- Deploy -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Deploy</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">レジストリ登録</text>
+        <!-- Version -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Version</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">バージョン管理</text>
+        <!-- Retire -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Retire</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">利用停止</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+
+        <!-- Feedback loop: Version → Test -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowS)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">更新後の再テスト</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s2-skill-define">Define — スキルの定義</h3>
+  <p>スキルは <code>SKILL.md</code> ファイルとして定義されます。このファイルには、フロントマター（name、description、triggers など）とともに、スキルが実行する動作の説明が含まれます。定義時には次の点を明確にします。</p>
+  <ul>
+    <li><code>name</code>: スキルの一意な識別子</li>
+    <li><code>description</code>: エージェントがこのスキルをいつ選択すべきかを決定する説明</li>
+    <li><code>triggers</code>: スキルが自動的に有効化される条件</li>
+    <li>本文: スキル実行時にエージェントが従うべき手順</li>
+  </ul>
+  <p>初期状態では <code>status: draft</code> としておき、エージェントが実際にこのスキルを自動選択できないようにします。</p>
+
+  <h3 id="s2-skill-test">Test — スキルの検証</h3>
+  <p>スキル定義が正しいかを <code>validate-skills.ts</code> で検証します。このスクリプトは次の点を確認します。</p>
+  <ul>
+    <li>フロントマターフィールドの完全性および形式の一致</li>
+    <li>トリガー条件が他のスキルと曖昧に重複していないか</li>
+    <li>参照しているツール（MCP tool など）が現在の環境で使用可能か</li>
+    <li>スキルの説明がエージェントに正しく理解される程度に具体的か</li>
+  </ul>
+  <p>検証に合格すると、Deploy 段階へ進む準備が整います。</p>
+
+  <h3 id="s2-skill-deploy">Deploy — スキルの配備</h3>
+  <p>検証済みのスキルを、エージェントが実際に呼び出せる環境に配備します。配備とは、具体的には次のことを意味します。</p>
+  <ul>
+    <li><code>status</code> を <code>active</code> に変更し、エージェントの自動選択対象に含める</li>
+    <li>必要に応じてワークスペースの <code>.zcode/skills/</code> やプラグインレジストリに登録する</li>
+    <li>当該スキルを使用するエージェントのフロントマターに依存関係を明示する</li>
+  </ul>
+  <p>配備後は、エージェントのセション内でスキルが正常にトリガーされ実行されるかを確認する手動レビューを実施します。</p>
+
+  <h3 id="s2-skill-version">Version — スキルのバージョン管理</h3>
+  <p>運用環境で使用中のスキルに変更が必要になった場合、バージョン管理によって安全に更新します。</p>
+  <ul>
+    <li>スキルファイルの変更履歴を <code>SKILL.md</code> のヘッダーコメントや changelog に記録する</li>
+    <li>互換性を損なう変更（breaking change）の場合は、既存のスキルを維持したまま新バージョンとして複製してから更新する</li>
+    <li>変更後は必ず <code>validate-skills.ts</code> で再検証する</li>
+  </ul>
+  <p>Version 段階から Test 段階に戻るこのループは、スキルのライフサイクルにおける中核的なフィードバックサイクルです。更新されたスキルが検証に合格すると、再び Deploy 段階に入ります。</p>
+
+  <h3 id="s2-skill-retire">Retire — スキルの廃止</h3>
+  <p>スキルが使用されなくなったり、他のスキルに置き換えられたりした場合は廃止します。</p>
+  <ul>
+    <li><code>status</code> を <code>retired</code> に変更し、エージェントの選択対象から除外する</li>
+    <li>当該スキルを参照していたエージェントのフロントマターから依存関係を除去する</li>
+    <li>ファイルは保存したうえで <code>retired</code> 状態として明示し、再利用時に元の内容を参照できるようにする</li>
+  </ul>
+
+  <div class="note">
+    <code>validate-skills.ts</code> は、スキルのライフサイクルにおける Test 段階の中核となるツールです。このスクリプトは単純な形式チェックだけでなく、スキル間のトリガー衝突や参照の整合性まで点検します。新しいスキルを追加したり既存のスキルを修正したりするたびに必ず実行する必要があります。エージェントの <code>agent:verify</code> と同様に、CI/CDパイプラインに組み込むことで、未検証のスキルが配備されることを自動的に防止できます。
+  </div>
+
+  <!-- ─── スクリプトのライフサイクル ─── -->
+
+  <h2 id="s2-script-lifecycle">スクリプトのライフサイクル</h2>
+
+  <p>スクリプトは <code>scripts/</code> ディレクトリ配下に <code>.ts</code> ファイルとして管理されます。エージェント生成の検証、テンプレートの発行、プロジェクトのスキャフォールディングなど、ワークスペースのインフラを自動化する実行可能なコードです。スクリプトのライフサイクルは次の5段階で構成されます。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Write -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Write</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">scripts/*.ts 作成</text>
+        <!-- Lint -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Lint</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">静的解析</text>
+        <!-- Test -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Test</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">単体・統合テスト</text>
+        <!-- Register -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Register</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">package.json 登録</text>
+        <!-- Deprecate -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecate</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">利用停止</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+
+        <!-- Feedback loop: Register → Lint -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowSc)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">修正後の再検証</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s2-script-write">Write — スクリプトの作成</h3>
+  <p>新しいスクリプトは <code>scripts/</code> ディレクトリに <code>.ts</code> ファイルとして作成します。作成時には次の点を遵守します。</p>
+  <ul>
+    <li>ファイル名がスクリプトの目的を明確に示していること（例: <code>publish-to-template.ts</code>、<code>validate-skills.ts</code>）</li>
+    <li>スクリプトの冒頭に目的、使用法、引数の説明をコメントとして記録する</li>
+    <li>型定義を明確にし、外部依存を最小化する</li>
+    <li>エラー処理を含め、失敗時に意味のあるメッセージを出力する</li>
+  </ul>
+  <p>作成直後のスクリプトは <code>draft</code> 状態とみなされます。</p>
+
+  <h3 id="s2-script-lint">Lint — 静的解析</h3>
+  <p>作成されたスクリプトに対して静的解析（lint）を実施します。TypeScriptベースのワークスペースでは、<code>bun run lint</code> または <code>tsc --noEmit</code> を使用して次の点を確認します。</p>
+  <ul>
+    <li>型エラーがないこと</li>
+    <li>使用されていない変数やインポートがないこと</li>
+    <li>コードスタイルの一貫性</li>
+    <li>潜在的なランタイムエラー（例: null参照）への警告</li>
+  </ul>
+  <p>静的解析で発見された問題はすべて修正しないと次の段階へ進めません。</p>
+
+  <h3 id="s2-script-test">Test — テスト</h3>
+  <p>静的解析を通過したスクリプトに対して単体テストおよび統合テストを実施します。スクリプトがファイルシステムやネットワークに依存する場合は、モック環境でテストします。</p>
+  <ul>
+    <li>正常経路（happy path）: 想定した入力に対して正しい出力が得られるか</li>
+    <li>例外経路: 不正な入力、ファイル不存在、権限エラーなどに対して適切にエラーを処理するか</li>
+    <li>統合テスト: 実際のワークスペース環境で他のスクリプトやエージェントと連携した際に正常に動作するか</li>
+  </ul>
+  <p>テストに合格したスクリプトのみが Register 段階へ進むことができます。</p>
+
+  <h3 id="s2-script-register">Register — スクリプトの登録</h3>
+  <p>テストに合格したスクリプトを <code>package.json</code> の <code>scripts</code> セクションに登録し、<code>bun run &lt;name&gt;</code> の形で実行できるようにします。</p>
+  <ul>
+    <li><code>package.json</code> に適切なスクリプト名と実行コマンドを追加する</li>
+    <li>スクリプトの説明書（本ハンドブックまたは別のREADME）に使用法を記録する</li>
+    <li>他のスクリプトやエージェントがこのスクリプトを呼び出す場合、その依存関係を文書化する</li>
+  </ul>
+  <p>登録完了後、<code>bun run &lt;name&gt;</code> が正常に実行されるかを最終確認します。</p>
+
+  <h3 id="s2-script-deprecate">Deprecate — スクリプトの廃止</h3>
+  <p>スクリプトが不要になったり、他のスクリプトに置き換えられたりした場合は廃止します。</p>
+  <ul>
+    <li><code>package.json</code> から当該スクリプトの項目を削除する</li>
+    <li>このスクリプトを呼び出していた他のスクリプトから依存関係を除去し、代替パスへ更新する</li>
+    <li>ファイル自体は <code>scripts/_deprecated/</code> のようなアーカイブディレクトリへ移動するか、コメントに <code>@deprecated</code> を明示して保存する</li>
+  </ul>
+
+  <div class="note">
+    スクリプトのライフサイクルにおいて、人が直接行う<strong>手動レビュー（manual review）</strong>は、Lint と Test の間、および Test と Register の間でそれぞれ一度ずつ推奨されます。自動化された検証がすべての問題を捉えられるわけではありません。特にスクリプトがワークスペースのファイル構造を変更する場合（例: <code>publish-to-template.ts</code>）、人が実際の結果を目視で確認する過程が不可欠です。
+  </div>
+
+  <!-- ─── 3つのライフサイクルの関係 ─── -->
+
+  <h2 id="s2-lifecycle-summary">3つのライフサイクルに共通する原則と相互依存関係</h2>
+
+  <h3 id="state-vs-lifecycle">状態（State）とライフサイクル（Lifecycle）の区別</h3>
+  <p>ここまで、3種類のライフサイクルをパイプラインとして説明してきました。ここで混同してはならない区別が一つあります — <strong>ライフサイクル（lifecycle）</strong>と<strong>状態（state）</strong>は異なる概念です。</p>
+  <ul>
+    <li><strong>ライフサイクル</strong>とは、コンポーネントが経る<strong>一連の段階</strong>全体を指します。エージェントであれば、Create → Verify → Operate → Improve → Deprecate という5段階のパイプライン自体がライフサイクルです。</li>
+    <li><strong>状態</strong>とは、特定の時点でそのコンポーネントが<strong>どこにあるか</strong>を示すスナップショットです。YAMLフロントマターの <code>status</code> フィールド（<code>draft</code>、<code>active</code>、<code>deprecated</code>、<code>retired</code>）が、まさにこの状態の値を保存する仕組みです。</li>
+  </ul>
+  <p>たとえるなら、ライフサイクルは「地下鉄の路線図」であり、状態は「現在、列車がどの駅にいるか」を示すリアルタイム表示板です。列車がどこへ向かうべきか（路線）は固定されていますが、今どこにいるか（駅）は刻々と変化します。</p>
+  <div class="note">ワークフロー実行レベルの状態 — 例えば、<a href="../workflows/09_Workflows_Chapter_ja.html">第9章</a>でPMが定義する Phase Pipeline（Phase 0: 要求受領 → Phase 1: 設計 → … → Phase 6: 同期完了）— は、個々のコンポーネントの <code>status</code> フィールドとはまた別の次元の状態です。前者は「作業がどの段階にあるか」であり、後者は「このコンポーネント自体がライフサイクルのどこにあるか」です。</div>
+
+  <p>エージェント・スキル・スクリプトのライフサイクルはそれぞれ独立して定義されていますが、実際のワークスペースでは密接に結びついています。</p>
+
+  <p>エージェント・スキル・スクリプトのライフサイクルはそれぞれ独立して定義されていますが、実際のワークスペースでは密接に結びついています。</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr>
+      <th >検証ツール</th>
+      <th >関連するライフサイクル</th>
+      <th >役割</th>
+    </tr></thead>
+    <tbody>
+      <tr><td ><code>bun run agent:verify</code></td><td >エージェント</td><td >エージェントファイルの構造、参照の整合性、AGENTS.mdへの登録状況を検証</td></tr>
+      <tr><td ><code>validate-skills.ts</code></td><td >スキル</td><td >スキルのフロントマター、トリガー衝突、ツール参照の有効性を検証</td></tr>
+      <tr><td >手動レビュー</td><td >すべてのライフサイクル</td><td >自動検証では捕捉できない意味的正確性、使いやすさ、影響範囲を確認</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>3つのライフサイクルは、次の3つの共通原則を共有しています。</p>
+
+  <ul>
+    <li><strong>段階の明示:</strong> すべてのコンポーネントは、<code>status</code> フィールドやファイルの配置場所を通じて現在の段階を明確に示さなければなりません。<code>draft</code> 状態のものは運用に投入されず、<code>deprecated</code>/<code>retired</code> 状態のものは新規の呼び出し対象から除外されます。</li>
+    <li><strong>検証ゲート:</strong> ある段階から次の段階へ移行する前に、定義された検証を必ず通過しなければなりません。検証に失敗した場合は前の段階に戻り、修正してから再検証します。</li>
+    <li><strong>廃止後の保存:</strong> 廃止されたコンポーネントは即座に削除せず、一定期間保存します。これにより、必要な場合に復元が可能となり、廃止決定の根拠を追跡できます。</li>
+  </ul>
+
+  <p>次節（§3 アーキテクチャ深掘り）では、ライフサイクル管理の原則が実際の高度化の方向性（コンテナ化、メモリ管理、variant配布パイプライン）とどのように結びつくかを扱います。</p>
+
+  <div class="video-refs">
+    <h3 id="videos">参考動画</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=zkDqFMF9B9o" target="_blank">Why AI Agents Need a Lifecycle</a><span class="video-meta">(6:49)</span> — AIエージェントのライフサイクル管理の必要性と、企業が見落としがちな管理ポイント</li>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=Odj-x2OZODw" target="_blank">The Agent Development Lifecycle (ADLC)</a><span class="video-meta">(5:22)</span> — 信頼できるAIエージェントをリリースするための体系的なブループリント</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Deploy_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §1 · デプロイとSSOT</div></a>
+    <a href="08_Intro_Advanced_AGENTS_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第8章 §3 · AGENTS.md 深掘り</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 4 §1 · Using Harness-Based Multi-Agent Teams - Multi-Agent Team Harness Engineering Handbook material.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 4 §1 · Using Harness-Based Multi-Agent Teams</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar navigation ── -->
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 4 §1 · Using Harness-Based Multi-Agent Teams</div>
+  <a href="#tree">Overview — Full Structure</a>
+  <div class="nav-section">Single Subagent</div>
+  <a href="#section-1">1. Defining Subagents — Predefined vs. Dynamic Creation</a>
+  <a href="#section-2">2. Invoking/Delegating Subagents</a>
+  <div class="nav-section">Parallel / Team Collaboration</div>
+  <a href="#section-3">3. Parallel Execution — Comparing 4 Tools</a>
+  <a href="#section-4">4. Automation/Hooks — What Fires Automatically</a>
+  <div class="nav-section">Reference</div>
+  <a href="#refs">Reference Links</a>
+  <div class="nav-section">Sibling Documents</div>
+  <a href="04_Practice_Manual_A_en.html">Chapter 4 §1-A · Claude-Centered</a>
+  <a href="04_Practice_Manual_B_en.html">Chapter 4 §1-B · Antigravity-Centered</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter_en.html">Chapter 3 · Guardrails and Permission Models</a>
+  <a href="../intro/05_Intro_Chapter_en.html">Chapter 5 · Introduction</a>
+</nav>
+
+<!-- ── Main content ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 4 §1</div>
+  <h1>Chapter 4 §1 · Using Harness-Based Multi-Agent Teams</h1>
+  <p class="subtitle">A side-by-side reference for defining, invoking, and scaling subagents into parallel/automated units across four tools — Claude Code / Claude App / Antigravity CLI / Antigravity (Desktop) &nbsp;|&nbsp; Official docs: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target Version</span><span class="vvalue">Claude Code 2026-07 release / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
+    <div class="version-row"><span class="vlabel">Reference Document URL</span><span class="vvalue"><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com/en/docs/claude-code/sub-agents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">antigravity.google/docs/cli-using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google/docs/agent-manager</a></span></div>
+    <div class="version-row"><span class="vlabel">Date Collected</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">How to Check Version</span><span class="vvalue">Claude Code/App: <code>claude --version</code> · Antigravity CLI: <code>agy --version</code> or <code>/usage</code> within a session · Antigravity Desktop: the app's info screen</span></div>
+    <div class="version-row"><span class="vlabel">Notes for Revision</span><span class="vvalue">Both Claude Code Agent Teams and Antigravity CLI/Agent Manager are rapidly evolving features, so flag names, commands, and UI layouts may change with each release — always check the latest release notes first</span></div>
+  </div>
+
+  <div class="warning-box">As of 2026-06-18, Google discontinued the Gemini CLI service for individual (Free/Pro/Ultra) users, and <strong>Antigravity CLI (<code>agy</code>)</strong> replaced it. This chapter was originally written around the Gemini command-line interface (CLI) before that date, but has since been fully updated to reflect Antigravity CLI/Desktop as of the current point in time. For a detailed comparison of tool-specific characteristics, see <a href="../tools/00_Tools_Manual_en.html">Tool Comparison</a>.</div>
+
+  <!-- ── Concept/command tree ── -->
+  <h2 id="tree">Overview — Full Structure</h2>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
+Using Harness-Based Multi-Agent Teams (based on the Desktop app, with CLI noted as an equivalent alternative)
+├── Defining Subagents
+│   ├── Claude App / Claude Code    .claude/agents/*.md (YAML frontmatter, predefined — same for both)
+│   └── Antigravity(Desktop) / CLI  No definition file — the orchestrator dynamically creates subagents based on the goal
+├── Invoking/Delegating Subagents
+│   ├── Claude App / Claude Code    Agent(Task) tool — description / prompt / subagent_type
+│   └── Antigravity(Desktop)/CLI    Agent Manager UI (Desktop) · /goal, /agent, /agents panel (CLI)
+├── Parallel Execution
+│   ├── Claude App                  Agent Teams (in-process only)
+│   ├── Claude Code                 Agent Teams (in-process/tmux) + multiple Agent calls in one message
+│   ├── Antigravity Desktop         Agent Manager — per-workspace agents (Local/New Worktree Mode)
+│   └── Antigravity CLI             Parallel subagents within a session + parallel across sessions (multiple terminals)
+└── Automation/Hooks
+    ├── Claude App                  Hooks do not fire — manual execution required
+    ├── Claude Code                 PostToolUse/TeammateIdle/TaskCompleted hooks fire automatically
+    ├── Antigravity Desktop         Not applicable — GUI-centric
+    └── Antigravity CLI             agy -p "prompt" (for non-interactive CI), agy inspect (check configuration)
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div></div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div >Example Agent Team Composition</div>
+    <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="teamArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+      </defs>
+      <!-- Main Session -->
+      <rect x="160" y="10" width="200" height="44" rx="10" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="260" y="32" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">Main Session</text>
+      <text x="260" y="46" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#0969da">Orchestrator</text>
+
+      <!-- Vertical line down -->
+      <line x1="260" y1="54" x2="260" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+      <!-- Horizontal branch -->
+      <line x1="90" y1="85" x2="430" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+
+      <!-- writer -->
+      <line x1="90" y1="85" x2="90" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="20" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="90" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#6639ba">writer</text>
+      <text x="90" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Draft writing</text>
+
+      <!-- reviewer -->
+      <line x1="260" y1="85" x2="260" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="190" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="260" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#1a7f37">reviewer</text>
+      <text x="260" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Review / feedback</text>
+
+      <!-- researcher (optional) -->
+      <line x1="430" y1="85" x2="430" y2="108" stroke="#d0d7de" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#teamArrow)"/>
+      <rect x="355" y="110" width="150" height="40" rx="8" fill="#ffffff" stroke="#953800" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <text x="430" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#953800">researcher</text>
+      <text x="430" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Research (optional)</text>
+
+      <!-- Connection lines between specialists -->
+      <path d="M90,150 L90,175 L260,175" fill="none" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <polygon points="260,175 254,172 254,178" fill="#6639ba"/>
+      <text x="175" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">Draft handoff</text>
+
+      <!-- Bottom note -->
+      <text x="260" y="210" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">The orchestrator dynamically assembles specialists based on the request</text>
+    </svg>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 1 ── -->
+  <h2 id="section-1">1. Defining Subagents — Predefined vs. Dynamic Creation</h2>
+
+  <p>The Anthropic family (Claude App/Claude Code) predefines each subagent as a single markdown file under the project folder. The Google family (Antigravity Desktop/CLI) has no separate definition file — the orchestrator creates subagents on the fly based on the given goal. Below, we first cover Claude App and Antigravity(Desktop) as the baseline, then introduce each one's CLI counterpart.</p>
+
+  <p >
+    The concrete definition/invocation method for the Claude family is covered in <a href="04_Practice_Manual_A_en.html">§1-A Claude-Centered</a>,
+    and the concrete method for the Antigravity family is covered in <a href="04_Practice_Manual_B_en.html">§1-B Antigravity-Centered</a>.
+  </p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Frontmatter Field</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td>Required. Must match the <code>subagent_type</code> value to be invokable</td>
+        <td rowspan="4">Not applicable — there is no definition file itself; the orchestrator determines the role and tool scope on its own at execution time to create the subagent</td>
+      </tr>
+      <tr>
+        <td><code>description</code></td>
+        <td>Explains when this agent is used; referenced for automatic trigger decisions</td>
+      </tr>
+      <tr>
+        <td><code>tools</code></td>
+        <td>List of available tools; inherits the default set if omitted</td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td>Specify an alias such as <code>sonnet</code> / <code>opus</code> / <code>haiku</code></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="warning-box">Antigravity (Desktop/CLI) has no concept of a "subagent definition file" at all — forcing a beginner exercise that mirrors Claude App/Code's <code>reviewer.md</code> example onto Antigravity would misrepresent the facts. The "introductory exercise" for Antigravity isn't creating a file — it's giving it a goal and observing how the orchestrator breaks down the work on its own.</div>
+
+  <hr>
+
+  <!-- ── Section 2 ── -->
+  <h2 id="section-2">2. Invoking/Delegating Subagents</h2>
+
+  <p>The Anthropic family (Claude App/Claude Code) spawns a subagent in a separate context using the <code>Agent</code>/<code>Task</code> tool. The Google family (Antigravity Desktop/CLI) delegates a goal to an agent via the Agent Manager UI or slash commands.</p>
+
+  <p >
+    The concrete invocation method for the Claude family is covered in <a href="04_Practice_Manual_A_en.html#section-2">§1-A Section 2</a>,
+    and the concrete method for the Antigravity family is covered in <a href="04_Practice_Manual_B_en.html#section-2">§1-B Section 2</a>.
+  </p>
+
+  <hr>
+
+  <!-- ── Section 3 ── -->
+  <h2 id="section-3">3. Parallel Execution — Comparing 4 Tools</h2>
+
+  <p>All four tools support parallel execution, but the approach differs. The Claude family uses Agent Teams / multiple Agent calls, while the Antigravity family uses Agent Manager / cross-session parallelism.</p>
+
+  <div class="warning-box">Running multiple agents simultaneously in the same directory/workspace can cause "cognitive overlap" — a problem where one agent mistakes the output of another agent working in the same folder as its own working context (hallucination). Isolating agents by workspace or worktree is the recommended practice, and this is not a minor issue that can be skipped as an exception.</div>
+
+  <p >
+    The Claude family's parallel execution method is covered in <a href="04_Practice_Manual_A_en.html#section-3">§1-A Section 3</a>,
+    and the Antigravity family's parallel execution method is covered in <a href="04_Practice_Manual_B_en.html#section-3">§1-B Section 3</a>.
+  </p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Item</th><th>Antigravity (Desktop)</th><th>Claude App (Desktop)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Parallel Execution Unit</td>
+        <td>Independent agent per workspace</td>
+        <td>Agent Teams (in-process only)</td>
+        <td>Within a session + across sessions (multiple terminals)</td>
+        <td>Multiple Agent calls within one message / Agent Teams (in-process + tmux)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 4 ── -->
+  <h2 id="section-4">4. Automation/Hooks — What Fires Automatically</h2>
+
+  <p>Claude Code (CLI) automatically fires event hooks (PostToolUse/TeammateIdle/TaskCompleted), but Claude App and Antigravity Desktop do not fire hooks automatically. The Antigravity command-line interface (CLI) provides non-interactive execution via <code>agy -p</code> and configuration inspection via <code>agy inspect</code>.</p>
+
+  <p >
+    Details on automation/hooks for the Claude family are covered in <a href="04_Practice_Manual_A_en.html#section-4">§1-A Section 4</a>,
+    and details for the Antigravity family are covered in <a href="04_Practice_Manual_B_en.html#section-4">§1-B Section 4</a>.
+  </p>
+
+  <p >Practical tip: Antigravity has a periodically refreshed usage quota based on calculated work done. Exact figures may vary by account/plan, so it's safer to keep this in mind when planning to run multiple agents in parallel for an extended period.</p>
+
+  <div class="warning-box">Both Agent Teams and Agent Manager are rapidly evolving features — flag names, default behavior, and UI layouts may change with each release, so check the latest release notes before relying on them in a production workflow.</div>
+
+  <hr>
+
+  <!-- ── Reference links ── -->
+  <h2 id="refs">Reference Links</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents official documentation</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started official documentation</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using AGY CLI official documentation</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager official documentation</a></li>
+    <li>⚙️ <a href="04_Practice_Examples_A_en.html">Chapter 4 §2 Practice Examples — 04_Practice_Examples_A_en.html</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Based on Claude Code 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 | July 2026</p>
+  <div class="chapter-nav">
+    <a href="../guardrails/03_Guardrails_Chapter_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 3 · Guardrails</div></a>
+    <div class="branch">
+      <div class="branch-label">Choose Tool</div>
+      <a href="04_Practice_Manual_A_en.html" >Claude (A)</a>
+      <a href="04_Practice_Manual_B_en.html" >Antigravity (B)</a>
+    </div>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

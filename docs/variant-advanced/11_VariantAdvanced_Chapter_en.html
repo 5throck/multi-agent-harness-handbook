@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on exercises. Reading width (720px), generous line spacing, chapter navigation flow.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Where to edit: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) 'Key points of this chapter'
+            (4) <h2 id>/<h3> sections and body  (5) previous/next chapter links
+  Fill in {{double braces}}·[description: ...] with actual content. All links are relative.
+  Colors use design tokens only — themes are swapped in at deploy time by references/apply-theme.sh, which replaces the brand colors in docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 11 · Creating a new variant vs. promoting an existing project to a variant - Multi-Agent Harness Engineering Handbook material.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 11 · Creating a New Variant vs. Promoting an Existing Project to a Variant</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 11 · New Variant vs. Promotion</div>
+  <a href="#s1">The Difference Between the Two Paths</a>
+  <a href="#s2">The Build-From-Scratch Path</a>
+  <a href="#s3">The Path of Promoting an Existing Project</a>
+  <a href="#s4">Which Path to Choose, and When</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Enterprise Integration</a>
+  <a href="../intro/10_ProjectUpgrade_Chapter_en.html">Chapter 10 · L2 Project Upgrade</a>
+  <a href="12_VariantAdvanced_Examples_en.html">Chapter 12 · New Variant Promotion Hands-on Examples →</a>
+  <a href="../index_en.html">Back to Handbook Home</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 11</div>
+  <h1>Creating a New Variant vs. Promoting an Existing Project to a Variant</h1>
+  <p class="lead">In Chapter 6 §2, we practiced scaffolding a brand-new variant called co-marketing entirely from scratch. But ai-workspace-standards has a second path that is conceptually quite different: "promoting" a project that is already running well — one that was never intended to become a template — into an official variant later on. This chapter covers how the two paths differ conceptually, and which situations call for which path.</p>
+  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Chapter Covers</div>
+    <ul>
+      <li>The fundamental difference between "building from scratch" and "promoting an existing project"</li>
+      <li>The concept of the build-from-scratch path, which flows from Phase A (create-variant) to Phase B (promote-variant)</li>
+      <li>The concept of promoting an already-existing project via the <code>promote-variant</code> skill and <code>l2-to-variant-pipeline.ts</code></li>
+      <li>Criteria for judging which of the two paths fits your organization's situation</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">The Difference Between the Two Paths</h2>
+  <p>There is more than one way to add a new variant to the workspace. ai-workspace-standards recognizes two distinct starting points. One is the path of "designing from the very beginning, with the intent that it will become a template, before any project exists yet." The other is the path where "a project that was never meant to be a template gets promoted to one only after enough time has passed that multiple teams have been copying it by hand because it proved itself."</p>
+  <p>The difference between the two is not merely "different commands." In the former, design comes before use; in the latter, use (and validation) comes before templating. The reason the workspace supports both paths is that the real-world situation of building a new domain's agent team tends to converge on one of these two shapes.</p>
+
+  <div class="pullquote">Building from scratch puts design ahead of use; promotion lets use, validated through practice, precede design.
+    <span class="by">— the fundamental ordering difference between the two paths</span></div>
+
+  <h2 id="s2">The Build-From-Scratch Path</h2>
+  <p>This path, which starts from a greenfield state, is divided into two stages. First, using the <code>create-variant</code> skill and <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code>, an independent "Phase A prototype" is created under <code>Projects/&lt;variant-name&gt;/</code>. This stage is part of the structure the workspace documentation calls the "L1-L2 Fork Model"; since it doesn't yet belong to the official <code>templates/</code> directory, you're free to experiment and change direction. The co-marketing prototype built in the Chapter 11 exercise (D-1) is exactly this Phase A stage. This exercise refers back to <a href="../variant-practice/06_VariantPractice_Examples_en.html">the Chapter 6 §2 exercise (D-1)</a>.</p>
+  <p>Once the prototype has matured sufficiently, it goes through a "Phase B promotion" via the <code>promote-variant</code> skill to become an official <code>templates/co-&lt;name&gt;/</code>. In other words, even the build-from-scratch path ultimately passes through a promotion stage. What sets it apart from the path in the next section is that the prototype itself was designed from the outset with the premise that it would become a template.</p>
+
+  <div class="note">
+    <svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+      </defs>
+      <!-- Left: create-l2-scaffold.ts -->
+      <rect x="16" y="28" width="160" height="36" rx="8" fill="#3b82f6"/>
+      <text x="96" y="51" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">create-l2-scaffold.ts</text>
+      <!-- Arrow left → right -->
+      <line x1="176" y1="46" x2="218" y2="46" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+      <!-- Right: folder box -->
+      <rect x="222" y="20" width="200" height="52" rx="8" fill="#8b5cf6"/>
+      <text x="322" y="42" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">Projects/co-marketing/</text>
+      <text x="322" y="60" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#e0d5f7" text-anchor="middle">created</text>
+      <!-- Sub-items -->
+      <line x1="322" y1="72" x2="322" y2="86" stroke="#6b7280" stroke-width="1.2"/>
+      <!-- agents/ -->
+      <rect x="240" y="86" width="164" height="24" rx="5" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+      <text x="322" y="102" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#6b7280" text-anchor="middle">agents/ (researcher, writer)</text>
+      <!-- AGENTS.md -->
+      <rect x="240" y="114" width="164" height="24" rx="5" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+      <text x="322" y="130" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#6b7280" text-anchor="middle">AGENTS.md roster updated</text>
+      <!-- agent:verify badge -->
+      <rect x="470" y="108" width="154" height="30" rx="15" fill="#22c55e"/>
+      <text x="547" y="128" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">✓ agent:verify passed</text>
+    </svg>
+  </div>
+
+  <h2 id="s3">The Path of Promoting an Existing Project</h2>
+  <p>The second path has an entirely different starting point. A team builds a project to solve a specific domain problem, without modeling it on any other template and without reuse in mind from the start. But over time, the project's setup works so well that other teams inside the company start copying its files by hand to build similar things. The purpose of promotion is to turn this kind of "already-validated, but not born as a template" project into an official variant.</p>
+  <p>This path ultimately uses the same <code>promote-variant</code> skill and the same <code>bun scripts/l2-to-variant-pipeline.ts --source Projects/&lt;name&gt; --variant co-&lt;name&gt; --variantType &lt;type&gt;</code> pipeline, so the mechanism is identical to Phase B of the build-from-scratch path. Before promotion, there is a gate requiring all the conditions in <code>PROMOTION_CHECKLIST.md</code> to be satisfied (whether <code>bun run agent:verify</code>, <code>bun scripts/validate-skills.ts</code>, and <code>bun scripts/audit.ts</code> pass, among others). After the pipeline runs, this is followed by checking the <code>inherits_common</code> version in <code>variant.json</code>, a "reconcile" step that removes parts duplicated with common files, and validation of platform parity between <code>.claude/</code> and <code>.gemini/</code>. Domain-specific directories that the pipeline cannot handle automatically (such as workflows/ or regulations/) must be moved manually as specified in <code>_ORIGIN.md</code>.</p>
+  <div class="note">The mechanical procedure is the same for both paths, but "what is being validated" differs. On the promotion path, the fact that it was already being used in production is itself the basis for quality, and the pipeline's role is to organize that into a reusable form.</div>
+  <p>Let's unpack what "reconcile" and "manual migration via <code>_ORIGIN.md</code>" actually do with a concrete example. Suppose the finance team's <code>Projects/budget-review/</code> is being promoted. This project mixes two kinds of files: ① common files copied as-is from <code>templates/common/</code>, such as PM definitions or session checklists, and ② assets unique to this project, such as internal accounting-regulation documents inside the <code>regulations/</code> folder. The reconcile step reverts files matching ① from "copies" back into "references that inherit the common file," so that when <code>templates/common/</code> is later updated, this variant is updated along with it. On the other hand, the pipeline has no way of knowing about ②, so it is left in the original project's <code>_ORIGIN.md</code> under a "Manual Phase B Steps" list — something like "manually copy the regulations/ folder to the new variant" — and the person handling the promotion moves each item over by hand, following the checklist.</p>
+
+  <h2 id="s4">Which Path to Choose, and When</h2>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>Building From Scratch (Phase A → B)</h4>
+      <ul>
+        <li>A greenfield domain with no existing project to reference yet</li>
+        <li>Design precedes use. Built from the start with reuse in mind</li>
+        <li>Free to change direction during the Phase A stage</li>
+        <li>Example: introducing an agent team into a completely new area of work for the first time</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>Promoting an Existing Project (Phase B Only)</h4>
+      <ul>
+        <li>A project already built and validated in production by a team</li>
+        <li>Use and validation precede design. Already proven in practice</li>
+        <li>Must pass the PROMOTION_CHECKLIST.md gate</li>
+        <li>Example: formalizing an internal standard project that multiple teams have been copying by hand</li>
+      </ul>
+    </div>
+  </div>
+  <p>In the end, the criterion for choosing comes down to one thing. If it's a new domain with no precedent to refer to at all, the design-from-scratch path is the natural choice. Conversely, if there's already a project within the organization that has been validated at least once and that everyone is copying, it's safer and more efficient to respect that validated result and formalize it through the promotion path. Since both paths ultimately converge on the same <code>templates/co-&lt;name&gt;/</code> shape, this is a question of "which mountain to climb," not "which mountain you end up on."</p>
+
+  <div class="video-refs">
+    <h3 id="videos">Reference Videos</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=kFey6jjUeJQ" target="_blank">Simple AI Agent Workflow in 14 min</a><span class="video-meta">(14:38)</span> — A hands-on tutorial building an AI agent workflow from scratch in 14 minutes</li>
+      <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=OydayHQWknI" target="_blank">An AI Design Agent That Actually Works</a><span class="video-meta">(13:58)</span> — A Korean-language demo of building a prototype combining an AI agent with UX tools</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../intro/10_ProjectUpgrade_Chapter_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Chapter 10 · L2 Project Upgrade</div></a>
+    <a href="12_VariantAdvanced_Examples_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 12 · New Variant Promotion Hands-on Examples</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

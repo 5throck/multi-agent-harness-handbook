@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 4 §2-A · Multi-Agent Team Practice — A Claude-Centered Scenario-Based Learning Guide - part of the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 4 §2-A · Multi-Agent Team Practice — A Claude-Centered Scenario-Based Learning Guide</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 Situation'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ Under the Hood'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 Tip'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ Caution'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar ── -->
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Ch.4 §2-A · Claude-Centered Practice</div>
+  <a href="#setup">🛠 Setup: Installing the Required Programs</a>
+  <a href="#beginner"><span class="dot dot-g"></span>Beginner (Getting Started)</a>
+
+  <div class="nav-group">Beginner Scenarios</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 Creating and Calling Your First Custom Subagent</a>
+
+  <div class="nav-group">Intermediate Scenarios</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 A Two-Stage writer → reviewer Pipeline</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 Observing How Team Composition and Workflow Change with the Request</a>
+
+  <div class="nav-group">Advanced Scenarios</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 Running Independent Tasks in Parallel — Agent Manager vs. Agent Teams</a>
+  <a href="#scenario-4"><span class="dot dot-p"></span>P-2 Building Cost Intuition by Comparing Model Tiers</a>
+  <a href="#cleanup">🧹 Wrapping Up the Practice Session</a>
+
+  <div class="nav-group">Quick Links</div>
+  <a href="04_Practice_Manual_en.html">📖 Ch.4 §1 Reference →</a>
+  <a href="04_Practice_Examples_B_en.html">🖥 Ch.4 §2-B Antigravity-Centered Practice →</a>
+</nav>
+
+<!-- ── Main content ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 4 §2-A</div>
+  <h1>Chapter 4 §2-A · Multi-Agent Team Practice (Claude-Centered)</h1>
+  <p class="subtitle">A hands-on guide that starts from an empty practice folder and walks through scenarios centered on Claude App/Claude Code — guided primarily through the Desktop app, with CLI equivalents introduced alongside &nbsp;|&nbsp; <a href="04_Practice_Manual_en.html">← Back to the Ch.4 §1 Reference Document</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_en.html">Ch.4 §2-B Antigravity-Centered →</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target Version/Scope</span><span class="vvalue">Claude Code/App 2026-07 release — this guide focuses on Claude; for the Antigravity equivalent see Ch.4 §2-B</span></div>
+    <div class="version-row"><span class="vlabel">Purpose of This File</span><span class="vvalue">Provides five hands-on exercises to walk through in Claude App/Code: defining and calling subagents, sequential pipelines, dynamic team composition and workflow combinations, parallel execution, and model tier comparison</span></div>
+    <div class="version-row"><span class="vlabel">Reference Documents</span><span class="vvalue"><a href="04_Practice_Manual_en.html">Ch.4 §1 Common</a> · <a href="04_Practice_Manual_A_en.html">Ch.4 §1-A Claude Details</a> · <a href="04_Practice_Manual_B_en.html">Ch.4 §1-B Antigravity Details</a> — linked from each scenario</span></div>
+    <div class="version-row"><span class="vlabel">Written On</span><span class="vvalue">July 14, 2026</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>The Principle Behind the Entire Course</strong> — Every scenario below follows the same order: first write the subagent's role as a tool-neutral <code>AGENTS.md</code> specification, then "implement" that specification in the Claude family as a predefined subagent file (see Ch.2 §5 AGENTS.md). Confirming by hand that there is one specification but the execution method differs per tool is the core goal of this exercise. For the Antigravity equivalent, see <a href="04_Practice_Examples_B_en.html">Ch.4 §2-B</a>.
+  </div>
+
+  <!-- ══════════════════════════════ Pre-Practice Setup ══════════════════════════════ -->
+  <h2 id="setup">Setup: Installing the Required Programs</h2>
+  <p>The exercises below focus on Claude App (Desktop) and Claude Code (CLI). If your local environment doesn't have these tools yet, the environment setup automation included with this handbook — the <a href="../setup/SETUP_ko.html">setup guide</a> — will automatically install exactly what this chapter's exercises need. Just follow the instructions to download and run the script locally.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 Before You Install — Things to Check</div>
+    <p class="text-dim" style="margin-bottom:10px;">Before running the script, read the <a href="../setup/SETUP_CHECKLIST_ko.html">pre-installation checklist</a> first. It lists the following prerequisites.</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>An active Claude Pro/Max subscription <strong>and</strong> a Google account for Antigravity access (this must be a subscription/account-based plan, not an individual API key)</li>
+      <li>A GitHub account you can use to run <code>gh auth login</code></li>
+      <li>At least 5GB of free disk space</li>
+      <li>Administrator or sudo privileges</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>If you don't already have a GitHub account</strong><br>
+    ① Go to <a href="https://github.com/signup" target="_blank">github.com/signup</a> in your browser.<br>
+    ② Enter your email address, password, and username — the username is used as-is in the repository URL later (<code>github.com/&lt;username&gt;/...</code>), so choose it carefully.<br>
+    ③ Complete the puzzle/code verification to prevent automated sign-ups.<br>
+    ④ Open the verification email sent to the address you signed up with and complete <strong>email verification</strong> — skipping this step can block <code>gh auth login</code> or repository creation later.<br>
+    ⑤ Signing up for the Free plan is enough — this handbook's exercises and PR practice don't require a paid plan.<br>
+    Once sign-up is complete, the <a href="https://cli.github.com/" target="_blank">GitHub CLI (<code>gh</code>)</a> is installed together as part of the setup script above, and the <code>gh auth login</code> command below connects your terminal to that account.
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# Follow the prompts: choose GitHub.com → choose HTTPS → choose Login with a web browser (recommended)
+# When the browser opens, log in with the account you just created and confirm the authentication code</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <h3>Installing on Windows</h3>
+  <p>Since this handbook's path notation is Windows-based, Windows users should download <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>, place it in a dedicated practice folder (e.g., <code>harness-lab/setup/</code>), run PowerShell <strong>as Administrator</strong>, and then run the command below.</p>
+  <div class="tip-box">
+    <strong>How to Open PowerShell as Administrator</strong><br>
+    ① Open the Start menu and search for <code>PowerShell</code>.<br>
+    ② <strong>Right-click</strong> on "Windows PowerShell" in the search results.<br>
+    ③ Select <strong>"Run as administrator"</strong> from the menu that appears.<br>
+    ④ When the User Account Control (UAC) prompt appears, click <strong>"Yes"</strong> to approve.<br>
+    If the title bar shows something like <code>Administrator: Windows PowerShell</code>, you've opened it correctly. Some steps, like winget installs, may error out or silently skip without administrator privileges.
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup
+.\setup-windows.ps1
+# Optional flags: -WSL2, -WezTerm, -Docker, -Force (reinstall tools even if already installed)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>After the script finishes, you must fully close and reopen your terminal for the PATH changes to take effect.</p>
+
+  <h3>Installing on macOS / Linux</h3>
+  <p>On macOS, download and use <a href="../setup/setup-mac.sh">setup-mac.sh</a>; on Linux, use <a href="../setup/setup-linux.sh">setup-linux.sh</a>. Both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
+  <div style="position:relative">
+  <pre class="code-block"># macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <h3>Verifying the Installation</h3>
+  <p>Regardless of your OS, running <a href="../setup/setup-common.ts">setup-common.ts</a> with <code>bun</code> prints a checklist table showing your installation status. If every item shows ✅, you're ready to proceed with the exercises below.</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <p>Among the tools this project installs, the ones directly relevant to this chapter's four-tool exercises are: Claude App (Desktop), <code>claude</code> (Claude Code CLI), Antigravity (Desktop), <code>agy</code> (Antigravity CLI), <code>bun</code> (needed to run subagents based on <code>.claude/agents/*.md</code>), and <code>gh</code> (GitHub CLI), which is used in later chapters as well.</p>
+
+  <div class="tip-box">
+    The Antigravity CLI (<code>agy</code>) is a single compiled binary that requires no separate runtime installation — just unzip it and put it on PATH, and it's ready to run. Older guidance floating around, such as "install the Gemini CLI globally via npm," is no longer valid. Check <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a> for the current installation instructions.
+  </div>
+
+  <div class="tip-box">
+    If you run into problems during installation, logs are saved to <code>%USERPROFILE%\workshop-setup-logs\</code> on Windows. Check these logs first when troubleshooting.
+  </div>
+
+  <!-- ══════════════════════════════ Beginner ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● Beginner</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">The first step: create a custom subagent and observe it being called from Claude App</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">Beginner</span>
+      <strong class="card-title">Creating and Calling Your First Custom Subagent</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        A developer trying the harness for the first time creates a fresh, empty practice folder called <code>harness-lab/</code>, first writes a <code>reviewer</code> role as a tool-neutral <code>AGENTS.md</code> specification, then "implements" it as a predefined subagent in Claude App (Desktop) and calls it. Since this folder is dedicated to practice, it won't get mixed up with other project files.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Ch.2)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-1">Defining a Subagent</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-2">Calling a Subagent</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Step-by-Step</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① Create and Enter the Practice Folder</strong>
+            <p>Create a new folder named <code>harness-lab</code> under your current folder and move into it. Every command from here on runs inside this folder.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② Write the Common Role Specification — <code>AGENTS.md</code></strong>
+            <p>Write the <code>reviewer</code> role as plain text, free of any tool-specific wording, so it reads with the same meaning whether opened in Claude, Antigravity, or any other tool that supports the AGENTS.md standard. This single file becomes the sole source of truth for "what this role does," and the two tools below merely implement that source, each in its own way. On macOS/Linux/Git Bash, run the command as-is.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement suggestions
+Permissions: Read-only — does not modify the file directly.
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong>, the <code>cat</code> command itself is an alias for <code>Get-Content</code> and can be used as-is for reading files. However, it doesn't support the heredoc syntax (<code>&lt;&lt; 'EOF'</code>) for entering multiple lines directly, so build the same content as a quoted here-string (<code>@'...'@</code>) and write it to the file with <code>Set-Content</code>.</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement suggestions
+Permissions: Read-only — does not modify the file directly.
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Implementing the AGENTS.md Spec as a Predefined Subagent</div>
+        <p class="text-dim" style="margin-bottom:10px;">Don't create the file ahead of time in a terminal or separate editor. Just follow the three steps below — every gray code box is meant to be copied as-is with the "Copy" button and pasted in.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Open the Project in Claude App</strong>
+              <p>Launch Claude App (Desktop) and open the <code>harness-lab/</code> folder you just created as a project.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Request Subagent Creation — Paste the Text Below into the Chat Box and Send</strong>
+              <div style="position:relative">
+                <pre class="code-block">Following the reviewer role spec written in AGENTS.md exactly, create a reviewer subagent at .claude/agents/reviewer.md. Allow only the Read and Grep tools, and set the model to sonnet.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                Claude App reads the "role/input/output/permissions" spec in AGENTS.md and directly creates <code>.claude/agents/reviewer.md</code> using the Write tool, transferring the content into the YAML frontmatter (<code>description</code>, <code>tools</code>) and system prompt — the spec stays the same, only the format has been adapted to the tool. Once creation finishes, compare the file contents shown in the chat against AGENTS.md.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Create a Target File and Call the Subagent — Continue Pasting in the Same Chat and Send</strong>
+              <div style="position:relative">
+                <pre class="code-block">Create a file called notes.txt containing the text "This project is very good. This is very good." Then use the reviewer subagent to review notes.txt.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                Claude App calls the <code>Agent</code> (Task) tool with <code>description="Review notes.txt"</code> and <code>subagent_type="reviewer"</code>. The screen shows, in order, the subagent being spawned and, once its work is done, a summary result returned to the main session.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p class="text-dim" style="margin-top:10px;"><strong>The same applies in Claude Code (CLI)</strong> — running <code>claude</code> in a terminal and pasting the same sentences from steps ②③ into the chat causes the command-line interface (CLI) to read the AGENTS.md spec the same way and directly create/call <code>.claude/agents/reviewer.md</code>. The one difference in the CLI is that automation hooks such as <code>PostToolUse</code> fire additionally (hooks don't fire in the App).</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>Verifying the Result</strong> — Check whether <code>harness-lab/.claude/agents/reviewer.md</code> was actually created, and whether its <code>description</code>, <code>tools</code>, and <code>model</code> fields match what you requested. The final response should show a list divided into typos, logical gaps, and improvement suggestions — if the reviewer responds with something like "I fixed it," the <code>tools</code> restriction was applied incorrectly.
+      </div>
+
+      <div class="warning-box">
+        <strong>A Common Failure</strong> — If the subagent is never called and the main session reviews notes.txt directly instead, it usually means step ②'s sentence was missing the phrase "with the reviewer subagent," or step ③ was requested before creation of <code>.claude/agents/reviewer.md</code> finished. Confirm that file creation finished in step ②'s response before sending step ③.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Intermediate ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● Intermediate</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">A practical pattern where the main session acts as an orchestrator directing two specialist agents — writer and reviewer — in sequence</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">Intermediate</span>
+      <strong class="card-title">A Two-Stage writer → reviewer Pipeline</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        A practitioner who has finished G-1 writes a second role, <code>writer</code>, in the same <code>harness-lab/</code> folder, following the same approach as G-1 by first specifying it in <code>AGENTS.md</code>, then implementing it as a predefined subagent in Claude App. They then have it direct a pipeline in which writer drafts first and reviewer critiques the result, in strict order.
+      </div>
+
+      <div class="note">
+        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+          </defs>
+          <!-- Box 1: User request (gray) -->
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="var(--text-dim)" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="var(--text-dim)">User Request</text>
+          <!-- Arrow 1 -->
+          <line x1="115" y1="43" x2="150" y2="43" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <!-- Box 2: writer.md (blue) -->
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent)">writer.md</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent)">Draft Writing</text>
+          <!-- Arrow 2 -->
+          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <!-- Return arrow (curved, below) -->
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="var(--accent-amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="var(--accent-amber)"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-amber)">Returns to writer if revisions are requested</text>
+          <!-- Box 3: reviewer.md (green) -->
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-green)" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-green)">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-green)">Feedback/Approval</text>
+          <!-- Arrow 3 -->
+          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-purple)" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <!-- Box 4: Final result (purple) -->
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-purple)" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-purple)">Final Result</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-purple)">Complete</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Ch.2)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-1">Defining a Subagent</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-2">Calling a Subagent</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Step-by-Step</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>Add to the Common Role Specification — Append a writer Entry to <code>AGENTS.md</code></strong>
+            <p>Append the <code>writer</code> role to the same <code>AGENTS.md</code> created in G-1. Leave the reviewer entry as-is and add only the content below. On macOS/Linux/Git Bash, run the command as-is.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+Role: Write a short 3-5 sentence draft on a given topic.
+Input: Topic, path to save the file to
+Output: Draft text file
+Permissions: Write access — saves only to the specified file.
+handoff_to: reviewer (review follows once the draft is done)
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong>, append the here-string with <code>Add-Content</code> (you must use <code>Add-Content</code> rather than <code>Set-Content</code>, which overwrites the file and would erase the reviewer entry).</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+Role: Write a short 3-5 sentence draft on a given topic.
+Input: Topic, path to save the file to
+Output: Draft text file
+Permissions: Write access — saves only to the specified file.
+handoff_to: reviewer (review follows once the draft is done)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — The Main Session Dispatches Agent Calls Sequentially</div>
+        <p class="text-dim" style="margin-bottom:10px;">As in G-1, don't prepare any files in advance. Continue in the same <code>harness-lab/</code> chat you opened for G-1.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Request writer Subagent Creation — Paste the Text Below into the Chat Box and Send</strong>
+              <div style="position:relative">
+                <pre class="code-block">Following the writer role spec written in AGENTS.md exactly, create a writer subagent at .claude/agents/writer.md. Allow the Write and Read tools, and set the model to sonnet.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                Claude App reads the writer spec in AGENTS.md and directly creates <code>.claude/agents/writer.md</code> using the Write tool. It sits alongside the <code>reviewer.md</code> already created in G-1, inside the same <code>.claude/agents/</code> folder — the <code>handoff_to: reviewer</code> entry in AGENTS.md actually plays out in the next step.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Request the writer → reviewer Sequential Pipeline — Continue Pasting in the Same Chat and Send</strong>
+              <div style="position:relative">
+                <pre class="code-block">Have the writer subagent write a draft.txt draft on the topic 'The Advantages of Remote Work,' and once that's done, have the reviewer subagent review draft.txt. Proceed through the two stages in order.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                The main session first calls <code>Agent</code> with <code>subagent_type="writer"</code> to generate <code>draft.txt</code>, and only after that result comes back does it send the <code>subagent_type="reviewer"</code> call. Coordinating the dependency between the two specialists is the main session's job, not the subagents'.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          Calling writer and reviewer in parallel (both in one message) can make reviewer try to review a draft.txt that doesn't exist yet and fail — tasks with a dependency must always be requested as sequential calls (the key is explicitly stating "proceed in order," as in step ② above).
+        </div>
+        <div class="tip-box">
+          <strong>Verifying the Result</strong> — The chat should show two subagent spawns in this order: <code>writer</code> call → complete → <code>reviewer</code> call → complete. If it only shows up once, the orchestrator collapsed the pipeline into a single step, so double-check whether your request sentence explicitly said "in order." After completion, also open <code>harness-lab/draft.txt</code> to confirm the draft was actually saved.
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>The same applies in Claude Code (CLI)</strong> — using the same <code>writer.md</code>/<code>reviewer.md</code> as-is and pasting the sentences from steps ①② into a terminal produces the same sequential dispatch.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">Intermediate</span>
+      <strong class="card-title">Observing How Team Composition and Workflow Change with the Request</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        This scenario lets you see, firsthand, the "dynamic team composition" and "combination of different workflows" covered in Ch.2 §4b. Leave the two subagents created in D-1, <code>writer</code> and <code>reviewer</code>, exactly as they are, and simply vary the nature of the request to observe who the orchestrator actually calls, how many times, and in what order — the key point is that you never define a new subagent again.
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >A Dynamic Routing Branch Diagram — Same Team, Different Requests</div>
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+            <marker id="drArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="drArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+          </defs>
+
+          <!-- Row 1: Request A → reviewer only -->
+          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">Request A</text>
+          <rect x="15" y="30" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Simple Review</text>
+          <line x1="95" y1="46" x2="145" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- reviewer box -->
+          <rect x="150" y="30" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">×1</text>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- Result -->
+          <rect x="325" y="30" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Result</text>
+          <!-- Label: simple -->
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">Single Pass</text>
+
+          <!-- Row 2: Request B → writer → reviewer (pipeline) -->
+          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">Request B</text>
+          <rect x="15" y="105" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Draft + Review</text>
+          <line x1="95" y1="121" x2="145" y2="121" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- writer box -->
+          <rect x="150" y="105" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">×1</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-purple)" stroke-width="1.2" marker-end="url(#drArrowP)"/>
+          <!-- reviewer box -->
+          <rect x="325" y="105" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">×1</text>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- Result -->
+          <rect x="485" y="105" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Result</text>
+          <!-- Label: pipeline -->
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-purple)" font-weight="600">Pipeline</text>
+
+          <!-- Row 3: Request C → writer → reviewer×2 (fan-out) -->
+          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">Request C</text>
+          <rect x="15" y="180" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">Draft +</text>
+          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">Multi-Review</text>
+          <line x1="95" y1="196" x2="145" y2="196" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- writer box -->
+          <rect x="150" y="180" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">×1</text>
+          <!-- Fan-out to 2 reviewers -->
+          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- reviewer 1 (grammar) -->
+          <rect x="315" y="170" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="370" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">Grammar Angle</text>
+          <!-- reviewer 2 (logic) -->
+          <rect x="315" y="206" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">Logic Angle</text>
+          <!-- Merge to result -->
+          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <rect x="485" y="182" width="80" height="30" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Result</text>
+          <!-- Label: fan-out -->
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">Fan-Out</text>
+
+          <!-- Bottom note -->
+          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ The subagents are defined once — the orchestrator routes dynamically per request</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s4b">Dynamic Team Composition and Diverse Workflows</a>
+        </div>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Same Team, Three Different Requests</div>
+        <p class="text-dim" style="margin-bottom:10px;">Continue in the same chat where you finished D-1. Pay close attention each time to which subagent gets called, how many times, as shown on screen.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① A Simple Request — A Case That Only Needs reviewer</strong>
+              <div style="position:relative">
+                <pre class="code-block">Just skim draft.txt for typos.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                The orchestrator decides <code>writer</code> isn't needed for this request and calls only <code>reviewer</code>. Even with the same team (writer+reviewer) defined, this is the simplest example showing that the orchestrator decides who's actually deployed for each request as it goes.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② A Complex Request — Combining writer and reviewer with Two Perspectives</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a new draft in draft2.txt on the topic 'The Four-Day Workweek.' Once the draft is done, have it independently reviewed from a grammar perspective and a logic perspective simultaneously.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <div class="flow-box">
+                This time, after one <code>writer</code> call (the first stage of the pipeline), <code>reviewer</code> is called twice at once (fan-out), each with different instructions — "grammar perspective" and "logic perspective." You can see the pipeline (writer → reviewer) and fan-out (reviewer ×2 running concurrently) orchestration patterns combined within a single request — the same two subagents produced a workflow with a completely different shape than in ①.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          Comparing ① and ② side by side makes it clear that the "team roster" (which subagents you've defined) and the "actual composition deployed for this task" (who gets called how many times, in what order) are two different layers. The former is fixed in advance in <code>.claude/agents/</code>, but the latter is decided fresh with every request.
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>The same applies in Claude Code (CLI)</strong> — using the same <code>writer.md</code>/<code>reviewer.md</code> as-is and pasting the sentences from steps ①② into a terminal produces the same behavior.</p>
+        <div class="warning-box">
+          <strong>A Common Failure</strong> — If reviewer only gets called once in ② even though you said "review simultaneously," it's likely your request sentence didn't clearly distinguish the two perspectives, like "grammar perspective and logic perspective." Try rephrasing with the perspectives split out more concretely.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See Also:</strong> <a href="../concepts/02_Concepts_Chapter_en.html#s4b">Ch.2 §4b — Dynamic Team Composition and Diverse Workflows</a>, <a href="04_Practice_Manual_en.html#section-3">Ch.4 §1 Reference — Parallel Execution</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Advanced ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● Advanced</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">Running writer and reviewer concurrently against two independent files — parallel operation with Claude Code Agent Teams</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">Advanced</span>
+      <strong class="card-title">Running Independent Tasks in Parallel — Agent Manager vs. Agent Teams</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        A practitioner who has finished through D-1 tries running two independent tasks with no dependency between them — drafting <code>topic-a.txt</code> and <code>topic-b.txt</code> — in parallel using Claude Code Agent Teams.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-3">Parallel Execution — Scaling Up to a Team</a>
+          <a class="cmd-chip" href="04_Practice_Manual_en.html#section-3">Parallel Execution</a>
+        </div>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams, teammateMode: in-process</div>
+        <p class="text-dim" style="margin-bottom:10px;">Enable the experimental Agent Teams feature in the same <code>harness-lab/</code> folder. In the Desktop App, <code>teammateMode</code> must be <code>in-process</code> (<code>tmux</code> is not supported).</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Write the Config File (Terminal) — Create a New <code>.claude/settings.json</code> If You Don't Have One, or Merge These Two Keys If You Do</strong>
+              <p class="text-dim" style="margin:6px 0;">On macOS/Linux/Git Bash, run the command as-is.</p>
+              <div class="warning-box">
+                This command overwrites the entire <code>.claude/settings.json</code> file. If the file already contains other settings, all existing content will be lost, so back it up beforehand or merge the content below manually if you need to keep anything.
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">cat > .claude/settings.json << 'EOF'
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "teammateMode": "in-process"
+}
+EOF</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong>, create the same file with a here-string.</p>
+              <div style="position:relative">
+                <pre class="code-block">@'
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "teammateMode": "in-process"
+}
+'@ | Set-Content .claude/settings.json</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Restart Claude App</strong>
+              <p>Fully quit and reopen Claude App for the settings to take effect.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Request Parallel Teammate Spawning — Paste the Text Below into the Chat Box and Send</strong>
+              <div style="position:relative">
+                <pre class="code-block">Spawn two writer teammates in parallel — have one write a draft in topic-a.txt on 'remote work' and the other write a draft in topic-b.txt on 'the four-day workweek' at the same time. Once each file is done, have a reviewer teammate review it, and show me the shared task list too.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          With Agent Teams enabled, multiple Claude instances run in parallel as teammates, with each teammate's tasks registered and its status updated in a shared task list. Since the two writer teammates have no dependency between <code>topic-a.txt</code> and <code>topic-b.txt</code>, they proceed at the same time, and teammates can also exchange direct messages via <code>SendMessage</code>. Note, however, that some keyboard navigation (such as Shift+Down) is limited in the Desktop App.
+        </div>
+        <div class="tip-box">
+          To keep task lists from getting tangled, it's safer to assign completely separate files or directories to teammates you spawn in parallel from the start.
+        </div>
+        <div class="warning-box">
+          <strong>A Common Failure</strong> — If you can't find the Agent Teams feature or teammates never spawn, it's usually one of two things: ① whether <code>.claude/settings.json</code> was saved relative to the <code>harness-lab/</code> folder (saving it elsewhere means it won't be recognized), or ② whether Claude App was fully restarted in step ②. A JSON syntax error (like a missing comma) causing the settings file to be silently ignored is also common, so open it in an editor and double-check the syntax.
+        </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >Before/After Permission Settings — The Principle of Least Privilege</div>
+        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+          </defs>
+
+          <!-- BEFORE section -->
+          <text x="140" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent-red)">Before — All Tools Allowed</text>
+          <!-- Wide open box -->
+          <rect x="30" y="28" width="220" height="80" rx="8" fill="#ffebe9" stroke="#ff8182" stroke-width="1.5"/>
+          <text x="140" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" fill="var(--accent-red)">tools: [all tools]</text>
+          <!-- Tool icons row -->
+          <rect x="50" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="72" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Read</text>
+          <rect x="100" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="122" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Write</text>
+          <rect x="150" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="172" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Bash</text>
+          <rect x="50" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="72" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Edit</text>
+          <rect x="100" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="122" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Grep</text>
+          <rect x="150" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="172" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Push</text>
+          <!-- Attack surface label -->
+          <text x="140" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="700" fill="var(--accent-red)">Attack Surface: Wide</text>
+
+          <!-- Arrow between -->
+          <line x1="260" y1="68" x2="325" y2="68" stroke="var(--text-dim)" stroke-width="2" marker-end="url(#paArrow)"/>
+          <text x="293" y="60" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="700" fill="var(--accent)">Least Privilege</text>
+
+          <!-- AFTER section -->
+          <text x="460" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent-green)">After — Only What's Needed</text>
+          <!-- Restricted box -->
+          <rect x="340" y="28" width="240" height="80" rx="8" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.5"/>
+          <text x="460" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" fill="#116329">tools: [Read, Grep]</text>
+          <!-- Tool icons row - only 2 -->
+          <rect x="385" y="62" width="55" height="20" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="412" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="#fff">Read</text>
+          <rect x="445" y="62" width="55" height="20" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="472" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="#fff">Grep</text>
+          <!-- Grayed out tools -->
+          <rect x="385" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
+          <text x="412" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="#ffffff">Write</text>
+          <rect x="445" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
+          <text x="472" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="#ffffff">Bash</text>
+          <text x="508" y="100" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="14" fill="#d0d7de">…</text>
+          <!-- Attack surface label -->
+          <text x="460" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="700" fill="#116329">Attack Surface: Narrow</text>
+
+          <!-- Bottom comparison bar -->
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-red)" opacity="0.3"/>
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
+          <text x="140" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="700" fill="#fff">Risk Scope: 100%</text>
+
+          <rect x="340" y="148" width="88" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
+          <text x="384" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="700" fill="#fff">Risk: 33%</text>
+
+          <!-- Reduction arrow -->
+          <text x="300" y="178" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent-green)">67% Reduction in Risk Scope</text>
+          <text x="300" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--text-dim)">reviewer can't use it in the first place, so mistakes never happen</text>
+        </svg>
+      </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>The same applies in Claude Code (CLI)</strong> — the same settings and the same request sentence work identically. The one difference from the Desktop App is that the CLI additionally lets you choose <code>teammateMode: "tmux"</code>, letting you view each teammate's screen side-by-side in tmux split panes.</p>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See Also:</strong> <a href="04_Practice_Manual_en.html#section-3">Ch.4 §1 Reference — Parallel Execution (Comparing Four Tools)</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-4">
+    <div class="card-header">
+      <span class="card-id">P-2</span>
+      <span class="badge badge-p">Advanced</span>
+      <strong class="card-title">Building Cost Intuition by Comparing Model Tiers</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        This scenario lets you experience firsthand, before hearing the numbers explained, what real difference the model tiers (high/medium/low) covered in detail in Chapter 8 actually make. Call the same reviewer subagent three times, changing only the model, and compare response speed and result quality with your own eyes.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../intro/05_Intro_Chapter_en.html#s3">Model Tiers (Ch.5)</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >Model Tier Comparison Chart</div>
+        <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <!-- Table header -->
+          <rect x="0" y="0" width="520" height="30" rx="6" fill="#eef1f4"/>
+          <text x="52" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Model</text>
+          <text x="178" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Speed</text>
+          <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Cost</text>
+          <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Quality</text>
+
+          <!-- Row 1: haiku -->
+          <rect x="0" y="34" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="52" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent)">haiku</text>
+          <!-- Speed bar: fast -->
+          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Fast</text>
+          <!-- Cost bar: low -->
+          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
+          <text x="304" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Low</text>
+          <!-- Quality bar: basic -->
+          <rect x="400" y="46" width="65" height="16" rx="4" fill="var(--accent-amber)" opacity="0.6"/>
+          <text x="433" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Basic</text>
+          <!-- Quality description -->
+          <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">Routine Tasks</text>
+          <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">Typo Checks</text>
+
+          <!-- Row 2: sonnet -->
+          <rect x="0" y="88" width="520" height="50" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="52" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-purple)">sonnet</text>
+          <!-- Speed bar: medium -->
+          <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Medium</text>
+          <!-- Cost bar: medium -->
+          <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="315" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Medium</text>
+          <!-- Quality bar: good -->
+          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-purple)" opacity="0.6"/>
+          <text x="450" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Good</text>
+          <!-- Quality description -->
+          <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">General Review</text>
+          <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">Code Review</text>
+
+          <!-- Row 3: opus -->
+          <rect x="0" y="142" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="52" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-red)">opus</text>
+          <!-- Speed bar: slow -->
+          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
+          <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Slow</text>
+          <!-- Cost bar: high -->
+          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
+          <text x="338" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">High</text>
+          <!-- Quality bar: excellent -->
+          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="468" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">Excellent</text>
+          <!-- Quality description -->
+          <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">Complex Logic</text>
+          <text x="490" y="173" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">Architecture</text>
+
+          <!-- Bottom note -->
+          <text x="260" y="212" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ Light roles = fast models, heavy judgment = high-tier models — assign the right tool for the job</text>
+        </svg>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Same File, Review Requests with Three Different Models</div>
+        <p class="text-dim" style="margin-bottom:10px;">Prepare a piece of writing that's a bit more complex than G-1's <code>notes.txt</code> and contains a logical flaw. Paste the text below into the chat box as-is.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Prepare the Target File</strong>
+              <div style="position:relative">
+                <pre class="code-block">Create a file called argument.txt and write the following into it: "Remote work is always more productive than office work. This is because people who work remotely say remote work is good. Therefore, every company should switch entirely to remote work."</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Review with the haiku Tier</strong>
+              <p>Paste the text below into the chat box as-is. Claude App changes the <code>model</code> field in <code>reviewer.md</code> to <code>haiku</code>, then performs the review.</p>
+              <div style="position:relative">
+                <pre class="code-block">Change the model field in .claude/agents/reviewer.md to haiku. Then use the reviewer subagent to review argument.txt.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Repeat the Same Request with the sonnet Tier</strong>
+              <p>The same way, change <code>model</code> to <code>sonnet</code> and review again. Compare against the haiku result to see whether it precisely identifies logical flaws such as circular reasoning.</p>
+              <div style="position:relative">
+                <pre class="code-block">Change the model field in .claude/agents/reviewer.md to sonnet. Then use the reviewer subagent to review argument.txt.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ Repeat the Same Request with the opus Tier</strong>
+              <p>The same way, change <code>model</code> to <code>opus</code> and review again. Note how the response time and depth of insight differ from ②③.</p>
+              <div style="position:relative">
+                <pre class="code-block">Change the model field in .claude/agents/reviewer.md to opus. Then use the reviewer subagent to review argument.txt.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          For a simple typo check, the results from the three models barely differ, but for a task like this one — where you need to identify a flaw in the structure of an argument — the lower the tier, the more pronounced the tendency to miss the circular reasoning as circular reasoning and instead flag only surface-level phrasing. Conversely, haiku responds fastest of the three. Experiencing the speed-versus-depth trade-off firsthand makes it much clearer why the principle explained in Chapter 5 — "the heavier the judgment a role requires, the higher the tier; the more routine the task, the lower the tier" — exists in the first place.
+        </div>
+        <div class="tip-box">
+          Just ask Claude App to "change the model field" each time — there's no need to open the definition file yourself; Claude App edits it and performs the review on its own.
+        </div>
+        <div class="warning-box">
+          <strong>A Common Failure</strong> — If the <code>model</code> field contains a value that doesn't exist (a typo, wrong capitalization, etc.), the call may fail or silently fall back to a default model. After finishing ②③④, open <code>.claude/agents/reviewer.md</code> directly and confirm the <code>model:</code> value exactly matches the intended <code>haiku</code>/<code>sonnet</code>/<code>opus</code>.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See Also:</strong> <a href="../intro/05_Intro_Chapter_en.html#s3">Ch.5 §templates and variant — Model Tiering</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Wrapping Up the Practice Session ══════════════════════════════ -->
+  <h2 id="cleanup">Wrapping Up the Practice Session</h2>
+  <p>Once you've finished all five scenarios, decide what to do with the <code>harness-lab/</code> folder. Since the next chapter (Ch.5) uses a new practice folder, you don't have to keep it, but if you'd like to compare the <code>AGENTS.md</code> and subagent definitions you've built so far, it's worth skimming through them once before deleting.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">🧹 Cleaning Up the harness-lab Folder</div>
+    <p class="text-dim" style="margin-bottom:10px;">If you no longer need it, delete the entire folder. On macOS/Linux/Git Bash, run the command as-is.</p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+rm -rf harness-lab</pre>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong></p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+Remove-Item -Recurse -Force harness-lab</pre>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>If You'd Like to Keep It</strong> — Instead of deleting the folder, you can leave a local commit as a record with <code>git init && git add -A && git commit -m "harness-lab practice record"</code>. Keep it around for reference afterward, and start the next chapter's exercises in a separate new folder.
+  </div>
+
+  <div class="warning-box">
+    The <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code> flag turned on in <code>.claude/settings.json</code> in P-1 applies only to the <code>harness-lab/</code> folder, so it disappears along with the folder if you delete it. If you want to keep using Agent Teams in other projects, you'll need to add the same setting separately to that project's <code>.claude/settings.json</code>.
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">Related Videos</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=AJpK3YTTKZ4" target="_blank">Introducing Claude Code</a><span class="video-meta">(3:55)</span> — Anthropic's official Claude Code introduction video</li>
+    <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=RywmhLTFeFk" target="_blank">The Complete Claude Code Guide: How to Use Claude Code for Beginners in 2026</a><span class="video-meta">(18:42)</span> — A detailed Korean-language guide to using Claude Code</li>
+  </ul>
+</div>
+
+  <hr>
+  <p class="text-dim" style="text-align: center;">
+    Based on Claude Code/App 2026-07 | Written July 14, 2026<br>
+    <a href="04_Practice_Manual_en.html">← Ch.4 §1 Multi-Agent Team Usage Reference</a> &nbsp;·&nbsp; <a href="04_Practice_Examples_B_en.html">Ch.4 §2-B Antigravity-Centered Practice</a> &nbsp;·&nbsp; <a href="../intro/05_Intro_Chapter_en.html">Ch.5 Introduction to ai-workspace-standards →</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_A_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch.4 §1-A · Claude Details</div></a>
+    <div class="branch">
+      <div class="branch-label">Ch.4 §2</div>
+      <a href="04_Practice_Examples_A_en.html" >Claude (A)</a>
+      <a href="04_Practice_Examples_B_en.html" >Antigravity (B)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Ch.5 · Introduction to ai-workspace-standards</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

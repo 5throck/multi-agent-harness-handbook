@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 13 · Capstone Exercise — Designing Your Own Workflow - Multi-Agent Team Harness Engineering Handbook material.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 13 · Capstone Exercise — Designing Your Own Workflow</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	    .checklist .ct { color: var(--badge-green-fg); text-transform: uppercase; letter-spacing: .04em; }
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 13 · Capstone Exercise</div>
+  <a href="#s1">Goal of This Exercise</a>
+  <a href="#s2">Step 1 — Define the Problem and Design the Team</a>
+  <a href="#s3">Step 2 — Set Guardrails First</a>
+  <a href="#s4">Step 3 — Define Subagents and Implement the Workflow</a>
+  <a href="#s4">Step 4 — Verify and Reflect</a>
+  <a href="#checklist">Completion Checklist</a>
+  <a href="#next-steps">Next Steps After Completion</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../variant-advanced/12_VariantAdvanced_Examples_en.html">Chapter 11 · New Variant Promotion Exercise Example</a>
+  <a href="../glossary/00_Glossary_en.html">Glossary</a>
+  <a href="../faq/00_FAQ_en.html">FAQ</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 13 · Capstone</div>
+  <h1>Capstone Exercise — Designing Your Own Workflow</h1>
+  <p class="lead">This final exercise brings together everything you've learned so far — the concepts (Chapters 2 and 3), the tools (Chapter 4), the operational sense for running a team (Chapter 7), and the workspace structure (Chapters 5 and 8) — into a project you design and run end to end yourself, even at a tiny scale. There is no single correct answer. This chapter guides you not on "what to build," but on "in what order to make decisions so you don't miss anything."</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What You'll Do in This Chapter</div>
+    <ul>
+      <li>Pick one task you actually repeat and reframe it as a mini multi-agent-team problem</li>
+      <li>Decide the guardrails (permissions and approval gates) before building any subagents</li>
+      <li>Implement the orchestrator, specialists, and handoff contract as real files</li>
+      <li>Verify the results and reflect on what differed from the plan</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">Goal of This Exercise</h2>
+  <p>In Chapter 4 §2 you followed a pre-defined scenario (reviewer, writer), and in Chapter 11 you built a variant for a pre-defined domain (co-marketing). This time, you choose both the scenario and the domain yourself. It's fine to keep the scale small — a single five-minute chore you actually repeat every week is enough. What matters is becoming able to explain, in your own words, why you made each decision in this particular order.</p>
+
+  <div class="note">
+    <svg viewBox="0 0 680 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="cap-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+        </marker>
+        <marker id="cap-return" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8b5cf6"/>
+        </marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,sans-serif">
+        <!-- Step 1: Define the problem (blue) -->
+        <rect x="10" y="12" width="130" height="56" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <circle cx="35" cy="30" r="10" fill="#3b82f6"/>
+        <text x="35" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">①</text>
+        <text x="85" y="34" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">Define Problem</text>
+        <text x="75" y="52" text-anchor="middle" font-size="9" fill="#6b7280">See Ch. 2, 3</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="143" y1="40" x2="170" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 2: Design guardrails (orange) -->
+        <rect x="175" y="12" width="130" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+        <circle cx="200" cy="30" r="10" fill="#f59e0b"/>
+        <text x="200" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">②</text>
+        <text x="255" y="34" text-anchor="middle" font-size="12" fill="#92400e" font-weight="700">Design Guardrails</text>
+        <text x="240" y="52" text-anchor="middle" font-size="9" fill="#6b7280">See Ch. 3</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="308" y1="40" x2="335" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 3: Implement agents (green) -->
+        <rect x="340" y="12" width="130" height="56" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+        <circle cx="365" cy="30" r="10" fill="#22c55e"/>
+        <text x="365" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">③</text>
+        <text x="420" y="34" text-anchor="middle" font-size="12" fill="#166534" font-weight="700">Implement Agents</text>
+        <text x="405" y="52" text-anchor="middle" font-size="9" fill="#6b7280">See Ch. 4, 6</text>
+
+        <!-- Arrow 3→4 -->
+        <line x1="473" y1="40" x2="500" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 4: Verify & reflect (purple) -->
+        <rect x="505" y="12" width="130" height="56" rx="8" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5"/>
+        <circle cx="530" cy="30" r="10" fill="#8b5cf6"/>
+        <text x="530" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">④</text>
+        <text x="585" y="34" text-anchor="middle" font-size="12" fill="#5b21b6" font-weight="700">Verify & Reflect</text>
+        <text x="570" y="52" text-anchor="middle" font-size="9" fill="#6b7280">Integrates all chapters</text>
+
+        <!-- Return arrow: ④ → ① -->
+        <path d="M570,71 C570,108 75,108 75,71" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#cap-return)"/>
+        <text x="340" y="106" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="600">Iterate & Improve</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2 id="s2">Step 1 — Define the Problem and Design the Team</h2>
+  <div class="stage">
+    <div class="stage-title">Question 1. What are you repeating?</div>
+    <p>Think of a task you've been doing repeatedly lately. For example: "every week I read meeting notes and pull out just the action items," "I draft a new blog post and check the tone," or "I write a PR description and make sure the checklist is complete."</p>
+  </div>
+  <div class="stage">
+    <div class="stage-title">Question 2. If you handed this task to a single solo agent, which of the three problems from Chapter 1 §2 (limits of a single agent) would show up?</div>
+    <p>Is it context overload (multiple stages getting mixed up in one session)? Role conflict (the writer having to review its own output)? Or lack of parallelism (several independent subtasks)? Your answer here determines the team structure from Chapter 1 §3.</p>
+  </div>
+  <div class="stage">
+    <div class="stage-title">Question 3. How many orchestrators and specialists will you split this into?</div>
+    <p>Sketch out a minimal setup, referring to Chapter 1 §3–§4b. It's fine to have just one specialist — an orchestrator (the main session) plus a single specialist (subagent) already counts as a team. Write down each specialist's input and output in one sentence ("this agent takes X and produces Y").</p>
+  </div>
+
+  <h2 id="s3">Step 2 — Set Guardrails First</h2>
+  <p>Following the principle from Chapter 3, decide permissions <em>before</em> actually building the subagent. Fill in the table below.</p>
+  <div class="note">
+    <strong>What is the minimum this specialist needs to be able to do?</strong> (e.g., read files only / read and write files / call an external API)<br>
+    <strong>Is there any action that must never run without human confirmation?</strong> (Corresponds to the "destructive / externally impactful" tier from Chapter 3 — e.g., actually sending a message, actually committing.)<br>
+    <strong>On failure, should it retry, roll back, or escalate to a human?</strong> (Refer to the retry/rollback/escalation criteria from Chapter 2 §4.)
+  </div>
+  <p>The answers to these three questions become the <code>tools</code> field in the subagent's frontmatter, and the "stop right here" wording you'll include when instructing the orchestrator.</p>
+
+  <h2 id="s4">Step 3 — Define Subagents and Implement the Workflow</h2>
+  <p>Using the same approach as the Chapter 4 §2 exercise, ask Claude App (or Code) directly in chat to create the subagent for you. Below is a blank template — replace the bracketed parts with your own answers and paste it into the chat window.</p>
+  <div class="note">Antigravity CLI (<code>agy</code>) users can follow the same four-step structure. Just write the subagent definition in <code>AGENTS.md</code> instead of <code>.claude/agents/</code>, and assign role-based tasks with the <code>/goal</code> command instead of Claude's Agent tool.</div>
+  <div style="position:relative">
+    <pre class="code-block">Create a subagent named [role name] at .claude/agents/[role name].md.
+[One sentence describing what this agent does]. Allow only [the minimum permissions decided in Step 2]
+for tools, and set model to [the tier chosen using the criteria from Ch. 1 and 5].</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  </div>
+  <p>If you have two or more specialists, create each one the same way as in the D-1 scenario, then explicitly instruct the orchestration mode at the end — e.g., "run these two stages in sequence" or "run them concurrently." Confirm for yourself which one you chose, and, as you learned in Chapter 1 §4b, that this choice depends on the dependency relationships in the request.</p>
+
+  <h2 id="s5">Step 4 — Verify and Reflect</h2>
+  <p>After actually running it once, answer the following questions.</p>
+  <ul>
+    <li>Did the result come out in the expected format (the handoff contract)? If not, was the subagent's <code>description</code> perhaps too vague?</li>
+    <li>Were the guardrails you set in Step 2 actually respected? Did any place end up with a <code>tools</code> scope broader than necessary?</li>
+    <li>If this workflow needs to be repeated regularly, is it worth promoting later into a variant or a reusable skill, as covered in Chapter 11?</li>
+  </ul>
+  <div class="note">Once you complete this reflection, you will have gone through, on your own, the full cycle this handbook has emphasized from the start (<strong>concepts (Ch. 2) → safeguards (Ch. 3) → tools (Ch. 4) → organization/structure (Ch. 5, 7, 8)</strong>). The next time you encounter a similar repetitive task, simply asking these same questions again, in the same order, will let you design a new workflow.</div>
+
+  <h2 id="checklist">Completion Checklist</h2>
+  <div class="checklist">
+    <div class="ct">Self-Check</div>
+    <div class="chk">☐ Defined one repetitive task as a problem</div>
+    <div class="chk">☐ Can explain which limitation of a single agent makes a team necessary</div>
+    <div class="chk">☐ Decided permissions and approval gates before building any subagent</div>
+    <div class="chk">☐ Actually built a subagent and ran it at least once</div>
+    <div class="chk">☐ Verified the results and wrote down what differed from expectations</div>
+    <div class="ct">Reproducibility Check</div>
+    <div class="chk">☐ Ran the same request 2+ times and confirmed the results were consistent</div>
+    <div class="chk">☐ Confirmed the guardrails activate correctly when given abnormal input (empty file, wrong format, etc.)</div>
+    <div class="chk">☐ Compared before/after snapshots to confirm there were no unexpected file changes</div>
+  </div>
+
+  <h2 id="next-steps">Next Steps After Completion</h2>
+  <p>This handbook ends here, but real-world application starts now. Once you apply the workflow you designed today to actual work, it will naturally lead in one of the following three directions.</p>
+  <div class="checklist">
+    <div class="ct">Within This Week</div>
+    <div class="chk">☐ Run the subagent you built today on the actual recurring task once more, and this time share the results with a colleague</div>
+    <div class="chk">☐ Ask one person whether this workflow could be useful for another team in your organization</div>
+    <div class="ct">Once This Workflow Is Established</div>
+    <div class="chk">☐ Consider following the promotion process covered in Chapters 10 and 12 to turn it into a formal variant — so your whole team can reuse it</div>
+    <div class="chk">☐ Learning the L2 project upgrade process from Chapter 8 §5 means you won't have to manually apply every future change to the shared standards</div>
+    <div class="ct">If You Get Stuck</div>
+    <div class="chk">☐ Look up the concept again in the <a href="../glossary/00_Glossary_en.html">Glossary</a></div>
+    <div class="chk">☐ Check the <a href="../faq/00_FAQ_en.html">FAQ</a> for anyone who's hit a similar issue</div>
+  </div>
+  <div class="note">What matters most isn't "memorizing the right answer," but being able to walk through the sequence this handbook has followed — define the problem → check the limitations → design permissions → implement → verify — on your own, every time you face a new repetitive task.</div>
+
+  <div class="chapter-nav">
+    <a href="../variant-advanced/12_VariantAdvanced_Examples_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Chapter 12 · New Variant Promotion Exercise Example</div></a>
+    <a href="../glossary/00_Glossary_en.html" class="next"><div class="dir">Reference →</div><div class="ttl">Glossary</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

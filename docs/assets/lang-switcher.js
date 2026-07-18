@@ -118,8 +118,23 @@
    * instead probe the plain file first and fall back to the `_ko` file.
    * @param {function(string)} callback — invoked with the resolved URL
    */
+  // Most browsers refuse fetch() against file:// URLs (opaque-origin CORS
+  // block), so every HEAD probe below rejects immediately when the page is
+  // opened directly from disk instead of served over http(s). Detect that
+  // case up front and skip probing entirely — otherwise every "does this
+  // variant exist" check resolves to "no", which disables every non-Korean
+  // dropdown option and makes the switcher look completely broken during
+  // local file:// testing even though it works once deployed.
+  var IS_FILE_PROTOCOL = window.location.protocol === 'file:';
+
   var koreanTargetCache = {};
   function resolveKoreanTargetUrl(callback) {
+    if (IS_FILE_PROTOCOL) {
+      // Can't verify existence locally — optimistically prefer the plain
+      // file (the common case) so switching still works for most pages.
+      callback(buildTargetUrl(''));
+      return;
+    }
     var plainUrl = buildTargetUrl('');
     if (koreanTargetCache.hasOwnProperty(plainUrl)) {
       callback(koreanTargetCache[plainUrl]);
@@ -164,7 +179,10 @@
    * @param {function(boolean)} callback
    */
   function checkAvailability(langCode, callback) {
-    if (langCode === '') {
+    if (langCode === '' || IS_FILE_PROTOCOL) {
+      // Under file://, fetch() always rejects (see IS_FILE_PROTOCOL above),
+      // so treat every variant as available rather than disabling every
+      // non-Korean option during local testing.
       callback(true);
       return;
     }

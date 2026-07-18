@@ -167,7 +167,6 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
 
   <h3>실전 예시: PM이 작성한 실행 계획</h3>
   <p>다음은 "agents/pm.md와 스크립트를 업데이트하는 플랫폼 패리티 작업"의 실제 실행 계획 예시다.</p>
-  <div class="table-compare">
   <table>
     <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>
     <tbody>
@@ -178,7 +177,6 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
       <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>sonnet</td><td></td></tr>
     </tbody>
   </table>
-  </div>
   <p><strong>실행 순서</strong>: Sequential — <a href="#platform-parity">플랫폼 패리티</a>를 위해 CLAUDE.md와 GEMINI.md를 함께 업데이트해야 하므로 순차 실행이다. automation-engineer에 low가 배정된 것은 Tier Adjustment Rule에 따른 것이다.</p>
 
   <div class="note">

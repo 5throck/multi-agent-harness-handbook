@@ -1014,9 +1014,9 @@ pre.code-block {
 }
 
 .variant-list { margin: 12px 0; }
-.variant-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.variant-row { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .variant-row:last-child { border-bottom: none; }
-.variant-name { font-weight: 700; font-size: var(--font-size-compact); font-family: var(--font-mono); color: var(--accent-dark); flex-shrink: 0; }
+.variant-name { font-weight: 700; font-size: var(--font-size-compact); font-family: var(--font-mono); color: var(--accent-dark); flex-shrink: 0; min-width: 12ch; }
 
 /* ==========================================================================
    T. Search & Utilities

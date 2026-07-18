@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!--
+  第8章 §3 · AGENTS.md 詳解 — エージェントロスター仕様の構造、作成ガイド、ツール別実装マッピング、検証とライフサイクルの連携
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第8章 §3 · AGENTS.md 詳解 - マルチエージェントハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第8章 §3 · AGENTS.md 詳解</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第8章 §3 · AGENTS.md 詳解</div>
+  <a href="#spec-format" >仕様フォーマット</a>
+  <a href="#impl-mapping">ツール別実装マッピング</a>
+  <a href="#authoring-guide">作成ガイド</a>
+  <a href="#verify-lifecycle">検証とライフサイクル</a>
+  <div class="nav-section">第8章の他の節</div>
+  <a href="08_Intro_Advanced_Deploy_ja.html">§1 · デプロイとSSOT</a>
+  <a href="08_Intro_Advanced_Chapter_ja.html">§2 · ライフサイクル管理</a>
+  <a href="08_Intro_Advanced_Architecture_ja.html">§4 · アーキテクチャ詳解</a>
+  <a href="08_Intro_Advanced_Roadmap_ja.html">§5 · 高度化ロードマップ</a>
+  <div class="nav-section">他の章</div>
+  <a href="05_Intro_Chapter_ja.html">第5章 · ai-workspace-standards 紹介</a>
+  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 企業内マルチエージェントチーム運用</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variant作成</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第8章 §3</div>
+  <h1>AGENTS.md 詳解</h1>
+  <p class="lead">AGENTS.mdの仕様フォーマット、ツール別の実装方式、作成原則、検証手順を整理する。第5章で概念的に紹介したAGENTS.mdを実務の観点から詳しく掘り下げる。</p>
+  <p class="source-line">標準仕様: <a href="https://agents.md/" target="_blank">agents.md</a> · 実習例: <a href="../practice/04_Practice_Examples_A_ja.html">第4章 §2-A</a> / <a href="../practice/04_Practice_Examples_B_ja.html">第4章 §2-B</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">この節で扱うこと</div>
+    <ul>
+      <li>エージェント項目のフィールド構造と意味</li>
+      <li>AGENTS.md(共通仕様)がClaude系とAntigravity系でそれぞれどのように「実装」されるか</li>
+      <li>最小権限の原則とhandoff宣言</li>
+      <li>検証ツール(<code>agent:verify</code>)とライフサイクルの連携</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. 仕様フォーマット
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="spec-format">仕様フォーマット</h2>
+
+  <p>AGENTS.mdの各エージェント項目は、<code>## Agent: {名前}</code>で始まるMarkdownセクションである。このセクション内に役割・入力・出力・権限・handoffなどのフィールドを自由形式で記述する。標準仕様は厳密なスキーマを強制せず、ツールが共通して認識する慣例(convention)に依存する。</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>フィールド</th><th>意味</th><th>必須かどうか</th><th>第4章実習例</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>## Agent: {名前}</code></td>
+        <td>エージェント識別子。Claude系では<code>subagent_type</code>の値と一致して初めて呼び出し可能</td>
+        <td>必須</td>
+        <td><code>## Agent: reviewer</code></td>
+      </tr>
+      <tr>
+        <td><code>役割</code></td>
+        <td>このエージェントが何をするか</td>
+        <td>必須</td>
+        <td>「テキストファイルの誤字脱字、論理的な欠陥、改善点をレビューする」</td>
+      </tr>
+      <tr>
+        <td><code>入力</code></td>
+        <td>どのような入力を受け取るか</td>
+        <td>推奨</td>
+        <td>「レビュー対象のテキストファイルパス」</td>
+      </tr>
+      <tr>
+        <td><code>出力</code></td>
+        <td>どのような出力を出すか</td>
+        <td>推奨</td>
+        <td>「誤字脱字・論理的欠陥・改善点のリスト」</td>
+      </tr>
+      <tr>
+        <td><code>権限</code></td>
+        <td>ファイルアクセスの範囲。最小権限の原則 — 必要なものだけを許可する</td>
+        <td>推奨</td>
+        <td>「読み取り専用 — ファイルを直接修正しない」</td>
+      </tr>
+      <tr>
+        <td><code>handoff_to</code></td>
+        <td>完了後に結果を引き渡す他のエージェント。オーケストレーターが参照する宣言的ヒント</td>
+        <td>任意</td>
+        <td><code>handoff_to: reviewer</code></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>完成例</h3>
+  <p>第4章の実習(G-1、D-1)で作成した2つのエージェントを含むAGENTS.md全体の姿である。</p>
+  <div style="position:relative">
+  <pre class="code-block">## Agent: reviewer
+
+役割: テキストファイルの誤字脱字、論理的な欠陥、改善点をレビューする。
+入力: レビュー対象のテキストファイルパス
+出力: 誤字脱字・論理的欠陥・改善点のリスト
+権限: 読み取り専用 — ファイルを直接修正しない。
+
+## Agent: writer
+
+役割: 与えられたテーマで3〜5文程度の短い草稿を作成する。
+入力: テーマ、保存先のファイルパス
+出力: 草稿テキストファイル
+権限: 書き込み許可 — 指定されたファイルにのみ保存する。
+handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <div class="note">AGENTS.mdはAIツールに向けた指示文ではなく、<strong>人間が定義した複数の役割の登録簿</strong>である。Claude系はこの登録簿を読み込み、ツール別の定義ファイル(<code>.claude/agents/*.md</code>)に「翻訳」し、Antigravity系は登録簿そのものをオーケストレーションが直接読み取り解釈する。</div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. ツール別実装マッピング
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="impl-mapping">ツール別実装マッピング</h2>
+
+  <p>AGENTS.mdはツール中立な共通仕様である。しかし、実際にサブエージェントを「実装」する方式は、Claude系とAntigravity系で根本的に異なる。</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>階層</th><th>Claude App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>AGENTS.mdの読み込み</td>
+        <td>メインセッションが<code>AGENTS.md</code>を読み込み、エージェント一覧を把握する</td>
+        <td>オーケストレーターが<code>AGENTS.md</code>を読み込み、動的にサブエージェントを生成する</td>
+      </tr>
+      <tr>
+        <td>サブエージェント定義</td>
+        <td><code>.claude/agents/{name}.md</code>ファイルにYAML frontmatter(<code>name</code>、<code>description</code>、<code>tools</code>、<code>model</code>)+システムプロンプト</td>
+        <td>定義ファイルなし — オーケストレーターが実行時点で役割・ツール範囲を自律的に判断する</td>
+      </tr>
+      <tr>
+        <td>権限の実装</td>
+        <td><code>.claude/agents/*.md</code>の<code>tools</code>フィールドに<code>Read, Grep</code>など必要最小限のツールのみを列挙</td>
+        <td>オーケストレーターがAGENTS.mdの<code>権限</code>フィールドを解釈し、ツールアクセスを自ら制限する</td>
+      </tr>
+      <tr>
+        <td>handoff</td>
+        <td><code>handoff_to</code>は参考ヒント。メインセッションが<code>Agent</code>ツールを順次呼び出して関係を調整する</td>
+        <td>オーケストレーターが<code>handoff_to</code>を読み取り、自動で順次パイプラインを構成する</td>
+      </tr>
+      <tr>
+        <td>詳細参照</td>
+        <td><a href="../practice/04_Practice_Manual_A_ja.html">第4章 §1-A Claude中心</a></td>
+        <td><a href="../practice/04_Practice_Manual_B_ja.html">第4章 §1-B Antigravity中心</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div >AGENTS.md → ツール別実装の流れ</div>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+        <marker id="agArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+      </defs>
+      <!-- AGENTS.md at top -->
+      <rect x="180" y="10" width="200" height="40" rx="8" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="280" y="34" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">AGENTS.md (共通仕様)</text>
+      <!-- Branch arrows -->
+      <line x1="220" y1="50" x2="140" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="340" y1="50" x2="420" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <!-- Claude side -->
+      <rect x="40" y="82" width="200" height="44" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="140" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#1a7f37">Claude App / Claude Code</text>
+      <text x="140" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">.claude/agents/*.md (事前定義)</text>
+      <line x1="140" y1="126" x2="140" y2="152" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="50" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="140" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#1a7f37">YAML frontmatter + システムプロンプト</text>
+      <!-- Antigravity side -->
+      <rect x="320" y="82" width="200" height="44" rx="8" fill="#faf5ff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="420" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#6639ba">Antigravity Desktop / CLI</text>
+      <text x="420" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">定義ファイルなし(動的生成)</text>
+      <line x1="420" y1="126" x2="420" y2="152" stroke="#6639ba" stroke-width="1.5" marker-end="url(#agArrowP)"/>
+      <rect x="330" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6639ba">オーケストレーターがリアルタイムで解釈</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. 作成ガイド
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="authoring-guide">作成ガイド</h2>
+
+  <h3>1. セクションから始める</h3>
+  <p><code>## Agent: {名前}</code>でエージェント項目を開始する。名前は<strong>英語の小文字</strong>とし、複数の単語は<code>-</code>で連結する(<code>code-reviewer</code>、<code>api-tester</code>)。この名前はClaude系では<code>subagent_type</code>の値として使用される。</p>
+
+  <h3>2. 役割を簡潔に</h3>
+  <p><code>役割</code>は「何をするか」を1〜2文で明確に記述する。他のエージェントとの重複を避け、各エージェントが独立して責任を持つ領域が明確になるようにする。</p>
+
+  <h3>3. 最小権限で権限を設定する</h3>
+  <p><code>権限</code>フィールドはファイルアクセスの範囲を制限する。この原則を守らないと、サブエージェントが誤って重要なファイルを上書きしてしまう可能性がある。Claude系では、この権限は<code>.claude/agents/*.md</code>の<code>tools</code>フィールド(<code>Read, Grep</code>、<code>Write</code>など)に変換される。</p>
+
+  <div class="pullquote">reviewerはそもそも書き込みができないため、ミスは発生しない。
+    <span class="by">— 第4章 §2-A 最小権限の原則</span>
+  </div>
+
+  <h3>4. handoffで前後関係を宣言する</h3>
+  <p><code>handoff_to</code>は「このエージェントが作業を終えたら結果をどこに引き渡すか」を宣言する。これは<strong>命令ではなくヒント</strong>である。実際に順次パイプラインを構成するのは、メインセッション(オーケストレーター)の役目である。</p>
+
+  <div style="position:relative">
+  <pre class="code-block">## Agent: draft-writer
+役割: 与えられたテーマで草稿を作成する。
+handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)
+
+## Agent: reviewer
+役割: テキストの誤字脱字と論理をレビューする。
+handoff_to: editor(レビュー完了後に最終編集へ引き継ぐ)
+
+## Agent: editor
+役割: フィードバックを反映して最終文書を完成させる。</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <div class="note">handoff_toが宣言されていないエージェント(上記例の<code>editor</code>)は、パイプラインの終点である。オーケストレーターはそのエージェントの結果を最終ユーザーに返す。</div>
+
+  <h3>5. 検証</h3>
+  <p>作成が完了したら、<code>bun run agent:verify</code>で構造を検証する。このスクリプトは、エージェントfrontmatterの完全性、必須セクションの存在、<code>AGENTS.md</code>ロスターとの整合性を確認する。</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. 検証とライフサイクル
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="verify-lifecycle">検証とライフサイクル</h2>
+
+  <p>AGENTS.mdにエージェントを登録することは、<strong>ライフサイクルのCreate段階</strong>に該当する(第8章§2参照)。登録されたエージェントは以下の段階を経る。</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>ライフサイクル段階</th><th>AGENTS.mdでの動作</th><th>検証</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Create</strong></td>
+        <td><code>## Agent: {名前}</code>セクションをAGENTS.mdに追加</td>
+        <td><code>bun run agent:verify</code> — 構造の完全性</td>
+      </tr>
+      <tr>
+        <td><strong>Verify</strong></td>
+        <td>登録内容がワークスペースの他のファイル(CONSTITUTION.md、agents/*.md)と整合しているかを確認</td>
+        <td><code>bun run agent:verify</code> — 整合性検証</td>
+      </tr>
+      <tr>
+        <td><strong>Operate</strong></td>
+        <td>実際のセッションでオーケストレーターがロスターを読み込みエージェントを呼び出す</td>
+        <td>セッションログでエージェント呼び出しを追跡</td>
+      </tr>
+      <tr>
+        <td><strong>Improve</strong></td>
+        <td>役割定義、権限、handoff関係を修正</td>
+        <td>修正後に再度<code>agent:verify</code></td>
+      </tr>
+      <tr>
+        <td><strong>Deprecate</strong></td>
+        <td>AGENTS.mdから該当エージェント項目を削除、またはコメントアウト</td>
+        <td><code>agent:verify</code> — 参照整合性(他のエージェントのhandoff_toがdeprecatedを指していないか)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>エージェントを新規作成または変更するたびに<code>agent:verify</code>を実行することを習慣化すれば、「ロスターにはあるが実際の定義ファイルが存在しない」や「handoff_toが指すエージェントが削除されている」といった不整合を早期に発見できる。</p>
+
+  <p>この検証フローの自動化は、第8章§1(デプロイとSSOT)で扱うCI/CDパイプラインに<code>validate-templates.ts</code>のステップとして統合できる。</p>
+
+  <div class="note"><strong>FAQ:</strong> <code>bun run agent:verify</code>実行時に「AGENTS.mdの表と実際の<code>agents/*.md</code>ファイル一覧が食い違っている」というエラーが出た場合、AGENTS.mdのエージェント名と<code>.claude/agents/</code>フォルダのファイル名を照合し、不足している項目を追加するか不要なファイルを削除する。→ <a href="../faq/00_FAQ_ja.html">FAQ</a></div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Chapter_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §2 · ライフサイクル管理</div></a>
+    <a href="08_Intro_Advanced_Architecture_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第8章 §4 · アーキテクチャ詳解</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

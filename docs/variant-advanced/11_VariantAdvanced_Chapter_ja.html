@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+  章（読み物形式）テンプレート — 実習のない「読み物」テーマ向け。読みやすい幅（720px）・ゆとりある行間・章移動導線。
+  Manual（リファレンス）/Examples（実習）とは異なり、バージョンボックスやコード強調ではなく本文の流れを中心とする。
+  編集箇所: (1) <title>/章番号/タイトル/リード  (2) nav（この章の節＋他の章）  (3) 「この章で扱うこと」
+            (4) <h2 id>/<h3> 節と本文  (5) 前/次章リンク
+  {{二重中括弧}}・[説明: ...] を実際の内容で埋める。リンクはすべて相対パス。
+  色はデザイントークンのみ使用 — テーマは配布時に references/apply-theme.sh が docs/ のブランドカラーを置換する。
+  検索インデックスの前提: 本文の節は必ず <h2 id="..."> （必要に応じ <h3>）構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第11章 · 新規variantの作成 vs 既存プロジェクトをバリアント(variant)へ昇格 - マルチエージェントチームハーネスエンジニアリングハンドブック資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第11章 · 新規variantの作成 vs 既存プロジェクトをバリアント(variant)へ昇格させる</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第11章 · 新規variant vs 昇格</div>
+  <a href="#s1">二つの経路の違い</a>
+  <a href="#s2">最初から作る経路</a>
+  <a href="#s3">既存プロジェクトを昇格させる経路</a>
+  <a href="#s4">どちらの経路をいつ選ぶか</a>
+  <div class="nav-section">他の章</div>
+  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · エンタープライズ連携</a>
+  <a href="../intro/10_ProjectUpgrade_Chapter_ja.html">第10章 · L2プロジェクトアップグレード</a>
+  <a href="12_VariantAdvanced_Examples_ja.html">第12章 · 新規variant昇格実習例 →</a>
+  <a href="../index_ja.html">ハンドブックホームへ</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第11章</div>
+  <h1>新規variantの作成 vs 既存プロジェクトをバリアント(variant)へ昇格させる</h1>
+  <p class="lead">第6章§2では、co-marketingという新規バリアント(variant)を最初からスキャフォールディングする過程を実習した。しかし、ai-workspace-standardsにはこれとは性質の異なるもう一つの経路がある。すでに問題なく動いており、テンプレートにするつもりなど全くなく始めたプロジェクトを、後になって正式なバリアント(variant)へと「昇格」させる経路である。本章では、この二つの経路が概念的にどう異なるのか、そしてどのような状況でどちらを選ぶべきかを扱う。</p>
+  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">この章で扱うこと</div>
+    <ul>
+      <li>「最初から作る」と「既存プロジェクトを昇格させる」という二つの経路の根本的な違い</li>
+      <li>Phase A（create-variant）→ Phase B（promote-variant）へとつながる、最初から作る経路の概念</li>
+      <li>すでに存在するプロジェクトを<code>promote-variant</code>スキルと<code>l2-to-variant-pipeline.ts</code>で昇格させる経路の概念</li>
+      <li>二つの経路のうちどちらが自組織の状況に合うかを判断する基準</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">二つの経路の違い</h2>
+  <p>新しいバリアント(variant)をワークスペースに追加する方法は一つではない。ai-workspace-standardsは二つの異なる出発点を認めている。一つは「まだどのプロジェクトも存在しない状態から、最初からテンプレートになることを念頭に置いて設計する」経路である。もう一つは「元々テンプレートにするつもりなど全くなく始めたプロジェクトが、時間が経つにつれて複数のチームが手作業でコピーして使うほど実証された後になって、テンプレートへと昇格する」経路である。</p>
+  <p>この二つの違いは、単に「コマンドが違う」というレベルの話ではない。前者は設計が先で使用が後であり、後者は使用（そして検証）が先でテンプレート化が後である。ワークスペースがこの両方の経路をサポートしている理由は、新しいドメインのエージェントチームを作る実際の状況が、この二つの形のいずれかに収束するためである。</p>
+
+  <div class="pullquote">最初から作ることは設計が使用に先立ち、昇格は使用が検証を経て設計に先立つ。
+    <span class="by">— 二つの経路を分ける根本的な順序の違い</span></div>
+
+  <h2 id="s2">最初から作る経路</h2>
+  <p>グリーンフィールドの状態から始まるこの経路は、二つの段階に分かれる。まず<code>create-variant</code>スキルと<code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code>により、<code>Projects/&lt;variant-name&gt;/</code>配下に独立した「Phase Aプロトタイプ」を作る。この段階は、ワークスペースのドキュメントで「L1-L2 Fork Model」と呼ばれる構造の一部であり、まだ正式な<code>templates/</code>に属していないため、自由に実験し方向を変えることができる。第11章の実習（D-1）で作るco-marketingプロトタイプは、まさにこのPhase A段階に該当する。この実習は<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章§2の実習（D-1）</a>を参照する。</p>
+  <p>プロトタイプが十分に成熟すると、<code>promote-variant</code>スキルを通じて「Phase B昇格」を経て、正式な<code>templates/co-&lt;name&gt;/</code>となる。つまり、最初から作る経路も結局は昇格の段階を通過する。ただし、そのプロトタイプ自体が最初からテンプレートになることを前提に設計されている点が、次節の経路と区別される点である。</p>
+
+  <div class="note">
+    <svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+      </defs>
+      <!-- Left: create-l2-scaffold.ts -->
+      <rect x="16" y="28" width="160" height="36" rx="8" fill="#3b82f6"/>
+      <text x="96" y="51" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">create-l2-scaffold.ts</text>
+      <!-- Arrow left → right -->
+      <line x1="176" y1="46" x2="218" y2="46" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+      <!-- Right: folder box -->
+      <rect x="222" y="20" width="200" height="52" rx="8" fill="#8b5cf6"/>
+      <text x="322" y="42" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">Projects/co-marketing/</text>
+      <text x="322" y="60" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#e0d5f7" text-anchor="middle">作成済み</text>
+      <!-- Sub-items -->
+      <line x1="322" y1="72" x2="322" y2="86" stroke="#6b7280" stroke-width="1.2"/>
+      <!-- agents/ -->
+      <rect x="240" y="86" width="164" height="24" rx="5" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+      <text x="322" y="102" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#6b7280" text-anchor="middle">agents/ (researcher, writer)</text>
+      <!-- AGENTS.md -->
+      <rect x="240" y="114" width="164" height="24" rx="5" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+      <text x="322" y="130" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#6b7280" text-anchor="middle">AGENTS.md ロスター更新</text>
+      <!-- agent:verify badge -->
+      <rect x="470" y="108" width="154" height="30" rx="15" fill="#22c55e"/>
+      <text x="547" y="128" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">✓ agent:verify 合格</text>
+    </svg>
+  </div>
+
+  <h2 id="s3">既存プロジェクトを昇格させる経路</h2>
+  <p>二つ目の経路は出発点そのものが異なる。あるチームが特定のドメインの課題を解決するためにプロジェクトを一つ作ったが、そのプロジェクトは他のテンプレートを原型にもしておらず、そもそも再利用を念頭に置いてもいなかった。ところが時間が経つにつれ、そのプロジェクトの構成があまりにうまく機能しているため、社内の他のチームがファイルを手作業でコピーして似たようなものを作り始める。このような「すでに実証されているが、テンプレートとして生まれたわけではない」プロジェクトを正式なバリアント(variant)へと転換することが、昇格の目的である。</p>
+  <p>この経路も結局は同じ<code>promote-variant</code>スキルと<code>bun scripts/l2-to-variant-pipeline.ts --source Projects/&lt;name&gt; --variant co-&lt;name&gt; --variantType &lt;type&gt;</code>パイプラインを使用するという点で、最初から作る経路のPhase Bとメカニズムは同じである。昇格前には<code>PROMOTION_CHECKLIST.md</code>の条件（<code>bun run agent:verify</code>、<code>bun scripts/validate-skills.ts</code>、<code>bun scripts/audit.ts</code>の合格可否など）をすべて満たさなければならないというゲートがある。パイプライン実行後は、<code>variant.json</code>の<code>inherits_common</code>バージョンの確認、共通ファイルと重複する部分を取り除く「reconcile」段階、そして<code>.claude/</code>と<code>.gemini/</code>間のプラットフォームパリティ検証が続く。このパイプラインが自動で処理できないドメイン固有のディレクトリ（例: workflows/、regulations/など）は、<code>_ORIGIN.md</code>が指定した通りに手動で移す必要がある。</p>
+  <div class="note">機械的な手続きは両経路とも同じだが、「何を検証するか」は異なる。昇格経路では、すでに実戦で使われていたという事実そのものが品質の根拠となり、パイプラインはそれを再利用可能な形に整理する役割を担う。</div>
+  <p>「reconcile」と「<code>_ORIGIN.md</code>による手動移管」が実際に何をするのか、具体例で見てみよう。財務チームが作った<code>Projects/budget-review/</code>を昇格させるとすると、このプロジェクトには二種類のファイルが混在している。①PM定義やセッションチェックリストのように<code>templates/common/</code>にすでに存在する共通ファイルをそのままコピーしてきたもの、②<code>regulations/</code>フォルダ内の社内会計規程文書のように、このプロジェクト固有の資産。reconcile段階は①に該当するファイルを「コピー」から「共通ファイルを継承する参照」へと戻し、後で<code>templates/common/</code>が更新された際にこのvariantも一緒に最新化されるようにする。一方②はパイプラインがその存在自体を知る手立てがないため、元のプロジェクトに残された<code>_ORIGIN.md</code>の「Manual Phase B Steps」リストに「regulations/フォルダを新規バリアント(variant)へ手動でコピーすること」のように明記しておき、昇格担当者がチェックリストを見ながら一つずつ手作業で移す。</p>
+
+  <h2 id="s4">どちらの経路をいつ選ぶか</h2>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>最初から作る（Phase A → B）</h4>
+      <ul>
+        <li>まだ参考にできる既存プロジェクトがないグリーンフィールドのドメイン</li>
+        <li>設計が使用に先立つ。最初から再利用を念頭に置いて構成</li>
+        <li>Phase A段階では自由に方向転換が可能</li>
+        <li>例: 全く新しい業務領域に初めてエージェントチームを導入する場合</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>既存プロジェクトの昇格（Phase Bのみ）</h4>
+      <ul>
+        <li>すでに一つのチームが作り、実戦で検証したプロジェクトがある場合</li>
+        <li>使用と検証が設計に先立つ。実戦ですでに実証済み</li>
+        <li>PROMOTION_CHECKLIST.mdのゲートを必ず通過しなければならない</li>
+        <li>例: 複数のチームが手作業でコピーして使っていた社内標準プロジェクトを正式化する場合</li>
+      </ul>
+    </div>
+  </div>
+  <p>結局のところ、選択の基準は一つに要約される。参考にできる先例が全くない新しいドメインであれば、最初から設計する経路が自然である。逆に、組織内にすでに一度以上検証され、皆が真似して使っているプロジェクトがあるなら、その実証済みの成果を尊重して昇格経路で正式化する方がより安全で効率的である。両方の経路とも最終的には同じ<code>templates/co-&lt;name&gt;/</code>という形に収束するという点で、これは「どの山に登るか」の問題であって、「別の山に到着するか」の問題ではない。</p>
+
+  <div class="video-refs">
+    <h3 id="videos">参考動画</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=kFey6jjUeJQ" target="_blank">Simple AI Agent Workflow in 14 min</a><span class="video-meta">(14:38)</span> — 14分でAIエージェントワークフローを最初から構築する実践チュートリアル</li>
+      <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=OydayHQWknI" target="_blank">実際に動作するAIデザインエージェント</a><span class="video-meta">(13:58)</span> — 韓国語でAIエージェントとUXツールを組み合わせたプロトタイプ制作のデモ</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../intro/10_ProjectUpgrade_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第10章 · L2プロジェクトアップグレード</div></a>
+    <a href="12_VariantAdvanced_Examples_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第12章 · 新規variant昇格実習例</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

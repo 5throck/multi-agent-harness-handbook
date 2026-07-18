@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第4章 §1 · ハーネスベースのマルチエージェントチーム活用 - マルチエージェントチームハーネスエンジニアリングハンドブック資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第4章 §1 · ハーネスベースのマルチエージェントチーム活用</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── サイドバーナビゲーション ── -->
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第4章 §1 · ハーネスベースのマルチエージェントチーム活用</div>
+  <a href="#tree">概要 — 全体構造</a>
+  <div class="nav-section">単一サブエージェント</div>
+  <a href="#section-1">1. サブエージェントの定義 — 事前定義 vs 動的生成</a>
+  <a href="#section-2">2. サブエージェントの呼び出し/委任</a>
+  <div class="nav-section">並列・チーム協働</div>
+  <a href="#section-3">3. 並列実行 — 4つのツール比較</a>
+  <a href="#section-4">4. 自動化/フック — 何が自動的に発火するか</a>
+  <div class="nav-section">参考</div>
+  <a href="#refs">参考リンク</a>
+  <div class="nav-section">姉妹ドキュメント</div>
+  <a href="04_Practice_Manual_A_ja.html">第4章 §1-A · Claude中心</a>
+  <a href="04_Practice_Manual_B_ja.html">第4章 §1-B · Antigravity中心</a>
+  <div class="nav-section">他の章</div>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章 · ガードレールと権限モデル</a>
+  <a href="../intro/05_Intro_Chapter_ja.html">第5章 · 導入</a>
+</nav>
+
+<!-- ── 本文 ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第4章 §1</div>
+  <h1>第4章 §1 · ハーネスベースのマルチエージェントチーム活用</h1>
+  <p class="subtitle">Claude Code / Claude App / Antigravity CLI / Antigravity(Desktop)の4つのツールでサブエージェントを定義し、呼び出し、並列・自動化の単位に拡張する方法を並べて整理したリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象バージョン</span><span class="vvalue">Claude Code 2026-07リリース / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
+    <div class="version-row"><span class="vlabel">参照ドキュメントURL</span><span class="vvalue"><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com/en/docs/claude-code/sub-agents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">antigravity.google/docs/cli-using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google/docs/agent-manager</a></span></div>
+    <div class="version-row"><span class="vlabel">資料収集日</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">バージョン確認方法</span><span class="vvalue">Claude Code/App: <code>claude --version</code> · Antigravity CLI: <code>agy --version</code> またはセッション内で <code>/usage</code> · Antigravity Desktop: アプリ内の情報画面</span></div>
+    <div class="version-row"><span class="vlabel">改訂時の確認事項</span><span class="vvalue">Claude Code Agent TeamsとAntigravity CLI/Agent Managerはいずれも急速に変化する機能のため、フラグ名・コマンド・UI構成がリリースごとに変わる可能性があるので最新のリリースノートを優先的に確認すること</span></div>
+  </div>
+
+  <div class="warning-box">2026-06-18を境に、Googleは個人(Free/Pro/Ultra)ユーザー向けのGemini CLIサービスを終了し、その後継として<strong>Antigravity CLI(<code>agy</code>)</strong>が導入された。本章はそれ以前はGemini コマンドラインインターフェース(CLI)を基準に書かれていたが、現時点を基準にAntigravity CLI/デスクトップ(Desktop)へ全面的に更新した。ツール別特性の詳細な比較は<a href="../tools/00_Tools_Manual_ja.html">ツール比較</a>を参照。</div>
+
+  <!-- ── 概念/コマンドツリー ── -->
+  <h2 id="tree">概要 — 全体構造</h2>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
+ハーネスベースのマルチエージェントチーム活用 (Desktopアプリを基準に、CLIは同一概念の代替として併記)
+├── サブエージェントの定義
+│   ├── Claude App / Claude Code    .claude/agents/*.md (YAML frontmatter、事前定義 — 両方とも同一)
+│   └── Antigravity(Desktop) / CLI  事前定義ファイルなし — オーケストレーターが目標を見て動的に生成
+├── サブエージェントの呼び出し/委任
+│   ├── Claude App / Claude Code    Agent(Task)ツール — description / prompt / subagent_type
+│   └── Antigravity(Desktop)/CLI    Agent Manager UI(Desktop) · /goal, /agent, /agentsパネル(CLI)
+├── 並列実行
+│   ├── Claude App                  Agent Teams(in-processのみ)
+│   ├── Claude Code                 Agent Teams(in-process/tmux) + 1メッセージで複数Agent呼び出し
+│   ├── Antigravity Desktop         Agent Manager — Workspaceごとのエージェント(Local/New Worktree Mode)
+│   └── Antigravity CLI             セッション内部並列サブエージェント + セッション間(複数ターミナル)並列
+└── 自動化/フック
+    ├── Claude App                  フック未発火 — 手動実行が必要
+    ├── Claude Code                 PostToolUse/TeammateIdle/TaskCompletedフックが自動発火
+    ├── Antigravity Desktop         該当なし — GUI中心
+    └── Antigravity CLI             agy -p "プロンプト"(非対話型CI用)、agy inspect(設定確認)
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div></div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div >エージェントチーム構成例</div>
+    <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="teamArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+      </defs>
+      <!-- Main Session -->
+      <rect x="160" y="10" width="200" height="44" rx="10" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="260" y="32" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">Main Session</text>
+      <text x="260" y="46" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#0969da">オーケストレーター</text>
+
+      <!-- Vertical line down -->
+      <line x1="260" y1="54" x2="260" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+      <!-- Horizontal branch -->
+      <line x1="90" y1="85" x2="430" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+
+      <!-- writer -->
+      <line x1="90" y1="85" x2="90" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="20" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="90" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#6639ba">writer</text>
+      <text x="90" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">下書き作成</text>
+
+      <!-- reviewer -->
+      <line x1="260" y1="85" x2="260" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="190" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="260" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#1a7f37">reviewer</text>
+      <text x="260" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">レビュー / フィードバック</text>
+
+      <!-- researcher (optional) -->
+      <line x1="430" y1="85" x2="430" y2="108" stroke="#d0d7de" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#teamArrow)"/>
+      <rect x="355" y="110" width="150" height="40" rx="8" fill="#ffffff" stroke="#953800" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <text x="430" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#953800">researcher</text>
+      <text x="430" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">調査 (optional)</text>
+
+      <!-- Connection lines between specialists -->
+      <path d="M90,150 L90,175 L260,175" fill="none" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <polygon points="260,175 254,172 254,178" fill="#6639ba"/>
+      <text x="175" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">下書き引き渡し</text>
+
+      <!-- Bottom note -->
+      <text x="260" y="210" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">オーケストレーターがリクエストに応じて専門家を動的に組み合わせる</text>
+    </svg>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション1 ── -->
+  <h2 id="section-1">1. サブエージェントの定義 — 事前定義 vs 動的生成</h2>
+
+  <p>Anthropic系(Claude App/Claude Code)は、プロジェクトフォルダ配下にマークダウンファイル1つでサブエージェントを1つ事前定義しておく。Google系(Antigravity Desktop/CLI)には別途の定義ファイルがない — オーケストレーターが与えられた目標を見て、その都度サブエージェントを作成する。以下ではClaude AppとAntigravity(Desktop)を基準にまず説明し、それぞれのCLI対応を続けて紹介する。</p>
+
+  <p >
+    Claude系の具体的な定義・呼び出し方法は<a href="04_Practice_Manual_A_ja.html">§1-A Claude中心</a>で、
+    Antigravity系の具体的な方法は<a href="04_Practice_Manual_B_ja.html">§1-B Antigravity中心</a>で扱う。
+  </p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>frontmatterフィールド</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td>必須。<code>subagent_type</code>の値と一致しないと呼び出し不可</td>
+        <td rowspan="4">該当なし — 定義ファイル自体が存在せず、オーケストレーターが実行時点で役割・ツール範囲を自ら判断してサブエージェントを生成する</td>
+      </tr>
+      <tr>
+        <td><code>description</code></td>
+        <td>このエージェントがいつ使われるかを説明、自動トリガー判断の参考になる</td>
+      </tr>
+      <tr>
+        <td><code>tools</code></td>
+        <td>使用可能なツールのリスト、省略時はデフォルトセットを継承</td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td><code>sonnet</code> / <code>opus</code> / <code>haiku</code>などのエイリアスを指定</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="warning-box">Antigravity(Desktop/CLI)には「サブエージェント定義ファイル」という概念自体が存在しない — 初級実習でAntigravity側にClaude App/Codeの<code>reviewer.md</code>と全く同じ例を無理に作ると事実と乖離する。Antigravityの「入門実習」はファイルを作ることではなく、目標を与えてオーケストレーターが自ら作業を分割していく過程を観察することである。</div>
+
+  <hr>
+
+  <!-- ── セクション2 ── -->
+  <h2 id="section-2">2. サブエージェントの呼び出し/委任</h2>
+
+  <p>Anthropic系(Claude App/Claude Code)は<code>Agent</code>/<code>Task</code>ツールで別コンテキストのサブエージェントをスポーンする。Google系(Antigravity Desktop/CLI)はAgent Manager UIまたはスラッシュコマンドでエージェントに目標を委任する。</p>
+
+  <p >
+    Claude系の具体的な呼び出し方法は<a href="04_Practice_Manual_A_ja.html#section-2">§1-A セクション2</a>で、
+    Antigravity系の具体的な方法は<a href="04_Practice_Manual_B_ja.html#section-2">§1-B セクション2</a>で扱う。
+  </p>
+
+  <hr>
+
+  <!-- ── セクション3 ── -->
+  <h2 id="section-3">3. 並列実行 — 4つのツール比較</h2>
+
+  <p>4つのツールすべてが並列実行をサポートするが、方式が異なる。Claude系はAgent Teams / 複数Agent呼び出し、Antigravity系はAgent Manager / セッション間並列を使用する。</p>
+
+  <div class="warning-box">同一ディレクトリ・Workspaceで複数のエージェントを同時に動かすと「認知的重複(cognitive overlap)」が発生することがある — あるエージェントが同じフォルダで作業中の別のエージェントの結果を自分の作業コンテキストと誤認(ハルシネーション)する問題である。Workspaceやworktreeでエージェントを分離することが推奨される慣行であり、例外的に見逃してよい些細な問題ではない。</div>
+
+  <p >
+    Claude系の並列実行方式は<a href="04_Practice_Manual_A_ja.html#section-3">§1-A セクション3</a>で、
+    Antigravity系の並列実行方式は<a href="04_Practice_Manual_B_ja.html#section-3">§1-B セクション3</a>で扱う。
+  </p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>項目</th><th>Antigravity (Desktop)</th><th>Claude App (Desktop)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>並列実行単位</td>
+        <td>ワークスペースごとの独立エージェント</td>
+        <td>Agent Teams (in-processのみ)</td>
+        <td>セッション内部 + セッション間(複数ターミナル)</td>
+        <td>1メッセージ内での複数Agent呼び出し / Agent Teams(in-process + tmux)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション4 ── -->
+  <h2 id="section-4">4. 自動化/フック — 何が自動的に発火するか</h2>
+
+  <p>Claude Code(CLI)はイベントフック(PostToolUse/TeammateIdle/TaskCompleted)を自動発火するが、Claude AppとAntigravityデスクトップ(Desktop)はフックを自動発火しない。Antigravity コマンドラインインターフェース(CLI)は<code>agy -p</code>で非対話型実行、<code>agy inspect</code>で設定点検を提供する。</p>
+
+  <p >
+    Claude系の自動化/フックの詳細は<a href="04_Practice_Manual_A_ja.html#section-4">§1-A セクション4</a>で、
+    Antigravity系の自動化/フックの詳細は<a href="04_Practice_Manual_B_ja.html#section-4">§1-B セクション4</a>で扱う。
+  </p>
+
+  <p >実務のヒント: Antigravityには計算された作業量(work done)に基づく、定期的に更新される使用量クォータがある。正確な数値はアカウント・プランごとに異なる可能性があるため、複数のエージェントを長時間並列で動かす作業を計画する際はこの点を考慮しておく方が安全である。</p>
+
+  <div class="warning-box">Agent TeamsとAgent Managerはいずれも急速に発展中の機能である — フラグ名、デフォルト動作、UI構成がリリースごとに変わる可能性があるため、プロダクションワークフローに依存する前に最新のリリースノートを確認すること。</div>
+
+  <hr>
+
+  <!-- ── 参考リンク ── -->
+  <h2 id="refs">参考リンク</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents 公式ドキュメント</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started 公式ドキュメント</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using AGY CLI 公式ドキュメント</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager 公式ドキュメント</a></li>
+    <li>⚙️ <a href="04_Practice_Examples_A_ja.html">第4章 §2 実習例 — 04_Practice_Examples_A_ja.html</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 基準 | 2026年7月</p>
+  <div class="chapter-nav">
+    <a href="../guardrails/03_Guardrails_Chapter_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第3章 · ガードレール</div></a>
+    <div class="branch">
+      <div class="branch-label">ツール選択</div>
+      <a href="04_Practice_Manual_A_ja.html" >Claude (A)</a>
+      <a href="04_Practice_Manual_B_ja.html" >Antigravity (B)</a>
+    </div>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -91,10 +91,10 @@
   <p class="subtitle">빈 실습 폴더에서 시작해 Claude App/Claude Code 위주로 시나리오를 따라해보는 실습 가이드 — Desktop 앱을 기준으로 안내하고 CLI 대응을 이어서 소개한다 &nbsp;|&nbsp; <a href="04_Practice_Manual.html">← 4장 §1 레퍼런스 문서로 돌아가기</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B.html">4장 §2-B Antigravity 중심 →</a></p>
 
   <div class="version-box">
-    <div class="version-row"><span class="vlabel">대상 버전/범위</span><span>Claude Code/App 2026-07 릴리스 — Claude를 중심으로 안내하며, Antigravity 대응은 4장 §2-B를 참조</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span>서브에이전트 정의·호출, 순차 파이프라인, 동적 팀 구성·워크플로우 조합, 병렬 실행, 모델 티어 비교를 Claude App/Code에서 손으로 따라해보는 5단계 실습 제공</span></div>
-    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span><a href="04_Practice_Manual.html">4장 §1 공통</a> · <a href="04_Practice_Manual_A.html">4장 §1-A Claude 상세</a> · <a href="04_Practice_Manual_B.html">4장 §1-B Antigravity 상세</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
-    <div class="version-row"><span class="vlabel">작성일</span><span>2026년 7월 14일</span></div>
+    <div class="version-row"><span class="vlabel">대상 버전/범위</span><span class="vvalue">Claude Code/App 2026-07 릴리스 — Claude를 중심으로 안내하며, Antigravity 대응은 4장 §2-B를 참조</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span class="vvalue">서브에이전트 정의·호출, 순차 파이프라인, 동적 팀 구성·워크플로우 조합, 병렬 실행, 모델 티어 비교를 Claude App/Code에서 손으로 따라해보는 5단계 실습 제공</span></div>
+    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span class="vvalue"><a href="04_Practice_Manual.html">4장 §1 공통</a> · <a href="04_Practice_Manual_A.html">4장 §1-A Claude 상세</a> · <a href="04_Practice_Manual_B.html">4장 §1-B Antigravity 상세</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
+    <div class="version-row"><span class="vlabel">작성일</span><span class="vvalue">2026년 7월 14일</span></div>
   </div>
 
   <div class="note" >
@@ -107,7 +107,7 @@
 
   <div class="platform-block" >
     <div class="platform-block-title">📦 설치 전 확인 사항</div>
-    <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">스크립트를 실행하기 전에 <a href="../setup/SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>를 먼저 읽어본다. 이 문서에는 다음 전제 조건이 정리되어 있다.</p>
+    <p class="text-dim" style="margin-bottom:10px;">스크립트를 실행하기 전에 <a href="../setup/SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>를 먼저 읽어본다. 이 문서에는 다음 전제 조건이 정리되어 있다.</p>
     <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
       <li>활성 상태의 Claude Pro/Max 구독 <strong>그리고</strong> Antigravity 사용을 위한 Google 계정 (개별 API 키가 아니라 구독제/계정 기반 플랜이어야 한다)</li>
       <li><code>gh auth login</code>을 진행할 수 있는 GitHub 계정</li>
@@ -234,7 +234,7 @@ cd harness-lab</pre>
 EOF</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
-            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> <code>cat</code> 명령 자체는 <code>Get-Content</code>의 별칭으로 파일 읽기에 그대로 쓸 수 있다. 다만 <code>&lt;&lt; 'EOF'</code>처럼 여러 줄을 직접 넣는 heredoc 문법은 지원하지 않으므로, 같은 내용은 따옴표 있는 here-string(<code>@'...'@</code>)으로 만들어 <code>Set-Content</code>로 파일에 쓴다.</p>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> <code>cat</code> 명령 자체는 <code>Get-Content</code>의 별칭으로 파일 읽기에 그대로 쓸 수 있다. 다만 <code>&lt;&lt; 'EOF'</code>처럼 여러 줄을 직접 넣는 heredoc 문법은 지원하지 않으므로, 같은 내용은 따옴표 있는 here-string(<code>@'...'@</code>)으로 만들어 <code>Set-Content</code>로 파일에 쓴다.</p>
             <div style="position:relative">
               <pre class="code-block">@'
 ## Agent: reviewer
@@ -252,7 +252,7 @@ EOF</pre>
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — AGENTS.md 명세를 사전 정의 서브에이전트로 구현</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">터미널이나 별도 에디터에서 미리 파일을 만들지 않는다. 아래 세 단계를 그대로 따라간다 — 회색 코드 상자는 전부 "복사" 버튼으로 그대로 복사해서 붙여넣으면 되는 내용이다.</p>
+        <p class="text-dim" style="margin-bottom:10px;">터미널이나 별도 에디터에서 미리 파일을 만들지 않는다. 아래 세 단계를 그대로 따라간다 — 회색 코드 상자는 전부 "복사" 버튼으로 그대로 복사해서 붙여넣으면 되는 내용이다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -285,7 +285,7 @@ EOF</pre>
             </div>
           </li>
         </ol>
-        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 터미널에서 <code>claude</code>를 실행한 뒤 ②③의 문장을 그대로 채팅으로 붙여넣으면, 명령줄 인터페이스(CLI)가 똑같이 AGENTS.md 명세를 읽고 <code>.claude/agents/reviewer.md</code>를 직접 생성·호출한다. CLI에는 추가로 <code>PostToolUse</code> 등 자동화 훅이 발화한다는 차이가 있다(App에서는 훅이 발화하지 않는다).</p>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 터미널에서 <code>claude</code>를 실행한 뒤 ②③의 문장을 그대로 채팅으로 붙여넣으면, 명령줄 인터페이스(CLI)가 똑같이 AGENTS.md 명세를 읽고 <code>.claude/agents/reviewer.md</code>를 직접 생성·호출한다. CLI에는 추가로 <code>PostToolUse</code> 등 자동화 훅이 발화한다는 차이가 있다(App에서는 훅이 발화하지 않는다).</p>
       </div>
 
       <div class="tip-box">
@@ -382,7 +382,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 EOF</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
-            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string을 <code>Add-Content</code>로 이어붙인다(<code>Set-Content</code>는 파일을 덮어쓰므로 반드시 <code>Add-Content</code>를 써야 reviewer 항목이 지워지지 않는다).</p>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string을 <code>Add-Content</code>로 이어붙인다(<code>Set-Content</code>는 파일을 덮어쓰므로 반드시 <code>Add-Content</code>를 써야 reviewer 항목이 지워지지 않는다).</p>
             <div style="position:relative">
               <pre class="code-block">@'
 
@@ -402,7 +402,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 메인 세션이 Agent 호출을 순차 디스패치</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>harness-lab/</code> 채팅에서 이어서 진행한다.</p>
+        <p class="text-dim" style="margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>harness-lab/</code> 채팅에서 이어서 진행한다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -435,7 +435,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
         <div class="tip-box">
           <strong>결과 확인</strong> — 채팅 화면에 <code>writer</code> 호출 → 완료 → <code>reviewer</code> 호출 → 완료 순서로 두 번의 서브에이전트 스폰이 표시되어야 정상이다. 한 번만 표시된다면 오케스트레이터가 파이프라인을 한 단계로 합쳐버린 것이니, 요청 문장에 "순서대로"가 명시됐는지 다시 확인한다. 완료 후 <code>harness-lab/draft.txt</code>를 열어 초안이 실제로 저장돼 있는지도 확인한다.
         </div>
-        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 순차 디스패치된다.</p>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 순차 디스패치된다.</p>
       </div>
 
     </div>
@@ -543,7 +543,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 같은 팀, 다른 요청 세 번</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">D-1을 마친 같은 채팅에서 이어서 진행한다. 매번 어떤 서브에이전트가 몇 번 호출되는지 화면에 표시되는 과정을 눈여겨본다.</p>
+        <p class="text-dim" style="margin-bottom:10px;">D-1을 마친 같은 채팅에서 이어서 진행한다. 매번 어떤 서브에이전트가 몇 번 호출되는지 화면에 표시되는 과정을 눈여겨본다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -573,7 +573,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
         <div class="tip-box">
           ①과 ②를 나란히 비교하면 "팀 명단(어떤 서브에이전트를 정의해 뒀는가)"과 "이번 작업에 실제로 투입되는 구성(누가 몇 번, 어떤 순서로 호출되는가)"이 서로 다른 층위라는 게 뚜렷해진다. 전자는 <code>.claude/agents/</code>에 미리 고정돼 있지만, 후자는 매 요청마다 새로 결정된다.
         </div>
-        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 동작한다.</p>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 <code>writer.md</code>/<code>reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 동작한다.</p>
         <div class="warning-box">
           <strong>흔한 실패</strong> — ②에서 "동시에 검토해줘"라고 했는데도 reviewer가 한 번만 호출된다면, 요청 문장이 "문법 관점과 논리 관점"처럼 두 관점을 명확히 구분하지 않았을 가능성이 높다. 관점을 더 구체적으로 나눠 다시 요청해본다.
         </div>
@@ -615,12 +615,12 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams, teammateMode: in-process</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">같은 <code>harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
+        <p class="text-dim" style="margin-bottom:10px;">같은 <code>harness-lab/</code> 폴더에서 실험적 기능인 Agent Teams를 활성화한다. Desktop App에서는 <code>teammateMode</code>가 반드시 <code>in-process</code>여야 한다(<code>tmux</code>는 지원되지 않는다).</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
               <strong>① 설정 파일 작성 (터미널) — <code>.claude/settings.json</code>이 없다면 새로 만들고, 있다면 아래 두 키를 병합</strong>
-              <p style="font-size:13.5px;color:var(--text-dim);margin:6px 0;">macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+              <p class="text-dim" style="margin:6px 0;">macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
               <div class="warning-box">
                 이 명령은 <code>.claude/settings.json</code> 파일 전체를 덮어씁니다. 이미 다른 설정이 들어있는 파일이라면 기존 내용이 모두 사라지므로, 필요한 설정이 있다면 미리 백업하거나 아래 내용을 수동으로 병합하세요.
               </div>
@@ -635,7 +635,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 EOF</pre>
                 <button class="copy-btn" onclick="copyCode(this)">복사</button>
               </div>
-              <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string으로 같은 파일을 만든다.</p>
+              <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string으로 같은 파일을 만든다.</p>
               <div style="position:relative">
                 <pre class="code-block">@'
 {
@@ -739,7 +739,7 @@ EOF</pre>
           <text x="300" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">reviewer는 애초에 쓸 수 없으므로 실수가 발생하지 않는다</text>
         </svg>
       </div>
-        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 설정과 같은 요청 문장이 그대로 동작한다. CLI에서만 <code>teammateMode: "tmux"</code>를 추가로 선택할 수 있어, tmux 분할 창으로 각 팀메이트의 화면을 나란히 볼 수 있다는 점이 Desktop App과 다르다.</p>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)에서도 동일하게</strong> — 같은 설정과 같은 요청 문장이 그대로 동작한다. CLI에서만 <code>teammateMode: "tmux"</code>를 추가로 선택할 수 있어, tmux 분할 창으로 각 팀메이트의 화면을 나란히 볼 수 있다는 점이 Desktop App과 다르다.</p>
       </div>
 
       <div class="related-cmds">
@@ -833,7 +833,7 @@ EOF</pre>
 
       <div class="platform-block claudeapp">
         <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 같은 파일, 세 가지 모델로 검토 요청</div>
-        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">G-1의 <code>notes.txt</code>보다 조금 더 복잡한, 논리적 허점이 있는 글을 준비한다. 채팅창에 아래 문장을 그대로 붙여넣는다.</p>
+        <p class="text-dim" style="margin-bottom:10px;">G-1의 <code>notes.txt</code>보다 조금 더 복잡한, 논리적 허점이 있는 글을 준비한다. 채팅창에 아래 문장을 그대로 붙여넣는다.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -899,13 +899,13 @@ EOF</pre>
 
   <div class="platform-block" >
     <div class="platform-block-title">🧹 harness-lab 폴더 정리</div>
-    <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">더 이상 필요 없다면 폴더 전체를 삭제한다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+    <p class="text-dim" style="margin-bottom:10px;">더 이상 필요 없다면 폴더 전체를 삭제한다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
     <div style="position:relative">
       <pre class="code-block">cd ..
 rm -rf harness-lab</pre>
       <button class="copy-btn" onclick="copyCode(this)">복사</button>
     </div>
-    <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong></p>
+    <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong></p>
     <div style="position:relative">
       <pre class="code-block">cd ..
 Remove-Item -Recurse -Force harness-lab</pre>
@@ -930,7 +930,7 @@ Remove-Item -Recurse -Force harness-lab</pre>
 </div>
 
   <hr>
-  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+  <p class="text-dim" style="text-align: center;">
     Claude Code/App 2026-07 기준 | 2026년 7월 14일 작성<br>
     <a href="04_Practice_Manual.html">← 4장 §1 멀티 에이전트 팀 활용 레퍼런스</a> &nbsp;·&nbsp; <a href="04_Practice_Examples_B.html">4장 §2-B Antigravity 중심 실습</a> &nbsp;·&nbsp; <a href="../intro/05_Intro_Chapter.html">5장 ai-workspace-standards 소개 →</a>
   </p>

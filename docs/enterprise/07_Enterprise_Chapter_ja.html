@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<!--
+  章（読み物形式）テンプレート — 実習を伴わない「読む文章」向けのトピックに使用。読みやすい幅（720px）・ゆとりある行間・章移動の導線。
+  Manual（リファレンス）/Examples（実習）とは異なり、バージョンボックスやコード強調ではなく本文の流れを中心に構成する。
+  編集箇所: (1) <title>/章番号/タイトル/リード (2) nav（この章の節＋他の章） (3) 「この章の要点」
+            (4) <h2 id>/<h3> の節と本文 (5) 前/次の章へのリンク
+  {{二重中括弧}}・[説明: ...] は実際の内容に置き換える。リンクはすべて相対パス。
+  色はデザイントークンのみを使用 — テーマはデプロイ時に references/apply-theme.sh が docs/ 内のブランドカラーを置換する。
+  検索インデックスの前提: 本文の節は必ず <h2 id="..."> （必要に応じ <h3>）構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第7章・企業内マルチエージェントチーム運用、2つのモデルの比較 - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第7章・企業内マルチエージェントチーム運用、2つのモデルの比較</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第7章・2つのモデルの比較</div>
+  <a href="#s1">サービスチケットモデル</a>
+  <a href="#s1">↳ なぜカンバン方式が必要なのか</a>
+  <a href="#s2">開発ツール＋バリアントモデル</a>
+  <a href="#s3">両者を並べて比較する</a>
+  <a href="#s3b">2つのモデルの長所と短所</a>
+  <div class="nav-section">他の章</div>
+  <a href="../tools/00_Tools_Manual_ja.html">共通リファレンス・ハーネスツールリファレンス</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_ja.html">第8章・発展的な内容</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第7章</div>
+  <h1>企業内マルチエージェントチーム運用、2つのモデルの比較</h1>
+  <p class="lead">マルチエージェント開発環境を導入しようとする組織は、概ね2つの道のどちらかを選ぶことになる。1つは、1つの中央化されたチームが要求をチケットとして受け付ける方式であり、もう1つは、各チームが自分たちのチームを自ら構築できるツールを配布される方式である。本章では、この2つのモデルを並べて何が異なるのかだけを整理する。</p>
+
+  <div class="keypoints">
+    <div class="kp-title">この章で扱う内容</div>
+    <ul>
+      <li>サービスチケットモデルとは何か、どのように機能するのかを簡単に</li>
+      <li>サービスチケットモデルがカンバン（Kanban）方式で運用されるべき理由</li>
+      <li>開発ツール＋バリアントモデルとは何か、どのように機能するのかを簡単に</li>
+      <li>中央化、コンテキストの継続性、セットアップコスト、ガバナンス負担、適した利用場面という観点から2つのモデルを並べて比較</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">サービスチケットモデル</h2>
+  <p>1つのマルチエージェントチームが、定められた範囲内の要求を常時チケットとして受け付ける。PM役のエージェントが窓口となり、Slackや社内チケッティングシステムで要求を受け取り、要求の性質に合った専門エージェントに作業を割り振り、結果を返す。利用者は自分のパソコンに何もインストールする必要はなく、使い慣れた社内ツールにメッセージを残すだけでよい。</p>
+  <p>ここでいう「定められた範囲」は、必ずしも会社全体を意味するわけではない。組織規模が小さければ会社全体でこの1つのチームを共有しても問題ないが、組織が大きくなると、本部・事業部単位でそれぞれの受付窓口を別々に運用する方が現実的になる。マーケティング本部にはマーケティング本部専用のエージェントチーム、財務本部には財務本部専用のエージェントチームを、というように分けるわけだ。いずれにせよこのモデルの本質は同じである。<strong>その範囲内では</strong>、要求が複数のチームではなく1つの窓口に集約されるという点だ。</p>
+  <p>具体的に考えるとこうなる。小規模組織であれば、マーケティングチームAの「今回のキャンペーンのランディングページの文言を整えてほしい」と財務チームBの「先月の支出データを整理してほしい」が同じ1つのPMエージェント／チケット窓口に届き、PMがそれぞれを文書作成エージェントとデータ分析エージェントに割り当てる。大規模組織であれば、マーケティング本部傘下のチームからの要求はマーケティング本部専用の窓口へ、財務本部傘下のチームからの要求は財務本部専用の窓口へ、それぞれ集約される。本部ごとに別々のエージェントチームを運用しつつも、各本部の内部では依然として「1つの窓口に集約する」という原則を守る。要求者は同じ窓口を使う他の要求者の存在を知らなくてよく、その範囲内ではエージェントチームを1つだけ構築・運用すればよいという点が、このモデルの魅力である。</p>
+
+  <h3>なぜカンバン（Kanban）方式で運用すべきなのか</h3>
+  <p>問題は、まさにこの「1つの窓口にその範囲内の要求がすべて集まる」という特性から生じる。異なるチーム・異なる性質の要求が同時に押し寄せる中で、これを順序を決めずに届いた順に処理していると、緊急ではない要求が緊急な要求を押しのけ、処理中だった作業が新しい要求に押されて途中で中断され、今何が処理されていて何が滞っているのかを誰も把握できない状態になる。人間が運営するヘルプデスクがチケット数の増加とともに破綻するのとまったく同じ理由だ。</p>
+  <p>カンバンはこの問題を3つの仕組みで解決する。第一に、<strong>可視化されたキュー（待ち行列）</strong>である。すべての要求を「待機 → 進行中 → レビュー → 完了」といった列に分けてボードに載せておけば、今何件が滞っているか、何が長く停滞しているかを誰もが一目で把握できる。第二に、<strong>進行中作業数の制限（WIP制限）</strong>である。PMエージェント（あるいはその先の専門エージェント）が同時に処理する作業数を意図的に制限すれば、第2章§2で扱った「コンテキスト過負荷」問題が組織レベルでも同じように再現されるのを防げる。制限なしに要求をすべて受け入れると、エージェントが複数の要求のコンテキストを行き来しながら混同し、品質が低下する。第三に、<strong>優先度に基づくプル</strong>である。新しい要求が届いた順ではなく優先度の高い項目から次の作業として引き上げるようにすれば、緊急の財務締切要求が緊急でない文言修正要求の後ろに埋もれ、何日も放置される事故を防げる。</p>
+  <p>結局のところ、サービスチケットモデルは「単一窓口」という利点と、「その範囲内のすべてのチームの要求が1か所に集中する」というリスクを同時に抱えており、カンバンは後者を制御可能な状態に保つための最低限の運用規律である。カンバンなしにチケットモデルだけを導入すると、最初のうちは便利に見えても、要求量が増えた瞬間に処理遅延・優先順位の逆転・コンテキストの混同という3つの失敗パターンがほぼ必然的に現れる。</p>
+
+  <h2 id="s2">開発ツール＋バリアントモデル</h2>
+  <p>会社がすべての要求を代わりに処理する代わりに、各チームに「自分のチーム専用のマルチエージェントチームを自ら構築できる開発ツール」を配布する。チームは用意されたプロジェクトテンプレート（バリアント）の中から1つを選んで自分のプロジェクトをスキャフォールディングし、そうして作られたプロジェクトは独立したリポジトリとしてそのチームが継続して所有・運用する。ai-workspace-standardsが実際にどのようにこのモデルを実装しているかは、第5章§3で詳しく扱う。</p>
+  <p>同じ例で比較すると違いがはっきりする。マーケティングチームは<code>co-work</code>バリアントで自分のチーム専用プロジェクトをスキャフォールディングし、その中でキャンペーンの文言を継続的に磨き上げていき、財務チームは<code>co-develop</code>や<code>co-consult</code>バリアントで自分のチーム専用のデータ分析パイプラインを整える。両チームとも互いの要求キューを共有せず、それぞれのリポジトリ・メモリログ・エージェント構成を独立して所有する。チケットモデルの「単一窓口の待ち行列」問題自体がそもそも発生しない代わりに、チームごとに初期セットアップと運用の負担を自ら負う必要がある。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowE" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="150" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">サービスチケットモデル — 中央集中</text>
+        <circle cx="150" cy="110" r="42" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="150" y="106" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">PM /</text>
+        <text x="150" y="120" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">エージェントチーム</text>
+
+        <rect x="18" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="54" text-anchor="middle" font-size="10" fill="#116329">マーケティング</text>
+        <line x1="70" y1="65" x2="115" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="18" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="169" text-anchor="middle" font-size="10" fill="#116329">財務</text>
+        <line x1="70" y1="150" x2="115" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="54" text-anchor="middle" font-size="10" fill="#116329">営業</text>
+        <line x1="230" y1="65" x2="185" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="169" text-anchor="middle" font-size="10" fill="#116329">人事</text>
+        <line x1="230" y1="150" x2="185" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <text x="150" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">すべての要求が1つの窓口へ</text>
+
+        <rect x="328" y="10" width="1" height="210" fill="#d0d7de"/>
+
+        <text x="480" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">開発ツール＋バリアントモデル — 分散</text>
+
+        <rect x="345" y="60" width="90" height="70" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="390" y="88" text-anchor="middle" font-size="10.5" fill="#116329" font-weight="700">マーケティング</text>
+        <text x="390" y="104" text-anchor="middle" font-size="9.5" fill="#116329">co-work</text>
+        <text x="390" y="118" text-anchor="middle" font-size="9.5" fill="#116329">専用エージェントチーム</text>
+
+        <rect x="450" y="60" width="90" height="70" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="495" y="88" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">財務</text>
+        <text x="495" y="104" text-anchor="middle" font-size="9.5" fill="#0550ae">co-consult</text>
+        <text x="495" y="118" text-anchor="middle" font-size="9.5" fill="#0550ae">専用エージェントチーム</text>
+
+        <rect x="555" y="60" width="70" height="70" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="590" y="88" text-anchor="middle" font-size="10.5" fill="#6639ba" font-weight="700">人事</text>
+        <text x="590" y="104" text-anchor="middle" font-size="9.5" fill="#6639ba">co-work</text>
+        <text x="590" y="118" text-anchor="middle" font-size="9.5" fill="#6639ba">専用エージェントチーム</text>
+
+        <text x="480" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">チームごとに独立したリポジトリ・キュー・構成</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2 id="s3">両者を並べて比較する</h2>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Title -->
+        <text x="300" y="22" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">導入検討マトリックス — 2つのモデルの比較</text>
+
+        <!-- Header row -->
+        <rect x="10" y="34" width="580" height="30" rx="6" fill="#eef1f4" stroke="#d0d7de" stroke-width="1"/>
+        <text x="140" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">評価項目</text>
+        <text x="340" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">チケットモデル</text>
+        <text x="510" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">バリアントモデル</text>
+
+        <!-- Column dividers -->
+        <line x1="240" y1="34" x2="240" y2="238" stroke="#d0d7de" stroke-width="1"/>
+        <line x1="430" y1="34" x2="430" y2="238" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Row 1: 初期コスト — 低い(green) vs 高い(orange) -->
+        <rect x="10" y="68" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="102" x2="590" y2="102" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="90" font-size="11" fill="#1f2328" font-weight="600">初期コスト</text>
+        <rect x="290" y="76" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="316" y="90" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">低い</text>
+        <rect x="470" y="76" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="496" y="90" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">高い</text>
+
+        <!-- Row 2: 運用の自律性 — 低い(orange) vs 高い(green) -->
+        <rect x="10" y="104" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="138" x2="590" y2="138" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="126" font-size="11" fill="#1f2328" font-weight="600">運用の自律性</text>
+        <rect x="290" y="112" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="316" y="126" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">低い</text>
+        <rect x="470" y="112" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="496" y="126" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">高い</text>
+
+        <!-- Row 3: 拡張性 — 限定的(orange) vs 良好(green) -->
+        <rect x="10" y="140" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="174" x2="590" y2="174" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="162" font-size="11" fill="#1f2328" font-weight="600">拡張性</text>
+        <rect x="276" y="148" width="72" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="312" y="162" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">限定的</text>
+        <rect x="480" y="148" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="162" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">良好</text>
+
+        <!-- Row 4: ガバナンス — 中央統制(green) vs 分散(orange) -->
+        <rect x="10" y="176" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="210" x2="590" y2="210" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="198" font-size="11" fill="#1f2328" font-weight="600">ガバナンス</text>
+        <rect x="276" y="184" width="72" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="312" y="198" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">中央統制</text>
+        <rect x="450" y="184" width="106" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="503" y="198" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">分散（標準が必要）</text>
+
+        <!-- Row 5: コンテキスト維持 — 途切れる(orange) vs 深い(green) -->
+        <rect x="10" y="212" width="580" height="34" rx="0" fill="#fff"/>
+        <text x="30" y="234" font-size="11" fill="#1f2328" font-weight="600">コンテキスト維持</text>
+        <rect x="284" y="220" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="310" y="234" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">途切れる</text>
+        <rect x="480" y="220" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="234" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">深い</text>
+
+        <!-- Table outer border -->
+        <rect x="10" y="34" width="580" height="212" rx="6" fill="none" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Legend -->
+        <rect x="140" y="252" width="12" height="12" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.5"/>
+        <text x="157" y="262" font-size="9" fill="#636c76">長所（優位）</text>
+        <rect x="240" y="252" width="12" height="12" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.5"/>
+        <text x="257" y="262" font-size="9" fill="#636c76">トレードオフ</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>サービスチケットモデル</h4>
+      <ul>
+        <li><strong>中央化：</strong>単一チーム、単一窓口。小規模組織では会社全体、大規模組織では本部・事業部単位で共有</li>
+        <li><strong>コンテキストの継続性：</strong>要求ごとにコンテキストが頻繁に途切れ、無関係なプロジェクトが同じキューを通過する</li>
+        <li><strong>セットアップコスト：</strong>低い。新しいチームもすぐに同じ窓口を利用できる</li>
+        <li><strong>ガバナンス負担：</strong>低い。運用が1か所に集中しているため統制が容易</li>
+        <li><strong>適した用途：</strong>狭く反復的な要求（社内ヘルプデスク型）</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>開発ツール＋バリアントモデル</h4>
+      <ul>
+        <li><strong>中央化：</strong>分散。チームごとに自分のエージェントチームを所有</li>
+        <li><strong>コンテキストの継続性：</strong>プロジェクトのリポジトリ・メモリログを継続的に参照するため優れている</li>
+        <li><strong>セットアップコスト：</strong>チームごとに初期スキャフォールディング・構成のコストが発生する</li>
+        <li><strong>ガバナンス負担：</strong>高い。共有標準（CONSTITUTION.md類）がなければチーム間で標準が乖離する</li>
+        <li><strong>適した用途：</strong>チームが自分のプロジェクトを長期にわたり深く運用する必要がある場合</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pullquote">2つのモデルを分ける本当の基準は、要求がどれだけ反復的かではなく、その要求がプロジェクトのコンテキストをどれだけ深く必要とするかである。
+    <span class="by">— 中央集中型と分散型の運用モデルの根本的な違い</span></div>
+
+  <p>要求が狭く反復的で、深いドメインコンテキストを必要としないのであれば、チケットモデルが効率的である。逆に、各チームが自分のプロジェクトを長期にわたり深く運用する必要があるなら、初期コストを許容してでもチームごとにエージェントチームを所有する方が持続可能である。</p>
+  <div class="note">2つのモデルは互いに排他的ではない。組織の中でも、ヘルプデスク的な業務はチケットモデルで、製品開発チームはバリアントモデルで、というように併用することも可能である。</div>
+
+  <h2 id="s3b">2つのモデルの長所と短所</h2>
+  <p>§3の表が「何が異なるのか」を属性ごとに列挙したのに対し、ここではその違いが実際の運用でどのような利益と代償につながるのかを長所・短所として整理する。</p>
+
+  <h3>サービスチケットモデル</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >長所</h4>
+      <ul>
+        <li><strong>参入障壁が低い。</strong>新しいチームも別途セットアップなしにすぐ同じ窓口を利用できる。</li>
+        <li><strong>ガバナンスが単純である。</strong>運用が1つのチームに集中しているため、規則違反の有無を1か所だけで統制・監査すればよい（第3章の監査ログの原則が適用される箇所も1つだけである）。</li>
+        <li><strong>応答品質が標準化される。</strong>すべての要求が同じPM／エージェントチームを経由するため、成果物の形式と水準が均一になる。</li>
+        <li><strong>初期導入コストが最小化される。</strong>適用範囲（会社全体または本部単位）内でエージェントチームを1つだけ構築・運用すればよい。</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >短所</h4>
+      <ul>
+        <li><strong>コンテキストが毎回途切れる。</strong>要求者は毎回背景を再度説明しなければならず、深いドメイン知識が蓄積されない。</li>
+        <li><strong>ボトルネックが構造的である。</strong>その範囲（会社全体または本部）が大きくなるほど、単一窓口が処理速度を左右する。本部単位で窓口を分ければ会社全体で1つの窓口を使う場合よりはボトルネックが緩和されるが、各本部の内部では依然として同じ問題が再現される。§1のカンバンなしにはこのボトルネックがはるかに早く、はるかに深刻に訪れる。</li>
+        <li><strong>チームの所有権がない。</strong>要求元のチームがワークフローを直接調整できず、成果物に対する責任の所在も曖昧になりやすい。</li>
+        <li><strong>拡張に限界がある。</strong>要求量がチームの人員増加の速度より速く増えると、キューが対応しきれなくなる。</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>開発ツール＋バリアントモデル</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >長所</h4>
+      <ul>
+        <li><strong>コンテキストが深く維持される。</strong>プロジェクトのリポジトリ・メモリログを継続的に参照するため、反復するほどむしろ成果の品質が向上する。</li>
+        <li><strong>チームの自律性が高い。</strong>自分のドメインに合ったワークフローをバリアントとして直接設計・カスタマイズできる。</li>
+        <li><strong>拡張性が良い。</strong>チームが増えても互いのキューを共有しないため、組織全体のボトルネックにならない。</li>
+        <li><strong>再利用がしやすい。</strong>一度作ったバリアントを他のチームがそのまま複製して始められる（第5章§3のボイラープレートの考え方）。</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >短所</h4>
+      <ul>
+        <li><strong>初期セットアップコストがかかる。</strong>チームごとにスキャフォールディング・エージェント定義・ガバナンスパイプラインを整える必要がある。</li>
+        <li><strong>ガバナンスが分断化するリスクがある。</strong>共有標準（CONSTITUTION.md）がない、あるいは守られなければ、チームごとに異なる規則へと乖離していく。フォークモデル（第5章§3）が与える自由の代償である。</li>
+        <li><strong>インフラが重複する。</strong>類似した構成を複数のプロジェクトがそれぞれ維持しなければならない。L0→L1→L2構造がこれを緩和するが、完全には解消しない。</li>
+        <li><strong>習熟度が求められる。</strong>チームメンバーがハーネス構成そのもの（第2章§1・第3章の概念）をある程度理解している必要がある。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">結局、トレードオフは一文に要約できる。<strong>チケットモデルは「低い参入障壁と単純な統制」を買い、その代償として「コンテキストの断絶と拡張の限界」を支払う。バリアントモデルは「深いコンテキストと拡張性」を買い、その代償として「初期コストと習熟度の要求」を支払う。</strong>どちらが「より優れた」モデルというわけではなく、組織が今どちらの代償を負担できるかという問題である。</div>
+
+  <div class="chapter-nav">
+    <a href="../tools/00_Tools_Manual_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">共通リファレンス・ツール比較</div></a>
+    <a href="../intro/08_Intro_Advanced_Deploy_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第8章§1・デプロイとSSOT</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

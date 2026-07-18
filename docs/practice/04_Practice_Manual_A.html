@@ -12,7 +12,6 @@
     .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
     .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
     .tree-box pre .desc { color: var(--text-dim); }
-    td code { font-size: var(--font-size-label); }
     .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
     .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
     @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
@@ -73,7 +72,7 @@
 
   <p>Claude App과 Claude Code는 프로젝트 폴더 아래에 마크다운 파일 하나로 서브에이전트 하나를 미리 정의한다. <strong>Claude App과 Claude Code는 같은 파일을 공유한다</strong> — 둘 다 <code>.claude/agents/*.md</code>를 완전히 같은 방식으로 인식한다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claudeapp">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> .claude/agents/*.md</h3>
     <p>프로젝트 루트의 <code>.claude/agents/</code> 폴더에 마크다운 파일을 두면 Claude App에서도 자동으로 커스텀 서브에이전트로 인식된다. <code>name</code>이 나중에 <code>subagent_type</code>으로 참조하는 식별자가 된다. <strong>Claude Code(CLI)에서도 완전히 같은 파일이 완전히 같은 방식으로 동작한다</strong> — 둘은 같은 서브에이전트 정의 포맷을 공유한다.</p>
     <div style="position:relative">
@@ -91,7 +90,7 @@ model: sonnet
 </div>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claude">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude App과 동일한 .claude/agents/*.md</h3>
     <p>Claude App에서 쓴 것과 완전히 같은 <code>.claude/agents/*.md</code> 파일을 그대로 인식한다. Desktop App과 CLI 사이에 서브에이전트 정의 방식의 차이는 없다.</p>
   </div>
@@ -127,7 +126,7 @@ model: sonnet
 
   <p>Claude App과 Claude Code 모두 <code>Agent</code> 툴(문서에서는 <code>Task</code> 툴로도 불림)을 호출해 별도의 컨텍스트를 가진 서브에이전트를 띄운다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claudeapp">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent(Task) 툴</h3>
     <p>Claude App에서도 메인 세션은 <code>Agent</code> 툴(문서에서는 <code>Task</code> 툴로도 불림)을 호출해 별도의 컨텍스트를 가진 서브에이전트를 띄운다. 서브에이전트는 메인 세션의 대화 기록을 보지 못하므로, <code>prompt</code>에 필요한 배경을 자족적으로 담아야 한다. <strong>Claude Code(CLI)도 같은 <code>Agent</code>/<code>Task</code> 툴을 그대로 쓴다</strong> — 채팅창에 자연어로 요청하면 내부적으로 아래와 같은 형태로 호출된다.</p>
     <div style="position:relative">
@@ -141,7 +140,7 @@ model: sonnet
 </div>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claude">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude App과 동일한 Agent(Task) 툴</h3>
     <p>Claude App과 완전히 같은 <code>Agent</code>/<code>Task</code> 툴 호출 방식이다. 터미널에서 자연어로 요청하면 동일한 방식으로 서브에이전트가 스폰된다.</p>
   </div>
@@ -153,14 +152,14 @@ model: sonnet
 
   <p>Claude 계열은 두 가지 방식으로 병렬 실행을 지원한다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claudeapp">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent Teams — in-process</h3>
     <p>Claude App에서도 실험적 기능인 Agent Teams를 켜면 여러 팀메이트가 병렬로 작업한다. 다만 Desktop App에서는 <code>teammateMode: in-process</code>만 쓸 수 있고, 일부 키보드 내비게이션(Shift+Down 등)이 제한된다. <strong>Claude Code(CLI)에서도 같은 <code>in-process</code> 모드가 그대로 동작</strong>하며, CLI에서는 추가로 tmux 분할 창을 쓰는 <code>tmux</code> 모드도 고를 수 있다.</p>
   </div>
 
   <div class="warning-box">같은 디렉터리·Workspace에서 여러 에이전트를 동시에 돌리면 "인지적 중첩(cognitive overlap)"이 발생할 수 있다 — 한 에이전트가 같은 폴더에서 작업 중인 다른 에이전트의 결과를 자기 작업 맥락으로 착각(hallucination)하는 문제다. 작업 디렉터리나 worktree로 에이전트를 분리하는 것이 권장 관행이다.</div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claude">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — 한 메시지에 여러 Agent 호출</h3>
     <p>서로 의존성이 없는 작업이 여러 개 있다면, 한 메시지 안에 <code>Agent</code> 호출을 여러 개 나란히 담아 동시에 실행할 수 있다. Claude Code는 이 호출들을 병렬로 디스패치한다.</p>
     <div style="position:relative">
@@ -192,12 +191,12 @@ Agent(description="테스트 커버리지 점검",
 
   <p>Claude 계열에서 자동화·훅의 차이점은 App과 Code 사이에 있다.</p>
 
-  <div style="border: 1px solid var(--border); border-top: 3px dashed var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claudeapp">
     <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 훅 미발화</h3>
     <p><code>.claude/settings.json</code>에 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅을 정의해도 Claude App에서는 자동으로 발화하지 않는다. 훅이 하던 일(예: 감사 스크립트 실행)은 세션이 끝난 뒤 수동으로 실행해야 한다. <strong>Claude Code(CLI)에서는 같은 설정 파일의 훅이 이벤트에 맞춰 자동으로 발화한다</strong> — 자동화 게이트가 필요한 팀은 이 지점에서 명령줄 인터페이스(CLI)를 선택하는 것이 합리적이다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-green); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block claude">
     <h3><span class="badge badge-claude">Claude Code (CLI)</span> — 훅 자동 발화</h3>
     <p><code>.claude/settings.json</code>의 <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> 훅이 파일 저장·작업 완료 같은 이벤트에 맞춰 자동으로 실행된다.</p>
     <div style="position:relative">
@@ -219,7 +218,7 @@ Agent(description="테스트 커버리지 점검",
 
   <!-- ── 참고 링크 ── -->
   <h2 id="refs">참고 링크</h2>
-  <ul style="list-style: none; padding: 0; line-height: 2.2;">
+  <ul class="flat-list">
     <li>📖 <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents 공식 문서</a></li>
     <li>⚙️ <a href="04_Practice_Manual.html">4장 §1 공통 레퍼런스 — 04_Practice_Manual.html</a></li>
     <li>⚙️ <a href="04_Practice_Manual_B.html">4장 §1-B Antigravity 중심 — 04_Practice_Manual_B.html</a></li>

@@ -12,7 +12,6 @@
     .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
     .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
     .tree-box pre .desc { color: var(--text-dim); }
-    td code { font-size: var(--font-size-label); }
     .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
     .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
     @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
@@ -73,12 +72,12 @@
 
   <p>Google 계열(Antigravity Desktop/CLI)은 별도의 정의 파일이 없다 — 오케스트레이터가 주어진 목표를 보고 그때그때 서브에이전트를 만든다.</p>
 
-  <div style="border:1px solid var(--border);border-top:3px dashed var(--accent-purple);border-radius:8px;padding:14px 16px;margin:12px 0 20px;">
+  <div class="platform-block antigravity">
     <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> 워크스페이스 단위 — 별도 정의 파일 없음</h3>
     <p>Antigravity 데스크톱(Desktop)의 Agent Manager는 에이전트를 사전에 정의된 파일 단위가 아니라 Workspace 단위로 다룬다. 사용자가 목표를 주면 그 Workspace를 맡은 에이전트(오케스트레이터)가 스스로 하위 작업을 쪼개고 필요한 서브에이전트를 즉석에서 만든다. 즉 "reviewer.md 같은 파일을 미리 준비한다"는 개념 자체가 없다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block agy">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 오케스트레이터가 동적으로 생성</h3>
     <p>Antigravity 데스크톱(Desktop)과 마찬가지로 <code>agy</code>도 사전 정의 파일 없이, 목표(goal)를 받으면 오케스트레이터 에이전트가 작업을 어떻게 쪼갤지 스스로 판단해 서브에이전트를 즉석에서 만들어 병렬로 실행한다. 각 서브에이전트는 독립된 컨텍스트 창을 가져 메인 세션의 맥락이 흐려지는 것을 막는다.</p>
   </div>
@@ -92,12 +91,12 @@
 
   <p>Antigravity 계열은 Agent Manager UI와 슬래시 커맨드로 에이전트에게 목표를 맡긴다.</p>
 
-  <div style="border:1px solid var(--border);border-top:3px dashed var(--accent-purple);border-radius:8px;padding:14px 16px;margin:12px 0 20px;">
+  <div class="platform-block antigravity">
     <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> Agent Manager UI</h3>
     <p>Antigravity Desktop에서는 Agent Manager 화면에서 Workspace를 고르고, 그 Workspace를 맡을 에이전트를 스폰(Local Mode 또는 New Worktree Mode)한 뒤 자연어로 목표를 준다. 승인·피드백이 필요한 시점에는 Inbox에 메시지가 쌓인다. "서브에이전트를 호출한다"는 개념보다는 "에이전트에게 목표를 맡기고 진행 상황을 지켜본다"에 가깝다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block agy">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — /goal, /agent, /agents</h3>
     <p>Claude Code의 <code>Agent</code>/<code>Task</code> 툴과 같은 "동적으로 필요한 서브에이전트를 스폰한다"는 동작을, <code>agy</code>는 슬래시 커맨드로 부른다는 차이일 뿐이다(<a href="04_Practice_Manual_A.html#section-2">§1-A 섹션 2</a> 참조). <code>agy</code> 세션에서 <code>/goal</code>로 목표를 주면 중간 확인 없이 끝까지 실행하고(주지 않으면 주요 단계마다 확인을 위해 멈춘다), <code>/agent</code>로 장기 작업을 백그라운드에 맡긴 채 계속 다른 프롬프트를 이어갈 수 있다. <code>/agents</code>는 실행 중/완료/막힌 서브에이전트 목록을 보여주는 패널이다.</p>
     <div style="position:relative">
@@ -117,14 +116,14 @@
 
   <p>Antigravity 계열은 Workspace 단위와 세션 단위의 두 층위에서 병렬 실행을 지원한다.</p>
 
-  <div style="border:1px solid var(--border);border-top:3px dashed var(--accent-purple);border-radius:8px;padding:14px 16px;margin:12px 0 20px;">
+  <div class="platform-block antigravity">
     <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> Agent Manager로 여러 Workspace에 에이전트 배정</h3>
     <p>Antigravity 데스크톱(Desktop)의 Agent Manager는 Editor보다 상위 레벨에서 여러 Workspace에 걸쳐 여러 에이전트를 한눈에 관리하는 인터페이스다. 코드를 직접 작성하기보다 에이전트를 통해 코드베이스와 상호작용하는 방식이 기본이다. 각 Workspace에는 원칙적으로 에이전트를 하나씩만 배정하는 것이 권장되지만, 필요하면 한 Workspace를 여러 에이전트가 함께 쓸 수도 있다. 에이전트를 스폰할 때는 활성 폴더에서 바로 작업하는 <strong>Local Mode</strong>와, 격리된 git worktree에서 작업하는 <strong>New Worktree Mode</strong> 중 하나를 선택한다.</p>
   </div>
 
   <div class="warning-box">같은 디렉터리·Workspace에서 여러 에이전트를 동시에 돌리면 "인지적 중첩(cognitive overlap)"이 발생할 수 있다 — 한 에이전트가 같은 폴더에서 작업 중인 다른 에이전트의 결과를 자기 작업 맥락으로 착각(hallucination)하는 문제다. Workspace나 worktree로 에이전트를 분리하는 것이 권장 관행이며, 예외적으로 넘어갈 수 있는 사소한 문제가 아니다.</div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block agy">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 세션 내부 + 세션 간 병렬</h3>
     <p><code>agy</code>는 두 층위의 병렬성을 지원한다. 한 세션 안에서는 오케스트레이터가 여러 서브에이전트를 동시에 실행하고, 세션 간에는 터미널을 여러 개 띄워 서로 다른 <code>agy</code> 세션을 독립적으로 병렬 실행할 수 있다 — 서로 다른 파일을 건드리는 한 안전하다. Antigravity 데스크톱(Desktop)의 Agent Manager를 못 쓰는 환경에서 이 세션 간 병렬이 대안이 된다.</p>
   </div>
@@ -149,12 +148,12 @@
 
   <p>Antigravity 계열에서 자동화는 명령줄 인터페이스(CLI)의 비대화형 모드와 설정 점검 명령으로 담당한다.</p>
 
-  <div style="border:1px solid var(--border);border-top:3px dashed var(--accent-purple);border-radius:8px;padding:14px 16px;margin:12px 0 20px;">
+  <div class="platform-block antigravity">
     <h3><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 해당 없음, GUI 중심</h3>
     <p>Antigravity 데스크톱(Desktop)은 GUI로 승인·진행을 관리하는 구조라, Claude Code의 훅에 대응하는 자동 발화 장치가 없다. 자동화가 필요한 반복 작업은 Antigravity CLI 쪽으로 옮기는 것이 현실적이다.</p>
   </div>
 
-  <div style="border: 1px solid var(--border); border-top: 3px solid var(--accent-dark); border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+  <div class="platform-block agy">
     <h3><span class="badge badge-agy">Antigravity CLI (agy)</span> — 비대화형 실행 + 설정 점검</h3>
     <p><code>agy -p "프롬프트"</code>는 한 번 실행하고 종료하는 비대화형 모드로, CI 파이프라인 같은 자동화에 적합하다. <code>agy inspect</code>는 프로젝트에 로드된 설정·스킬·플러그인·훅 구성을 보여준다 — Claude Code의 훅 자동 발화에 대응하는 것은 아니지만, "지금 어떤 설정이 실제로 적용돼 있는지" 확인하는 역할은 같다.</p>
     <div style="position:relative">
@@ -175,7 +174,7 @@ agy inspect
 
   <!-- ── 참고 링크 ── -->
   <h2 id="refs">참고 링크</h2>
-  <ul style="list-style: none; padding: 0; line-height: 2.2;">
+  <ul class="flat-list">
     <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Getting Started 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Using AGY CLI 공식 문서</a></li>
     <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Agent Manager 공식 문서</a></li>

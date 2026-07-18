@@ -416,6 +416,29 @@ table + table { margin-top: calc(var(--spacing-unit) * 3); }
 .table-compare { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
 .table-compare th:first-child { width: auto; }
 
+/* Modifier — add alongside .table-compare (e.g. class="table-compare
+   narrow-first-col") ONLY when the first column holds short, fixed
+   English vocabulary next to a long free-text column (e.g. Tier labels
+   beside a "Purpose" description) — auto layout otherwise starves the
+   short column, since it has almost no shrink range compared to the
+   free-text one. Do NOT apply this to a .table-compare whose first
+   column is translatable prose (e.g. "Lifecycle Stage") — that repeats
+   the exact mistake documented in the policy above. The 2-class
+   selector is intentional: it's what tells check-tables.ts this is a
+   deliberate, scoped opt-in rather than the accidental blanket nowrap
+   that broke .table-schedule.
+
+   `width` adds `2 * var(--table-cell-padding)` because `* { box-sizing:
+   border-box }` makes a plain `width: 9ch` the OUTER box including
+   padding — the same mistake already made once in .table-plan. Without
+   it, "Medium" still doesn't fit and the column renders no wider than
+   before this rule existed. */
+.table-compare.narrow-first-col th:nth-child(1),
+.table-compare.narrow-first-col td:nth-child(1) {
+  width: calc(9ch + 2 * var(--table-cell-padding));
+  white-space: nowrap;
+}
+
 /* Table type: Plan — PM execution plan table (AGENTS.md §5.1 Standard
    Execution Plan Template: # | Task | Agent | Tier | Model | Spec). Fixed
    layout because the Task column routinely holds a long inline <code>

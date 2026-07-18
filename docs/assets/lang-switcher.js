@@ -103,6 +103,14 @@
   function buildTargetUrl(langCode) {
     var base = stripSuffix(window.location.pathname);
     if (langCode) {
+      // A directory index (e.g. the site root served as ".../") has no
+      // ".html" to anchor the suffix replacement on, so switching language
+      // from it rebuilt the identical URL and navigated nowhere — the
+      // dropdown looked dead on the landing page. Treat a trailing slash as
+      // an implicit index.html so we can form index_en.html / index_ja.html.
+      if (/\/$/.test(base)) {
+        base = base + 'index.html';
+      }
       base = base.replace(/\.html$/, '_' + langCode + '.html');
     }
     return base;

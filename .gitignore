@@ -52,7 +52,8 @@ gha-creds-*.json
 node_modules/
 __pycache__/
 *.log
-.playwright-mcp/      # 브라우저 자동화(MCP) 검증용 스크린샷/스냅샷 — 임시 아티팩트
+# 브라우저 자동화(MCP) 검증용 스크린샷/스냅샷 — 임시 아티팩트
+.playwright-mcp/
 
 # Obsidian vault metadata
 .obsidian/

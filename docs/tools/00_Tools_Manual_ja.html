@@ -261,17 +261,17 @@ Google family
       </defs>
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Title -->
-        <text x="360" y="20" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Tool Selection Decision Flow</text>
+        <text x="360" y="20" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">ツール選択 意思決定フロー</text>
 
         <!-- Diamond 1: Do you need CLI? -->
         <polygon points="260,46 340,80 260,114 180,80" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
-        <text x="260" y="76" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Do you need</text>
-        <text x="260" y="90" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">CLI?</text>
+        <text x="260" y="76" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">CLIは</text>
+        <text x="260" y="90" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">必要ですか？</text>
 
         <!-- Start arrow to diamond 1 -->
         <line x1="80" y1="80" x2="180" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
         <rect x="10" y="64" width="68" height="32" rx="6" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
-        <text x="44" y="84" text-anchor="middle" font-size="10" fill="#636c76" font-weight="600">Start</text>
+        <text x="44" y="84" text-anchor="middle" font-size="10" fill="#636c76" font-weight="600">開始</text>
 
         <!-- Yes path (down) from diamond 1 -->
         <line x1="260" y1="114" x2="260" y2="140" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#arrowDtG)"/>
@@ -280,12 +280,12 @@ Google family
         <!-- Yes branch: Claude Code -->
         <rect x="148" y="142" width="120" height="40" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
         <text x="208" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude Code</text>
-        <text x="208" y="174" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · hooks supported</text>
+        <text x="208" y="174" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · フック対応</text>
 
         <!-- Yes branch: Antigravity CLI -->
         <rect x="280" y="142" width="120" height="40" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
         <text x="340" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity CLI</text>
-        <text x="340" y="174" text-anchor="middle" font-size="8.5" fill="#6639ba">Experimental · dynamic agents</text>
+        <text x="340" y="174" text-anchor="middle" font-size="8.5" fill="#6639ba">実験的 · 動的エージェント</text>
 
         <!-- No path (right) from diamond 1 -->
         <line x1="340" y1="80" x2="380" y2="80" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrowDtB)"/>
@@ -294,11 +294,11 @@ Google family
         <!-- No branch boxes -->
         <rect x="382" y="62" width="110" height="36" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
         <text x="437" y="80" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude App</text>
-        <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · GUI default</text>
+        <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · GUI標準</text>
 
         <rect x="382" y="104" width="110" height="36" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
         <text x="437" y="122" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity</text>
-        <text x="437" y="134" text-anchor="middle" font-size="8.5" fill="#6639ba">Experimental · Agent Manager</text>
+        <text x="437" y="134" text-anchor="middle" font-size="8.5" fill="#6639ba">実験的 · Agent Manager</text>
 
         <!-- Connecting lines from No to the two boxes -->
         <line x1="378" y1="80" x2="378" y2="122" stroke="#0969da" stroke-width="1" stroke-dasharray="3,2"/>
@@ -307,8 +307,8 @@ Google family
 
         <!-- Diamond 2: Do you need team-level parallelism? -->
         <polygon points="260,206 380,250 260,294 140,250" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
-        <text x="260" y="244" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Do you need</text>
-        <text x="260" y="258" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">team-level parallelism?</text>
+        <text x="260" y="244" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">チーム単位の</text>
+        <text x="260" y="258" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">並列は必要ですか？</text>
 
         <!-- Arrow from first-level results down to diamond 2 -->
         <line x1="208" y1="182" x2="208" y2="208" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
@@ -329,15 +329,15 @@ Google family
 
         <!-- Legend -->
         <rect x="530" y="62" width="14" height="14" rx="3" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
-        <text x="550" y="73" font-size="9" fill="#636c76">Claude family</text>
+        <text x="550" y="73" font-size="9" fill="#636c76">Claude系</text>
         <rect x="530" y="82" width="14" height="14" rx="3" fill="#f1e8fd" stroke="#6639ba" stroke-width="1"/>
-        <text x="550" y="93" font-size="9" fill="#636c76">Antigravity family</text>
+        <text x="550" y="93" font-size="9" fill="#636c76">Antigravity系</text>
         <polygon points="537,112 544,118 537,124 530,118" fill="#fef7e0" stroke="#953800" stroke-width="1"/>
-        <text x="550" y="122" font-size="9" fill="#636c76">Decision node</text>
+        <text x="550" y="122" font-size="9" fill="#636c76">意思決定ノード</text>
 
         <!-- Platform labels -->
-        <text x="270" y="36" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">Choosing an execution environment</text>
-        <text x="270" y="200" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">Whether parallelism is needed</text>
+        <text x="270" y="36" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">実行環境の選択</text>
+        <text x="270" y="200" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">並列実行の要否</text>
       </g>
     </svg>
   </div>

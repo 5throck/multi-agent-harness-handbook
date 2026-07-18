@@ -62,7 +62,7 @@
     <li><strong>자율적 행동:</strong> 에이전트는 단일 프롬프트에 대한 단일 응답이 아니라, 목적을 달성하기 위해 여러 단계를 자율적으로 수행할 수 있다. 조건 분기, 오류 재시도, 결과 검증까지 스스로 판단한다.</li>
   </ul>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -123,7 +123,7 @@
   <p>하네스 엔지니어링은 어느 날 갑자기 등장한 개념이 아니라, AI를 다루는 방식이 세 단계를 거치며 쌓아 올린 결과다. 각 단계는 이전 단계를 대체한 것이 아니라, "이전 단계만으로는 부족하다"는 걸 드러내며 그 위에 새로운 층을 얹었다.</p>
   <p>세 단계를 요리에 비유하면 이해가 빠르다. 프롬프트 엔지니어링은 "주방장에게 어떤 말로 주문을 넣을 것인가"이고, 컨텍스트 엔지니어링은 "주방장 손에 어떤 재료와 레시피를 쥐여 줄 것인가"이며, 하네스 엔지니어링은 "이 주방이 매번 같은 맛을 내도록 검수 절차·도구·위생 규칙까지 갖춘 시스템을 만드는 것"이다. 아무리 말을 잘하고 재료가 좋아도, 주방 시스템 자체가 엉성하면 결과는 매번 들쭉날쭉하다.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -170,7 +170,7 @@
   <h2 id="architecture-diagram">하네스 아키텍처 전체도</h2>
   <p>하네스 엔지니어링은 모델과 사용자 사이에 놓이는 5층 구조로 생각할 수 있다. 아래 다이어그램은 이 핸드북 전체를 관통하는 아키텍처를 한눈에 보여준다 — 각 장이 이 5층 중 어느 계층을 다루는지는 <a href="#s1">다음 절</a>에서 연결한다.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
   <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
@@ -249,7 +249,7 @@
       <text x="20" y="371" font-size="10" font-weight="700" fill="#cf222e">런타임</text>
     </g>
   </svg>
-  <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">그림 2-1. 하네스 엔지니어링의 5층 구조 — 워크스페이스부터 모델까지, 이 핸드북 전체를 관통하는 아키텍처</p>
+  <p class="fig-caption">그림 2-1. 하네스 엔지니어링의 5층 구조 — 워크스페이스부터 모델까지, 이 핸드북 전체를 관통하는 아키텍처</p>
   </div>
 
   <h2 id="s1">하네스 엔지니어링이란</h2>
@@ -261,7 +261,7 @@
 
   <h2 id="s2">단일 에이전트의 한계</h2>
   <p>하나의 에이전트에게 모든 역할을 맡기면 초기에는 편리하지만, 작업이 커질수록 세 가지 문제가 뚜렷해진다. 첫째, 컨텍스트 과부하다. 설계 검토, 코드 작성, 테스트, 문서화를 한 세션 안에서 순서대로 처리하다 보면 앞선 단계의 세부 사항이 뒤로 갈수록 희미해지고, 결과의 일관성이 떨어진다. 둘째, 역할 충돌이다. 코드를 작성한 에이전트가 자기 코드를 스스로 검토하면 놓치는 결함이 많아진다. 작성자와 검토자가 같은 사람이면 생기는 것과 똑같은 문제다. 셋째, 병렬성의 부재다. 서로 독립적인 하위 작업(예: 여러 파일의 리팩터링, 여러 관점의 코드 리뷰)도 단일 에이전트는 순서대로 처리할 수밖에 없어 시간이 선형으로 늘어난다.</p>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- 작업 블록들 -->
@@ -296,7 +296,7 @@
   <h2 id="s3">멀티 에이전트팀의 구성요소</h2>
   <p>멀티 에이전트팀은 크게 세 가지 요소로 이루어진다.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -330,7 +330,7 @@
         <text x="520" y="211" text-anchor="middle" font-size="10.5" fill="#116329">테스트</text>
       </g>
     </svg>
-    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">오케스트레이터가 작업을 쪼개 스페셜리스트에게 핸드오프 계약으로 넘기는 기본 구조 (스페셜리스트 구성은 작업마다 §4b에서 다루는 것처럼 동적으로 달라진다)</p>
+    <p class="fig-caption">오케스트레이터가 작업을 쪼개 스페셜리스트에게 핸드오프 계약으로 넘기는 기본 구조 (스페셜리스트 구성은 작업마다 §4b에서 다루는 것처럼 동적으로 달라진다)</p>
   </div>
 
   <h3>오케스트레이터(Orchestrator)</h3>
@@ -488,7 +488,7 @@
   </ul>
   <div class="note">다섯 패턴은 독립적으로 쓰이기보다 겹쳐 쓰인다. 라우팅이 프롬프트 체이닝의 첫 단계로 들어가거나, 오케스트레이터-워커가 워커 단위마다 평가자-최적화를 내부에 품거나, 병렬화가 다른 패턴 안에 끼어드는 식이다. §4b에서 이 조합을 실제 예로 다룬다.</div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -548,7 +548,7 @@
         <text x="440" y="80" font-size="9" fill="#cf222e" transform="rotate(-90 440 80)">반려</text>
       </g>
     </svg>
-    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">다섯 패턴 중 파이프라인·팬아웃·검증-후-적용 세 가지를 시각화했다. 라우팅과 오케스트레이터-워커를 포함한 전체 목록은 본문을 참고. 패턴은 서로 대체재가 아니라 조합해 쓰는 도구 상자다.</p>
+    <p class="fig-caption">다섯 패턴 중 파이프라인·팬아웃·검증-후-적용 세 가지를 시각화했다. 라우팅과 오케스트레이터-워커를 포함한 전체 목록은 본문을 참고. 패턴은 서로 대체재가 아니라 조합해 쓰는 도구 상자다.</p>
   </div>
 
   <h3>실패했을 때 — 재시도·롤백·에스컬레이션</h3>
@@ -565,7 +565,7 @@
 
   <h3>팀 구성은 고정돼 있지 않다</h3>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Left: 정적 팀 -->
@@ -629,7 +629,7 @@
   <p>같은 내용(예: "테스트는 항상 <code>npm test</code>로 실행하고, <code>src/legacy/</code> 폴더는 절대 수정하지 마라")을 팀원이 쓰는 도구 수만큼(CLAUDE.md, .cursorrules, copilot-instructions.md...) 복사해 두면, 규칙이 바뀔 때마다 파일을 전부 찾아 고쳐야 하고 하나라도 빠뜨리면 그 도구를 쓰는 사람만 다른 규칙으로 일하게 된다. 여러 나라 말로 같은 계약서를 따로따로 번역해 보관하다가, 한쪽만 조항을 고치는 바람에 버전이 어긋나는 것과 같은 문제다.</p>
   <p><strong>AGENTS.md</strong>는 이 문제를 풀기 위해 2025년 8월 OpenAI 주도로 Google·Cursor·Factory 등이 참여해 만든 개방형 표준이고, 2025년 12월 리눅스 재단 산하 Agentic AI Foundation에 기증됐다. 저장소 루트에 AGENTS.md 하나만 두면 Codex, Claude Code(가져오기 방식), GitHub Copilot, Cursor, Google Jules, Antigravity 계열을 포함해 30개가 넘는 도구가 세션 시작 시 이를 읽어 빌드·테스트 명령, 코드 스타일, 손대면 안 되는 영역 같은 공통 규칙을 공유한다.</p>
   <p>이 핸드북이 계속 강조하는 "네 도구 모두 지원"이라는 원칙도 결국 같은 문제의식에서 나온다. 팀이 Claude App을 쓰든 Antigravity 데스크톱(Desktop)을 쓰든, 저장소 루트의 공유 규칙(AGENTS.md)과 도구별 세부 설정(<code>CLAUDE.md</code>, <code>GEMINI.md</code> 등)을 나눠 두면 도구를 바꾸거나 섞어 써도 하네스 자체는 흔들리지 않는다. 5장에서 살펴볼 ai-workspace-standards 저장소는 이 원칙을 실제로 구현한 사례다. 루트의 <code>AGENTS.md</code> 파일이 워크스페이스 전체 에이전트의 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적(engine-agnostic) 커맨드·스킬을 담는다.</p>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -675,7 +675,7 @@
 
       </g>
     </svg>
-    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">AGENTS.md가 공통 명세(SSOT) 역할을 하고, 도구별 파일이 각 도구의 실행 방법만 추가 정의하는 계층 분리 구조</p>
+    <p class="fig-caption">AGENTS.md가 공통 명세(SSOT) 역할을 하고, 도구별 파일이 각 도구의 실행 방법만 추가 정의하는 계층 분리 구조</p>
   </div>
 
   <div class="note">AGENTS.md는 "무엇을 지켜야 하는가"를 도구 중립적으로 정의하고, CLAUDE.md/GEMINI.md 같은 도구별 파일은 "그것을 이 도구에서 어떻게 실행하는가"만 추가로 정의한다. 중복을 줄이는 계층 분리다.</div>

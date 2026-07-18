@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第4章 §1-A・サブエージェント活用詳細 — Claude中心 - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第4章 §1-A・サブエージェント活用詳細 — Claude中心</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+    .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
+    @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
+    .platform-col { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+    .platform-col pre.code-block { max-width: 100%; }
+    .platform-col.claude { border-top: 3px solid var(--accent-green); }
+    .platform-col.claudeapp { border-top: 3px dashed var(--accent-green); }
+    .platform-col.agy { border-top: 3px solid var(--accent-dark); }
+    .platform-col.antigravity { border-top: 3px dashed var(--accent-dark); }
+    .platform-col h3 { margin-top: 0; }
+    .platform-pair.quad { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 760px) { .platform-pair.quad { grid-template-columns: 1fr; } }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── サイドバーナビゲーション ── -->
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第4章 §1-A・Claude中心詳細</div>
+  <a href="#section-1">1. サブエージェントの定義</a>
+  <a href="#section-2">2. サブエージェントの呼び出し/委任</a>
+  <a href="#section-3">3. 並列実行</a>
+  <a href="#section-4">4. 自動化/フック</a>
+  <div class="nav-section">参考</div>
+  <a href="#refs">参考リンク</a>
+  <div class="nav-section">姉妹文書</div>
+  <a href="04_Practice_Manual_ja.html">第4章 §1・共通リファレンス</a>
+  <a href="04_Practice_Manual_B_ja.html">第4章 §1-B・Antigravity中心</a>
+  <div class="nav-section">他の章</div>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章・ガードレールと権限モデル</a>
+  <a href="../intro/05_Intro_Chapter_ja.html">第5章・導入</a>
+</nav>
+
+<!-- ── 本文 ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第4章 §1-A</div>
+  <h1>サブエージェント活用詳細（Claude中心）</h1>
+  <p class="subtitle">Claude Code / Claude Appでサブエージェントを定義し、呼び出し、並列・自動化の単位に拡張する方法をClaude系列に限定してまとめた詳細文書 &nbsp;|&nbsp; 共通の概念は<a href="04_Practice_Manual_ja.html">第4章 §1リファレンス</a>で、Antigravity系列は<a href="04_Practice_Manual_B_ja.html">第4章 §1-B Antigravity中心</a>で扱う。</p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象バージョン</span><span class="vvalue">Claude Code / Claude App 2026-07リリース — Antigravity対応は<a href="04_Practice_Manual_B_ja.html">§1-B</a>を参照</span></div>
+    <div class="version-row"><span class="vlabel">参照文書URL</span><span class="vvalue"><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com/en/docs/claude-code/sub-agents</a></span></div>
+    <div class="version-row"><span class="vlabel">文書収集日</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">バージョン確認方法</span><span class="vvalue">Claude Code/App: <code>claude --version</code></span></div>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション1 ── -->
+  <h2 id="section-1">1. サブエージェントの定義</h2>
+
+  <p>Claude AppとClaude Codeは、プロジェクトフォルダ配下にMarkdownファイル1つでサブエージェント1つを事前に定義する。<strong>Claude AppとClaude Codeは同じファイルを共有する</strong> — どちらも<code>.claude/agents/*.md</code>を完全に同じ方式で認識する。</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> .claude/agents/*.md</h3>
+    <p>プロジェクトルートの<code>.claude/agents/</code>フォルダにMarkdownファイルを置くと、Claude Appでも自動的にカスタムサブエージェントとして認識される。<code>name</code>が後で<code>subagent_type</code>として参照する識別子になる。<strong>Claude Code（CLI）でも全く同じファイルが全く同じ方式で動作する</strong> — 両者は同じサブエージェント定義フォーマットを共有している。</p>
+    <div style="position:relative">
+  <pre class="code-block">---
+name: reviewer
+description: テキストファイルの誤字と
+  論理的な穴を検討する。
+tools: Read, Grep
+model: sonnet
+---
+
+あなたはレビュアーの役割を担う。与えられたファイルを
+読み、改善点をリストにまとめて報告する。</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude Appと同一の.claude/agents/*.md</h3>
+    <p>Claude Appで書いたものと全く同じ<code>.claude/agents/*.md</code>ファイルをそのまま認識する。Desktop AppとCLIの間でサブエージェント定義方式に違いはない。</p>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>frontmatterフィールド</th><th>Claude App / Claude Code (.claude/agents)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td>必須。<code>subagent_type</code>の値と一致して初めて呼び出し可能</td>
+      </tr>
+      <tr>
+        <td><code>description</code></td>
+        <td>このエージェントがいつ使われるかを説明し、自動トリガー判断の参考になる</td>
+      </tr>
+      <tr>
+        <td><code>tools</code></td>
+        <td>使用可能なツールの一覧。省略時はデフォルトセットを継承</td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td><code>sonnet</code> / <code>opus</code> / <code>haiku</code>などのエイリアスを指定</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション2 ── -->
+  <h2 id="section-2">2. サブエージェントの呼び出し/委任</h2>
+
+  <p>Claude AppとClaude Codeはいずれも<code>Agent</code>ツール（文書では<code>Task</code>ツールとも呼ばれる）を呼び出し、独立したコンテキストを持つサブエージェントを起動する。</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent(Task)ツール</h3>
+    <p>Claude Appでもメインセッションは<code>Agent</code>ツール（文書では<code>Task</code>ツールとも呼ばれる）を呼び出し、独立したコンテキストを持つサブエージェントを起動する。サブエージェントはメインセッションの会話履歴を見ることができないため、<code>prompt</code>に必要な背景を自己完結的に含めなければならない。<strong>Claude Code（CLI）も同じ<code>Agent</code>/<code>Task</code>ツールをそのまま使う</strong> — チャット欄に自然言語で依頼すると、内部的には以下のような形で呼び出される。</p>
+    <div style="position:relative">
+  <pre class="code-block">Agent(
+  description   = "認証モジュールのレビュー",
+  prompt         = "src/auth/login.tsの
+    セッション期限切れ処理ロジックを検討し、バグを探して。",
+  subagent_type  = "reviewer"
+)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Claude Appと同一のAgent(Task)ツール</h3>
+    <p>Claude Appと全く同じ<code>Agent</code>/<code>Task</code>ツールの呼び出し方式である。ターミナルで自然言語で依頼すると、同じ方式でサブエージェントが起動する。</p>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション3 ── -->
+  <h2 id="section-3">3. 並列実行</h2>
+
+  <p>Claude系列は2つの方式で並列実行をサポートする。</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> Agent Teams — in-process</h3>
+    <p>Claude Appでも実験的機能であるAgent Teamsをオンにすると、複数のチームメイトが並列で作業する。ただし、Desktop Appでは<code>teammateMode: in-process</code>しか使えず、一部のキーボードナビゲーション（Shift+Downなど）が制限される。<strong>Claude Code（CLI）でも同じ<code>in-process</code>モードがそのまま動作</strong>し、CLIではさらにtmux分割ウィンドウを使う<code>tmux</code>モードも選択できる。</p>
+  </div>
+
+  <div class="warning-box">同じディレクトリ・Workspaceで複数のエージェントを同時に動かすと、「認知的重複（cognitive overlap）」が発生することがある — あるエージェントが同じフォルダで作業中の別エージェントの結果を、自分の作業コンテキストと誤認（ハルシネーション）してしまう問題である。作業ディレクトリやworktreeでエージェントを分離することが推奨される慣行である。</div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — 1つのメッセージで複数のAgent呼び出し</h3>
+    <p>互いに依存関係のない作業が複数ある場合、1つのメッセージの中に<code>Agent</code>呼び出しを複数並べて同時に実行できる。Claude Codeはこれらの呼び出しを並列にディスパッチする。</p>
+    <div style="position:relative">
+  <pre class="code-block">Agent(description="APIドキュメント草案作成",
+  prompt="...", subagent_type="writer")
+Agent(description="テストカバレッジ点検",
+  prompt="...", subagent_type="reviewer")</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>項目</th><th>Claude App (Desktop)</th><th>Claude Code (CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>並列実行単位</td>
+        <td>Agent Teams（in-processのみ）</td>
+        <td>1メッセージ内での複数Agent呼び出し / Agent Teams（in-process + tmux）</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション4 ── -->
+  <h2 id="section-4">4. 自動化/フック</h2>
+
+  <p>Claude系列における自動化・フックの違いは、AppとCodeの間にある。</p>
+
+  <div class="platform-block claudeapp">
+    <h3><span class="badge badge-claudeapp">Claude App (Desktop)</span> — フック未発火</h3>
+    <p><code>.claude/settings.json</code>に<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>フックを定義しても、Claude Appでは自動的に発火しない。フックが行うはずだった処理（例：監査スクリプトの実行）は、セッション終了後に手動で実行する必要がある。<strong>Claude Code（CLI）では同じ設定ファイルのフックがイベントに合わせて自動的に発火する</strong> — 自動化ゲートが必要なチームは、この点でコマンドラインインターフェース（CLI）を選ぶのが合理的である。</p>
+  </div>
+
+  <div class="platform-block claude">
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — フック自動発火</h3>
+    <p><code>.claude/settings.json</code>の<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>フックが、ファイル保存や作業完了などのイベントに合わせて自動的に実行される。</p>
+    <div style="position:relative">
+  <pre class="code-block">{
+  "hooks": {
+    "PostToolUse": [
+      { "matcher": "Write|Edit",
+        "hooks": [{ "type": "command", "command": "bun scripts/audit.ts" }] }
+    ]
+  }
+}</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <div class="warning-box">Agent Teamsは急速に発展中の機能である — フラグ名、デフォルト動作、UI構成がリリースごとに変わる可能性があるため、プロダクションワークフローに依存する前に最新のリリースノートを確認すること。</div>
+
+  <hr>
+
+  <!-- ── 参考リンク ── -->
+  <h2 id="refs">参考リンク</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagents公式文書</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_ja.html">第4章 §1共通リファレンス — 04_Practice_Manual_ja.html</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_B_ja.html">第4章 §1-B Antigravity中心 — 04_Practice_Manual_B_ja.html</a></li>
+    <li>⚙️ <a href="04_Practice_Examples_A_ja.html">第4章 §2実習例 — 04_Practice_Examples_A_ja.html</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code/App 2026-07基準 | 2026年7月</p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第4章 §1・リファレンス</div></a>
+    <div class="branch">
+      <div class="branch-label">第4章 §1</div>
+      <a href="04_Practice_Manual_A_ja.html" >Claude (A)</a>
+      <a href="04_Practice_Manual_B_ja.html" >Antigravity (B)</a>
+    </div>
+    <a href="04_Practice_Examples_A_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第4章 §2-A・実習</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了！';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

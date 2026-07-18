@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 6 §1 · Local installation of ai-workspace-standards and project scaffolding - material from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 6 §1 · Local Installation of ai-workspace-standards and Project Scaffolding</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific: tree-box inner spans */
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    /* Mode table (first column monospace) */
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 6 §1 · Variant Practice Reference</div>
+  <a href="#tree">Full Structure Overview</a>
+  <a href="#repository-walk">Repository Structure Walkthrough</a>
+  <div class="nav-section">Installation and Verification</div>
+  <a href="#section-1">1. Local Environment Setup</a>
+  <a href="#section-2">2. Project Scaffolding Commands</a>
+  <div class="nav-section">Reference</div>
+  <a href="#session-checklist">3. Session Start Checklist</a>
+  <a href="#section-3">Reference Links</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../intro/05_Intro_Chapter_en.html">Chapter 5 §1 · Introduction to ai-workspace-standards</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 · Creating a New Variant</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 6 §1</div>
+  <h1>Local Installation of ai-workspace-standards and Project Scaffolding</h1>
+  <p class="subtitle">A reference covering how to set up the workspace locally and scaffold a project from an existing variant &nbsp;|&nbsp; Official documentation: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target Repository</span><span class="vvalue">ai-workspace-standards</span></div>
+    <div class="version-row"><span class="vlabel">Target Branch</span><span class="vvalue">main</span></div>
+    <div class="version-row"><span class="vlabel">Reference Document URL</span><span class="vvalue"><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a></span></div>
+    <div class="version-row"><span class="vlabel">Documentation Collected On</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">How to Check Version</span><span class="vvalue">Check local tool versions with <code>git --version</code> and <code>bun --version</code>. The workspace itself is versioned via <code>templates/VERSION</code> and each variant's <code>template-vX.Y.Z</code> tag.</span></div>
+    <div class="version-row"><span class="vlabel">What to Check on Revision</span><span class="vvalue">Re-verify in the original repository whether <code>CONSTITUTION.md</code>, <code>scripts/new-project.ts</code>, or <code>scripts/list-template-versions.ts</code> have changed.</span></div>
+  </div>
+
+  <h2 id="tree">Full Structure Overview</h2>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
+ai-workspace-standards/                (cloned as the workspace root)
+├── CONSTITUTION.md                    Shared standards — read this first
+├── CLAUDE.md / GEMINI.md / AGENTS.md  Platform-specific behavior / agent roster
+├── templates/                         Collection of variants (project templates)
+│   ├── co-develop/                    6-stage software development pipeline
+│   ├── co-design/                     5-stage UI/UX workflow
+│   ├── co-work/                       General collaboration/documentation 6-stage workflow
+│   └── ...                            co-security, co-consult, co-deck, and more
+├── scripts/                           Operational scripts such as new-project.ts (TypeScript, run via bun)
+└── Projects/                          Individual projects in the form &lt;project-name&gt;/ (each its own independent git repository)
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div></div>
+
+  <h3>Complete List of the 7 Variants</h3>
+  <table>
+    <thead><tr><th>Variant</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>co-work</code></td><td>General collaboration/documentation — common 6-stage business workflow</td></tr>
+      <tr><td><code>co-consult</code></td><td>Consulting/analysis — diagnosing client problems and drafting proposals</td></tr>
+      <tr><td><code>co-deck</code></td><td>Presentations — building slide decks and generating drafts</td></tr>
+      <tr><td><code>co-marketing</code></td><td>Marketing — content planning, creation, and review pipeline</td></tr>
+      <tr><td><code>co-develop</code></td><td>Software development — 6-stage development pipeline</td></tr>
+      <tr><td><code>co-research</code></td><td>Research — literature review and summarization workflow</td></tr>
+      <tr><td><code>co-review</code></td><td>Code/document review — PR review and quality verification</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="repository-walk">Repository Structure Walkthrough — 5 Places to Check First After Cloning</h3>
+  <p>After cloning the repository into the workspace root with <code>git clone</code>, let's walk through, in order, the 5 core directories you should check first. This order matches the "runtime flow" covered in Chapter 5.</p>
+  <ol style="margin:0 0 16px 20px;line-height:2.2;">
+    <li><strong><code>CONSTITUTION.md</code></strong> — The file to read first. It defines the shared standards for the entire workspace (governance, PR workflow, multi-agent principles).</li>
+    <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — Check the file matching the AI coding tool you use. Each defines platform-specific behavior (hooks, slash commands, agent dispatch rules).</li>
+    <li><strong><code>AGENTS.md</code></strong> — The roster of agents callable in this workspace. Lets you see at a glance "who does what."</li>
+    <li><strong><code>templates/</code></strong> — All 7 available variants live under this directory. Open each variant folder to examine its agent composition and governance pipeline.</li>
+    <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code> lives here. This script is the core command that clones a variant into an actual project.</li>
+  </ol>
+  <div class="note">This walkthrough is a short guide meant to give you a sense of "what this repository contains" before you get hands-on with agents in the Chapter 4 exercises. During the exercise, open just these 5 places first, and come back to explore the rest of the structure as needed.</div>
+
+  <hr>
+
+  <h2 id="section-1">1. Local Environment Setup</h2>
+
+  <h3><code>git clone</code>. Clone into the workspace root</h3>
+  <p>ai-workspace-standards is not designed to be placed inside a project like a typical library — it's designed to be cloned as the root of the workspace itself. For example, if you clone this repository into a location like <code>C:\git</code> on Windows or <code>~/git</code> on macOS/Linux, every project you create beneath it automatically inherits the shared rules from <code>CONSTITUTION.md</code>.</p>
+  <p>What happens if you ignore this rule and drop it into a specific project folder as a submodule (e.g., <code>my-project/ai-workspace-standards/</code>)? Scripts like <code>new-project.ts</code> check for themselves whether they were "run from the workspace root," and since this condition is broken, scaffolding is either rejected outright, or path calculations go wrong and the project gets created in the wrong location. Worse, only that one project would inherit the shared rules, while any other project you create later would share none of them at all — undermining the very reason this repository exists: for the entire workspace to use the same standards.</p>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
+cd C:\git</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <h3><code>bun</code>. Install the runtime</h3>
+  <p>Every operational script in the workspace (<code>scripts/*.ts</code>) is written in TypeScript and run with <code>bun</code>. There are no separate <code>.sh</code>/<code>.ps1</code> versions, so you need to install bun before you can run any scripts.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun --version
+git --version</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p >💡 <strong>Key takeaway:</strong> once both commands print a version number successfully, your local environment is ready.</p>
+
+  <h3 id="session-checklist">Session Start Checklist</h3>
+  <p>The session start checklist defined in <code>CONSTITUTION.md</code> follows this order.</p>
+  <ol style="margin:0 0 16px 20px;line-height:2;">
+    <li><strong>Set the git hooks path:</strong> <code>git config core.hooksPath .githooks</code></li>
+    <li><strong>Read CONSTITUTION.md:</strong> confirm the workspace's shared standards</li>
+    <li><strong>Read the project's docs/context.md:</strong> confirm the project's single source of truth</li>
+    <li><strong>Read AGENTS.md:</strong> confirm the agent roster for the project</li>
+    <li><strong>Check memory/MEMORY.md:</strong> confirm context left over from previous sessions</li>
+    <li><strong>Load the skill(s) specified by docs/context.md</strong></li>
+  </ol>
+
+  <hr>
+
+  <h2 id="section-2">2. Project Scaffolding Commands</h2>
+
+  <h3><code>bun scripts/list-template-versions.ts</code>. Check available variants</h3>
+  <p>Before creating a new project, first check which variants exist in the workspace and which versions each is tagged with.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/list-template-versions.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <h3><code>bun scripts/new-project.ts</code>. Create a project from an existing variant</h3>
+  <p>The most frequently used command. Pick a variant and run it together with a project name, and the entire composition under <code>templates/&lt;variant&gt;/</code> (agent definitions, skills, commands, governance pipeline) is cloned into a new independent repository.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  <p>If you want to pin a specific version when scaffolding, also specify <code>--version</code>.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop --version 1.4.0</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <table>
+    <thead><tr><th>Option</th><th>Description</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>--variant</code></td>
+        <td>Specifies which project template to use (co-develop, co-design, co-work, etc.)</td>
+        <td>If omitted, either an interactive selection or a default is used (depends on the script's behavior)</td>
+      </tr>
+      <tr>
+        <td><code>--version</code></td>
+        <td>Pins a specific <code>template-vX.Y.Z</code> tag for the given variant</td>
+        <td>If omitted, the latest version is used</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    <span class="badge badge-workflow">Scaffolding</span>
+    <span class="badge badge-alias">Independent git repository</span>
+    <span class="badge badge-skill">Inherits shared standards</span>
+  </p>
+
+  <div class="warning-box">A scaffolded project is created as an independent git repository separate from the workspace root. Be careful not to mix edits to workspace-root files and new-project files within the same task/commit.</div>
+
+  <h3>If you want to create a brand-new variant</h3>
+  <p>If none of the existing variants fit and you need a completely new domain team composition, you can first create an independent Phase A prototype under <code>Projects/&lt;variant-name&gt;/</code> using the <code>create-variant</code> skill together with the <code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code> command. This prototype can be freely developed until it is promoted to an official <code>templates/</code> variant. The detailed steps of this flow and the promotion procedure are covered in Chapter 11 (New Creation D-1) and Chapter 12 (Promotion P-1).</p>
+
+  <hr>
+
+  <h2 id="section-3">3. Reference Links</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></li>
+    <li>⚙️ <a href="../variant-practice/06_VariantPractice_Examples_en.html">Chapter 6 §2 Exercise. Using Existing Variants (co-consult, co-deck)</a></li>
+    <li>⚙️ <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11. Creating a New Variant</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Based on the ai-workspace-standards main branch | July 2026</p>
+
+  <div class="chapter-nav">
+    <a href="../intro/05_Intro_Chapter_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 5 · ai-workspace-standards</div></a>
+    <a href="06_VariantPractice_Examples_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 6 §2 · Variant Practice</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

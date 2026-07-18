@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第3章 · ガードレールと権限モデル - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第3章 · ガードレールと権限モデル</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第3章 · ガードレールと権限モデル</div>
+  <a href="#s1">なぜガードレールが必要なのか</a>
+  <a href="#s2">危険な作業を3段階に分類する</a>
+  <a href="#s3">最小権限の原則 — toolsフィールド</a>
+  <a href="#s4">人による承認ゲート</a>
+  <a href="#s5">分離 — worktreeとsandbox</a>
+  <a href="#s6">監査ログと可観測性</a>
+  <div class="nav-section">他の章</div>
+  <a href="../concepts/02_Concepts_Chapter_ja.html">第2章 · 概念の理解</a>
+  <a href="../practice/04_Practice_Manual_ja.html">第4章 · Claude Code実習</a>
+  <a href="../glossary/00_Glossary_ja.html">用語集</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第3章</div>
+  <h1>ガードレールと権限モデル</h1>
+  <p class="lead">サブエージェントを作成し呼び出す方法は第4章で実際に手を動かしながら習得する。しかしその前に、「このエージェントは何をしてよく、何をしてはいけないか」を先に定めておかなければ、実習中も実務でも事故が起きる。本章では、第2章で少し触れた「ガードレール」を実際にどう設計するかを扱う。</p>
+
+  <div class="keypoints">
+    <div class="kp-title">本章で扱う内容</div>
+    <ul>
+      <li>ガードレールがなぜ必要なのか(自律性が大きくなるほどミスの波及範囲も大きくなる)</li>
+      <li>読み取り・書き込み・破壊的作業の3段階でリスクを分類する方法</li>
+      <li><code>tools</code>フィールドでサブエージェントに最小権限のみを付与する方法</li>
+      <li>オーケストレーターが人の承認を必ず待たなければならない地点(ゲート)の設計</li>
+      <li>worktree・sandboxで並列作業を物理的に分離する理由</li>
+      <li>事故が起きた後「何があったのか」を追跡するための最小限のログ習慣</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">なぜガードレールが必要なのか</h2>
+  <p>第2章では、ハーネスを「馬が思うままにどの方向にも走り出さないよう抑える馬具」に例えた。ガードレールは、その馬具の中でも特に「この方向へは絶対に行ってはならない」という柵に当たる。サブエージェントがファイルを読んで要約する程度であればミスをしても元に戻しやすいが、ファイルを削除したりコミット・デプロイまで自動で行うようになると、一つのミスが取り返しのつかない結果につながる。</p>
+  <p>問題は、「能力」と「リスク」が同じ方向に大きくなることである。エージェントにより多くのツール・より広い権限を与えるほど処理できる仕事は増えるが、誤った判断をしたときの被害範囲も同時に広がる。ガードレールはこの二つを切り分ける。「できること」は広く開けておきつつ、「人の確認なしに実行してよいこと」は狭く制限するのである。</p>
+  <div class="pullquote">ガードレールの目的は、エージェントを信用しないことではなく、ミスの波及範囲を人が対処できる大きさにあらかじめ切り分けておくことである。</div>
+
+  <h2 id="s2">危険な作業を3段階に分類する</h2>
+  <p>すべての作業を同じ強度で統制すると、実務で使えないほど遅くなってしまう。実際には、作業を元に戻せる度合いに応じて3段階に分け、それぞれ異なる扱いをするのが現実的である。</p>
+  <table>
+    <thead><tr><th>段階</th><th>例</th><th>デフォルトのポリシー</th></tr></thead>
+    <tbody>
+      <tr><td><strong>読み取り(Read)</strong></td><td>ファイルの読み込み、コード検索、Web参照</td><td>おおむね自由に許可(元に戻す必要がない)</td></tr>
+      <tr><td><strong>書き込み(Write)</strong></td><td>ファイルの作成・修正、ローカルコミット</td><td>許可はするが結果をレビュー(gitで元に戻せる範囲)</td></tr>
+      <tr><td><strong>破壊的/外部影響(Destructive/External)</strong></td><td>ファイル・ブランチの削除、強制プッシュ、デプロイ、決済、外部へのメッセージ送信</td><td>人の明示的な承認なしには絶対に実行しない</td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin:20px 0 28px;">
+    <div>リスク判断フローチャート</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div style="border:2px solid var(--accent);border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;color:var(--accent-dark);">この作業は元に戻せるか?</div>
+      <div style="display:flex;gap:40px;width:100%;justify-content:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;max-width:220px;">
+          <div style="background:var(--bg-success);border:1px solid var(--badge-green-border);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--badge-green-fg);margin-bottom:8px;">Yes — 元に戻せる</div>
+          <div style="border-left:2px solid var(--badge-green-border);padding-left:12px;font-size:12px;color:var(--text);line-height:1.6;">
+            <div style="margin-bottom:6px;"><strong>読み取り専用</strong><br/>最小権限のtoolsフィールド<br/><code>tools: Read, Grep</code></div>
+            <div><strong>書き込み(可逆)</strong><br/>最小権限 + 監査ログ<br/>gitで元に戻せる</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;max-width:220px;">
+          <div style="background:var(--bg-error);border:1px solid var(--badge-red-fg);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--accent-red);margin-bottom:8px;">No — 元に戻せない</div>
+          <div style="border-left:2px solid var(--accent-red);padding-left:12px;font-size:12px;color:var(--text);line-height:1.6;">
+            <div style="margin-bottom:6px;"><strong>破壊的 / 外部影響</strong></div>
+            <div><strong>人の承認ゲートが必須</strong><br/>自動実行は絶対に禁止<br/>明示的な確認後にのみ進める</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>この3段階分類は、本ハンドブックが参照したワークスペース文書の実際の規則とも一致する。第5章で扱った<code>/sync</code>パイプラインが<code>.pem</code>・<code>.key</code>・<code>.env</code>のような機微なファイルをコミット直前に遮断する「Sensitive File Guard」や、強制プッシュ・<code>--no-verify</code>を明示的に禁止する規則が、まさに破壊的作業段階に当たるガードレールである。</p>
+
+  <h2 id="s3">最小権限の原則 — <code>tools</code>フィールド</h2>
+  <p>第4章§2の実習で作成した<code>reviewer</code>サブエージェントのfrontmatterを思い出してみよう。<code>tools: Read, Grep</code>のように、許可するツールを明示的に列挙した。これがサブエージェント単位の最小権限の原則である。reviewerにはそもそも<code>Write</code>ツールがないため、プロンプトがどれほど曖昧に解釈されても、ファイルを修正する手段自体が存在しない。</p>
+  <p>この原則を実際の事故シナリオで見てみると、なぜ重要なのかが明確になる。もしreviewerに<code>Write</code>権限まで習慣的に開放していたとすると、「このファイルをレビューして改善して」というやや曖昧な依頼を受けた際に、reviewerが「改善」を「直接修正」と解釈し、原本を上書きしてしまう可能性もある。<code>tools</code>フィールドで権限をあらかじめ狭めておけば、こうした解釈の食い違いがそもそも事故につながらない。プロンプトの品質に頼るのではなく、構造的に防ぐのである。</p>
+  <div class="note">権限は「この役割が最大でどこまでできるか」ではなく、「この役割が正常に機能するために最小限何が必要か」を基準に定める。後で必要になったときに広げるのは簡単だが、最初から広く開けておいた権限を事故が起きた後で狭めるのはすでに手遅れである。</div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div>最小権限の原則 — 3段階権限レベルの階層図</div>
+    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+      <defs>
+        <linearGradient id="pyramidRed" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#cf222e"/>
+          <stop offset="100%" stop-color="#ff8182"/>
+        </linearGradient>
+        <linearGradient id="pyramidOrange" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#953800"/>
+          <stop offset="100%" stop-color="#f5c518"/>
+        </linearGradient>
+        <linearGradient id="pyramidGreen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a7f37"/>
+          <stop offset="100%" stop-color="#a2d9b1"/>
+        </linearGradient>
+      </defs>
+      <!-- Top tier: Destructive operations (triangle apex) -->
+      <polygon points="250,20 325,100 175,100" fill="url(#pyramidRed)" opacity="0.9"/>
+      <text x="250" y="62" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">破壊的作業</text>
+      <text x="250" y="78" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Destructive</text>
+      <!-- Red tier label -->
+      <rect x="430" y="48" width="155" height="44" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+      <text x="508" y="66" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">例: git push, rm -rf</text>
+      <text x="508" y="82" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">デプロイ、決済、外部メッセージ</text>
+      <line x1="325" y1="70" x2="430" y2="70" stroke="#ff8182" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Middle tier: Write operations (trapezoid) -->
+      <polygon points="175,100 325,100 375,190 125,190" fill="url(#pyramidOrange)" opacity="0.9"/>
+      <text x="250" y="142" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">書き込み作業</text>
+      <text x="250" y="158" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Write</text>
+      <!-- Orange tier label -->
+      <rect x="430" y="138" width="155" height="44" rx="6" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+      <text x="508" y="156" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#953800">例: ファイル修正、PR作成</text>
+      <text x="508" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">ローカルコミット、設定変更</text>
+      <line x1="375" y1="155" x2="430" y2="155" stroke="#f5c518" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Bottom tier: Read operations (trapezoid) -->
+      <polygon points="125,190 375,190 420,280 80,280" fill="url(#pyramidGreen)" opacity="0.9"/>
+      <text x="250" y="234" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">読み取り作業</text>
+      <text x="250" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Read</text>
+      <!-- Green tier label -->
+      <rect x="430" y="225" width="155" height="44" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+      <text x="508" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#116329">例: ファイル読み込み、検索</text>
+      <text x="508" y="259" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Web参照、ログ閲覧</text>
+      <line x1="420" y1="247" x2="430" y2="247" stroke="#a2d9b1" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Least privilege label -->
+      <text x="250" y="320" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="600" fill="#636c76">▲ 最小権限の原則(Least Privilege) — 必要な権限のみ付与</text>
+    </svg>
+  </div>
+
+  <h2 id="s4">人による承認ゲート</h2>
+  <p>第2章では、オーケストレーターを「ユーザーとの確認が必要な地点(ゲート)で進行を止める役割」と定義した。ガードレール設計で最も重要な問いは、「そのゲートを正確にどこに置くか」である。頻繁に止まりすぎるとエージェントに仕事を任せる意味がなくなり、止まらなさすぎると破壊的作業まで静かに通り過ぎてしまう。</p>
+  <p>実務で検証された基準は単純である。§2の「破壊的/外部影響」段階に当たる作業の直前では必ず止まり、それより下の段階は事後レビューで十分とする。例えば<code>/sync</code>パイプラインはコミット・プッシュ・PR作成までは自動で進めるが、PRを実際にマージしたりプロダクションにデプロイしたりする段階では別途人の承認を要求するよう設計されている。「どこまでは信頼して任せ、どこからは必ず人が見るか」という境界線を明示的に引いておくことが、ゲート設計の核心である。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div>承認ゲート動作フローチャート</div>
+    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+        <marker id="agArrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#cf222e"/></marker>
+        <marker id="agArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+      </defs>
+      <!-- 1. User request -->
+      <rect x="10" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#0969da" stroke-width="1.5"/>
+      <text x="65" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">ユーザー要求</text>
+      <text x="65" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">エージェント動作</text>
+      <!-- Arrow 1→2 -->
+      <line x1="120" y1="150" x2="155" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+
+      <!-- 2. Risk analysis -->
+      <rect x="160" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="215" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#6639ba">リスク分類</text>
+      <text x="215" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">自動判定</text>
+      <!-- Arrow 2→3 -->
+      <line x1="270" y1="150" x2="305" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+
+      <!-- 3. Decision diamond -->
+      <polygon points="360,108 420,150 360,192 300,150" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+      <text x="360" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">リスク</text>
+      <text x="360" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">判定?</text>
+
+      <!-- Low branch (up) -->
+      <line x1="360" y1="108" x2="360" y2="58" stroke="#1a7f37" stroke-width="1.5"/>
+      <line x1="360" y1="58" x2="440" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <text x="365" y="78" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#1a7f37">低い</text>
+      <!-- Low: auto-execute -->
+      <rect x="445" y="40" width="100" height="36" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+      <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">自動実行</text>
+      <text x="495" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Read / Write</text>
+
+      <!-- High branch (down) -->
+      <line x1="360" y1="192" x2="360" y2="240" stroke="#cf222e" stroke-width="1.5"/>
+      <line x1="360" y1="240" x2="440" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <text x="365" y="228" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">高い</text>
+      <!-- High: awaiting human approval -->
+      <rect x="445" y="222" width="100" height="36" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1.2"/>
+      <text x="495" y="237" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#cf222e">承認待ち</text>
+      <text x="495" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">人による確認</text>
+
+      <!-- Low → execute → result -->
+      <line x1="545" y1="58" x2="575" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="580" y="42" width="68" height="32" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1.2"/>
+      <text x="614" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#1a7f37">実行</text>
+      <text x="614" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#1a7f37"></text>
+      <!-- Execute → result -->
+      <line x1="545" y1="240" x2="575" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <rect x="580" y="224" width="68" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+      <text x="614" y="238" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">承認</text>
+      <text x="614" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#0969da"></text>
+
+      <!-- Both paths converge to result -->
+      <line x1="614" y1="74" x2="614" y2="110" stroke="#1a7f37" stroke-width="1.2"/>
+      <line x1="614" y1="110" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
+      <line x1="614" y1="256" x2="614" y2="280" stroke="#cf222e" stroke-width="1.2"/>
+      <line x1="670" y1="280" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
+      <line x1="614" y1="280" x2="670" y2="280" stroke="#0969da" stroke-width="1.2"/>
+      <!-- Result -->
+      <rect x="640" y="130" width="60" height="40" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1.5"/>
+      <text x="670" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">結果</text>
+      <text x="670" y="161" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">応答返却</text>
+
+      <!-- Bottom note -->
+      <text x="360" y="290" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 破壊的/外部影響作業は必ず人による承認ゲートを経なければならない</text>
+    </svg>
+  </div>
+
+  <h2 id="s5">分離 — worktreeとsandbox</h2>
+  <p>第4章§2の上級シナリオ(P-1)で、「同じWorkspaceに複数のエージェントを割り当てると認知的重複(cognitive overlap)が生じうる」と警告した。これもガードレールの一形態である。複数のエージェントが同じファイル・同じgit履歴を同時に触ると、一つのエージェントのミスが他のエージェントの作業コンテキストまで汚染しかねない。</p>
+  <p>worktree(分離されたgit作業ディレクトリ)や別のsandbox環境で各エージェントを実行すれば、たとえ一つのエージェントが誤った判断をしても、その影響が自分の作業空間の外に漏れ出ることはない。複数のエージェントを並列で動かすときは、「同じ空間を共有させるか、物理的に分けるか」を常に先に決めておかなければならない。</p>
+
+  <h2 id="s6">監査ログと可観測性</h2>
+  <p>ガードレールが事前予防だとすれば、監査ログは事後追跡である。完璧なガードレールは存在しないため、事故が起きたときに「いつ、どのエージェントが、どのツールで、何をしたか」を遡って確認できる最小限の記録が必ず必要となる。第5章で扱った<code>memory/MEMORY.md</code>がセッション間のコンテキストを記録する用途であれば、CI環境の<code>PostToolUse</code>フックとして実行される<code>audit.ts</code>のような監査スクリプトは、「規則に反する変更がなかったか」を毎回機械的に検査する可観測性の装置である。</p>
+  <div class="warn">第4章で扱うClaude App(Desktop)では、このようなフックは発火しない。Desktopアプリ中心で作業するチームの場合、監査ログが「動いていると思っていたら実は一つも動いていなかった」という状況が実際に起こりうる。ガードレールを設計する際は、必ず「このポリシーが自分の使うツールで実際に発動するか」まで確認しなければならない。</div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div>監査ログの構造と監査フロー</div>
+    <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+        <marker id="alArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+      </defs>
+
+      <!-- Left side: Audit Log Structure -->
+      <text x="80" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">監査ログの構造</text>
+      <!-- Log entry card -->
+      <rect x="10" y="32" width="140" height="140" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+      <!-- Header row -->
+      <rect x="10" y="32" width="140" height="26" rx="8" fill="#eef1f4"/>
+      <rect x="10" y="46" width="140" height="12" fill="#eef1f4"/>
+      <text x="80" y="49" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="10" font-weight="700" fill="#0550ae">log_entry</text>
+      <!-- Fields -->
+      <text x="20" y="74" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">timestamp</text>
+      <rect x="78" y="64" width="60" height="16" rx="3" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="0.8"/>
+      <text x="108" y="75" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#0550ae">ISO 8601</text>
+
+      <text x="20" y="98" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">agent</text>
+      <rect x="78" y="88" width="60" height="16" rx="3" fill="#fbefff" stroke="#d2b9ff" stroke-width="0.8"/>
+      <text x="108" y="99" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#6639ba">reviewer</text>
+
+      <text x="20" y="122" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">action</text>
+      <rect x="78" y="112" width="60" height="16" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.8"/>
+      <text x="108" y="123" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#953800">Read/Grep</text>
+
+      <text x="20" y="146" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">result</text>
+      <rect x="78" y="136" width="60" height="16" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.8"/>
+      <text x="108" y="147" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#116329">ok / deny</text>
+
+      <text x="20" y="168" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">context</text>
+      <rect x="78" y="158" width="60" height="16" rx="3" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.8"/>
+      <text x="108" y="169" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#636c76">filepath…</text>
+
+      <!-- Divider line -->
+      <line x1="170" y1="30" x2="170" y2="275" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+      <!-- Right side: Flow -->
+      <text x="400" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">監査フロー</text>
+
+      <!-- Step 1: Agent action -->
+      <rect x="200" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1.2"/>
+      <text x="250" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">エージェント動作</text>
+      <text x="250" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">tool呼び出し</text>
+      <!-- Arrow -->
+      <line x1="300" y1="58" x2="335" y2="58" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+
+      <!-- Step 2: Log record -->
+      <rect x="340" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+      <text x="390" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">ログ記録</text>
+      <text x="390" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">audit.ts</text>
+      <!-- Arrow down -->
+      <line x1="390" y1="76" x2="390" y2="100" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+
+      <!-- Step 3: Inspection/analysis -->
+      <rect x="340" y="105" width="100" height="36" rx="6" fill="#ffffff" stroke="#953800" stroke-width="1.2"/>
+      <text x="390" y="121" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">検査 / 分析</text>
+      <text x="390" y="133" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">規則違反?</text>
+
+      <!-- Branch: Normal -->
+      <line x1="440" y1="115" x2="475" y2="115" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#alArrowB)"/>
+      <text x="450" y="108" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#1a7f37">正常</text>
+      <rect x="480" y="100" width="80" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+      <text x="520" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#116329">記録保存</text>
+
+      <!-- Branch: Violation -->
+      <line x1="440" y1="131" x2="475" y2="131" stroke="#cf222e" stroke-width="1.2"/>
+      <polygon points="480,131 475,128 475,134" fill="#cf222e"/>
+      <text x="450" y="140" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#cf222e">違反</text>
+      <rect x="480" y="155" width="80" height="30" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+      <text x="520" y="170" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#cf222e">警告 / 通知</text>
+      <line x1="475" y1="131" x2="475" y2="170" stroke="#cf222e" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="475" y1="170" x2="480" y2="170" stroke="#cf222e" stroke-width="1"/>
+
+      <!-- Arrow from warning down to post-review -->
+      <line x1="520" y1="185" x2="520" y2="210" stroke="#cf222e" stroke-width="1.2" marker-end="url(#alArrow)"/>
+      <rect x="470" y="215" width="100" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
+      <text x="520" y="232" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#953800">事後レビュー</text>
+      <text x="520" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">チームレビュー</text>
+
+      <!-- Loop arrow: post-review → agent action -->
+      <path d="M470,235 L200,235 L200,76" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
+      <polygon points="200,76 197,82 203,82" fill="#636c76"/>
+      <text x="335" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">フィードバックループ — ガードレールの改善</text>
+
+      <!-- Bottom note -->
+      <text x="320" y="275" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 完璧なガードレールは存在しない — 事故発生時に追跡できなければならない</text>
+    </svg>
+  </div>
+
+  <div class="note">一文でまとめると: ガードレールとは、<strong>リスクに応じて権限を差別化して付与し(§2·§3)</strong>、<strong>取り返しのつかない地点の手前では必ず人が確認し(§4)</strong>、<strong>並列作業は物理的に分離し(§5)</strong>、<strong>すべてが失敗したときのために記録を残しておく(§6)</strong>という4つの習慣である。第4章からは、この原則を実際の実習コードの中に適用しながら進めていく。</div>
+
+  <div class="chapter-nav">
+    <a href="../concepts/02_Concepts_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念</div></a>
+    <a href="../warm-up/Warmup_Tetris_Pacman_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">ウォームアップ実習 · テトリスからパックマンまで</div></a>
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">参考動画</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=5fwoMW3aUSk" target="_blank">Anthropic's Constitutional AI — How Claude Judges Itself</a><span class="video-meta">(2:31)</span> — ClaudeがConstitutional AIの原理に基づき自ら出力を判断する仕組み</li>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=6Unxqr50Kqg" target="_blank">Controlling powerful AI</a><span class="video-meta">(51:27)</span> — Anthropic公式: 強力なAIシステムの統制と安全管理の哲学</li>
+  </ul>
+</div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

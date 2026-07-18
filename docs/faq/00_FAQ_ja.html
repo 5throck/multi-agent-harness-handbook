@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="FAQ · よくあるエラーと解決法 · マルチエージェントチームハーネスエンジニアリングハンドブック - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ · よくあるエラーと解決法 · マルチエージェントチームハーネスエンジニアリングハンドブック</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">FAQ · トラブルシューティング</div>
+  <a href="#setup">セットアップ・環境</a>
+  <a href="#subagent">サブエージェント実行</a>
+  <a href="#parallel">並列・チーム協業</a>
+  <a href="#workspace">workspace/variant</a>
+  <a href="#cost">コスト・パフォーマンス</a>
+  <a href="#platform">プラットフォーム別の問題</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>FAQ · よくあるエラーと解決法</h1>
+  <p class="lead">各章に散らばっている警告・ヒントボックスを、実習中によく発生する順に一箇所にまとめました。まず症状で検索し、必要であれば「詳細」リンクから元の説明を確認してください。</p>
+
+  <h2 id="setup">セットアップ・環境</h2>
+
+  <div class="q">4章§2の実習準備スクリプトを実行したところ、一部の項目が❌と表示されます。</div>
+  <p class="faq-answer">OSに関わらず、<code>setup-common.ts</code>がチェックリストを再検証します。Windowsではスクリプトを<strong>管理者権限</strong>で実行したかを、macOS/Linuxでは<code>--wezterm</code>/<code>--docker</code>のようなオプションフラグを付け忘れていないかをまず確認してください。インストールログはWindowsの場合<code>%USERPROFILE%\workshop-setup-logs\</code>に残ります。</p>
+  <span class="see">詳細: <a href="../practice/04_Practice_Examples_A_ja.html#setup">4章§2-A 準備</a></span>
+
+  <div class="q">Antigravityコマンドラインインターフェース(CLI)をnpmでグローバルインストールしようとしていますが、うまくいきません。</div>
+  <p class="faq-answer">2026年6月18日をもってGemini CLIサービスが終了し、Antigravity CLI(<code>agy</code>)に置き換わりました。<code>agy</code>は別途ランタイムのインストールが不要な単一のコンパイル済みバイナリで、解凍してPATHに追加するだけで使用できます。npmインストールの案内は古い情報です。</p>
+  <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html">共通リファレンス§ツール比較</a></span>
+
+  <h2 id="subagent">サブエージェント実行</h2>
+
+  <div class="q">writerサブエージェントにファイルを書かせたところ、reviewerが「ファイルが存在しない」と言います。</div>
+  <p class="faq-answer">writerとreviewerを1つのメッセージで同時に(並列で)呼び出した可能性が高いです。writerがファイルを作成する前にreviewerがレビューを試みたため失敗しました。依存関係のあるタスクは「2つのステップを順番に進めて」のように、明示的に順次実行を指示する必要があります。</p>
+  <span class="see">詳細: <a href="../practice/04_Practice_Examples_A_ja.html#scenario-2">4章§2-A D-1</a></span>
+
+  <div class="q">Claude Appでファイルを保存した後、監査スクリプトが自動的に実行されません。</div>
+  <p class="faq-answer">これは正常な動作です。<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>のようなフックはClaude App(Desktop)では発火せず、Claude Code(CLI)セッションでのみ自動実行されます。Desktop Appを使用するチームは、フックが行うはずだった処理をセッション終了後に手動で実行する必要があります。これを知らずにいると、「監査が実行されたと思っていたが実際は実行されていなかった」という事故につながる可能性があります。</p>
+  <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-1">共通リファレンス§1</a>、<a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">3章§監査ログと観測性</a></span>
+
+  <div class="q">reviewerにレビューだけを依頼したのに、ファイルを修正してしまいました。</div>
+  <p class="faq-answer"><code>tools</code>フィールドに<code>Write</code>が含まれていないか確認してください。reviewerのような読み取り専用の役割には、最初から<code>tools: Read, Grep</code>のように必要最小限の権限だけを付与し、プロンプトの解釈が曖昧であっても修正そのものが不可能になるようにすべきです。</p>
+  <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s3">3章§最小権限の原則</a></span>
+
+  <div class="q">エージェントが同じ作業を繰り返し、いつまでも終わりません。</div>
+  <p class="faq-answer">評価者・最適化者(Evaluator-Optimizer)ループにおいて、評価者が常に「不十分」と判断し、最適化者が再試行を続ける<strong>スピン(spin)</strong>状態です。解決法として、最大反復回数をあらかじめ決めておき、指定回数以内に基準を満たさなければ自動終了させます。<a href="../concepts/02_Concepts_Chapter_ja.html#s4">2章§オーケストレーションパターン</a>で説明されているようにパターン単位で解決しようとせず、<a href="../workflows/09_Workflows_Chapter_ja.html">9章</a>の実行計画(Execution Plan)としてワークフロー全体を構造化すると予防しやすくなります。</p>
+  <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s4">2章§オーケストレーションパターン</a>、<a href="../workflows/09_Workflows_Chapter_ja.html">9章・ワークフローデザインパターン</a></span>
+
+  <div class="q">サブエージェントがツールを呼び出そうとして失敗し、そのまま止まってしまいます。</div>
+  <p class="faq-answer">最も多い原因は次の2つです。1つ目は<strong>ネットワークタイムアウト</strong>で、API呼び出しやMCPサーバーへの接続が一時的に切断された場合です。Claude Codeの場合は<code>/cost</code>コマンドでセッションの状態を確認し、Antigravityの場合はAgent Managerでエージェントの状態を確認してから再試行してください。2つ目は<strong>MCPサーバー未接続</strong>で、ローカルのMCPサーバーが起動しているかを<code>claude mcp list</code>(Claude Code)、または各プラットフォームのサーバー状態確認コマンドで確認してください。一時的なエラーについては、<a href="#cost">コスト・パフォーマンス</a>のタイムアウト解決法を参照してください。</p>
+  <span class="see">詳細: <a href="#cost">FAQ・コスト・パフォーマンス</a>、<a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">3章§監査ログと観測性</a></span>
+
+  <div class="q">エージェントが実行した破壊的操作やファイル修正の履歴を、エンタープライズ環境で監視・監査(Audit)するには?</div>
+  <p class="faq-answer">エージェントのターミナルコマンド実行およびツール使用履歴は、システムの監査ログ(Audit Log)としてリアルタイムに収集される必要があります。そのために、Sandbox環境内で監査デーモンやシェルフッキング(Shell Hooking)技術を使用し、実行記録をリモートログサーバーに送信します。また、重要な破壊的操作(例: DBの削除、Secret Keyの破棄)については、Human Approval Gateを強制し、システム管理者または担当者の最終承認なしには実行できないよう、隔離された構造を構築する必要があります。</p>
+  <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">3章§監査ログと観測性</a></span>
+
+  <h2 id="parallel">並列・チーム協業</h2>
+
+  <div class="q">Antigravity Agent Managerで2つのエージェントがそれぞれ別のファイルを修正しているのに、結果が混ざってしまいます。</div>
+  <p class="faq-answer">2つのエージェントを同じWorkspace(同じフォルダ)に割り当てた可能性が高いです。同じコードベースを共有すると、一方のエージェントがもう一方のエージェントの作業コンテキストを自分のものと誤認する「認知的重複(cognitive overlap)」が発生することがあります。Workspaceまたはgit worktree単位で必ず分離してください。</p>
+  <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-2">共通リファレンス§2</a>、<a href="../guardrails/03_Guardrails_Chapter_ja.html#s5">3章§隔離</a></span>
+
+  <div class="q">Claude AppでAgent Teamsを有効にしましたが、<code>tmux</code>オプションが表示されません。</div>
+  <p class="faq-answer">これは正常な動作です。Desktop Appは<code>teammateMode: in-process</code>のみをサポートしており、tmux分割ウィンドウモードはClaude Code(CLI)でのみ追加でサポートされています。</p>
+  <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-1">共通リファレンス§1</a></span>
+
+  <div class="q">エージェントが作業を進める途中で、人間の最終承認や中間入力を受け取る必要がある場合、どのように処理しますか?</div>
+  <p class="faq-answer"><code>Human-in-the-Loop (HITL)</code>パターンを使用します。オーケストレーターが作業を進める中で、重要な分岐点や権限が必要な地点(例: デプロイ、コードマージ)で処理を一時停止し、状態を保持したままユーザーにフィードバックを要求します。この際、エージェントは質問の文脈と必要な情報を構造化して伝える必要があり、承認が却下されたり修正要求があった場合は、エージェントチームが以前の作業状態にロールバックしてフィードバック内容を反映した上で、再度処理を試みるようフローを制御します。</p>
+  <span class="see">詳細: <a href="../workflows/09_Workflows_Chapter_ja.html">9章・ワークフローデザインパターン</a></span>
+
+  <h2 id="workspace">workspace/variant</h2>
+
+  <div class="q"><code>new-project.ts</code>を実行したところ、スキャフォールディングが拒否されたり、パスがおかしくなったりします。</div>
+  <p class="faq-answer">ワークスペースのルートではなく、別のプロジェクトフォルダの中で実行した可能性が高いです。ai-workspace-standardsは必ずワークスペース自体のルートにクローンして使用する必要があり(Windowsでは<code>C:\git</code>、macOS/Linuxでは<code>~/git</code>)、別のプロジェクトフォルダの中にサブモジュールのように配置するとパス計算がずれてしまいます。</p>
+  <span class="see">詳細: <a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-1">6章§1</a></span>
+
+  <div class="q"><code>bun run agent:verify</code>の実行結果にある「Documented agents」の数値が予想と異なります。</div>
+  <p class="faq-answer">AGENTS.mdの表と実際の<code>agents/*.md</code>ファイル一覧がずれています。ワークスペース専用のエージェント(auditor、lifecycle-managerなど)が表に残っていないか、新しく作成したエージェントが表から漏れていないかを再確認してください。</p>
+  <span class="see">詳細: <a href="../variant-practice/06_VariantPractice_Examples_ja.html#scenario-2">6章 D-1</a></span>
+
+  <div class="q">昇格パイプライン(<code>l2-to-variant-pipeline.ts</code>)を実行してもよいか確信が持てません。</div>
+  <p class="faq-answer">このコマンドは実際のgit履歴に痕跡を残す、元に戻すのが難しい操作です。講義・ワークショップ環境であれば、参加者全員が実行するのではなく、講師が一度デモンストレーションするだけで十分です。<a href="../lecture-guide/00_Lecture_Guide_ja.html#per-section">講義進行ガイド</a>に案内があります。</p>
+  <span class="see">詳細: <a href="../variant-advanced/12_VariantAdvanced_Examples_ja.html">12章 実習</a></span>
+
+  <div class="q">ai-workspace-standardsを実際の本番環境(Docker/Kubernetes)で使用するには?</div>
+  <p class="faq-answer">現在、ai-workspace-standardsはローカルのAIコーディングツール(Claude Code/App、Antigravityなど)と直接連携する方式でのみ動作します。DockerまたはKubernetes環境でOpen WebUIのようなフロントエンドサービスと連携し、ユーザー単位でエージェントチームをサポートする形態は<strong>高度化の方向性</strong>として議論中であり、まだ実装されていません。
+    <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#container">8章§5 高度化ロードマップ</a></span></p>
+
+  <div class="q">複数のプロジェクトの<code>memory/MEMORY.md</code>を一箇所にまとめて見ることはできますか?</div>
+  <p class="faq-answer">現在は各プロジェクトごとに独立した<code>memory/MEMORY.md</code>を維持する構造であり、ワークスペースレベルでメモリを集約・整理する機能は<strong>高度化の方向性</strong>として計画中です。プロジェクトが増えるほど個別のメモリファイルから全体のトレンドを把握しにくくなる点を改善する予定です。
+    <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#memory">8章§5 高度化ロードマップ</a></span></p>
+
+  <div class="q">variantテンプレートが更新されると、既存のプロジェクトにも自動的に反映されますか?</div>
+  <p class="faq-answer">いいえ。ai-workspace-standardsは<strong>フォークモデル(Fork Model)</strong>を採用しています。L1(共通テンプレート)の変更は、すでにスキャフォールディングされたL2プロジェクトに自動的に伝播しません。これは意図的な差分を保持するための設計ですが、セキュリティパッチやバグ修正を手動で反映しなければならないという運用負担を生みます。同意ベース(consent-based)の選択的受信モデルと非同期配布パイプラインが、高度化の方向性として検討されています。
+    <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#variant-deploy">8章§5 高度化ロードマップ</a></span></p>
+
+  <div class="q">新規variant(バリアント)作成時に<code>agent:verify</code>の検証や<code>validate-templates</code>で失敗します。</div>
+  <p class="faq-answer">最もよくある原因は、エージェント宣言間の**対称性(Symmetry)の不遵守**です。例えば、<code>researcher</code>エージェントの<code>handoff_to</code>に<code>writer</code>が指定されている場合、<code>writer</code>エージェントの<code>handoff_from</code>にも必ず<code>researcher</code>が対になって定義されている必要があります。また、<code>variant.json</code>ファイルのJSON構文エラーや、必須フィールド(エージェント一覧など)が有効な仕様になっているかも確認する必要があります。</p>
+  <span class="see">詳細: <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">11章§新規variant作成</a></span>
+
+  <div class="q">自分で設計・構築したエージェントチームが、実運用で常に意図した品質で動作しているかをどう検証しますか?</div>
+  <p class="faq-answer">正常動作を評価するために<strong>エージェントテストベンチ(Test Bench)</strong>を構築する必要があります。第一に、代表的な入力要件と期待される出力(Gold Dataset)を定義します。第二に、プロンプトやエージェントのルールを修正するたびに、データセットを投入して回帰テスト(Regression Test)を自動で実行します。第三に、定量評価が難しい自然言語出力については、高性能モデルを審判(LLM-as-a-Judge)として立て、事前に合意した定量スコアで評価するように実装します。</p>
+  <span class="see">詳細: <a href="../capstone/13_Capstone_ja.html">13章§キャップストーン実習</a></span>
+
+  <h2 id="cost">コスト・パフォーマンス</h2>
+
+  <div class="q">マルチエージェントチームを稼働させると、トークンコストはどのくらいかかりますか?</div>
+  <p class="faq-answer">コストはエージェント数×各エージェントのモデルティア×実行頻度によって決まります。5章で説明されているモデルティアリング(<code>tier: high/medium/low</code>)は、コスト管理の中核となる仕組みです。例えば、co-consultバリアントの10名のエージェントをすべてhighで動かすと1セッションで数万トークンを消費しますが、実際の実装役割をmedium/lowに下げることで、コストを40~60%削減できます。Claude Codeの<code>/cost</code>コマンドで、現在のセッションの累積トークンをリアルタイムに確認できます。</p>
+  <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">5章§templatesとvariant 7種</a></span>
+
+  <div class="q">エージェントの応答が急に遅くなったり、タイムアウトしたりします。</div>
+  <p class="faq-answer">コンテキストウィンドウが一杯になると、モデルの処理速度が急激に低下します。Claude Codeでは<code>/compact</code>コマンドで会話の長さを圧縮できます。また、複数のエージェントを並列に投入した際にAPIリクエストがキューに溜まって遅延する現象もよく見られます。この場合は順次実行に切り替えるか、WIP上限を下げて同時実行数を減らしてください。</p>
+  <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-1">共通リファレンス§1</a></span>
+
+  <div class="q">複数のエージェントループや長いワークフローを実行すると、APIトークンのコストがかかりすぎます。最適化方法は?</div>
+  <p class="faq-answer">第一に、エージェントの役割ごとに**モデルティア(Model Tier)**を分けて指定します。単純なファイル書き込みやテスト実行にはmedium/lowモデルを、全体のフロー制御や総合設計にはhighモデルを配置することで、コストを40%以上削減できます。第二に、プロンプトキャッシング(Prompt Caching)が機能するよう、会話の文脈が一定である間はシステムプロンプトを変更せず、連続したセッションを維持します。第三に、オーケストレーターとスペシャリストの対話が無限にスピンしないよう、<code>Max Turns</code>のようなハード上限値を明確に設定します。</p>
+  <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">5章§templatesとvariant 7種</a></span>
+
+  <h2 id="platform">プラットフォーム別の問題</h2>
+
+  <div class="q">Windowsで<code>new-project.ts</code>を実行すると、パス区切り文字のエラーが発生します。</div>
+  <p class="faq-answer">ai-workspace-standardsのスクリプトはNode.js/Bunランタイム上で<code>path</code>モジュールを使用してプラットフォームごとのパスを処理するため、基本的にWindowsとmacOS/Linuxの両方に対応しています。ただし、Claude Codeセッション内で<code>git clone</code>コマンドを直接実行する際に、Git BashではなくPowerShellのパス(<code>C:\Users\...</code>)が混ざると問題が発生することがあります。Claude Codeでは常に<code>/</code>形式のパスまたはGit Bash形式を使用し、ワークスペースのルートは<code>C:\git</code>のように短く階層の浅い場所にクローンすることを推奨します。</p>
+  <span class="see">詳細: <a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-1">6章§1</a></span>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

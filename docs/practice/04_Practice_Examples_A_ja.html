@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="4章 §2-A・マルチエージェントチーム実習 — Claude中心のシナリオ別学習ガイド - マルチエージェントハーネスエンジニアリングハンドブック資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4章 §2-A・マルチエージェントチーム実習 (Claude中心)</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 状況'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ 内部動作'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 ヒント'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ 注意'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── サイドバー ── -->
+<nav>
+  <a href="../index.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">4章 §2-A・Claude中心実習</div>
+  <a href="#setup">🛠 準備: 必要なプログラムのインストール</a>
+  <a href="#beginner"><span class="dot dot-g"></span>初級 (Getting Started)</a>
+
+  <div class="nav-group">初級シナリオ</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 最初のカスタムサブエージェントを作成して呼び出す</a>
+
+  <div class="nav-group">中級シナリオ</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer 2段階パイプライン</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 リクエストに応じたチーム構成とワークフローの変化を観察する</a>
+
+  <div class="nav-group">上級シナリオ</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 独立作業の並列実行 — Agent Manager vs Agent Teams</a>
+  <a href="#scenario-4"><span class="dot dot-p"></span>P-2 モデルティア比較でコスト感覚を養う</a>
+  <a href="#cleanup">🧹 実習の最終整理</a>
+
+  <div class="nav-group">ショートカット</div>
+  <a href="04_Practice_Manual_ja.html">📖 4章 §1 リファレンス →</a>
+  <a href="04_Practice_Examples_B_ja.html">🖥 4章 §2-B Antigravity中心実習 →</a>
+</nav>
+
+<!-- ── 本文 ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">4章 §2-A</div>
+  <h1>4章 §2-A・マルチエージェントチーム実習 (Claude中心)</h1>
+  <p class="subtitle">空の実習フォルダから始めてClaude App/Claude Codeを中心にシナリオを体験する実習ガイド — Desktopアプリを基準に案内し、CLI対応を続けて紹介する &nbsp;|&nbsp; <a href="04_Practice_Manual_ja.html">← 4章 §1 リファレンス文書に戻る</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_ja.html">4章 §2-B Antigravity中心 →</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象バージョン/範囲</span><span class="vvalue">Claude Code/App 2026-07リリース — Claudeを中心に案内し、Antigravity対応は4章 §2-Bを参照</span></div>
+    <div class="version-row"><span class="vlabel">このファイルの目的</span><span class="vvalue">サブエージェント定義・呼び出し、順次パイプライン、動的チーム構成・ワークフロー組み合わせ、並列実行、モデルティア比較をClaude App/Codeで手を動かして体験する5段階の実習を提供</span></div>
+    <div class="version-row"><span class="vlabel">リファレンス文書</span><span class="vvalue"><a href="04_Practice_Manual_ja.html">4章 §1 共通</a> · <a href="04_Practice_Manual_A_ja.html">4章 §1-A Claude詳細</a> · <a href="04_Practice_Manual_B_ja.html">4章 §1-B Antigravity詳細</a> — 各シナリオでリンクで接続されます</span></div>
+    <div class="version-row"><span class="vlabel">作成日</span><span class="vvalue">2026年7月14日</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>この過程全体が従う原則</strong> — 以下のすべてのシナリオは、まずサブエージェントの役割をツール中立的な<code>AGENTS.md</code>仕様として記述し、その仕様をClaude系では事前定義サブエージェントファイルとして「実装」する順序に従う（2章 §5 AGENTS.md参照）。定義は一つ、実行方式のみがツールごとに異なるという原則を手作業で確認することがこの実習の核心的な目標です。Antigravityでの対応方法は<a href="04_Practice_Examples_B_ja.html">4章 §2-B</a>を参照します。
+  </div>
+
+  <!-- ══════════════════════════════ 実習前準備 ══════════════════════════════ -->
+  <h2 id="setup">準備: 必要なプログラムのインストール</h2>
+  <p>以下の実習はClaude App(Desktop)とClaude Code(CLI)を中心に進められます。ローカル環境にこれらのツールがまだない場合は、このハンドブックに同梱されている環境設定自動化ツールである<a href="../setup/SETUP_ja.html">セットアップガイド</a>が、この章の実習に正確に必要な構成を自動的にインストールします。案内に従ってスクリプトをダウンロードし、ローカルで実行すればよいです。</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 インストール前の確認事項</div>
+    <p class="text-dim" style="margin-bottom:10px;">スクリプトを実行する前に<a href="../setup/SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>を先に読んでください。この文書には以下の前提条件がまとめられています。</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>アクティブなClaude Pro/Maxサブスクリプション<strong>および</strong>Antigravity使用のためのGoogleアカウント（個別のAPIキーではなく、サブスクリプション/アカウントベースのプランである必要があります）</li>
+      <li><code>gh auth login</code>を実行できるGitHubアカウント</li>
+      <li>最低5GBの空きディスク容量</li>
+      <li>管理者(admin)またはsudo権限</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>GitHubアカウントがまだない場合</strong><br>
+    ① ブラウザで<a href="https://github.com/signup" target="_blank">github.com/signup</a>にアクセスします。<br>
+    ② メールアドレス、パスワード、ユーザー名(username)を入力します — usernameは後でリポジトリURL(<code>github.com/&lt;username&gt;/...</code>)にそのまま使われるため慎重に決めてください。<br>
+    ③ 自動登録防止のためのパズル/コード認証を通過します。<br>
+    ④ 登録時に入力したメールに届いた認証メールを開き、<strong>メール認証</strong>を完了します — このステップをスキップすると、その後の<code>gh auth login</code>やリポジトリ作成がブロックされる可能性があります。<br>
+    ⑤ 無料(Free)プランで登録すれば十分です — このハンドブックの実習・PR練習に有料プランは必要ありません。<br>
+    登録が終わったら、<a href="https://cli.github.com/" target="_blank">GitHub CLI(<code>gh</code>)</a>が上記インストールスクリプトに含まれて一緒にインストールされ、以下の<code>gh auth login</code>コマンドでターミナルをそのアカウントと接続します。
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# 案内に従って: GitHub.com選択 → HTTPS選択 → ブラウザでログイン(推奨)選択
+# ブラウザが開いたら、さっき作成したアカウントでログインして認証コードを確認します</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <h3>Windowsでインストールする</h3>
+  <p>このハンドブックのパス表記はWindows基準ですので、Windowsユーザーは<a href="../setup/setup-windows.ps1">setup-windows.ps1</a>をダウンロードして実習専用フォルダ（例: <code>harness-lab/setup/</code>）に置き、PowerShellを<strong>管理者権限で</strong>実行した後、以下のコマンドを実行します。</p>
+  <div class="tip-box">
+    <strong>PowerShellを管理者権限で開く方法</strong><br>
+    ① スタートメニューを開いて<code>PowerShell</code>を検索します。<br>
+    ② 検索結果の「Windows PowerShell」を<strong>マウス右クリック</strong>します。<br>
+    ③ 表示されるメニューから<strong>「管理者として実行」</strong>を選択します。<br>
+    ④ ユーザーアカウント制御(UAC)ウィンドウが表示されたら<strong>「はい」</strong>を押して承認します。<br>
+    ウィンドウのタイトルバーに<code>管理者: Windows PowerShell</code>のように「管理者」が付いていれば正しく開いています。wingetインストールなど一部のステップは管理者権限なしで実行するとエラーになったり、静かにスキップされる可能性があります。
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup
+.\setup-windows.ps1
+# 選択オプション: -WSL2, -WezTerm, -Docker, -Force (既にインストールされているツールも再インストール)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>スクリプトが終了したら、ターミナルを完全に閉じてから再度開くとPATH変更が適用されます。</p>
+
+  <h3>macOS / Linuxでインストールする</h3>
+  <p>macOSは<a href="../setup/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用します。どちらも<code>--wezterm</code>、<code>--docker</code>選択フラグをサポートしています。</p>
+  <div style="position:relative">
+  <pre class="code-block"># macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <h3>インストールの検証</h3>
+  <p>OSに関わらず、<a href="../setup/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態をチェックするチェックリスト表が出力されます。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになります。</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <p>このプロジェクトがインストールするツールのうち、この章の4ツール実習と直接関連するものは以下の通りです。Claude App(Desktop)、<code>claude</code>(Claude Code CLI)、Antigravity(Desktop)、<code>agy</code>(Antigravity CLI)、および<code>.claude/agents/*.md</code>ベースのサブエージェント実行に必要な<code>bun</code>、以降の章で使用される<code>gh</code>(GitHub CLI)まで一緒にインストールされます。</p>
+
+  <div class="tip-box">
+    Antigravity CLI(<code>agy</code>)は別途ランタイムインストールが必要ない単一コンパイルバイナリです — 解凍後にPATHに入れるだけで即座に実行できます。古い資料に残っている「Geminiコマンドラインインターフェース(CLI)をnpmでグローバルインストール」のような案内はもはや有効ではありません。最新のインストール方法は<a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>で確認してください。
+  </div>
+
+  <div class="tip-box">
+    インストール中に問題が発生した場合は、Windows基準で<code>%USERPROFILE%\workshop-setup-logs\</code>フォルダにログが残ります。問題を解決する際はこのログから確認してください。
+  </div>
+
+  <!-- ══════════════════════════════ 初級 ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● 初級</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">カスタムサブエージェントを一つ作成し、Claude Appで呼び出しを観察する最初のステップ</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">初級</span>
+      <strong class="card-title">最初のカスタムサブエージェントを作成して呼び出す</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        ハーネスを初めて使用する開発者が実習専用の空フォルダ<code>harness-lab/</code>を新規作成し、<code>reviewer</code>役割をツール中立的な<code>AGENTS.md</code>仕様として先に記述した後、Claude App(Desktop)で事前定義サブエージェントとして「実装」して呼び出してみます。このフォルダは実習専用のため、他のプロジェクトファイルと混ざりません。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s5">AGENTS.md (2章)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-1">サブエージェントの定義</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-2">サブエージェントの呼び出し</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップ別実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① 実習フォルダの作成と移動</strong>
+            <p>現在のフォルダの下に<code>harness-lab</code>フォルダを新規作成し、その中に移動します。以降のすべてのコマンドはこのフォルダ内で実行します。</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② 共通役割仕様の作成 — <code>AGENTS.md</code></strong>
+            <p>ClaudeやAntigravity、その他AGENTS.md標準をサポートするどのツールで開いても同じ意味で読み取れるよう、<code>reviewer</code>役割をツール依存の表現なしに純粋なテキストで記述します。このファイル一つが「何をする役割か」の唯一のオリジナルとなり、以下の二つのツールは各々の方式でこのオリジナルを実装するだけです。macOS/Linux/Git Bashでは以下のコマンドをそのまま使用します。</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+Role: Review text files for typos, logical flaws, and improvement points.
+Input: Path to the text file to be reviewed
+Output: List of typos, logical flaws, and improvement points
+Permissions: Read-only — does not directly modify files.
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong> <code>cat</code>コマンド自体は<code>Get-Content</code>のエイリアスとしてファイル読み取りにそのまま使用できます。ただし<code>&lt;&lt; 'EOF'</code>のように複数行を直接入力するheredoc構文はサポートされていないため、同じ内容は引用符付きのhere-string(<code>@'...'@</code>)で作成して<code>Set-Content</code>でファイルに書き込みます。</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+Role: Review text files for typos, logical flaws, and improvement points.
+Input: Path to the text file to be reviewed
+Output: List of typos, logical flaws, and improvement points
+Permissions: Read-only — does not directly modify files.
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — AGENTS.md仕様を事前定義サブエージェントとして実装</div>
+        <p class="text-dim" style="margin-bottom:10px;">ターミナルや別のエディタで事前にファイルを作成しません。以下の3ステップをそのまま実行します — 灰色のコードボックスはすべて「コピー」ボタンでそのままコピーして貼り付ければよい内容です。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Claude Appでプロジェクトを開く</strong>
+              <p>Claude App(Desktop)を実行し、さっき作成した<code>harness-lab/</code>フォルダをプロジェクトとして開きます。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② サブエージェント作成リクエスト — チャットウィンドウに以下の文をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">AGENTS.mdに記載されているreviewer役割仕様に従って、.claude/agents/reviewer.mdにreviewerサブエージェントを作成してください。toolsはRead、Grepのみを許可し、modelはsonnetに設定してください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                Claude AppはAGENTS.mdの「役割/入力/出力/権限」仕様を読み取り、その内容を<code>.claude/agents/reviewer.md</code>のYAML frontmatter(<code>description</code>、<code>tools</code>)とシステムプロンプトに移してWriteツールで直接生成します。仕様はそのままで、表現形式だけがツールに合わせて変わったのです — 生成が終わったら、チャットに表示されたファイル内容をAGENTS.mdと比較してみてください。
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ レビュー対象ファイルの作成 + サブエージェントの呼び出し — 同じチャットウィンドウに続けて貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">notes.txtファイルを作成し、「このプロジェクトは非常に良い。これはとても良い。」と書き込んだ後、reviewerサブエージェントでnotes.txtをレビューしてください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                Claude Appは<code>Agent</code>(Task)ツールを<code>description="notes.txtのレビュー"</code>、<code>subagent_type="reviewer"</code>で呼び出します。画面にはサブエージェントがスポーンされる過程と、作業を終えた後にメインセッションに戻る要約結果が順番に表示されます。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)でも同様に</strong> — ターミナルで<code>claude</code>を実行した後、②③の文をそのままチャットに貼り付ければ、コマンドラインインターフェース(CLI)が同じようにAGENTS.md仕様を読み取り<code>.claude/agents/reviewer.md</code>を直接生成・呼び出します。CLIでは追加で<code>PostToolUse</code>などの自動化フックが発火するという違いがあります（Appではフックは発火しません）。</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>結果の確認</strong> — <code>harness-lab/.claude/agents/reviewer.md</code>ファイルが実際に生成されたか、その中の<code>description</code>・<code>tools</code>・<code>model</code>フィールドが要求通りになっているか確認します。最後の応答には、誤字・論理的欠陥・改善点を分けたリストが表示されるのが正常です — reviewerが「修正しました」のような返答をした場合は<code>tools</code>制限が正しく適用されていません。
+      </div>
+
+      <div class="warning-box">
+        <strong>よくある失敗</strong> — サブエージェントが呼び出されず、メインセッションが直接notes.txtをレビューしてしまった場合は、②ステップの文に<code>reviewerサブエイジェントで</code>という表現が抜けているか、<code>.claude/agents/reviewer.md</code>の生成が先に完了していない状態で③をリクエストした場合です。②の応答でファイル生成が終わっているか先に確認してから③を送信してください。
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 中級 ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● 中級</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">メインセッションがオーケストレーターとなり、writerとreviewerの二つの専門エージェントを順番に指揮する実務パターン</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">中級</span>
+      <strong class="card-title">writer → reviewer 2段階パイプライン</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        G-1を終えた実務者が同じ<code>harness-lab/</code>フォルダで、二つ目の役割<code>writer</code>もG-1と同じ方式で<code>AGENTS.md</code>に先に仕様を記述した後、Claude Appに事前定義サブエージェントとして実装します。writerが先に草稿を書き、reviewerがその結果を批評するパイプラインを順序を守って指揮させます。
+      </div>
+
+      <div class="note">
+        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+          </defs>
+          <!-- Box 1: ユーザーリクエスト (gray) -->
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="var(--text-dim)" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="var(--text-dim)">ユーザーリクエスト</text>
+          <!-- Arrow 1 -->
+          <line x1="115" y1="43" x2="150" y2="43" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <!-- Box 2: writer.md (blue) -->
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent)">writer.md</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent)">草稿作成</text>
+          <!-- Arrow 2 -->
+          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <!-- Return arrow (curved, below) -->
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="var(--accent-amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="var(--accent-amber)"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-amber)">修正依頼時はwriterに戻る</text>
+          <!-- Box 3: reviewer.md (green) -->
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-green)" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-green)">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-green)">フィードバック/承認</text>
+          <!-- Arrow 3 -->
+          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-purple)" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <!-- Box 4: 最終結果物 (purple) -->
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="var(--accent-purple)" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-purple)">最終結果物</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-purple)">完了</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s5">AGENTS.md (2章)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-1">サブエージェントの定義</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-2">サブエージェントの呼び出し</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップ別実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>共通役割仕様の追加 — <code>AGENTS.md</code>にwriter項目を追記</strong>
+            <p>G-1で作成した同じ<code>AGENTS.md</code>に<code>writer</code>役割を続けて記述します。reviewer項目はそのまま残し、以下の内容だけを追加します。macOS/Linux/Git Bashでは以下のコマンドをそのまま使用します。</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+Role: Write a short draft of 3-5 sentences on a given topic.
+Input: Topic, file path to save
+Output: Draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (proceeds to review after draft completion)
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong> here-stringを<code>Add-Content</code>で追記します（<code>Set-Content</code>はファイルを上書きするため、必ず<code>Add-Content</code>を使用してreviewer項目が消えないようにしてください）。</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+Role: Write a short draft of 3-5 sentences on a given topic.
+Input: Topic, file path to save
+Output: Draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (proceeds to review after draft completion)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — メインセッションがAgent呼び出しを順次ディスパッチ</div>
+        <p class="text-dim" style="margin-bottom:10px;">G-1と同様にファイルを事前に準備しません。G-1で開いておいた同じ<code>harness-lab/</code>チャットで続けて進めます。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① writerサブエージェント作成リクエスト — チャットウィンドウにそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">AGENTS.mdに記載されているwriter役割仕様に従って、.claude/agents/writer.mdにwriterサブエージェントを作成してください。toolsはWrite、Readを許可し、modelはsonnetに設定してください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                Claude AppはAGENTS.mdのwriter仕様を読み取り、Writeツールで<code>.claude/agents/writer.md</code>を直接生成します。G-1で既に作成しておいた<code>reviewer.md</code>と同じ<code>.claude/agents/</code>フォルダ内に並んで配置されます — AGENTS.mdの<code>handoff_to: reviewer</code>が次のステップで実際に繋がります。
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② writer → reviewer 順次パイプライン実行リクエスト — 同じチャットウィンドウに続けて貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">writerサブエージェントでdraft.txtに「リモートワークの利点」というトピックの草稿を書かせ、完了したらreviewerサブエージェントでdraft.txtをレビューしてください。二つのステップを順番に進めてください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                メインセッションはまず<code>subagent_type="writer"</code>で<code>Agent</code>を呼び出して<code>draft.txt</code>を生成させ、その結果が戻ってきてから初めて<code>subagent_type="reviewer"</code>呼び出しを送ります。二つの専門家間の依存関係を調整するのは、サブエージェントではなくメインセッションの役割です。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          writerとreviewerを並列（一つのメッセージで同時）に呼び出すと、reviewerがまだ存在しないdraft.txtをレビューしようとして失敗する可能性があります — 依存関係がある作業は必ず順次呼び出しでリクエストする必要があります（上記②のように「二つのステップを順番に進めてください」と明示することが核心です）。
+        </div>
+        <div class="tip-box">
+          <strong>結果の確認</strong> — チャット画面に<code>writer</code>呼び出し → 完了 → <code>reviewer</code>呼び出し → 完了の順序で二回のサブエージェントスポーンが表示されるのが正常です。一度しか表示されない場合は、オーケストレーターがパイプラインを一つのステップにまとめてしまった可能性があるため、リクエスト文に「順番に」が明示されているか再度確認してください。完了後、<code>harness-lab/draft.txt</code>を開いて草稿が実際に保存されているかも確認します。
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)でも同様に</strong> — 同じ<code>writer.md</code>/<code>reviewer.md</code>をそのまま使用し、ターミナルで①②の文をそのまま貼り付ければ同様に順次ディスパッチされます。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">中級</span>
+      <strong class="card-title">リクエストに応じたチーム構成とワークフローの変化を観察する</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        2章 §4bで扱った「動的チーム構成」と「様々なワークフロー組み合わせ」を実際に目で確認するシナリオです。D-1で作成した<code>writer</code>・<code>reviewer</code>二つのサブエージェントはそのまま残し、リクエストの性質だけを変えながらオーケストレーターが実際に誰を、何回、どの順序で呼び出すか観察します — サブエージェント定義は一度も新しく作成しないことが核心です。
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >動的ルーティング分岐フロー図 — 同じチーム、異なるリクエスト</div>
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+            <marker id="drArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="drArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+          </defs>
+
+          <!-- Row 1: Request A → reviewer only -->
+          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">リクエストA</text>
+          <rect x="15" y="30" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">単純レビュー</text>
+          <line x1="95" y1="46" x2="145" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- reviewer box -->
+          <rect x="150" y="30" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">×1</text>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- Result -->
+          <rect x="325" y="30" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">結果</text>
+          <!-- Label: simple -->
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">シングルパス</text>
+
+          <!-- Row 2: Request B → writer → reviewer (pipeline) -->
+          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">リクエストB</text>
+          <rect x="15" y="105" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">草稿+レビュー</text>
+          <line x1="95" y1="121" x2="145" y2="121" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- writer box -->
+          <rect x="150" y="105" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">×1</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-purple)" stroke-width="1.2" marker-end="url(#drArrowP)"/>
+          <!-- reviewer box -->
+          <rect x="325" y="105" width="110" height="32" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">×1</text>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- Result -->
+          <rect x="485" y="105" width="80" height="32" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">結果</text>
+          <!-- Label: pipeline -->
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-purple)" font-weight="600">パイプライン</text>
+
+          <!-- Row 3: Request C → writer → reviewer×2 (fan-out) -->
+          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">リクエストC</text>
+          <rect x="15" y="180" width="80" height="32" rx="6" fill="#ffffff" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">草稿+多重</text>
+          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">レビュー</text>
+          <line x1="95" y1="196" x2="145" y2="196" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#drArrow)"/>
+          <!-- writer box -->
+          <rect x="150" y="180" width="110" height="32" rx="6" fill="#fbefff" stroke="#d2b9ff" stroke-width="1.2"/>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">×1</text>
+          <!-- Fan-out to 2 reviewers -->
+          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#drArrowG)"/>
+          <!-- reviewer 1 (文法) -->
+          <rect x="315" y="170" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="370" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">文法視点</text>
+          <!-- reviewer 2 (論理) -->
+          <rect x="315" y="206" width="110" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+          <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="#116329">reviewer</text>
+          <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="#116329">論理視点</text>
+          <!-- Merge to result -->
+          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <rect x="485" y="182" width="80" height="30" rx="6" fill="#f0f7ff" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">結果</text>
+          <!-- Label: fan-out -->
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">ファンアウト</text>
+
+          <!-- Bottom note -->
+          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ サブエージェント定義は1回 — オーケストレーターがリクエスト毎に動的にルーティング</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s4b">動的チーム構成と様々なワークフロー</a>
+        </div>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 同じチーム、異なるリクエスト三回</div>
+        <p class="text-dim" style="margin-bottom:10px;">D-1を終えた同じチャットで続けて進めます。毎回どのサブエージェントが何回呼び出されるか、画面に表示される過程に注目します。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 単純リクエスト — reviewer一つだけが必要な場合</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txtの誤字だけをざっと見てください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                オーケストレーターは今回のリクエストに<code>writer</code>が必要ないと判断し、<code>reviewer</code>一つだけを呼び出します。同じチーム(writer+reviewer)が定義されていても、実際に投入される要員はリクエスト毎にオーケストレーターがその都度決定するということを示す最も単純な例です。
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 複合リクエスト — writerとreviewerを二視点で組み合わせ</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft2.txtに「週4日勤務制」というトピックで新しい草稿を書いてください。草稿が完了したら、その草稿を文法視点と論理視点の二つでそれぞれ独立して同時にレビューしてください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                今回は<code>writer</code>一回（パイプラインの最初のステップ）の後に、<code>reviewer</code>が「文法視点」と「論理視点」という異なる指示を受けて二回同時に（ファンアウト）呼び出されます。パイプライン(writer → reviewer)とファンアウト(reviewer ×2同時実行)という二つのオーケストレーションパターンが一つのリクエスト内で組み合わされることを確認できます — 同じ二つのサブエージェントで①とは完全に異なる形状のワークフローが作られました。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          ①と②を並べて比較すると、「チーム名簿（どのサブエージェントを定義しておいたか）」と「今回の作業に実際に投入される構成（誰が何回、どの順序で呼び出されるか）」が互いに異なる層であることがはっきりします。前者は<code>.claude/agents/</code>に事前に固定されていますが、後者は毎リクエスト毎に新しく決定されます。
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)でも同様に</strong> — 同じ<code>writer.md</code>/<code>reviewer.md</code>をそのまま使用し、ターミナルで①②の文をそのまま貼り付ければ同様に動作します。</p>
+        <div class="warning-box">
+          <strong>よくある失敗</strong> — ②で「同時にレビューしてください」と言ったのにreviewerが一回しか呼び出されない場合は、リクエスト文が「文法視点と論理視点」のように二つの視点を明確に区別していない可能性が高いです。視点をより具体的に分けて再度リクエストしてみてください。
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>合わせて参照:</strong> <a href="../concepts/02_Concepts_Chapter_ja.html#s4b">2章 §4b — 動的チーム構成と様々なワークフロー</a>、<a href="04_Practice_Manual_ja.html#section-3">4章 §1 リファレンス — 並列実行</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 上級 ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● 上級</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">writerとreviewerを独立した二つのファイルに対して同時に回す並列運用 — Claude Code Agent Teams</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">上級</span>
+      <strong class="card-title">独立作業の並列実行 — Agent Manager vs Agent Teams</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        D-1までを終えた熟練者が、互いに依存しない二つの独立した作業（<code>topic-a.txt</code>、<code>topic-b.txt</code>草稿作成）をClaude Code Agent Teamsで並列に回してみます。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-3">並列実行 — チーム単位で拡張する</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-3">並列実行</a>
+        </div>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams、teammateMode: in-process</div>
+        <p class="text-dim" style="margin-bottom:10px;">同じ<code>harness-lab/</code>フォルダで実験的機能であるAgent Teamsを有効化します。Desktop Appでは<code>teammateMode</code>は必ず<code>in-process</code>でなければなりません（<code>tmux</code>はサポートされていません）。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 設定ファイルの作成 (ターミナル) — <code>.claude/settings.json</code>がない場合は新規作成、ある場合は以下の二つのキーをマージ</strong>
+              <p class="text-dim" style="margin:6px 0;">macOS/Linux/Git Bashでは以下のコマンドをそのまま使用します。</p>
+              <div class="warning-box">
+                このコマンドは<code>.claude/settings.json</code>ファイル全体を上書きします。既に他の設定が入っているファイルの場合は、既存の内容がすべて消えるため、必要な設定がある場合は事前にバックアップするか、以下の内容を手動でマージしてください。
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">cat > .claude/settings.json << 'EOF'
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "teammateMode": "in-process"
+}
+EOF</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong> here-stringで同じファイルを作成します。</p>
+              <div style="position:relative">
+                <pre class="code-block">@'
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "teammateMode": "in-process"
+}
+'@ | Set-Content .claude/settings.json</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Claude Appの再起動</strong>
+              <p>設定を適用するには、Claude Appを完全に終了してから再度開きます。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ チームメイト並列スポーンリクエスト — チャットウィンドウに以下の文をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">writerチームメイト二名を並列でスポーンして、一つはtopic-a.txtに「在宅勤務」、もう一つはtopic-b.txtに「週4日勤務制」の草稿を同時に書かせてください。各ファイルが完了したらreviewerチームメイトがレビューするようにし、共有作業リストも表示してください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          Agent Teamsが有効な状態では、複数のClaudeインスタンスがチームメイトとして並列実行され、共有作業リストに各チームメイトのやることが登録され、状態が更新されます。二つのwriterチームメイトは<code>topic-a.txt</code>/<code>topic-b.txt</code>間に依存関係がないため同時に進行し、チームメイト間では<code>SendMessage</code>で直接メッセージをやり取りすることもできます。ただしDesktop Appでは一部のキーボードナビゲーション(Shift+Downなど)が制限されます。
+        </div>
+        <div class="tip-box">
+          作業リストが互いに絡み合わないよう、並列でスポーンするチームメイトには最初から完全に分離されたファイルやディレクトリを割り当てるのが安全です。
+        </div>
+        <div class="warning-box">
+          <strong>よくある失敗</strong> — 「Agent Teams機能が見つからない」またはチームメイトがスポーンされない場合は、大抵①<code>.claude/settings.json</code>が<code>harness-lab/</code>フォルダ基準で保存されたか（別のフォルダに保存すると認識されません）、②②でClaude Appを完全に再起動したかの二点を見落としている場合です。JSON構文エラー（カンマの欠落など）で設定ファイル自体が無視される場合も多いため、エディタで開いて構文を再度確認してください。
+        </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >権限設定前後の比較 — 最小権限の原則</div>
+        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+          </defs>
+
+          <!-- BEFORE section -->
+          <text x="140" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent-red)">Before — すべてのツールを許可</text>
+          <!-- Wide open box -->
+          <rect x="30" y="28" width="220" height="80" rx="8" fill="#ffebe9" stroke="#ff8182" stroke-width="1.5"/>
+          <text x="140" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" fill="var(--accent-red)">tools: [すべてのツール]</text>
+          <!-- Tool icons row -->
+          <rect x="50" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="72" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Read</text>
+          <rect x="100" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="122" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Write</text>
+          <rect x="150" y="62" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="172" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Bash</text>
+          <rect x="50" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="72" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Edit</text>
+          <rect x="100" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="122" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Grep</text>
+          <rect x="150" y="86" width="45" height="20" rx="4" fill="#ff8182" opacity="0.7"/>
+          <text x="172" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="600" fill="#fff">Push</text>
+          <!-- Attack surface label -->
+          <text x="140" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="700" fill="var(--accent-red)">攻撃面: 広い</text>
+
+          <!-- Arrow between -->
+          <line x1="260" y1="68" x2="325" y2="68" stroke="var(--text-dim)" stroke-width="2" marker-end="url(#paArrow)"/>
+          <text x="293" y="60" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="700" fill="var(--accent)">最小権限</text>
+
+          <!-- AFTER section -->
+          <text x="460" y="18" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent-green)">After — 必要なツールのみ</text>
+          <!-- Restricted box -->
+          <rect x="340" y="28" width="240" height="80" rx="8" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.5"/>
+          <text x="460" y="50" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" fill="#116329">tools: [Read, Grep]</text>
+          <!-- Tool icons row - only 2 -->
+          <rect x="385" y="62" width="55" height="20" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="412" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="#fff">Read</text>
+          <rect x="445" y="62" width="55" height="20" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="472" y="76" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="#fff">Grep</text>
+          <!-- Grayed out tools -->
+          <rect x="385" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
+          <text x="412" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="#ffffff">Write</text>
+          <rect x="445" y="86" width="55" height="20" rx="4" fill="#d0d7de" opacity="0.5"/>
+          <text x="472" y="100" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="#ffffff">Bash</text>
+          <text x="508" y="100" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="14" fill="#d0d7de">…</text>
+          <!-- Attack surface label -->
+          <text x="460" y="122" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="700" fill="#116329">攻撃面: 狭い</text>
+
+          <!-- Bottom comparison bar -->
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-red)" opacity="0.3"/>
+          <rect x="30" y="148" width="220" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
+          <text x="140" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="700" fill="#fff">危険範囲: 100%</text>
+
+          <rect x="340" y="148" width="88" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
+          <text x="384" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" font-weight="700" fill="#fff">危険: 33%</text>
+
+          <!-- Reduction arrow -->
+          <text x="300" y="178" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent-green)">危険範囲 67% 削減</text>
+          <text x="300" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--text-dim)">reviewerは元々書き込めないため、ミスが発生しない</text>
+        </svg>
+      </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Claude Code(CLI)でも同様に</strong> — 同じ設定と同じリクエスト文がそのまま動作します。CLIではのみ<code>teammateMode: "tmux"</code>を追加で選択でき、tmux分割ウィンドウで各チームメイトの画面を並べて見ることができる点がDesktop Appと異なります。</p>
+      </div>
+
+      <div class="related-cmds">
+        <strong>合わせて参照:</strong> <a href="04_Practice_Manual_ja.html#section-3">4章 §1 リファレンス — 並列実行 (4つのツール比較)</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-4">
+    <div class="card-header">
+      <span class="card-id">P-2</span>
+      <span class="badge badge-p">上級</span>
+      <strong class="card-title">モデルティア比較でコスト感覚を養う</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        8章で詳しく扱うモデルティア(high/medium/low)が実際にどのような体感差を生むか、数字で説明を聞く前に直接体験するシナリオです。同じreviewerサブエージェントをモデルだけ変えて三回呼び出し、応答速度と結果品質を目で比較します。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../intro/05_Intro_Chapter_ja.html#s3">モデルティア (5章)</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >モデルティア比較チャート</div>
+        <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <!-- Table header -->
+          <rect x="0" y="0" width="520" height="30" rx="6" fill="#eef1f4"/>
+          <text x="52" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">モデル</text>
+          <text x="178" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">速度</text>
+          <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">コスト</text>
+          <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">品質</text>
+
+          <!-- Row 1: haiku -->
+          <rect x="0" y="34" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="52" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent)">haiku</text>
+          <!-- Speed bar: 速い -->
+          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">速い</text>
+          <!-- Cost bar: 低い -->
+          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
+          <text x="304" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">低い</text>
+          <!-- Quality bar: 基本 -->
+          <rect x="400" y="46" width="65" height="16" rx="4" fill="var(--accent-amber)" opacity="0.6"/>
+          <text x="433" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">基本</text>
+          <!-- Quality description -->
+          <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">定型作業</text>
+          <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">誤字チェック</text>
+
+          <!-- Row 2: sonnet -->
+          <rect x="0" y="88" width="520" height="50" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="52" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-purple)">sonnet</text>
+          <!-- Speed bar: 中程度 -->
+          <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">中程度</text>
+          <!-- Cost bar: 中程度 -->
+          <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="315" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">中程度</text>
+          <!-- Quality bar: 良好 -->
+          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-purple)" opacity="0.6"/>
+          <text x="450" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">良好</text>
+          <!-- Quality description -->
+          <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">一般レビュー</text>
+          <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">コードレビュー</text>
+
+          <!-- Row 3: opus -->
+          <rect x="0" y="142" width="520" height="50" fill="#ffffff" stroke="#d0d7de" stroke-width="0.5"/>
+          <text x="52" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="14" font-weight="700" fill="var(--accent-red)">opus</text>
+          <!-- Speed bar: 遅い -->
+          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
+          <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">遅い</text>
+          <!-- Cost bar: 高い -->
+          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
+          <text x="338" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">高い</text>
+          <!-- Quality bar: 優秀 -->
+          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="468" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#fff">優秀</text>
+          <!-- Quality description -->
+          <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">複雑な論理</text>
+          <text x="490" y="173" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">アーキテクチャ</text>
+
+          <!-- Bottom note -->
+          <text x="260" y="212" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 軽い役割=速いモデル、重い判断=高いモデル — 適材適所に配置</text>
+        </svg>
+      </div>
+
+      <div class="platform-block claudeapp">
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 同じファイル、三つのモデルでレビューリクエスト</div>
+        <p class="text-dim" style="margin-bottom:10px;">G-1の<code>notes.txt</code>より少し複雑で、論理的欠陥がある文章を用意します。チャットウィンドウに以下の文をそのまま貼り付けます。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① レビュー対象ファイルの準備</strong>
+              <div style="position:relative">
+                <pre class="code-block">argument.txtファイルを作成し、以下の内容を書き込んでください: 「在宅勤務は常にオフィス勤務より生産的である。なぜなら、在宅勤務をしている人々が在宅勤務が良いと言っているからである。したがって、すべての会社は在宅勤務のみを行うべきである。」</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② haikuティアでレビュー</strong>
+              <p>チャットウィンドウに以下の文をそのまま貼り付けます。Claude Appは<code>reviewer.md</code>の<code>model</code>フィールドを<code>haiku</code>に変更した後、レビューを実行します。</p>
+              <div style="position:relative">
+                <pre class="code-block">.claude/agents/reviewer.mdのmodelフィールドをhaikuに変更してください。そしてargument.txtをreviewerサブエージェントでレビューしてください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ sonnetティアで同じリクエストを繰り返す</strong>
+              <p>同じ方式で<code>model</code>を<code>sonnet</code>に変更してからレビューします。循環論法(circular reasoning)などの論理的欠陥を正確に指摘できるか、haiku結果と比較します。</p>
+              <div style="position:relative">
+                <pre class="code-block">.claude/agents/reviewer.mdのmodelフィールドをsonnetに変更してください。そしてargument.txtをreviewerサブエージェントでレビューしてください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ opusティアで同じリクエストを繰り返す</strong>
+              <p>同じ方式で<code>model</code>を<code>opus</code>に変更してからレビューします。応答時間と指摘の深さが②③とどう異なるか記録します。</p>
+              <div style="position:relative">
+                <pre class="code-block">.claude/agents/reviewer.mdのmodelフィールドをopusに変更してください。そしてargument.txtをreviewerサブエージェントでレビューしてください。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          簡単な誤字チェックであれば三つのモデルの結果差はほとんどありませんが、今回のように「論証構造の欠陥を指摘しなければならない」作業では、ティアが低いほど循環論法を循環論法として正確に指摘できず、表面的な文章のみを指摘する傾向が顕著になります。逆にhaikuは三つの中で最も速く応答します — 5章で説明する「判断が重い役割ほど高いティア、定型化された作業ほど低いティア」という原則がなぜ存在するのか、速度と深さのトレードオフを直接体験するとずっと明確になります。
+        </div>
+        <div class="tip-box">
+          毎回Claude Appに「modelフィールドを変更してください」とリクエストすればよいです — 定義ファイルを直接開く必要はなく、Claude Appが自動的に修正してからレビューを実行します。
+        </div>
+        <div class="warning-box">
+          <strong>よくある失敗</strong> — modelフィールドに存在しない値（誤字、大文字など）が入ると、呼び出しが失敗したりデフォルトモデルに静かに置き換えられる可能性があります。②③④を終えた後、<code>.claude/agents/reviewer.md</code>を直接開いて<code>model:</code>値が<code>haiku</code>/<code>sonnet</code>/<code>opus</code>のうち意図した値と正確に一致しているか確認してください。
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>合わせて参照:</strong> <a href="../intro/05_Intro_Chapter_ja.html#s3">5章 §templatesとvariant — モデルティアリング</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 実習最終整理 ══════════════════════════════ -->
+  <h2 id="cleanup">実習の最終整理</h2>
+  <p>5つのシナリオをすべて終えたら、<code>harness-lab/</code>フォルダをどうするか整理します。次章(5章)では新しい実習フォルダを使用するため、必ず残しておく必要はありませんが、今まで作成した<code>AGENTS.md</code>・サブエージェント定義を比較してみたい場合は、削除前に一度眺めておくことをお勧めします。</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">🧹 harness-labフォルダの整理</div>
+    <p class="text-dim" style="margin-bottom:10px;">もう必要ない場合は、フォルダ全体を削除します。macOS/Linux/Git Bashでは以下のコマンドをそのまま使用します。</p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+rm -rf harness-lab</pre>
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+    </div>
+    <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong></p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+Remove-Item -Recurse -Force harness-lab</pre>
+      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>保存したい場合</strong> — フォルダを削除する代わりに、<code>git init && git add -A && git commit -m "harness-lab実習記録"</code>でローカルコミットだけ残す方法もあります。その後参考資料として置いておき、次章の実習は別の新しいフォルダで開始しても構いません。
+  </div>
+
+  <div class="warning-box">
+    P-1で<code>.claude/settings.json</code>に有効化した<code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code>フラグは<code>harness-lab/</code>フォルダのみに適用される設定のため、フォルダを削除すると一緒に消えます。他のプロジェクトでもAgent Teamsを継続して使用したい場合は、そのプロジェクトの<code>.claude/settings.json</code>に同じ設定を別途追加する必要があります。
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">参考動画</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=AJpK3YTTKZ4" target="_blank">Introducing Claude Code</a><span class="video-meta">(3:55)</span> — Anthropic公式Claude Code紹介動画</li>
+    <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=RywmhLTFeFk" target="_blank">Claude Code完全ガイド: 2026年初心者のためのClaude Code使用方法</a><span class="video-meta">(18:42)</span> — 韓国語Claude Code使用方法詳細ガイド</li>
+  </ul>
+</div>
+
+  <hr>
+  <p class="text-dim" style="text-align: center;">
+    Claude Code/App 2026-07基準 | 2026年7月14日作成<br>
+    <a href="04_Practice_Manual_ja.html">← 4章 §1 マルチエージェントチーム活用リファレンス</a> &nbsp;·&nbsp; <a href="04_Practice_Examples_B_ja.html">4章 §2-B Antigravity中心実習</a> &nbsp;·&nbsp; <a href="../intro/05_Intro_Chapter_ja.html">5章 ai-workspace-standards紹介 →</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_A_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">4章 §1-A・Claude詳細</div></a>
+    <div class="branch">
+      <div class="branch-label">4章 §2</div>
+      <a href="04_Practice_Examples_A_ja.html" >Claude (A)</a>
+      <a href="04_Practice_Examples_B_ja.html" >Antigravity (B)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">5章・ai-workspace-standards紹介</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "read-only" topics without hands-on exercises. Reading width (720px), generous line-height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Sections to edit: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) "Key points of this section"
+            (4) <h2 id>/<h3> sections and body  (5) previous/next chapter links
+  Fill in {{double braces}}/[description: ...] with actual content. All links are relative.
+  Colors use design tokens only — the theme is applied at deploy time by references/apply-theme.sh, which replaces the brand colors in docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 8 §1 · Deployment and SSOT - Material from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 8 §1 · Deployment and SSOT</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 8 · Advanced Architecture</div>
+  <a href="#s1" >§1 · Deployment and SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_en.html">§2 · Lifecycle Management</a>
+  <a href="08_Intro_Advanced_AGENTS_en.html">§3 · AGENTS.md In Depth</a>
+  <a href="08_Intro_Advanced_Architecture_en.html">§4 · Architecture In Depth</a>
+  <a href="08_Intro_Advanced_Roadmap_en.html">§5 · Advancement Roadmap</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="05_Intro_Chapter_en.html">Chapter 5 · Introduction to ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Operating a Multi-Agent Team Within an Enterprise</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 · Creating a New Variant</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 8 §1</div>
+  <h1>Deployment and SSOT</h1>
+  <p class="lead">This section covers the L0→L1→L2 three-tier hierarchy of ai-workspace-standards, the design rationale behind the fork model, and the per-file SSOT (Single Source of Truth) flow. The source always flows top-down, and there is no automatic synchronization that flows back upward.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Section Covers</div>
+    <ul>
+      <li>The L0→L1→L2 three-tier principle</li>
+      <li>The fork model and why automatic back-synchronization is not possible</li>
+      <li>The per-file SSOT flow</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">The L0 → L1 → L2 Hierarchy (3-Tier)</h2>
+  <p>The CONSTITUTION.md, templates/, variants, and new-project.ts covered so far all operate on a single overarching principle. The repository is designed as a three-tier hierarchy — <strong>L0 (workspace root) → L1 (common templates) → L2 (variant/project)</strong> — and the single source of truth always flows top-down. There is no automatic synchronization flowing back upward. The boilerplate discussed in the previous section corresponds to L1 in this three-tier model. This boilerplate is published from L0 and delivered as a one-time snapshot at the moment an L2 is born.</p>
+
+  <h3>What Each of the Three Tiers Is Responsible For</h3>
+  <p><strong>L0 (workspace root)</strong> is the single source of truth for files such as <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, and <code>scripts/*.ts</code>. Editing happens here, and only here. <strong>L1 (<code>templates/common/</code>)</strong> is a snapshot of the common infrastructure published from L0, serving purely as the baseline starting point when a new L2 variant is created. <strong>L2</strong> takes two forms. One is <code>templates/co-&lt;name&gt;/</code>, which has solidified into an official template; the other is <code>Projects/&lt;name&gt;/</code>, a living project actually created via <code>new-project.ts</code>. In both cases, once forked off per variant, each evolves independently.</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">L0 — Workspace root (C:\git\, single source of truth)
+  │  L0→L1: publish-to-template.ts (automatic and ongoing, on every dev-sync)
+  ▼
+L1 — templates/common/ (common template snapshot)
+  │  L1→L2: create-l2-scaffold.ts (once, at variant creation time)
+  ▼
+L2 — templates/co-&lt;name&gt;/ or Projects/co-&lt;name&gt;/
+     └─ Evolves independently after forking, no automatic back-sync
+     └─ Run l2-to-variant-pipeline.ts explicitly to promote to an official template</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:0 0 28px;">
+    <svg viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="20" y="80" width="110" height="50" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="102" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">L0</text>
+        <text x="75" y="118" text-anchor="middle" font-size="10" fill="#6639ba">Workspace Root</text>
+
+        <line x1="130" y1="105" x2="185" y2="105" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowL)"/>
+        <text x="157" y="96" text-anchor="middle" font-size="9" fill="#636c76">Automatic, Ongoing</text>
+
+        <rect x="190" y="80" width="130" height="50" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="255" y="102" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">L1</text>
+        <text x="255" y="118" text-anchor="middle" font-size="10" fill="#0550ae">templates/common/</text>
+
+        <line x1="320" y1="90" x2="400" y2="35" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <line x1="320" y1="105" x2="400" y2="105" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <line x1="320" y1="120" x2="400" y2="175" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <text x="355" y="55" text-anchor="middle" font-size="9" fill="#636c76">Once, at Scaffolding Time</text>
+
+        <rect x="405" y="10" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="30" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-develop</text>
+        <text x="500" y="46" text-anchor="middle" font-size="9.5" fill="#116329">Evolves independently after fork</text>
+
+        <rect x="405" y="80" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — Projects/my-app</text>
+        <text x="500" y="116" text-anchor="middle" font-size="9.5" fill="#116329">Evolves independently after fork</text>
+
+        <rect x="405" y="150" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="170" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-marketing</text>
+        <text x="500" y="186" text-anchor="middle" font-size="9.5" fill="#116329">Evolves independently after fork</text>
+
+        <path d="M500,60 C440,60 440,70 500,80" fill="none" stroke="#cf222e" stroke-width="1.1" stroke-dasharray="3,2"/>
+        <text x="360" y="200" font-size="9.5" fill="#cf222e">✕ No automatic back-sync — no L2→L1 arrow exists</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>Why L1 → L2 Ends in a "Fork"</h3>
+  <p>Early on, an approach was tried where every L1 change was automatically propagated to all existing L2 variants, but three problems kept recurring. Changes in L1 silently overwrote parts a variant had deliberately customized differently; every time a new variant was added, the hardcoded variant list in the propagation script had to be manually updated; and there was no way to distinguish "an intentional difference" from "a difference caused by a missed sync." So the <strong>Fork Model</strong> is used instead. L1 delivers its content exactly once, at the moment of scaffolding a variant, and from then on L2 evolves completely independently. Reflecting an L2 change back into the official template requires a human to explicitly run <code>l2-to-variant-pipeline.ts</code> rather than any automatic process (Chapter 11 covers this promotion procedure directly). Meanwhile, <code>publish-to-template.ts --check-drift</code> periodically reports the differences between L1 and each L2, but this report is read-only and never automatically overwrites values. The reverse direction — the procedure for actually applying L1's latest changes to an already-created L2 project — is covered in <a href="10_ProjectUpgrade_Chapter_en.html">Chapter 10 · Upgrading an L2 Project</a>.</p>
+
+  <h3>Per-File SSOT — What Flows Where, From Where</h3>
+  <div class="table-compare">
+  <table>
+    <thead><tr>
+      <th >File</th>
+      <th >Source (SSOT)</th>
+      <th >Sync Method</th>
+    </tr></thead>
+    <tbody>
+      <tr><td ><code>CLAUDE.md</code> / <code>GEMINI.md</code></td><td >Workspace root</td><td >Manual propagation + <code>validate-templates.ts</code></td></tr>
+      <tr><td ><code>agents/*.md</code></td><td >Workspace root <code>agents/</code></td><td ><code>bun run agent:verify</code></td></tr>
+      <tr><td ><code>AGENTS.md</code></td><td >Workspace root</td><td ><code>bun run agent:verify</code></td></tr>
+      <tr><td ><code>variant.json</code></td><td ><code>templates/co-&lt;name&gt;/</code> itself</td><td >That variant is itself the source</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><code>agents/pm.md</code> is the case that best illustrates the L0→L1 relationship. L0's <code>agents/pm.md</code> is the complete source, while L1's <code>templates/common/agents/pm.md</code> is a "pure extension" file that references L0 via the <code>extends: ../../../agents/pm.md</code> frontmatter while stripping out workspace-only sections (e.g., Auto-Mode, lifecycle-state fields). L2's <code>templates/co-*/agents/pm.md</code> inherits from L1 but does not copy the content verbatim — instead it regenerates what it needs from scratch based on variant-specific overrides ("Layout Reconstruction"). That's why even when L0's <code>agents/pm.md</code> exceeds 300 lines, L2's pm.md stays around 50–100 lines.</p>
+
+  <div class="note">L0→L1→L2 in one sentence: <strong>the source is edited only at the top. The layers below are either snapshots of the source or copies taken at scaffolding time. The flow always moves top-down, never the reverse.</strong> A representative mistake that violates this principle is "editing an agent file in a new project (L2) without reflecting the change back into the workspace root (L0)" — since no reverse flow from L2 back to L0 exists in the first place, that edit is valid only within that project and is never reflected anywhere else.</div>
+
+  <h3>Boilerplate Strategy — What to Lock, and What to Leave Open</h3>
+  <p>Chapter 5 defined boilerplate as "a pre-assembled starting point so you don't have to rewrite the same things for every project." From an architectural standpoint, this definition immediately raises a practical question — <strong>how much of what L1 hands down to L2 should projects be free to modify?</strong> This repository answers that question differently on a per-file basis. The five categories of <code>upgrade-project.ts</code> covered in §5 (LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER, PRUNE) are essentially this strategy nailed down in code.</p>
+  <ul>
+    <li><strong>What gets locked as LOCKED</strong> (<code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code>) — files corresponding to the minimum security baseline of the Chapter 3 guardrails. There's no reason for these to differ between projects, and differing would itself lead to a security incident, so no room for customization is given at all.</li>
+    <li><strong>What's half-opened via MERGE</strong> (<code>CLAUDE.md</code>/<code>GEMINI.md</code>, <code>.gitignore</code>, <code>agents/pm.md</code>) — only the sections wrapped in <code>WORKSPACE-MANAGED</code> markers continue to be managed by L1, while everything outside the markers is free for the project to write as it sees fit. This is the compromise that satisfies "common rules from above, project context from below" within a single file at the same time.</li>
+    <li><strong>What's fully opened via PRESERVE</strong> (<code>README.md</code>, <code>docs/context.md</code>, <code>src/</code>) — L1 only checks that these files exist and does not interfere with their content, because this is the space that holds the project's identity.</li>
+  </ul>
+  <p>When designing a new variant (Chapters 6 and 11), deciding in advance which of these three categories a new file belongs to prevents questions like "why does this file get overwritten every time we upgrade?" from ever arising. The judgment criterion is simple — <strong>classify anything that must be identical across the whole organization, such as security and governance, as LOCKED; anything where organizational rules and project context must coexist as MERGE; and anything unique to the project as PRESERVE.</strong></p>
+
+  <h3>Model Tier Strategy — Operating Tiers at Organizational Scale</h3>
+  <p>Chapter 5 showed how <code>tier: high/medium/low</code> is assigned to individual agent roles. Here we examine, from an architectural standpoint, the flow of <strong>changing and maintaining</strong> that assignment. The tier value lives in the frontmatter of <code>agents/*.md</code>, and as seen in the SSOT table above, L0 is the source for this file, managed by <code>upgrade-project.ts</code> in §5 under <strong>SYNC_IF_NEWER</strong> — meaning the tier strategy itself follows the L0→L1→L2 principle exactly.</p>
+  <ul>
+    <li><strong>The default assignment is decided once, at L0.</strong> Once the principle that PM/Architect-type roles are high, code-writer/docs-writer-type roles are medium, and automation-engineer-type roles are low is finalized in the workspace root's <code>agents/*.md</code>, every variant's L1 template inherits it.</li>
+    <li><strong>When tier criteria change, the version is bumped.</strong> An organization-wide re-judgment such as "this role should now be high instead of medium" takes the form of editing L0's <code>agents/*.md</code> and bumping <code>@version</code> (or the frontmatter <code>version:</code>). This is not automatically reflected in already-created L2 projects; each project must run <code>upgrade-project.ts</code> (Chapter 10) to receive the new tier — tier changes follow the fork model without exception, too.</li>
+    <li><strong>Project-specific exceptions are left only at L2.</strong> If a specific role in a specific variant needs a different tier (for example, giving a code-writer that handles unusually complex domain logic high instead of medium), that project's <code>agents/*.md</code> is edited directly, locally. However, since this file is subject to SYNC_IF_NEWER, keep in mind that if L1's version is higher at the next upgrade, it may be overwritten along with a <code>⚠️ CONFLICT</code> warning (see the safeguards in §5).</li>
+  </ul>
+  <div class="note">The boilerplate strategy and the tier strategy are, in the end, two answers to the same question — <strong>"enforce at L0/L1 whatever must be identical across the whole organization, and delegate to L2 whatever may differ per project."</strong> Both strategies share the common trait of drawing that boundary explicitly, one at the file level (LOCKED/MERGE/PRESERVE) and the other at the field level (tier).</div>
+
+  <div class="chapter-nav">
+    <a href="../enterprise/07_Enterprise_Chapter_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Chapter 7 · Operating a Multi-Agent Team Within an Enterprise</div></a>
+    <a href="08_Intro_Advanced_Chapter_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 8 §2 · Lifecycle Management</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

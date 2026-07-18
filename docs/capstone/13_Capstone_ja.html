@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第13章・キャップストーン演習 — 自分だけのワークフローを設計する - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第13章・キャップストーン演習 — 自分だけのワークフローを設計する</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	    .checklist .ct { color: var(--badge-green-fg); text-transform: uppercase; letter-spacing: .04em; }
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第13章・キャップストーン演習</div>
+  <a href="#s1">この演習の目標</a>
+  <a href="#s2">ステップ1 — 問題定義とチーム設計</a>
+  <a href="#s3">ステップ2 — ガードレールを先に決める</a>
+  <a href="#s4">ステップ3 — サブエージェント定義とワークフロー実装</a>
+  <a href="#s5">ステップ4 — 検証と振り返り</a>
+  <a href="#checklist">完了チェックリスト</a>
+  <a href="#next-steps">修了後の次のステップ</a>
+  <div class="nav-section">他の章</div>
+  <a href="../variant-advanced/12_VariantAdvanced_Examples_ja.html">第11章・新規variant昇格演習例</a>
+  <a href="../glossary/00_Glossary_ja.html">用語集</a>
+  <a href="../faq/00_FAQ_ja.html">FAQ</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第13章・キャップストーン</div>
+  <h1>キャップストーン演習 — 自分だけのワークフローを設計する</h1>
+  <p class="lead">これまで学んだ概念(第2章・第3章)とツール(第4章)、組織運営の感覚(第7章)、ワークスペース構造(第5章・第8章)を一つにまとめ、ごく小さな規模でも最初から最後まで自分自身で設計・実行する最後の演習である。正解は一つではない。本章は「何を作るか」ではなく、「どの順序で決めれば漏れなく作れるか」をガイドする。</p>
+
+  <div class="keypoints">
+    <div class="kp-title">この章で行うこと</div>
+    <ul>
+      <li>自分が実際に繰り返している作業を一つ選び、ミニ・マルチエージェントチームの問題として再定義する</li>
+      <li>サブエージェントを作る前に、ガードレール(権限・承認ゲート)を決める</li>
+      <li>オーケストレーター・スペシャリスト・ハンドオフ契約を実際のファイルとして実装する</li>
+      <li>結果を検証し、計画と何が違っていたかを振り返る</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">この演習の目標</h2>
+  <p>第4章§2ではあらかじめ決められたシナリオ(reviewer、writer)に沿って進め、第11章では決められたdomain(co-marketing)でバリアント(variant)を作った。今回はシナリオもdomainも自分で決める。規模は小さくてもよい。実際に毎週繰り返している5分程度の雑務が一つあれば十分である。重要なのは、「この決定をなぜこの順序で下したのか」を自分自身で説明できるようになることである。</p>
+
+  <div class="note">
+    <svg viewBox="0 0 680 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="cap-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+        </marker>
+        <marker id="cap-return" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8b5cf6"/>
+        </marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,sans-serif">
+        <!-- Step 1: 問題定義 (blue) -->
+        <rect x="10" y="12" width="130" height="56" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <circle cx="35" cy="30" r="10" fill="#3b82f6"/>
+        <text x="35" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">①</text>
+        <text x="85" y="34" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">問題定義</text>
+        <text x="75" y="52" text-anchor="middle" font-size="9" fill="#6b7280">第2章・第3章参照</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="143" y1="40" x2="170" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 2: ガードレール設計 (orange) -->
+        <rect x="175" y="12" width="130" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+        <circle cx="200" cy="30" r="10" fill="#f59e0b"/>
+        <text x="200" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">②</text>
+        <text x="255" y="34" text-anchor="middle" font-size="12" fill="#92400e" font-weight="700">ガードレール設計</text>
+        <text x="240" y="52" text-anchor="middle" font-size="9" fill="#6b7280">第3章参照</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="308" y1="40" x2="335" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 3: エージェント実装 (green) -->
+        <rect x="340" y="12" width="130" height="56" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+        <circle cx="365" cy="30" r="10" fill="#22c55e"/>
+        <text x="365" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">③</text>
+        <text x="420" y="34" text-anchor="middle" font-size="12" fill="#166534" font-weight="700">エージェント実装</text>
+        <text x="405" y="52" text-anchor="middle" font-size="9" fill="#6b7280">第4章・第6章参照</text>
+
+        <!-- Arrow 3→4 -->
+        <line x1="473" y1="40" x2="500" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 4: 検証・振り返り (purple) -->
+        <rect x="505" y="12" width="130" height="56" rx="8" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5"/>
+        <circle cx="530" cy="30" r="10" fill="#8b5cf6"/>
+        <text x="530" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">④</text>
+        <text x="585" y="34" text-anchor="middle" font-size="12" fill="#5b21b6" font-weight="700">検証・振り返り</text>
+        <text x="570" y="52" text-anchor="middle" font-size="9" fill="#6b7280">全章統合</text>
+
+        <!-- Return arrow: ④ → ① -->
+        <path d="M570,71 C570,108 75,108 75,71" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#cap-return)"/>
+        <text x="340" y="106" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="600">循環改善</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2 id="s2">ステップ1 — 問題定義とチーム設計</h2>
+  <div class="stage">
+    <div class="stage-title">質問1. 何を繰り返しているか?</div>
+    <p>最近繰り返し行っている作業を一つ思い浮かべる。例:「毎週議事録を読んでアクションアイテムだけ抜き出して整理する」「新しいブログ記事の下書きを書いてトーンを確認する」「PR説明を書いてチェックリストに漏れがないか確認する」。</p>
+  </div>
+  <div class="stage">
+    <div class="stage-title">質問2. この作業を単独のエージェントに任せた場合、第1章§2(単一エージェントの限界)で学んだ3つの問題のうちどれが生じるか?</div>
+    <p>コンテキスト過負荷か(複数の段階が一つのセッションで処理され混ざるか)、役割の衝突か(作成者が自分の成果物を自ら検証しなければならないか)、並列性の欠如か(独立した下位タスクが複数あるか)? この答えが第1章§3のチーム構成を決定する。</p>
+  </div>
+  <div class="stage">
+    <div class="stage-title">質問3. オーケストレーターとスペシャリストを何人に分けるか?</div>
+    <p>第1章§3~§4bを参考に最小構成を描いてみる。スペシャリストが一人だけでも構わない。オーケストレーター(メインセッション)とスペシャリスト(サブエージェント)一人だけでもチームである。各スペシャリストの入力と出力を一文で書き留める(「このエージェントはXを受け取ってYを出す」)。</p>
+  </div>
+
+  <h2 id="s3">ステップ2 — ガードレールを先に決める</h2>
+  <p>第3章の原則どおり、サブエージェントを実際に作る<em>前に</em>権限から決める。以下の表を埋めてみる。</p>
+  <div class="note">
+    <strong>このスペシャリストができなければならない最小限の作業は何か?</strong>(例:ファイルの読み取りのみ / 読み取り+書き込み / 外部API呼び出し)<br>
+    <strong>人の確認なしに絶対に実行されてはならない作業はあるか?</strong>(第3章の「破壊的・外部影響」段階に該当するもの。例:実際の送信、実際のコミット)<br>
+    <strong>失敗した場合、再試行するのか、ロールバックするのか、人に引き渡すのか?</strong>(第2章§4の再試行・ロールバック・エスカレーション基準を参照)
+  </div>
+  <p>この3つの質問への答えが、そのままサブエージェントのfrontmatterの<code>tools</code>フィールドと、オーケストレーターに指示する際に入れる「ここまでで止まる」という文言になる。</p>
+
+  <h2 id="s4">ステップ3 — サブエージェント定義とワークフロー実装</h2>
+  <p>第4章§2の演習で行ったのと同じ方法で、Claude App(またはCode)にチャットで直接サブエージェントを作ってほしいと依頼する。以下は埋め込む空のテンプレートである。角括弧の部分を自分の答えに置き換えてチャット欄に貼り付ける。</p>
+  <div class="note">Antigravity CLI(<code>agy</code>)ユーザーも同じ4ステップの構造で演習できる。ただしサブエージェント定義は<code>.claude/agents/</code>ではなく<code>AGENTS.md</code>に記述し、Claudeのagentツールの代わりに<code>/goal</code>コマンドで役割ごとの作業を割り当てればよい。</div>
+  <div style="position:relative">
+    <pre class="code-block">[役割名]という名前のサブエージェントを.claude/agents/[役割名].mdに作って。
+[このエージェントが行うことを一文で]。toolsは[ステップ2で決めた最小権限]のみを許可し、
+modelは[第1章・第5章で学んだ基準で選んだティア]に設定して。</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <p>スペシャリストが二人以上いる場合は、D-1シナリオのようにそれぞれ作成した後、最後に「二つの段階を順番に進めて」または「同時に進めて」のようにオーケストレーション方式を明示的に指示する。どちらを選んだか、そして第1章§4bで学んだように、この選択がリクエストの依存関係によって変わることを自分で確認する。</p>
+
+  <h2 id="s5">ステップ4 — 検証と振り返り</h2>
+  <p>実際に一度実行してみた後、以下の質問に答えてみる。</p>
+  <ul>
+    <li>結果は期待した形式(ハンドオフ契約)どおりに出てきたか? そうでなければ、サブエージェントの<code>description</code>が曖昧だったのではないか?</li>
+    <li>ステップ2で決めたガードレールは実際に守られたか? もしかして<code>tools</code>を必要以上に広く与えた箇所はないか?</li>
+    <li>このワークフローを定期的に繰り返す必要があるなら、第11章で学んだように、後でvariantや再利用可能なスキルに昇格させる価値があるか?</li>
+  </ul>
+  <div class="note">この振り返りまで終えれば、このハンドブックが最初から強調してきた循環(<strong>概念(第2章)→安全装置(第3章)→ツール(第4章)→組織・構造(第5章・第7章・第8章)</strong>)を一人で一巡させたことになる。次に似たような繰り返し作業に出会ったときは、今回投げかけた質問を順番に再び投げかけるだけで、新しいワークフローを設計できる。</div>
+
+  <h2 id="checklist">完了チェックリスト</h2>
+  <div class="checklist">
+    <div class="ct">セルフチェック</div>
+    <div class="chk">☐ 繰り返し作業を一つ問題として定義した</div>
+    <div class="chk">☐ 単一エージェントのどんな限界のためにチームが必要かを説明できる</div>
+    <div class="chk">☐ サブエージェントを作る前に権限と承認ゲートを先に決めた</div>
+    <div class="chk">☐ 実際にサブエージェントを作り、最低一度実行した</div>
+    <div class="chk">☐ 結果を検証し、何が予想と違ったかを書き出してみた</div>
+    <div class="ct">再現性検証</div>
+    <div class="chk">☐ 同一のリクエストを2回以上実行し、結果が一貫していることを確認した</div>
+    <div class="chk">☐ 異常な入力(空ファイル、誤った形式など)を与えたときにガードレールが機能するか確認した</div>
+    <div class="chk">☐ 実行前後のスナップショットを比較し、予期しないファイル変更がないことを確認した</div>
+  </div>
+
+  <h2 id="next-steps">修了後の次のステップ</h2>
+  <p>このハンドブックはここで終わるが、実際の適用はこれからが本番である。今日設計したワークフローを実際の業務に適用してみると、次の3つの方向のいずれかへ自然につながっていく。</p>
+  <div class="checklist">
+    <div class="ct">今週中に</div>
+    <div class="chk">☐ 今日作ったサブエージェントを実際の繰り返し業務にもう一度実行し、今回は結果を同僚と共有する</div>
+    <div class="chk">☐ このワークフローが組織内の他のチームにも役立つか、一人に聞いてみる</div>
+    <div class="ct">このワークフローが定着したら</div>
+    <div class="chk">☐ 第10章・第12章で扱った昇格手続きに従い、正式なvariantにすることを検討する — チーム全体が再利用できるようになる</div>
+    <div class="chk">☐ 第8章§5のL2プロジェクトアップグレード手続きを身につけておくと、以後共通標準が変わるたびに毎回手作業で反映しなくて済む</div>
+    <div class="ct">行き詰まったら</div>
+    <div class="chk">☐ <a href="../glossary/00_Glossary_ja.html">用語集</a>で再登場した概念を調べてみる</div>
+    <div class="chk">☐ <a href="../faq/00_FAQ_ja.html">FAQ</a>で似たような症状を経験した事例がないか確認する</div>
+  </div>
+  <div class="note">最も重要なのは「正解を暗記すること」ではなく、新しい繰り返し作業に出会うたびに、このハンドブックが示した順序 — 問題定義 → 限界の確認 → 権限設計 → 実装 → 検証 — を自分自身で改めて踏めるようになることである。</div>
+
+  <div class="chapter-nav">
+    <a href="../variant-advanced/12_VariantAdvanced_Examples_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第12章・新規variant昇格演習例</div></a>
+    <a href="../glossary/00_Glossary_ja.html" class="next"><div class="dir">参考 →</div><div class="ttl">用語集</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了!';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

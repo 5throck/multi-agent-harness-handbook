@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 3 · Guardrails and Permission Models - part of the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 3 · Guardrails and Permission Models</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 3 · Guardrails and Permission Models</div>
+  <a href="#s1">Why Guardrails Are Needed</a>
+  <a href="#s2">Classifying Risky Operations into Three Tiers</a>
+  <a href="#s3">Principle of Least Privilege — the tools Field</a>
+  <a href="#s4">Human Approval Gates</a>
+  <a href="#s5">Isolation — Worktrees and Sandboxes</a>
+  <a href="#s6">Audit Logs and Observability</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../concepts/02_Concepts_Chapter_en.html">Chapter 2 · Understanding the Concepts</a>
+  <a href="../practice/04_Practice_Manual_en.html">Chapter 4 · Claude Code Hands-On</a>
+  <a href="../glossary/00_Glossary_en.html">Glossary</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 3</div>
+  <h1>Guardrails and Permission Models</h1>
+  <p class="lead">You'll get hands-on practice creating and invoking subagents in Chapter 4. But before that, if you don't first decide "what this agent is allowed to do and what it isn't," you'll run into trouble both during practice and in production. This chapter covers how to actually design the "guardrails" briefly mentioned in Chapter 2.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Chapter Covers</div>
+    <ul>
+      <li>Why guardrails matter (the more autonomy you grant, the larger the blast radius of a mistake)</li>
+      <li>How to classify risk into three tiers: read, write, and destructive operations</li>
+      <li>How to grant subagents only minimal permissions using the <code>tools</code> field</li>
+      <li>Designing the points (gates) where an orchestrator must always wait for human approval</li>
+      <li>Why worktrees and sandboxes physically isolate parallel work</li>
+      <li>The minimal logging habits needed to trace "what happened" after an incident</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">Why Guardrails Are Needed</h2>
+  <p>In Chapter 2 we compared a harness to "a harness that keeps a horse from running off in any direction it pleases." Guardrails are the part of that harness that specifically marks "you must never go this way." If a subagent only reads files and summarizes them, a mistake is easy to undo. But once a subagent can delete files, or automatically commit and deploy, a single mistake can lead to consequences that are hard to reverse.</p>
+  <p>The problem is that "capability" and "risk" grow in the same direction. The more tools and broader permissions you give an agent, the more it can handle — but the larger the blast radius when it makes a wrong call. Guardrails separate these two. They keep "what the agent can do" broad, while narrowing "what it may execute without human confirmation."</p>
+  <div class="pullquote">The purpose of guardrails isn't distrust of the agent — it's cutting the blast radius of a mistake down to a size a human can handle, in advance.</div>
+
+  <h2 id="s2">Classifying Risky Operations into Three Tiers</h2>
+  <p>Controlling every operation with the same intensity would make the system too slow to be practical. In reality, it's more realistic to sort operations into three tiers based on how reversible they are, and handle each differently.</p>
+  <table>
+    <thead><tr><th>Tier</th><th>Examples</th><th>Default Policy</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Read</strong></td><td>Reading files, searching code, browsing the web</td><td>Generally allowed freely (nothing needs to be undone)</td></tr>
+      <tr><td><strong>Write</strong></td><td>Creating/modifying files, local commits</td><td>Allowed, but review the results (within the range git can undo)</td></tr>
+      <tr><td><strong>Destructive/External</strong></td><td>Deleting files or branches, force pushes, deployments, payments, sending external messages</td><td>Never execute without explicit human approval</td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin:20px 0 28px;">
+    <div>Risk Decision Flowchart</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div style="border:2px solid var(--accent);border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;color:var(--accent-dark);">Can this operation be undone?</div>
+      <div style="display:flex;gap:40px;width:100%;justify-content:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;max-width:220px;">
+          <div style="background:var(--bg-success);border:1px solid var(--badge-green-border);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--badge-green-fg);margin-bottom:8px;">Yes — Reversible</div>
+          <div style="border-left:2px solid var(--badge-green-border);padding-left:12px;font-size:12px;color:var(--text);line-height:1.6;">
+            <div style="margin-bottom:6px;"><strong>Read-only</strong><br/>Minimal-privilege tools field<br/><code>tools: Read, Grep</code></div>
+            <div><strong>Write (reversible)</strong><br/>Minimal privilege + audit log<br/>Recoverable via git</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;max-width:220px;">
+          <div style="background:var(--bg-error);border:1px solid var(--badge-red-fg);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--accent-red);margin-bottom:8px;">No — Irreversible</div>
+          <div style="border-left:2px solid var(--accent-red);padding-left:12px;font-size:12px;color:var(--text);line-height:1.6;">
+            <div style="margin-bottom:6px;"><strong>Destructive / External impact</strong></div>
+            <div><strong>Human approval gate required</strong><br/>Never execute automatically<br/>Proceed only after explicit confirmation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>This three-tier classification matches the actual rules of the workspace documentation this handbook is based on. The "Sensitive File Guard" from the <code>/sync</code> pipeline covered in Chapter 5 — which blocks sensitive files like <code>.pem</code>, <code>.key</code>, and <code>.env</code> right before a commit — and the rule explicitly forbidding force pushes and <code>--no-verify</code>, are both guardrails belonging to the destructive-operation tier.</p>
+
+  <h2 id="s3">Principle of Least Privilege — the <code>tools</code> Field</h2>
+  <p>Recall the frontmatter of the <code>reviewer</code> subagent we created in the Chapter 4 §2 exercise. We explicitly listed the tools to allow, like <code>tools: Read, Grep</code>. This is the principle of least privilege applied at the subagent level. Since reviewer never has the <code>Write</code> tool to begin with, no matter how ambiguously the prompt is interpreted, there's simply no way for it to modify a file.</p>
+  <p>Looking at a real incident scenario makes clear why this matters. If reviewer had been habitually granted <code>Write</code> permission as well, then a slightly ambiguous request like "review this file and improve it" might be interpreted by reviewer as "directly edit," overwriting the original. Narrowing permissions in advance via the <code>tools</code> field prevents this kind of interpretation gap from ever becoming an incident. It blocks the problem structurally, instead of relying on prompt quality.</p>
+  <div class="note">Permissions should be set based on "what the minimum is that this role needs to function normally," not "what this role could possibly do at maximum." Widening permissions later when needed is easy, but narrowing permissions that were opened too broadly from the start, after an incident has already occurred, is too late.</div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div>Principle of Least Privilege — Three-Tier Permission Level Hierarchy</div>
+    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+      <defs>
+        <linearGradient id="pyramidRed" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#cf222e"/>
+          <stop offset="100%" stop-color="#ff8182"/>
+        </linearGradient>
+        <linearGradient id="pyramidOrange" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#953800"/>
+          <stop offset="100%" stop-color="#f5c518"/>
+        </linearGradient>
+        <linearGradient id="pyramidGreen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a7f37"/>
+          <stop offset="100%" stop-color="#a2d9b1"/>
+        </linearGradient>
+      </defs>
+      <!-- Top tier: Destructive operations (triangle apex) -->
+      <polygon points="250,20 325,100 175,100" fill="url(#pyramidRed)" opacity="0.9"/>
+      <text x="250" y="62" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">Destructive Ops</text>
+      <text x="250" y="78" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Destructive</text>
+      <!-- Red tier label -->
+      <rect x="430" y="48" width="155" height="44" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+      <text x="508" y="66" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">e.g. git push, rm -rf</text>
+      <text x="508" y="82" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">Deploys, payments, external messages</text>
+      <line x1="325" y1="70" x2="430" y2="70" stroke="#ff8182" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Middle tier: Write operations (trapezoid) -->
+      <polygon points="175,100 325,100 375,190 125,190" fill="url(#pyramidOrange)" opacity="0.9"/>
+      <text x="250" y="142" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">Write Ops</text>
+      <text x="250" y="158" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Write</text>
+      <!-- Orange tier label -->
+      <rect x="430" y="138" width="155" height="44" rx="6" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+      <text x="508" y="156" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#953800">e.g. edit files, create PR</text>
+      <text x="508" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">Local commits, config changes</text>
+      <line x1="375" y1="155" x2="430" y2="155" stroke="#f5c518" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Bottom tier: Read operations (trapezoid) -->
+      <polygon points="125,190 375,190 420,280 80,280" fill="url(#pyramidGreen)" opacity="0.9"/>
+      <text x="250" y="234" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">Read Ops</text>
+      <text x="250" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Read</text>
+      <!-- Green tier label -->
+      <rect x="430" y="225" width="155" height="44" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+      <text x="508" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#116329">e.g. read files, search</text>
+      <text x="508" y="259" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Web lookup, view logs</text>
+      <line x1="420" y1="247" x2="430" y2="247" stroke="#a2d9b1" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Least privilege label -->
+      <text x="250" y="320" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="600" fill="#636c76">▲ Principle of Least Privilege — grant only what is needed</text>
+    </svg>
+  </div>
+
+  <h2 id="s4">Human Approval Gates</h2>
+  <p>In Chapter 2 we defined the orchestrator as "the role that halts progress at points (gates) requiring confirmation from the user." The most important question in guardrail design is "exactly where should that gate be placed?" Stop too often, and delegating work to an agent becomes meaningless; stop too rarely, and even destructive operations can slip through silently.</p>
+  <p>The rule proven in practice is simple. Always stop right before an operation belonging to the "destructive/external impact" tier from §2; post-hoc review is sufficient for tiers below that. For example, the <code>/sync</code> pipeline proceeds automatically through commit, push, and PR creation, but is designed to require separate human approval for actually merging the PR or deploying to production. Explicitly drawing the line — "up to here we trust it to proceed, and from here a human must always look" — is the core of gate design.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div>Approval Gate Operation Flowchart</div>
+    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+        <marker id="agArrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#cf222e"/></marker>
+        <marker id="agArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+      </defs>
+      <!-- 1. User request -->
+      <rect x="10" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#0969da" stroke-width="1.5"/>
+      <text x="65" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">User Request</text>
+      <text x="65" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Agent action</text>
+      <!-- Arrow 1→2 -->
+      <line x1="120" y1="150" x2="155" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+
+      <!-- 2. Risk analysis -->
+      <rect x="160" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="215" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#6639ba">Risk Classification</text>
+      <text x="215" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Automatic judgment</text>
+      <!-- Arrow 2→3 -->
+      <line x1="270" y1="150" x2="305" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+
+      <!-- 3. Decision diamond -->
+      <polygon points="360,108 420,150 360,192 300,150" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+      <text x="360" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">Risk</text>
+      <text x="360" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">judged?</text>
+
+      <!-- Low branch (up) -->
+      <line x1="360" y1="108" x2="360" y2="58" stroke="#1a7f37" stroke-width="1.5"/>
+      <line x1="360" y1="58" x2="440" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <text x="365" y="78" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#1a7f37">Low</text>
+      <!-- Low: auto-execute -->
+      <rect x="445" y="40" width="100" height="36" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
+      <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">Auto-Execute</text>
+      <text x="495" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Read / Write</text>
+
+      <!-- High branch (down) -->
+      <line x1="360" y1="192" x2="360" y2="240" stroke="#cf222e" stroke-width="1.5"/>
+      <line x1="360" y1="240" x2="440" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <text x="365" y="228" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">High</text>
+      <!-- High: awaiting human approval -->
+      <rect x="445" y="222" width="100" height="36" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1.2"/>
+      <text x="495" y="237" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#cf222e">Awaiting Approval</text>
+      <text x="495" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">Human confirmation</text>
+
+      <!-- Low → execute → result -->
+      <line x1="545" y1="58" x2="575" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="580" y="42" width="68" height="32" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1.2"/>
+      <text x="614" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#1a7f37">Execute</text>
+      <text x="614" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#1a7f37"></text>
+      <!-- Execute → result -->
+      <line x1="545" y1="240" x2="575" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <rect x="580" y="224" width="68" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+      <text x="614" y="238" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">Approved</text>
+      <text x="614" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#0969da"></text>
+
+      <!-- Both paths converge to result -->
+      <line x1="614" y1="74" x2="614" y2="110" stroke="#1a7f37" stroke-width="1.2"/>
+      <line x1="614" y1="110" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
+      <line x1="614" y1="256" x2="614" y2="280" stroke="#cf222e" stroke-width="1.2"/>
+      <line x1="670" y1="280" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
+      <line x1="614" y1="280" x2="670" y2="280" stroke="#0969da" stroke-width="1.2"/>
+      <!-- Result -->
+      <rect x="640" y="130" width="60" height="40" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1.5"/>
+      <text x="670" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">Result</text>
+      <text x="670" y="161" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">Response returned</text>
+
+      <!-- Bottom note -->
+      <text x="360" y="290" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ Destructive/external-impact operations must always go through a human approval gate</text>
+    </svg>
+  </div>
+
+  <h2 id="s5">Isolation — Worktrees and Sandboxes</h2>
+  <p>In the advanced scenario (P-1) in Chapter 4 §2, we warned that "assigning multiple agents to the same workspace can create cognitive overlap." This is also a form of guardrail. If multiple agents touch the same files and the same git history at once, one agent's mistake can contaminate another agent's working context.</p>
+  <p>Running each agent in a worktree (an isolated git working directory) or a separate sandbox environment means that even if one agent makes a wrong judgment, its impact doesn't leak outside its own workspace. When running multiple agents in parallel, you must always first decide: "should they share the same space, or be physically separated?"</p>
+
+  <h2 id="s6">Audit Logs and Observability</h2>
+  <p>If guardrails are prevention, audit logs are after-the-fact tracing. No guardrail is perfect, so when an incident occurs, you absolutely need a minimal record that lets you retrace "when, which agent, with which tool, did what." If <code>memory/MEMORY.md</code> covered in Chapter 5 serves to record context across sessions, an audit script like <code>audit.ts</code>, run via a <code>PostToolUse</code> hook in CI, is an observability device that mechanically checks every time whether "a change violated the rules."</p>
+  <div class="warn">In the Claude App (Desktop), covered in Chapter 4, hooks like this do not fire. For teams working mainly in the Desktop app, a situation can actually arise where "we thought the audit log was running, but in fact none of it was running at all." When designing guardrails, you must always verify "does this policy actually fire on the tool I'm using?"</div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div>Audit Log Structure and Audit Flow</div>
+    <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+        <marker id="alArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+      </defs>
+
+      <!-- Left side: Audit Log Structure -->
+      <text x="80" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">Audit Log Structure</text>
+      <!-- Log entry card -->
+      <rect x="10" y="32" width="140" height="140" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+      <!-- Header row -->
+      <rect x="10" y="32" width="140" height="26" rx="8" fill="#eef1f4"/>
+      <rect x="10" y="46" width="140" height="12" fill="#eef1f4"/>
+      <text x="80" y="49" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="10" font-weight="700" fill="#0550ae">log_entry</text>
+      <!-- Fields -->
+      <text x="20" y="74" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">timestamp</text>
+      <rect x="78" y="64" width="60" height="16" rx="3" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="0.8"/>
+      <text x="108" y="75" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#0550ae">ISO 8601</text>
+
+      <text x="20" y="98" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">agent</text>
+      <rect x="78" y="88" width="60" height="16" rx="3" fill="#fbefff" stroke="#d2b9ff" stroke-width="0.8"/>
+      <text x="108" y="99" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#6639ba">reviewer</text>
+
+      <text x="20" y="122" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">action</text>
+      <rect x="78" y="112" width="60" height="16" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.8"/>
+      <text x="108" y="123" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#953800">Read/Grep</text>
+
+      <text x="20" y="146" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">result</text>
+      <rect x="78" y="136" width="60" height="16" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.8"/>
+      <text x="108" y="147" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#116329">ok / deny</text>
+
+      <text x="20" y="168" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">context</text>
+      <rect x="78" y="158" width="60" height="16" rx="3" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.8"/>
+      <text x="108" y="169" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#636c76">filepath…</text>
+
+      <!-- Divider line -->
+      <line x1="170" y1="30" x2="170" y2="275" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+      <!-- Right side: Flow -->
+      <text x="400" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">Audit Flow</text>
+
+      <!-- Step 1: Agent action -->
+      <rect x="200" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1.2"/>
+      <text x="250" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">Agent Action</text>
+      <text x="250" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">tool call</text>
+      <!-- Arrow -->
+      <line x1="300" y1="58" x2="335" y2="58" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+
+      <!-- Step 2: Log record -->
+      <rect x="340" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+      <text x="390" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">Log Record</text>
+      <text x="390" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">audit.ts</text>
+      <!-- Arrow down -->
+      <line x1="390" y1="76" x2="390" y2="100" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+
+      <!-- Step 3: Inspection/analysis -->
+      <rect x="340" y="105" width="100" height="36" rx="6" fill="#ffffff" stroke="#953800" stroke-width="1.2"/>
+      <text x="390" y="121" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">Inspection / Analysis</text>
+      <text x="390" y="133" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">Rule violation?</text>
+
+      <!-- Branch: Normal -->
+      <line x1="440" y1="115" x2="475" y2="115" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#alArrowB)"/>
+      <text x="450" y="108" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#1a7f37">Normal</text>
+      <rect x="480" y="100" width="80" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+      <text x="520" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#116329">Keep Record</text>
+
+      <!-- Branch: Violation -->
+      <line x1="440" y1="131" x2="475" y2="131" stroke="#cf222e" stroke-width="1.2"/>
+      <polygon points="480,131 475,128 475,134" fill="#cf222e"/>
+      <text x="450" y="140" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#cf222e">Violation</text>
+      <rect x="480" y="155" width="80" height="30" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+      <text x="520" y="170" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#cf222e">Warning / Alert</text>
+      <line x1="475" y1="131" x2="475" y2="170" stroke="#cf222e" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="475" y1="170" x2="480" y2="170" stroke="#cf222e" stroke-width="1"/>
+
+      <!-- Arrow from warning down to post-review -->
+      <line x1="520" y1="185" x2="520" y2="210" stroke="#cf222e" stroke-width="1.2" marker-end="url(#alArrow)"/>
+      <rect x="470" y="215" width="100" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
+      <text x="520" y="232" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#953800">Post-Review</text>
+      <text x="520" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">Team review</text>
+
+      <!-- Loop arrow: post-review → agent action -->
+      <path d="M470,235 L200,235 L200,76" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
+      <polygon points="200,76 197,82 203,82" fill="#636c76"/>
+      <text x="335" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">Feedback loop — improving guardrails</text>
+
+      <!-- Bottom note -->
+      <text x="320" y="275" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ No guardrail is perfect — you must be able to trace what happened when an incident occurs</text>
+    </svg>
+  </div>
+
+  <div class="note">In one sentence: guardrails are the combination of four habits — <strong>granting differentiated permissions based on risk level (§2·§3)</strong>, <strong>always requiring human confirmation before an irreversible point (§4)</strong>, <strong>physically isolating parallel work (§5)</strong>, and <strong>keeping records in case everything else fails (§6)</strong>. Starting in Chapter 4, we apply these principles directly within hands-on practice code.</div>
+
+  <div class="chapter-nav">
+    <a href="../concepts/02_Concepts_Chapter_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Chapter 2 · Harness Engineering and Multi-Agent Team Concepts</div></a>
+    <a href="../warm-up/Warmup_Tetris_Pacman_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Warm-Up Exercise · From Tetris to Pac-Man</div></a>
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">Reference Videos</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=5fwoMW3aUSk" target="_blank">Anthropic's Constitutional AI — How Claude Judges Itself</a><span class="video-meta">(2:31)</span> — how Claude judges its own outputs, per Constitutional AI principles</li>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=6Unxqr50Kqg" target="_blank">Controlling powerful AI</a><span class="video-meta">(51:27)</span> — an official Anthropic talk on controlling and safely managing powerful AI systems</li>
+  </ul>
+</div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

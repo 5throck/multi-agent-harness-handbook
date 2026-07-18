@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="ワークショップ事前インストールチェックリスト · マルチエージェントチームハーネスエンジニアリングハンドブック - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ワークショップ事前インストールチェックリスト · マルチエージェントチームハーネスエンジニアリングハンドブック</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    h2 { color: var(--accent-dark); margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); scroll-margin-top: 20px; }
+    .chk-list li.sub { margin-left: 22px; color: var(--text-dim); }
+    .chk-list li.sub::before { content: '—'; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">事前インストールチェックリスト</div>
+  <a href="#s1">1. サブスクリプションの確認</a>
+  <a href="#s2">2. アカウントの準備</a>
+  <a href="#s3">3. システム要件</a>
+  <a href="#s4">4. Gitユーザー設定</a>
+  <a href="#s5">5. GitHub認証</a>
+  <a href="#s6">6. プロジェクト環境設定</a>
+  <a href="#s7">7. 最終環境確認</a>
+  <div class="nav-section">その他のドキュメント</div>
+  <a href="SETUP_ja.html">ワークショップ環境インストールガイド</a>
+  <a href="../practice/04_Practice_Examples_A_ja.html#setup">第4章 §2-A 実習準備セクション</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>ワークショップ事前インストールチェックリスト</h1>
+  <p class="subtitle">インストールスクリプトを実行する<strong>前に</strong>このチェックリストを完了してください。以下の項目は自動化できないため、手動での対応が必要です。</p>
+
+  <h2 id="s1">1. サブスクリプションの確認（最優先）</h2>
+  <p>ワークショップの実習で使用するツールには、有効なサブスクリプションが必要です。</p>
+  <table>
+    <thead><tr><th>ツール</th><th>必要なプラン</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Claude Code CLI</strong>（<code>claude</code>）</td><td>Claude Pro または Max</td></tr>
+      <tr><td><strong>Claudeデスクトップアプリ</strong></td><td>Claude Pro 以上</td></tr>
+      <tr><td><strong>Antigravity CLI</strong>（<code>agy</code>）</td><td>Gemini Advanced</td></tr>
+      <tr><td><strong>Antigravityデスクトップアプリ</strong></td><td>Gemini Advanced</td></tr>
+    </tbody>
+  </table>
+  <div class="warn"><strong>APIキーについて</strong>: APIキーは、サブスクリプションプランの範囲外で別途連携が必要な場合にのみ使用します。ワークショップの実習にはサブスクリプションモデルで十分ですので、APIキーの発行は本当に必要な場合にのみ行ってください。</div>
+
+  <h2 id="s2">2. アカウントの準備</h2>
+  <ul class="chk-list">
+    <li><strong>Googleアカウント</strong> — Antigravity / Gemini Advanced の利用に必要</li>
+    <li><strong>GitHubアカウント</strong> — <code>gh auth login</code> およびPR実習に必要</li>
+    <li class="sub">アカウントをお持ちでない場合は、<a href="../practice/04_Practice_Examples_A_ja.html#setup">第4章 §2-A 実習準備セクション</a>の案内に従い、<a href="https://github.com/signup" target="_blank">github.com/signup</a>で事前に登録してください</li>
+  </ul>
+
+  <h2 id="s3">3. システム要件</h2>
+  <ul class="chk-list">
+    <li>OS: Windows 11（Intel）/ macOS Sequoia 15 以上 Apple Silicon（Mシリーズ）/ Ubuntu 24.04 以上</li>
+    <li>空きディスク容量: <strong>5 GB 以上</strong></li>
+    <li>管理者 / sudo 権限を保有していること</li>
+    <li class="sub"><strong>Windows</strong>: スタート → 「PowerShell」を検索 → 右クリック → 「管理者として実行」（または <code>Win + X</code> → 「ターミナル（管理者）」）、UAC確認画面で「はい」をクリック</li>
+    <li class="sub"><strong>macOS / Linux</strong>: コマンドの先頭に <code>sudo</code> を付けて実行</li>
+    <li>安定したインターネット接続（合計ダウンロード容量 約1〜2 GB）</li>
+  </ul>
+
+  <h2 id="s4">4. Gitユーザー設定</h2>
+  <p>gitインストール後、以下のコマンドでユーザー情報を登録してください。</p>
+  <div style="position:relative">
+    <pre class="code-block">git config --global user.name  "山田太郎"
+git config --global user.email "you@example.com"</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>git config --global user.name</code> の設定完了</li>
+    <li><code>git config --global user.email</code> の設定完了</li>
+  </ul>
+
+  <h2 id="s5">5. GitHub認証</h2>
+  <div style="position:relative">
+    <pre class="code-block">gh auth login</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <p>案内に従って、ブラウザで認証を完了してください。</p>
+  <ul class="chk-list">
+    <li><code>gh auth status</code> 実行時に「Logged in」と表示されることを確認</li>
+  </ul>
+
+  <h2 id="s6">6. プロジェクト環境設定（リポジトリのクローン後）</h2>
+  <p><strong>co-develop</strong> および <strong>co-consult</strong> variantを使用する場合:</p>
+  <div style="position:relative">
+    <pre class="code-block">cp .env.sample .env
+# .envファイルを開いて必要な値を入力してください</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>.env.sample</code> から <code>.env</code> ファイルを作成完了</li>
+    <li>必要なAPIキー / 設定値の入力完了</li>
+  </ul>
+
+  <p><strong>co-develop</strong> Pythonプロジェクト — <strong>uv</strong> を使用（必須）:</p>
+  <div style="position:relative">
+    <pre class="code-block">uv sync          # pyproject.tomlに基づく依存関係のインストール
+# または requirements.txt を使用する場合:
+uv pip install -r requirements.txt</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>uv</code> がインストールされ、使用可能であることを確認（<code>uv --version</code>）</li>
+    <li><code>uv</code> によるPython依存関係のインストール完了</li>
+  </ul>
+
+  <div class="note"><strong>Docker</strong>は任意です。運営者から別途案内があった場合のみインストールしてください。macOS/Linuxではインストールスクリプトに <code>--docker</code> フラグ、Windowsでは <code>-Docker</code> フラグを追加します。
+  <ul class="chk-list" style="margin-top:8px;"><li><em>（任意）</em> Dockerのインストールとデーモンの起動確認</li></ul></div>
+
+  <h2 id="s7">7. 最終環境確認（ワークショップ前に必ず実行）</h2>
+  <p>プロジェクトのルートフォルダで以下のコマンドを実行してください。</p>
+  <div style="position:relative">
+    <pre class="code-block">bun setup-common.ts</pre>
+    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  </div>
+  <p>出力テーブルのすべての項目が✅と表示されれば準備完了です。</p>
+
+  <hr>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">ご不明な点がございましたら、ワークショップ開始前に運営者までご連絡ください。</p>
+ </article>
+</main>
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了！';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

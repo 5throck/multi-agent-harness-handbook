@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Glossary · Multi-Agent Team Harness Engineering Handbook - material from the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary · Multi-Agent Team Harness Engineering Handbook</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    dl { margin: 0 0 8px; }
+    dt { font-weight: 700; font-family: var(--font-mono); font-size: var(--font-size-compact); margin-top: 18px; color: var(--text); }
+    dt .en { color: var(--text-dim); font-weight: 400; font-size: var(--font-size-label); }
+    dd { margin: 4px 0 0 0; color: var(--text); font-size: var(--font-size-compact); }
+    dd .see { display: block; margin-top: 4px; font-size: var(--font-size-label); color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Glossary</div>
+  <a href="#core">Core Concepts</a>
+  <a href="#team">Multi-Agent Team Components</a>
+  <a href="#workspace">ai-workspace-standards Structure</a>
+  <a href="#tools">Tools &amp; Platforms</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>Glossary</h1>
+  <p class="lead">This page collects the terms used repeatedly throughout this handbook in one place. The "Details" link on each entry takes you to the chapter that first explains the term in depth.</p>
+
+  <div class="jump">
+    <a href="#core">Core Concepts</a>
+    <a href="#team">Team Components</a>
+    <a href="#workspace">Workspace Structure</a>
+    <a href="#tools">Tools &amp; Platforms</a>
+  </div>
+
+  <h2 id="core">Core Concepts</h2>
+  <dl>
+    <dt>Harness Engineering <span class="en">Harness Engineering</span></dt>
+    <dd>The discipline of designing which tools, rules, and verification mechanisms a model works through. It is the third stage in the progression from prompt engineering (what to say) to context engineering (what to make known).
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s1">Chapter 2 §1</a></span></dd>
+
+    <dt>Subagent <span class="en">Subagent</span></dt>
+    <dd>A helper agent that has a context window independent of the main session, handles a narrow task, and returns only a summary. It is the mechanism by which the "specialist" concept is implemented in real tools.
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s3b">Chapter 2 §3b</a></span></dd>
+
+    <dt>Handoff <span class="en">Handoff</span></dt>
+    <dd>The act, or the point, at which work is passed between agents. A Handoff Contract structures the format of the information exchanged — by spelling out purpose, scope, and prior-step deliverables, it lets the next agent start immediately without needing to ask follow-up questions.
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s3">Chapter 2 §3</a></span></dd>
+
+    <dt>Dynamic Team Composition <span class="en">Dynamic Team Composition</span></dt>
+    <dd>The orchestrator deciding, for each request, which subagents to actually deploy, how many times, and in what order. Even though the defined team roster is fixed, the actual deployment configuration varies task by task.
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s4b">Chapter 2 §4b</a> · Practice: <a href="../practice/04_Practice_Examples_A_en.html#scenario-2b">Chapter 4 D-2</a></span></dd>
+
+    <dt>Orchestration Pattern <span class="en">Orchestration Pattern</span></dt>
+    <dd>Anthropic's well-known set of five representative patterns: prompt chaining (sequential step-by-step processing), routing (classifying a request and dispatching it to the appropriate agent/model), parallelization (fan-out to run independent tasks concurrently, or voting to repeat the same task and take a majority), orchestrator-workers (dynamically decomposing subtasks rather than fixing them in advance), and evaluator-optimizer (independently verifying a draft before incorporating it — verify-then-apply). These can be freely combined within a single workflow.
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s4">Chapter 2 §4</a></span></dd>
+
+    <dt>Context Window / Context Overload <span class="en">Context Window / Context Overload</span></dt>
+    <dd>The context window is the limit on the number of tokens (text) an AI model can process at once. Within this limit it must hold the role definition, past conversation, task instructions, and output all together; as content grows, earlier information starts to fade — this is called context overload. Distributing work by role to address this is one of the core motivations behind multi-agent teams.
+      <span class="see">Details: <a href="../intro/01_Why_AI_Chapter_en.html#s3">Chapter 1 §Multi-Agent: The Principle of an Expert Team</a></span></dd>
+
+    <dt>Frontmatter <span class="en">Frontmatter</span></dt>
+    <dd>A metadata block written in YAML at the top of an agent definition file (<code>agents/*.md</code>). It defines things like the agent's name, role, allowed tools (<code>tools</code>), and model tier (<code>tier</code>) so they can be parsed mechanically. The <code>extends</code> field can be used to inherit from another agent file.
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and the SSOT</a></span></dd>
+
+    <dt>Scaffolding <span class="en">Scaffolding</span></dt>
+    <dd>The act of using <code>bun scripts/new-project.ts</code> to clone a variant template's entire configuration (agents, skills, commands, governance pipeline) into an independent git repository. The idea being: "you don't build a project from scratch — you start from a pre-designed skeleton."
+      <span class="see">Details: <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-2">Chapter 6 §2</a></span></dd>
+
+    <dt>Hook <span class="en">Hook</span></dt>
+    <dd>A script that runs automatically before or after an agent calls a particular tool. Example: a <code>PostToolUse</code> hook that runs an automated audit check after a file edit. In Claude Code (CLI), hooks defined under <code>.claude/hooks/</code> fire as expected, but they do not fire in Claude App (Desktop) — so it's important to be aware of these per-tool behavioral differences.
+      <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logs and Observability</a></span></dd>
+
+    <dt>Kanban / WIP Limit <span class="en">Kanban / WIP Limit</span></dt>
+    <dd>A concurrency-control method that caps the number of tasks in progress (Work In Progress) at any one time. When fanning out to run many agents simultaneously, setting a WIP limit prevents the resource contention and dropped context that arise from too much concurrent execution.
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s4">Chapter 2 §Orchestration Patterns</a></span></dd>
+
+    <dt>Service Ticket Model <span class="en">Service Ticket Model</span></dt>
+    <dd>An operating model that uses AI purely as "a service that handles requests as they come in" — similar to a traditional IT organization's ticketing system. The user must direct every request explicitly, which limits the agent team's autonomy. This is the approach this handbook contrasts with its proposed "development tool + variant model."
+      <span class="see">Details: <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Comparing Enterprise Operating Strategies</a></span></dd>
+
+    <dt>Lifecycle / State <span class="en">Lifecycle / State</span></dt>
+    <dd>Lifecycle refers to the entire sequence of stages an agent, skill, or script passes through (e.g., Create → Verify → Operate → Improve → Deprecate). State is a snapshot of which lifecycle stage that component is in at a given moment. The <code>status</code> field in the YAML frontmatter (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) stores the state value. Lifecycle can be thought of as a "subway map," and state as the sign showing "which station the current train is at."
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#state-vs-lifecycle">Chapter 8 §2 · Distinguishing State from Lifecycle</a></span></dd>
+  </dl>
+
+  <h2 id="team">Multi-Agent Team Components</h2>
+  <dl>
+    <dt>Orchestrator <span class="en">Orchestrator</span></dt>
+    <dd>The role that breaks the overall task into stages, calls on specialists, and pauses at points where user confirmation is needed. Commonly referred to as the "PM agent."</dd>
+
+    <dt>Specialist <span class="en">Specialist</span></dt>
+    <dd>An agent with a narrow, clearly defined responsibility — such as design, implementation, testing, or security review — whose inputs and outputs are clearly specified.</dd>
+
+    <dt>Model Tier <span class="en">Model Tier</span></dt>
+    <dd>The model cost tier (<code>high</code>/<code>medium</code>/<code>low</code>) assigned per agent role. Roles requiring heavy judgment are assigned high; standardized, repetitive work is assigned low — balancing cost and quality. It is specified via the <code>tier</code> field in <code>agents/*.md</code> frontmatter, and the platform translates it into an actual model name via <code>model: inherit</code>.
+      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §3</a>. Note: this is a different concept from the "3-tier" of L0→L1→L2 — don't confuse the two.</span></dd>
+  </dl>
+
+  <h2 id="workspace">ai-workspace-standards Structure</h2>
+  <dl>
+    <dt>SSOT <span class="en">Single Source of Truth</span></dt>
+    <dd>The principle that a given piece of information has its original copy in exactly one place. Example: CONSTITUTION.md is the SSOT for the entire workspace's rules; context.md is the SSOT for an individual project.
+      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s4">Chapter 5 §4</a></span></dd>
+
+    <dt>L0 / L1 / L2</dt>
+    <dd>The three-tier hierarchy running from the workspace root (L0, the sole original) → the common template snapshot (L1, <code>templates/common/</code>) → the variant/project (L2, <code>templates/co-*/</code> or <code>Projects/*/</code>). The flow always moves top-down, and the L1→L2 transfer is a "fork" that happens exactly once, at scaffolding time.
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and the SSOT</a></span></dd>
+
+    <dt>Fork Model <span class="en">Fork Model</span></dt>
+    <dd>The approach whereby, once L2 branches off from L1, it evolves independently with no automatic reverse synchronization. Promoting it to an official template requires a human to explicitly run <code>l2-to-variant-pipeline.ts</code>.</dd>
+
+    <dt>variant</dt>
+    <dd>A complete multi-agent team configuration for a specific domain — living under <code>templates/</code> — bundling a PM, specialist agents, and a governance pipeline. co-develop, co-design, and co-work are examples.
+      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §3</a></span></dd>
+
+    <dt>Phase A / Phase B</dt>
+    <dd>The two stages of creating a new variant. Phase A is the stage of experimenting freely as an independent prototype under <code>Projects/</code>; Phase B is the stage of promoting it to an official <code>templates/</code> variant via <code>promote-variant</code>.
+      <span class="see">Details: <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 · Creating a New Variant</a></span></dd>
+
+    <dt>Boilerplate <span class="en">Boilerplate</span></dt>
+    <dd>A pre-built starting point — PM role definitions, governance pipeline, and command/skill wiring — that would otherwise need to be written from scratch for every project. This is the essence of what ai-workspace-standards distributes.</dd>
+
+    <dt>Container Integration <span class="en">Container Integration</span></dt>
+    <dd>One direction for advancing ai-workspace-standards: the requirement that a scaffolded project be able to integrate with services like Open WebUI in a Docker/Kubernetes environment and be supported on a per-individual basis. Currently only direct integration with local AI coding tools is supported.
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#container">Chapter 8 §5 Advancement Roadmap</a></span></dd>
+
+    <dt>Memory Consolidation <span class="en">Memory Consolidation</span></dt>
+    <dd>One direction for advancing ai-workspace-standards: a feature that gathers and organizes <code>memory/MEMORY.md</code> files scattered across individual projects at the workspace level so that overall trends can be identified.
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#memory">Chapter 8 §5 Advancement Roadmap</a></span></dd>
+  </dl>
+
+  <h2 id="tools">Tools &amp; Platforms</h2>
+  <dl>
+    <dt>AGENTS.md</dt>
+    <dd>An open standard file read in common by 30+ AI coding tools. It defines tool-neutral rules such as build/test commands and code style. In this repository it additionally doubles as the "agent roster."
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s5">Chapter 2 §AGENTS.md, the Harness That Crosses Tools</a></span></dd>
+
+    <dt>teammateMode</dt>
+    <dd>The parallel execution mode for Agent Teams (an experimental feature). Claude App (Desktop) only supports <code>in-process</code>, while Claude Code (CLI) additionally supports <code>tmux</code> split-pane mode.
+      <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-1">Common Reference §1</a></span></dd>
+
+    <dt>Agent Manager</dt>
+    <dd>A higher-level interface in Antigravity (Desktop) for overseeing multiple workspaces from a single screen. The principle is to assign one agent per workspace.</dd>
+
+    <dt><code>/goal</code> / <code>/agent</code> / <code>/agents</code></dt>
+    <dd>Slash commands in the Antigravity CLI (<code>agy</code>) that invoke dynamic subagent orchestration. <code>/goal</code> runs a goal through to completion, <code>/agent</code> delegates a long-running background task, and <code>/agents</code> lists the status of subagents created so far. This capability isn't unique to agy — Claude Code/App performs the same dynamic orchestration via the <code>Agent</code> (Task) tool and natural-language requests, while Antigravity (Desktop) does so via the Agent Manager GUI. These three commands are simply the names given to that behavior on the CLI screen.
+      <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-2">Common Reference §2</a></span></dd>
+  </dl>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

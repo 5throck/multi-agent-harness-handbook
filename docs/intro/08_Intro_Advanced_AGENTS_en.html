@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!--
+  Chapter 8 §3 · AGENTS.md In Depth — structure of the agent roster specification, authoring guide, tool-specific implementation mapping, verification and lifecycle links
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 8 §3 · AGENTS.md In Depth - material from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 8 §3 · AGENTS.md In Depth</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 8 §3 · AGENTS.md In Depth</div>
+  <a href="#spec-format" >Spec Format</a>
+  <a href="#impl-mapping">Tool-Specific Implementation Mapping</a>
+  <a href="#authoring-guide">Authoring Guide</a>
+  <a href="#verify-lifecycle">Verification and Lifecycle</a>
+  <div class="nav-section">Other Sections in Chapter 8</div>
+  <a href="08_Intro_Advanced_Deploy_en.html">§1 · Deployment and SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_en.html">§2 · Lifecycle Management</a>
+  <a href="08_Intro_Advanced_Architecture_en.html">§4 · Architecture In Depth</a>
+  <a href="08_Intro_Advanced_Roadmap_en.html">§5 · Advancement Roadmap</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="05_Intro_Chapter_en.html">Chapter 5 · Introducing ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Running a Multi-Agent Team Inside an Enterprise</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 · Creating a New Variant</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 8 §3</div>
+  <h1>AGENTS.md In Depth</h1>
+  <p class="lead">This section covers the specification format of AGENTS.md, how it is implemented across tools, authoring principles, and the verification process. It builds on the conceptual introduction to AGENTS.md given in Chapter 5, taking a practitioner's perspective.</p>
+  <p class="source-line">Standard spec: <a href="https://agents.md/" target="_blank">agents.md</a> · Hands-on examples: <a href="../practice/04_Practice_Examples_A_en.html">Chapter 4 §2-A</a> / <a href="../practice/04_Practice_Examples_B_en.html">Chapter 4 §2-B</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">What this section covers</div>
+    <ul>
+      <li>The field structure and meaning of an agent entry</li>
+      <li>How the common AGENTS.md specification is each "implemented" differently in the Claude family and the Antigravity family</li>
+      <li>The principle of least privilege and handoff declarations</li>
+      <li>The verification tool (<code>agent:verify</code>) and its connection to the lifecycle</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. Spec Format
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="spec-format">Spec Format</h2>
+
+  <p>Each agent entry in AGENTS.md is a Markdown section that begins with <code>## Agent: {name}</code>. Within this section, fields such as role, input, output, permissions, and handoff are described in a free-form manner. The standard specification does not enforce a strict schema; it relies on conventions that tools commonly recognize.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Field</th><th>Meaning</th><th>Required?</th><th>Example from Chapter 4 Hands-On</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>## Agent: {name}</code></td>
+        <td>Agent identifier. In the Claude family, this must match the <code>subagent_type</code> value to be invokable</td>
+        <td>Required</td>
+        <td><code>## Agent: reviewer</code></td>
+      </tr>
+      <tr>
+        <td><code>Role</code></td>
+        <td>What this agent does</td>
+        <td>Required</td>
+        <td>"Reviews text files for typos, logical gaps, and improvement points."</td>
+      </tr>
+      <tr>
+        <td><code>Input</code></td>
+        <td>What input it receives</td>
+        <td>Recommended</td>
+        <td>"Path to the text file to be reviewed"</td>
+      </tr>
+      <tr>
+        <td><code>Output</code></td>
+        <td>What output it produces</td>
+        <td>Recommended</td>
+        <td>"List of typos, logical gaps, and improvement points"</td>
+      </tr>
+      <tr>
+        <td><code>Permissions</code></td>
+        <td>Scope of file access. Principle of least privilege — allow only what is needed</td>
+        <td>Recommended</td>
+        <td>"Read-only — does not modify files directly"</td>
+      </tr>
+      <tr>
+        <td><code>handoff_to</code></td>
+        <td>The other agent to which results are passed after completion. A declarative hint referenced by the orchestrator</td>
+        <td>Optional</td>
+        <td><code>handoff_to: reviewer</code></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Complete Example</h3>
+  <p>Below is the full picture of an AGENTS.md file containing the two agents authored in the Chapter 4 hands-on exercises (G-1, D-1).</p>
+  <div style="position:relative">
+  <pre class="code-block">## Agent: reviewer
+
+Role: Reviews text files for typos, logical gaps, and improvement points.
+Input: Path to the text file to be reviewed
+Output: List of typos, logical gaps, and improvement points
+Permissions: Read-only — does not modify files directly.
+
+## Agent: writer
+
+Role: Writes a short 3-5 sentence draft on a given topic.
+Input: Topic, path to save the file to
+Output: Draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <div class="note">AGENTS.md is not an instruction directed at an AI tool but a <strong>registry of roles defined by a human</strong>. The Claude family reads this registry and "translates" it into tool-specific definition files (<code>.claude/agents/*.md</code>), while the Antigravity family has its orchestration read and interpret the registry directly.</div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. Tool-Specific Implementation Mapping
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="impl-mapping">Tool-Specific Implementation Mapping</h2>
+
+  <p>AGENTS.md is a tool-neutral common specification. However, the way subagents are actually "implemented" differs fundamentally between the Claude family and the Antigravity family.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Layer</th><th>Claude App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Reading AGENTS.md</td>
+        <td>The main session reads <code>AGENTS.md</code> and identifies the agent roster</td>
+        <td>The orchestrator reads <code>AGENTS.md</code> and dynamically creates subagents</td>
+      </tr>
+      <tr>
+        <td>Subagent definition</td>
+        <td><code>.claude/agents/{name}.md</code> files with YAML frontmatter (<code>name</code>, <code>description</code>, <code>tools</code>, <code>model</code>) plus a system prompt</td>
+        <td>No definition file — the orchestrator autonomously determines the role and tool scope at execution time</td>
+      </tr>
+      <tr>
+        <td>Permission implementation</td>
+        <td>Only the minimum required tools (<code>Read</code>, <code>Grep</code>, etc.) are listed in the <code>tools</code> field of <code>.claude/agents/*.md</code></td>
+        <td>The orchestrator interprets the <code>Permissions</code> field of AGENTS.md and restricts tool access on its own</td>
+      </tr>
+      <tr>
+        <td>Handoff</td>
+        <td><code>handoff_to</code> is a reference hint. The main session coordinates the relationship by invoking the <code>Agent</code> tool sequentially</td>
+        <td>The orchestrator reads <code>handoff_to</code> and automatically constructs a sequential pipeline</td>
+      </tr>
+      <tr>
+        <td>Detailed reference</td>
+        <td><a href="../practice/04_Practice_Manual_A_en.html">Chapter 4 §1-A Claude-Centric</a></td>
+        <td><a href="../practice/04_Practice_Manual_B_en.html">Chapter 4 §1-B Antigravity-Centric</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div >AGENTS.md → Tool-Specific Implementation Flow</div>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+        <marker id="agArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+      </defs>
+      <!-- AGENTS.md at top -->
+      <rect x="180" y="10" width="200" height="40" rx="8" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="280" y="34" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">AGENTS.md (Common Spec)</text>
+      <!-- Branch arrows -->
+      <line x1="220" y1="50" x2="140" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="340" y1="50" x2="420" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <!-- Claude side -->
+      <rect x="40" y="82" width="200" height="44" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="140" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#1a7f37">Claude App / Claude Code</text>
+      <text x="140" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">.claude/agents/*.md (predefined)</text>
+      <line x1="140" y1="126" x2="140" y2="152" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="50" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="140" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#1a7f37">YAML frontmatter + system prompt</text>
+      <!-- Antigravity side -->
+      <rect x="320" y="82" width="200" height="44" rx="8" fill="#faf5ff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="420" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#6639ba">Antigravity Desktop / CLI</text>
+      <text x="420" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">No definition file (dynamic generation)</text>
+      <line x1="420" y1="126" x2="420" y2="152" stroke="#6639ba" stroke-width="1.5" marker-end="url(#agArrowP)"/>
+      <rect x="330" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6639ba">Orchestrator interprets in real time</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. Authoring Guide
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="authoring-guide">Authoring Guide</h2>
+
+  <h3>1. Start with a Section</h3>
+  <p>Begin each agent entry with <code>## Agent: {name}</code>. The name should be in <strong>lowercase English</strong>, with multiple words joined by <code>-</code> (e.g., <code>code-reviewer</code>, <code>api-tester</code>). This name is used as the <code>subagent_type</code> value in the Claude family.</p>
+
+  <h3>2. Keep the Role Concise</h3>
+  <p>Describe <code>Role</code> — "what it does" — clearly in one or two sentences. Avoid overlap with other agents, and make sure each agent's area of independent responsibility is clear.</p>
+
+  <h3>3. Set Permissions with Least Privilege</h3>
+  <p>The <code>Permissions</code> field restricts the scope of file access. Failing to follow this principle can allow a subagent to accidentally overwrite important files. In the Claude family, this permission is translated into the <code>tools</code> field (<code>Read</code>, <code>Grep</code>, <code>Write</code>, etc.) of <code>.claude/agents/*.md</code>.</p>
+
+  <div class="pullquote">Since the reviewer cannot write in the first place, mistakes simply cannot happen.
+    <span class="by">— Chapter 4 §2-A, Principle of Least Privilege</span>
+  </div>
+
+  <h3>4. Declare Order with Handoff</h3>
+  <p><code>handoff_to</code> declares "where results go once this agent finishes its work." This is <strong>a hint, not a command</strong>. Actually constructing the sequential pipeline is the responsibility of the main session (the orchestrator).</p>
+
+  <div style="position:relative">
+  <pre class="code-block">## Agent: draft-writer
+Role: Writes a draft on a given topic.
+handoff_to: reviewer (proceeds to review after the draft is complete)
+
+## Agent: reviewer
+Role: Reviews the text for typos and logical issues.
+handoff_to: editor (proceeds to final editing after review is complete)
+
+## Agent: editor
+Role: Finalizes the document by incorporating feedback.</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+  <div class="note">An agent with no <code>handoff_to</code> declared (<code>editor</code> in the example above) is the endpoint of the pipeline. The orchestrator returns that agent's result to the end user.</div>
+
+  <h3>5. Verification</h3>
+  <p>Once authoring is complete, verify the structure with <code>bun run agent:verify</code>. This script checks the completeness of agent frontmatter, the presence of required sections, and consistency with the <code>AGENTS.md</code> roster.</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. Verification and Lifecycle
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="verify-lifecycle">Verification and Lifecycle</h2>
+
+  <p>Registering an agent in AGENTS.md corresponds to the <strong>Create phase of the lifecycle</strong> (see Chapter 8 §2). A registered agent then passes through the following stages.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Lifecycle Stage</th><th>Behavior in AGENTS.md</th><th>Verification</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Create</strong></td>
+        <td>Adds a <code>## Agent: {name}</code> section to AGENTS.md</td>
+        <td><code>bun run agent:verify</code> — structural completeness</td>
+      </tr>
+      <tr>
+        <td><strong>Verify</strong></td>
+        <td>Confirms the registration is consistent with other workspace files (CONSTITUTION.md, agents/*.md)</td>
+        <td><code>bun run agent:verify</code> — integrity check</td>
+      </tr>
+      <tr>
+        <td><strong>Operate</strong></td>
+        <td>The orchestrator reads the roster and invokes agents during an actual session</td>
+        <td>Trace agent invocations in session logs</td>
+      </tr>
+      <tr>
+        <td><strong>Improve</strong></td>
+        <td>Modifies role definitions, permissions, or handoff relationships</td>
+        <td>Rerun <code>agent:verify</code> after modification</td>
+      </tr>
+      <tr>
+        <td><strong>Deprecate</strong></td>
+        <td>Removes or comments out the corresponding agent entry from AGENTS.md</td>
+        <td><code>agent:verify</code> — reference integrity (ensures no other agent's <code>handoff_to</code> points to a deprecated agent)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Making it a habit to run <code>agent:verify</code> whenever you create or change an agent lets you catch inconsistencies early — such as "listed in the roster but no actual definition file exists" or "the agent pointed to by handoff_to has been deleted."</p>
+
+  <p>Automating this verification flow can be integrated as a <code>validate-templates.ts</code> step in the CI/CD pipeline covered in Chapter 8 §1 (Deployment and SSOT).</p>
+
+  <div class="note"><strong>FAQ:</strong> If running <code>bun run agent:verify</code> produces an error such as "the AGENTS.md table and the actual list of <code>agents/*.md</code> files are out of sync," compare the agent names in AGENTS.md against the filenames in the <code>.claude/agents/</code> folder, then add any missing entries or remove unnecessary files. → <a href="../faq/00_FAQ_en.html">FAQ</a></div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Chapter_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 8 §2 · Lifecycle Management</div></a>
+    <a href="08_Intro_Advanced_Architecture_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 8 §4 · Architecture In Depth</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Done!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

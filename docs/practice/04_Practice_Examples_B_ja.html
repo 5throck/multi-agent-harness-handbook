@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第4章 §2-B・マルチエージェントチーム実習 — Antigravity中心シナリオ別学習ガイド - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第4章 §2-B・マルチエージェントチーム実習 — Antigravity中心シナリオ別学習ガイド</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 状況'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ 内部動作'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 ヒント'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ 注意'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── サイドバー ── -->
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第4章 §2-B・マルチエージェントチーム実習(Antigravity中心)</div>
+  <a href="#setup">🛠 準備: 必要なプログラムのインストール</a>
+  <a href="#beginner"><span class="dot dot-g"></span>初級 (Getting Started)</a>
+
+  <div class="nav-group">初級シナリオ</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 最初のカスタムサブエージェントを作成して呼び出す</a>
+
+  <div class="nav-group">中級シナリオ</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer 2段階パイプライン</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 リクエストに応じてチーム構成とワークフローが変わる様子を観察する</a>
+
+  <div class="nav-group">上級シナリオ</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 独立タスクの並列実行 — Agent Manager</a>
+
+  <div class="nav-group">ショートカット</div>
+  <a href="04_Practice_Manual_ja.html">📖 第4章 §1 リファレンス →</a>
+  <a href="04_Practice_Examples_A_ja.html">🖥 第4章 §2-A Claude中心実習 →</a>
+</nav>
+
+<!-- ── 本文 ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第4章 §2-B</div>
+  <h1>第4章 §2-B・マルチエージェントチーム実習</h1>
+  <p class="subtitle">空の実習フォルダから始めてAntigravity(Desktop)/Antigravity CLIを中心にシナリオを一つずつ実践していく実習ガイド — Desktopアプリを基準に案内し、続けてCLI対応を紹介する &nbsp;|&nbsp; <a href="04_Practice_Manual_ja.html">← 第4章 §1 リファレンス文書に戻る</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象バージョン/範囲</span><span class="vvalue">Antigravity CLI (agy) 1.1.0+、Antigravity 2.0 — Antigravityを中心に案内し、Claude App/Code対応は第4章 §2-Aを参照</span></div>
+    <div class="version-row"><span class="vlabel">このファイルの目的</span><span class="vvalue">サブエージェントの定義・呼び出し、順次パイプライン、動的チーム構成・ワークフローの組み合わせ、並列実行をAntigravity(Desktop)/Antigravity CLI中心に手を動かして実践する4段階の実習を提供</span></div>
+    <div class="version-row"><span class="vlabel">リファレンス文書</span><span class="vvalue"><a href="04_Practice_Manual_ja.html">第4章 §1 共通</a>・<a href="04_Practice_Manual_A_ja.html">第4章 §1-A Claude詳細</a>・<a href="04_Practice_Manual_B_ja.html">第4章 §1-B Antigravity詳細</a> — 各シナリオからリンクで接続されます</span></div>
+    <div class="version-row"><span class="vlabel">作成日</span><span class="vvalue">2026年7月14日</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>この全課程が従う原則</strong> — 特定のツール一つに合わせて実習を覚えると、別のツールに移るときにまた最初から学び直さなければならない。だから以下のすべてのシナリオは、まずサブエージェントの役割をツール中立的な<code>AGENTS.md</code>仕様として書き、その<em>同じ仕様</em>をAntigravity系では自然言語の目標として「実装」する順序に従う(第2章 §5 AGENTS.md参照)。Claude系での対応方法は<a href="04_Practice_Examples_A_ja.html">第4章 §2-A</a>で扱う。定義は一つ、実行方式だけがツールごとに異なるという原則を手を動かして確認することが、この実習の中心的な目標である。
+  </div>
+
+  <!-- ══════════════════════════════ 実習前の準備 ══════════════════════════════ -->
+  <h2 id="setup">準備: 必要なプログラムのインストール</h2>
+  <p>以下の実習はAntigravity(Desktop)とAntigravity CLI(<code>agy</code>)を中心に進める。ローカル環境にこれらのツールがまだない場合は、このハンドブックに同梱されている環境設定自動化ツールである<a href="../setup/SETUP_ja.html">setupガイド</a>が、この章の実習に正確に必要な構成を自動でインストールしてくれる。案内に従ってスクリプトをダウンロードし、ローカルで実行すればよい。</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 インストール前の確認事項</div>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">スクリプトを実行する前に<a href="../setup/SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>を先に読んでおく。この文書には次の前提条件がまとめられている。</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>Antigravity利用のためのGoogleアカウント(個別APIキーではなく、サブスクリプション/アカウントベースのプランであること)</li>
+      <li><code>gh auth login</code>を実行できるGitHubアカウント</li>
+      <li>最低5GBの空きディスク容量</li>
+      <li>管理者(admin)またはsudo権限</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>まだGitHubアカウントがない場合</strong><br>
+    ① ブラウザで<a href="https://github.com/signup" target="_blank">github.com/signup</a>にアクセスする。<br>
+    ② メールアドレス、パスワード、ユーザー名(username)を入力する — usernameは後でリポジトリURL(<code>github.com/&lt;username&gt;/...</code>)にそのまま使われるため、慎重に決める。<br>
+    ③ 自動登録防止のためのパズル/コード認証を通過する。<br>
+    ④ 登録時に入力したメールに届いた認証メールを開き、<strong>メール認証</strong>を完了する — このステップを飛ばすと、以降<code>gh auth login</code>やリポジトリ作成が阻まれることがある。<br>
+    ⑤ 無料(Free)プランで登録すれば十分である — このハンドブックの実習・PR練習には有料プランは不要。<br>
+    登録が終わると<a href="https://cli.github.com/" target="_blank">GitHub CLI(<code>gh</code>)</a>が上記のインストールスクリプトに含まれて一緒にインストールされ、下記の<code>gh auth login</code>コマンドでターミナルをそのアカウントに接続する。
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# 案内に従って: GitHub.comを選択 → HTTPSを選択 → ブラウザでログイン(推奨)を選択
+# ブラウザが開いたら、先ほど作成したアカウントでログインし、認証コードを確認する</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <h3>Windowsでのインストール</h3>
+  <p>このハンドブックのパス表記はWindows基準のため、Windowsユーザーは<a href="../setup/setup-windows.ps1">setup-windows.ps1</a>をダウンロードし、実習専用フォルダ(例: <code>harness-lab/setup/</code>)に置いて、PowerShellを<strong>管理者権限で</strong>実行した後、下記のコマンドを実行する。</p>
+  <div class="tip-box">
+    <strong>PowerShellを管理者権限で開く方法</strong><br>
+    ① スタートメニューを開き、<code>PowerShell</code>を検索する。<br>
+    ② 検索結果の「Windows PowerShell」を<strong>右クリック</strong>する。<br>
+    ③ 表示されるメニューから<strong>「管理者として実行」</strong>を選択する。<br>
+    ④ ユーザーアカウント制御(UAC)ウィンドウが表示されたら<strong>「はい」</strong>を押して承認する。<br>
+    ウィンドウのタイトルバーに<code>管理者: Windows PowerShell</code>のように「管理者」が付いていれば正しく開けている。wingetインストールなど一部のステップは、管理者権限なしで実行するとエラーになったり黙ってスキップされたりすることがある。
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup
+.\setup-windows.ps1
+# 選択オプション: -WSL2, -WezTerm, -Docker, -Force (すでにインストール済みのツールも再インストール)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>スクリプトが終わったら、ターミナルを完全に閉じて再度開く必要がある。PATHの変更が反映されるためだ。</p>
+
+  <h3>macOS / Linuxでのインストール</h3>
+  <p>macOSは<a href="../setup/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用する。どちらも<code>--wezterm</code>、<code>--docker</code>の選択フラグをサポートする。</p>
+  <div style="position:relative">
+  <pre class="code-block"># macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <h3>インストールの検証</h3>
+  <p>OSにかかわらず、<a href="../setup/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態を点検するチェックリスト表が出力される。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになる。</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <p>このプロジェクトがインストールするツールのうち、この章の実習に直接関係するものは次の通りである。Antigravity(Desktop)、<code>agy</code>(Antigravity CLI)、そして後の章で使われる<code>gh</code>(GitHub CLI)まで一緒にインストールされる。</p>
+
+  <div class="tip-box">
+    Antigravity CLI(<code>agy</code>)は別途ランタイムのインストールが不要な単一コンパイルバイナリである — 解凍後PATHに入れるだけですぐに実行できる。古い資料に残っている「Gemini コマンドラインインターフェース(CLI)をnpmでグローバルインストール」といった案内はもはや有効ではない。最新のインストール方法は<a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>で確認する。
+  </div>
+
+  <div class="tip-box">
+    インストール中に問題が起きた場合、Windows基準で<code>%USERPROFILE%\workshop-setup-logs\</code>フォルダにログが残る。トラブルシューティングの際はまずこのログを確認する。
+  </div>
+
+  <!-- ══════════════════════════════ 初級 ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● 初級</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">Antigravity(Desktop)で目標を与え、動的生成を観察する最初のステップ</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">初級</span>
+      <strong class="card-title">最初のカスタムサブエージェントを作成して呼び出す</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        ハーネスを初めて使う開発者が実習専用の空フォルダ<code>harness-lab/</code>を新しく作り、<code>reviewer</code>役割をツール中立的な<code>AGENTS.md</code>仕様として先に書いた後、Antigravity(Desktop)で自然言語の目標として「実装」して呼び出してみる。このフォルダは実習専用なので、他のプロジェクトファイルと混ざらない。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s5">AGENTS.md (第2章)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-1">サブエージェントを定義する</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-2">サブエージェントを呼び出す</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップ別実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① 実習フォルダの作成と移動</strong>
+            <p>現在のフォルダの下に<code>harness-lab</code>フォルダを新しく作り、その中に移動する。以降のすべてのコマンドはこのフォルダの中で実行する。</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② 共通の役割仕様を作成 — <code>AGENTS.md</code></strong>
+            <p>ClaudeでもAntigravityでも、あるいはその他のAGENTS.md標準をサポートするどんなツールで開いても同じ意味で読めるように、<code>reviewer</code>役割をツール依存的な表現を使わず純粋なテキストで書く。このファイル一つが「何をする役割か」の唯一の原本となり、下のAntigravityはこの原本を自然言語の目標として実装するだけである。macOS/Linux/Git Bashでは下記のコマンドをそのまま使う。</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+役割: テキストファイルの誤字脱字、論理的な欠陥、改善点を検討する。
+入力: 検討対象のテキストファイルのパス
+出力: 誤字脱字・論理的欠陥・改善点のリスト
+権限: 読み取り専用 — ファイルを直接修正しない。
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShellでは</strong><code>cat</code>コマンド自体は<code>Get-Content</code>のエイリアスとしてファイル読み込みにそのまま使える。ただし<code>&lt;&lt; 'EOF'</code>のように複数行を直接入力するheredoc構文はサポートしないため、同じ内容を引用符付きのhere-string(<code>@'...'@</code>)として作成し、<code>Set-Content</code>でファイルに書き込む。</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+役割: テキストファイルの誤字脱字、論理的な欠陥、改善点を検討する。
+入力: 検討対象のテキストファイルのパス
+出力: 誤字脱字・論理的欠陥・改善点のリスト
+権限: 読み取り専用 — ファイルを直接修正しない。
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 同じAGENTS.md仕様を自然言語の目標として実装</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravityには<code>.claude/agents</code>のような事前定義ファイルの概念がない。代わりに先ほど作成した<code>AGENTS.md</code>をワークスペースにそのまま置いた状態で、同じ仕様を目標プロンプトに込めてやる。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 検討対象ファイルを事前に用意(ターミナル)</strong>
+              <div style="position:relative">
+                <pre class="code-block">echo "このプロジェクトはとても良い。これは非常に良い。" > notes.txt</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Antigravity Agent ManagerでWorkspaceを作成</strong>
+              <p>Agent Managerを開き、<code>harness-lab/</code>フォルダ(AGENTS.mdがすでに入っているフォルダ)を指す新しいWorkspaceを一つ作る。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ 目標指示 — Workspaceのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">AGENTS.mdに書かれたreviewer役割仕様通りにnotes.txtを検討して。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                Workspaceを担当するエージェントがAGENTS.mdを読み、その中の役割/入力/出力/権限の仕様をそのまま目標として、必要な作業(ファイルの読み込み、改善点の整理)を自ら判断して実行する。AGENTS.mdが「何を検討基準とするか」の唯一の原本であるため、検討基準(誤字脱字・論理的欠陥・改善点)はこの仕様によって決まる。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)でも</strong>同じ概念で実習できる — 事前定義ファイルなしで<code>/goal</code>で目標だけを与える。</p>
+        <div style="position:relative">
+          <pre class="code-block">cd harness-lab && agy
+/goal notes.txtファイルを検討して改善点を要約して</pre>
+          <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        Antigravityは定義ファイルがないため、Claude系のように<code>tools</code>フィールドで事前に権限制限をすることはできない。代わりに目標プロンプト自体を「読んで要約だけして」のように明確に絞り込むことが安全である。AGENTS.mdに書かれた<code>権限: 読み取り専用</code>の仕様も、オーケストレーターに権限境界を伝える役割を果たす。
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 中級 ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● 中級</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">メインセッションがオーケストレーターとなり、writerとreviewerという2つの専門エージェントを順番に指揮する実務パターン</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">中級</span>
+      <strong class="card-title">writer → reviewer 2段階パイプライン</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        G-1を終えた実務者が、同じ<code>harness-lab/</code>フォルダで2つ目の役割<code>writer</code>もG-1と同じ方式で<code>AGENTS.md</code>に先に仕様を書き、Antigravity(Desktop)で自然言語の目標として実装する。writerが先に草稿を書き、reviewerがその結果を批評するパイプラインを、オーケストレーターが順序を守って指揮するようにする。
+      </div>
+
+      <div class="note">
+        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+          </defs>
+          <!-- Box 1: ユーザーリクエスト (gray) -->
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="#6b7280">ユーザーリクエスト</text>
+          <!-- Arrow 1 -->
+          <line x1="115" y1="43" x2="150" y2="43" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <!-- Box 2: writer.md (blue) -->
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#3b82f6">writer.md</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#3b82f6">草稿作成</text>
+          <!-- Arrow 2 -->
+          <line x1="295" y1="43" x2="330" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <!-- Return arrow (curved, below) -->
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="#f59e0b"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#f59e0b">修正依頼時はwriterに戻る</text>
+          <!-- Box 3: reviewer.md (green) -->
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#22c55e">reviewer.md</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">フィードバック/承認</text>
+          <!-- Arrow 3 -->
+          <line x1="475" y1="43" x2="510" y2="43" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <!-- Box 4: 最終成果物 (purple) -->
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#8b5cf6">最終成果物</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">完成</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s5">AGENTS.md (第2章)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-1">サブエージェントを定義する</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-2">サブエージェントを呼び出す</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップ別実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>共通の役割仕様を追加 — <code>AGENTS.md</code>にwriter項目を続けて書く</strong>
+            <p>G-1で作成した同じ<code>AGENTS.md</code>に<code>writer</code>役割を続けて書く。reviewer項目はそのままにして、下記の内容だけを追加する。macOS/Linux/Git Bashでは下記のコマンドをそのまま使う。</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+役割: 与えられたテーマで3〜5文程度の短い草稿を作成する。
+入力: テーマ、保存するファイルのパス
+出力: 草稿のテキストファイル
+権限: 書き込み許可 — 指定されたファイルにのみ保存する。
+handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShellでは</strong>here-stringを<code>Add-Content</code>で追記する(<code>Set-Content</code>はファイルを上書きするため、reviewer項目が消えないよう必ず<code>Add-Content</code>を使う必要がある)。</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+役割: 与えられたテーマで3〜5文程度の短い草稿を作成する。
+入力: テーマ、保存するファイルのパス
+出力: 草稿のテキストファイル
+権限: 書き込み許可 — 指定されたファイルにのみ保存する。
+handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 同じAGENTS.md仕様2つを1つの目標としてオーケストレーターが自ら分解</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravityは事前に<code>writer</code>/<code>reviewer</code>ファイルを分けて定義しない。代わりにAGENTS.mdにすでに書いておいた2つの役割仕様(reviewerはG-1で、writerは今しがた)をそのまま参照させる。G-1で作成した同じWorkspaceのチャットで引き続き進める。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 2段階の目標指示 — Workspaceのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">AGENTS.mdのwriter仕様通りにdraft.txtに「リモートワークの利点」というテーマで草稿を先に作成し、完了したらAGENTS.mdのreviewer仕様通りにその草稿を検討して。2つの段階を順番に進めて。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                オーケストレーターがAGENTS.mdの<code>handoff_to: reviewer</code>関係を読み取り、目標を「草稿作成 → 検討」の2つの下位作業に自ら分解した後、草稿作成が終わってから初めて検討作業を開始する。順序調整の責任がユーザーではなくオーケストレーター内部にあるという点が特徴である — ただし「何を検討基準とするか」はAGENTS.mdが唯一の原本である。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)でも</strong>同じ目標を一度に与えられる。<code>/goal</code>でパイプライン全体を1つの文章に込めるとオーケストレーターが自動で分解し、必要なら<code>/agent</code>で検討段階をバックグラウンドに任せたまま他の作業を続けることもできる。</p>
+        <div style="position:relative">
+          <pre class="code-block">agy
+/goal draft.txtに「リモートワークの利点」というテーマで草稿を先に書き、
+完了したらその草稿を検討して改善点を要約して</pre>
+          <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">中級</span>
+      <strong class="card-title">リクエストに応じてチーム構成とワークフローが変わる様子を観察する</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        第2章 §4bで扱った「動的チーム構成」と「多様なワークフローの組み合わせ」を直接目で確認するシナリオである。D-1で作成した<code>writer</code>・<code>reviewer</code>という2つの役割仕様はそのままにして、リクエストの性質だけを変えながら、オーケストレーターが実際にどんな作業を、何回、どんな順序で行うかを観察する — サブエージェントの定義は一度も新しく作らないという点が核心である。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s4b">動的チーム構成と多様なワークフロー</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — 自然言語の目標だけでも同じ柔軟性が現れる</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravityはそもそもサブエージェントを動的に生成する方式であるため、この柔軟性がより直接的に現れる。D-1で使っていた同じWorkspaceチャットで引き続き進める。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 単純な目標指示</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txtの誤字脱字だけざっと見て。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                オーケストレーターは今回のリクエストに作成役割は不要だと判断し、検討役割一つだけをその場で構成する。AGENTS.mdに2つの役割が定義されていても、実際に投入される構成はリクエストごとにオーケストレーターがその都度決定するということを示す、最も単純な例である。
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 複合的な目標指示</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft2.txtに「週4日勤務制」というテーマで新しい草稿を先に書き、完了したらその草稿を文法の観点と論理の観点の2つで、それぞれ独立して同時に検討して。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <div class="flow-box">
+                オーケストレーターは①では検討役割一つだけをその場で構成し、②では作成役割一つと検討役割二つ(互いに異なる観点)を新しく構成する。事前に定義されたサブエージェントファイルがそもそも存在しないため、「今回の作業に合ったチームを毎回新しく組む」という原則がより鮮明に現れる。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          ①と②を並べて比較すると、「AGENTS.mdにどんな役割を定義しておいたか」と「今回の作業に実際に投入される構成が何か」が互いに異なる階層であることがはっきりする。前者はAGENTS.mdに事前に固定されているが、後者はリクエストのたびにオーケストレーターが新しく決定する。
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>あわせて見る:</strong> <a href="../concepts/02_Concepts_Chapter_ja.html#s4b">第2章 §4b — 動的チーム構成と多様なワークフロー</a>、<a href="04_Practice_Manual_ja.html#section-3">第4章 §1 リファレンス — 並列実行</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 上級 ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● 上級</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">writerとreviewerを独立した2つのファイルに対して同時に動かす並列運用 — Agent Manager活用</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">上級</span>
+      <strong class="card-title">独立タスクの並列実行 — Agent Manager</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        D-1まで終えた熟練者が、互いに依存しない2つの独立した作業(<code>topic-a.txt</code>、<code>topic-b.txt</code>の草稿作成)をAntigravity(Desktop) Agent Managerで並列に実行してみる。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-3">並列実行 — チーム単位に拡張する</a>
+          <a class="cmd-chip" href="04_Practice_Manual_ja.html#section-3">並列実行</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Desktop)</span> — Agent Manager、Workspaceごとにエージェント1つ</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravityを開き、Agent Managerで<code>harness-lab/</code>を指すProjectを一つ用意する。今回は1つのWorkspaceに2つのエージェントを詰め込まず、<strong>互いに異なるWorkspace2つ</strong>を作って、それぞれにエージェントを1つずつ割り当てる。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Workspace Aの作成</strong>
+              <p>New Worktree ModeでWorkspaceを一つ作る。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Workspace Aのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">topic-a.txtに「在宅勤務」というテーマで3〜5文の草稿を作成して。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Workspace Bの作成</strong>
+              <p>別途のWorkspaceをもう一つ作る(New Worktree Mode推奨)。Workspace Aのエージェントとは完全に分離されたインスタンスである。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ Workspace Bのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">topic-b.txtに「週4日勤務制」というテーマで3〜5文の草稿を作成して。</pre>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>⑤ Inboxで2つのエージェントの進行状況を確認</strong>
+              <p>2つのエージェントがそれぞれのWorkspaceで同時に作業している間、Inboxで承認やフィードバックが必要なメッセージが来ていないか確認し、必要であれば応答する。</p>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          2つのエージェントを<strong>同じWorkspace</strong>に一緒に割り当てない — 同じフォルダを共有すると、一方のエージェントがもう一方のエージェントの作業コンテキストを自分のものと錯覚する「認知的重複(cognitive overlap)」が発生することがある。WorkspaceまたはworktreeでかならずWorkspaceを分離するのがAntigravityの推奨される慣行である。
+        </div>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Antigravity CLI(<code>agy</code>)でも</strong>デスクトップのAgent Managerの代わりにターミナルを複数立ち上げて同じ効果を出せる — 1つのターミナルで<code>agy</code>によりtopic-a.txtの作業を、別のターミナルで独立した<code>agy</code>セッションによりtopic-b.txtの作業を同時に進める(セッション間の並列)。互いに異なるファイルを触っている限り、2つのセッションは衝突しない。</p>
+      </div>
+
+      <div class="related-cmds">
+        <strong>あわせて見る:</strong> <a href="04_Practice_Manual_ja.html#section-3">第4章 §1 リファレンス — 並列実行</a>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+    Antigravity CLI (agy) 1.1.0+・Antigravity 2.0基準 | 2026年7月14日作成<br>
+    <a href="04_Practice_Examples_A_ja.html">← 第4章 §2-A Claude中心実習へ</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_B_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第4章 §1-B・Antigravity詳細</div></a>
+    <div class="branch">
+      <div class="branch-label">第4章 §2</div>
+      <a href="04_Practice_Examples_A_ja.html" >Claude (A)</a>
+      <a href="04_Practice_Examples_B_ja.html" >Antigravity (B)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第5章・ai-workspace-standards</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  Manual(레퍼런스)/Examples(실습)과 달리 버전 박스·코드 강조가 아니라 본문 흐름 중심이다.
+  수정할 곳: (1) <title>/장 번호/제목/리드  (2) nav(이 장의 절 + 다른 장)  (3) '이 장의 요점'
+            (4) <h2 id>/<h3> 절과 본문  (5) 이전/다음 장 링크
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 8 §5 · Advanced Roadmap - a reference from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 8 §5 · Advanced Roadmap</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 8 §5 · Advanced Roadmap</div>
+  <a href="#container">Container-Based Service Integration</a>
+  <a href="#memory">Memory Aggregation and Curation</a>
+  <a href="#variant-deploy">Evolution of Variant Deployment</a>
+  <a href="#boilerplate-strategy">Advancing the Boilerplate Strategy</a>
+  <a href="#tier-strategy">Advancing the Model Tier Strategy</a>
+  <div class="nav-section">Other Sections in Chapter 8</div>
+  <a href="08_Intro_Advanced_Deploy_en.html">Ch.8 §1 · Deployment and SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_en.html">Ch.8 §2 · Lifecycle Management</a>
+  <a href="08_Intro_Advanced_AGENTS_en.html">Ch.8 §3 · AGENTS.md In Depth</a>
+  <a href="08_Intro_Advanced_Architecture_en.html">Ch.8 §4 · Architecture In Depth</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="05_Intro_Chapter_en.html">Ch.5 · Introducing ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_en.html">Ch.7 · Running a Multi-Agent Team Inside an Enterprise</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Ch.11 · Creating a New Variant</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 8 §5</div>
+  <h1>Advanced Roadmap</h1>
+  <p class="lead">What §1 through §4 covered so far is the <strong>current implementation</strong> of ai-workspace-standards. This section covers the opposite — five directions the repository is heading in that have not yet been implemented. They split into three infrastructure-level directions (container integration, memory aggregation, variant deployment automation) and two governance-level directions (boilerplate strategy, model tier strategy).</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Section Covers</div>
+    <ul>
+      <li>The need for service integration in containerized (Docker/Kubernetes) environments</li>
+      <li>Workspace-level aggregation of independent MEMORY.md files</li>
+      <li>Ways to selectively propagate security patches and bug fixes while preserving the benefits of the fork model</li>
+      <li>The limits of the LOCKED/MERGE/PRESERVE three-way classification being a fixed taxonomy, and directions for per-organization customization</li>
+      <li>Directions for adjusting statically assigned model tiers based on real organizational operating data</li>
+    </ul>
+  </div>
+
+  <h2 id="container">Container-Based Service Integration</h2>
+  <p>Today, a project scaffolded from any given variant only operates by connecting directly, inside a local workspace, to AI coding tools like Claude Code/App or Antigravity. But in real enterprise environments, projects often need to be deployed as <strong>independent services</strong> on a per-project basis.</p>
+  <p>The core of this advancement is that a scaffolded project should be able to run in a Docker or Kubernetes environment, **connected to a frontend service such as Open WebUI so it can be supported on a per-user basis**. In that form, each user invokes their assigned agent team through a browser interface, reviews results, and retains context across sessions.</p>
+
+  <h2 id="memory">Memory Aggregation and Curation</h2>
+  <p>Today, each L2 project maintains its own independent <code>memory/MEMORY.md</code> file (covered in Chapter 5 §4). This file records cross-session context for that project, but as the number of projects grows, memory files become scattered and <strong>it becomes difficult to see workspace-wide insights</strong>.</p>
+  <p>The second axis of advancement is the need for a capability to **aggregate and curate** memory files that are otherwise scattered across individual projects. For example, it should become possible to run workspace-level trend analyses such as "what error patterns did agent teams across all projects run into most often last week" or "which role combinations were used most frequently."</p>
+
+  <h2 id="variant-deploy">Evolution of Variant Deployment</h2>
+  <p>Today, variant deployment is centered on local scaffolding via <code>new-project.ts</code>, following a fork model in which template updates are not automatically propagated to L2. This approach has the advantage of preserving intentional differences, but from an operational standpoint it creates a burden: template bug fixes or security patches must be manually applied to each project one by one.</p>
+  <p>Two directions for advancement are being discussed: (a) a **consent-based receiving model** that lets only security patches or critical bug fixes propagate selectively to L2 while preserving the benefits of the fork model, and (b) an **asynchronous deployment pipeline** in which variants are managed in a central registry and <code>new-project.ts</code> pulls the latest version over the network.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="roadmapArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <line x1="50" y1="100" x2="630" y2="100" stroke="#d0d7de" stroke-width="2" stroke-dasharray="6,4"/>
+
+        <circle cx="80" cy="100" r="14" fill="#0969da" stroke="#fff" stroke-width="2"/>
+        <text x="80" y="104" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">Now</text>
+        <text x="80" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Local Scaffolding</text>
+        <text x="80" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">Centered on new-project.ts</text>
+
+        <line x1="96" y1="100" x2="200" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="148" y="90" text-anchor="middle" font-size="9" fill="#636c76">Stage 1</text>
+
+        <circle cx="220" cy="100" r="14" fill="#6639ba" stroke="#fff" stroke-width="2"/>
+        <text x="220" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">①</text>
+        <text x="220" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="220" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Container Service</text>
+        <text x="220" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">Docker / K8s integration</text>
+
+        <line x1="236" y1="100" x2="340" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="288" y="90" text-anchor="middle" font-size="9" fill="#636c76">Stage 2</text>
+
+        <circle cx="360" cy="100" r="14" fill="#1a7f37" stroke="#fff" stroke-width="2"/>
+        <text x="360" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">②</text>
+        <text x="360" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="360" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Memory Aggregation</text>
+        <text x="360" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">Workspace level</text>
+
+        <line x1="376" y1="100" x2="480" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="428" y="90" text-anchor="middle" font-size="9" fill="#636c76">Stage 3</text>
+
+        <circle cx="500" cy="100" r="14" fill="#953800" stroke="#fff" stroke-width="2"/>
+        <text x="500" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">③</text>
+        <text x="500" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="500" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Variant Deployment</text>
+        <text x="500" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">Automation pipeline</text>
+
+        <line x1="516" y1="100" x2="572" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <rect x="578" y="82" width="100" height="36" rx="18" fill="#0969da" stroke="#0550ae" stroke-width="1"/>
+        <text x="628" y="104" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">Vision Complete</text>
+
+        <rect x="56" y="52" width="48" height="20" rx="4" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="1"/>
+        <text x="80" y="66" text-anchor="middle" font-size="9" fill="#0550ae" font-weight="600">v1.0</text>
+
+        <rect x="196" y="52" width="48" height="20" rx="4" fill="#fbefff" stroke="#d2b9ff" stroke-width="1"/>
+        <text x="220" y="66" text-anchor="middle" font-size="9" fill="#6639ba" font-weight="600">v1.x</text>
+
+        <rect x="336" y="52" width="48" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="360" y="66" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">v2.0</text>
+
+        <rect x="476" y="52" width="48" height="20" rx="4" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
+        <text x="500" y="66" text-anchor="middle" font-size="9" fill="#7d4e00" font-weight="600">v3.0</text>
+
+        <line x1="80" y1="72" x2="80" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="220" y1="72" x2="220" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="360" y1="72" x2="360" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="500" y1="72" x2="500" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+      </g>
+    </svg>
+  </div>
+
+  <p>If the three items above are advancement directions at the <strong>infrastructure level</strong>, the two below are advancement directions at the <strong>governance level</strong> — covering what limitations the boilerplate strategy and model tier strategy from §1 and §4 currently have, and which directions they could be refined toward.</p>
+
+  <h2 id="boilerplate-strategy">Advancing the Boilerplate Strategy</h2>
+  <p>In §1 and §4 we covered the LOCKED·MERGE·PRESERVE·SYNC_IF_NEWER·PRUNE five-way classification as the criterion for deciding "what to lock and what to leave open." Right now this classification is <strong>hardcoded per file path</strong> inside the <code>upgrade-project.ts</code> code — whether a given file is LOCKED or MERGE only changes if the script itself is edited. This works fine when the repository manages few file types, but as organization-specific exceptions accumulate — "we also want to treat this file as LOCKED" or "we want to fully open this MERGE file to PRESERVE for our organization" — it increasingly forces organizations to fork the script itself.</p>
+  <p>The direction for advancement is to move this classification out of code and into a <strong>declarative manifest</strong>. For example, one option under discussion is placing a file such as <code>boilerplate-policy.json</code> at the workspace root, letting each organization redefine its own LOCKED/MERGE/PRESERVE boundaries at the file-pattern level. With this in place, <code>upgrade-project.ts</code> would read this manifest instead of relying on a hardcoded classification table, and organizations could adjust the boundaries to fit their own security and governance standards without touching the script.</p>
+
+  <h2 id="tier-strategy">Advancing the Model Tier Strategy</h2>
+  <p>In §1 and §4 we saw that tier assignment is statically fixed in <code>agents/*.md</code> frontmatter, and that changes at L0 only propagate via <code>upgrade-project.ts</code>'s SYNC_IF_NEWER. The limitation of this approach is that <strong>tier assignment is tied only to "role," and does not reflect the actual difficulty of the work or the organization's cost budget</strong>. For example, the code-writer role is always medium, but in practice the complexity of the codebase a code-writer works with varies widely from project to project. In the current structure, reflecting that difference requires a person to manually edit each project's <code>agents/*.md</code> by hand.</p>
+  <p>Two directions for advancement are being discussed: (a) <strong>operational-data-driven tier recommendations</strong>, based on session logs or <code>/cost</code> data, that surface guidance such as "this role has repeatedly triggered retries over the last N sessions → recommend raising it to high," and (b) <strong>tier budget cap governance</strong> at the workspace or organization level, such as "this month's budget only allows high-tier assignment for N roles." Both directions preserve the current "static assignment + manual override" model while layering observability and organizational policy on top of it.</p>
+
+  <div class="note">
+    This handbook is written based on the <strong>current implementation state</strong> of ai-workspace-standards (the main branch, as of July 2026). The five items mentioned in this section are all planned items on the repository's roadmap, and <strong>are not implemented in the current codebase</strong>. The actual timing and form of implementation may differ.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Architecture_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch.8 §4 · Architecture In Depth</div></a>
+    <a href="../workflows/09_Workflows_Chapter_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch.9 · Workflow Design Patterns</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

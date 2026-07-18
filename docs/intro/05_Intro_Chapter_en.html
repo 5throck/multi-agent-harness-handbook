@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on practice. Reading width (720px), generous line height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is body-text flow rather than version boxes and code highlighting.
+  Where to edit: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) "Key points of this chapter"
+            (4) <h2 id>/<h3> sections and body  (5) prev/next chapter links
+  Fill {{double braces}}/[description: ...] with actual content. All links are relative paths.
+  Colors use design tokens only — the theme is applied at deploy time via references/apply-theme.sh, which replaces docs/ brand colors.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 5 · Introducing ai-workspace-standards - Multi-Agent Team Harness Engineering Handbook material.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 5 · Introducing ai-workspace-standards</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 5 · Introducing ai-workspace-standards</div>
+  <a href="#s1">What the repository is</a>
+  <a href="#s1b">The overall architecture at a glance</a>
+  <a href="#s2">The four core files</a>
+  <a href="#s3">templates and the 7 variants</a>
+  <a href="#s4">Session-start checklist and scaffolding</a>
+  <div class="nav-section">Other chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter_en.html">Chapter 3 · Guardrails and the permission model</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_en.html">Chapter 8 · Architecture deep dive</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 5</div>
+  <h1>Introducing ai-workspace-standards</h1>
+  <p class="lead">ai-workspace-standards is the repository that actually implements the "dev tools + variant" model previewed in Chapter 7. This chapter walks through exactly what this repository is, what files it consists of, and what project templates it provides.</p>
+  <p class="source-line">Sources: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/adr/0031-l1-l2-fork-model.md" target="_blank">ADR-0031 L1–L2 Fork Model</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/constitution/00-ssot-architecture.md" target="_blank">CONSTITUTION.md §0 SSOT Architecture</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">What this chapter covers</div>
+    <ul>
+      <li>What ai-workspace-standards is, and why it must be cloned as the "workspace root"</li>
+      <li>The overall directory structure of the repository, and the actual order in which a session reads and executes files (the runtime flow)</li>
+      <li>The roles of the four core files: CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md</li>
+      <li>Which domain each of the 7 variants under templates/ is designed for</li>
+      <li>A conceptual picture of the session-start checklist and the new-project.ts scaffolding flow</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">What the repository is</h2>
+  <p>ai-workspace-standards describes itself as an "operating model for multi-agent teams for Vibe Coding and Harness Engineering." It is a repository designed to apply the same behaviors, workflows, and quality standards across multiple AI coding tools (Claude Code/App, Antigravity CLI/Desktop, and so on).</p>
+  <p>The way this repository is used is a bit unusual. Rather than being pulled into a single project like an ordinary library, the repository itself is cloned as the root of your workspace — for example at <code>C:\git</code> on Windows or <code>~/git</code> on macOS/Linux. Once set up this way, every new project created underneath it automatically inherits the workspace's shared rules.</p>
+
+  <div class="pullquote">ai-workspace-standards is a repository that ships "a way to build projects," not "a finished project."
+    <span class="by">— why it's cloned as the workspace root</span></div>
+
+  <h2 id="s1b">The overall architecture at a glance</h2>
+  <p>Before dissecting the four core files, the variants, and L0→L1→L2 one by one in the following sections, it helps to first see the whole picture of where these pieces actually sit in the repository and under what names, so you don't lose your bearings. Cloning the workspace root produces the following top-level structure.</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">C:\git\  (workspace root = L0)
+├── CONSTITUTION.md          ← §2: what must be followed (master standard, L0 original)
+├── CLAUDE.md                ← §2: how it runs in Claude Code/App
+├── GEMINI.md                ← §2: how it runs in Antigravity CLI/Desktop
+├── AGENTS.md                ← §2: who does the work (agent roster, L0 original)
+├── agents/                  ← §5: original agent definitions such as pm.md (L0, edit only here)
+│   └── pm.md
+├── .claude/                 ← §2: Claude-only commands/skills (/sync, create-variant, etc.)
+├── .gemini/                 ← §2: Antigravity-only commands/skills (same names, different implementation)
+├── .agents/                 ← §2: tool-agnostic commands/skills (for tools supporting the AGENTS.md standard)
+├── scripts/                 ← §4·§5: operational scripts such as new-project.ts, publish-to-template.ts
+├── templates/                (L1 + official L2)
+│   ├── common/              ← §5: L1 — an L0 snapshot, the starting point when creating a variant
+│   │   └── agents/pm.md     ← extends: ../../../agents/pm.md (references L0 + strips workspace-only sections)
+│   ├── co-develop/          ← §3: official L2 variant (software development, 6 stages)
+│   ├── co-design/           ← §3: official L2 variant (UI/UX, 5 stages)
+│   ├── co-work/             ← §3: official L2 variant (collaboration/documents, 6 stages)
+│   ├── co-security/         ← §3: official L2 variant (red team, 6 stages)
+│   ├── co-consult/          ← §3: official L2 variant (consulting, 7 stages)
+│   ├── co-deck/   [beta]    ← §3: official L2 variant (lectures/presentations, 11 stages)
+│   └── co-game/   [beta]    ← §3: official L2 variant (game development)
+├── Projects/                 (living L2 — actual projects scaffolded via new-project.ts)
+│   └── &lt;my-project&gt;/
+│       ├── docs/context.md  ← §4: this project's own SSOT (the variant's empty skeleton, filled in)
+│       ├── agents/          ← inherited from the variant, continues to evolve for this project
+│       └── (an independent git repository — separate from the workspace root)
+└── memory/
+    └── MEMORY.md            ← §4: context carried across sessions</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <p>What's worth noting in this tree is that the three layers appear directly as the actual directory structure. Right below the root (CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md, <code>agents/</code>, <code>scripts/</code>) is L0, <code>templates/common/</code> is L1, and <code>templates/co-*/</code> and <code>Projects/*/</code> are L2. In other words, "L0→L1→L2" isn't an abstract diagram — it's a physical layout you can see with a single <code>ls</code> in the cloned folder.</p>
+
+  <p>The actual order in which work proceeds on top of this structure (the runtime flow) is as follows.</p>
+  <ol style="margin:0 0 16px 22px;line-height:2;">
+    <li><strong>Session start.</strong> The agent reads, in order: CONSTITUTION.md → the current project's docs/context.md → AGENTS.md → memory/MEMORY.md (covered in §4).</li>
+    <li><strong>Tool-specific execution rules apply.</strong> For Claude Code/App, CLAUDE.md and <code>.claude/</code> govern the detailed execution; for the Antigravity family, GEMINI.md and <code>.gemini/</code> do.</li>
+    <li><strong>When a new project is needed.</strong> <code>scripts/new-project.ts</code> clones the entire configuration of <code>templates/co-&lt;variant&gt;/</code> (L2) into <code>Projects/&lt;name&gt;/</code>. At this point, <code>templates/co-&lt;variant&gt;/</code> itself had already been created a generation earlier by taking a snapshot from <code>templates/common/</code> (L1).</li>
+    <li><strong>When L0 changes during operation.</strong> <code>scripts/publish-to-template.ts</code>, as part of the <code>/sync</code> pipeline, automatically and continuously publishes L0 changes to L1 (<code>templates/common/</code>). This is not automatically propagated to L2 instances that have already been born (Projects/*, templates/co-*). This is the "fork" principle covered in Chapter 8.</li>
+  </ol>
+  <div class="note">In one sentence: <strong>L0 is "right below the root," L1 is "templates/common/," and L2 is "templates/co-*/ and Projects/*/"</strong> — remembering just these three coordinates lets you follow every explanation in the rest of this chapter against the actual folder locations.</div>
+
+  <h2 id="s2">The four core files</h2>
+  <p>At the workspace root there are four core files that every project references in common.</p>
+  <p><code>CONSTITUTION.md</code> is the master shared standard, the document that should be read first at the start of any session. It defines the governance rules, PR workflow, and multi-agent architecture principles for the entire workspace. <code>CLAUDE.md</code> holds the concrete behavior for Claude Code/App (hooks, slash commands, agent dispatch rules), while <code>GEMINI.md</code> defines the equivalent behavior for Antigravity CLI/Desktop. <code>AGENTS.md</code> serves as the canonical roster of agents available across the entire workspace. This filename is the same as the open AGENTS.md standard introduced in Chapter 2, which is read in common by 30+ tools including Claude Code — though in this repository it also doubles as a more specific "agent registry and orchestration reference." The top of the file even states explicitly that "this file is not an instruction directed at AI tools, but a registry of human-defined roles."</p>
+  <p>To summarize the relationship among these four files in one sentence: CONSTITUTION.md defines "what must be followed," CLAUDE.md/GEMINI.md define "how that is executed on each platform," and AGENTS.md defines "who does the work."</p>
+
+  <p>An agent entry in AGENTS.md consists of the following fields. <strong>Concrete authoring guidance and tool-specific implementation mapping are covered in Chapter 8 §3, AGENTS.md Deep Dive.</strong></p>
+  <table>
+    <thead><tr><th>Field</th><th>Meaning</th><th>Required</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>## Agent: {name}</code></td><td>Agent identifier</td><td>Required</td><td><code>## Agent: reviewer</code></td></tr>
+      <tr><td><code>Role</code></td><td>What this agent does</td><td>Required</td><td>"Reviews text files for typos"</td></tr>
+      <tr><td><code>Input</code></td><td>What input it receives</td><td>Recommended</td><td>"Path of the text file to review"</td></tr>
+      <tr><td><code>Output</code></td><td>What output it produces</td><td>Recommended</td><td>"List of typos, gaps, and improvements"</td></tr>
+      <tr><td><code>Permissions</code></td><td>Scope of file access</td><td>Recommended</td><td>"Read-only" / "Write allowed — only for specified files"</td></tr>
+      <tr><td><code>handoff_to</code></td><td>Who to hand off to after completion</td><td>Optional</td><td><code>handoff_to: reviewer</code></td></tr>
+    </tbody>
+  </table>
+  <p>Let's trace this relationship using a concrete rule as an example. Suppose there's a rule that says "PR titles and bodies must be written in English." This rule itself is written exactly once, in <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> defines <em>how</em> to enforce this rule in Claude Code — for instance, by specifying that the <code>/sync</code> command's language gate (language-guard.ts) automatically checks this rule before every commit. <code>GEMINI.md</code> defines how the same rule is enforced in the Antigravity-side pipeline. And who actually performs this check — which agent is responsible for this gate — is registered in the roster in <code>AGENTS.md</code>. A single rule shows up in all four files, each from a different angle. This isn't duplication; it's three different answers to the three questions of "what, how, and who."</p>
+  <p>Below the four core files sit folders holding executable assets. Commands and skills are split across three locations: <code>.claude/</code> is Claude Code/App-only, <code>.gemini/</code> is Antigravity CLI/Desktop-only, and <code>.agents/</code> holds <strong>tool-agnostic (engine-agnostic)</strong> commands and skills not tied to a single tool. For example, slash commands like <code>/sync</code>/<code>/meeting</code> or skills like <code>create-variant</code>/<code>audit-workspace</code> exist under the same name in all three folders, but each implementation differs slightly to match its own platform's tooling conventions (Claude Code's <code>Agent</code> tool syntax, Antigravity's sub-agent approach, etc.). External tools that support the AGENTS.md standard (Codex, Cursor, etc.) will reference the <code>.agents/</code> folder when they open this repository.</p>
+
+  <h2 id="s3">templates and the 7 variants</h2>
+  <p>The <code>templates/</code> directory is a collection of version-controlled project template "variants." Each variant contains a complete multi-agent team configuration for a specific domain, including a PM, specialist agents, and a staged governance pipeline. The variants the repository provides are as follows.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">co-develop</span><span>For software development. A 6-stage governance pipeline composed of PM, Architect, Designer, Code Writer, Test Runner, and Security Monitor.</span></div>
+    <div class="variant-row"><span class="variant-name">co-design</span><span>For UI/UX. A 5-stage iterative workflow with Design Lead, UX Researcher, Visual Designer, Prototype Engineer, and others.</span></div>
+    <div class="variant-row"><span class="variant-name">co-work</span><span>For general collaboration/document work. A 6-stage asynchronous workflow with Analyst, Technical Writer, Content Writer, and others.</span></div>
+    <div class="variant-row"><span class="variant-name">co-security</span><span>For red-team/penetration testing. A 6-stage pipeline with Red Team Lead, Pentester, Threat Modeler, and others.</span></div>
+    <div class="variant-row"><span class="variant-name">co-consult</span><span>For strategy consulting. A 7-stage (Phase 0–6) workflow led by a PM (Engagement Leader), composed of 10 specialist agents including Strategy Analyst, Change Management Partner, Industry Expert, and SME. It covers the entire consulting project lifecycle — market analysis → organizational diagnosis → cross-validation (Phase 1.5) → proposal approval gate (Phase 2) → practical solution design → delivery → PR/handoff.</span></div>
+    <div class="variant-row"><span class="variant-name">co-deck <span class="badge" >beta</span></span><span>For producing lecture and presentation materials. An 11-stage (Stage 0–11) pipeline led by a PM. It automates the entire process from research to a print-ready PDF: Research → Source Verifier (credibility verification) → Storyline → Design → Image Curation + Diagram Generation (parallel) → HTML Build → Layout Measure → PDF Export. Supports 5 themes (outline, pitch, pitch-enhanced, vertical, zen) and 5 styles (premium-dark, classic, minimal, visual-heavy, academic).</span></div>
+    <div class="variant-row"><span class="variant-name">co-game <span class="badge" >beta</span></span><span>For HTML5 Canvas game development.</span></div>
+  </div>
+
+  <p>Each variant is versioned with the git tag <code>template-vX.Y.Z</code>, and <code>bun scripts/validate-templates.ts</code> checks structural compliance — the completeness of agent frontmatter, required sections, consistency with the AGENTS.md roster, and platform parity between <code>.claude/</code> and <code>.gemini/</code>.</p>
+  <p>As the name <code>templates/</code> suggests, what this repository ultimately ships is <strong>boilerplate</strong> — a starting point that already has the PM role definitions, governance pipeline, and platform-specific command/skill wiring you'd otherwise have to write from scratch for every project. But unlike the usual "copy it and everyone tweaks it themselves" boilerplate, this repository explicitly lays out, as a layered structure, <em>where that starting point came from and how it gets updated</em>. That's the L0 → L1 → L2 model covered in the next section.</p>
+  <p>One of the things this boilerplate has already set up in advance is <strong>model assignment per agent role</strong>. Each agent definition file (<code>agents/*.md</code>) inside a variant has a <code>tier</code> field in its frontmatter, and this value assigns <code>high</code>/<code>medium</code>/<code>low</code> per platform (<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>). Roles requiring heavy judgment (PM, Architect) get <code>high</code>, roles handling actual implementation (code-writer, docs-writer) get <code>medium</code>, and standardized repetitive tasks (automation-engineer, etc.) get <code>low</code>. The actual <code>model</code> field is usually left as <code>inherit</code>, because each platform translates this tier value into its own model alias (<code>opus</code>/<code>sonnet</code>/<code>haiku</code>) at deployment time. In other words, the moment you clone the boilerplate, a new project already starts with "who works using which cost tier of model" already decided.</p>
+  <p>What actually goes wrong without this tiering? If every agent were uniformly assigned to the highest-performance model (high), even a role like automation-engineer that only repeats standardized script execution would incur unnecessarily expensive inference costs every time, making the whole team's operating cost pointlessly large. Conversely, if everything were unified onto the lowest-cost model (low), a role like PM — which needs to synthesize the output of multiple agents and make judgment calls — would frequently make poor coordination decisions from only shallow reasoning. Tiering is a mechanism that pre-balances cost and quality per role, matched to "how much depth of reasoning this role actually needs."</p>
+  <div class="note">This <strong>model cost tier (high/medium/low)</strong> shares only the "three-tier" feel of its name with the <strong>L0 → L1 → L2 3-tier</strong> (the layering of where files come from and how they flow) covered in Chapter 8 — they are otherwise different concepts. One is "which model to assign to an agent," and the other is "where the original of a file lives."</div>
+
+  <h2 id="s4">Session-start checklist and scaffolding</h2>
+  <p>CONSTITUTION.md defines the order every session must follow at startup. First, set the git hooks path with <code>git config core.hooksPath .githooks</code>, then read CONSTITUTION.md itself, then read the <code>docs/context.md</code> of the project you're working on. Next, check AGENTS.md for the available agents, check whether context from a previous session remains in <code>memory/MEMORY.md</code>, and finally load whatever skills docs/context.md specifies.</p>
+  <p>The flow for creating a new project is conceptually simple. Run the <code>bun scripts/new-project.ts</code> script with a project name and the desired variant, and the entire configuration of that variant is cloned into a fully independent git repository. This repository is separate from the workspace root, but it starts out having already inherited CONSTITUTION.md's shared standards from birth. The team then evolves the team by filling in the project's own <code>docs/context.md</code> and any project-level CLAUDE.md/GEMINI.md overrides. The exact syntax and options for this command are practiced hands-on in Chapter 6 §1.</p>
+
+  <div class="note">
+    <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+        <marker id="arrow2g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+        <marker id="arrow2p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+      </defs>
+      <!-- Box 1: L0 workspace root (blue) -->
+      <rect x="5" y="25" width="160" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="85" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3b82f6">L0 Workspace Root</text>
+      <text x="85" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#6b7280">C:\git\</text>
+      <!-- Arrow 1 with label -->
+      <line x1="165" y1="43" x2="235" y2="43" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrow2)"/>
+      <text x="200" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6" font-weight="600">new-project.ts</text>
+      <!-- Box 2: L2 template (green) -->
+      <rect x="240" y="25" width="180" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="330" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#22c55e">templates/co-consult/</text>
+      <text x="330" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">L2 template clone</text>
+      <!-- Small text below Box 2 -->
+      <text x="330" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#6b7280">Includes AGENTS.md · CONSTITUTION.md · agents/</text>
+      <!-- Arrow 2 with label -->
+      <line x1="420" y1="43" x2="490" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow2p)"/>
+      <text x="455" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#8b5cf6" font-weight="600">independent git init</text>
+      <!-- Box 3: Projects/my-project/ (purple) -->
+      <rect x="495" y="25" width="180" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#8b5cf6">Projects/my-project/</text>
+      <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">independent repository</text>
+    </svg>
+  </div>
+
+  <p>It's worth clarifying the relationship between CONSTITUTION.md and context.md here. Both are documents read during the "session-start checklist," but they sit at different layers of the SSOT hierarchy. <code>CONSTITUTION.md</code> exists exactly once, at L0 (the workspace root), and defines rules shared by <em>every</em> project — governance, PR workflow, and multi-agent principles are all here. <code>context.md</code>, by contrast, exists separately for each L2 (individual project), and is the <strong>project-specific SSOT</strong> that holds that project's own goals, domain knowledge, and current progress. The difference is that CONSTITUTION.md isn't a file that's filled in by mandate from above — it's a file each project team writes for itself. That's why the checklist has an order: first confirm "what must be followed (shared)" via CONSTITUTION.md, then confirm "what this project is doing right now (individual)" via context.md.</p>
+  <p>Note, however, that a file with the same name also exists inside each variant, at <code>templates/&lt;variant&gt;/docs/context.md</code>. This shares only its name with an L2 project's context.md — its role is different. The context.md inside a variant is still an unfilled empty skeleton (a placeholder), and the moment <code>new-project.ts</code> runs, it is cloned exactly once, just like the other L1→L2 files. Once cloned, its connection to the original (the variant's context.md) is completely severed, and it becomes an independent document that the project team fills in with real content going forward. So even if the variant's context.md skeleton changes later, it is not automatically reflected into the context.md of a project that has already been scaffolded.</p>
+
+  <div class="note">Files at the workspace root (CONSTITUTION.md, CLAUDE.md, etc.) and files in individual scaffolded projects belong to separate git repositories. It is a core principle of this repository that the two are never modified together in the same piece of work.</div>
+
+  <div class="chapter-nav">
+    <a href="../practice/04_Practice_Manual_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Chapter 4 · Using a Harness-Based Multi-Agent Team</div></a>
+    <a href="../variant-practice/06_VariantPractice_Manual_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Chapter 6 · Working with an Existing Variant</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

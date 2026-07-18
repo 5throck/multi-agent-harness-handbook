@@ -62,7 +62,7 @@
     <li><strong>自律的な振る舞い：</strong>単一プロンプトに対する単一応答ではなく、エージェントは目標を達成するために複数のステップを自律的に実行できます。条件による分岐、エラー時のリトライ、結果の検証を自ら判断します。</li>
   </ul>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -123,7 +123,7 @@
   <p>ハーネスエンジニアリングは突然現れたものではありません。AIへのアプローチにおいて3つの段階が積み重なった結果です。各段階は前の段階を置き換えるものではなく、「前の段階だけでは不十分」と判明した後に、その上に重ねられました。</p>
   <p>料理の例えで3つの段階を理解するのが簡単です。プロンプトエンジニアリングは「料理人にどう注文の言葉を伝えるか」、コンテキストエンジニアリングは「料理人にどんな食材とレシピを渡すか」、ハーネスエンジニアリングは「厨房そのもの — 検査手順、道具、衛生ルール — が毎回同じ品質を生み出すシステムを構築する」です。注文の言葉がどれほど上手でも、食材がどれほど良くても、厨房システムそのものが杜撰なら、結果は毎回不一致になります。</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -170,7 +170,7 @@
   <h2 id="architecture-diagram">ハーネスの全体アーキテクチャ図</h2>
   <p>ハーネスエンジニアリングは、モデルとユーザーの間に位置する5層構造として捉えることができます。以下の図は、本ハンドブック全体を貫くアーキテクチャを一望できるものです — <a href="#s1">次節</a>で、この5層の各層がどの章で扱われるかを対応付けます。</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
   <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
@@ -249,7 +249,7 @@
       <text x="20" y="371" font-size="10" font-weight="700" fill="#cf222e">Runtime</text>
     </g>
   </svg>
-  <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">図2-1. ハーネスエンジニアリングの5層構造 — ワークスペースからモデルまで、本ハンドブック全体を貫くアーキテクチャ</p>
+  <p class="fig-caption">図2-1. ハーネスエンジニアリングの5層構造 — ワークスペースからモデルまで、本ハンドブック全体を貫くアーキテクチャ</p>
   </div>
 
   <h2 id="s1">ハーネスエンジニアリングとは</h2>
@@ -261,7 +261,7 @@
 
   <h2 id="s2">単一エージェントの限界</h2>
   <p>すべての役割を単一エージェントに割り当てるのは最初は便利ですが、作業がスケールするにつれて3つの問題が顕在化します。第一に、コンテキストの過負荷：設計レビュー、コード執筆、テスト、ドキュメント作成をすべて1つのセッション内で順次処理すると、作業が進むにつれて初期のステップの詳細が薄れ、結果の一貫性が低下します。第二に、役割の衝突：自分のコードを自分でレビューするエージェントは、自分が書いた欠陥を見逃します — 著者とレビュアーが同じ人である場合と同じ問題です。第三に、並列性の欠如：独立したサブタスク（複数ファイルのリファクタリング、複数の視点からのレビューなど）であっても、単一エージェントが順次処理する必要があるため、合計時間が線形に増大します。</p>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Task blocks -->
@@ -296,7 +296,7 @@
   <h2 id="s3">マルチエージェントチームの構成要素</h2>
   <p>マルチエージェントチームは3つの主要な要素で構成されます。</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -330,7 +330,7 @@
         <text x="520" y="211" text-anchor="middle" font-size="10.5" fill="#116329">Testing</text>
       </g>
     </svg>
-    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">基本構造：オーケストレーターが作業を分割し、ハンドオフ契約を通じてスペシャリストに振り分ける（§4bで解説するように、スペシャリストの構成はタスクごとに動的に変化する）</p>
+    <p class="fig-caption">基本構造：オーケストレーターが作業を分割し、ハンドオフ契約を通じてスペシャリストに振り分ける（§4bで解説するように、スペシャリストの構成はタスクごとに動的に変化する）</p>
   </div>
 
   <h3>オーケストレーター</h3>
@@ -488,7 +488,7 @@
   </ul>
   <div class="note">5つのパターンは、単独で使われるよりも組み合わせて使われることが多いです — ルーティングがプロンプトチェーンの最初のステップに繋がったり、オーケストレーター・ワーカーが各ワーカーの作業単位内に評価者・最適化を埋め込んだり、並列化が別のパターンの途中に割り込んだりします。§4bでこの組み合わせの具体例を解説します。</div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -548,7 +548,7 @@
         <text x="440" y="80" font-size="9" fill="#cf222e" transform="rotate(-90 440 80)">Reject</text>
       </g>
     </svg>
-    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">5パターンのうち3つを可視化：パイプライン、ファンアウト、検証後適用。ルーティングとオーケストレーター・ワーカーを含む全リストは本文を参照。パターンは互いの代替ではなく、組み合わせるためのツールボックスです。</p>
+    <p class="fig-caption">5パターンのうち3つを可視化：パイプライン、ファンアウト、検証後適用。ルーティングとオーケストレーター・ワーカーを含む全リストは本文を参照。パターンは互いの代替ではなく、組み合わせるためのツールボックスです。</p>
   </div>
 
   <h3>失敗時の対応 — リトライ、ロールバック、エスカレーション</h3>
@@ -565,7 +565,7 @@
 
   <h3>チーム編成は固定ではない</h3>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Left: Static team -->
@@ -629,7 +629,7 @@
   <p>同じ内容（例：「常に<code>npm test</code>でテストを実行し、<code>src/legacy/</code>フォルダは変更しない」）をチームが使うツールごとに（CLAUDE.md、.cursorrules、copilot-instructions.md...）コピーすると、ルール変更のたびにすべてのファイルを見つけて編集する必要があり、一つでも見落とせばそのツールを使う人は別のルールの下で作業することになります。これは、同じ契約を複数の言語に別々に翻訳して保持し、一部だけが修正されたときに版が食い違うのと同じ問題です。</p>
   <p><strong>AGENTS.md</strong>は、この問題を解決するために2025年8月にOpenAI主導でGoogle、Cursor、Factoryなどの参加を得て作成されたオープン規格で、2025年12月にはLinux Foundation傘下のAgentic AI Foundationに寄贈されました。リポジトリのルートに単一のAGENTS.mdを配置するだけで、Codex、Claude Code（インポート経由）、GitHub Copilot、Cursor、Google Jules、Antigravityファミリーなど30以上のツールがセッション開始時にこれを読み取り、ビルド/テストコマンド、コードスタイル、アクセス禁止領域などの共通ルールを共有できます。</p>
   <p>本ハンドブックが「4つのツールすべてをサポートする」と強調し続けている理由も、まさに同じ問題意識に由来します。チームがClaude Appを使ってもAntigravity Desktopを使っても、共通ルールをリポジトリルート（AGENTS.md）に置き、ツール固有の詳細設定（<code>CLAUDE.md</code>、<code>GEMINI.md</code>など）と分離しておけば、ツールを切り替えたり混用したりしてもハーネス自体は安定します。第5章で検討するai-workspace-standardsリポジトリは、この原理の実際の実装です。ルートの<code>AGENTS.md</code>ファイルがワークスペース内のすべてのエージェントの単一の信頼できる情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>や<code>.gemini/</code>と並んで、エンジンに依存しないコマンドとスキルを保持します。</p>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div class="diagram-frame">
     <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -675,7 +675,7 @@
 
       </g>
     </svg>
-    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">AGENTS.mdが共有仕様（SSOT）として機能し、ツール固有ファイルは各ツールでの実行方法だけを追加する — 重複を減らす階層的分離</p>
+    <p class="fig-caption">AGENTS.mdが共有仕様（SSOT）として機能し、ツール固有ファイルは各ツールでの実行方法だけを追加する — 重複を減らす階層的分離</p>
   </div>
 
   <div class="note">AGENTS.mdはツールに依存しない形で「何を守るべきか」を定義し、CLAUDE.md/GEMINI.mdなどのツール固有ファイルは「この特定のツールでそれをどう実行するか」だけを追加的に定義します。重複を減らす階層的分離です。</div>

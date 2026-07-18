@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<!--
+  チャプター(叙述型)テンプレート — 実習を伴わない「読み物」トピック向け。読みやすい幅(720px)・ゆったりした行間・章移動導線。
+  Manual(リファレンス)/Examples(実習)と異なり、バージョンボックスやコード強調ではなく本文の流れを中心に構成する。
+  編集箇所: (1) <title>/章番号/タイトル/リード  (2) nav(この章の節+他の章)  (3) 「この章で扱うこと」
+            (4) <h2 id>/<h3> 節と本文  (5) 前/次の章へのリンク
+  {{二重波括弧}}・[説明: ...] を実際の内容で埋める。リンクはすべて相対パス。
+  色はデザイントークンのみを使用 — テーマは配布時に references/apply-theme.sh が docs/ のブランドカラーを置換する。
+  検索インデックスの前提: 本文の節は必ず <h2 id="..."> (必要に応じて <h3>) 構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第5章 · ai-workspace-standards 紹介 - マルチエージェントチーム・ハーネスエンジニアリングハンドブック資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第5章 · ai-workspace-standards 紹介</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第5章 · ai-workspace-standards 紹介</div>
+  <a href="#s1">リポジトリとは何か</a>
+  <a href="#s1b">全体アーキテクチャを俯瞰する</a>
+  <a href="#s2">4つの中核ファイル</a>
+  <a href="#s3">templatesと7種のvariant</a>
+  <a href="#s4">セッション開始チェックリストとスキャフォールディング</a>
+  <div class="nav-section">他の章</div>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章 · ガードレールと権限モデル</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_ja.html">第8章 · アーキテクチャ深掘り</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第5章</div>
+  <h1>ai-workspace-standards 紹介</h1>
+  <p class="lead">第7章で見る「開発ツール + variant」モデルを実際に実装したリポジトリがai-workspace-standardsである。本章では、このリポジトリが正確には何であり、どのようなファイルで構成され、どのようなプロジェクトテンプレートを提供するのかを順を追って紹介する。</p>
+  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/adr/0031-l1-l2-fork-model.md" target="_blank">ADR-0031 L1–L2 Fork Model</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/constitution/00-ssot-architecture.md" target="_blank">CONSTITUTION.md §0 SSOT Architecture</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">この章で扱うこと</div>
+    <ul>
+      <li>ai-workspace-standardsとは何か、なぜ「ワークスペースルート」としてクローンすべきなのか</li>
+      <li>リポジトリ全体のディレクトリ構造と、セッションが実際にどの順序でファイルを読み込み実行するか(ランタイムフロー)</li>
+      <li>CONSTITUTION.md、CLAUDE.md、GEMINI.md、AGENTS.md、4つの中核ファイルの役割</li>
+      <li>templates/配下にある7種のvariantがそれぞれどのドメイン向けなのか</li>
+      <li>セッション開始チェックリストとnew-project.tsのスキャフォールディングフローの概念図</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">リポジトリとは何か</h2>
+  <p>ai-workspace-standardsは自らを「Vibe CodingとHarness Engineeringのためのマルチエージェントチーム運用方式」と紹介している。複数のAIコーディングツール(Claude Code/App、Antigravity CLI/Desktopなど)にわたって、同一の動作・ワークフロー・品質基準を適用するためのリポジトリである。</p>
+  <p>このリポジトリの使い方は少し独特だ。通常のライブラリのように1つのプロジェクトに従属させるのではなく、リポジトリ自体をワークスペースのルートとしてクローンして使う。Windowsでは<code>C:\git</code>、macOS/Linuxでは<code>~/git</code>のような場所がその例である。こうしておくことで、その配下に新規作成するすべてのプロジェクトが、ワークスペースの共有ルールを自動的に継承する。</p>
+
+  <div class="pullquote">ai-workspace-standardsは「完成したプロジェクト」ではなく「プロジェクトの作り方」を配布するリポジトリである。
+    <span class="by">— ワークスペースルートとしてクローンする理由</span></div>
+
+  <h2 id="s1b">全体アーキテクチャを俯瞰する</h2>
+  <p>以降の節で4つの中核ファイル、variant、L0→L1→L2を1つずつ掘り下げる前に、これらの要素が実際にリポジトリのどこにどのような名前で配置されているかをまず全体として把握しておくと、方向を見失わずに済む。ワークスペースルートをクローンすると、次のような最上位構造が得られる。</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">C:\git\  (ワークスペースルート = L0)
+├── CONSTITUTION.md          ← §2: 何を守るべきか (マスター標準、L0原本)
+├── CLAUDE.md                ← §2: Claude Code/Appでどう実行するか
+├── GEMINI.md                ← §2: Antigravity CLI/Desktopでどう実行するか
+├── AGENTS.md                ← §2: 誰がその作業を行うか (エージェントロスター、L0原本)
+├── agents/                  ← §5: pm.mdなどエージェント定義の原本 (L0、ここでのみ編集)
+│   └── pm.md
+├── .claude/                 ← §2: Claude専用のコマンド・スキル (/sync、create-variantなど)
+├── .gemini/                 ← §2: Antigravity専用のコマンド・スキル (同名で実装が異なる)
+├── .agents/                 ← §2: ツール非依存のコマンド・スキル (AGENTS.md標準対応ツール向け)
+├── scripts/                 ← §4·§5: new-project.ts、publish-to-template.tsなどの運用スクリプト
+├── templates/                (L1 + 公式L2)
+│   ├── common/              ← §5: L1 — L0のスナップショット、variant作成時の出発点
+│   │   └── agents/pm.md     ← extends: ../../../agents/pm.md (L0参照 + ワークスペース専用セクションを除去)
+│   ├── co-develop/          ← §3: L2公式variant (ソフトウェア開発、6段階)
+│   ├── co-design/           ← §3: L2公式variant (UI/UX、5段階)
+│   ├── co-work/             ← §3: L2公式variant (協業/ドキュメント、6段階)
+│   ├── co-security/         ← §3: L2公式variant (レッドチーム、6段階)
+│   ├── co-consult/          ← §3: L2公式variant (コンサルティング、7段階)
+│   ├── co-deck/   [beta]    ← §3: L2公式variant (講義/プレゼン、11段階)
+│   └── co-game/   [beta]    ← §3: L2公式variant (ゲーム開発)
+├── Projects/                 (稼働中のL2 — new-project.tsでスキャフォールディングされた実プロジェクト)
+│   └── &lt;my-project&gt;/
+│       ├── docs/context.md  ← §4: このプロジェクト専用のSSOT (variantの空の骨格を埋めたもの)
+│       ├── agents/          ← variantから継承し、このプロジェクト専用として進化を続ける
+│       └── (独立したgitリポジトリ — ワークスペースルートとは別)
+└── memory/
+    └── MEMORY.md            ← §4: セッション間で引き継がれるコンテキスト記録</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  </div>
+
+  <p>このツリーで注目すべきは、3つの層が実際のディレクトリ構造としてそのまま現れている点である。ルート直下(CONSTITUTION.md・CLAUDE.md・GEMINI.md・AGENTS.md・<code>agents/</code>・<code>scripts/</code>)がL0であり、<code>templates/common/</code>がL1、<code>templates/co-*/</code>と<code>Projects/*/</code>がL2である。つまり「L0→L1→L2」は抽象的な概念図ではなく、クローンしたフォルダで<code>ls</code>を一度打つだけで見える物理的な配置なのである。</p>
+
+  <p>この構造の上で実際に作業が進行する順序(ランタイムフロー)は次のとおりである。</p>
+  <ol style="margin:0 0 16px 22px;line-height:2;">
+    <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md → AGENTS.md → memory/MEMORY.mdの順に読み込む(§4で扱う)。</li>
+    <li><strong>ツール別の実行規則を適用。</strong> Claude Code/AppであればCLAUDE.mdと<code>.claude/</code>が、Antigravity系であればGEMINI.mdと<code>.gemini/</code>が詳細な実行方式を定める。</li>
+    <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。</li>
+    <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/publish-to-template.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2(Projects/*、templates/co-*)には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
+  </ol>
+  <div class="note">一言で言えば: <strong>L0は「ルート直下」、L1は「templates/common/」、L2は「templates/co-*/とProjects/*/」</strong> — この3つの座標さえ覚えておけば、以降の節のすべての説明を実際のフォルダ位置に対応させながら追うことができる。</div>
+
+  <h2 id="s2">4つの中核ファイル</h2>
+  <p>ワークスペースルートには、すべてのプロジェクトが共通して参照する4つの中核ファイルがある。</p>
+  <p><code>CONSTITUTION.md</code>はマスター共有標準であり、セッション開始時に最初に読むべき文書である。ワークスペース全体のガバナンスルール、PRワークフロー、マルチエージェントアーキテクチャの原則がここに定義されている。<code>CLAUDE.md</code>はClaude Code/Appでの具体的な動作方式(フック、スラッシュコマンド、エージェントディスパッチ規則)を、<code>GEMINI.md</code>はAntigravity CLI/Desktopでの同等の動作を定義する。<code>AGENTS.md</code>はワークスペース全体で利用可能なエージェント群の正本目録(ロスター)としての役割を果たす。このファイル名は、第2章で紹介したClaude Codeをはじめとする30以上のツールが共通して読み込む開放型AGENTS.md標準と同じである。ただしこのリポジトリでは、「エージェントレジストリ兼オーケストレーションリファレンス」というより具体的な役割まで兼ねている。ファイルの冒頭に「このファイルはAIツールへの指示文ではなく、人間が定義した複数の役割の登録簿である」と明記されているほどだ。</p>
+  <p>この4つのファイルの関係を一文でまとめると、CONSTITUTION.mdが「何を守るべきか」を定義し、CLAUDE.md/GEMINI.mdは「それを各プラットフォームでどう実行するか」を、AGENTS.mdは「誰がその作業を行うか」を定義している。</p>
+
+  <p>AGENTS.mdのエージェント項目は次のようなフィールドで構成される。<strong>具体的な作成ガイドとツール別の実装マッピングは第8章§3 AGENTS.md深掘りで扱う。</strong></p>
+  <table>
+    <thead><tr><th>フィールド</th><th>意味</th><th>必須</th><th>例</th></tr></thead>
+    <tbody>
+      <tr><td><code>## Agent: {名前}</code></td><td>エージェント識別子</td><td>必須</td><td><code>## Agent: reviewer</code></td></tr>
+      <tr><td><code>役割</code></td><td>このエージェントが何をするか</td><td>必須</td><td>「テキストファイルの誤字脱字をレビューする」</td></tr>
+      <tr><td><code>入力</code></td><td>どのような入力を受け取るか</td><td>推奨</td><td>「レビュー対象のテキストファイルパス」</td></tr>
+      <tr><td><code>出力</code></td><td>どのような出力を出すか</td><td>推奨</td><td>「誤字脱字・不備・改善点のリスト」</td></tr>
+      <tr><td><code>権限</code></td><td>ファイルアクセス範囲</td><td>推奨</td><td>「読み取り専用」/「書き込み許可 — 指定ファイルのみ」</td></tr>
+      <tr><td><code>handoff_to</code></td><td>完了後に引き継ぐ対象</td><td>任意</td><td><code>handoff_to: reviewer</code></td></tr>
+    </tbody>
+  </table>
+  <p>具体的な規則を1つ例にとって、この関係をたどってみよう。「PRのタイトルと本文は必ず英語で書く」という規則があるとすると、この規則自体は<code>CONSTITUTION.md</code>に一度だけ記載される。<code>CLAUDE.md</code>はこの規則をClaude Codeで<em>どのように</em>強制するかを定義する。例えば、<code>/sync</code>コマンドの言語ゲート(language-guard.ts)がコミット前にこの規則を自動的にチェックするよう明示する形だ。<code>GEMINI.md</code>は同じ規則をAntigravity側のパイプラインで強制する方法を定義する。そして、この検査を実際に実行するのが「誰」なのか、すなわちどのエージェントがこのゲートを担当するのかは<code>AGENTS.md</code>のロスターに登録されている。1つの規則が4つのファイルにそれぞれ異なる角度で現れるわけだ。これは重複ではなく、「何を・どのように・誰が」という3つの問いに対するそれぞれ異なる答えである。</p>
+  <p>4つのファイルの下には、実行可能な資産を格納するフォルダがある。コマンド・スキルは3か所に分かれており、<code>.claude/</code>はClaude Code/App専用、<code>.gemini/</code>はAntigravity CLI/Desktop専用、そして<code>.agents/</code>はどれか1つのツールに縛られない<strong>ツール非依存(engine-agnostic)</strong>のコマンド・スキルを格納する。例えば<code>/sync</code>・<code>/meeting</code>のようなスラッシュコマンドや<code>create-variant</code>・<code>audit-workspace</code>のようなスキルは3つのフォルダすべてに同じ名前で存在するが、それぞれ自プラットフォームのツール規則(Claude Codeの<code>Agent</code>ツール構文、Antigravityのサブエージェント方式など)に合わせて実装が少しずつ異なる。AGENTS.md標準に対応する外部ツール(Codex、Cursorなど)がこのリポジトリを開くと、<code>.agents/</code>フォルダを参照することになる。</p>
+
+  <h2 id="s3">templatesと7種のvariant</h2>
+  <p><code>templates/</code>ディレクトリは、バージョン管理されたプロジェクトテンプレート「variant」の集合である。各バリアント(variant)は特定のドメイン向けの完結したマルチエージェントチーム構成を持つ。PM、専門エージェント群、段階的なガバナンスパイプラインがここに含まれる。リポジトリが提供するバリアント(variant)は次のとおりである。</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">co-develop</span><span>ソフトウェア開発向け。PM・Architect・Designer・Code Writer・Test Runner・Security Monitorで構成される6段階のガバナンスパイプライン。</span></div>
+    <div class="variant-row"><span class="variant-name">co-design</span><span>UI/UX向け。Design Lead・UX Researcher・Visual Designer・Prototype Engineerなどによる5段階の反復ワークフロー。</span></div>
+    <div class="variant-row"><span class="variant-name">co-work</span><span>一般的な協業/ドキュメント作業向け。Analyst・Technical Writer・Content Writerなどによる6段階の非同期ワークフロー。</span></div>
+    <div class="variant-row"><span class="variant-name">co-security</span><span>レッドチーム/ペネトレーションテスト向け。Red Team Lead・Pentester・Threat Modelerなどによる6段階のパイプライン。</span></div>
+    <div class="variant-row"><span class="variant-name">co-consult</span><span>戦略コンサルティング向け。PM(Engagement Leader)が指揮する7段階(Phase 0〜6)のワークフロー。Strategy Analyst・Change Management Partner・Industry Expert・SMEなど10名の専門エージェントで構成される。市場分析 → 組織診断 → 相互検証(Phase 1.5) → 提案承認ゲート(Phase 2) → 実務ソリューション設計 → 納品 → PR/引き渡しまで、コンサルティングプロジェクトの全工程を扱う。</span></div>
+    <div class="variant-row"><span class="variant-name">co-deck <span class="badge" >beta</span></span><span>講義・プレゼン資料制作向け。PMが指揮する11段階(Stage 0〜11)のパイプライン。Research → Source Verifier(信頼性検証) → Storyline → Design → Image Curation + Diagram Generation(並列) → HTML Build → Layout Measure → PDF Exportまで、リサーチから印刷用PDF出力までの全工程を自動化する。5種のテーマ(outline、pitch、pitch-enhanced、vertical、zen)と5種のスタイル(premium-dark、classic、minimal、visual-heavy、academic)をサポートする。</span></div>
+    <div class="variant-row"><span class="variant-name">co-game <span class="badge" >beta</span></span><span>HTML5 Canvasゲーム開発向け。</span></div>
+  </div>
+
+  <p>各バリアント(variant)はgitタグ<code>template-vX.Y.Z</code>でバージョン管理され、<code>bun scripts/validate-templates.ts</code>がエージェントfrontmatterの完全性、必須セクション、AGENTS.mdロスターとの整合性、<code>.claude/</code>・<code>.gemini/</code>間のプラットフォームパリティなど、構造的な規定遵守を検査する。</p>
+  <p><code>templates/</code>という名前が示すとおり、このリポジトリが配布するものは結局のところ<strong>ボイラープレート(boilerplate)</strong>である。プロジェクトごとに毎回一から書き直す必要があったPMの役割定義、ガバナンスパイプライン、プラットフォーム別のコマンド・スキル配線をあらかじめ備えた出発点である。ただし「コピーして各自で勝手に直す」ありふれたボイラープレートとは異なり、このリポジトリはその出発点が<em>どこから来て、どのように更新されるか</em>まで階層構造として明示する。それが次節のL0 → L1 → L2である。</p>
+  <p>このボイラープレートがあらかじめ備えているものの1つが<strong>エージェントの役割別モデル割り当て</strong>である。variant内の各エージェント定義ファイル(<code>agents/*.md</code>)はfrontmatterに<code>tier</code>フィールドを持ち、この値はプラットフォーム別(<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>)に<code>high</code>/<code>medium</code>/<code>low</code>のいずれかを指定する。判断が重い役割(PM・Architect)にはhigh、実際の実装を担当する役割(code-writer・docs-writer)にはmedium、定型化された反復作業(automation-engineerなど)にはlowを割り当てる形だ。実際の<code>model</code>フィールドは通常<code>inherit</code>のまま残されるが、これは各プラットフォームが配布時点でこのtier値を自プラットフォームのモデルエイリアス(<code>opus</code>/<code>sonnet</code>/<code>haiku</code>)に変換して割り当てるためである。つまりボイラープレートを複製した瞬間、新しいプロジェクトは「誰がどのコストのモデルで働くか」まですでに決まった状態で始まる。</p>
+  <p>このティアリングがないと実際にどのような問題が生じるか。すべてのエージェントを画一的に最高性能モデル(high)に割り当てると、automation-engineerのように定型化されたスクリプト実行のみを繰り返す役割にも毎回不必要に高コストな推論コストがかかり、チーム全体の運用コストが無意味に膨らむ。逆に、すべてを最低コストモデル(low)に統一すると、PMのように複数のエージェントの成果物を総合して判断すべき役割が浅い推論しかできず、誤った調整判断を下すことが頻発する。ティアリングは「この役割が実際にどれだけ深い推論を必要とするか」に合わせて、コストと品質のバランスを役割単位であらかじめ整えておく仕組みである。</p>
+  <div class="note">この<strong>モデルコストティア(high/medium/low)</strong>は、第8章で扱う<strong>L0 → L1 → L2の3層</strong>(ファイルがどこから来て、どのように流れるかについての階層)と、名前の「3段」という感覚が同じだけで、互いに異なる概念である。一方は「エージェントにどのモデルを割り当てるか」であり、もう一方は「ファイルの原本がどこにあるか」である。</div>
+
+  <h2 id="s4">セッション開始チェックリストとスキャフォールディング</h2>
+  <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>を読む。続いてAGENTS.mdで利用可能なエージェントを確認し、<code>memory/MEMORY.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
+  <p>新規プロジェクトを作成する流れは概念的には単純である。<code>bun scripts/new-project.ts</code>スクリプトにプロジェクト名と希望するバリアント(variant)を指定して実行すると、そのバリアント(variant)の構成全体が複製され、完全に独立したgitリポジトリになる。このリポジトリはワークスペースルートとは分離されているが、生まれた時点からCONSTITUTION.mdの共有標準を継承した状態で始まる。チームはその中で、プロジェクト固有の<code>docs/context.md</code>とプロジェクトレベルのCLAUDE.md/GEMINI.mdオーバーライドを埋めながらチームを発展させていく。このコマンドの正確な構文とオプションは第6章§1で実際に実習する。</p>
+
+  <div class="note">
+    <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+        <marker id="arrow2g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+        <marker id="arrow2p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+      </defs>
+      <!-- Box 1: L0 workspace root (blue) -->
+      <rect x="5" y="25" width="160" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="85" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3b82f6">L0 ワークスペースルート</text>
+      <text x="85" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#6b7280">C:\git\</text>
+      <!-- Arrow 1 with label -->
+      <line x1="165" y1="43" x2="235" y2="43" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrow2)"/>
+      <text x="200" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6" font-weight="600">new-project.ts</text>
+      <!-- Box 2: L2 template (green) -->
+      <rect x="240" y="25" width="180" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="330" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#22c55e">templates/co-consult/</text>
+      <text x="330" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">L2テンプレート複製</text>
+      <!-- Small text below Box 2 -->
+      <text x="330" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#6b7280">AGENTS.md · CONSTITUTION.md · agents/ を含む</text>
+      <!-- Arrow 2 with label -->
+      <line x1="420" y1="43" x2="490" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow2p)"/>
+      <text x="455" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#8b5cf6" font-weight="600">独立git初期化</text>
+      <!-- Box 3: Projects/my-project/ (purple) -->
+      <rect x="495" y="25" width="180" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#8b5cf6">Projects/my-project/</text>
+      <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">独立リポジトリ</text>
+    </svg>
+  </div>
+
+  <p>ここでCONSTITUTION.mdとcontext.mdの関係を明確にしておく必要がある。両方とも「セッション開始チェックリスト」で読む文書だが、SSOTの階層が異なる。<code>CONSTITUTION.md</code>はL0(ワークスペースルート)にただ1つだけ存在し、<em>すべての</em>プロジェクトが共有するルールを定義する。ガバナンス、PRワークフロー、マルチエージェントの原則がここに含まれる。一方、<code>context.md</code>はL2(個別プロジェクト)ごとに別々に存在し、そのプロジェクト固有の目標・ドメイン知識・現在の進捗状況を格納する<strong>プロジェクト専用のSSOT</strong>である。CONSTITUTION.mdが上から強制されて埋められるファイルではなく、各プロジェクトチームが自ら書き進めていくファイルである点が異なる。だからチェックリストにも順序がある。CONSTITUTION.mdで「何を守るべきか(共通)」をまず確認した後、context.mdで「今このプロジェクトが何をしているか(個別)」を確認する。</p>
+  <p>ところで、<code>templates/&lt;variant&gt;/docs/context.md</code>のように、variantの中にも同じ名前のファイルがある。これはL2プロジェクトのcontext.mdと名前だけが同じで役割は異なる。variant内のcontext.mdはまだ埋められていない空の骨格(プレースホルダー)であり、<code>new-project.ts</code>が実行される瞬間、他のL1→L2ファイルと同様に一度だけ複製される。複製された後は、原本(バリアント(variant)のcontext.md)との連結が完全に切れ、そのプロジェクトチームが実際の内容で埋めていく独立した文書になる。そのため、以降にバリアント(variant)のcontext.mdの骨格が変わっても、すでにスキャフォールディングされたプロジェクトのcontext.mdには自動的には反映されない。</p>
+
+  <div class="note">ワークスペースルートのファイル(CONSTITUTION.md、CLAUDE.mdなど)と、スキャフォールディングされた個別プロジェクトのファイルは、それぞれ別のgitリポジトリに属する。両者を同じ作業の中で一緒に修正しないことが、このリポジトリの基本原則である。</div>
+
+  <div class="chapter-nav">
+    <a href="../practice/04_Practice_Manual_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第4章 · ハーネスベースのマルチエージェントチーム活用</div></a>
+    <a href="../variant-practice/06_VariantPractice_Manual_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第6章 · 既存variantの活用</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

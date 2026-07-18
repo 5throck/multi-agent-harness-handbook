@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="FAQ · Common Errors and Fixes · Multi-Agent Harness Engineering Handbook - reference material for the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ · Common Errors and Fixes · Multi-Agent Harness Engineering Handbook</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">FAQ · Troubleshooting</div>
+  <a href="#setup">Setup & Environment</a>
+  <a href="#subagent">Subagent Execution</a>
+  <a href="#parallel">Parallel & Team Collaboration</a>
+  <a href="#workspace">Workspace / Variant</a>
+  <a href="#cost">Cost & Performance</a>
+  <a href="#platform">Platform-Specific Issues</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>FAQ · Common Errors and Fixes</h1>
+  <p class="lead">This page collects the warning and tip boxes scattered across each chapter, ordered by how often they come up during hands-on practice. Look up your symptom first, then follow the "Details" link if you need the original explanation.</p>
+
+  <h2 id="setup">Setup & Environment</h2>
+
+  <div class="q">I ran the Chapter 4 §2 setup script, but some items show ❌.</div>
+  <p class="faq-answer">Regardless of OS, <code>setup-common.ts</code> re-validates the checklist. On Windows, first confirm you ran the script with <strong>administrator privileges</strong>; on macOS/Linux, check that you didn't forget optional flags like <code>--wezterm</code>/<code>--docker</code>. Installation logs are saved to <code>%USERPROFILE%\workshop-setup-logs\</code> on Windows.</p>
+  <span class="see">Details: <a href="../practice/04_Practice_Examples_A_en.html#setup">Chapter 4 §2-A Setup</a></span>
+
+  <div class="q">I'm trying to install the Antigravity CLI globally via npm, but it doesn't work.</div>
+  <p class="faq-answer">As of 2026-06-18, the Gemini CLI service was retired and replaced by the Antigravity CLI (<code>agy</code>). <code>agy</code> is a single compiled binary that requires no separate runtime install — just unzip it and add it to your PATH. Instructions for npm installation are outdated.</p>
+  <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html">Common Reference §Tool Comparison</a></span>
+
+  <h2 id="subagent">Subagent Execution</h2>
+
+  <div class="q">I had the writer subagent write a file, but the reviewer says "the file doesn't exist."</div>
+  <p class="faq-answer">You most likely invoked writer and reviewer at the same time (in parallel) within a single message. The reviewer attempted its review before the writer had even created the file, causing the failure. For tasks with dependencies, explicitly request sequential execution, e.g. "run these two steps in order."</p>
+  <span class="see">Details: <a href="../practice/04_Practice_Examples_A_en.html#scenario-2">Chapter 4 §2-A D-1</a></span>
+
+  <div class="q">After saving a file in the Claude App, the audit script doesn't run automatically.</div>
+  <p class="faq-answer">This is expected. Hooks such as <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> do not fire in the Claude App (Desktop) — they only run automatically in Claude Code (CLI) sessions. Teams using the Desktop App must run whatever the hook would have done manually after the session ends. Missing this can lead to incidents where you assume "the audit ran" when it actually didn't.</p>
+  <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-1">Common Reference §1</a>, <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logging and Observability</a></span>
+
+  <div class="q">I asked the reviewer only to review, but it modified the file anyway.</div>
+  <p class="faq-answer">Check whether the <code>tools</code> field includes <code>Write</code>. For read-only roles like reviewer, grant only the minimum permissions needed from the start — e.g. <code>tools: Read, Grep</code> — so that even if the prompt is interpreted ambiguously, the agent is structurally incapable of making edits.</p>
+  <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s3">Chapter 3 §Principle of Least Privilege</a></span>
+
+  <div class="q">The agent keeps repeating the same task and never finishes.</div>
+  <p class="faq-answer">This is a <strong>spin</strong> state in an evaluator-optimizer loop, where the evaluator keeps judging the output "insufficient" and the optimizer keeps retrying. The fix: set a maximum number of iterations up front, and automatically terminate if the criteria aren't met within that limit. Rather than solving this at the individual pattern level as described in <a href="../concepts/02_Concepts_Chapter_en.html#s4">Chapter 2 §Orchestration Patterns</a>, it's easier to prevent by structuring the entire workflow as an Execution Plan, as covered in <a href="../workflows/09_Workflows_Chapter_en.html">Chapter 9</a>.</p>
+  <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s4">Chapter 2 §Orchestration Patterns</a>, <a href="../workflows/09_Workflows_Chapter_en.html">Chapter 9 · Workflow Design Patterns</a></span>
+
+  <div class="q">A subagent calls a tool, fails, and then just stops.</div>
+  <p class="faq-answer">There are two common causes. First, a <strong>network timeout</strong> — the API call or MCP server connection was briefly interrupted. In Claude Code, check session state with the <code>/cost</code> command; in Antigravity, check agent status in Agent Manager, then retry. Second, an <strong>unconnected MCP server</strong> — verify whether the local MCP server is running using <code>claude mcp list</code> (Claude Code) or the equivalent server-status command for your platform. For transient errors, see the timeout troubleshooting under <a href="#cost">Cost & Performance</a>.</p>
+  <span class="see">Details: <a href="#cost">FAQ · Cost & Performance</a>, <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logging and Observability</a></span>
+
+  <div class="q">How do I monitor and audit an agent's destructive actions or file-modification history in an enterprise environment?</div>
+  <p class="faq-answer">The agent's terminal command execution and tool-use history must be collected in real time as system audit logs. To do this, use an audit daemon or shell-hooking technique inside the sandbox environment to forward execution records to a remote log server. Additionally, important destructive operations (e.g., dropping a database, destroying a secret key) must enforce a Human Approval Gate, structurally isolating them so they cannot execute without final sign-off from a system administrator or responsible party.</p>
+  <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logging and Observability</a></span>
+
+  <h2 id="parallel">Parallel & Team Collaboration</h2>
+
+  <div class="q">In Antigravity Agent Manager, two agents are editing different files, but the results get mixed up.</div>
+  <p class="faq-answer">You most likely assigned both agents to the same workspace (the same folder). Sharing a codebase can cause "cognitive overlap," where one agent mistakes another agent's working context for its own. Always separate agents by workspace or git worktree.</p>
+  <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-2">Common Reference §2</a>, <a href="../guardrails/03_Guardrails_Chapter_en.html#s5">Chapter 3 §Isolation</a></span>
+
+  <div class="q">I turned on Agent Teams in the Claude App, but I don't see a <code>tmux</code> option.</div>
+  <p class="faq-answer">This is expected. The Desktop App only supports <code>teammateMode: in-process</code>; tmux split-pane mode is only additionally supported in Claude Code (CLI).</p>
+  <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-1">Common Reference §1</a></span>
+
+  <div class="q">How should an agent handle needing final human approval or intermediate input while performing a task?</div>
+  <p class="faq-answer">Use the <code>Human-in-the-Loop (HITL)</code> pattern. As the orchestrator progresses through a task, it pauses at a critical decision point or an operation requiring authorization (e.g., deployment, code merge), preserves state, and requests feedback from the user. The agent must structure the context of the question and the information it needs when relaying it, and if approval is denied or a revision is requested, the agent team should roll back to the prior state, incorporate the feedback, and control the flow to attempt the task again.</p>
+  <span class="see">Details: <a href="../workflows/09_Workflows_Chapter_en.html">Chapter 9 · Workflow Design Patterns</a></span>
+
+  <h2 id="workspace">Workspace / Variant</h2>
+
+  <div class="q">I ran <code>new-project.ts</code>, but scaffolding was rejected or paths look wrong.</div>
+  <p class="faq-answer">You likely ran it from inside a project folder rather than the workspace root. ai-workspace-standards must be cloned directly to the workspace root itself (<code>C:\git</code> on Windows, <code>~/git</code> on macOS/Linux); placing it as a submodule inside another project folder breaks path resolution.</p>
+  <span class="see">Details: <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-1">Chapter 6 §1</a></span>
+
+  <div class="q">The "Documented agents" count from <code>bun run agent:verify</code> doesn't match what I expect.</div>
+  <p class="faq-answer">The AGENTS.md table and the actual list of <code>agents/*.md</code> files are out of sync. Check whether workspace-only agents (auditor, lifecycle-manager, etc.) are still lingering in the table, or whether a newly created agent is missing from it.</p>
+  <span class="see">Details: <a href="../variant-practice/06_VariantPractice_Examples_en.html#scenario-2">Chapter 6 D-1</a></span>
+
+  <div class="q">I'm not sure whether it's safe to run the promotion pipeline (<code>l2-to-variant-pipeline.ts</code>).</div>
+  <p class="faq-answer">This command leaves traces in actual git history and is hard to undo. In a lecture or workshop setting, it's sufficient for the instructor to demonstrate it once rather than have every participant run it. See <a href="../lecture-guide/00_Lecture_Guide_en.html#per-section">the Lecture Guide</a> for details.</p>
+  <span class="see">Details: <a href="../variant-advanced/12_VariantAdvanced_Examples_en.html">Chapter 12 Exercises</a></span>
+
+  <div class="q">How do I use ai-workspace-standards in an actual production environment (Docker/Kubernetes)?</div>
+  <p class="faq-answer">Currently, ai-workspace-standards only works by integrating directly with local AI coding tools (Claude Code/App, Antigravity, etc.). Supporting per-user agent teams in a Docker or Kubernetes environment in conjunction with a frontend service like Open WebUI is under discussion as a <strong>future enhancement</strong>, but has not yet been implemented.
+    <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#container">Chapter 8 §5 Advanced Roadmap</a></span></p>
+
+  <div class="q">Can I aggregate <code>memory/MEMORY.md</code> from multiple projects into one place?</div>
+  <p class="faq-answer">Currently, each project maintains an independent <code>memory/MEMORY.md</code>, and a workspace-level feature to consolidate and organize memory is planned as a <strong>future enhancement</strong>. This is intended to address the difficulty of spotting overall trends across individual memory files as the number of projects grows.
+    <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#memory">Chapter 8 §5 Advanced Roadmap</a></span></p>
+
+  <div class="q">If a variant template is updated, does it automatically propagate to existing projects?</div>
+  <p class="faq-answer">No. ai-workspace-standards uses a <strong>Fork Model</strong>. Changes to L1 (the common template) do not automatically propagate to already-scaffolded L2 projects. This is by design to preserve intentional divergence, but it creates the operational burden of manually applying security patches or bug fixes. A consent-based opt-in model and an asynchronous deployment pipeline are being discussed as future enhancements.
+    <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#variant-deploy">Chapter 8 §5 Advanced Roadmap</a></span></p>
+
+  <div class="q">Creating a new variant fails <code>agent:verify</code> validation or <code>validate-templates</code>.</div>
+  <p class="faq-answer">The most common cause is a failure to maintain **symmetry** between agent declarations. For example, if the <code>researcher</code> agent's <code>handoff_to</code> lists <code>writer</code>, then the <code>writer</code> agent's <code>handoff_from</code> must also define <code>researcher</code> as a matching pair. Also check for JSON syntax errors in <code>variant.json</code> or missing required fields (such as the agent list).</p>
+  <span class="see">Details: <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 §Creating a New Variant</a></span>
+
+  <div class="q">How do you verify that an agent team you designed and built yourself consistently performs at the intended quality in production?</div>
+  <p class="faq-answer">You need to build an <strong>agent test bench</strong> to evaluate normal operation. First, define representative input requirements and expected outputs (a gold dataset). Second, run automated regression tests against that dataset every time you modify a prompt or agent rule. Third, for natural-language output that's hard to score quantitatively, set up a high-performing model as an LLM-as-a-Judge, evaluating against a pre-agreed quantitative score.</p>
+  <span class="see">Details: <a href="../capstone/13_Capstone_en.html">Chapter 13 §Capstone Project</a></span>
+
+  <h2 id="cost">Cost & Performance</h2>
+
+  <div class="q">How much does running a multi-agent team cost in tokens?</div>
+  <p class="faq-answer">Cost is determined by the number of agents × each agent's model tier × execution frequency. The model tiering (<code>tier: high/medium/low</code>) described in Chapter 5 is the key cost-control mechanism. For example, running all 10 agents of the co-consult variant on high can consume tens of thousands of tokens in a single session, but lowering the actual implementation roles to medium/low can cut costs by 40-60%. Claude Code's <code>/cost</code> command lets you check cumulative token usage for the current session in real time.</p>
+  <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §Templates and the 7 Variants</a></span>
+
+  <div class="q">Agent responses suddenly become slow or time out.</div>
+  <p class="faq-answer">When the context window fills up, model processing speed drops sharply. Claude Code lets you compress conversation length with the <code>/compact</code> command. Also, when running multiple agents in parallel, API requests can queue up and cause delays — in this case, switch to sequential execution or lower your WIP limit to reduce the number of concurrent runs.</p>
+  <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-1">Common Reference §1</a></span>
+
+  <div class="q">Running a multi-agent loop or long workflow costs too many API tokens. How do I optimize it?</div>
+  <p class="faq-answer">First, assign distinct **model tiers** per agent role. Use medium/low models for simple file writes or test execution, and reserve high-tier models for overall flow control or comprehensive design — this alone can cut costs by 40% or more. Second, keep the conversation context stable so prompt caching works — avoid changing the system prompt and maintain a continuous session. Third, set clear hard limits, such as <code>Max Turns</code>, so the conversation between the orchestrator and specialists doesn't spin indefinitely.</p>
+  <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §Templates and the 7 Variants</a></span>
+
+  <h2 id="platform">Platform-Specific Issues</h2>
+
+  <div class="q">Running <code>new-project.ts</code> on Windows produces a path-separator error.</div>
+  <p class="faq-answer">ai-workspace-standards scripts use the <code>path</code> module in the Node.js/Bun runtime to handle platform-specific paths, so they're compatible with both Windows and macOS/Linux by default. However, issues can arise if a PowerShell-style path (<code>C:\Users\...</code>) gets mixed in when you run <code>git clone</code> directly inside a Claude Code session instead of Git Bash. In Claude Code, always use <code>/</code>-style paths or Git Bash formatting, and it's recommended to clone the workspace root to a short, shallow location like <code>C:\git</code>.</p>
+  <span class="see">Details: <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-1">Chapter 6 §1</a></span>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

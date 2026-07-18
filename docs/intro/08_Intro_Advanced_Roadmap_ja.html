@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  Manual(레퍼런스)/Examples(실습)과 달리 버전 박스·코드 강조가 아니라 본문 흐름 중심이다.
+  수정할 곳: (1) <title>/장 번호/제목/리드  (2) nav(이 장의 절 + 다른 장)  (3) '이 장의 요점'
+            (4) <h2 id>/<h3> 절과 본문  (5) 이전/다음 장 링크
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第8章 §5・高度化ロードマップ - マルチエージェントハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第8章 §5・高度化ロードマップ</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第8章 §5・高度化ロードマップ</div>
+  <a href="#container">コンテナ基盤サービス連携</a>
+  <a href="#memory">メモリの集約と整理</a>
+  <a href="#variant-deploy">variant配布方式の進化</a>
+  <a href="#boilerplate-strategy">ボイラープレート戦略の高度化</a>
+  <a href="#tier-strategy">モデルティア戦略の高度化</a>
+  <div class="nav-section">第8章の他の節</div>
+  <a href="08_Intro_Advanced_Deploy_ja.html">第8章 §1・デプロイとSSOT</a>
+  <a href="08_Intro_Advanced_Chapter_ja.html">第8章 §2・ライフサイクル管理</a>
+  <a href="08_Intro_Advanced_AGENTS_ja.html">第8章 §3・AGENTS.md詳解</a>
+  <a href="08_Intro_Advanced_Architecture_ja.html">第8章 §4・アーキテクチャ詳解</a>
+  <div class="nav-section">他の章</div>
+  <a href="05_Intro_Chapter_ja.html">第5章・ai-workspace-standards紹介</a>
+  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章・企業内マルチエージェントチーム運用</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章・新規variant作成</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第8章 §5</div>
+  <h1>高度化ロードマップ</h1>
+  <p class="lead">これまで§1〜§4で扱ってきたのは、ai-workspace-standardsの<strong>現在の実装</strong>である。本節はその逆――まだ実装されていないが、リポジトリが向かっている5つの方向を扱う。インフラレベル(コンテナ連携・メモリ集約・variant配布の自動化)の3つと、ガバナンスレベル(ボイラープレート戦略・モデルティア戦略)の2つに分かれる。</p>
+
+  <div class="keypoints">
+    <div class="kp-title">本節で扱う内容</div>
+    <ul>
+      <li>コンテナ(Docker/Kubernetes)環境におけるサービス連携の必要性</li>
+      <li>独立したMEMORY.mdファイル群のワークスペースレベルでの集約</li>
+      <li>フォークモデルの利点を維持しつつ、セキュリティパッチ・バグ修正を選択的に伝播させる方法</li>
+      <li>LOCKED/MERGE/PRESERVEの3分類が固定分類表であることの限界と、組織別カスタマイズの方向性</li>
+      <li>静的に割り当てられたモデルティアを、組織の運用データに合わせて調整する方向性</li>
+    </ul>
+  </div>
+
+  <h2 id="container">コンテナ基盤サービス連携</h2>
+  <p>現在、各バリアント(variant)からスキャフォールディングされたプロジェクトは、ローカルワークスペース内でClaude Code/App、AntigravityといったAIコーディングツールと直接連携する形でのみ動作する。しかし実際の企業環境では、プロジェクト単位で<strong>独立したサービス</strong>として配備しなければならない場合が多い。</p>
+  <p>高度化の核心は、スキャフォールディングされたプロジェクトがDockerまたはKubernetes環境で**Open WebUIのようなフロントエンドサービスと連携し、個人単位でサポートされる**必要があるという点である。各ユーザーが自分に割り当てられたエージェントチームをブラウザインターフェースを通じて呼び出し、結果を確認し、セッション間でコンテキストを維持できる形態である。</p>
+
+  <h2 id="memory">メモリの集約と整理</h2>
+  <p>現在、各L2プロジェクトは独立した<code>memory/MEMORY.md</code>ファイルを維持している(第5章§4で扱った)。このファイルは当該プロジェクトのセッション間コンテキストを記録するが、プロジェクトが増えるほどメモリファイルも散在し、<strong>ワークスペース全体レベルでのインサイトの把握が難しくなる</strong>。</p>
+  <p>高度化の第2の軸は、個別プロジェクト単位に散らばっているメモリファイルを**集約して整理できる機能**が必要だという点である。例えば「先週すべてのプロジェクトでエージェントチームがどのようなパターンのエラーに頻繁に遭遇したか」「どの役割の組み合わせが最も頻繁に使われたか」といったワークスペースレベルのトレンド分析が可能になるべきである。</p>
+
+  <h2 id="variant-deploy">variant配布方式の進化</h2>
+  <p>現在のvariant配布は<code>new-project.ts</code>によるローカルスキャフォールディングが中心であり、テンプレートの更新がL2に自動的に伝播しないフォークモデルに従っている。この方式は意図した差異を保存できるという利点があるが、運用の観点では、テンプレートのバグ修正やセキュリティパッチを各プロジェクトに一つずつ手動で反映しなければならない負担を生む。</p>
+  <p>高度化の方向としては、(a) フォークモデルの利点を維持しつつ、セキュリティパッチや重要なバグ修正のみを選択的にL2へ伝播できる**同意ベース(consent-based)の受信モデル**、(b) バリアント(variant)を中央レジストリで管理し、<code>new-project.ts</code>がネットワーク経由で最新バージョンを取得する**非同期配布パイプライン**が挙げられる。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="roadmapArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <line x1="50" y1="100" x2="630" y2="100" stroke="#d0d7de" stroke-width="2" stroke-dasharray="6,4"/>
+
+        <circle cx="80" cy="100" r="14" fill="#0969da" stroke="#fff" stroke-width="2"/>
+        <text x="80" y="104" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">現在</text>
+        <text x="80" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">ローカルスキャフォールディング</text>
+        <text x="80" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">new-project.ts中心</text>
+
+        <line x1="96" y1="100" x2="200" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="148" y="90" text-anchor="middle" font-size="9" fill="#636c76">第1段階</text>
+
+        <circle cx="220" cy="100" r="14" fill="#6639ba" stroke="#fff" stroke-width="2"/>
+        <text x="220" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">①</text>
+        <text x="220" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="220" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">コンテナサービス</text>
+        <text x="220" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">Docker / K8s連携</text>
+
+        <line x1="236" y1="100" x2="340" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="288" y="90" text-anchor="middle" font-size="9" fill="#636c76">第2段階</text>
+
+        <circle cx="360" cy="100" r="14" fill="#1a7f37" stroke="#fff" stroke-width="2"/>
+        <text x="360" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">②</text>
+        <text x="360" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="360" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">メモリ集約</text>
+        <text x="360" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">ワークスペースレベル</text>
+
+        <line x1="376" y1="100" x2="480" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <text x="428" y="90" text-anchor="middle" font-size="9" fill="#636c76">第3段階</text>
+
+        <circle cx="500" cy="100" r="14" fill="#953800" stroke="#fff" stroke-width="2"/>
+        <text x="500" y="96" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">③</text>
+        <text x="500" y="104" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">　</text>
+        <text x="500" y="134" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">variant配布</text>
+        <text x="500" y="149" text-anchor="middle" font-size="9.5" fill="#636c76">自動化パイプライン</text>
+
+        <line x1="516" y1="100" x2="572" y2="100" stroke="#636c76" stroke-width="1.5" marker-end="url(#roadmapArrow)"/>
+        <rect x="578" y="82" width="100" height="36" rx="18" fill="#0969da" stroke="#0550ae" stroke-width="1"/>
+        <text x="628" y="104" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">ビジョン完成</text>
+
+        <rect x="56" y="52" width="48" height="20" rx="4" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="1"/>
+        <text x="80" y="66" text-anchor="middle" font-size="9" fill="#0550ae" font-weight="600">v1.0</text>
+
+        <rect x="196" y="52" width="48" height="20" rx="4" fill="#fbefff" stroke="#d2b9ff" stroke-width="1"/>
+        <text x="220" y="66" text-anchor="middle" font-size="9" fill="#6639ba" font-weight="600">v1.x</text>
+
+        <rect x="336" y="52" width="48" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="360" y="66" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">v2.0</text>
+
+        <rect x="476" y="52" width="48" height="20" rx="4" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
+        <text x="500" y="66" text-anchor="middle" font-size="9" fill="#7d4e00" font-weight="600">v3.0</text>
+
+        <line x1="80" y1="72" x2="80" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="220" y1="72" x2="220" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="360" y1="72" x2="360" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="500" y1="72" x2="500" y2="85" stroke="#d0d7de" stroke-width="1" stroke-dasharray="3,2"/>
+      </g>
+    </svg>
+  </div>
+
+  <p>上記の3つが<strong>インフラレベル</strong>の高度化の方向だとすれば、以下の2つは<strong>ガバナンスレベル</strong>の高度化の方向である――§1と§4で扱ったボイラープレート戦略・モデルティア戦略が現在どのような限界を抱えており、どの方向へ洗練され得るかを扱う。</p>
+
+  <h2 id="boilerplate-strategy">ボイラープレート戦略の高度化</h2>
+  <p>§1・§4では、LOCKED・MERGE・PRESERVE・SYNC_IF_NEWER・PRUNEの5分類を「何を固定し、何を開放しておくか」の判断基準として扱った。現在この分類は<code>upgrade-project.ts</code>のコード内に<strong>ファイルパス単位でハードコーディング</strong>されている――あるファイルがLOCKEDなのかMERGEなのかは、スクリプトを直接書き換えなければ変わらない。この方式はリポジトリが管理するファイルの種類が少ないうちは問題にならないが、組織ごとに「このファイルもLOCKEDとして扱いたい」「このMERGEファイルは我々の組織では完全にPRESERVEに開放したい」といった例外が増えるほど、スクリプト自体をフォークせざるを得ない負担につながる。</p>
+  <p>高度化の方向は、この分類を<strong>コードではなく宣言的なマニフェスト</strong>に移すことである。例えば、ワークスペースのルートに<code>boilerplate-policy.json</code>のようなファイルを置き、各組織が自らのLOCKED/MERGE/PRESERVEの境界をファイルパターン単位で再定義できるようにする方向が議論されている。こうなれば<code>upgrade-project.ts</code>はハードコーディングされた分類表の代わりにこのマニフェストを読み込んで動作するようになり、組織はスクリプトに手を加えることなく、自らのセキュリティ・ガバナンス基準に合わせて境界を調整できる。</p>
+
+  <h2 id="tier-strategy">モデルティア戦略の高度化</h2>
+  <p>§1・§4では、tierの割り当てが<code>agents/*.md</code>のfrontmatterに静的に固定されており、L0で変更された場合も<code>upgrade-project.ts</code>のSYNC_IF_NEWERを通じてのみ伝播することを見た。この方式の限界は、<strong>ティア割り当てが「役割」だけに紐づいており、実際の作業の難易度や組織のコスト予算を反映できない</strong>という点である。例えばcode-writerの役割は常にmediumだが、実際にはプロジェクトごとにcode-writerが扱うコードベースの複雑さは大きく異なる。現在の構造では、この違いを反映するには人が直接各プロジェクトの<code>agents/*.md</code>を手作業で修正しなければならない。</p>
+  <p>高度化の方向としては、(a) セッションログや<code>/cost</code>データを根拠に「この役割は直近N回のセッションで繰り返しリトライが発生している→highへの引き上げを推奨する」といった<strong>運用データに基づくティア推奨</strong>、(b) ワークスペース全体または組織単位で「今月の予算はこの程度なので、high ティアの割り当てはN個の役割に制限する」といった<strong>ティア予算上限ガバナンス</strong>が挙げられる。いずれの方向も、現在の「静的割り当て+手動オーバーライド」モデルを維持しながら、その上に可観測性(observability)と組織のポリシーを重ねる拡張である。</p>
+
+  <div class="note">
+    本ハンドブックはai-workspace-standardsの<strong>現在の実装状態</strong>(mainブランチ、2026年7月時点)を基準に作成されている。本節で言及した5つの方向はいずれもリポジトリのロードマップに反映された計画であり、<strong>現在のコードベースには実装されていない</strong>。実際の実装時期と形態は変わり得る。
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Architecture_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §4・アーキテクチャ詳解</div></a>
+    <a href="../workflows/09_Workflows_Chapter_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第9章・ワークフローデザインパターン</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

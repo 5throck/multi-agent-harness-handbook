@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 12 · Hands-on Examples for New Variant Promotion — a Scenario-Based Learning Guide - Material from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 12 · Hands-on Examples for New Variant Promotion — a Scenario-Based Learning Guide</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific: scenario card overrides (Convention B) */
+    .scenario-card { border-radius: 10px; margin-bottom: 36px; }
+    .scenario-card .card-header { gap: 12px; padding: 16px 22px; justify-content: flex-start; }
+    .scenario-card .card-id { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--text-dim); min-width: 34px; }
+    .scenario-card .card-title { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .scenario-card .card-body { padding: 22px 26px; font-size: 14px; line-height: 1.7; }
+    /* Level header with border-bottom */
+    .level-header { border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+    .level-header .badge { flex-shrink: 0; }
+    .level-header .level-title { flex-shrink: 0; }
+    .level-header .level-desc { flex: 1; }
+    /* Step list variant (li instead of .step) */
+    .step-list { list-style: none; }
+    .step-list li { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    /* Callout ::before overrides (English labels) */
+    .situation::before { content: '📌 Situation'; display: block; font-weight: 700; color: var(--accent-amber); margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .flow-box::before { content: '⚙️ Under the Hood'; display: block; font-weight: 700; color: var(--accent-dark); margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .tip-box::before { content: '💡 Tip'; display: block; font-weight: 700; color: var(--accent-green); margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .warning-box::before { content: '⚠️ Warning'; display: block; font-weight: 700; color: var(--accent-amber); margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    /* Related commands */
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; font-size: 13px; color: var(--text-dim); }
+    .related-cmds strong { color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Chapter 12 · New Variant Promotion Hands-on</div>
+  <a href="#beginner"><span class="dot dot-g"></span>Beginner (Getting Started)</a>
+
+  <div class="nav-group">Beginner Scenarios</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 Comparing Template Structure vs. Prototype Structure</a>
+
+  <div class="nav-group">Intermediate Scenarios</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 Filling Out the Promotion Checklist</a>
+
+  <div class="nav-group">Advanced Scenarios</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 Running and Verifying the Promotion Pipeline</a>
+
+  <div class="nav-group">Shortcuts</div>
+  <a href="11_VariantAdvanced_Chapter_en.html">📖 Chapter 11 — New Variant vs. Promotion →</a>
+  <a href="../capstone/13_Capstone_en.html">🎓 Chapter 12 — Capstone Exercise →</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Chapter 12</div>
+  <h1>Hands-on Examples for New Variant Promotion</h1>
+  <p class="subtitle">A hands-on guide comparing the two paths side by side, using the co-marketing prototype as the baseline &nbsp;|&nbsp; <a href="11_VariantAdvanced_Chapter_en.html">← Back to the reference document</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target Repository</span><span class="vvalue">ai-workspace-standards, main branch</span></div>
+    <div class="version-row"><span class="vlabel">Purpose of This File</span><span class="vvalue">Hands-on practice applying the promotion (Phase B) concept from Chapter 11 to the co-marketing prototype created in Chapter 6 §2</span></div>
+    <div class="version-row"><span class="vlabel">Reference Document</span><span class="vvalue"><a href="11_VariantAdvanced_Chapter_en.html">11_VariantAdvanced_Chapter_en.html</a> — linked from each scenario</span></div>
+    <div class="version-row"><span class="vlabel">Written On</span><span class="vvalue">July 14, 2026</span></div>
+  </div>
+
+  <!-- ══════════════════════════════ Beginner ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● Beginner</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">See with your own eyes exactly how a fully promoted template differs structurally from a prototype that hasn't yet been promoted</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">Beginner</span>
+      <strong class="card-title">Comparing Template Structure vs. Prototype Structure</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        In Chapter 6 §2, you scaffolded a project from <code>templates/co-work/</code> and also created a Phase A prototype at <code>Projects/co-marketing/</code>. Now you want to place the two directories side by side and check exactly which files exist in the official template but not in the prototype. This assumes you're continuing inside the practice workspace (<code>ai-workspace-standards-demo</code>).
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <span class="cmd-chip cmd-chip--label">variant.json</span>
+          <span class="cmd-chip cmd-chip--label">README_ko.md</span>
+          <span class="cmd-chip cmd-chip--label">docs/adr/</span>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="compareArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+            </marker>
+          </defs>
+          <g font-family="-apple-system,Segoe UI,sans-serif">
+            <!-- Title -->
+            <text x="340" y="22" text-anchor="middle" font-size="12" fill="#1f2328" font-weight="700">Official Template vs. Phase A Prototype Structure Comparison</text>
+
+            <!-- Left Panel: templates/co-marketing/ -->
+            <rect x="20" y="38" width="290" height="258" rx="8" fill="#f0f7ff" stroke="#a5d5f7" stroke-width="1.5"/>
+            <!-- Header -->
+            <rect x="20" y="38" width="290" height="30" rx="8" fill="#0969da"/>
+            <rect x="20" y="56" width="290" height="12" fill="#0969da"/>
+            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700">templates/co-marketing/ (Official Template)</text>
+            <!-- Status badge -->
+            <rect x="230" y="42" width="72" height="18" rx="9" fill="#1a7f37"/>
+            <text x="266" y="55" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">Verified</text>
+
+            <!-- File list left -->
+            <text x="40" y="90" font-size="11" fill="#1f2328" font-weight="600">variant.json</text>
+            <rect x="40" y="96" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="104" font-size="9" fill="#636c76">Version / manifest metadata</text>
+
+            <text x="40" y="122" font-size="11" fill="#1f2328" font-weight="600">README.md / README_ko.md</text>
+            <rect x="40" y="128" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="136" font-size="9" fill="#636c76">Complete documentation</text>
+
+            <text x="40" y="154" font-size="11" fill="#1f2328" font-weight="600">docs/adr/</text>
+            <rect x="40" y="160" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="168" font-size="9" fill="#636c76">Architecture decision records</text>
+
+            <text x="40" y="186" font-size="11" fill="#1f2328" font-weight="600">.claude/ / .gemini/</text>
+            <rect x="40" y="192" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="200" font-size="9" fill="#636c76">Platform parity secured</text>
+
+            <text x="40" y="218" font-size="11" fill="#1f2328" font-weight="600">agents/*.md</text>
+            <rect x="40" y="224" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="232" font-size="9" fill="#636c76">Agent frontmatter complete</text>
+
+            <text x="40" y="250" font-size="11" fill="#1f2328" font-weight="600">skills/</text>
+            <rect x="40" y="256" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="54" y="264" font-size="9" fill="#636c76">Skill manifest fully registered</text>
+
+            <!-- Version tag -->
+            <text x="40" y="286" font-size="9.5" fill="#0969da" font-weight="600">Tag: v1.0.0</text>
+
+            <!-- Center comparison arrows -->
+            <text x="340" y="158" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">vs</text>
+            <line x1="315" y1="166" x2="365" y2="166" stroke="#d0d7de" stroke-width="1.5"/>
+            <polygon points="320,166 315,162 315,170" fill="#d0d7de"/>
+            <polygon points="360,166 365,162 365,170" fill="#d0d7de"/>
+
+            <!-- Right Panel: Projects/co-marketing/ -->
+            <rect x="370" y="38" width="290" height="258" rx="8" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+            <!-- Header -->
+            <rect x="370" y="38" width="290" height="30" rx="8" fill="#953800"/>
+            <rect x="370" y="56" width="290" height="12" fill="#953800"/>
+            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700">Projects/co-marketing/ (Phase A)</text>
+            <!-- Status badge -->
+            <rect x="580" y="42" width="72" height="18" rx="9" fill="#cf222e"/>
+            <text x="616" y="55" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">In Progress</text>
+
+            <!-- File list right -->
+            <text x="390" y="90" font-size="11" fill="#953800" font-weight="600">variant.json</text>
+            <rect x="390" y="96" width="9" height="9" rx="2" fill="#cf222e"/>
+            <text x="404" y="104" font-size="9" fill="#636c76">Missing or minimal</text>
+
+            <text x="390" y="122" font-size="11" fill="#953800" font-weight="600">README.md / README_ko.md</text>
+            <rect x="390" y="128" width="9" height="9" rx="2" fill="#953800"/>
+            <text x="404" y="136" font-size="9" fill="#636c76">Draft or not yet written</text>
+
+            <text x="390" y="154" font-size="11" fill="#953800" font-weight="600">docs/adr/</text>
+            <rect x="390" y="160" width="9" height="9" rx="2" fill="#cf222e"/>
+            <text x="404" y="168" font-size="9" fill="#636c76">Directory does not exist</text>
+
+            <text x="390" y="186" font-size="11" fill="#1f2328" font-weight="600">.claude/ / .gemini/</text>
+            <rect x="390" y="192" width="9" height="9" rx="2" fill="#1a7f37"/>
+            <text x="404" y="200" font-size="9" fill="#636c76">Created during scaffolding</text>
+
+            <text x="390" y="218" font-size="11" fill="#1f2328" font-weight="600">agents/*.md</text>
+            <rect x="390" y="224" width="9" height="9" rx="2" fill="#953800"/>
+            <text x="404" y="232" font-size="9" fill="#636c76">Fields may be missing</text>
+
+            <text x="390" y="250" font-size="11" fill="#953800" font-weight="600">skills/</text>
+            <rect x="390" y="256" width="9" height="9" rx="2" fill="#953800"/>
+            <text x="404" y="264" font-size="9" fill="#636c76">Not registered in manifest</text>
+
+            <!-- No version tag -->
+            <text x="390" y="286" font-size="9.5" fill="#cf222e" font-weight="600">Tag: none (awaiting promotion)</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="steps-title">Step-by-Step</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>Compare the two directory listings side by side</strong>
+            <p>Compare the top-level file listings of co-work, an official variant, and co-marketing, which is still in the prototype stage.</p>
+            <div style="position:relative">
+              <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-marketing/)</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Check which items exist only in the official template</strong>
+            <p>Typically, <code>variant.json</code>, <code>README.md</code>/<code>README_ko.md</code>, and <code>docs/adr/</code> exist in the official template but are still missing or empty at the Phase A prototype stage. First confirm these files actually exist on the official template (co-work) side.</p>
+            <div style="position:relative">
+              <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">Next, check the co-marketing prototype's folder listing to confirm the above files don't yet exist there.</p>
+            <div style="position:relative">
+              <pre class="code-block">ls Projects/co-marketing/</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="flow-box">
+        <code>variant.json</code> holds the metadata (version, skill_manifest, script_manifest) required for a variant to be registered as an official scaffolding target. It's normal for this file to be missing, or to exist only minimally, during the Phase A prototype stage — the difference itself is a signal that "this hasn't been promoted yet."
+      </div>
+
+      <div class="tip-box">
+        Doing this comparison ahead of time lets you immediately see what's missing when you fill in the <code>PROMOTION_CHECKLIST.md</code> in the next scenario, D-1.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Intermediate ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● Intermediate</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">Fill out the checklist and manifests needed to make co-marketing eligible for promotion</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">Intermediate</span>
+      <strong class="card-title">Filling Out the Promotion Checklist</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        This is the situation of a practitioner trying to actually close the gaps identified in G-1. To make the co-marketing prototype eligible for official promotion, you need to satisfy the conditions in <code>PROMOTION_CHECKLIST.md</code> and fill in <code>skill_manifest</code>/<code>script_manifest</code> in <code>variant.json</code>.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="11_VariantAdvanced_Chapter_en.html#s3">PROMOTION_CHECKLIST.md</a>
+          <span class="cmd-chip cmd-chip--label">skill_manifest</span>
+          <span class="cmd-chip cmd-chip--label">script_manifest</span>
+        </div>
+      </div>
+
+      <div class="steps-title">Step-by-Step</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>Review the PROMOTION_CHECKLIST.md items</strong>
+            <p>The checklist generally includes items like "required verification scripts pass," "platform parity secured," and "agent frontmatter is complete." For co-marketing, start by re-confirming whether <code>researcher.md</code> and <code>writer.md</code>, created in Chapter 6 §2, have all required fields. The two scripts check different things, so run each separately and check the results independently.</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① Agent frontmatter completeness check</strong> — confirm that required fields such as name, tier, and handoff are all filled in.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun run agent:verify</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Skill manifest check</strong> — confirm that the skills referenced by the variant actually exist and are evenly deployed across all three platforms (.claude/.gemini/.agents).</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/validate-skills.ts</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Define the manifests in variant.json</strong>
+            <p>Register the skills co-marketing uses (e.g., campaign-research, copywriting) in <code>skill_manifest.variant_specific</code>, and any variant-specific scripts in <code>script_manifest</code>.</p>
+            <div style="position:relative">
+              <pre class="code-block">{
+  "name": "co-marketing",
+  "inherits_common": "1.0.0",
+  "skill_manifest": {
+    "variant_specific": ["campaign-research", "copywriting"]
+  },
+  "script_manifest": []
+}</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="flow-box">
+        <code>skill_manifest.variant_specific</code> is where this variant declares any skills it needs beyond the common set. Any skill not registered here is at risk of being dropped during the reconcile step of the promotion pipeline.
+      </div>
+
+      <div class="warning-box">
+        The checklist items must be filled in against the actual <code>PROMOTION_CHECKLIST.md</code> template in the repository — the example here shows the general flow, not the complete list of items.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Advanced ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● Advanced</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">The actual promotion pipeline command and post-promotion verification procedure</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">Advanced</span>
+      <strong class="card-title">Running and Verifying the Promotion Pipeline</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        An experienced practitioner who has finished D-1 and judged the prototype ready for promotion now actually runs <code>l2-to-variant-pipeline.ts</code> to convert co-marketing into an official <code>templates/co-marketing/</code>. From this point on, this is a hard-to-reverse operation that leaves traces in the actual git history.
+      </div>
+
+      <div class="note">
+        <svg viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+          </defs>
+          <!-- Top row: Phase A prototype -->
+          <rect x="14" y="18" width="130" height="36" rx="8" fill="#f59e0b"/>
+          <text x="79" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">Phase A Prototype</text>
+          <!-- Arrow -->
+          <line x1="144" y1="36" x2="172" y2="36" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- agent:verify -->
+          <rect x="176" y="18" width="100" height="36" rx="8" fill="#3b82f6"/>
+          <text x="226" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">agent:verify</text>
+          <!-- Arrow -->
+          <line x1="276" y1="36" x2="304" y2="36" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- validate-templates.ts -->
+          <rect x="308" y="18" width="130" height="36" rx="8" fill="#3b82f6"/>
+          <text x="373" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">validate-templates.ts</text>
+          <!-- Arrow -->
+          <line x1="438" y1="36" x2="466" y2="36" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- Checklist -->
+          <rect x="470" y="18" width="156" height="36" rx="8" fill="#6b7280"/>
+          <text x="548" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">Write Promotion Checklist</text>
+          <!-- Arrow down from checklist -->
+          <line x1="548" y1="54" x2="548" y2="76" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- Bottom row: l2-to-variant-pipeline.ts -->
+          <rect x="308" y="80" width="180" height="36" rx="8" fill="#22c55e"/>
+          <text x="398" y="103" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">l2-to-variant-pipeline.ts</text>
+          <!-- Arrow -->
+          <line x1="488" y1="98" x2="516" y2="98" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <!-- Final variant -->
+          <rect x="520" y="80" width="106" height="36" rx="8" fill="#8b5cf6"/>
+          <text x="573" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">templates/</text>
+          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#e0d5f7" text-anchor="middle">co-marketing/ (official)</text>
+        </svg>
+      </div>
+
+      <div class="warning-box">
+        This scenario is an operation that produces a substantive change on a real git-tracked workspace. Only run it if you genuinely intend to publish the variant; if you only want to observe the flow, do not execute the commands — just read them.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="11_VariantAdvanced_Chapter_en.html#s3">l2-to-variant-pipeline.ts</a>
+          <a class="cmd-chip" href="../variant-practice/06_VariantPractice_Manual_en.html#section-2">validate-templates.ts</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Step-by-Step</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>Run the promotion pipeline</strong>
+            <p><code>--source</code> is the Phase A prototype path, <code>--variant</code> is the final variant name, and <code>--variantType</code> is the domain type.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/l2-to-variant-pipeline.ts --source Projects/co-marketing --variant co-marketing --variantType marketing</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Manually confirm platform parity</strong>
+            <p>Use diff to confirm that the commands/skills directory listings in <code>.claude/</code> and <code>.gemini/</code> correspond to each other.</p>
+            <div style="position:relative">
+              <pre class="code-block">diff <(ls templates/co-marketing/.claude/commands/) <(ls templates/co-marketing/.gemini/commands/)
+diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.gemini/skills/)</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Final gate — validate-templates.ts</strong>
+            <p>After all steps are complete, run the structural validation one more time to confirm the new variant satisfies the workspace-wide rules.</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/validate-templates.ts</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="flow-box">
+        The pipeline's reconcile step removes duplication by deleting files in <code>Projects/co-marketing/</code> that are identical to common files (L0/common). However, skill directories are intentionally excluded from this reconcile step, so after promotion you need to separately confirm the skills still remain in <code>.claude/skills/</code> and <code>.gemini/skills/</code>.
+      </div>
+
+      <div class="note">
+        <svg viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+          </defs>
+          <!-- Left: prototype files -->
+          <rect x="14" y="50" width="120" height="40" rx="8" fill="#3b82f6"/>
+          <text x="74" y="75" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">Prototype Files</text>
+          <!-- Arrow to diamond -->
+          <line x1="134" y1="70" x2="218" y2="70" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <!-- Center diamond: compare against common files -->
+          <polygon points="280,34 340,70 280,106 220,70" fill="#6b7280" stroke="#d0d7de" stroke-width="1"/>
+          <text x="280" y="67" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Compare with</text>
+          <text x="280" y="80" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">common files</text>
+          <!-- Arrow from diamond to outcomes -->
+          <line x1="340" y1="70" x2="380" y2="70" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <!-- Branch lines to 3 outcomes -->
+          <line x1="414" y1="70" x2="414" y2="28" stroke="#6b7280" stroke-width="1"/>
+          <line x1="414" y1="28" x2="448" y2="28" stroke="#6b7280" stroke-width="1" marker-end="url(#arrow3)"/>
+          <line x1="414" y1="70" x2="448" y2="70" stroke="#6b7280" stroke-width="1" marker-end="url(#arrow3)"/>
+          <line x1="414" y1="70" x2="414" y2="112" stroke="#6b7280" stroke-width="1"/>
+          <line x1="414" y1="112" x2="448" y2="112" stroke="#6b7280" stroke-width="1" marker-end="url(#arrow3)"/>
+          <!-- Outcome 1: identical → converted to extends reference -->
+          <rect x="452" y="12" width="174" height="32" rx="8" fill="#22c55e"/>
+          <text x="539" y="33" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Identical → converted to extends</text>
+          <!-- Outcome 2: missing → copied -->
+          <rect x="452" y="54" width="174" height="32" rx="8" fill="#3b82f6"/>
+          <text x="539" y="75" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Missing → copied</text>
+          <!-- Outcome 3: domain-specific → moved to _ORIGIN.md -->
+          <rect x="452" y="96" width="174" height="32" rx="8" fill="#f59e0b"/>
+          <text x="539" y="117" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Domain-specific → moved to _ORIGIN.md</text>
+        </svg>
+      </div>
+
+      <div class="tip-box">
+        If <code>_ORIGIN.md</code> has a "Manual Phase B Steps" section, it lists the domain-specific directories the pipeline couldn't move automatically — do a final check to make sure you've manually moved everything on that list. For example, co-marketing's <code>_ORIGIN.md</code> might read like this.
+        <div style="position:relative;margin-top:10px;">
+          <div style="position:relative">
+  <pre class="code-block">## Manual Phase B Steps
+- [ ] Copy the brand-assets/ directory to templates/co-marketing/brand-assets/
+- [ ] Carry over the campaign brief skeleton files under campaign-templates/ as-is
+- [ ] Reset the initial channel list in channel-configs.json to an empty array</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+        </div>
+        These items are a different kind of concern than the "de-duplicate common files" work reconcile handles — they're variant-specific assets, so the pipeline won't process them for you. You have to check each checkbox off and move them yourself.
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="doneArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+            </marker>
+            <linearGradient id="doneGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#1a7f37"/>
+              <stop offset="100%" stop-color="#116329"/>
+            </linearGradient>
+          </defs>
+          <g font-family="-apple-system,Segoe UI,sans-serif">
+            <!-- Title -->
+            <text x="350" y="22" text-anchor="middle" font-size="12" fill="#1f2328" font-weight="700">Promotion Pipeline Completion Status</text>
+
+            <!-- Step 1: Phase A prototype -->
+            <rect x="20" y="50" width="120" height="42" rx="8" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+            <text x="80" y="70" text-anchor="middle" font-size="10.5" fill="#953800" font-weight="700">Phase A</text>
+            <text x="80" y="83" text-anchor="middle" font-size="10.5" fill="#953800" font-weight="700">Prototype</text>
+
+            <!-- Arrow 1→2 -->
+            <line x1="142" y1="71" x2="158" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 2: reconcile -->
+            <rect x="162" y="50" width="100" height="42" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+            <text x="212" y="76" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">reconcile</text>
+
+            <!-- Arrow 2→3 -->
+            <line x1="264" y1="71" x2="280" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 3: checklist passed -->
+            <rect x="284" y="50" width="108" height="42" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+            <text x="338" y="69" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="700">Checklist</text>
+            <text x="338" y="83" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="700">Passed</text>
+
+            <!-- Arrow 3→4 -->
+            <line x1="394" y1="71" x2="410" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 4: merged into templates/ -->
+            <rect x="414" y="50" width="112" height="42" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+            <text x="470" y="69" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Merged into</text>
+            <text x="470" y="83" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">templates/</text>
+
+            <!-- Arrow 4→5 -->
+            <line x1="528" y1="71" x2="544" y2="71" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#doneArrow)"/>
+
+            <!-- Step 5: scaffoldable via new-project.ts -->
+            <rect x="548" y="50" width="132" height="42" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+            <text x="614" y="69" text-anchor="middle" font-size="9.5" fill="#116329" font-weight="700">Scaffoldable via</text>
+            <text x="614" y="83" text-anchor="middle" font-size="9.5" fill="#116329" font-weight="700">new-project.ts</text>
+
+            <!-- Done badge -->
+            <rect x="594" y="108" width="80" height="28" rx="14" fill="url(#doneGrad)"/>
+            <text x="634" y="126" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">Done</text>
+            <!-- Checkmark inside badge -->
+            <circle cx="610" y="122" r="6" fill="none" stroke="#fff" stroke-width="1.2" cy="122"/>
+            <polyline points="606,122 609,126 615,119" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Connecting line to badge -->
+            <line x1="634" y1="94" x2="634" y2="106" stroke="#1a7f37" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+            <!-- Progress bar at bottom -->
+            <rect x="20" y="155" width="660" height="8" rx="4" fill="#eef1f4"/>
+            <rect x="20" y="155" width="660" height="8" rx="4" fill="#1a7f37" opacity="0.3"/>
+            <rect x="20" y="155" width="660" height="8" rx="4" fill="#1a7f37"/>
+            <!-- Progress labels -->
+            <text x="20" y="180" font-size="9" fill="#636c76">Phase A</text>
+            <text x="165" y="180" font-size="9" fill="#636c76">Convert</text>
+            <text x="310" y="180" font-size="9" fill="#636c76">Verify</text>
+            <text x="445" y="180" font-size="9" fill="#636c76">Merge</text>
+            <text x="600" y="180" font-size="9" fill="#116329" font-weight="600">Ready to Deploy</text>
+            <!-- Tick marks on progress bar -->
+            <line x1="150" y1="152" x2="150" y2="166" stroke="#fff" stroke-width="1.5"/>
+            <line x1="290" y1="152" x2="290" y2="166" stroke="#fff" stroke-width="1.5"/>
+            <line x1="430" y1="152" x2="430" y2="166" stroke="#fff" stroke-width="1.5"/>
+            <line x1="560" y1="152" x2="560" y2="166" stroke="#fff" stroke-width="1.5"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See also:</strong> the concept of designing a new variant from scratch is covered in <a href="11_VariantAdvanced_Chapter_en.html#s2">Chapter 11 · The From-Scratch Path</a>, and the hands-on exercise for creating a Phase A prototype is covered in <a href="../variant-practice/06_VariantPractice_Examples_en.html">Chapter 6 §2 Exercise</a>.
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+    Based on the ai-workspace-standards main branch | Written July 14, 2026<br>
+    <a href="../index_en.html">← Back to Handbook Home</a>
+  </p>
+
+  <div class="chapter-nav">
+    <a href="11_VariantAdvanced_Chapter_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 11 · New Variant vs. Promotion</div></a>
+    <a href="../capstone/13_Capstone_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 13 · Capstone Exercise</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

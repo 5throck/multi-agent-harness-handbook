@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Workshop Pre-Installation Checklist · Multi-Agent Harness Engineering Handbook - part of the Multi-Agent Harness Engineering Handbook materials.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshop Pre-Installation Checklist · Multi-Agent Harness Engineering Handbook</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    h2 { color: var(--accent-dark); margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); scroll-margin-top: 20px; }
+    .chk-list li.sub { margin-left: 22px; color: var(--text-dim); }
+    .chk-list li.sub::before { content: '—'; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Pre-Installation Checklist</div>
+  <a href="#s1">1. Verify Subscription</a>
+  <a href="#s2">2. Account Preparation</a>
+  <a href="#s3">3. System Requirements</a>
+  <a href="#s4">4. Git User Setup</a>
+  <a href="#s5">5. GitHub Authentication</a>
+  <a href="#s6">6. Project Environment Setup</a>
+  <a href="#s7">7. Final Environment Check</a>
+  <div class="nav-section">Other Documents</div>
+  <a href="SETUP_en.html">Workshop Environment Setup Guide</a>
+  <a href="../practice/04_Practice_Examples_A_en.html#setup">Chapter 4 §2-A Practice Preparation Section</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>Workshop Pre-Installation Checklist</h1>
+  <p class="subtitle">Complete this checklist <strong>before</strong> running the installation script. The items below cannot be automated and require manual action.</p>
+
+  <h2 id="s1">1. Verify Subscription (Top Priority)</h2>
+  <p>The tools used in the workshop hands-on sessions require a valid subscription.</p>
+  <table>
+    <thead><tr><th>Tool</th><th>Required Plan</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Claude Code CLI</strong> (<code>claude</code>)</td><td>Claude Pro or Max</td></tr>
+      <tr><td><strong>Claude Desktop App</strong></td><td>Claude Pro or higher</td></tr>
+      <tr><td><strong>Antigravity CLI</strong> (<code>agy</code>)</td><td>Gemini Advanced</td></tr>
+      <tr><td><strong>Antigravity Desktop App</strong></td><td>Gemini Advanced</td></tr>
+    </tbody>
+  </table>
+  <div class="warn"><strong>Regarding API Keys</strong>: API keys are only needed for integrations outside of your subscription plan. The workshop hands-on sessions are fully covered by the subscription model, so only issue an API key if it is truly necessary.</div>
+
+  <h2 id="s2">2. Account Preparation</h2>
+  <ul class="chk-list">
+    <li><strong>Google Account</strong> — required to use Antigravity / Gemini Advanced</li>
+    <li><strong>GitHub Account</strong> — required for <code>gh auth login</code> and PR exercises</li>
+    <li class="sub">If you don't have one, sign up in advance at <a href="https://github.com/signup" target="_blank">github.com/signup</a>, following the sign-up guidance in <a href="../practice/04_Practice_Examples_A_en.html#setup">Chapter 4 §2-A Practice Preparation Section</a></li>
+  </ul>
+
+  <h2 id="s3">3. System Requirements</h2>
+  <ul class="chk-list">
+    <li>OS: Windows 11 (Intel) / macOS Sequoia 15 or later on Apple Silicon (M series) / Ubuntu 24.04 or later</li>
+    <li>Free disk space: <strong>5 GB or more</strong></li>
+    <li>Administrator / sudo privileges</li>
+    <li class="sub"><strong>Windows</strong>: Start → search "PowerShell" → right-click → "Run as administrator" (or <code>Win + X</code> → "Terminal (Admin)"), then click "Yes" in the UAC confirmation dialog</li>
+    <li class="sub"><strong>macOS / Linux</strong>: prefix the command with <code>sudo</code></li>
+    <li>Stable internet connection (total download size approx. 1–2 GB)</li>
+  </ul>
+
+  <h2 id="s4">4. Git User Setup</h2>
+  <p>After installing git, register your user information with the commands below.</p>
+  <div style="position:relative">
+    <pre class="code-block">git config --global user.name  "Jane Doe"
+git config --global user.email "you@example.com"</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>git config --global user.name</code> configured</li>
+    <li><code>git config --global user.email</code> configured</li>
+  </ul>
+
+  <h2 id="s5">5. GitHub Authentication</h2>
+  <div style="position:relative">
+    <pre class="code-block">gh auth login</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  </div>
+  <p>Follow the prompts to complete authentication in your browser.</p>
+  <ul class="chk-list">
+    <li>Confirm "Logged in" is displayed when running <code>gh auth status</code></li>
+  </ul>
+
+  <h2 id="s6">6. Project Environment Setup (after cloning the repository)</h2>
+  <p>When using the <strong>co-develop</strong> or <strong>co-consult</strong> variants:</p>
+  <div style="position:relative">
+    <pre class="code-block">cp .env.sample .env
+# Open the .env file and fill in the required values</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  </div>
+  <ul class="chk-list">
+    <li>Created <code>.env</code> from <code>.env.sample</code></li>
+    <li>Entered required API keys / configuration values</li>
+  </ul>
+
+  <p><strong>co-develop</strong> Python projects — use <strong>uv</strong> (required):</p>
+  <div style="position:relative">
+    <pre class="code-block">uv sync          # Install dependencies based on pyproject.toml
+# Or, if using requirements.txt:
+uv pip install -r requirements.txt</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  </div>
+  <ul class="chk-list">
+    <li>Confirmed <code>uv</code> is installed and available (<code>uv --version</code>)</li>
+    <li>Installed Python dependencies via <code>uv</code></li>
+  </ul>
+
+  <div class="note"><strong>Docker</strong> is optional. Install it only if the facilitator specifically instructs you to. Add the <code>--docker</code> flag on macOS/Linux or the <code>-Docker</code> flag on Windows to the installation script.
+  <ul class="chk-list" style="margin-top:8px;"><li><em>(Optional)</em> Confirm Docker is installed and the daemon is running</li></ul></div>
+
+  <h2 id="s7">7. Final Environment Check (must be run before the workshop)</h2>
+  <p>Run the following command from the project root folder.</p>
+  <div style="position:relative">
+    <pre class="code-block">bun setup-common.ts</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  </div>
+  <p>You are ready once every item in the output table shows ✅.</p>
+
+  <hr>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">For questions, please contact the facilitator before the workshop begins.</p>
+ </article>
+</main>
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

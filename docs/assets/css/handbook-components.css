@@ -333,6 +333,9 @@ pre {
 }
 pre code { background: none; border: none; padding: 0; font-size: .875em; line-height: 1.6; }
 
+/* Code in table cells */
+td code { font-size: var(--font-size-label); }
+
 /* Blockquote */
 blockquote {
   border-left: 4px solid var(--accent);
@@ -489,8 +492,8 @@ pre.code-block {
 .platform-block {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 16px 18px;
-  margin: calc(var(--spacing-unit) * 2) 0;
+  padding: 14px 16px;
+  margin: 12px 0 20px;
 }
 
 .platform-block-title {
@@ -499,10 +502,10 @@ pre.code-block {
   margin-bottom: 10px;
 }
 
-.platform-block.claude  { border-left: 3px solid var(--platform-claude); }
-.platform-block.claudeapp { border-left: 3px solid var(--platform-claudeapp); }
-.platform-block.agy     { border-left: 3px solid var(--platform-agy); }
-.platform-block.antigravity { border-left: 3px solid var(--platform-antigravity); }
+.platform-block.claude      { border-top: 3px solid var(--accent-green); }
+.platform-block.claudeapp   { border-top: 3px dashed var(--accent-green); }
+.platform-block.agy         { border-top: 3px solid var(--accent-dark); }
+.platform-block.antigravity { border-top: 3px dashed var(--accent-purple); }
 
 .situation {
   background: var(--bg-situation);
@@ -788,7 +791,9 @@ pre.code-block {
    ========================================================================== */
 
 .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0 28px; }
-.compare-col  {}
+.compare-col { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+.compare-col h4 { font-size: var(--font-size-compact); color: var(--accent-dark); margin-bottom: 10px; }
+.compare-col ul { margin: 0 0 0 18px; font-size: var(--font-size-small); line-height: 1.75; }
 .compare-box {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -806,6 +811,7 @@ pre.code-block {
 .version-row { display: flex; border-bottom: 1px solid var(--border); }
 .version-row:last-child { border-bottom: none; }
 .vlabel { padding: 10px 16px; font-size: var(--font-size-small); font-weight: 600; color: var(--text-dim); background: var(--bg3); min-width: 140px; }
+.vlabel + span { padding: 10px 16px; font-size: var(--font-size-compact); flex: 1; }
 .vvalue { padding: 10px 16px; font-size: var(--font-size-compact); flex: 1; }
 
 .tree-box {
@@ -955,7 +961,7 @@ pre.code-block {
    R. Checklist
    ========================================================================== */
 
-.checklist { margin: 16px 0; }
+.checklist { background: var(--bg-success); border: 1px solid var(--badge-green-border); border-radius: 8px; padding: 16px 20px; margin: 18px 0; }
 .ct { font-weight: 700; font-size: var(--font-size-compact); color: var(--accent-dark); margin-bottom: 10px; }
 
 .chk-list { list-style: none; padding: 0; }
@@ -999,7 +1005,7 @@ pre.code-block {
 .variant-list { margin: 12px 0; }
 .variant-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .variant-row:last-child { border-bottom: none; }
-.variant-name { font-weight: 600; font-size: var(--font-size-compact); }
+.variant-name { font-weight: 700; font-size: var(--font-size-compact); font-family: var(--font-mono); color: var(--accent-dark); flex-shrink: 0; }
 
 /* ==========================================================================
    T. Search & Utilities
@@ -1124,7 +1130,29 @@ pre.code-block {
 }
 
 /* ==========================================================================
-   U. Responsive
+   U. Utility Classes
+   ========================================================================== */
+
+/* Dim text */
+.text-dim { color: var(--text-dim); font-size: var(--font-size-small); }
+
+/* Figure caption */
+.fig-caption { font-size: 12.5px; color: var(--text-dim); text-align: center; margin-top: 10px; }
+
+/* Flat/unstyled list */
+.flat-list { list-style: none; padding: 0; line-height: 2.2; }
+
+/* SVG / diagram container */
+.diagram-frame { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 20px 0 28px; }
+
+/* Plain pre (non-code-block) */
+.pre-plain { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre; }
+
+/* cmd-chip non-link modifier */
+.cmd-chip--label { cursor: default; }
+
+/* ==========================================================================
+   V. Responsive
    ========================================================================== */
 
 @media (max-width: 640px) {

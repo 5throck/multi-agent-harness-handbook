@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Course Overview · Multi-Agent Team Harness Engineering Handbook - Materials for the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Overview · Multi-Agent Team Harness Engineering Handbook</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .hero p { font-size: 14px; line-height: 1.75; margin: 0; }
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px; letter-spacing: .04em;
+      margin-right: 6px; margin-bottom: 6px;
+    }
+    h2 {
+      font-weight: 700; margin: 44px 0 14px;
+      scroll-margin-top: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2 .icon { font-size: 1.2rem; }
+    tr.schedule-total td { font-weight: 700; background: var(--bg2); }
+    .obj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0 22px; }
+    .obj-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 18px; font-size: 14px; line-height: 1.65; text-align: left;
+    }
+    .obj-card .obj-num {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: var(--tag-bg); border-radius: 10px; padding: 2px 8px; margin-bottom: 8px; display: inline-block;
+    }
+    .obj-card strong { color: var(--accent-dark); }
+    .takeaway-list { list-style: none; padding: 0; margin: 14px 0 22px; }
+    .takeaway-list li {
+      padding: 10px 16px 10px 42px; position: relative; margin-bottom: 8px;
+      background: var(--bg-success); border: 1px solid var(--badge-green-border); border-radius: 8px; font-size: 14px;
+    }
+    .takeaway-list li::before {
+      content: "✓"; position: absolute; left: 14px; top: 10px;
+      color: var(--accent-green); font-weight: 700; font-size: 14px;
+    }
+    .instructor-box p { margin: 6px 0; }
+    .schedule-block {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 6px 0; border-bottom: 1px solid var(--bg3);
+    }
+    .schedule-block:last-child { border-bottom: none; }
+    .schedule-time {
+      min-width: 70px; font-weight: 700; color: var(--accent-dark);
+      text-align: right; padding-top: 2px;
+    }
+    .schedule-body { flex: 1; }
+    .schedule-body h4 { font-size: 14px; font-weight: 700; margin: 0 0 3px; }
+    .schedule-body p { font-size: 13px; color: var(--text-dim); margin: 2px 0; line-height: 1.6; }
+    footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+      color: var(--text-dim); font-size: 12px; line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 640px) {
+      .wrap { padding: 32px 18px 60px; }
+      h1 { font-size: 1.7rem; }
+      .obj-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Multi-Agent Team Harness Engineering Workshop</h1>
+  <p class="subtitle">From prompt engineering to harness engineering. A two-day hands-on workshop where you design and operate multi-agent teams across four tools: Claude Code, Claude App, Antigravity, and Antigravity CLI.</p>
+</header>
+
+<!-- ── One-line summary ── -->
+<div class="hero">
+  <p><strong>What is this workshop?</strong> Starting from the premise that "prompt engineering alone is not enough," this <strong>two-day hands-on workshop</strong> teaches a design methodology for multi-agent teams in which AI agents are given <strong>narrow roles</strong> and coordinated by an <strong>orchestrator</strong>, while participants actually build subagents and pipelines across the four tools: Claude Code, Claude App, Antigravity, and Antigravity CLI.</p>
+  <p><strong>Day 1</strong> targets general users and focuses on multi-agent concepts, hands-on practice with the tools, and using existing variants. <strong>Day 2</strong> targets IT professionals and covers architecture in depth, tool comparison, enterprise operating strategy, creating new variants, and a capstone project.</p>
+</div>
+
+<!-- ────────────────── 1. Learning Objectives ────────────────── -->
+<h2 id="objectives"><span class="icon">🎯</span>Learning Objectives</h2>
+<p>Upon completing this workshop, participants will be able to:</p>
+<div class="obj-grid">
+  <div class="obj-card">
+    <div class="obj-num">LO-1</div>
+    <strong>Explain</strong> the definition of harness engineering in comparison with prompt and context engineering, and identify the three structural limitations of a single agent (context overload, role conflict, lack of parallelism).
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-2</div>
+    <strong>Design</strong> a multi-agent team composed of an orchestrator, specialists, and handoff contracts, and select the appropriate pattern from Anthropic's five orchestration patterns (chaining, routing, parallelization, orchestrator-worker, evaluator-optimizer) for a given situation.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-3</div>
+    <strong>Apply</strong> a guardrail system to subagents that includes a three-tier classification of risky actions (read/write/destructive), the principle of least privilege, human approval gates, isolation, and audit logging.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-4</div>
+    <strong>Execute</strong> subagent definition and invocation across the four tools — Claude Code, Claude App, Antigravity, and Antigravity CLI — and directly implement sequential pipelines and parallel execution.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-5</div>
+    <strong>Compare</strong> the four tools' subagent definition methods, teammateMode, hook support, and Agent Manager differences, based on hands-on experience.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-6</div>
+    <strong>Judge</strong> which of the two enterprise multi-agent team operating models (service-ticket model vs. development-tool + variant model) suits your organization and explain why.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-7</div>
+    <strong>Implement</strong> your understanding of the ai-workspace-standards repository's L0→L1→L2 layer structure and its four core files by prototyping a new variant (co-marketing) and writing a promotion checklist.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-8</div>
+    <strong>Synthesize</strong> your own recurring task into a problem statement, then design and execute the full cycle: problem definition → guardrail design → subagent implementation → verification and retrospective.
+  </div>
+</div>
+
+<!-- ────────────────── 2. Audience ────────────────── -->
+<h2 id="audience"><span class="icon">👥</span>Audience</h2>
+<p>This workshop runs over two days, each aimed at a <strong>different audience</strong>. You may attend a single day that matches your background, or attend both days for a systematic learning path.</p>
+
+<h3>📅 Day 1 — General Users</h3>
+<p>Aimed at practitioners who want to apply AI tools to their work. Extensive coding experience is not required — familiarity with basic CLI operations is sufficient to follow along.</p>
+<ul>
+  <li><strong>Practitioners newly adopting or already using AI coding tools daily.</strong> If you use Claude Code, GitHub Copilot, Cursor, or similar tools but feel limited by single-prompt interactions, this is for you.</li>
+  <li><strong>Team leads or planners considering AI agent adoption.</strong> For those thinking through how to deploy agents within their team.</li>
+  <li><strong>Instructors and consultants who teach AI tools.</strong> For those who cover Claude Code and Antigravity in their training materials.</li>
+</ul>
+<div class="note">
+  <strong>Note:</strong> The Day 1 warm-up exercise (Tetris/Pac-Man) uses claude.ai or Claude Code. You can participate with prompt input alone even without coding experience, though familiarity with browser environments will make the HTML Canvas-based game exercise smoother.
+</div>
+
+<h3>📅 Day 2 — IT Professionals</h3>
+<p>Building on the Day 1 experience, this session targets IT professionals and covers architecture and deeper technical material.</p>
+<ul>
+  <li><strong>Software engineers who use AI coding tools daily.</strong> If you use Claude Code, GitHub Copilot, Cursor, or similar tools but need experience designing multi-agent architectures, this is for you.</li>
+  <li><strong>DevOps and platform engineers.</strong> For those whose work includes building organization-wide AI workspaces and managing variants.</li>
+  <li><strong>Tech leads designing AI agent adoption.</strong> For those responsible for deploying agents safely across a whole team.</li>
+</ul>
+<div class="note">
+  <strong>Note:</strong> This workshop focuses on the Claude Code and Antigravity family of tools, and assumes familiarity with installing and using the basic CLI operations of all four tools. Beginners without CLI experience are encouraged to thoroughly practice the preparatory steps in the <a href="../setup/SETUP_en.html">installation guide</a> beforehand.
+</div>
+
+<!-- ────────────────── 3. Prerequisites ────────────────── -->
+<h2 id="prerequisites"><span class="icon">📋</span>Prerequisites</h2>
+
+<h3>Subscriptions & Accounts</h3>
+<div class="chk">☐ An active Claude Pro/Max subscription (a subscription account, not an API key)</div>
+<div class="chk">☐ A Google account for using Antigravity</div>
+<div class="chk">☐ A GitHub account capable of <code>gh auth login</code></div>
+
+<h3>System Requirements</h3>
+<div class="chk">☐ At least 5GB of free disk space, and administrator/sudo privileges</div>
+<div class="chk">☐ Claude App (Desktop), Claude Code (CLI), Antigravity (Desktop), and Antigravity CLI (<code>agy</code>) installed</div>
+<div class="chk">☐ Confirm <code>bun --version</code> and <code>git --version</code> print normal output</div>
+<div class="chk">☐ Clone <code>git clone https://github.com/5throck/ai-workspace-standards.git</code> into your workspace root ahead of time</div>
+
+<div class="warn">
+  <strong>⚠️ Pre-installation is mandatory.</strong> To avoid wasting time on installation issues on the day of the workshop, please complete every item in the <a href="../setup/SETUP_CHECKLIST_en.html">pre-installation checklist</a> at least one day before the course begins. OS-specific automated install scripts are available in the <a href="../setup/SETUP_en.html">installation guide</a>.
+</div>
+
+<!-- ────────────────── 4. Course Format ────────────────── -->
+<h2 id="format"><span class="icon">📖</span>Course Format</h2>
+<div class="table-schedule">
+<table>
+  <thead><tr><th>Format</th><th>Content</th><th>Day 1 share</th><th>Day 2 share</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tag tag-lecture">Lecture</span></td><td>Concept explanations, pattern introductions, tool comparisons, model comparisons</td><td>~30%</td><td>~40%</td></tr>
+    <tr><td><span class="tag tag-lab">Lab</span></td><td>Participants define/invoke subagents, build pipelines, and scaffold variants themselves</td><td>~55%</td><td>~45%</td></tr>
+    <tr><td><span class="tag tag-discuss">Discussion</span></td><td>Small-group discussion, comprehension checks, full-group retrospective</td><td>~15%</td><td>~10%</td></tr>
+    <tr><td><span class="tag tag-demo">Demo</span></td><td>Instructor screen-share (irreversible operations only, e.g. the promotion pipeline)</td><td>—</td><td>~5%</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="highlight">
+  <div class="hl-title">Hands-on environment</div>
+  <p>All four tools (Claude App, Claude Code, Antigravity Desktop, Antigravity CLI) are installed, and participants are split into four groups, each running the same scenario on a different tool. At the end, results are compared, giving direct, first-hand experience of the content in the "tool comparison" chapter.</p>
+</div>
+
+<!-- ────────────────── 5. Course Schedule ────────────────── -->
+<h2 id="agenda"><span class="icon">🕐</span>Course Schedule</h2>
+    <p>Total duration across both days is <strong>about 11 hours 15 minutes</strong> (excluding breaks). With 2 breaks on Day 1 and 2 breaks on Day 2 (10-15 minutes each), that comes to roughly <strong>5h 55m-6h 25m on Day 1 and 6h-6h 30m on Day 2</strong>.</p>
+
+<div class="highlight">
+  <div class="hl-title">Scheduling principles</div>
+  <p><strong>Day 1 (general users)</strong> focuses on harness engineering concepts, guardrails, and hands-on tool practice, introduces ai-workspace-standards lightly, and then dedicates ample time to hands-on practice with <strong>existing variants</strong>. It is structured so that participants with little coding experience can follow along. <strong>Day 2 (IT professionals)</strong> builds on Day 1 to cover the ai-workspace-standards architecture in depth, tool comparison, and enterprise operating strategy, then works through <strong>creating a new variant</strong> and a <strong>capstone project</strong>.</p>
+</div>
+
+<h3>📅 Day 1 — General Users: Practical Multi-Agent Application</h3>
+
+<div class="schedule-block">
+  <div class="schedule-time">10 min</div>
+  <div class="schedule-body">
+    <h4>Introduction</h4>
+    <p>Course goals and two-day roadmap overview, confirmation of prerequisites</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">30 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 1 · Work Transformation in the AI Era</h4>
+    <p>Why AI now (adoption statistics), the three stages of AI use (user→utilizer→designer), the need for harness engineering, the principles of multi-agent systems, real-world time-savings case studies, and this workshop's roadmap</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">45 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 2 · Harness Engineering and Multi-Agent Team Concepts</h4>
+    <p>The Prompt→Context→Harness flow, single-agent limitations, orchestrator-specialist-handoff contracts, the 5 orchestration patterns, dynamic team composition, the AGENTS.md standard</p>
+    <p><span class="tag tag-lecture">Lecture</span> <span class="tag tag-discuss">Comprehension check</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">20 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 3 · Guardrails and the Permission Model</h4>
+    <p>Three-tier classification of risky actions, the principle of least privilege, human approval gates, isolation, audit logging</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Break 1 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Warm-up lab — From Tetris to Pac-Man</h4>
+    <p>Vibe-code a Tetris clone (10 min) → attempt Pac-Man with a single prompt and experience the failure firsthand → retry with a 3-stage planning/development/QA multi-agent team (25 min) → wrap-up takeaway: "the value of role separation grows exponentially as complexity increases" (5 min)</p>
+    <p><span class="tag tag-lab">Lab (hands-on)</span> <span class="tag tag-discuss">Takeaway</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">80 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 4 §1 + Chapter 4 §2-A/B · Multi-Agent Team Lab</h4>
+    <p>Subagent definition/invocation, sequential pipelines, dynamic team composition, parallel execution, and model tier comparison in Claude (A)/Antigravity (B) (G-1/D-1/D-2/P-1/P-2)</p>
+    <p><span class="tag tag-lab">Lab (hands-on)</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Break 2 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">20 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 5 · Introduction to ai-workspace-standards (light overview)</h4>
+    <p>Repository overview, the four core files (AGENTS.md, CONSTITUTION.md, CLAUDE.md, GEMINI.md), what a variant is, and the basics of scaffolding a project</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 6 · Using an Existing Variant (G-1)</h4>
+    <p>Scaffolding a Physical AI market research project with co-consult, applying the 4-stage design framework, running the agent team (the 7-stage consulting workflow), reviewing deliverables and tracking handoffs</p>
+    <p><span class="tag tag-lab">Lab (hands-on)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 6 · Using an Existing Variant (G-2)</h4>
+    <p>Scaffolding a Korean-food-globalization presentation deck with co-deck, framing the presentation topic, running the 11-stage pipeline, reviewing and improving the deliverable, configuring TTS and automatic slide generation</p>
+    <p><span class="tag tag-lab">Lab (hands-on)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">10 min</div>
+  <div class="schedule-body">
+    <h4>Day 1 wrap-up</h4>
+    <p>Summary of today's material, retrospective comparison of the two variants' structures (co-consult vs. co-deck), preview of Day 2 (the IT professional session)</p>
+    <p><span class="tag tag-discuss">Discussion</span></p>
+  </div>
+</div>
+
+<h3 style="margin-top:36px">📅 Day 2 — IT Professionals: Architecture, New-Variant Creation, and Capstone</h3>
+
+<div class="schedule-block">
+  <div class="schedule-time">10 min</div>
+  <div class="schedule-body">
+    <h4>Day 1 recap</h4>
+    <p>Summary of key concepts (orchestration patterns, guardrails, AGENTS.md), sharing outcomes from the Chapter 6 existing-variant lab</p>
+    <p><span class="tag tag-discuss">Discussion</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 8 §1 · Deployment and SSOT</h4>
+    <p>The L0→L1→L2 layer structure in detail, the fork model, per-file SSOT flow</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 8 §2 · Lifecycle Management</h4>
+    <p>Lifecycle management for agents, skills, and scripts</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 10 · Upgrading an L2 Project</h4>
+    <p>The procedure for upgrading an existing project to the L2 variant structure, the 5-way file-handling classification, snapshots and rollback, and how this differs in direction from promotion</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 9 · Workflow Design Patterns</h4>
+    <p>Workflow building blocks (steps, branching, parallelism, aggregation, gates, loops), five domain-specific case studies, a pattern-selection guide</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">25 min</div>
+  <div class="schedule-body">
+    <h4>Common reference · Tool comparison (technical)</h4>
+    <p>An at-a-glance view of the four tools' structures, Claude App vs. Code (subagent definitions, teammateMode), Antigravity vs. agy (Agent Manager, /goal·/agent·/agents), a comparison table of multi-agent support scope, a guide for choosing tools for hands-on practice, and AGENTS.md integration</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">30 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 7 · Comparing Enterprise Operating Strategies</h4>
+    <p>Service-ticket model vs. development-tool + variant model, kanban-based operations, comparing the pros and cons of the two models</p>
+    <p><span class="tag tag-lecture">Lecture</span> <span class="tag tag-discuss">Discussion</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Break 1 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 11 · Creating a New Variant (D-1)</h4>
+    <p>Building the co-marketing Phase A prototype — create-l2-scaffold, defining domain agents (researcher, writer), updating the AGENTS.md roster, agent:verify</p>
+    <p><span class="tag tag-lab">Lab (hands-on)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">20 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 11 · Creating a New Variant — Lecture</h4>
+    <p>Building from scratch (Phase A→B) vs. promoting an existing project — the differences between the two paths and criteria for choosing one</p>
+    <p><span class="tag tag-lecture">Lecture</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">60 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 12 · Promoting a New Variant</h4>
+    <p>Validating the prototype (validate-templates, agent:verify), writing the promotion checklist/manifest (participant exercise), running the promotion pipeline (instructor demo)</p>
+    <p><span class="tag tag-lab">Lab</span> <span class="tag tag-demo">Demo</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Break 2 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">60 min</div>
+  <div class="schedule-body">
+    <h4>Chapter 13 · Capstone Lab</h4>
+    <p>Pick your own recurring task and design the 4 stages yourself (problem definition, guardrail design, subagent implementation, verification and retrospective)</p>
+    <p><span class="tag tag-lab">Lab (hands-on)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Capstone presentations</h4>
+    <p>1-2 participants briefly share their own workflow, followed by peer feedback</p>
+    <p><span class="tag tag-discuss">Presentation</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Wrap-up</h4>
+    <p>Full two-day retrospective, Q&A, pointers to the glossary/FAQ, and next steps</p>
+    <p><span class="tag tag-discuss">Discussion</span></p>
+  </div>
+</div>
+
+<!-- ────────────────── 6. Topics Covered ────────────────── -->
+<h2 id="topics"><span class="icon">📚</span>Topics Covered</h2>
+<div class="table-schedule">
+<table>
+  <thead><tr><th>Block</th><th>Topic</th><th>Related chapter</th><th>Schedule</th></tr></thead>
+  <tbody>
+        <tr><td>Introduction</td><td>State of AI adoption and statistics, the 3 stages of AI use, the need for harness engineering, multi-agent principles, real-world time-savings case studies</td><td>Ch. 1</td><td>Day 1</td></tr>
+        <tr><td>Concepts</td><td>The harness engineering paradigm, orchestration patterns, the AGENTS.md standard</td><td>Ch. 2</td><td>Day 1</td></tr>
+        <tr><td>Safety</td><td>Guardrail design, classification of risky actions, least privilege, approval gates, isolation</td><td>Ch. 3</td><td>Day 1</td></tr>
+        <tr><td>Warm-up</td><td>Experiencing the difference in approach based on complexity via vibe-coding (Tetris) vs. multi-agent (Pac-Man)</td><td>Warm-up</td><td>Day 1</td></tr>
+            <tr><td>Lab</td><td>Subagent definition/invocation, pipelines, parallel execution, model tier comparison</td><td>Ch. 4 §1, §2-A/B</td><td>Day 1</td></tr>
+    <tr><td>Design</td><td>Introduction to ai-workspace-standards, the 4 core files, variant overview</td><td>Ch. 5 (light)</td><td>Day 1</td></tr>
+    <tr><td>Implementation</td><td>Using existing variants (scaffolding and running co-consult, co-deck)</td><td>Ch. 6</td><td>Day 1</td></tr>
+            <tr><td>Design deep-dive</td><td>The L0→L1→L2 layer structure, per-file SSOT flow, lifecycle management for agents/skills/scripts</td><td>Ch. 8 §1, §2</td><td>Day 2</td></tr>
+                <tr><td>Upgrade</td><td>Converting an existing project to the L2 variant structure, the 5-way file-handling classification, snapshots and rollback</td><td>Ch. 10</td><td>Day 2</td></tr>
+        <tr><td>Workflow</td><td>Workflow building blocks, 5 domain-specific pattern case studies, pattern-selection guide</td><td>Ch. 9</td><td>Day 2</td></tr>
+    <tr><td>Tools</td><td>Comparative analysis of Claude Code, Claude App, Antigravity, and Antigravity CLI</td><td>Common reference</td><td>Day 2</td></tr>
+    <tr><td>Operations</td><td>Service-ticket model vs. variant model, kanban-based operations</td><td>Ch. 7</td><td>Day 2</td></tr>
+        <tr><td>Creation</td><td>Creating a new variant (co-marketing prototype), the promotion pipeline</td><td>Ch. 11, 12</td><td>Day 2</td></tr>
+    <tr><td>Synthesis</td><td>Capstone: applying a multi-agent team to your own work</td><td>Ch. 13</td><td>Day 2</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ────────────────── 7. What You'll Gain ────────────────── -->
+<h2 id="takeaways"><span class="icon">✅</span>What You'll Gain After Completion</h2>
+<ul class="takeaway-list">
+  <li><strong>Multi-agent team design skills.</strong> Master the design methodology for transitioning from a single agent to a team structure, ready for immediate application to your own work.</li>
+  <li><strong>Hands-on experience with all four tools.</strong> Run the same scenario yourself across Claude Code, Claude App, Antigravity, and the Antigravity command-line interface (CLI), and directly experience the strengths and weaknesses of each.</li>
+  <li><strong>A guardrail design checklist.</strong> Take away a practical guardrail design template that covers risky-action classification, least privilege, and approval gates.</li>
+  <li><strong>A variant prototype.</strong> Build a co-marketing prototype yourself based on ai-workspace-standards, giving you a concrete starting point for introducing variants within your organization.</li>
+  <li><strong>Criteria for choosing an operating model.</strong> Compare the pros and cons of the service-ticket model and the variant model so you can settle on an operating strategy that fits your organization.</li>
+  <li><strong>Your own workflow.</strong> In the capstone lab, reframe one of your own recurring tasks as a multi-agent team problem and experience the full cycle from problem definition through verification.</li>
+</ul>
+
+<!-- ────────────────── 8. Instructor Info ────────────────── -->
+<h2 id="instructor"><span class="icon">🎤</span>Instructor Information</h2>
+<div class="instructor-box">
+  <p class="placeholder">[Instructor name · affiliation · title]</p>
+  <p class="placeholder">[Instructor profile: experience introducing/operating AI agents, key areas of interest, contact information]</p>
+  <p style="margin-top:12px;font-size:12px;color:var(--text-dim);">This section is intentionally left blank for the instructor to fill in.</p>
+</div>
+
+<!-- ────────────────── 9. Resources ────────────────── -->
+<h2 id="resources"><span class="icon">🔗</span>Resources</h2>
+<ul>
+  <li><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Official Claude Code Subagents documentation</a></li>
+  <li><a href="https://antigravity.google/docs/agent-manager" target="_blank">Official Antigravity Agent Manager documentation</a></li>
+  <li><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards GitHub repository</a></li>
+  <li><a href="../setup/SETUP_en.html">Workshop environment installation guide</a></li>
+  <li><a href="../setup/SETUP_CHECKLIST_en.html">Pre-installation checklist</a></li>
+  <li><a href="../glossary/00_Glossary.html">Glossary</a></li>
+  <li><a href="../faq/00_FAQ.html">FAQ · common errors and fixes</a></li>
+</ul>
+
+<footer>
+  Based on Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08) · English training material<br>
+  Official resources: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> ·
+  <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google</a> ·
+  <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a>
+</footer>
+
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

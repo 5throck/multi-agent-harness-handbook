@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="講義紹介・マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>講義紹介・マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .hero p { font-size: 14px; line-height: 1.75; margin: 0; }
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px; letter-spacing: .04em;
+      margin-right: 6px; margin-bottom: 6px;
+    }
+    h2 {
+      font-weight: 700; margin: 44px 0 14px;
+      scroll-margin-top: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2 .icon { font-size: 1.2rem; }
+    tr.schedule-total td { font-weight: 700; background: var(--bg2); }
+    .obj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0 22px; }
+    .obj-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 18px; font-size: 14px; line-height: 1.65; text-align: left;
+    }
+    .obj-card .obj-num {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: var(--tag-bg); border-radius: 10px; padding: 2px 8px; margin-bottom: 8px; display: inline-block;
+    }
+    .obj-card strong { color: var(--accent-dark); }
+    .takeaway-list { list-style: none; padding: 0; margin: 14px 0 22px; }
+    .takeaway-list li {
+      padding: 10px 16px 10px 42px; position: relative; margin-bottom: 8px;
+      background: var(--bg-success); border: 1px solid var(--badge-green-border); border-radius: 8px; font-size: 14px;
+    }
+    .takeaway-list li::before {
+      content: "✓"; position: absolute; left: 14px; top: 10px;
+      color: var(--accent-green); font-weight: 700; font-size: 14px;
+    }
+    .instructor-box p { margin: 6px 0; }
+    .schedule-block {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 6px 0; border-bottom: 1px solid var(--bg3);
+    }
+    .schedule-block:last-child { border-bottom: none; }
+    .schedule-time {
+      min-width: 70px; font-weight: 700; color: var(--accent-dark);
+      text-align: right; padding-top: 2px;
+    }
+    .schedule-body { flex: 1; }
+    .schedule-body h4 { font-size: 14px; font-weight: 700; margin: 0 0 3px; }
+    .schedule-body p { font-size: 13px; color: var(--text-dim); margin: 2px 0; line-height: 1.6; }
+    footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+      color: var(--text-dim); font-size: 12px; line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 640px) {
+      .wrap { padding: 32px 18px 60px; }
+      h1 { font-size: 1.7rem; }
+      .obj-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>マルチエージェントチーム・ハーネスエンジニアリング・ワークショップ</h1>
+  <p class="subtitle">プロンプトエンジニアリングからハーネスエンジニアリングへ。Claude Code・Claude App・Antigravity・Antigravity CLIの4つのツールを横断しながら、マルチエージェントチームを自ら設計・運用する2日間の実践ワークショップです。</p>
+</header>
+
+<!-- ── 一行要約 ── -->
+<div class="hero">
+  <p><strong>本ワークショップとは?</strong> 「プロンプトエンジニアリングだけでは不十分である」という問題意識から出発し、AIエージェントに<strong>狭い役割を与え</strong>、<strong>オーケストレーターが調整する</strong>マルチエージェントチームの設計方法論を学び、Claude Code・Claude App・Antigravity・Antigravity CLIの4つのツールで実際にサブエージェントを作成し、パイプラインを構築する<strong>2日間にわたる実践ワークショップ</strong>です。</p>
+  <p><strong>1日目</strong>は一般ユーザーを対象に、マルチエージェントの概念と実務ツールの実習、既存variantの活用に重点を置きます。<strong>2日目</strong>はITプロフェッショナルを対象に、アーキテクチャの深掘り、ツール比較、企業運用戦略、新規variantの作成からキャップストーンプロジェクトまでを扱います。</p>
+</div>
+
+<!-- ────────────────── 1. 学習目標 ────────────────── -->
+<h2 id="objectives"><span class="icon">🎯</span>学習目標</h2>
+<p>本ワークショップを修了した参加者は、次のことができるようになります。</p>
+<div class="obj-grid">
+  <div class="obj-card">
+    <div class="obj-num">LO-1</div>
+    <strong>説明</strong>ハーネスエンジニアリングの定義をプロンプト・コンテキストエンジニアリングと比較して説明し、単一エージェントが抱える3つの構造的限界(コンテキスト過負荷・役割の衝突・並列性の欠如)を挙げられます。
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-2</div>
+    <strong>設計</strong>オーケストレーター・スペシャリスト・ハンドオフ契約から成るマルチエージェントチームを構成し、Anthropicの5つのオーケストレーションパターン(チェイニング・ルーティング・並列化・オーケストレーター-ワーカー・評価者-最適化)の中から状況に適したパターンを選択できます。
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-3</div>
+    <strong>適用</strong>危険作業の3段階分類(読み取り/書き込み/破壊的操作)、最小権限の原則、人による承認ゲート、隔離、監査ログを含むガードレール体系をサブエージェントに設計できます。
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-4</div>
+    <strong>実行</strong>Claude Code・Claude App・Antigravity・Antigravity CLIの4つのツールでサブエージェントを定義・呼び出し、順次パイプラインと並列実行を直接実装できます。
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-5</div>
+    <strong>比較</strong>実習経験に基づき、4つのツールのサブエージェント定義方式、teammateMode、フックのサポート状況、Agent Managerの違いを説明できます。
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-6</div>
+    <strong>判断</strong>企業内マルチエージェントチーム運用の2つのモデル(サービスチケットモデル vs 開発ツール+variantモデル)を比較し、自組織に適したモデルとその理由を説明できます。
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-7</div>
+    <strong>実装</strong>ai-workspace-standardsリポジトリのL0→L1→L2階層構造と中核となる4種類のファイルを理解し、新しいvariant(co-marketing)をプロトタイプとして作成し、昇格チェックリストを作成できます。
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-8</div>
+    <strong>統合</strong>自身の実際の反復業務を課題として再定義し、課題定義→ガードレール設計→サブエージェント実装→検証・振り返りという一連のサイクルを自ら設計・実行できます。
+  </div>
+</div>
+
+<!-- ────────────────── 2. 対象者 ────────────────── -->
+<h2 id="audience"><span class="icon">👥</span>対象者</h2>
+<p>本ワークショップは2日間にわたり、それぞれ<strong>異なる対象層</strong>を対象に開催されます。日程に合わせて参加することも、両日とも参加して体系的に学ぶこともできます。</p>
+
+<h3>📅 1日目 — 一般ユーザー</h3>
+<p>AIツールを業務に活用したい実務者を対象としています。コーディング経験が豊富でなくても、CLIの基本操作に慣れていれば十分についていけます。</p>
+<ul>
+  <li><strong>AIコーディングツールを新たに導入する、または日常的に使用している実務者。</strong>Claude Code、GitHub Copilot、Cursorなどを使っているものの、単一プロンプトでは限界を感じている方</li>
+  <li><strong>AIエージェント導入を検討しているチームリーダー・企画者。</strong>チームにどのようにエージェントを配置するか検討している方</li>
+  <li><strong>AIツール教育を担当する講師・コンサルタント。</strong>Claude CodeとAntigravityを教育教材として扱う方</li>
+</ul>
+<div class="note">
+  <strong>参考:</strong> 1日目のウォームアップ実習(テトリス/パックマン)では、claude.aiまたはClaude Codeを使用します。コーディング経験がなくてもプロンプト入力のみで参加できますが、HTML Canvasベースのゲームを体験する過程ではブラウザ環境に慣れているとより円滑に進められます。
+</div>
+
+<h3>📅 2日目 — ITプロフェッショナル</h3>
+<p>1日目の経験を土台に、アーキテクチャと技術的な深掘りを扱うITプロフェッショナル向けのセッションです。</p>
+<ul>
+  <li><strong>AIコーディングツールを日常的に使用しているソフトウェアエンジニア。</strong>Claude Code、GitHub Copilot、Cursorなどを使っているものの、マルチエージェントアーキテクチャの設計経験が必要な方</li>
+  <li><strong>DevOps・プラットフォームエンジニア。</strong>組織単位のAIワークスペース構築とvariant管理が業務に含まれる方</li>
+  <li><strong>AIエージェント導入を設計するテックリード。</strong>チーム全体にどのようにエージェントを配置し、安全に運用するかを設計する責任がある方</li>
+</ul>
+<div class="note">
+  <strong>参考:</strong> 本ワークショップはClaude CodeとAntigravity系のツールに焦点を当てており、4つのツールのインストールとCLIの基本操作に慣れていることを前提とします。CLI経験のない初心者は、<a href="../setup/SETUP_ja.html">インストールガイド</a>の事前準備手順を十分に練習してから参加することをお勧めします。
+</div>
+
+<!-- ────────────────── 3. 事前要件 ────────────────── -->
+<h2 id="prerequisites"><span class="icon">📋</span>事前要件</h2>
+
+<h3>サブスクリプション・アカウント</h3>
+<div class="chk">☐ 有効なClaude Pro/Maxサブスクリプション(APIキーではなくサブスクリプション型アカウント)</div>
+<div class="chk">☐ Antigravity利用のためのGoogleアカウント</div>
+<div class="chk">☐ <code>gh auth login</code>が可能なGitHubアカウント</div>
+
+<h3>システム要件</h3>
+<div class="chk">☐ 最低5GBの空きディスク容量、管理者/sudo権限</div>
+<div class="chk">☐ Claude App(Desktop)、Claude Code(CLI)、Antigravity(Desktop)、Antigravity CLI(<code>agy</code>)のインストール完了</div>
+<div class="chk">☐ <code>bun --version</code>、<code>git --version</code>が正常に出力されることを確認</div>
+<div class="chk">☐ ワークスペースのルート位置に<code>git clone https://github.com/5throck/ai-workspace-standards.git</code>を事前にクローン</div>
+
+<div class="warn">
+  <strong>⚠️ 事前インストール必須。</strong> ワークショップ当日にインストールの問題で時間を無駄にしないよう、講義開始の少なくとも1日前までに<a href="../setup/SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>のすべての項目を完了してください。OS別の自動インストールスクリプトは<a href="../setup/SETUP_ja.html">インストールガイド</a>に用意されています。
+</div>
+
+<!-- ────────────────── 4. 講義形態 ────────────────── -->
+<h2 id="format"><span class="icon">📖</span>講義形態</h2>
+<div class="table-schedule">
+<table>
+  <thead><tr><th>形態</th><th>内容</th><th>1日目の割合</th><th>2日目の割合</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tag tag-lecture">講義</span></td><td>概念説明、パターン紹介、ツール比較、モデル比較</td><td>約30%</td><td>約40%</td></tr>
+    <tr><td><span class="tag tag-lab">実習</span></td><td>参加者自身によるサブエージェントの定義・呼び出し・パイプライン・variantスキャフォールディング</td><td>約55%</td><td>約45%</td></tr>
+    <tr><td><span class="tag tag-discuss">討論</span></td><td>小グループ討論、確認質問、全体振り返り</td><td>約15%</td><td>約10%</td></tr>
+    <tr><td><span class="tag tag-demo">デモ</span></td><td>講師による画面共有(昇格パイプラインなど不可逆的な作業のみ)</td><td>—</td><td>約5%</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="highlight">
+  <div class="hl-title">実習環境</div>
+  <p>4つのツール(Claude App、Claude Code、Antigravity Desktop、Antigravity CLI)をすべてインストールした上で、参加者を4つのグループに分け、それぞれ異なるツールで同じシナリオを進めます。最後に結果を比較することで、「ツール比較」の章の内容を直接体感できます。</p>
+</div>
+
+<!-- ────────────────── 5. 講義日程 ────────────────── -->
+<h2 id="agenda"><span class="icon">🕐</span>講義日程</h2>
+    <p>両日合計の所要時間は<strong>約11時間15分</strong>(休憩を除く)。1日目の休憩2回、2日目の休憩2回(各10~15分)を含めると、<strong>1日目は約5時間55分~6時間25分、2日目は約6時間~6時間30分</strong>です。</p>
+
+<div class="highlight">
+  <div class="hl-title">日程構成の原則</div>
+  <p><strong>1日目(一般ユーザー)</strong>はハーネスエンジニアリングの概念とガードレール、実務ツールの実習に重点を置き、ai-workspace-standardsを軽く紹介した後、<strong>既存variantの活用</strong>実習を十分に行います。コーディング経験の少ない参加者でもついていけるよう構成されています。<strong>2日目(ITプロフェッショナル)</strong>は1日目の経験を土台に、ai-workspace-standardsアーキテクチャの深掘り、ツール比較、企業運用戦略を扱い、<strong>新規variant作成</strong>と<strong>キャップストーンプロジェクト</strong>を行います。</p>
+</div>
+
+<h3>📅 1日目 — 一般ユーザー: マルチエージェント実践活用</h3>
+
+<div class="schedule-block">
+  <div class="schedule-time">10分</div>
+  <div class="schedule-body">
+    <h4>導入</h4>
+    <p>講義目標・両日全体のロードマップ紹介、事前準備物の確認</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">30分</div>
+  <div class="schedule-body">
+    <h4>第1章 · AI時代の業務革新</h4>
+    <p>今なぜAIなのか(導入統計)、AI活用の3段階(利用者→活用者→設計者)、ハーネスエンジニアリングの必要性、マルチエージェントの原理、実務時間短縮の事例、本ワークショップのロードマップ</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">45分</div>
+  <div class="schedule-body">
+    <h4>第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念</h4>
+    <p>Prompt→Context→Harnessの流れ、単一エージェントの限界、オーケストレーター・スペシャリスト・ハンドオフ契約、オーケストレーションパターン5種、動的チーム構成、AGENTS.md標準</p>
+    <p><span class="tag tag-lecture">講義</span> <span class="tag tag-discuss">確認質問</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">20分</div>
+  <div class="schedule-body">
+    <h4>第3章 · ガードレールと権限モデル</h4>
+    <p>危険作業の3段階分類、最小権限の原則、人による承認ゲート、隔離、監査ログ</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ 休憩1(10~15分)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">40分</div>
+  <div class="schedule-body">
+    <h4>ウォームアップ実習 — テトリスからパックマンまで</h4>
+    <p>バイブコーディングでテトリスを作る(10分)→単一プロンプトでパックマンに挑戦し失敗を体験→企画・開発・QAの3段階マルチエージェントで再挑戦(25分)→示唆のまとめ:「複雑さが高まるほど役割分離の価値は指数関数的に増加する」(5分)</p>
+    <p><span class="tag tag-lab">実習(参加者自身)</span> <span class="tag tag-discuss">示唆</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">80分</div>
+  <div class="schedule-body">
+    <h4>第4章 §1 + 第4章 §2-A/B · マルチエージェントチーム実習</h4>
+    <p>Claude(A)/Antigravity(B)でサブエージェントの定義・呼び出し・順次パイプライン・動的チーム構成・並列実行・モデルティア比較(G-1/D-1/D-2/P-1/P-2)</p>
+    <p><span class="tag tag-lab">実習(参加者自身)</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ 休憩2(10~15分)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">20分</div>
+  <div class="schedule-body">
+    <h4>第5章 · ai-workspace-standardsの紹介(軽く)</h4>
+    <p>リポジトリ概要、中核となる4種類のファイル(AGENTS.md・CONSTITUTION.md・CLAUDE.md・GEMINI.md)、variantとは何か、スキャフォールディングによるプロジェクト作成の基本</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">40分</div>
+  <div class="schedule-body">
+    <h4>第6章 · 既存variantの活用(G-1)</h4>
+    <p>co-consultでPhysical AI市場調査プロジェクトをスキャフォールディング、4段階設計フレームワークの適用、エージェントチームの稼働(7段階コンサルティングワークフロー)、成果物のレビュー・ハンドオフの追跡</p>
+    <p><span class="tag tag-lab">実習(参加者自身)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">40分</div>
+  <div class="schedule-body">
+    <h4>第6章 · 既存variantの活用(G-2)</h4>
+    <p>co-deckで韓食の世界化に関する発表資料をスキャフォールディング、発表テーマの枠組み設定、11段階パイプラインの稼働、成果物のレビュー・改善、TTS・自動スライド設定</p>
+    <p><span class="tag tag-lab">実習(参加者自身)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">10分</div>
+  <div class="schedule-body">
+    <h4>1日目のまとめ</h4>
+    <p>本日学んだ内容の要約、2つのvariant(co-consult vs co-deck)の構造比較の振り返り、2日目(ITプロフェッショナルセッション)の予告</p>
+    <p><span class="tag tag-discuss">討論</span></p>
+  </div>
+</div>
+
+<h3 style="margin-top:36px">📅 2日目 — ITプロフェッショナル: アーキテクチャ・新規作成・キャップストーン</h3>
+
+<div class="schedule-block">
+  <div class="schedule-time">10分</div>
+  <div class="schedule-body">
+    <h4>1日目の復習</h4>
+    <p>主要概念の要約(オーケストレーションパターン、ガードレール、AGENTS.md)、第6章の既存variant活用実習の成果共有</p>
+    <p><span class="tag tag-discuss">討論</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15分</div>
+  <div class="schedule-body">
+    <h4>第8章 §1 · 配布とSSOT</h4>
+    <p>L0→L1→L2階層構造の詳細、フォークモデル、ファイル別SSOTの流れ</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15分</div>
+  <div class="schedule-body">
+    <h4>第8章 §2 · ライフサイクル管理</h4>
+    <p>エージェント・スキル・スクリプトのライフサイクル管理</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15分</div>
+  <div class="schedule-body">
+    <h4>第10章 · L2プロジェクトのアップグレード</h4>
+    <p>既存プロジェクトをL2 variant構造にアップグレードする手順、ファイル処理5分類、スナップショット・ロールバック、昇格との方向性の違い</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15分</div>
+  <div class="schedule-body">
+    <h4>第9章 · ワークフローデザインパターン</h4>
+    <p>ワークフロー構成要素(ステップ・分岐・並列・集約・ゲート・ループ)、5つのドメイン別事例、パターン選択ガイド</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">25分</div>
+  <div class="schedule-body">
+    <h4>共通参考 · ツール比較(技術的)</h4>
+    <p>4つのツールの構造を一目で把握、Claude App vs Code(サブエージェント定義、teammateMode)、Antigravity vs agy(Agent Manager、/goal・/agent・/agents)、マルチエージェント対応範囲の比較表、実習ツール選択ガイド、AGENTS.mdの統合</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">30分</div>
+  <div class="schedule-body">
+    <h4>第7章 · 企業内運用戦略の比較</h4>
+    <p>サービスチケットモデル vs 開発ツール+variantモデル、カンバンベースの運用、両モデルの長所・短所の比較</p>
+    <p><span class="tag tag-lecture">講義</span> <span class="tag tag-discuss">討論</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ 休憩1(10~15分)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">40分</div>
+  <div class="schedule-body">
+    <h4>第11章 · 新規variantの作成(D-1)</h4>
+    <p>co-marketingのPhase Aプロトタイプ作成 — create-l2-scaffold、ドメインエージェントの定義(researcher・writer)、AGENTS.mdロスターの更新、agent:verify</p>
+    <p><span class="tag tag-lab">実習(参加者自身)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">20分</div>
+  <div class="schedule-body">
+    <h4>第11章 · 新規variantの作成 — 講義</h4>
+    <p>ゼロから作る(Phase A→B)vs既存プロジェクトの昇格、2つの経路の違いと選択基準</p>
+    <p><span class="tag tag-lecture">講義</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">60分</div>
+  <div class="schedule-body">
+    <h4>第12章 · 新規variantの昇格</h4>
+    <p>プロトタイプの検証(validate-templates・agent:verify)、昇格チェックリスト/マニフェストの作成(参加者実習)、昇格パイプラインの実行(講師デモ)</p>
+    <p><span class="tag tag-lab">実習</span> <span class="tag tag-demo">デモ</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ 休憩2(10~15分)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">60分</div>
+  <div class="schedule-body">
+    <h4>第13章 · キャップストーン実習</h4>
+    <p>自身の反復業務を選び、4段階(課題定義・ガードレール設計・サブエージェント実装・検証振り返り)を自ら設計する</p>
+    <p><span class="tag tag-lab">実習(参加者自身)</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15分</div>
+  <div class="schedule-body">
+    <h4>キャップストーン発表</h4>
+    <p>1~2名が自身のワークフローを短く共有し、参加者からフィードバック</p>
+    <p><span class="tag tag-discuss">発表</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15分</div>
+  <div class="schedule-body">
+    <h4>まとめ</h4>
+    <p>両日全体の振り返り、Q&A、用語集/FAQの案内、次のステップの案内</p>
+    <p><span class="tag tag-discuss">討論</span></p>
+  </div>
+</div>
+
+<!-- ────────────────── 6. 扱うテーマ ────────────────── -->
+<h2 id="topics"><span class="icon">📚</span>扱うテーマ</h2>
+<div class="table-schedule">
+<table>
+  <thead><tr><th>ブロック</th><th>テーマ</th><th>関連章</th><th>日程</th></tr></thead>
+  <tbody>
+        <tr><td>導入</td><td>AI導入の現状と統計、AI活用3段階、ハーネスエンジニアリングの必要性、マルチエージェントの原理、実務時間短縮の事例</td><td>第1章</td><td>1日目</td></tr>
+        <tr><td>概念</td><td>ハーネスエンジニアリングのパラダイム、オーケストレーションパターン、AGENTS.md標準</td><td>第2章</td><td>1日目</td></tr>
+        <tr><td>安全性</td><td>ガードレール設計、危険作業の分類、最小権限、承認ゲート、隔離</td><td>第3章</td><td>1日目</td></tr>
+        <tr><td>ウォームアップ</td><td>バイブコーディング(テトリス)とマルチエージェント(パックマン)で複雑さによるアプローチの違いを体験</td><td>ウォームアップ</td><td>1日目</td></tr>
+            <tr><td>実習</td><td>サブエージェントの定義・呼び出し・パイプライン・並列実行・モデルティア比較</td><td>第4章 §1、§2-A/B</td><td>1日目</td></tr>
+    <tr><td>設計</td><td>ai-workspace-standardsの紹介、中核となる4種類のファイル、variant概要</td><td>第5章(軽く)</td><td>1日目</td></tr>
+    <tr><td>実装</td><td>既存variantの活用(co-consult、co-deckのスキャフォールディング・稼働)</td><td>第6章</td><td>1日目</td></tr>
+            <tr><td>設計深掘り</td><td>L0→L1→L2階層構造、ファイル別SSOTの流れ、エージェント・スキル・スクリプトのライフサイクル管理</td><td>第8章 §1、§2</td><td>2日目</td></tr>
+                <tr><td>アップグレード</td><td>既存プロジェクトをL2 variant構造に転換、ファイル処理5分類、スナップショット・ロールバック</td><td>第10章</td><td>2日目</td></tr>
+        <tr><td>ワークフロー</td><td>ワークフロー構成要素、5つのドメイン別パターン事例、パターン選択ガイド</td><td>第9章</td><td>2日目</td></tr>
+    <tr><td>ツール</td><td>Claude Code、Claude App、Antigravity、Antigravity CLIの比較分析</td><td>共通参考</td><td>2日目</td></tr>
+    <tr><td>運用</td><td>サービスチケットモデル vs variantモデル、カンバンベースの運用</td><td>第7章</td><td>2日目</td></tr>
+        <tr><td>創出</td><td>新規variant作成(co-marketingプロトタイプ)、昇格パイプライン</td><td>第11章、第12章</td><td>2日目</td></tr>
+    <tr><td>統合</td><td>キャップストーン: 自身の業務にマルチエージェントチームを適用する</td><td>第13章</td><td>2日目</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ────────────────── 7. 修了後に得られるもの ────────────────── -->
+<h2 id="takeaways"><span class="icon">✅</span>修了後に得られるもの</h2>
+<ul class="takeaway-list">
+  <li><strong>マルチエージェントチーム設計力。</strong>単一エージェントからチーム構造への転換設計方法論を体得し、実務にすぐに適用できます。</li>
+  <li><strong>4つのツールでの実践経験。</strong>Claude Code・Claude App・Antigravity・Antigravityコマンドラインインターフェース(CLI)で同じシナリオを自ら実行し、各ツールの長所・短所を体感します。</li>
+  <li><strong>ガードレール設計チェックリスト。</strong>危険作業の分類、最小権限、承認ゲートを含む実務用ガードレール設計テンプレートを持ち帰れます。</li>
+  <li><strong>variantプロトタイプ。</strong>ai-workspace-standardsをベースにco-marketingプロトタイプを自ら作成し、組織内でのvariant導入の具体的な出発点を確保します。</li>
+  <li><strong>運用モデルの判断基準。</strong>サービスチケットモデルとvariantモデルの長所・短所を比較し、自組織に適した運用戦略を立てられるようになります。</li>
+  <li><strong>自分自身のワークフロー。</strong>キャップストーン実習で自身の実際の反復業務をマルチエージェントチームの課題として再定義し、課題定義から検証までの全サイクルを経験します。</li>
+</ul>
+
+<!-- ────────────────── 8. 講師情報 ────────────────── -->
+<h2 id="instructor"><span class="icon">🎤</span>講師情報</h2>
+<div class="instructor-box">
+  <p class="placeholder">[講師名・所属・肩書き]</p>
+  <p class="placeholder">[講師プロフィール: AIエージェント導入・運用の経験、主な関心分野、連絡先]</p>
+  <p style="margin-top:12px;font-size:12px;color:var(--text-dim);">このセクションは講師が直接記入できるよう空欄にしてあります。</p>
+</div>
+
+<!-- ────────────────── 9. 参考資料 ────────────────── -->
+<h2 id="resources"><span class="icon">🔗</span>参考資料</h2>
+<ul>
+  <li><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code Subagents公式ドキュメント</a></li>
+  <li><a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity Agent Manager公式ドキュメント</a></li>
+  <li><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards GitHubリポジトリ</a></li>
+  <li><a href="../setup/SETUP_ja.html">ワークショップ環境インストールガイド</a></li>
+  <li><a href="../setup/SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a></li>
+  <li><a href="../glossary/00_Glossary.html">用語集</a></li>
+  <li><a href="../faq/00_FAQ.html">FAQ・よくあるエラーと解決法</a></li>
+</ul>
+
+<footer>
+  Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main(2026-07-08)基準・日本語教育資料<br>
+  公式資料: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> ·
+  <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google</a> ·
+  <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a>
+</footer>
+
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

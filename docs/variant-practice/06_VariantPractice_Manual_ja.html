@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第6章 §1 · ai-workspace-standards のローカルインストールとプロジェクトスキャフォールディング - マルチエージェント・ハーネス・エンジニアリング・ハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第6章 §1 · ai-workspace-standards のローカルインストールとプロジェクトスキャフォールディング</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific: tree-box inner spans */
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    /* Mode table (first column monospace) */
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第6章 §1 · Variant実習リファレンス</div>
+  <a href="#tree">全体構成の概要</a>
+  <a href="#repository-walk">リポジトリ構成の見取り図</a>
+  <div class="nav-section">インストールと確認</div>
+  <a href="#section-1">1. ローカル環境の準備</a>
+  <a href="#section-2">2. プロジェクトスキャフォールディングコマンド</a>
+  <div class="nav-section">参考</div>
+  <a href="#session-checklist">3. セッション開始チェックリスト</a>
+  <a href="#section-3">参考リンク</a>
+  <div class="nav-section">他の章</div>
+  <a href="../intro/05_Intro_Chapter_ja.html">第5章 §1 · ai-workspace-standards 紹介</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variant作成</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第6章 §1</div>
+  <h1>ai-workspace-standards のローカルインストールとプロジェクトスキャフォールディング</h1>
+  <p class="subtitle">ワークスペースをローカルにセットアップし、既存のvariant(バリアント)でプロジェクトをスキャフォールディングする方法を扱うリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象リポジトリ</span><span class="vvalue">ai-workspace-standards</span></div>
+    <div class="version-row"><span class="vlabel">対象ブランチ</span><span class="vvalue">main</span></div>
+    <div class="version-row"><span class="vlabel">参照ドキュメントURL</span><span class="vvalue"><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a></span></div>
+    <div class="version-row"><span class="vlabel">資料収集日</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">バージョン確認方法</span><span class="vvalue"><code>git --version</code>、<code>bun --version</code>でローカルツールのバージョンを確認する。ワークスペース自体は<code>templates/VERSION</code>と各variant(バリアント)の<code>template-vX.Y.Z</code>タグでバージョンを管理する。</span></div>
+    <div class="version-row"><span class="vlabel">改訂時の確認事項</span><span class="vvalue">リポジトリの<code>CONSTITUTION.md</code>、<code>scripts/new-project.ts</code>、<code>scripts/list-template-versions.ts</code>が変更されていないか、元のリポジトリで再確認する。</span></div>
+  </div>
+
+  <h2 id="tree">全体構成の概要</h2>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
+ai-workspace-standards/                (ワークスペースルートとしてクローン)
+├── CONSTITUTION.md                    共有標準 — 最初に読むべきファイル
+├── CLAUDE.md / GEMINI.md / AGENTS.md  プラットフォーム別の動作・エージェントロスター
+├── templates/                         variant(プロジェクトテンプレート)の集合
+│   ├── co-develop/                    ソフトウェア開発6段階パイプライン
+│   ├── co-design/                     UI/UX 5段階ワークフロー
+│   ├── co-work/                       一般協業/ドキュメント6段階ワークフロー
+│   └── ...                            co-security、co-consult、co-deckなど
+├── scripts/                           new-project.tsなどの運用スクリプト(TypeScript、bunで実行)
+└── Projects/                          &lt;プロジェクト名&gt;/形式の個別プロジェクト(それぞれ独立したgitリポジトリ)
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div></div>
+
+  <h3>Variant全7種類の一覧</h3>
+  <table>
+    <thead><tr><th>Variant</th><th>目的</th></tr></thead>
+    <tbody>
+      <tr><td><code>co-work</code></td><td>一般協業/ドキュメント — 共通業務ワークフロー6段階</td></tr>
+      <tr><td><code>co-consult</code></td><td>コンサルティング/分析 — 顧客課題の診断と提案書作成</td></tr>
+      <tr><td><code>co-deck</code></td><td>プレゼンテーション — スライド構成と草案生成</td></tr>
+      <tr><td><code>co-marketing</code></td><td>マーケティング — コンテンツ企画・生成・レビューのパイプライン</td></tr>
+      <tr><td><code>co-develop</code></td><td>ソフトウェア開発 — 6段階開発パイプライン</td></tr>
+      <tr><td><code>co-research</code></td><td>研究 — 文献調査および要約ワークフロー</td></tr>
+      <tr><td><code>co-review</code></td><td>コード/ドキュメントレビュー — PRレビューと品質検証</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="repository-walk">リポジトリ構成の見取り図 — clone後に最初に確認すべき5箇所</h3>
+  <p><code>git clone</code>でワークスペースルートにリポジトリを複製した後、最初に確認すべき中核ディレクトリ5箇所を順番に見ていく。この順序は第5章で扱った「ランタイムフロー」と一致する。</p>
+  <ol style="margin:0 0 16px 20px;line-height:2.2;">
+    <li><strong><code>CONSTITUTION.md</code></strong> — 最初に読むべきファイル。ワークスペース全体の共有標準(ガバナンス、PRワークフロー、マルチエージェント原則)が定義されている。</li>
+    <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — 使用しているAIコーディングツールに対応するファイルを確認する。プラットフォームごとの動作方式(フック、スラッシュコマンド、エージェントディスパッチルール)が定義されている。</li>
+    <li><strong><code>AGENTS.md</code></strong> — このワークスペースで呼び出し可能なエージェントロスター。「誰がどの役割を担うか」を一目で確認できる。</li>
+    <li><strong><code>templates/</code></strong> — 利用可能なvariant全7種類がこのディレクトリの下にある。各variantフォルダを開き、エージェント構成とガバナンスパイプラインを確認する。</li>
+    <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code>がここにある。このスクリプトがvariant(バリアント)を実際のプロジェクトとして複製する中核コマンドである。</li>
+  </ol>
+  <div class="note">この見取り図は、第4章の実習でエージェントに実際に触れる前に、「このリポジトリに何が入っているのか」の感覚をつかむための短い案内である。実習の際はまずこの5箇所だけを開いてみて、残りの構成は必要になったときに随時戻って確認する進め方でよい。</div>
+
+  <hr>
+
+  <h2 id="section-1">1. ローカル環境の準備</h2>
+
+  <h3><code>git clone</code>。ワークスペースルートへクローン</h3>
+  <p>ai-workspace-standardsは、一般的なライブラリのようにプロジェクトの中に組み込むのではなく、ワークスペース自体のルートとしてクローンして使うように設計されている。例えばWindowsでは<code>C:\git</code>、macOS/Linuxでは<code>~/git</code>のような場所にこのリポジトリをクローンすると、その配下に作るすべてのプロジェクトが<code>CONSTITUTION.md</code>の共有ルールを自動的に継承する。</p>
+  <p>もしこのルールを無視して、特定のプロジェクトフォルダの中に(例:<code>my-project/ai-workspace-standards/</code>のように)サブモジュールとして組み込んでしまったらどうなるだろうか。<code>new-project.ts</code>のようなスクリプトは「ワークスペースルートから実行されたか」を自ら確認するが、この前提が崩れるためスキャフォールディング自体が拒否されたり、パス計算がずれて見当違いの場所にプロジェクトが生成されたりする。さらに、そのプロジェクトだけが共有ルールを継承し、後で作る他のプロジェクトは一切ルールを共有できなくなるため、そもそも「ワークスペース全体が同じ標準を使う」というこのリポジトリの存在意義自体が崩れてしまう。</p>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
+cd C:\git</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <h3><code>bun</code>。ランタイムのインストール</h3>
+  <p>ワークスペースのすべての運用スクリプト(<code>scripts/*.ts</code>)はTypeScriptで書かれており、<code>bun</code>で実行する。別途<code>.sh</code>/<code>.ps1</code>版は存在しないため、bunのインストールを先に済ませておかないとスクリプトを実行できない。</p>
+  <div style="position:relative">
+  <pre class="code-block">bun --version
+git --version</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p >💡 <strong>要点:</strong> 両方のコマンドが正常にバージョンを出力すれば、ローカル環境の準備は完了である。</p>
+
+  <h3 id="session-checklist">セッション開始チェックリスト</h3>
+  <p><code>CONSTITUTION.md</code>が定めるセッション開始チェックリストは、次の順序に従う。</p>
+  <ol style="margin:0 0 16px 20px;line-height:2;">
+    <li><strong>gitフックのパス設定:</strong> <code>git config core.hooksPath .githooks</code></li>
+    <li><strong>CONSTITUTION.mdを読む:</strong> ワークスペースの共有標準を確認する</li>
+    <li><strong>プロジェクトのdocs/context.mdを読む:</strong> プロジェクト固有の単一情報源を確認する</li>
+    <li><strong>AGENTS.mdを読む:</strong> 該当プロジェクトのエージェントロスターを確認する</li>
+    <li><strong>memory/MEMORY.mdを確認:</strong> 前回のセッションで残されたコンテキストを確認する</li>
+    <li><strong>docs/context.mdが指定するskillをロードする</strong></li>
+  </ol>
+
+  <hr>
+
+  <h2 id="section-2">2. プロジェクトスキャフォールディングコマンド</h2>
+
+  <h3><code>bun scripts/list-template-versions.ts</code>。利用可能なvariantの確認</h3>
+  <p>新しいプロジェクトを作る前に、ワークスペースにどのvariantがあり、それぞれどのバージョンがタグ付けされているかをまず確認する。</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/list-template-versions.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <h3><code>bun scripts/new-project.ts</code>。既存のvariant(バリアント)からプロジェクトを生成</h3>
+  <p>最もよく使うコマンドである。variantを一つ選び、プロジェクト名とともに実行すると、<code>templates/&lt;variant&gt;/</code>の全構成(エージェント定義、スキル、コマンド、ガバナンスパイプライン)が新しい独立リポジトリとして複製される。</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>特定のバージョンを固定してスキャフォールディングしたい場合は、<code>--version</code>を併せて指定する。</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop --version 1.4.0</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+
+  <table>
+    <thead><tr><th>オプション</th><th>説明</th><th>備考</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>--variant</code></td>
+        <td>使用するプロジェクトテンプレート(co-develop、co-design、co-workなど)を指定する</td>
+        <td>省略した場合は対話形式で選択するか、デフォルト値を使用する(スクリプトの動作による)</td>
+      </tr>
+      <tr>
+        <td><code>--version</code></td>
+        <td>該当variant(バリアント)の特定の<code>template-vX.Y.Z</code>タグを固定して使用する</td>
+        <td>省略すると最新バージョンを使用する</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    <span class="badge badge-workflow">スキャフォールディング</span>
+    <span class="badge badge-alias">独立gitリポジトリ</span>
+    <span class="badge badge-skill">共有標準の継承</span>
+  </p>
+
+  <div class="warning-box">スキャフォールディングされたプロジェクトは、ワークスペースルートとは別の独立したgitリポジトリとして生成される。ワークスペースルートのファイルと新規プロジェクトのファイルを同じ作業/コミットで混在させて修正しないよう注意する。</div>
+
+  <h3>新規variant(バリアント)を自分で作りたい場合</h3>
+  <p>既存のvariantでは不十分で、まったく新しいドメインチーム構成が必要な場合は、<code>create-variant</code>スキルと<code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code>コマンドを使って、<code>Projects/&lt;variant-name&gt;/</code>の下に独立したPhase Aプロトタイプをまず作成できる。このプロトタイプは、正式な<code>templates/</code>のvariant(バリアント)へ昇格(promote)されるまで自由に発展させることができる。この流れの詳細な手順と昇格手順については、第11章(新規作成D-1)と第12章(昇格P-1)で扱う。</p>
+
+  <hr>
+
+  <h2 id="section-3">3. 参考リンク</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></li>
+    <li>⚙️ <a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章 §2 実習。既存variantの活用(co-consult、co-deck)</a></li>
+    <li>⚙️ <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章。新規variant作成</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">ai-workspace-standards mainブランチ基準 | 2026年7月</p>
+
+  <div class="chapter-nav">
+    <a href="../intro/05_Intro_Chapter_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第5章 · ai-workspace-standards</div></a>
+    <a href="06_VariantPractice_Examples_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第6章 §2 · Variant実習</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '완료!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第6章 §2 · Variant実習例 — シナリオ別学習ガイド - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第6章 §2 · Variant実習例 — シナリオ別学習ガイド</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific: scenario card overrides (Convention B) */
+    .scenario-card { border-radius: 10px; margin-bottom: 36px; }
+    .scenario-card .card-header { gap: 12px; padding: 16px 22px; justify-content: flex-start; }
+    .scenario-card .card-id { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--text-dim); min-width: 34px; }
+    .scenario-card .card-title { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .scenario-card .card-body { padding: 22px 26px; font-size: 14px; line-height: 1.7; }
+    /* Area header variants */
+    .area-header { display: flex; align-items: center; gap: 14px; margin: 52px 0 24px; padding: 16px 22px; border-radius: 10px; }
+    .area-header.area-existing { background: var(--bg-success); border: 1px solid var(--border-success); }
+    .area-header.area-new { background: var(--bg-info); border: 1px solid var(--border-info); }
+    .area-icon { font-size: 1.6rem; }
+    .area-title { font-size: 1.35rem; font-weight: 700; }
+    .area-title-existing { color: var(--accent-green); }
+    .area-title-new { color: var(--accent); }
+    /* Level header with border-bottom */
+    .level-header { border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+    .level-header .badge { flex-shrink: 0; }
+    .level-header .level-title { flex-shrink: 0; }
+    .level-header .level-desc { flex: 1; }
+    /* Step list variant (li instead of .step) */
+    .step-list { list-style: none; }
+    .step-list li { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    /* Prompt box (user input) */
+    .prompt-box { background: var(--bg-success); border: 1px solid var(--border-success); border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: var(--font-size-small); overflow-wrap: break-word; }
+    .prompt-box::before { content: '📝 ユーザー入力'; display: block; font-weight: 700; color: var(--accent-green); margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .prompt-box .prompt-text { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px; margin-top: 6px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre-wrap; position: relative; }
+    .prompt-box .copy-btn { position: absolute; top: 6px; right: 6px; }
+    /* Callout ::before overrides (labels) */
+    .situation::before { content: '📌 状況'; display: block; font-weight: 700; color: var(--accent-amber); margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .flow-box::before { content: '⚙️ 内部動作'; display: block; font-weight: 700; color: var(--accent-dark); margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .tip-box::before { content: '💡 ヒント'; display: block; font-weight: 700; color: var(--accent-green); margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .warning-box::before { content: '⚠️ 注意'; display: block; font-weight: 700; color: var(--accent-amber); margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    /* Related commands */
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; font-size: 13px; color: var(--text-dim); }
+    .related-cmds strong { color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第6章 §2 · Variant実習例</div>
+
+  <div class="nav-group">エリア1 — 既存Variantの利用</div>
+  <a href="#area-existing"><span class="dot dot-g"></span>既存Variantの利用（初級）</a>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 co-consult: Physical AI市場調査</a>
+  <a href="#scenario-2"><span class="dot dot-g"></span>G-2 co-deck: 韓国料理グローバル化デッキ</a>
+
+  <div class="nav-group">ショートカット</div>
+  <a href="06_VariantPractice_Manual_ja.html">📖 第6章 §1 · Variant実習リファレンス →</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第6章 §2</div>
+  <h1>Variant実習例</h1>
+  <p class="subtitle">既存Variantを使って実際のプロジェクトを運営する実践ガイド &nbsp;|&nbsp; <a href="06_VariantPractice_Manual_ja.html">← リファレンス文書に戻る</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象リポジトリ</span><span>ai-workspace-standards、mainブランチ</span></div>
+    <div class="version-row"><span class="vlabel">本ファイルの目的</span><span>第6章 §1で扱うコマンドを実際のシナリオの順序で体験できるようにする</span></div>
+    <div class="version-row"><span class="vlabel">リファレンス文書</span><span><a href="06_VariantPractice_Manual_ja.html">06_VariantPractice_Manual_ja.html</a> — 各シナリオからリンク</span></div>
+    <div class="version-row"><span class="vlabel">作成日</span><span>2026年7月16日</span></div>
+  </div>
+
+  <div class="warning-box">本ドキュメントは<strong>既存Variant利用の演習</strong>です。すでに構築済みのVariantをプロジェクトにスキャフォールドし、実際のトピックでエージェントチームを実行する演習です。新規Variantの作成（D-1）と昇格（P-1）は2日目の第11章・第12章で扱います。</div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       Area 1: Using an Existing Variant
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="area-header area-existing" id="area-existing">
+    <span class="area-icon">🏗️</span>
+    <div>
+      <span class="area-title area-title-existing">エリア1 · 既存Variantの利用</span>
+      <p class="area-desc">すでに構築済みのVariantをプロジェクトにスキャフォールドし、実際のトピックでエージェントチームを実行する演習です。Variantの構造とエージェントの協働方法を直接体験することを目指します。</p>
+    </div>
+  </div>
+
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● 初級</span>
+    <span class="level-title level-title-g">はじめに</span>
+    <span class="level-desc">既存Variantからプロジェクトをスキャフォールドし、実際のトピックでエージェントチームを実行する最初のステップ</span>
+  </div>
+
+  <!-- ── G-1: co-consult Physical AI ── -->
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">初級</span>
+      <strong class="card-title">co-consult — Physical AI市場調査プロジェクト</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        戦略コンサルティング用Variantである<code>co-consult</code>を使用して、「Physical AI」（ロボティクス、自動運転、スマートファクトリなど物理環境で動作するAI）の市場参入の妥当性と競争環境を分析する実際のコンサルティングプロジェクトを実行します。PM（Engagement Leader）が10人の専門エージェント（Strategy Analyst、Industry Expert、SME、Change Management Partnerなど）を各フェーズごとにディスパッチする7段階のコンサルティングワークフローが、実際のプロジェクトでどのように動作するかを体験することを目指します。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="06_VariantPractice_Manual_ja.html#section-1">git clone</a>
+          <a class="cmd-chip" href="06_VariantPractice_Manual_ja.html#section-2">new-project.ts</a>
+          <a class="cmd-chip" href="06_VariantPractice_Manual_ja.html#section-2">list-template-versions.ts</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップバイステップ実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>演習用リポジトリをクローンする</strong>
+            <p>実際に作業中のワークスペースと重複しない別のフォルダにクローンします。</p>
+            <div style="position:relative">
+              <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git ai-workspace-standards-demo
+cd ai-workspace-standards-demo</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>bunがインストールされていることを確認し、利用可能なVariantを一覧表示する</strong>
+            <p>bunがインストールされていない場合は先にインストールし、その後リポジトリが提供するVariantとバージョンのリストを確認します。</p>
+            <div style="position:relative">
+              <pre class="code-block">bun --version
+bun scripts/list-template-versions.ts</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>co-consultでPhysical AI市場調査プロジェクトをスキャフォールドする</strong>
+            <p>戦略コンサルティングVariantである<code>co-consult</code>でプロジェクトを作成します。プロジェクト名に演習トピックを反映させます。</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/new-project.ts "physical-ai-market-research" --variant co-consult</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>スキャフォールドされたプロジェクト構造を探索する</strong>
+            <p>生成されたプロジェクトディレクトリの全体構造を確認します。エージェント定義ファイル、<code>docs/context.md</code>のPhase設定、<code>AGENTS.md</code>のロスターに注目して、co-consultがどのように7段階のコンサルティングワークフローを構築しているかを理解します。</p>
+            <div style="position:relative">
+              <pre class="code-block">cd physical-ai-market-research
+find . -maxdepth 3 -type f | head -40</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>コンサルティングタスクを定義する — 4ステップ設計フレームワークを適用する</strong>
+            <p>エージェントチームを起動する前に、まず<strong>目標、入力、出力、検証基準</strong>を明確に定義します。これら4つが具体的であるほど、エージェントチームが生み出す結果の品質が高くなります。</p>
+            <div class="prompt-box">
+              <p>以下のフレームワークに記入し、PMセッションでエージェントチームに渡します。</p>
+              <div class="prompt-text">Step 1 — 目標の定義: "Physical AI（ロボティクス、自動運転、スマートファクトリ）の市場参入戦略と競争環境を2030年まで分析する"
+Step 2 — 入力の定義: 対象産業（ロボティクス、自動運転、スマートファクトリ）、調査期間（2020〜2025年 + 2030年予測）、フォーカスキーワード（規制、技術、市場規模）
+Step 3 — 出力の定義: 5セクション構成のMarkdownレポート — エグゼクティブサマリー / 現状分析 / 機会と脅威 / 戦略的提言 / 参考文献一覧
+Step 4 — 検証基準の定義: すべての項目にソースURLが含まれていること、5つ以上のインプリケーションの番号付きリスト、2,000文字以上の長さ</div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Physical AI市場調査トピックでエージェントチームを実行する</strong>
+            <p>プロジェクト内でPMセッションを開始し、定義したコンサルティングタスクをPMに渡してエージェントチームを実行します。各Phaseでどのエージェントがアクティブになり、どんな出力を生成するかを観察します。</p>
+            <div class="flow-box">
+              co-consultの7段階ワークフローは、実際のコンサルティングプロジェクトと同じように実行されます。<br><br>
+              <strong>Phase 0（キックオフ）:</strong> PMがタスクを受け取り、プロジェクトのスコープとスケジュールを定義<br>
+              <strong>Phase 1（市場分析 / 組織診断）:</strong> Strategy AnalystがPhysical AIの市場規模を推定し競合マップを作成；Industry Expertがロボティクス/自動運転のドメイン技術トレンドを提供；SMEがスマートファクトリの導入事例に基づく実践的視点を補強<br>
+              <strong>Phase 1.5（クロスバリデーション）:</strong> 複数のエージェントが相互に他のエージェントの出力をレビューし、情報の信頼性を確保<br>
+              <strong>Phase 2（提案承認ゲート）:</strong> PMがPhase 1の結果をレビューし、クライアントに提示可能かを判定<br>
+              <strong>Phase 3（実践的ソリューション設計）:</strong> Change Management Partnerが導入ロードマップとチェンジマネジメント計画を策定<br>
+              <strong>Phase 4（納品）:</strong> 最終レポート（Markdown）が作成される — エグゼクティブサマリー / 現状分析 / 機会と脅威 / 戦略的提言 / 参考文献一覧<br>
+              <strong>Phase 5（PR/ハンドオフ）:</strong> クライアント向け納品物が整理される
+            </div>
+
+            <div class="note">
+              <svg viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
+                <defs>
+                  <marker id="arrowC" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6b7280"/></marker>
+                  <marker id="arrowO" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f59e0b"/></marker>
+                </defs>
+                <!-- Phase 0 기획 -->
+                <rect x="2" y="32" width="72" height="52" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="38" y="54" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 0</text>
+                <text x="38" y="72" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6">Planning</text>
+                <line x1="74" y1="58" x2="86" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 1 병렬 3 agents -->
+                <rect x="88" y="6" width="68" height="40" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="122" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="700">Analyst</text>
+                <text x="122" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#8b5cf6">Market Analysis</text>
+                <rect x="88" y="38" width="68" height="40" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="122" y="56" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="700">Expert</text>
+                <text x="122" y="69" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#8b5cf6">Domain View</text>
+                <rect x="88" y="70" width="68" height="40" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="122" y="88" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="700">SME</text>
+                <text x="122" y="101" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#8b5cf6">Practical Cases</text>
+                <line x1="156" y1="58" x2="168" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 1.5 교차 검증 -->
+                <rect x="170" y="38" width="78" height="40" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="209" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 1.5</text>
+                <text x="209" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#22c55e">Cross-Validation</text>
+                <line x1="248" y1="58" x2="260" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 2 승인 게이트 (orange highlighted) -->
+                <rect x="262" y="32" width="82" height="52" rx="8" fill="#f59e0b" opacity="0.12" stroke="#f59e0b" stroke-width="2.5"/>
+                <text x="303" y="50" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 2</text>
+                <text x="303" y="65" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#f59e0b" font-weight="600">Approval Gate</text>
+                <text x="303" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7" fill="#f59e0b">Human Approval</text>
+                <line x1="344" y1="58" x2="356" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 3 종합 보고서 -->
+                <rect x="358" y="38" width="82" height="40" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="399" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 3</text>
+                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6">Solution Design</text>
+                <line x1="440" y1="58" x2="452" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 4 요약/발표 -->
+                <rect x="454" y="38" width="82" height="40" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 4</text>
+                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6">Delivery</text>
+                <line x1="536" y1="58" x2="548" y2="58" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowC)"/>
+                <!-- Phase 5 핸드오프 -->
+                <rect x="550" y="38" width="82" height="40" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="700">Phase 5</text>
+                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#22c55e">Handoff</text>
+                <!-- Phase labels top row -->
+                <text x="38" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">Kickoff</text>
+                <text x="122" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">Parallel Research</text>
+                <text x="209" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">Build Trust</text>
+                <text x="303" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">Quality Gate</text>
+                <text x="399" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">Solution Design</text>
+                <text x="495" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">Delivery</text>
+                <text x="591" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="#6b7280">Client Handoff</text>
+              </svg>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>納品物をレビューする — エージェント間のハンドオフを追跡する</strong>
+            <p>実行完了後、生成された納品物をレビューします。Phase 1でStrategy Analystが生成した市場分析が、Phase 1.5のクロスバリデーションを経て、Phase 4の最終レポートにどのように流れていくかを追跡します。</p>
+            <div style="position:relative">
+              <pre class="code-block">find . -name "*.md" -not -path "*/node_modules/*" | head -20
+cat docs/reports/*.md   # Review the generated report</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="tip-box">
+        <code>physical-ai-market-research/agents/</code>を開き、各エージェントの定義ファイルを見て、<code>phases</code>、<code>handoff_to</code>、<code>handoff_from</code>フィールドがどのように構成されているかを確認してください。この演習では、<strong>リサーチエージェント</strong>（Strategy Analyst: 市場/競合/規制リサーチ）、<strong>分析エージェント</strong>（Industry Expert: パターンとインサイトの抽出）、<strong>執筆エージェント</strong>（PM: レポート/提案書の構成案）、<strong>調整エージェント</strong>（Change Management Partner: 全体的な品質レビューと統合）の4つのエージェントタイプが実際のコンサルティングパイプライン内でどのように協働するかを体験できます。
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── G-2: co-deck 韓国料理グローバル化 ── -->
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">G-2</span>
+      <span class="badge badge-g">初級</span>
+      <strong class="card-title">co-deck — 韓国料理グローバル化スライドデッキ</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        講義/プレゼン資料作成用Variantである<code>co-deck</code>を使用して、「韓国料理グローバル化戦略」をテーマにしたプレゼンテーションスライドデッキを自動生成します。<code>co-deck</code>は11段階パイプライン — Research → Source Verifier（信頼性確認）→ Storyline → Design → Image Curation + Diagram Generation（並列）→ HTML Build → Layout Measure → PDF Export を自動化するベータVariantです。G-1のco-consultとは全く異なる構造のVariantが、どのように異なる種類の納品物を生み出すかを比較することを目指します。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="06_VariantPractice_Manual_ja.html#section-2">new-project.ts</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップバイステップ実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>co-deckで韓国料理グローバル化デッキプロジェクトをスキャフォールドする</strong>
+            <p>G-1で使用した同じワークスペースで、今度は<code>co-deck</code>Variantでプレゼンプロジェクトを作成します。</p>
+            <div style="position:relative">
+              <pre class="code-block">bun scripts/new-project.ts "korean-cuisine-globalization" --variant co-deck</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>スキャフォールドされたプロジェクト構造を探索する</strong>
+            <p>co-consultプロジェクト（<code>physical-ai-market-research/</code>）と並べて開き、構造を比較します。エージェント数、Phase（Stage）構成、専門スキルリストがどのように異なるかを確認します。</p>
+            <div style="position:relative">
+              <pre class="code-block">cd korean-cuisine-globalization
+find . -maxdepth 3 -type f | head -40</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>プレゼンテーションのフレーミングを設定する</strong>
+            <p>パイプラインを実行する前に、プレゼンテーションの方向性について3つのことを明確に定義します。対象者と目的が明確なほど、AIが構成するストーリーラインとスライドの品質が高くなります。</p>
+            <div class="prompt-box">
+              <p>以下のフレームに記入し、PMセッションでエージェントチームに渡します。</p>
+              <div class="prompt-text">Audience: グローバル飲食企業の市場参入戦略責任者、および韓国政府の韓食振興政策に関わる担当官
+Purpose: 韓国の食文化のグローバル化に向けた戦略と成功事例を紹介し、市場参入の機会を提案する説得力のあるプレゼンテーション
+Time: 15〜20分（約12〜15スライド）</div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>韓国料理グローバル化トピックでデッキパイプラインを実行する</strong>
+            <p>プロジェクト内でPMセッションを開始し、定義したフレームとともに「韓国料理グローバル化戦略 — 韓国の食文化がグローバル市場に広がるメカニズムと成功事例の分析」というプレゼンテーショントピックをPMに割り当てます。</p>
+            <div class="flow-box">
+              co-deckの11段階パイプラインはデッキ制作ワークフローとして実行されます。<br><br>
+              <strong>Stage 0（キックオフ / トピック設定）:</strong> PMが対象者、目的、時間に基づいてプレゼンテーションの方向性を定義<br>
+              <strong>Research:</strong> 韓国料理グローバル化に関するリサーチ — グローバル韓食市場規模、対象国別の現状、政府の韓食振興政策<br>
+              <strong>Source Verifier:</strong> 統計とケースデータの信頼性を検証 — ソースURLの確認、数値の整合性チェック<br>
+              <strong>Storyline:</strong> プレゼンテーションのストーリーラインを構築 — 問題提起 → 現状分析 → 成功事例 → 市場参入戦略 → 結論/提言のセクション構成<br>
+              <strong>Design:</strong> スライドのデザイン方向を設定 — テーマ/スタイルの選択による視覚的一貫性の確立<br>
+              <strong>Image Curation + Diagram Generation（並列）:</strong> 韓食関連の画像をキュレーションし、市場構造と参入ロードマップの図表を自動生成<br>
+              <strong>HTML Build → Layout Measure → PDF Export:</strong> スライドのHTMLを生成し、レイアウトを測定/調整して、最終PDFをエクスポート
+            </div>
+
+            <div class="note">
+              <svg viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
+                <defs>
+                  <marker id="arrowD" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6b7280"/></marker>
+                  <marker id="arrowDown" markerWidth="6" markerHeight="8" refX="3" refY="8" orient="auto"><polygon points="0 0,3 8,6 0" fill="#6b7280"/></marker>
+                </defs>
+                <!-- Row 1 (y=18): Research → Source Verifier → Storyline → Design → Image Curation + Diagram (parallel) -->
+                <!-- Step 1: Research -->
+                <rect x="4" y="8" width="90" height="36" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="49" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">①</text>
+                <text x="49" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Research</text>
+                <line x1="94" y1="26" x2="106" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 2: Source Verifier -->
+                <rect x="108" y="8" width="90" height="36" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="153" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">②</text>
+                <text x="153" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="600">Source Verifier</text>
+                <line x1="198" y1="26" x2="210" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 3: Storyline -->
+                <rect x="212" y="8" width="90" height="36" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="257" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">③</text>
+                <text x="257" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Storyline</text>
+                <line x1="302" y1="26" x2="314" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 4: Design -->
+                <rect x="316" y="8" width="90" height="36" rx="8" fill="#f59e0b" opacity="0.15" stroke="#f59e0b" stroke-width="1.5"/>
+                <text x="361" y="24" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">④</text>
+                <text x="361" y="36" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Design</text>
+                <line x1="406" y1="26" x2="418" y2="26" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Parallel split indicator -->
+                <line x1="408" y1="18" x2="408" y2="44" stroke="#6b7280" stroke-width="1" stroke-dasharray="3,2"/>
+                <!-- Step 5a: Image Curation (upper parallel) -->
+                <rect x="420" y="2" width="100" height="30" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="470" y="21" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="600">⑤ Image Curation</text>
+                <!-- Step 5b: Diagram (lower parallel) -->
+                <rect x="420" y="34" width="100" height="30" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="470" y="53" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8.5" fill="#1f2328" font-weight="600">⑤ Diagram</text>
+                <!-- Parallel merge arrow down to row 2 -->
+                <line x1="520" y1="49" x2="540" y2="49" stroke="#6b7280" stroke-width="1.5"/>
+                <line x1="540" y1="49" x2="540" y2="90" stroke="#6b7280" stroke-width="1.5"/>
+                <line x1="540" y1="90" x2="556" y2="90" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Parallel label -->
+                <text x="540" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7" fill="#6b7280">Parallel</text>
+                <!-- Row 2 (y=76): HTML Build → Layout → PDF -->
+                <!-- Row 2 connecting line from left -->
+                <line x1="4" y1="90" x2="180" y2="90" stroke="#6b7280" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+                <!-- Step 6: HTML Build -->
+                <rect x="558" y="74" width="80" height="36" rx="8" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.5"/>
+                <text x="598" y="89" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">⑥</text>
+                <text x="598" y="102" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">HTML Build</text>
+                <line x1="638" y1="92" x2="648" y2="92" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 7: Layout -->
+                <rect x="650" y="74" width="60" height="36" rx="8" fill="#f59e0b" opacity="0.15" stroke="#f59e0b" stroke-width="1.5"/>
+                <text x="680" y="89" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">⑦</text>
+                <text x="680" y="102" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">Layout</text>
+                <line x1="710" y1="92" x2="720" y2="92" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowD)"/>
+                <!-- Step 8: PDF -->
+                <rect x="722" y="74" width="50" height="36" rx="8" fill="#22c55e" opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="747" y="89" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="8" fill="#6b7280">⑧</text>
+                <text x="747" y="102" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#1f2328" font-weight="600">PDF</text>
+              </svg>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>完成したデッキをレビューし、修正する</strong>
+            <p>ビルドされたHTMLプレゼンテーションをブラウザで開いて確認します。スライドの順序、内容、ビジュアルをレビューし、必要に応じて修正を依頼します。</p>
+            <div class="flow-box">
+              <strong>レビューポイント:</strong><br>
+              · スライドの順序がストーリーライン（問題提起 → 現状 → 事例 → 戦略 → 提言）と一致しているか？<br>
+              · 各スライドのコア内容は3〜4行以内に簡潔にまとまっているか？<br>
+              · 不要なスライドの削除、不足している内容の追加<br>
+              · 修正リクエストの例: 「スライド3のタイトルをもっと印象的に」「4つの箇条書きを3つに減らす」<br><br>
+              <strong>原則:</strong> 初稿が最終版である必要はない — 反復的な洗練が仕上がりを良くする
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>TTSと自動スライド設定（オプション）</strong>
+            <p>co-deckの追加機能を試してみましょう。読み上げたいテキストをスピーカーノーツ（Script）に入力すると、ブラウザのTTSエンジンが韓国語で自動的にナレーションします。フッターのManual/Autoボタンで無人プレゼンテーションモードも設定できます。</p>
+            <div class="flow-box">
+              <strong>TTS設定:</strong> 各スライドのスピーカーノーツフィールドに短く明確な文を書く<br>
+              <strong>自動スライド:</strong> フッターの「Manual」ボタンを「Auto」に切り替える（デフォルトは1秒間隔）<br>
+              <strong>活用シーン:</strong> オンラインクライアント配布（HTMLファイルリンクの共有）、キオスク/展示ブースでのプロモーション、社内研修の自動再生<br><br>
+              <strong>ショートカット:</strong> ←→ スライド間の移動、P（TTSの再生/停止）、A（自動/手動の切り替え）、S（スピーカーノーツの表示）
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="tip-box">
+        <code>physical-ai-market-research/agents/</code>と<code>korean-cuisine-globalization/agents/</code>を並べて開き、ファイル数を数えてみてください — 差は歴然です。co-consultは10人の専門エージェントからなる7段階のコンサルティングワークフローであり、co-deckはResearch、Design、HTML Build、PDF Exportなどを担当する専門エージェントからなる11段階パイプラインであるため、エージェント数と<code>docs/context.md</code>のフェーズ構成が大きく異なります。Variant名とバッジだけでは推測できない「実際の構造の違い」をスキャフォールドの出力を通じて直接比較できます。
+      </div>
+      <div class="tip-box">
+        <strong>G-1のco-consultの出力をG-2のco-deckの入力として流し込むことも可能です。</strong>Physical AI市場調査で完成したMarkdownレポートをそのままco-deckに渡すことで、同じ内容のプレゼンテーションデッキを自動生成できます。これがコンサルティングパイプライン（co-consult）とプレゼンテーションパイプライン（co-deck）が<strong>フルパイプライン</strong>として接続される仕組みです — トピック入力からプレゼン可能なHTML納品物まで約30〜45分で完成します。
+      </div>
+      <div class="warning-box">
+        co-deckはまだ<code>beta</code>Variantです — 第5章 §3で説明したように、公式Variantよりも構造が変更される頻度が高いため、本番プロジェクトではなく、まずは学習/実験目的で試すことを推奨します。
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+    ai-workspace-standardsのmainブランチに基づく | 2026年7月16日作成<br>
+    <a href="06_VariantPractice_Manual_ja.html">← 第6章 §1 · リファレンスに戻る</a>
+  </p>
+
+  <div class="chapter-nav">
+    <a href="06_VariantPractice_Manual_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第6章 §1 · リファレンス</div></a>
+    <a href="../tools/00_Tools_Manual_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">共通リファレンス · ツール比較</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -367,28 +367,50 @@ p + table,
 h2 + table, h3 + table { margin-top: calc(var(--spacing-unit) * 1.5); }
 table + table { margin-top: calc(var(--spacing-unit) * 3); }
 
-/* Table layout policy:
-   Default is `table-layout: auto` — the browser sizes columns from content,
-   so per-table (and per-locale) ratio tuning is unnecessary. Never hardcode
-   per-table percentage widths in CSS or inline <colgroup> markup.
-   `.table-fixed` and `.table-plan` are the only opt-in exceptions that
-   force fixed layout, and both are shared, named table TYPES (not
-   per-instance overrides) — a single content shape with wildly uneven
-   column-length needs (e.g. a 1-digit "#" column next to a full CLI
-   command) that `auto` cannot balance well, since one long unbroken cell
-   inflates its column's preferred width and starves the rest regardless
-   of locale. If a new recurring table shape needs this, add another named
-   type here rather than reaching for `.table-fixed` or inline widths.
-   For columns that need a width hint under `auto` layout, use the
-   semantic utilities below (treated as minimum preferred widths). */
+/* ============================================================
+   TABLE COLUMN-SIZING POLICY — read this before touching ANY
+   table-type rule below or adding a new one.
+
+   1. Default is `table-layout: auto`, no per-table/per-locale ratio
+      tuning, ever. Never hardcode a percentage width in CSS, and never
+      add inline <colgroup>/<col style> markup to a page — check-tables.ts
+      (`npm run check-tables`) fails the build on both.
+
+   2. NEVER `white-space: nowrap` a column that can hold translated
+      prose (a task description, a chapter label, free-text content).
+      nowrap forces auto layout to size the column to that column's
+      single longest UNWRAPPED value — since translations vary a lot in
+      length (e.g. ko "6장 (① 기존 활용 G-1)" vs en "Ch. 6 (①
+      existing-variant usage G-1)"), a column that looks fine in one
+      locale silently starves its neighbors in another. Only nowrap a
+      column whose vocabulary is fixed and short regardless of locale
+      (tier labels, model aliases, "10 min"-style durations).
+
+   3. Width hints must be `width`, never `max-width` alone. `max-width`
+      with no `width` gives auto layout no real target — it collapses
+      the column to its single-word min-content (a prior attempt at
+      this shrank an 18ch column to 59px) instead of the intended size.
+
+   4. `table-layout: fixed` is an opt-in exception for ONE known-bad
+      shape: a column whose content can be a long, unbroken inline
+      <code> snippet (a full CLI command) — `auto` layout gives that
+      column's inflated preferred width priority and starves every
+      other column, in every locale, regardless of nowrap. `.table-plan`
+      is the canonical example. If a new recurring shape needs `fixed`,
+      add another named, shared table TYPE here — never reach for
+      `.table-fixed` (a generic escape hatch) or per-instance widths.
+      Under `fixed`, give EVERY column an explicit `width` (not just the
+      narrow ones) so the browser distributes the table's own width
+      proportionally across all of them instead of one column (the one
+      left unwidthed) absorbing 100% of the remainder alone — and add a
+      `min-width` on the table equal to the width sum, or a narrow
+      viewport will proportionally shrink even the "fixed" columns
+      instead of just scrolling.
+   ============================================================ */
 .table-fixed table { table-layout: fixed; }
 .table-fixed table,
 .table-compare table,
 .table-code table { margin: 0; }
-
-/* Semantic column-width hints — reusable across all tables (auto layout) */
-col.w-narrow { width: 10ch; }  /* icons, numbers, tier badges */
-col.w-label  { width: 16ch; }  /* agent names, model names */
 
 /* Table type: Compare (4-6 columns, balanced columns) */
 .table-compare { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }

@@ -115,6 +115,7 @@
   <p>この4つのファイルの関係を一文でまとめると、CONSTITUTION.mdが「何を守るべきか」を定義し、CLAUDE.md/GEMINI.mdは「それを各プラットフォームでどう実行するか」を、AGENTS.mdは「誰がその作業を行うか」を定義している。</p>
 
   <p>AGENTS.mdのエージェント項目は次のようなフィールドで構成される。<strong>具体的な作成ガイドとツール別の実装マッピングは第8章§3 AGENTS.md深掘りで扱う。</strong></p>
+  <div class="table-compare narrow-col-3">
   <table>
     <thead><tr><th>フィールド</th><th>意味</th><th>必須</th><th>例</th></tr></thead>
     <tbody>
@@ -126,6 +127,7 @@
       <tr><td><code>handoff_to</code></td><td>完了後に引き継ぐ対象</td><td>任意</td><td><code>handoff_to: reviewer</code></td></tr>
     </tbody>
   </table>
+  </div>
   <p>具体的な規則を1つ例にとって、この関係をたどってみよう。「PRのタイトルと本文は必ず英語で書く」という規則があるとすると、この規則自体は<code>CONSTITUTION.md</code>に一度だけ記載される。<code>CLAUDE.md</code>はこの規則をClaude Codeで<em>どのように</em>強制するかを定義する。例えば、<code>/sync</code>コマンドの言語ゲート(language-guard.ts)がコミット前にこの規則を自動的にチェックするよう明示する形だ。<code>GEMINI.md</code>は同じ規則をAntigravity側のパイプラインで強制する方法を定義する。そして、この検査を実際に実行するのが「誰」なのか、すなわちどのエージェントがこのゲートを担当するのかは<code>AGENTS.md</code>のロスターに登録されている。1つの規則が4つのファイルにそれぞれ異なる角度で現れるわけだ。これは重複ではなく、「何を・どのように・誰が」という3つの問いに対するそれぞれ異なる答えである。</p>
   <p>4つのファイルの下には、実行可能な資産を格納するフォルダがある。コマンド・スキルは3か所に分かれており、<code>.claude/</code>はClaude Code/App専用、<code>.gemini/</code>はAntigravity CLI/Desktop専用、そして<code>.agents/</code>はどれか1つのツールに縛られない<strong>ツール非依存(engine-agnostic)</strong>のコマンド・スキルを格納する。例えば<code>/sync</code>・<code>/meeting</code>のようなスラッシュコマンドや<code>create-variant</code>・<code>audit-workspace</code>のようなスキルは3つのフォルダすべてに同じ名前で存在するが、それぞれ自プラットフォームのツール規則(Claude Codeの<code>Agent</code>ツール構文、Antigravityのサブエージェント方式など)に合わせて実装が少しずつ異なる。AGENTS.md標準に対応する外部ツール(Codex、Cursorなど)がこのリポジトリを開くと、<code>.agents/</code>フォルダを参照することになる。</p>
 

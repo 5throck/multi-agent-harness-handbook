@@ -398,7 +398,18 @@ col.w-label  { width: 16ch; }  /* agent names, model names */
    Execution Plan Template: # | Task | Agent | Tier | Model | Spec). Fixed
    layout because the Task column routinely holds a long inline <code>
    command that would otherwise dominate auto layout's column sizing. */
-.table-plan table { table-layout: fixed; margin: 0; }
+.table-plan table {
+  table-layout: fixed;
+  margin: 0;
+  /* Sum of the fixed columns' ch widths below + a floor for Task (20ch,
+     enough for an unwrapped short task name). Without this, a viewport
+     narrower than that sum makes browsers proportionally shrink EVERY
+     column — including the ones with an explicit width — squeezing
+     Tier/Model/Spec first since they're already the narrowest. min-width
+     forces horizontal scroll (.table-plan already has overflow-x: auto)
+     instead of breaking the fixed-column contract. */
+  min-width: calc(4ch + 20ch + 20ch + 9ch + 9ch + 11ch);
+}
 .table-plan { overflow-x: auto; margin: calc(var(--spacing-unit) * 4) 0; }
 /* Agent/Tier/Model/Spec are fixed English vocabulary regardless of locale
    (agent names from AGENTS.md's roster, tier labels, model aliases, spec

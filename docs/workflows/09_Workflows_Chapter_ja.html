@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on exercises. Reading width (720px), generous line height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Where to edit: (1) <title>/chapter number/title/lead (2) nav (this chapter's sections + other chapters) (3) 'Key points of this chapter'
+                 (4) <h2 id>/<h3> sections and body (5) previous/next chapter links
+  Colors use design tokens only — the theme is applied at deployment time via references/apply-theme.sh, which substitutes the brand colors in docs/.
+  Search index premise: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第9章 · ワークフローデザインパターン - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第9章 · ワークフローデザインパターン</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+    .variant-name { min-width: 130px; font-family: var(--font-mono); font-weight: 700; color: var(--accent-dark); flex-shrink: 0; }
+    /* ── Case cards ── */
+    .wf-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px 22px; margin: 24px 0;
+    }
+    .wf-card h3 { margin-top: 0; font-size: 1.15rem; color: var(--text); }
+    .wf-card h3 .wf-domain {
+      display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+      border-radius: 10px; color: var(--text-inverse); vertical-align: middle; margin-left: 8px;
+    }
+    .wf-card .wf-patterns { font-size: 13px; color: var(--text-dim); margin: 6px 0 12px; }
+    .wf-card .wf-patterns code { background: var(--bg-note); border-color: var(--border-note); color: var(--accent-amber); }
+    .wf-card .wf-stages { font-size: var(--font-size-small); line-height: 1.8; }
+    .wf-card .wf-stages strong { color: var(--accent-dark); }
+    .wf-card svg { margin: 14px 0 8px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第9章 · ワークフローデザインパターン</div>
+  <a href="#s1">ワークフローとは</a>
+  <a href="#s2">ワークフローの構成要素</a>
+  <a href="#s3">実世界のワークフロー事例</a>
+  <a href="#subagent-roster">サブエージェントロスター</a>
+  <a href="#role-boundary">ロール境界マトリックス</a>
+  <a href="#pm-phases">PMフェーズパイプライン</a>
+  <a href="#s4">ワークフロー選択ガイド</a>
+  <div class="nav-section">その他の章</div>
+  <a href="../tools/00_Tools_Manual_ja.html">共通リファレンス · ツール比較</a>
+  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · エンタープライズでのマルチエージェントチーム運用</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_ja.html">第8章 §1 · デプロイとSSOT</a>
+  <a href="../glossary/00_Glossary_ja.html">用語集</a>
+  <a href="../faq/00_FAQ_ja.html">FAQ</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第9章</div>
+  <h1>ワークフローデザインパターン</h1>
+  <p class="lead">本章では、オーケストレーションパターンを組み合わせて、実世界のドメインで使用される完全なワークフローを設計する方法と、さまざまなケーススタディについて解説します。</p>
+
+  <div class="keypoints">
+    <div class="kp-title">本章の内容</div>
+    <ul>
+      <li>オーケストレーションパターンとワークフローの関係 — パターンはブロック、ワークフローは完成品の組み立て</li>
+      <li>ワークフローを構成する6つの構成要素：ステージ、ブランチ、ファンアウト、ファンイン、ゲート、ループ</li>
+      <li>フロー図付きの5つの実世界ドメインワークフロー事例</li>
+      <li>サブエージェントロスター — 各エージェントの階層、並列実行可能性、書き込み権限</li>
+      <li>ロール境界マトリックス — どのシナリオでどのエージェントを使用するか</li>
+      <li>PMフェーズパイプライン — フェーズ0からフェーズ6までの実行ワークフロー</li>
+      <li>作業の性質に基づいて、どのパターンを選択し組み合わせるかを決定するガイド</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">ワークフローとは</h2>
+
+  <p>第2章 §4で学んだ5つのオーケストレーションパターン — プロンプトチェーン（パイプライン）、ルーティング、並列化（ファンアウト/投票）、オーケストレーター・ワーカー、および評価者・最適化者（検証してから適用） — は、単一の作業単位内でエージェント間の協力を構造化するための<strong>基本的な構成要素</strong>です。しかし実際には、単一のブロックだけでタスクを完了することよりも、複数のブロックを接続してレイヤー化し、1つの完全なフローにすることがはるかに一般的です。</p>
+
+  <p><strong>ワークフロー</strong>とは、「1つ以上のエージェントが協力して複雑なタスクを完了するプロセス全体」を指します。オーケストレーションパターンが「エージェントがどのように協力するか」に答えるなら、ワークフローは「プロセス全体がどのような順序と構造で進行するか」に答えます。ワークフローは通常、以下の3つの要素を組み合わせます。</p>
+
+  <ul>
+    <li><strong>オーケストレーションパターンの組み合わせ</strong> — 一部のステージは順次的（パイプライン）、一部は並列（ファンアウト）、一部のブランチは条件的（ルーティング）です。</li>
+    <li><strong>ドメインルール</strong> — 「コードレビューではセキュリティとパフォーマンスの観点を別々に検証する必要がある」など、特定のビジネスドメインで求められるルール。</li>
+    <li><strong>人間の承認ゲート</strong> — 第3章で学んだガードレールの原則に従い、不可逆的なポイントに到達する前に人間が確認するステップ。</li>
+  </ul>
+
+  <div class="pullquote">
+    オーケストレーションパターンはレゴブロックです。1つだけでも機能しますが、複数を組み合わせることではるかに複雑で有用な形状を作り出せます。ワークフローはその組み合わせの結果です。
+  </div>
+
+  <!-- §1 SVG: Pattern → Workflow relationship -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
+    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif">
+        <!-- Title -->
+        <text x="340" y="22" text-anchor="middle" font-size="13" fill="#636c76" font-weight="600">Orchestration Patterns (Blocks) → Workflow (Assembly)</text>
+
+        <!-- Pattern blocks -->
+        <rect x="20" y="50" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.5"/>
+        <text x="70" y="73" text-anchor="middle" font-size="11" fill="#0969da" font-weight="700">Pipeline</text>
+
+        <rect x="130" y="50" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="170" y="73" text-anchor="middle" font-size="11" fill="#1a7f37" font-weight="700">Routing</text>
+
+        <rect x="220" y="50" width="90" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="265" y="73" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">Fan-out</text>
+
+        <rect x="320" y="50" width="120" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="380" y="73" text-anchor="middle" font-size="11" fill="#cf5800" font-weight="700">Orchestrator</text>
+
+        <rect x="450" y="50" width="110" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="505" y="73" text-anchor="middle" font-size="11" fill="#cf222e" font-weight="700">Verify-Then-Apply</text>
+
+        <!-- Arrow down -->
+        <line x1="340" y1="95" x2="340" y2="125" stroke="#636c76" stroke-width="1.5" marker-end="url(#wfArrow)"/>
+        <text x="355" y="115" font-size="10" fill="#636c76">Combine</text>
+
+        <!-- Workflow assembly -->
+        <rect x="40" y="130" width="600" height="70" rx="10" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="340" y="150" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">Workflow (e.g., Code Review)</text>
+
+        <!-- Stage flow inside workflow box -->
+        <rect x="65" y="158" width="70" height="28" rx="5" fill="#e16f24" opacity="0.2" stroke="#e16f24" stroke-width="1"/>
+        <text x="100" y="177" text-anchor="middle" font-size="9.5" fill="#cf5800" font-weight="600">Routing</text>
+
+        <line x1="135" y1="172" x2="160" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="165" y="158" width="80" height="28" rx="5" fill="#6639ba" opacity="0.2" stroke="#6639ba" stroke-width="1"/>
+        <text x="205" y="177" text-anchor="middle" font-size="9.5" fill="#6639ba" font-weight="600">Fan-out</text>
+
+        <line x1="245" y1="172" x2="270" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="275" y="158" width="70" height="28" rx="5" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1"/>
+        <text x="310" y="177" text-anchor="middle" font-size="9.5" fill="#1a7f37" font-weight="600">Fan-in</text>
+
+        <line x1="345" y1="172" x2="370" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="375" y="158" width="90" height="28" rx="5" fill="#0969da" opacity="0.2" stroke="#0969da" stroke-width="1"/>
+        <text x="420" y="177" text-anchor="middle" font-size="9.5" fill="#0969da" font-weight="600">Pipeline</text>
+
+        <line x1="465" y1="172" x2="490" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="495" y="158" width="80" height="28" rx="5" fill="#cf222e" opacity="0.2" stroke="#cf222e" stroke-width="1"/>
+        <text x="535" y="177" text-anchor="middle" font-size="9.5" fill="#cf222e" font-weight="600">Verify</text>
+
+        <!-- Loop arrow -->
+        <path d="M575,172 Q595,172 595,150 Q595,130 575,130 L420,130" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="500" y="126" text-anchor="middle" font-size="9" fill="#636c76">Loop if rejected</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>本章では、第2章のパターンをすでに知っていることを前提としています。用語に不慣れな場合は、まず<a href="../concepts/02_Concepts_Chapter_ja.html#s4">第2章 §4 オーケストレーションパターン</a>と<a href="../concepts/02_Concepts_Chapter_ja.html#s4b">§4b 動的チーム編成</a>をお読みください。次のセクションでは、パターンを超えて、ワークフローを構成する6つの構成要素について解説します。
+
+
+  <h2 id="s2">ワークフローの構成要素</h2>
+
+  <p>複雑なワークフローを分解すると、いくつかの繰り返し現れる構造的要素が見つかります。第2章の5つのパターンはエージェント同士がどのように協力するかに焦点を当てましたが、ここではワークフローの<em>構造的な骨格</em>に焦点を当てます。</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">ステージ</span><span>順次的に実行される作業の単位。ワークフローの最も基本的な構成要素。前のステージの出力が次のステージの入力になります。</span></div>
+    <div class="variant-row"><span class="variant-name">ブランチ</span><span>条件に基づいてパスが分岐するポイント。ルーティングパターンの実用的な適用 — 例えば、「小さな変更は軽量レビュー、大きな変更はフルレビュー」といった具合に、変更の性質に応じて異なるエージェントまたは次のステージにリクエストを送信します。</span></div>
+    <div class="variant-row"><span class="variant-name">ファンアウト</span><span>独立したサブタスクが同時に実行されるポイント。ファンアウトパターンの構造的表現。実行時間は最も遅いサブタスクに収束します。例：セキュリティ、パフォーマンス、可読性の観点を同時にレビューする。</span></div>
+    <div class="variant-row"><span class="variant-name">ファンイン</span><span>並列に実行された複数の結果を1つに集約するステージ。<strong>第2章では扱わなかった概念です。</strong>ファンインでは、どの結果を優先するか（投票）、それらをどのようにマージするか（集約/選択）を決定するルールが必要です。例：3人のレビュアーの意見を最終フィードバックに統合する。</span></div>
+    <div class="variant-row"><span class="variant-name">ゲート</span><span>次のステージに進む前に検証または人間の承認を必要とするポイント。<a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章のガードレール</a>の実用的な適用ポイント。元に戻しにくい操作（ファイル変更、デプロイ、PRマージ）の前に配置されます。</span></div>
+    <div class="variant-row"><span class="variant-name">ループ</span><span>検証ステージで却下された場合に前のステージに戻る繰り返し構造。評価者・最適化者パターン（検証してから適用）の構造的表現。無限ループを防ぐために最大リトライ回数を設定する必要があります。</span></div>
+  </div>
+
+  <div class="note">これら6つの構成要素は、第2章の5つのパターンと1:1でマッピングされるわけではありません。単一のパターンに複数の構成要素が含まれる場合（例：ファンアウトパターン = ファンアウト + ファンイン）もあれば、単一の構成要素が複数のパターンに現れる場合（例：ゲートは検証してから適用とパイプラインの両方に現れる）もあります。</div>
+
+  <p>これらの要素を組み合わせることで、ほぼすべての実世界のワークフローを表現できます。次のセクションでは、実際のドメインでこれらの要素がどのように配置されているかのケーススタディを見ていきます。
+
+
+  <h2 id="s3">実世界のワークフロー事例</h2>
+
+  <p>5つのドメインワークフローをケース別に紹介します。各ケースでは、コアパターンの組み合わせ、ステージフロー、担当エージェント、人間ゲートの位置を示します。ai-workspace-standardsで実装済みのバリアントに接続済みのケースも含まれています。</p>
+
+  <!-- Case 1: Code Review -->
+  <div class="wf-card">
+    <h3>コードレビュー <span class="wf-domain" style="background:var(--accent)">ソフトウェア開発</span></h3>
+    <p class="wf-patterns">コアパターン: <code>ルーティング</code> → <code>ファンアウト</code> → <code>ファンイン</code> → <code>パイプライン</code> → <code>検証してから適用</code>(ループ)</p>
+    <p class="wf-stages">
+      <strong>① 変更分析（ルーティング）</strong>: 変更ファイルの規模と種類を分析してレビュー範囲を決定します。単純なタイポ修正は高速パスに分岐し、 majorな機能変更はフルレビューパスに分岐します。<br>
+      <strong>② 多角的レビュー（ファンアウト）</strong>: 専門レビュアーエージェントがセキュリティ、パフォーマンス、可読性の観点を同時に検証します。<br>
+      <strong>③ 意見集約（ファンイン）</strong>: 統合エージェントが3人のレビュアーのフィードバックを1つのフィードバックレポートにまとめます。<br>
+      <strong>④ 修正提案（パイプライン）</strong>: フィードバックに基づいてコード修正提案を生成します。<br>
+      <strong>⑤ 最終承認（検証してから適用）</strong>: 修正されたコードを再レビューします。合格すれば<span class="wf-gate">人間の承認ゲート</span>へ進み、却下されれば④にループバックします。
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="100" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① Change Analysis</text>
+        <line x1="105" y1="48" x2="125" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="180" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② Multi-Perspective</text>
+        <line x1="230" y1="48" x2="250" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="30" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="295" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ Fan-in</text>
+        <line x1="335" y1="48" x2="355" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="30" width="90" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="405" y="53" text-anchor="middle" font-weight="700" fill="#0969da">④ Fix Proposal</text>
+        <line x1="450" y1="48" x2="470" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="475" y="30" width="80" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="515" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">⑤ Approval</text>
+        <!-- gate -->
+        <rect x="555" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="580" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+        <!-- loop -->
+        <path d="M515,66 L515,85 L405,85 L405,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="460" y="96" text-anchor="middle" font-size="9" fill="#636c76">Loop if rejected</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">バリアント: <code>co-develop</code>の6段階ガバナンスパイプラインと構造的に類似。<a href="../variant-practice/06_VariantPractice_Manual_ja.html">第6章 §1</a>を参照。</p>
+  </div>
+
+  <!-- Case 2: Market Research Report -->
+  <div class="wf-card">
+    <h3>市場調査レポート <span class="wf-domain" style="background:var(--accent-purple)">コンサルティング · リサーチ</span></h3>
+    <p class="wf-patterns">コアパターン: <code>オーケストレーター・ワーカー</code> → <code>ファンアウト</code> → <code>パイプライン</code> → <code>検証してから適用</code></p>
+    <p class="wf-stages">
+      <strong>① オーケストレーション（PM）</strong>: PMエージェントが調査範囲、対象市場、納品物フォーマットを定義し、ワーカーに委譲します。<br>
+      <strong>② 並列調査（ファンアウト）</strong>: 3つのエージェントが市場規模分析、競合分析、技術動向調査を同時に実行します。<br>
+      <strong>③ 集約とドラフト作成（パイプライン）</strong>: 3つの調査結果をドラフトレポートに統合し、可視化（チャート）を生成します。<br>
+      <strong>④ クロス検証（検証してから適用）</strong>: 専門レビュアーがデータソース、論理的一貫性、欠落をチェックします。<span class="wf-gate">人間の承認ゲート</span>を経て、最終レポートが確定します。
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="110" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① PM Orchestration</text>
+        <line x1="115" y1="48" x2="135" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="140" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="190" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② Parallel ×3</text>
+        <line x1="240" y1="48" x2="260" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="265" y="30" width="90" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="310" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ Aggregate/Draft</text>
+        <line x1="355" y1="48" x2="375" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="380" y="30" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="430" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">④ Cross-Verify</text>
+        <line x1="480" y1="48" x2="500" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="505" y="30" width="70" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="540" y="53" text-anchor="middle" font-weight="700" fill="#0969da">⑤ Finalize</text>
+        <rect x="575" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+        <path d="M430,66 L430,85 L310,85 L310,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="370" y="96" text-anchor="middle" font-size="9" fill="#636c76">If revisions needed</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">バリアント: <code>co-consult</code>の7段階（フェーズ0-6）パイプライン構造に基づく。<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章 §2演習（G-1）</a>で直接体験できます。</p>
+  </div>
+
+  <!-- Case 3: Presentation Production -->
+  <div class="wf-card">
+    <h3>プレゼンテーション制作 <span class="wf-domain" style="background:var(--accent-green)">講義 · プレゼンテーション</span></h3>
+    <p class="wf-patterns">コアパターン: <code>パイプライン</code>(長いパイプライン) + <code>ファンアウト</code>(中間の並列処理)</p>
+    <p class="wf-stages">
+      <strong>① 調査</strong>: トピックに関連する資料を収集し、ソースを検証します。<br>
+      <strong>② ストーリーライン</strong>: 全体的なコンテンツフローとスライド構成を計画します。<br>
+      <strong>③ デザイン</strong>: ビジュアルレイアウトとテーマを選択します。<br>
+      <strong>④ 画像キュレーション + 図生成（ファンアウト）</strong>: イラストと図を<em>同時に</em>生成して時間を節約します。<br>
+      <strong>⑤⑥⑦ ビルド・計測・エクスポート（パイプライン）</strong>: HTMLビルド → レイアウト計測 → PDFエクスポートの順次処理。<br>
+      <strong>⑧⑨⑩⑩ 最終レビュー（検証してから適用）</strong>: 完成したPDFをクロスレビューし、<span class="wf-gate">人間の承認ゲート</span>へ進みます。
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="#1f2328">
+        <rect x="5" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="#0969da">① Research</text>
+        <line x1="65" y1="46" x2="80" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="85" y="30" width="65" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="117" y="50" text-anchor="middle" font-weight="700" fill="#0969da">② Story</text>
+        <line x1="150" y1="46" x2="165" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="170" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="197" y="50" text-anchor="middle" font-weight="700" fill="#0969da">③ Design</text>
+        <line x1="225" y1="46" x2="240" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <!-- Fan-out split -->
+        <rect x="245" y="15" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="35" text-anchor="middle" font-weight="700" fill="#6639ba">Image</text>
+        <rect x="245" y="52" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="72" text-anchor="middle" font-weight="700" fill="#6639ba">Diagram</text>
+        <!-- Fan-in merge -->
+        <line x1="320" y1="30" x2="345" y2="46" stroke="#636c76" stroke-width="1"/>
+        <line x1="320" y1="67" x2="345" y2="50" stroke="#636c76" stroke-width="1"/>
+        <rect x="350" y="30" width="55" height="32" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="377" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37">Merge</text>
+        <line x1="405" y1="46" x2="420" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="425" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="455" y="50" text-anchor="middle" font-weight="700" fill="#0969da">Build</text>
+        <line x1="485" y1="46" x2="495" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="500" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="527" y="50" text-anchor="middle" font-weight="700" fill="#0969da">PDF</text>
+        <line x1="555" y1="46" x2="570" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="575" y="32" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">バリアント: まさに<code>co-deck</code>の11段階（ステージ0-11）パイプライン。<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章 §2演習（G-2）</a>の韓国食品グローバル化プレゼンテーションで直接体験できます。</p>
+  </div>
+
+  <!-- Case 4: Issue Triage -->
+  <div class="wf-card">
+    <h3>課題トリアージ <span class="wf-domain" style="background:var(--accent-amber)">運用 · インシデント</span></h3>
+    <p class="wf-patterns">コアパターン: <code>ルーティング</code> → <code>オーケストレーター・ワーカー</code> → <code>エスカレーション</code></p>
+    <p class="wf-stages">
+      <strong>① 分類（ルーティング）</strong>: 受信した課題の緊急度と種類を分析してパスを決定します。バグは修正パス、機能リクエストは計画パス、セキュリティ問題は緊急パスに分岐します。<br>
+      <strong>② 自動調査（オーケストレーター・ワーカー）</strong>: ワーカーエージェントが分類された課題をサブタスクに分解して調査します — 関連ログ検索、再現の試行、影響範囲の評価。<br>
+      <strong>③ 優先度決定</strong>: 調査結果に基づいて優先度と担当者を推奨します。<br>
+      <strong>④ エスカレーションまたは自動解決</strong>: 自動的に解決できる軽微な問題（例：設定エラー）は即座に修正し、複雑な問題は<span class="wf-gate">人間の承認ゲート</span>にエスカレーションします。
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="80" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="#cf5800">① Classify</text>
+        <line x1="85" y1="46" x2="105" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="110" y="28" width="120" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="170" y="51" text-anchor="middle" font-weight="700" fill="#6639ba">② Auto-Investigate</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="110" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="310" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ Prioritize</text>
+        <line x1="365" y1="46" x2="385" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <!-- Branch -->
+        <rect x="390" y="8" width="80" height="30" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="430" y="28" text-anchor="middle" font-weight="700" fill="#1a7f37">Auto-Resolve</text>
+        <rect x="390" y="52" width="80" height="30" rx="5" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1"/><text x="430" y="72" text-anchor="middle" font-weight="700" fill="#cf222e">Escalate</text>
+        <rect x="475" y="57" width="50" height="22" rx="11" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="500" y="73" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">インシデント管理専用のバリアントはまだありませんが、<code>co-develop</code>のPMロールと第2章の障害対応パターン（リトライ、ロールバック、エスカレーション）を組み合わせることで実装できます。</p>
+  </div>
+
+  <!-- Case 5: PR Creation and Verification -->
+  <div class="wf-card">
+    <h3>PR作成と検証 <span class="wf-domain" style="background:var(--accent-red)">ガバナンス</span></h3>
+    <p class="wf-patterns">コアパターン: <code>パイプライン</code> → <code>検証してから適用</code>(ループ) → <code>ゲート</code></p>
+    <p class="wf-stages">
+      <strong>① 変更収集</strong>: コミット履歴と差分を収集してPRのドラフト（タイトル、本文）を作成します。<br>
+      <strong>② ルール検証（検証してから適用）</strong>: PRがCONSTITUTION.mdのルール（英語タイトル、特定のフォーマットなど）に準拠しているかを自動チェックします。違反がある場合は①にループバックして修正します。<br>
+      <strong>③ 影響分析</strong>: 変更が他のファイル/機能にどのような影響を与えるかを分析し、PR本文に追加します。<br>
+      <strong>④ 最終レビュー + 承認</strong>: PR全体を再レビューし、<span class="wf-gate">人間の承認ゲート</span>へ進みます。承認されるとマージ保留状態に移行します。
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="#0969da">① Collect Changes</text>
+        <line x1="105" y1="46" x2="125" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="28" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="180" y="51" text-anchor="middle" font-weight="700" fill="#cf222e">② Verify Rules</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="295" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ Impact Analysis</text>
+        <line x1="335" y1="46" x2="355" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="400" y="51" text-anchor="middle" font-weight="700" fill="#0969da">④ Review</text>
+        <line x1="440" y1="46" x2="460" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="465" y="33" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="490" y="51" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Human</text>
+        <!-- loop -->
+        <path d="M180,64 L180,82 L55,82 L55,64" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="117" y="93" text-anchor="middle" font-size="9" fill="#636c76">Loop if violated</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">ai-workspace-standardsのCONSTITUTION.mdで定義されたPRワークフローをエージェントが自動化する構造。<a href="../intro/05_Intro_Chapter_ja.html#s2">第5章 §2 コアファイル</a>と<a href="../intro/08_Intro_Advanced_Deploy_ja.html">第8章 §1 デプロイとSSOT</a>でデプロイパイプラインと合わせて解説されています。</p>
+  </div>
+
+  <h3 id="s3-note">事例に共通するパターン</h3>
+  <p>5つの事例からいくつかの共通構造が浮かび上がります。</p>
+  <ul>
+    <li><strong>すべてのワークフローに人間ゲートがあります。</strong>自動化がどれほど進んでも、納品物の確定、マージ、デプロイなどの不可逆的な決定の前には人間の承認が必要です。これは第3章で学んだガードレールの実用的な適用ポイントです。</li>
+    <li><strong>ファンアウトには必ずファンインが続きます。</strong>並列ブランチに分岐した結果をそのまま並べておくと、消費者（次のステージのエージェント、または人間）が手動で統合しなければなりません。次のパイプラインステージにスムーズに移行できる単一の納品物を生成するために、明示的なファンインステージが必要です。</li>
+    <li><strong>検証ステージがループするかエスカレーションするかでワークフローの複雑さが決まります。</strong>自動修正できる問題（フォーマット違反、タイポ）はループで解決され、判断が必要な問題（設計の欠陥、セキュリティ脆弱性）はエスカレーションで人間に引き渡されます。</li>
+    <li><strong>単純なパイプラインはほとんど使われません。</strong>5つの事例はすべて「純粋に順次的」なワークフローではありません。少なくとも1つのポイントでルーティング（分岐）またはファンアウト（並列）が含まれています。</li>
+  </ul>
+
+
+  <h2 id="subagent-roster">サブエージェントロスター — ワークフローを構成するエージェントのリスト</h2>
+
+  <p>第2章では「エージェント」をロールとしてモデル化することを学びました。実際のワークスペースでは、これらのロールは<strong>具体的なファイルと階層の割り当て</strong>で定義され、ロスターに登録されます。AGENTS.mdのサブエージェントロスターは、この定義を一覧で示すテーブルです。</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>エージェント</th><th>ファイル</th><th>階層</th><th>並列実行</th><th>書き込み権限</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PMオーケストレーター</strong></td><td><code>agents/pm.md</code></td><td>高</td><td>—</td><td>オーケストレーションのみ</td></tr>
+      <tr><td>整合性監査人</td><td><code>agents/auditor.md</code></td><td>中</td><td>独立QA</td><td>なし</td></tr>
+      <tr><td>ライフサイクルマネージャー</td><td><code>agents/lifecycle-manager.md</code></td><td>中</td><td>オンデマンドガバナンス</td><td>ガバナンス文書のみ（L0のみ）</td></tr>
+      <tr><td>テンプレートアーキテクト</td><td><code>agents/architect.md</code></td><td>高</td><td>設計フェーズ</td><td>なし</td></tr>
+      <tr><td>オートメーションエンジニア</td><td><code>agents/automation-engineer.md</code></td><td>低</td><td>順次</td><td>TypeScript (.ts) 自動化スクリプト</td></tr>
+      <tr><td>ドキュメントライター</td><td><code>agents/docs-writer.md</code></td><td><strong>中</strong></td><td>設計後</td><td>.mdファイルのみ</td></tr>
+      <tr><td>スキャフォールディング専門家</td><td><code>agents/scaffolding-expert.md</code></td><td>低</td><td>調査フェーズ</td><td>インストールスクリプトのみ（承認後）</td></tr>
+      <tr><td>セキュリティ・Git専門家</td><td><code>agents/security-expert.md</code></td><td>中</td><td>レビューフェーズ</td><td>フック設定のみ</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>このテーブルの「並列実行」列は、第8章 §4で扱った階層調整ルールと併せて解釈する必要があります。例えば、docs-writerは設計が確定する前に並列でドキュメントを書くと後でやり直しになるリスクがあるため、「設計後」にのみ並列実行できます。一方、Auditorは「独立QA」であり、他のエージェントの作業に関係なくいつでも独立して実行できます。</p>
+
+  <h2 id="role-boundary">ロール境界マトリックス — 「このタスクは誰がやるべきか」</h2>
+
+  <p>複数のエージェントがいる場合、「このタスクを誰が処理すべきか」が曖昧になることがあります。以下のマトリックスは、その曖昧さを解消するロール境界を定義します。</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>シナリオ</th><th>使用するエージェント</th><th>使用しないエージェント</th></tr></thead>
+    <tbody>
+      <tr><td>実装アプローチとフォルダ構造の設計</td><td><code>architect</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>自動化スクリプト (.ts) の作成/変更</td><td><code>automation-engineer</code></td><td><code>architect</code></td></tr>
+      <tr><td>ドキュメントの更新</td><td><code>docs-writer</code></td><td><code>architect</code></td></tr>
+      <tr><td>テンプレートからの新規プロジェクトスキャフォールディング</td><td><code>scaffolding-expert</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>セキュリティレビュー、Gitフック設定</td><td><code>security-expert</code></td><td><code>architect</code></td></tr>
+      <tr><td>ドキュメントの整合性クロス検証</td><td><code>auditor</code></td><td><code>docs-writer</code></td></tr>
+      <tr><td>複数エージェント間の作業オーケストレーション</td><td><code>pm</code></td><td>いずれの実行エージェント</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>このマトリックスの中核原則は<strong>「設計と実行の分離」</strong>です。architectは設計のみを行い、スクリプトを直接書くことはありません。automation-engineerはスクリプトを書きますが、構造を設計することはありません。docs-writerはドキュメントを検証しません — auditorが検証し、docs-writerはauditorのフィードバックを反映してドキュメントを改訂します。</p>
+
+  <h2 id="pm-phases">PMフェーズパイプライン — ワークフローのガバナンスビュー</h2>
+
+  <p>本章で扱ったワークフローパターン（ルーティング、ファンアウト、パイプラインなど）は、<strong>技術的構成要素</strong>の視点を表しています。実際のワークスペースでは、これらの技術パターンの上に<strong>ガバナンスフェーズ</strong>がレイヤー化されています。PMが管理する7つのフェーズを、ワークフローの視点から整理すると以下のようになります。</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">フェーズ0</span><span><strong>プロジェクト初期化</strong>（PM専用） — ワークスペースの要件を評価し、エージェント/スキルを動的に生成してAGENTS.mdを更新します。<em>ワークフロー: オーケストレーター単独</em></span></div>
+    <div class="variant-row"><span class="variant-name">フェーズ1-2</span><span><strong>計画・アーキテクチャ</strong>（専門家自律） — PMがリクエストを分類し、Architectが実装計画 + ADRを作成し、調査エージェントが並列にディスパッチされます。<em>ワークフロー: ルーティング → ファンアウト（並列調査）</em></span></div>
+    <div class="variant-row"><span class="variant-name">フェーズ3</span><span><strong>設計ハンドオフ</strong>（バリアントごと） — Architectが承認済み計画を実行エージェントに引き渡します。エージェント間の自律的ハンドオフ。<em>ワークフロー: オーケストレーター・ワーカー（ハンドオフ）</em></span></div>
+    <div class="variant-row"><span class="variant-name">フェーズ4</span><span><strong>実行</strong>（専門家自律） — Automation Engineerが承認済み計画に従って実装し、Docs Writerがドキュメントを更新します。<em>ワークフロー: パイプライン（順次実行）</em></span></div>
+    <div class="variant-row"><span class="variant-name">フェーズ5</span><span><strong>ライフサイクルクロージャ</strong>（PM専用） — PMが変更されたアーティファクトのガバナンス記録を更新します。<em>ワークフロー: オーケストレーター単独（記録）</em></span></div>
+    <div class="variant-row"><span class="variant-name">フェーズ6</span><span><strong>品質保証</strong>（ワークスペース自律） — Auditorが自動的に<code>qa-gate.ts</code>を実行します。最大2回のイテレーション後にPMにエスカレーションします。<em>ワークフロー: 検証してから適用（ループ）</em></span></div>
+  </div>
+
+  <p>これら7つのフェーズは、§3のワークフロー事例と直接対応しています。例えば、「コードレビュー」事例の全体フローは、フェーズ1-2（分析）→ フェーズ4（レビュー実行）→ フェーズ6（QA）のミニチュアです。実践で新しいワークフローを設計する際、これらのフェーズを念頭に置くことで、「人間ゲートをどこに配置するか」「どのステージが並列実行に安全か」を体系的に決定しやすくなります。
+
+
+  <h2 id="s4">ワークフロー選択ガイド</h2>
+
+  <p>新しいタスクにマルチエージェントワークフローを導入するには、どのパターンから始め、そこからどのように拡張するかを決定する必要があります。以下の意思決定ツリーが、最初のステップの選択をサポートします。</p>
+
+  <!-- Decision tree SVG -->
+  <div class="decision-box">
+    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#636c76"/></marker>
+        <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/></marker>
+        <marker id="dtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <!-- Q1 -->
+        <rect x="220" y="5" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="30" text-anchor="middle" font-weight="700">Are there dependencies between subtasks?</text>
+        <!-- Yes branch -->
+        <line x1="330" y1="45" x2="330" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="58" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No branch -->
+        <line x1="440" y1="25" x2="530" y2="25" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="530" y1="25" x2="530" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="480" y="20" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Q2 (Yes from Q1) -->
+        <rect x="220" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="95" text-anchor="middle" font-weight="700">Can they run in sequential order?</text>
+        <!-- Yes → Pipeline -->
+        <line x1="220" y1="90" x2="140" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="90" x2="140" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="85" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No → Orchestrator -->
+        <line x1="330" y1="110" x2="330" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="125" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Pipeline result -->
+        <rect x="60" y="135" width="160" height="40" rx="8" fill="#0969da" opacity="0.1" stroke="#0969da" stroke-width="1.5"/>
+        <text x="140" y="153" text-anchor="middle" font-weight="700" fill="#0969da">Pipeline</text>
+        <text x="140" y="166" text-anchor="middle" font-size="9" fill="#636c76">Design sequential stages</text>
+
+        <!-- Q3 (No from Q2) -->
+        <rect x="220" y="135" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="160" text-anchor="middle" font-weight="700">Is verification required?</text>
+        <!-- Yes → Verify -->
+        <line x1="220" y1="155" x2="140" y2="155" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="155" x2="140" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="150" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No → Orchestrator-Worker -->
+        <line x1="330" y1="175" x2="330" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="190" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Verify result -->
+        <rect x="60" y="200" width="160" height="40" rx="8" fill="#cf222e" opacity="0.1" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="140" y="218" text-anchor="middle" font-weight="700" fill="#cf222e">Verify-Then-Apply + Pipeline</text>
+        <text x="140" y="231" text-anchor="middle" font-size="9" fill="#636c76">Design stages with a loop</text>
+
+        <!-- Orchestrator-Worker result -->
+        <rect x="230" y="200" width="200" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="330" y="218" text-anchor="middle" font-weight="700" fill="#cf5800">Orchestrator-Worker</text>
+        <text x="330" y="231" text-anchor="middle" font-size="9" fill="#636c76">PM dynamically distributes work</text>
+
+        <!-- Q4 (No from Q1) -->
+        <rect x="430" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="540" y="95" text-anchor="middle" font-weight="700">Can they run simultaneously?</text>
+        <!-- Yes → Fan-out -->
+        <line x1="540" y1="110" x2="540" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="555" y="125" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <!-- No → Routing -->
+        <line x1="540" y1="90" x2="620" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="620" y1="90" x2="620" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="575" y="85" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Fan-out result -->
+        <rect x="460" y="135" width="160" height="40" rx="8" fill="#6639ba" opacity="0.1" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="540" y="153" text-anchor="middle" font-weight="700" fill="#6639ba">Fan-out + Fan-in</text>
+        <text x="540" y="166" text-anchor="middle" font-size="9" fill="#636c76">Parallel work + result aggregation</text>
+
+        <!-- Routing result -->
+        <rect x="540" y="135" width="110" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="595" y="153" text-anchor="middle" font-weight="700" fill="#cf5800">Routing</text>
+        <text x="595" y="166" text-anchor="middle" font-size="9" fill="#636c76">Conditional branching</text>
+
+        <!-- Combination note -->
+        <rect x="60" y="265" width="540" height="55" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+        <text x="330" y="285" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">💡 In practice, multiple patterns are combined</text>
+        <text x="330" y="302" text-anchor="middle" font-size="10" fill="#636c76">Code review = Routing + Fan-out + Fan-in + Pipeline + Verify-Then-Apply (this chapter's §3 Case 1)</text>
+        <text x="330" y="315" text-anchor="middle" font-size="10" fill="#636c76">The decision tree is meant only for <strong>choosing the first pattern</strong>. For complex tasks, design stages top-down, adding patterns naturally as you go.</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>タスクタイプ別の開始パターン</h3>
+  <p>意思決定ツリーの結果をタスクタイプ別に整理すると以下のようになります。</p>
+
+  <div class="table-compare">
+  <table>
+    <thead>
+      <tr><th>タスクタイプ</th><th>依存関係</th><th>並列化可能</th><th>検証の必要性</th><th>推奨開始パターン</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>ドキュメント翻訳/要約</td><td>順次</td><td>×</td><td>中程度</td><td><code>パイプライン</code></td></tr>
+      <tr><td>コードレビュー</td><td>部分的</td><td>○</td><td>必要</td><td><code>ルーティング → ファンアウト → 検証</code></td></tr>
+      <tr><td>市場調査</td><td>部分的</td><td>○</td><td>必要</td><td><code>オーケストレーター・ワーカー → ファンアウト</code></td></tr>
+      <tr><td>バグ修正</td><td>順次</td><td>×</td><td>必要</td><td><code>パイプライン + 検証してから適用</code></td></tr>
+      <tr><td>課題トリアージ</td><td>なし</td><td>条件的</td><td>中程度</td><td><code>ルーティング → オーケストレーター・ワーカー</code></td></tr>
+      <tr><td>プレゼンテーション制作</td><td>部分的</td><td>○</td><td>必要</td><td><code>パイプライン(長) + ファンアウト(中)</code></td></tr>
+      <tr><td>PR作成</td><td>順次</td><td>×</td><td>必要</td><td><code>パイプライン + 検証してから適用</code></td></tr>
+      <tr><td>多言語コンテンツ生成</td><td>なし</td><td>○</td><td>中程度</td><td><code>ファンアウト + ファンイン</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>パターン組み合わせガイド</h3>
+  <p>以下に、どのパターンを一緒に使用すると相乗効果を生むかのまとめを示します。</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">ファンアウト + パイプライン</span><span>並列レビュー、多言語翻訳に続く後処理。ファンアウトが速度を提供し、パイプラインが順序を保証します。</span></div>
+    <div class="variant-row"><span class="variant-name">ルーティング + ファンアウト</span><span>課題トリアージ、サイズベースのレビュー。ルーティングが分類し、各パスで異なる並列タスクを実行します。</span></div>
+    <div class="variant-row"><span class="variant-name">オーケストレーター・ワーカー + 検証</span><span>複雑な分析、設計レビュー。PMが動的に配分し、結果が検証されます。</span></div>
+    <div class="variant-row"><span class="variant-name">パイプライン + 検証 (ループ)</span><span>コード生成、PR作成。順次的に書き込みますが、品質基準を満たさない場合は前のステージに戻ります。</span></div>
+    <div class="variant-row"><span class="variant-name">ルーティング + オーケストレーター</span><span>モデルの階層化。簡単なタスクは軽量モデルに、難しいタスクは強力なモデルに配分されます。</span></div>
+  </div>
+
+  <div class="note">
+    本章のワークフロー事例は、<a href="../practice/04_Practice_Examples_A_ja.html">第4章演習</a>のD-1（順次パイプライン）とD-2（動的チーム編成）、および<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章演習</a>のG-1（co-consult）、G-2（co-deck）を通じて直接体験できます。<a href="../capstone/13_Capstone_ja.html">第13章のキャップストーン演習</a>では、本章の原則に基づいて「独自のワークフロー」を設計します。
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../intro/08_Intro_Advanced_Roadmap_ja.html" class="prev">
+      <div class="dir">← 前の章</div>
+      <div class="ttl">8章 §5 · 高度化ロードマップ</div>
+    </a>
+    <a href="../intro/10_ProjectUpgrade_Chapter_ja.html" class="next">
+      <div class="dir">次の章 →</div>
+      <div class="ttl">10章 · L2プロジェクトアップグレード</div>
+    </a>
+  </div>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

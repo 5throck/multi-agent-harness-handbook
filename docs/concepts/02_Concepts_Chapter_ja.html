@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念 - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第2章 · 概念の理解</div>
+  <a href="#agent-definition">エージェントとは何か</a>
+  <a href="#s0">プロンプト → コンテキスト → ハーネス</a>
+  <a href="#architecture-diagram">ハーネスの全体アーキテクチャ図</a>
+  <a href="#s1">ハーネスエンジニアリングとは</a>
+  <a href="#s2">単一エージェントの限界</a>
+  <a href="#s3">マルチエージェントチームの構成要素</a>
+  <a href="#s3b">サブエージェントとは</a>
+  <a href="#s4">オーケストレーションパターン</a>
+  <a href="#s4b">動的チーム編成と多様なワークフロー</a>
+  <a href="#s5">ツール横断的なハーネス — AGENTS.md</a>
+  <div class="nav-section">他の章</div>
+  <a href="../intro/01_Why_AI_Chapter_ja.html">1章 · 導入</a>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">3章 · ガードレールと権限モデル</a>
+  <a href="../glossary/00_Glossary_ja.html">用語集</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第2章</div>
+  <h1>ハーネスエンジニアリングとマルチエージェントチームの概念</h1>
+  <p class="lead">AIエージェントが実際のタスクを確実に動作させるためには、「何を指示するか」よりも「どのフレームワークの中で動かすか」が重要です。第1章では、なぜAIエージェントが必要なのかを見ました。本章では、ハーネスエンジニアリングの視点と、単一エージェントに頼るのではなく複数のエージェントがチームとして協働するマルチエージェントチームの基本構造について解説します。</p>
+  <p class="source-line">出典: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code公式ドキュメント — サブエージェント</a>, <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standardsリポジトリ</a>, <a href="https://www.faros.ai/blog/harness-engineering" target="_blank">Faros AI — Harness Engineering</a>, <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank">Anthropic — Building Effective Agents</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">本章の内容</div>
+    <ul>
+      <li>プロンプトエンジニアリング → コンテキストエンジニアリング → ハーネスエンジニアリングへの進化</li>
+      <li>ハーネスエンジニアリングとは何か、そしてプロンプトエンジニアリングだけでは不十分な理由</li>
+      <li>単一エージェントが複雑な作業を扱う際に生じる構造的な限界</li>
+      <li>マルチエージェントチームを構成する3つの要素：オーケストレーター、スペシャリスト、ハンドオフ契約</li>
+      <li>スペシャリストを実際に実装するメカニズムであるサブエージェント：定義方法、事前定義 vs 動的生成、および使いどころ</li>
+      <li>Anthropicの5つのオーケストレーションパターン：プロンプトチェーン、ルーティング、並列化（セクショニング/投票）、オーケストレーター・ワーカー、評価者・最適化（検証後適用）、および失敗時のリトライ/ロールバック/エスカレーション</li>
+      <li>チーム編成がタスクごとに動的に変化する仕組みと、ドメインごとに異なるワークフローを自由に実装できる仕組み</li>
+      <li>AGENTS.md規格 — Claude Code/AppとAntigravity CLI/Desktopなど異なるツールが同じハーネスを共有できるようにする標準</li>
+    </ul>
+  </div>
+
+  <h2 id="agent-definition">エージェントとは何か</h2>
+  <p>本章でハーネスエンジニアリングに踏み込む前に、「エージェント」を正確に定義しておきましょう。AIエージェントとは、<strong>目的を与えられたAIシステム</strong>であり、単純なチャットボットとは異なります。</p>
+
+  <p>チャットボットの仕事は単に「質問に答える」ことです。ユーザーがプロンプトを入力し、応答を生成し、会話が終われば何も残りません。エージェントは3つの点で異なります。</p>
+
+  <ul>
+    <li><strong>目的の永続性：</strong>エージェントには「役割」として定義された目的があります。会話が長くなっても、その役割（研究者、レビュアー、ライターなど）を見失うことなく一貫して動作します。</li>
+    <li><strong>ツールの使用：</strong>エージェントはテキストを生成する以上のことができます — ファイルの読み取り、コードの検索、コマンドの実行などが可能です。第4章では、<code>tools</code>フィールドを通じたこれらツールの制御方法を解説します。</li>
+    <li><strong>自律的な振る舞い：</strong>単一プロンプトに対する単一応答ではなく、エージェントは目標を達成するために複数のステップを自律的に実行できます。条件による分岐、エラー時のリトライ、結果の検証を自ら判断します。</li>
+  </ul>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+        <marker id="arrow-ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Left: Chatbot -->
+        <text x="155" y="18" text-anchor="middle" font-size="13" fill="#636c76" font-weight="700">Chatbot</text>
+        <rect x="20" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="55" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">User</text>
+        <line x1="90" y1="48" x2="120" y2="48" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow-ca)"/>
+        <rect x="122" y="32" width="70" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="157" y="52" text-anchor="middle" font-size="11" fill="#0550ae" font-weight="600">LLM</text>
+        <line x1="192" y1="48" x2="222" y2="48" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow-ca)"/>
+        <rect x="224" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="259" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">Response</text>
+        <text x="155" y="86" text-anchor="middle" font-size="10" fill="#636c76">Single loop: question → response</text>
+
+        <!-- Divider -->
+        <line x1="330" y1="8" x2="330" y2="196" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Right: Agent -->
+        <text x="495" y="18" text-anchor="middle" font-size="13" fill="#0969da" font-weight="700">Agent</text>
+        <rect x="350" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="385" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">User</text>
+        <line x1="420" y1="48" x2="450" y2="48" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <rect x="452" y="32" width="70" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="487" y="52" text-anchor="middle" font-size="11" fill="#0550ae" font-weight="700">LLM</text>
+        <!-- Arrow going down -->
+        <line x1="487" y1="64" x2="487" y2="86" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <!-- Tool/subagent box -->
+        <rect x="432" y="90" width="110" height="36" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="487" y="105" text-anchor="middle" font-size="10" fill="#116329" font-weight="600">Tool / Subagent</text>
+        <text x="487" y="119" text-anchor="middle" font-size="9" fill="#116329">Search · execute · analyze</text>
+        <!-- Result box -->
+        <line x1="487" y1="126" x2="487" y2="146" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <rect x="452" y="148" width="70" height="28" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="487" y="166" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="600">Result</text>
+        <!-- Back to LLM -->
+        <path d="M452,162 C400,162 400,52 450,52" fill="none" stroke="#0969da" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arrow-ag)"/>
+        <text x="418" y="110" font-size="9" fill="#0969da" transform="rotate(-90 418 110)">Re-review</text>
+        <!-- Final response -->
+        <line x1="522" y1="48" x2="570" y2="48" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <rect x="572" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="607" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">Response</text>
+        <text x="495" y="196" text-anchor="middle" font-size="10" fill="#0969da">Extended loop: verify after using tools/subagents</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="note">第1章で導入した「マルチエージェント」の概念は、こうしたエージェントを複数の役割に分割し、協働させるシステムです。本章では、その協働の構造 — オーケストレーター、スペシャリスト、ハンドオフ — について解説します。</div>
+
+  <h2 id="s0">プロンプト → コンテキスト → ハーネス — どうしてここに至ったのか</h2>
+  <p>ハーネスエンジニアリングは突然現れたものではありません。AIへのアプローチにおいて3つの段階が積み重なった結果です。各段階は前の段階を置き換えるものではなく、「前の段階だけでは不十分」と判明した後に、その上に重ねられました。</p>
+  <p>料理の例えで3つの段階を理解するのが簡単です。プロンプトエンジニアリングは「料理人にどう注文の言葉を伝えるか」、コンテキストエンジニアリングは「料理人にどんな食材とレシピを渡すか」、ハーネスエンジニアリングは「厨房そのもの — 検査手順、道具、衛生ルール — が毎回同じ品質を生み出すシステムを構築する」です。注文の言葉がどれほど上手でも、食材がどれほど良くても、厨房システムそのものが杜撰なら、結果は毎回不一致になります。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="10" y="15" width="190" height="115" rx="10" fill="#ffffff" stroke="#a5d5f7" stroke-width="1.5"/>
+        <text x="105" y="42" text-anchor="middle" font-size="11" fill="#0969da" font-weight="700">Stage 1 · 2022–2024</text>
+        <text x="105" y="66" text-anchor="middle" font-size="15" fill="#1f2328" font-weight="700">Prompt Engineering</text>
+        <text x="105" y="90" text-anchor="middle" font-size="12" fill="#636c76">What to say</text>
+        <text x="105" y="114" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Focus: behavior</text>
+
+        <line x1="205" y1="72" x2="245" y2="72" stroke="#636c76" stroke-width="2" marker-end="url(#arrow0)"/>
+
+        <rect x="250" y="15" width="190" height="115" rx="10" fill="#ffffff" stroke="#a2d9b1" stroke-width="1.5"/>
+        <text x="345" y="42" text-anchor="middle" font-size="11" fill="#1a7f37" font-weight="700">Stage 2 · 2024–2025</text>
+        <text x="345" y="66" text-anchor="middle" font-size="15" fill="#1f2328" font-weight="700">Context Engineering</text>
+        <text x="345" y="90" text-anchor="middle" font-size="12" fill="#636c76">What to make it know</text>
+        <text x="345" y="114" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Focus: understanding</text>
+
+        <line x1="445" y1="72" x2="485" y2="72" stroke="#636c76" stroke-width="2" marker-end="url(#arrow0)"/>
+
+        <rect x="490" y="15" width="180" height="115" rx="10" fill="#ffffff" stroke="#d2b9ff" stroke-width="1.5"/>
+        <text x="580" y="42" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">Stage 3 · 2026~</text>
+        <text x="580" y="66" text-anchor="middle" font-size="15" fill="#1f2328" font-weight="700">Harness Engineering</text>
+        <text x="580" y="90" text-anchor="middle" font-size="12" fill="#636c76">How to trust it</text>
+        <text x="580" y="114" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Focus: reliability</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>第1段階 — プロンプトエンジニアリング（2022〜2024年）</h3>
+  <p>初期の関心は純粋に言語に関するものでした。結果の品質がリクエストの言い回しに大きく依存することが明らかになると、「より良いプロンプトの書き方」がコアスキルとして扱われました。この段階のAIは洗練されたオートコンプリートに近く、人間が各ステップで方向を誘導する必要がありました。</p>
+  <p>例えば、単に「このコードをレビューして」と頼むと、モデルはどの基準を使うべきか判断できず、曖昧な回答になります。一方、「この関数のエッジケース処理、命名の一貫性、パフォーマンスの問題を個別にレビューして」という具体的な指示は、劇的に良い結果をもたらします。この「何を言うかを洗練させる」というノウハウが、この段階のすべてでした。</p>
+  <h3>第2段階 — コンテキストエンジニアリング（2024〜2025年）</h3>
+  <p>モデルの性能が向上するにつれ、ボトルネックは「表現」から「情報の供給」へと移りました。モデルのコンテキストウィンドウに何を入れるべきか — 関連ファイル、プロジェクトルール、アーキテクチャの制約 — をキュレーションすることが重要になり、RAGやMCPなどのツールがこのプロセスを体系化しました。2025年9月、Anthropicはこれを「推論中に最適なトークン集合をキュレーション・維持する技法」と公式に定義しました。</p>
+  <p>プロンプトがどれほど良くても、モデルがプロジェクトのコーディング規約や既存の関数構造を知らなければ、間違ったスタイルのコードを生成します。コンテキストエンジニアリングは、コンテキストウィンドウにモデルが実際に必要なものだけ — リクエストに関連する少数のファイル、プロジェクトルール文書、過去の会話の要約 — を入れる技法です。情報が少なすぎると推測になり、多すぎると重要なものがノイズに埋もれます。</p>
+  <h3>第3段階 — ハーネスエンジニアリング（2026年〜）</h3>
+  <p>2026年現在の支配的なパラダイムです。モデル自体は生の知性に近く、その知性を実際に信頼できる自律的な振る舞いに変えるのがハーネスです。ツールオーケストレーション、検証ループ、コンテキスト/メモリ管理、ガードレール、可観測性 — この5つのレイヤーが揃って初めて、エージェントは「実際に仕事を任せられる」レベルに達します。「エージェント自体が難しい部分ではない — ハーネスが難しい部分だ」という言葉がこの時代を要約しています。</p>
+  <p>同じプロンプトと同じコンテキストが毎回異なる品質の結果を生むなら、実用にはなりません。ハーネスエンジニアリングは、モデルの回答そのものではなく、回答を取り巻くシステムを設計することです — 「この結果を自動的に検証する方法はあるか」「危険な操作（ファイル削除、決済の実行など）は人間の承認なしにブロックされているか」「何かが失敗したときに何が悪かったのかをログから追跡できるか」といった問いを投げかけます。</p>
+  <div class="note">3つの段階は焦点を<strong>振る舞い（モデルに何をさせるか） → 理解（モデルに何を知らせるか） → 信頼性（結果を反復可能で検証可能にするにはどうするか）</strong>へと移行します。本ハンドブックが扱うマルチエージェントチームは、第3段階 — ハーネスエンジニアリングの産物です。</div>
+
+  <h2 id="architecture-diagram">ハーネスの全体アーキテクチャ図</h2>
+  <p>ハーネスエンジニアリングは、モデルとユーザーの間に位置する5層構造として捉えることができます。以下の図は、本ハンドブック全体を貫くアーキテクチャを一望できるものです — <a href="#s1">次節</a>で、この5層の各層がどの章で扱われるかを対応付けます。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <defs>
+      <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
+        <path d="M0,0 L10,3 L0,6 Z" fill="#636c76"/>
+      </marker>
+    </defs>
+    <g font-family="-apple-system,Segoe UI,sans-serif">
+      <!-- Layer 1: Workspace -->
+      <rect x="40" y="10" width="600" height="48" rx="10" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="340" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#6639ba">Workspace</text>
+      <text x="610" y="40" text-anchor="end" font-size="10" fill="#636c76">Ch. 5, 8, 10–12</text>
+      <!-- Arrow 1 -->
+      <line x1="340" y1="58" x2="340" y2="78" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Layer 2: Harness (5 sub-layers) -->
+      <rect x="40" y="80" width="600" height="170" rx="10" fill="#e8f4fd" stroke="#0969da" stroke-width="1.5"/>
+      <text x="60" y="102" font-size="13" font-weight="700" fill="#0550ae">Harness — 5 Layers</text>
+      <!-- Sub-layer 1 -->
+      <rect x="60" y="110" width="108" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="114" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Tool Orchestration</text>
+      <!-- Sub-layer 2 -->
+      <rect x="176" y="110" width="80" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="216" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Verification Loop</text>
+      <!-- Sub-layer 3 -->
+      <rect x="264" y="110" width="116" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="322" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Context · Memory</text>
+      <!-- Sub-layer 4 -->
+      <rect x="388" y="110" width="80" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="428" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Guardrails</text>
+      <!-- Sub-layer 5 -->
+      <rect x="476" y="110" width="72" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="512" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Observability</text>
+      <!-- Sub-layer descriptions -->
+      <text x="114" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Tool calls, hooks, skills</text>
+      <text x="114" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Automated procedures</text>
+      <text x="216" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Evaluate-improve loop</text>
+      <text x="216" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">QA gates</text>
+      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">MEMORY.md · handoff</text>
+      <text x="322" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Contracts, state mgmt</text>
+      <text x="428" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Least privilege, approval</text>
+      <text x="428" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Isolation, audit logs</text>
+      <text x="512" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Execution trace, cost</text>
+      <text x="512" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Timeline, replay</text>
+      <!-- Chapter refs -->
+      <text x="114" y="195" text-anchor="middle" font-size="9" fill="#0969da">Ch. 4</text>
+      <text x="216" y="195" text-anchor="middle" font-size="9" fill="#0969da">Ch. 4, 9</text>
+      <text x="322" y="195" text-anchor="middle" font-size="9" fill="#0969da">Ch. 8 §2</text>
+      <text x="428" y="195" text-anchor="middle" font-size="9" fill="#0969da">Ch. 3</text>
+      <text x="512" y="195" text-anchor="middle" font-size="9" fill="#0969da">Ch. 3 §6</text>
+      <!-- Sub-layer connectors -->
+      <line x1="60" y1="210" x2="640" y2="210" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="60" y="228" font-size="9" fill="#636c76">→ Only when these 5 layers combine does an agent become "trustworthy with work"</text>
+      <!-- Arrow 2 -->
+      <line x1="340" y1="250" x2="340" y2="270" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Layer 3: Agent -->
+      <rect x="40" y="272" width="285" height="48" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="182" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="#116329">Agent</text>
+      <text x="200" y="301" font-size="10" fill="#636c76">  Ch. 2, 4, 8 §3</text>
+      <!-- Layer 4: Tool (right side) -->
+      <rect x="355" y="272" width="285" height="48" rx="10" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+      <text x="497" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="#7d4e00">Tool</text>
+      <text x="510" y="301" font-size="10" fill="#636c76">  Ch. 4, AGENTS.md</text>
+      <!-- Bidirectional arrow between Agent and Tool -->
+      <line x1="325" y1="296" x2="355" y2="296" stroke="#636c76" stroke-width="1.5" marker-start="url(#archArrow)" marker-end="url(#archArrow)"/>
+      <!-- Arrow 3 down from Agent -->
+      <line x1="182" y1="320" x2="182" y2="340" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Arrow 4 down from Tool -->
+      <line x1="497" y1="320" x2="497" y2="340" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Layer 5: Model -->
+      <rect x="40" y="342" width="600" height="48" rx="10" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+      <text x="340" y="371" text-anchor="middle" font-size="14" font-weight="700" fill="#cf222e">Model</text>
+      <text x="610" y="371" text-anchor="end" font-size="10" fill="#636c76">Claude / Gemini</text>
+      <!-- Tier labels -->
+      <text x="20" y="34" font-size="10" font-weight="700" fill="#6639ba">L0</text>
+      <text x="20" y="165" font-size="10" font-weight="700" fill="#0550ae">L0/L1</text>
+      <text x="20" y="301" font-size="10" font-weight="700" fill="#116329">L1/L2</text>
+      <text x="20" y="371" font-size="10" font-weight="700" fill="#cf222e">Runtime</text>
+    </g>
+  </svg>
+  <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">図2-1. ハーネスエンジニアリングの5層構造 — ワークスペースからモデルまで、本ハンドブック全体を貫くアーキテクチャ</p>
+  </div>
+
+  <h2 id="s1">ハーネスエンジニアリングとは</h2>
+  <p>プロンプトエンジニアリングが「モデルにどんな言葉を与えるか」に焦点を当てるのに対し、ハーネスエンジニアリングは一歩引き、「モデルにどんなツール、ルール、検証メカニズムを通して作業させるか」を設計します。ここでの「ハーネス」という用語は、馬を制御するための馬具に由来しています — AIが好きな方向に走り出すのを防ぎ、定義された手順、ツール、権限の境界の中で予測可能に動くようにするフレームワークを指します。</p>
+  <p>実際には、このフレームワークはいくつかの具体的なメカニズムとして現れます：エージェントが呼び出せるツールのリストと、各ツールのリスクレベルに基づく承認ポリシー；特定のイベント（ファイル保存直後、タスク完了時など）で自動実行されるフック；定型的なタスク手順を標準化・再利用するスキル；そしてこれらすべてを組み合わせて複数のエージェントを固定順序・固定条件で実行するオーケストレーションスクリプトです。これらのメカニズムが蓄積されると、「同じリクエストを何回繰り返しても品質とフォーマットが揺れない」再現可能なAIワークフローが完成します。</p>
+  <p>具体例を挙げましょう。「このファイルを削除して」というリクエストが来たとき、ハーネスのないAIは即座に削除を実行する可能性があります。ハーネスのあるAIは違う動きをします：削除は「危険なツール」として分類され、実行前にユーザー承認を必要とするポリシーの対象となり；削除完了後はその事実がログに記録され；誤ったファイル削除を元に戻す手順（gitでのコミット前状態の確認など）すら用意されています。モデルの判断はどちらでも同じですが、結果の信頼性を決めるのは、その判断を取り巻く「安全メカニズム」の有無なのです。</p>
+
+  <div class="pullquote">良いプロンプトは一度だけ良い回答を引き出す。良いハーネスは毎回良い回答を引き出す。</div>
+
+  <h2 id="s2">単一エージェントの限界</h2>
+  <p>すべての役割を単一エージェントに割り当てるのは最初は便利ですが、作業がスケールするにつれて3つの問題が顕在化します。第一に、コンテキストの過負荷：設計レビュー、コード執筆、テスト、ドキュメント作成をすべて1つのセッション内で順次処理すると、作業が進むにつれて初期のステップの詳細が薄れ、結果の一貫性が低下します。第二に、役割の衝突：自分のコードを自分でレビューするエージェントは、自分が書いた欠陥を見逃します — 著者とレビュアーが同じ人である場合と同じ問題です。第三に、並列性の欠如：独立したサブタスク（複数ファイルのリファクタリング、複数の視点からのレビューなど）であっても、単一エージェントが順次処理する必要があるため、合計時間が線形に増大します。</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Task blocks -->
+        <rect x="20" y="16" width="120" height="30" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="80" y="36" text-anchor="middle" font-size="11" fill="#0550ae" font-weight="600">Task A: Design</text>
+        <rect x="155" y="16" width="120" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="215" y="36" text-anchor="middle" font-size="11" fill="#116329" font-weight="600">Task B: Build</text>
+        <rect x="290" y="16" width="120" height="30" rx="6" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="350" y="36" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="600">Task C: Test</text>
+        <rect x="425" y="16" width="120" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.2"/>
+        <text x="485" y="36" text-anchor="middle" font-size="11" fill="#7d4e00" font-weight="600">Task D: Docs</text>
+        <!-- Arrows going down -->
+        <line x1="80" y1="46" x2="200" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="215" y1="46" x2="280" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="350" y1="46" x2="340" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="485" y1="46" x2="420" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Context window box (overload) -->
+        <rect x="80" y="70" width="480" height="70" rx="8" fill="#fff0f0" stroke="#cf222e" stroke-width="2"/>
+        <text x="320" y="96" text-anchor="middle" font-size="13" fill="#cf222e" font-weight="700">Context Window</text>
+        <text x="320" y="116" text-anchor="middle" font-size="11" fill="#cf222e">All tasks squeezed into one window → overload</text>
+        <!-- Warning icon area -->
+        <text x="580" y="100" text-anchor="middle" font-size="22" fill="#cf222e">&#9888;</text>
+        <!-- Bottom label -->
+        <text x="320" y="166" text-anchor="middle" font-size="12" fill="#636c76" font-weight="600">One agent = one context window</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>企業の組織の例えで理解するのが簡単です。ある新人に企画、開発、テスト、ドキュメントをすべて一度に担当させると、最初はコミュニケーションオーバーヘッドがなくて速く感じます — しかし業務量が増えると、その人の頭（コンテキスト）はカオスになり、自分のコードの欠陥を見落とし（役割の衝突）、3つの無関係なタスクを同時に処理できず（並列性の欠如）、ボトルネックになります。組織が企画者、開発者、QAを分割する理由は、まさにAIの作業も複数エージェントに分割する理由と同じです。</p>
+  <p>マルチエージェントチームは、この3つの問題を構造的に解決します：役割ごとにコンテキストを分離して各エージェントが自分の役割に集中し、著者と検証者を分離して独立した視点を確保し、相互依存のないタスクを並行実行して合計時間を短縮します。</p>
+
+  <h2 id="s3">マルチエージェントチームの構成要素</h2>
+  <p>マルチエージェントチームは3つの主要な要素で構成されます。</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0550ae"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="220" y="10" width="200" height="56" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="320" y="33" text-anchor="middle" font-size="14" fill="#0550ae" font-weight="700">Orchestrator</text>
+        <text x="320" y="52" text-anchor="middle" font-size="11" fill="#0550ae">(PM Agent)</text>
+
+        <line x1="270" y1="66" x2="120" y2="160" stroke="#0550ae" stroke-width="1.5" marker-end="url(#arrow3)"/>
+        <line x1="320" y1="66" x2="320" y2="160" stroke="#0550ae" stroke-width="1.5" marker-end="url(#arrow3)"/>
+        <line x1="370" y1="66" x2="520" y2="160" stroke="#0550ae" stroke-width="1.5" marker-end="url(#arrow3)"/>
+
+
+        <text x="195" y="105" text-anchor="middle" font-size="10.5" fill="#636c76" font-style="italic">Handoff</text>
+        <text x="320" y="105" text-anchor="middle" font-size="10.5" fill="#636c76" font-style="italic">Handoff</text>
+        <text x="450" y="105" text-anchor="middle" font-size="10.5" fill="#636c76" font-style="italic">Handoff</text>
+
+        <rect x="20" y="166" width="200" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="120" y="192" text-anchor="middle" font-size="13" fill="#116329" font-weight="700">architect</text>
+        <text x="120" y="211" text-anchor="middle" font-size="10.5" fill="#116329">Design review</text>
+
+        <rect x="220" y="166" width="200" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="320" y="192" text-anchor="middle" font-size="13" fill="#116329" font-weight="700">code-writer</text>
+        <text x="320" y="211" text-anchor="middle" font-size="10.5" fill="#116329">Implementation</text>
+
+        <rect x="420" y="166" width="200" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="520" y="192" text-anchor="middle" font-size="13" fill="#116329" font-weight="700">test-runner</text>
+        <text x="520" y="211" text-anchor="middle" font-size="10.5" fill="#116329">Testing</text>
+      </g>
+    </svg>
+    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">基本構造：オーケストレーターが作業を分割し、ハンドオフ契約を通じてスペシャリストに振り分ける（§4bで解説するように、スペシャリストの構成はタスクごとに動的に変化する）</p>
+  </div>
+
+  <h3>オーケストレーター</h3>
+  <p>全体タスクをステップに分解し、各ステップに適したスペシャリストエージェントを呼び出し、ユーザーの確認が必要なポイント（ゲート）で進行を一時停止する役割です。よく「PMエージェント」と呼ばれ、自らはコードを書かず、調整に専念します。</p>
+  <p>プロジェクトマネージャー（PM）に例えるとわかりやすいです。PMはコードを直接書きませんが、「このタスクをバックエンド開発者に、このタスクをQAに」と割り当て、重要な判断の前にはチームリーダー（ユーザー）に「これで進めてもよいですか」と確認してから次のステップに進みます。オーケストレーターも同じ振る舞いをします。例えば、「新しい機能を追加して」というリクエストに対し、オーケストレーター自ら「1) 設計レビュー → 2) 実装 → 3) テスト → 4) ドキュメント」に分解し、各ステップを担当エージェントにハンドオフします。</p>
+  <h3>スペシャリスト</h3>
+  <p>狭く明確に定義された責任を持つエージェント — 設計、実装、テスト、セキュリティレビューなど。各スペシャリストは明確に定義された入力と出力を持つため、オーケストレーターは「このエージェントに何を任せられるか」を容易に判断できます。</p>
+  <p>例えば、<code>test-runner</code>スペシャリストは「テストを実行し、失敗項目を報告する」ことだけが責任です。新規コードの作成やアーキテクチャの変更はその仕事ではありません。責任をこのように狭く切ることで、オーケストレーターは「テストが必要ならtest-runnerを呼ぶ」と即座に判断でき、スペシャリストは自身の役割に集中してより正確な結果を生み出せます。</p>
+  <h3>ハンドオフ契約</h3>
+  <p>エージェント間で作業を引き継ぐ際に交換される情報の形式です。自然言語だけで引き継ぐと、次のエージェントがコンテキストを再推測しなければなりませんが、構造化された入力（JSONなど）で「このタスクの目的、範囲、事前成果物」を明記すれば、次のエージェントは直ちに作業を開始できます。</p>
+  <p>宅配の引き継ぎに例えるとわかりやすいです。「これをあそこに持って行って」と言うだけでは、受取人が住所、数量、注意事項を再確認する必要がありますが、送り状（追跡番号、受取人、数量、特記事項を記載した文書）を渡せば、受取人は直ちに配達を開始できます。ハンドオフ契約はエージェント間の「送り状」です。ライターが「このファイルをこの基準でこの形式でレビューして」と明示的にレビュアーに引き継げば、レビュアーは再確認することなく直ちに開始できます。</p>
+  <p>実際には、次のような構造化ドキュメントとして引き継がれます。</p>
+  <div style="position:relative">
+  <pre class="code-block">{
+  "task": "Code Review",
+  "agent": "reviewer",
+  "scope": {
+    "target_file": "src/api/handler.ts",
+    "change_description": "Added auth middleware — JWT token verification logic"
+  },
+  "deliverables": {
+    "from": "code-writer",
+    "files": ["src/api/handler.ts", "src/auth/verify.ts"],
+    "commit_hash": "a3f7c21"
+  },
+  "review_criteria": [
+    "Security: is token expiration handled",
+    "Error handling: is there a 401 response for invalid tokens",
+    "Tests: were relevant tests added"
+  ],
+  "output_format": {
+    "type": "structured_comment",
+    "fields": ["pass_fail", "findings", "suggestions"]
+  },
+  "failure_conditions": [
+    "Report immediately if target_file does not exist",
+    "Mark as block if security criteria are not met"
+  ]
+}</pre>
+  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+</div>
+  <p>この例では、<code>task</code>、<code>scope</code>、<code>review_criteria</code>が「何をレビューするか」を定義し、<code>output_format</code>が「結果をどの形式で返すか」を定義します。<code>failure_conditions</code>はレビュー対象自体に問題がある場合の対応をカバーします。このように、ハンドオフ契約は<strong>目的、範囲、基準、形式、例外処理</strong>を明示的に定義し、次のエージェントが再確認なしで直ちに作業を開始できるようにします。</p>
+  <div class="note">3つの要素のいずれかが欠けていると、チームではなく「それぞれが別々に作業する複数のエージェント」になります。調整（オーケストレーター）と契約（ハンドオフ）があって初めて、チームはチームとして機能します。</div>
+
+  <h2 id="s3b">サブエージェントとは</h2>
+  <p>前述のスペシャリストは概念であり、<strong>サブエージェント</strong>はその概念を実際のツール内で実装するメカニズムです。サブエージェントはメインセッションとは分離された<strong>独立したコンテキストウィンドウ</strong>を持つヘルパーエージェントで、割り当てられた狭いタスクだけを処理し、結果を要約してメインセッションに返します。メインセッションの会話履歴にはサブエージェントの詳細なやり取りが蓄積されず、最終的な要約だけが保持されるため、§2で指摘した「コンテキスト過負荷」問題を構造的に軽減します。</p>
+
+  <h3>事前定義 vs 動的生成</h3>
+  <p>サブエージェントの取り扱いはツールによって異なります。Claude Code/Appは<strong>事前定義</strong>方式を採用しています。<code>.claude/agents/</code>に<code>name.md</code>ファイルを配置し、YAMLフロントマターで<code>name</code>（呼び出し時の識別子）、<code>description</code>（このサブエージェントを使用する条件）、<code>tools</code>（許可するツールのリスト、権限を最小化するため）、<code>model</code>（どのモデルで実行するか）を指定します。メインセッションは<code>Agent</code>（Task）ツールを通じてこの定義を呼び出し、<code>subagent_type="name"</code>を指定します。</p>
+  <p>一方、Antigravityは<strong>動的生成</strong>に近いアプローチです。事前にファイルを作成するのではなく、オーケストレーターに自然言語で目標を与えると、その場で必要な役割を構成・処理します。「reviewerというサブエージェントを呼び出す」というよりは、エージェントがその都度、タスクに合った役割を構築するイメージです。どちらのアプローチも最終的には同じ目標 — 「分離されたコンテキストで狭いスコープのタスクを処理する」 — を達成しますが、事前定義は再利用性と権限制御に強く、動的生成は柔軟性に強いという違いがあります。</p>
+
+  <h3>サブエージェントを使うべき場面</h3>
+  <p>すべてのタスクをサブエージェントに分割する必要はありません。適しているのは、境界が明確な（入力と出力がはっきりしている）タスクで、かつ反復的または並列化可能なもの — コードレビュー、テストの実行、ドキュメントレビューなどです。逆に、メインセッションと継続的にコンテキストを交換し続ける探索的な作業は、サブエージェントに切り出すとハンドオフのオーバーヘッドがかえって大きくなります。</p>
+  <div class="note">サブエージェントは、スペシャリストの「役割」という概念を実際のツールで実行可能にする「実装」です。第4章では、Claude App/Antigravity Desktopを中心に、この定義方法と呼び出し方法を実際に手作りします。</div>
+
+  <h2 id="s4">オーケストレーションパターン</h2>
+  <p>Anthropicが2024年12月の「Building Effective Agents」で示した5つのワークフローパターンが、実務で最も広く使われています：プロンプトチェーン（パイプライン）、ルーティング、並列化（セクショニング/投票）、オーケストレーター・ワーカー、評価者・最適化（検証後適用）。5つのパターンは排他的な選択肢ではなく、「タスク間に依存があるか」「サブタスクを事前に予測できるか」「検証が必要か」という判断基準に基づいて選択・組み合わせるツールボックスです。</p>
+
+  <div class="note">
+    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+        </marker>
+        <marker id="pat-arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+        </marker>
+        <marker id="pat-arrow-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#22c55e"/>
+        </marker>
+        <marker id="pat-arrow-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/>
+        </marker>
+        <marker id="pat-arrow-p" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8b5cf6"/>
+        </marker>
+        <marker id="pat-arrow-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/>
+        </marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,sans-serif">
+
+        <!-- Column 1: Chaining (blue) center=78 -->
+        <text x="78" y="16" text-anchor="middle" font-size="12" fill="#3b82f6" font-weight="700">Chaining</text>
+        <rect x="30" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="46" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">A</text>
+        <line x1="62" y1="36" x2="76" y2="36" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#pat-arrow-b)"/>
+        <rect x="78" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="94" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">B</text>
+        <line x1="110" y1="36" x2="124" y2="36" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#pat-arrow-b)"/>
+        <rect x="126" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="142" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">C</text>
+        <text x="78" y="64" text-anchor="middle" font-size="9" fill="#6b7280">A → B → C</text>
+
+        <!-- Column 2: Routing (orange) center=234 -->
+        <text x="234" y="16" text-anchor="middle" font-size="12" fill="#f59e0b" font-weight="700">Routing</text>
+        <rect x="186" y="26" width="32" height="20" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+        <text x="202" y="40" text-anchor="middle" font-size="9" fill="#92400e" font-weight="600">A</text>
+        <line x1="218" y1="36" x2="226" y2="36" stroke="#f59e0b" stroke-width="1.2"/>
+        <rect x="226" y="26" width="40" height="20" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+        <text x="246" y="40" text-anchor="middle" font-size="8" fill="#92400e" font-weight="600">B or C</text>
+        <line x1="218" y1="40" x2="226" y2="44" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <text x="234" y="64" text-anchor="middle" font-size="9" fill="#6b7280">A→{B or C}</text>
+
+        <!-- Column 3: Sectioning/fan-out (green) center=390 -->
+        <text x="390" y="16" text-anchor="middle" font-size="12" fill="#22c55e" font-weight="700">Fan-out</text>
+        <rect x="342" y="26" width="32" height="20" rx="5" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="358" y="40" text-anchor="middle" font-size="9" fill="#166534" font-weight="600">A</text>
+        <line x1="358" y1="46" x2="344" y2="56" stroke="#22c55e" stroke-width="1.2" marker-end="url(#pat-arrow-g)"/>
+        <line x1="358" y1="46" x2="390" y2="56" stroke="#22c55e" stroke-width="1.2" marker-end="url(#pat-arrow-g)"/>
+        <rect x="330" y="58" width="28" height="18" rx="4" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="344" y="71" text-anchor="middle" font-size="8" fill="#166534" font-weight="600">B</text>
+        <rect x="376" y="58" width="28" height="18" rx="4" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="390" y="71" text-anchor="middle" font-size="8" fill="#166534" font-weight="600">C</text>
+        <text x="390" y="92" text-anchor="middle" font-size="9" fill="#6b7280">A→B,C (parallel)</text>
+
+        <!-- Column 4: Orchestrator-workers (purple) center=546 -->
+        <text x="546" y="16" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="700">Orchestrator</text>
+        <text x="546" y="28" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="700">-Workers</text>
+        <rect x="504" y="36" width="42" height="22" rx="5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="525" y="50" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">Orch</text>
+        <line x1="546" y1="58" x2="522" y2="64" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#pat-arrow-p)"/>
+        <line x1="546" y1="58" x2="570" y2="64" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#pat-arrow-p)"/>
+        <rect x="510" y="66" width="36" height="18" rx="4" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="528" y="79" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">W1</text>
+        <rect x="554" y="66" width="36" height="18" rx="4" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="572" y="79" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">W2</text>
+        <text x="546" y="100" text-anchor="middle" font-size="9" fill="#6b7280">Orch→Worker</text>
+
+        <!-- Column 5: Evaluator-optimizer (red/rose) center=702 -->
+        <text x="702" y="16" text-anchor="middle" font-size="11" fill="#ef4444" font-weight="700">Evaluator</text>
+        <text x="702" y="28" text-anchor="middle" font-size="11" fill="#ef4444" font-weight="700">-Optimizer</text>
+        <rect x="674" y="34" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="47" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Draft</text>
+        <line x1="702" y1="52" x2="702" y2="58" stroke="#ef4444" stroke-width="1.2" marker-end="url(#pat-arrow-r)"/>
+        <rect x="674" y="60" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="73" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Evaluate</text>
+        <line x1="702" y1="78" x2="702" y2="84" stroke="#ef4444" stroke-width="1.2" marker-end="url(#pat-arrow-r)"/>
+        <rect x="674" y="86" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="99" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Revise</text>
+        <path d="M702,104 C730,120 730,30 702,34" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#pat-arrow-r)"/>
+        <text x="740" y="68" font-size="8" fill="#ef4444" transform="rotate(90 740 68)">Repeat</text>
+        <text x="702" y="122" text-anchor="middle" font-size="9" fill="#6b7280">Draft→Eval→Revise</text>
+
+      </g>
+    </svg>
+  </div>
+
+  <ul>
+    <li><strong>プロンプトチェーン / パイプライン。</strong>タスクを順序付けられた一連のステップに分割し、各ステップの間に検証ゲートを配置します。複数のアイテムを同時に流し込むと、アイテム同士が待ち合わせないパイプラインになります — アイテムAがステップ3にある間にアイテムBはまだステップ1にいられるため、全体のスループットが向上します。<br><span style="color:var(--text-dim);font-size:14px;">例：工場の組立ラインのようなもの。製品Aが塗装段階にある間に、製品Bはすでに組立段階にあります。「ドラフト → レビュー → 校正」の3つの文書を流す場合、文書1がレビューに移った瞬間に文書2のドラフトを開始できます。</span></li>
+    <li><strong>ルーティング。</strong>まず入力リクエストを分類し、その性質に適したスペシャリストエージェントまたはモデルにルーティングします。第5章のモデルティアリングはその典型例 — 簡単な質問は安価なモデル（haiku）に、困難で稀な質問は高性能なモデル（opus）に送り、コストと品質のバランスを取ります。<br><span style="color:var(--text-dim);font-size:14px;">例：顧客からの問い合わせが来たとき、分類エージェントがまず「これは単純なFAQか、複雑な技術的質問か」を判定し、前者を定型応答エージェントに、後者をより深い調査が可能なエージェントにルーティングします。</span></li>
+    <li><strong>並列化。</strong>2つのブランチに分かれます。<strong>セクショニング（ファンアウト）</strong>は、複数の独立したサブタスク（例：4つの視点からのコードレビュー）を同時に複数のエージェントに渡し、結果を集約します — 合計時間は最も遅い単一タスクの時間に収束します。<strong>投票</strong>は、<em>同じ</em>タスクを複数のエージェントに独立して繰り返させ、過半数または合意で1つの回答を選びます。<br><span style="color:var(--text-dim);font-size:14px;">セクショニング例：「このコードをパフォーマンス、セキュリティ、可読性、テストカバレッジの4つの視点から同時にレビューして」。投票例：3つのエージェントに同じバグの根本原因を独立して分析させ、2つ以上が同じ原因を指摘したらその結論を採用する — 過半数投票で1つのエージェントの間違いをフィルタリングします。</span></li>
+    <li><strong>オーケストレーター・ワーカー。</strong>§3で説明したチーム構造がまさにこのパターンです。作業の分割方法を事前に決めるのではなく、中央のオーケストレーターが入力に基づいて動的にその場で判断し、ワーカー（スペシャリスト）に委譲して結果を統合します。サブタスクを事前に予測できない複雑なタスク（多数のファイルにまたがるコード変更、複数の情報源を統合する必要のある調査）に特に適しています。§4bで解説する「動的チーム編成」はまさにこのパターンの別名です。</li>
+    <li><strong>評価者・最適化 / 検証後適用。</strong>1つのエージェントがドラフトを作成し、独立したエージェント（または複数エージェントの合意）がそのドラフトに異議を唱え検証した後、初めて実際に適用されます。もっともらしいが間違った結果が通り抜けるのを防ぐメカニズムです。<br><span style="color:var(--text-dim);font-size:14px;">例：コードを修正する前に、独立したエージェントが懐疑的な立場から「この変更は本当に安全か」を再検討し、問題ないと判断された場合にのみファイルを実際に修正する。著者が自分の文章を推敲する際に、別の人が見落とした誤りに気付くのと同じ原理です。ただし限界もあります — 評価者自体が良い結果と悪い結果を区別できなければ、このループは進捗なしに回り続けることになります。</span></li>
+  </ul>
+  <div class="note">5つのパターンは、単独で使われるよりも組み合わせて使われることが多いです — ルーティングがプロンプトチェーンの最初のステップに繋がったり、オーケストレーター・ワーカーが各ワーカーの作業単位内に評価者・最適化を埋め込んだり、並列化が別のパターンの途中に割り込んだりします。§4bでこの組み合わせの具体例を解説します。</div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Fan-out -->
+        <text x="105" y="18" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Parallel Fan-out</text>
+        <rect x="85" y="28" width="40" height="26" rx="6" fill="#ddf4ff" stroke="#0969da"/>
+        <text x="105" y="45" text-anchor="middle" font-size="10" fill="#0550ae">Request</text>
+        <line x1="105" y1="54" x2="35" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="105" y1="54" x2="105" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="105" y1="54" x2="175" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <rect x="10" y="90" width="50" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37"/>
+        <rect x="80" y="90" width="50" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37"/>
+        <rect x="150" y="90" width="50" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="105" y="106" text-anchor="middle" font-size="9" fill="#116329" opacity="0"> </text>
+        <line x1="35" y1="114" x2="105" y2="146" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="105" y1="114" x2="105" y2="146" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="175" y1="114" x2="105" y2="146" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <rect x="70" y="150" width="70" height="26" rx="6" fill="#f1e8fd" stroke="#6639ba"/>
+        <text x="105" y="167" text-anchor="middle" font-size="10" fill="#6639ba">Merge</text>
+        <text x="105" y="198" text-anchor="middle" font-size="10.5" fill="#636c76">Runs concurrently → converges to the slowest one</text>
+
+        <!-- Pipeline -->
+        <line x1="230" y1="105" x2="230" y2="105" stroke="#d0d7de"/>
+        <rect x="228" y="10" width="1" height="185" fill="#d0d7de"/>
+        <text x="360" y="18" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Pipeline</text>
+        <text x="255" y="52" font-size="10" fill="#636c76">A</text>
+        <rect x="270" y="38" width="46" height="24" rx="5" fill="#ddf4ff" stroke="#0969da"/>
+        <rect x="326" y="38" width="46" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37" opacity="0.35"/>
+        <rect x="382" y="38" width="46" height="24" rx="5" fill="#f1e8fd" stroke="#6639ba" opacity="0.25"/>
+        <text x="255" y="90" font-size="10" fill="#636c76">B</text>
+        <rect x="270" y="76" width="46" height="24" rx="5" fill="#fff8c5" stroke="#d4a72c" opacity="0.4"/>
+        <rect x="326" y="76" width="46" height="24" rx="5" fill="#ddf4ff" stroke="#0969da"/>
+        <rect x="382" y="76" width="46" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37" opacity="0.35"/>
+        <text x="293" y="115" text-anchor="middle" font-size="9" fill="#636c76">Draft</text>
+        <text x="349" y="115" text-anchor="middle" font-size="9" fill="#636c76">Review</text>
+        <text x="405" y="115" text-anchor="middle" font-size="9" fill="#636c76">Proofread</text>
+        <text x="349" y="150" text-anchor="middle" font-size="10.5" fill="#636c76">While B is at step 1,</text>
+        <text x="349" y="166" text-anchor="middle" font-size="10.5" fill="#636c76">A is already at step 2 — no waiting</text>
+
+        <!-- Verify-then-apply -->
+        <rect x="448" y="10" width="1" height="185" fill="#d0d7de"/>
+        <text x="565" y="18" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Verify-then-Apply</text>
+        <rect x="475" y="35" width="70" height="26" rx="6" fill="#ddf4ff" stroke="#0969da"/>
+        <text x="510" y="52" text-anchor="middle" font-size="10" fill="#0550ae">Draft</text>
+        <line x1="510" y1="61" x2="510" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <rect x="472" y="90" width="76" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c"/>
+        <text x="510" y="109" text-anchor="middle" font-size="10" fill="#7d4e00">Independent verify</text>
+        <line x1="510" y1="120" x2="510" y2="145" stroke="#1a7f37" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <text x="530" y="135" font-size="9" fill="#1a7f37">Pass</text>
+        <rect x="470" y="149" width="80" height="26" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="510" y="166" text-anchor="middle" font-size="10" fill="#116329">Apply</text>
+        <path d="M472,105 C420,105 420,48 473,48" fill="none" stroke="#cf222e" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arrow4)"/>
+        <text x="440" y="80" font-size="9" fill="#cf222e" transform="rotate(-90 440 80)">Reject</text>
+      </g>
+    </svg>
+    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">5パターンのうち3つを可視化：パイプライン、ファンアウト、検証後適用。ルーティングとオーケストレーター・ワーカーを含む全リストは本文を参照。パターンは互いの代替ではなく、組み合わせるためのツールボックスです。</p>
+  </div>
+
+  <h3>失敗時の対応 — リトライ、ロールバック、エスカレーション</h3>
+  <p>上記のパターンはすべて「正常に終了した場合」を前提としていますが、実際にはサブエージェントが間違った結果を出したり、完全に失敗したりすることがあります。検証後適用は「実行前にフィルタリングする」メカニズムであり、実行後に問題が発見された場合の対応は別の問題です。典型的な対応方法は3つあります。</p>
+  <ul>
+    <li><strong>リトライ。</strong>一時的なエラー（ネットワークタイムアウト、ツール呼び出しの失敗など）の場合は、同じタスクを再試行します。ただし、同じプロンプトを無限にリトライしても同じ間違いを繰り返すだけなので、通常はリトライ回数に上限を設定します。</li>
+    <li><strong>ロールバック。</strong>間違った結果がすでにファイルやリポジトリに適用されている場合、変更前の状態に戻します。第3章の「書き込みステップはgitで取り消せる範囲に留めるべき」という原則がここで真価を発揮します。コミットレベルで作業を分割しておかなければ、ロールバックは正確なポイントに着地できません。</li>
+    <li><strong>エスカレーション。</strong>リトライが失敗し続ける場合や、オーケストレーターにとって判断が本質的に曖昧な場合は、人間に委ねます。「3回失敗したら自動リトライを停止し、人間に報告する」という事前定義の上限がなければ、失敗し続けるタスクを永遠にリトライして時間とコストを浪費することになります。</li>
+  </ul>
+  <div class="note">3つの選択基準は、最終的に「この失敗は一時的なものか、すでに不可逆な状態に到達しているか、判断自体が曖昧か」に帰着します。リトライは最初に、ロールバックは2番目に、エスカレーションは3番目に対処します。タスクが危険なほど、自動リトライよりもエスカレーションの閾値を下げる方が安全です（第3章§2のリスクティア分類も参照）。</div>
+
+  <h2 id="s4b">動的チーム編成と多様なワークフロー</h2>
+  <p>これまでオーケストレーター、スペシャリスト、ハンドオフ、オーケストレーションパターンを個別に解説しましたが、ハーネスエンジニアリングの真の力は、これらの要素が<strong>単一の固定された組み合わせにロックされていない</strong>ことです。従来の自動化スクリプトはコードの中に順序と参加者をハードコードします — 「常にAの次にB、常にBの次にC」 — しかしハーネス上に構築されたマルチエージェントチームは、オーケストレーターがリクエストごとに「今回は誰が必要で、どの順序で」と新たに判断します。</p>
+
+  <h3>チーム編成は固定ではない</h3>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Left: Static team -->
+        <text x="155" y="18" text-anchor="middle" font-size="12" fill="#636c76" font-weight="700">Static Team</text>
+        <rect x="30" y="30" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="70" y="50" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agent A</text>
+        <rect x="120" y="30" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="160" y="50" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agent B</text>
+        <rect x="210" y="30" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="250" y="50" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agent C</text>
+        <rect x="30" y="76" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="70" y="96" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agent D</text>
+        <rect x="120" y="76" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="160" y="96" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agent E</text>
+        <!-- Always-fixed marker -->
+        <rect x="26" y="26" width="270" height="86" rx="10" fill="none" stroke="#636c76" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="160" y="130" text-anchor="middle" font-size="10" fill="#636c76">Same agents deployed for every request</text>
+
+        <!-- Divider -->
+        <line x1="330" y1="8" x2="330" y2="160" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Right: Dynamic team -->
+        <text x="500" y="18" text-anchor="middle" font-size="12" fill="#1a7f37" font-weight="700">Dynamic Team</text>
+        <!-- Request 1: simple -->
+        <text x="355" y="42" font-size="9" fill="#636c76">Request 1 (simple)</text>
+        <rect x="420" y="30" width="80" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="460" y="46" text-anchor="middle" font-size="10" fill="#116329" font-weight="600">reviewer</text>
+        <text x="510" y="46" font-size="9" fill="#636c76">only</text>
+        <!-- Request 2: moderate -->
+        <text x="355" y="72" font-size="9" fill="#636c76">Request 2 (moderate)</text>
+        <rect x="420" y="60" width="70" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="455" y="76" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">writer</text>
+        <rect x="498" y="60" width="70" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="533" y="76" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">reviewer</text>
+        <!-- Request 3: complex -->
+        <text x="355" y="104" font-size="9" fill="#636c76">Request 3 (complex)</text>
+        <rect x="420" y="90" width="60" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="450" y="106" text-anchor="middle" font-size="8" fill="#116329" font-weight="600">architect</text>
+        <rect x="486" y="90" width="60" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="516" y="106" text-anchor="middle" font-size="8" fill="#116329" font-weight="600">writer</text>
+        <rect x="552" y="90" width="60" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="582" y="106" text-anchor="middle" font-size="8" fill="#116329" font-weight="600">tester</text>
+        <!-- + marker -->
+        <rect x="420" y="120" width="192" height="24" rx="6" fill="none" stroke="#1a7f37" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="516" y="136" text-anchor="middle" font-size="9" fill="#1a7f37">Security, docs, etc. can be added</text>
+        <text x="500" y="162" text-anchor="middle" font-size="10" fill="#1a7f37">Only the agents needed are mobilized dynamically per request</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>同じチームでも、リクエストの性質に応じて異なる数と組み合わせのスペシャリストを呼び出します。「単にタイポを修正して」といった単純なリクエストでは、オーケストレーターはreviewerだけを呼び出して終わるかもしれません。「新しい機能を設計からデプロイまで」というリクエストでは、architect・code-writer・test-runner・security-monitor・docs-writerを順次（または一部並列に）動員します。ロスター自体（どのサブエージェントが定義されているか）が事前に固定されていても、<strong>特定のタスクで実際に動員されるのは毎回新たに決定されます</strong>。サッカーチームの全22人の登録メンバーは固定ですが、対戦相手と戦術に応じて毎回スタメン11人が新たに選ばれるのと同じです。</p>
+  <p>この柔軟性は、<a href="#s3b">§3b</a>で解説したサブエージェントの2つの実装アプローチにも繋がります。事前定義アプローチ（Claude Code/App）であっても、オーケストレーターは毎回動的に「今回はどの定義済みサブエージェントを呼び出すか」を選択します。動的生成アプローチ（Antigravity）ではさらに一歩進み、サブエージェントの存在そのものがその時のニーズに合わせてその場で構築されます。どちらの場合でも「タスクがチーム編成を決める」という原則が成り立ちます。</p>
+
+  <h3>同じハーネス上に多様なワークフローを構築できる</h3>
+  <p>ハーネスエンジニアリングが固定するのは<em>骨格</em>だけです — 「オーケストレーターがいて、スペシャリストを呼び出し、ハンドオフで情報を渡す」。その骨格の上に何段のパイプラインを構築し、何人の参加者で実行するかは、ドメインごとに全く異なる設計が可能です。第5章で解説するai-workspace-standardsのバリアントがこれを実証しています。同じハーネス原理の上に、<code>co-develop</code>はPM、Architect、Designer、Code Writer、Test Runner、Security Monitorの6段階ガバナンスパイプライン、<code>co-design</code>は5段階の反復ワークフロー、<code>co-deck</code>は11段階のワークフロー — それぞれ全く異なる形に仕立てられています。ハーネスエンジニアリングのコアの利点は、単一の「正しいワークフロー」を強制するのではなく、ドメインが要求する段階数、参加者数、検証の厳格さに合わせてワークフロー自体を設計できることです。</p>
+  <p>これはまた、§4の5つのオーケストレーションパターン（プロンプトチェーン、ルーティング、並列化、オーケストレーター・ワーカー、評価者・最適化）が排他的ではなく、<strong>単一のワークフロー内で自由に組み合わせ可能</strong>であることも意味します。例えば、コードレビューワークフローでは、まず変更の小大を分類するためにルーティングを使用し、大きな変更の場合はオーケストレーター・ワーカーが影響ファイルを動的に分割して4つの視点から同時にファンアウトリビューし、結果をパイプラインで順次ドキュメント処理し、最後に評価者・最適化（検証後適用）が変更を実際に適用するかを決定する — 5つのパターンすべてを1つのフローに混在させることができます。</p>
+  <div class="note">動的チーム編成とワークフローの多様性は、同じ原理の2つの側面です。ハーネスが固定するのは「何を守るべきか」だけで、「誰がいつ、どのように動くか」はタスクとドメインに委ねられます。この柔軟性がなければ、すべてのバリアントで全く異なる自動化システムをスクラッチから構築する必要があったでしょう。実際に体験したい場合、<a href="../practice/04_Practice_Examples_A_en.html#scenario-2b">第4章§2の演習</a>のD-2シナリオで、同じサブエージェントチームでリクエストを変えるだけでチーム編成とワークフローが実際に変化する様子を観察できます。</div>
+
+  <h2 id="s5">ツール横断的なハーネス — AGENTS.md</h2>
+  <p>これまで解説したオーケストレーター、スペシャリスト、ハンドオフは、特定のツールに結びついた概念ではありません。問題は、各ツールがこのハーネスを異なる方法で設定していたことです。Claude Codeは<code>CLAUDE.md</code>を読み、Cursorは<code>.cursorrules</code>を読み、GitHub Copilotは<code>.github/copilot-instructions.md</code>を読みます — 複数のツールを併用するチームは、同じ内容を各ファイルに重複して維持する必要がありました。</p>
+  <p>同じ内容（例：「常に<code>npm test</code>でテストを実行し、<code>src/legacy/</code>フォルダは変更しない」）をチームが使うツールごとに（CLAUDE.md、.cursorrules、copilot-instructions.md...）コピーすると、ルール変更のたびにすべてのファイルを見つけて編集する必要があり、一つでも見落とせばそのツールを使う人は別のルールの下で作業することになります。これは、同じ契約を複数の言語に別々に翻訳して保持し、一部だけが修正されたときに版が食い違うのと同じ問題です。</p>
+  <p><strong>AGENTS.md</strong>は、この問題を解決するために2025年8月にOpenAI主導でGoogle、Cursor、Factoryなどの参加を得て作成されたオープン規格で、2025年12月にはLinux Foundation傘下のAgentic AI Foundationに寄贈されました。リポジトリのルートに単一のAGENTS.mdを配置するだけで、Codex、Claude Code（インポート経由）、GitHub Copilot、Cursor、Google Jules、Antigravityファミリーなど30以上のツールがセッション開始時にこれを読み取り、ビルド/テストコマンド、コードスタイル、アクセス禁止領域などの共通ルールを共有できます。</p>
+  <p>本ハンドブックが「4つのツールすべてをサポートする」と強調し続けている理由も、まさに同じ問題意識に由来します。チームがClaude Appを使ってもAntigravity Desktopを使っても、共通ルールをリポジトリルート（AGENTS.md）に置き、ツール固有の詳細設定（<code>CLAUDE.md</code>、<code>GEMINI.md</code>など）と分離しておけば、ツールを切り替えたり混用したりしてもハーネス自体は安定します。第5章で検討するai-workspace-standardsリポジトリは、この原理の実際の実装です。ルートの<code>AGENTS.md</code>ファイルがワークスペース内のすべてのエージェントの単一の信頼できる情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>や<code>.gemini/</code>と並んで、エンジンに依存しないコマンドとスキルを保持します。</p>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- project/ root -->
+        <text x="60" y="22" font-size="13" fill="#1f2328" font-weight="700">project/</text>
+
+        <!-- AGENTS.md -->
+        <rect x="24" y="34" width="220" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+        <text x="80" y="55" font-size="12" fill="#0550ae" font-weight="700">AGENTS.md</text>
+        <text x="178" y="55" font-size="10" fill="#0550ae">(shared spec · SSOT)</text>
+
+        <!-- Arrow AGENTS.md → platform files -->
+        <line x1="134" y1="66" x2="134" y2="90" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-agt)"/>
+        <line x1="134" y1="90" x2="280" y2="90" stroke="#0969da" stroke-width="1.5"/>
+        <line x1="280" y1="90" x2="280" y2="110" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-agt)"/>
+        <line x1="280" y1="90" x2="480" y2="90" stroke="#0969da" stroke-width="1.5"/>
+        <line x1="480" y1="90" x2="480" y2="110" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-agt)"/>
+
+        <!-- .claude/ branch -->
+        <text x="210" y="130" font-size="12" fill="#636c76" font-weight="600">.claude/</text>
+        <text x="230" y="152" font-size="12" fill="#636c76">agents/</text>
+        <rect x="230" y="158" width="110" height="24" rx="6" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="244" y="175" font-size="11" fill="#6639ba" font-weight="600">writer.md</text>
+        <rect x="348" y="158" width="120" height="24" rx="6" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="362" y="175" font-size="11" fill="#6639ba" font-weight="600">reviewer.md</text>
+        <text x="260" y="200" font-size="10" fill="#6639ba" font-style="italic">Claude-specific agents</text>
+
+        <!-- CLAUDE.md -->
+        <rect x="410" y="114" width="130" height="30" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="422" y="134" font-size="12" fill="#116329" font-weight="700">CLAUDE.md</text>
+        <text x="505" y="134" font-size="9" fill="#116329">(Claude config)</text>
+
+        <!-- GEMINI.md -->
+        <rect x="560" y="114" width="130" height="30" rx="8" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.2"/>
+        <text x="572" y="134" font-size="12" fill="#7d4e00" font-weight="700">GEMINI.md</text>
+        <text x="655" y="134" font-size="9" fill="#7d4e00">(Gemini config)</text>
+
+        <!-- Legend arrows -->
+
+      </g>
+    </svg>
+    <p style="font-size:12.5px;color:var(--text-dim);text-align:center;margin-top:10px;">AGENTS.mdが共有仕様（SSOT）として機能し、ツール固有ファイルは各ツールでの実行方法だけを追加する — 重複を減らす階層的分離</p>
+  </div>
+
+  <div class="note">AGENTS.mdはツールに依存しない形で「何を守るべきか」を定義し、CLAUDE.md/GEMINI.mdなどのツール固有ファイルは「この特定のツールでそれをどう実行するか」だけを追加的に定義します。重複を減らす階層的分離です。</div>
+
+  <p>次の章に進む前に、このチームに実際のツールを渡す際に必要な安全装置について解説します。第3章では、サブエージェントに対して何を許可し何をブロックすべきか、そして人間がどこで必ず確認しなければならないかを解説します。その後、第4章ではClaude App/Antigravity Desktopを中心に（Claude Code/Antigravity CLIの手順も併記して）、オーケストレーター、スペシャリスト、ハンドオフがツールごとにどう現れるかをハンズオンで構築します。</p>
+
+  <div class="chapter-nav">
+    <a href="../intro/01_Why_AI_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">1章 · 導入</div></a>
+    <a href="../guardrails/03_Guardrails_Chapter_ja.html" class="next" style="margin-left:auto;"><div class="dir">次の章 →</div><div class="ttl">3章 · ガードレールと権限モデル</div></a>
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">参考動画</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=jqx18KgIzAE" target="_blank">Claude | Computer use for orchestrating tasks</a><span class="video-meta">(2:04)</span> — AnthropicによるClaudeが複数タスクをオーケストレーションする公式デモ</li>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=zAjKqKHY1LE" target="_blank">Multi-Agent Orchestration — Simply Explained</a><span class="video-meta">(9:50)</span> — マルチエージェントオーケストレーションの概念の視覚的解説</li>
+    <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=3MPEFYmprAM" target="_blank">AI Agent Engineering | Lecture 5. Orchestration</a><span class="video-meta">(21:48)</span> — Hanbit Mediaによる公式韓国語オーケストレーション講義</li>
+  </ul>
+</div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '完了!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "validate-nav": "bun run scripts/validate-nav.ts"
+    "validate-nav": "bun run scripts/validate-nav.ts",
+    "check-tables": "bun run scripts/check-tables.ts"
   }
 }

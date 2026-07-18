@@ -413,7 +413,7 @@
 
   <!-- 의사결정 나무 SVG -->
   <div class="decision-box">
-    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#636c76"/></marker>
         <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/></marker>
@@ -427,9 +427,9 @@
         <line x1="330" y1="45" x2="330" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
         <text x="345" y="58" font-size="9" fill="#1a7f37" font-weight="700">예</text>
         <!-- No branch -->
-        <line x1="440" y1="25" x2="530" y2="25" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="530" y1="25" x2="530" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="480" y="20" font-size="9" fill="#0969da" font-weight="700">아니오</text>
+        <line x1="440" y1="25" x2="560" y2="25" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="560" y1="25" x2="560" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="490" y="20" font-size="9" fill="#0969da" font-weight="700">아니오</text>
 
         <!-- Q2 (Yes from Q1) -->
         <rect x="220" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
@@ -451,9 +451,10 @@
         <rect x="220" y="135" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
         <text x="330" y="160" text-anchor="middle" font-weight="700">검증이 필요한가?</text>
         <!-- Yes → Verify -->
-        <line x1="220" y1="155" x2="140" y2="155" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="140" y1="155" x2="140" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="175" y="150" font-size="9" fill="#1a7f37" font-weight="700">예</text>
+        <line x1="270" y1="175" x2="270" y2="190" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="270" y1="190" x2="140" y2="190" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="190" x2="140" y2="198" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="205" y="188" font-size="9" fill="#1a7f37" font-weight="700">예</text>
         <!-- No → Orchestrator-Worker -->
         <line x1="330" y1="175" x2="330" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
         <text x="345" y="190" font-size="9" fill="#0969da" font-weight="700">아니오</text>
@@ -469,31 +470,31 @@
         <text x="330" y="231" text-anchor="middle" font-size="9" fill="#636c76">PM이 동적으로 작업 분배</text>
 
         <!-- Q4 (No from Q1) -->
-        <rect x="430" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
-        <text x="540" y="95" text-anchor="middle" font-weight="700">동시에 실행해도 되는가?</text>
+        <rect x="440" y="70" width="240" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="560" y="95" text-anchor="middle" font-weight="700">동시에 실행해도 되는가?</text>
         <!-- Yes → Fan-out -->
-        <line x1="540" y1="110" x2="540" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="555" y="125" font-size="9" fill="#1a7f37" font-weight="700">예</text>
+        <line x1="560" y1="110" x2="560" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="575" y="125" font-size="9" fill="#1a7f37" font-weight="700">예</text>
         <!-- No → Routing -->
-        <line x1="540" y1="90" x2="620" y2="90" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="620" y1="90" x2="620" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="575" y="85" font-size="9" fill="#0969da" font-weight="700">아니오</text>
+        <line x1="680" y1="90" x2="710" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="710" y1="90" x2="710" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="686" y="85" font-size="9" fill="#0969da" font-weight="700">아니오</text>
 
         <!-- Fan-out result -->
-        <rect x="460" y="135" width="160" height="40" rx="8" fill="#6639ba" opacity="0.1" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="540" y="153" text-anchor="middle" font-weight="700" fill="#6639ba">팬아웃 + 취합</text>
-        <text x="540" y="166" text-anchor="middle" font-size="9" fill="#636c76">병렬 작업 + 결과 합산</text>
+        <rect x="490" y="135" width="140" height="40" rx="8" fill="#6639ba" opacity="0.1" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="560" y="153" text-anchor="middle" font-weight="700" fill="#6639ba">팬아웃 + 취합</text>
+        <text x="560" y="166" text-anchor="middle" font-size="9" fill="#636c76">병렬 작업 + 결과 합산</text>
 
         <!-- Routing result -->
-        <rect x="540" y="135" width="110" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
-        <text x="595" y="153" text-anchor="middle" font-weight="700" fill="#cf5800">라우팅</text>
-        <text x="595" y="166" text-anchor="middle" font-size="9" fill="#636c76">조건별 분기</text>
+        <rect x="655" y="135" width="110" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="710" y="153" text-anchor="middle" font-weight="700" fill="#cf5800">라우팅</text>
+        <text x="710" y="166" text-anchor="middle" font-size="9" fill="#636c76">조건별 분기</text>
 
         <!-- Combination note -->
-        <rect x="60" y="265" width="540" height="55" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
-        <text x="330" y="285" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">💡 실무에서는 여러 패턴을 조합한다</text>
-        <text x="330" y="302" text-anchor="middle" font-size="10" fill="#636c76">코드 리뷰 = 라우팅 + 팬아웃 + 취합 + 파이프라인 + 검증-후-적용 (이 장 §3 사례 1)</text>
-        <text x="330" y="315" text-anchor="middle" font-size="10" fill="#636c76">의사결정 나무는 <strong>첫 패턴을 고르는</strong> 용도다. 복잡한 업무는 위에서 아래로 단계를 설계하면서 패턴을 자연스럽게 추가한다.</text>
+        <rect x="60" y="265" width="660" height="55" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+        <text x="390" y="285" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">💡 실무에서는 여러 패턴을 조합한다</text>
+        <text x="390" y="302" text-anchor="middle" font-size="10" fill="#636c76">코드 리뷰 = 라우팅 + 팬아웃 + 취합 + 파이프라인 + 검증-후-적용 (이 장 §3 사례 1)</text>
+        <text x="390" y="315" text-anchor="middle" font-size="10" fill="#636c76">의사결정 나무는 <strong>첫 패턴을 고르는</strong> 용도다. 복잡한 업무는 위에서 아래로 단계를 설계하면서 패턴을 자연스럽게 추가한다.</text>
       </g>
     </svg>
   </div>

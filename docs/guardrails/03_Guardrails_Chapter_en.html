@@ -92,7 +92,7 @@
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div>Principle of Least Privilege — Three-Tier Permission Level Hierarchy</div>
-    <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
       <defs>
         <linearGradient id="pyramidRed" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#cf222e"/>
@@ -107,35 +107,31 @@
           <stop offset="100%" stop-color="#a2d9b1"/>
         </linearGradient>
       </defs>
+      <!-- Pyramid: pure shape, tier names live OUTSIDE in the callout boxes -->
       <!-- Top tier: Destructive operations (triangle apex) -->
-      <polygon points="250,20 325,100 175,100" fill="url(#pyramidRed)" opacity="0.9"/>
-      <text x="250" y="62" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">Destructive Ops</text>
-      <text x="250" y="78" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Destructive</text>
-      <!-- Red tier label -->
-      <rect x="430" y="48" width="155" height="44" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
-      <text x="508" y="66" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">e.g. git push, rm -rf</text>
-      <text x="508" y="82" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">Deploys, payments, external messages</text>
-      <line x1="325" y1="70" x2="430" y2="70" stroke="#ff8182" stroke-width="1" stroke-dasharray="3,2"/>
+      <polygon points="250,20 302,100 198,100" fill="url(#pyramidRed)" opacity="0.9"/>
+      <!-- Red tier callout (outside the shape) -->
+      <rect x="430" y="29" width="200" height="62" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+      <text x="530" y="47" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#cf222e">Destructive Ops</text>
+      <text x="530" y="64" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">e.g. git push, rm -rf</text>
+      <text x="530" y="79" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">Deploys, payments, external messages</text>
+      <line x1="276" y1="60" x2="430" y2="60" stroke="#ff8182" stroke-width="1" stroke-dasharray="3,2"/>
 
       <!-- Middle tier: Write operations (trapezoid) -->
-      <polygon points="175,100 325,100 375,190 125,190" fill="url(#pyramidOrange)" opacity="0.9"/>
-      <text x="250" y="142" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">Write Ops</text>
-      <text x="250" y="158" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Write</text>
-      <!-- Orange tier label -->
-      <rect x="430" y="138" width="155" height="44" rx="6" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
-      <text x="508" y="156" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#953800">e.g. edit files, create PR</text>
-      <text x="508" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">Local commits, config changes</text>
-      <line x1="375" y1="155" x2="430" y2="155" stroke="#f5c518" stroke-width="1" stroke-dasharray="3,2"/>
+      <polygon points="198,100 302,100 361,190 139,190" fill="url(#pyramidOrange)" opacity="0.9"/>
+      <rect x="430" y="114" width="200" height="62" rx="6" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+      <text x="530" y="132" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#953800">Write Ops</text>
+      <text x="530" y="149" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">e.g. edit files, create PR</text>
+      <text x="530" y="164" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">Local commits, config changes</text>
+      <line x1="332" y1="145" x2="430" y2="145" stroke="#f5c518" stroke-width="1" stroke-dasharray="3,2"/>
 
       <!-- Bottom tier: Read operations (trapezoid) -->
-      <polygon points="125,190 375,190 420,280 80,280" fill="url(#pyramidGreen)" opacity="0.9"/>
-      <text x="250" y="234" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#ffffff">Read Ops</text>
-      <text x="250" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#ffffff">Read</text>
-      <!-- Green tier label -->
-      <rect x="430" y="225" width="155" height="44" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
-      <text x="508" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#116329">e.g. read files, search</text>
-      <text x="508" y="259" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Web lookup, view logs</text>
-      <line x1="420" y1="247" x2="430" y2="247" stroke="#a2d9b1" stroke-width="1" stroke-dasharray="3,2"/>
+      <polygon points="139,190 361,190 420,280 80,280" fill="url(#pyramidGreen)" opacity="0.9"/>
+      <rect x="430" y="204" width="200" height="62" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+      <text x="530" y="222" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#116329">Read Ops</text>
+      <text x="530" y="239" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">e.g. read files, search</text>
+      <text x="530" y="254" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Web lookup, view logs</text>
+      <line x1="391" y1="235" x2="430" y2="235" stroke="#a2d9b1" stroke-width="1" stroke-dasharray="3,2"/>
 
       <!-- Least privilege label -->
       <text x="250" y="320" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="600" fill="#636c76">▲ Principle of Least Privilege — grant only what is needed</text>

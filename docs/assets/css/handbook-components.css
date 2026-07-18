@@ -867,12 +867,19 @@ pre.code-block {
 .compare-box ul { margin: 6px 0 0 18px; font-size: var(--font-size-compact); line-height: var(--line-height-compact); }
 .compare-box li { margin: 4px 0; }
 
-.version-box { border: 1px solid var(--border); border-radius: var(--radius-md); margin: 20px 0; overflow: hidden; }
-.version-row { display: flex; border-bottom: 1px solid var(--border); }
-.version-row:last-child { border-bottom: none; }
-.vlabel { padding: 10px 16px; font-size: var(--font-size-small); font-weight: 600; color: var(--text-dim); background: var(--bg3); min-width: 140px; }
-.vlabel + span { padding: 10px 16px; font-size: var(--font-size-compact); flex: 1; }
-.vvalue { padding: 10px 16px; font-size: var(--font-size-compact); flex: 1; }
+/* Grid (not flex) so the label column shares one width across ALL rows —
+   flex would size each row's label independently to its own content,
+   which looks fine in short-label locales (ko) but misaligns badly once
+   a label translates to something longer (en "Target Version/Scope" vs
+   the 140px min-width floor other rows don't need). .version-row is
+   display:contents so its .vlabel/.vvalue children become direct grid
+   items of .version-box — same technique as .variant-list. */
+.version-box { display: grid; grid-template-columns: max-content 1fr; border: 1px solid var(--border); border-radius: var(--radius-md); margin: 20px 0; overflow: hidden; }
+.version-row { display: contents; }
+.version-row > * { border-bottom: 1px solid var(--border); }
+.version-row:last-child > * { border-bottom: none; }
+.vlabel { padding: 10px 16px; font-size: var(--font-size-small); font-weight: 600; color: var(--text-dim); background: var(--bg3); }
+.vvalue { padding: 10px 16px; font-size: var(--font-size-compact); }
 
 .tree-box {
   background: var(--bg2);

@@ -115,6 +115,7 @@
   <p>To summarize the relationship among these four files in one sentence: CONSTITUTION.md defines "what must be followed," CLAUDE.md/GEMINI.md define "how that is executed on each platform," and AGENTS.md defines "who does the work."</p>
 
   <p>An agent entry in AGENTS.md consists of the following fields. <strong>Concrete authoring guidance and tool-specific implementation mapping are covered in Chapter 8 §3, AGENTS.md Deep Dive.</strong></p>
+  <div class="table-compare narrow-col-3">
   <table>
     <thead><tr><th>Field</th><th>Meaning</th><th>Required</th><th>Example</th></tr></thead>
     <tbody>
@@ -126,6 +127,7 @@
       <tr><td><code>handoff_to</code></td><td>Who to hand off to after completion</td><td>Optional</td><td><code>handoff_to: reviewer</code></td></tr>
     </tbody>
   </table>
+  </div>
   <p>Let's trace this relationship using a concrete rule as an example. Suppose there's a rule that says "PR titles and bodies must be written in English." This rule itself is written exactly once, in <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> defines <em>how</em> to enforce this rule in Claude Code — for instance, by specifying that the <code>/sync</code> command's language gate (language-guard.ts) automatically checks this rule before every commit. <code>GEMINI.md</code> defines how the same rule is enforced in the Antigravity-side pipeline. And who actually performs this check — which agent is responsible for this gate — is registered in the roster in <code>AGENTS.md</code>. A single rule shows up in all four files, each from a different angle. This isn't duplication; it's three different answers to the three questions of "what, how, and who."</p>
   <p>Below the four core files sit folders holding executable assets. Commands and skills are split across three locations: <code>.claude/</code> is Claude Code/App-only, <code>.gemini/</code> is Antigravity CLI/Desktop-only, and <code>.agents/</code> holds <strong>tool-agnostic (engine-agnostic)</strong> commands and skills not tied to a single tool. For example, slash commands like <code>/sync</code>/<code>/meeting</code> or skills like <code>create-variant</code>/<code>audit-workspace</code> exist under the same name in all three folders, but each implementation differs slightly to match its own platform's tooling conventions (Claude Code's <code>Agent</code> tool syntax, Antigravity's sub-agent approach, etc.). External tools that support the AGENTS.md standard (Codex, Cursor, etc.) will reference the <code>.agents/</code> folder when they open this repository.</p>
 

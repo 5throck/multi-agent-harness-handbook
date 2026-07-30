@@ -29,8 +29,6 @@ Cubre desde los conceptos fundamentales de la ingeniería de harness, práctica 
 - Antigravity CLI 1.1.0+ / Antigravity 2.0
 - `ai-workspace-standards` main (2026-07-08)
 
-*Built with the Teach Me skill for Claude Code.*
-
 ## 📜 Licencia
 - **Código fuente** (scripts, configuración): [GNU AGPL-3.0](LICENSE)
 - **Contenido del manual** (capítulos, docs): [CC BY-NC-SA 4.0](LICENSE-CC-BY-NC-SA) (Atribución-NoComercial-CompartirIgual 4.0 Internacional)

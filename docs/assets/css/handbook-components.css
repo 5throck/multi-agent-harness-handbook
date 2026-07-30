@@ -1319,7 +1319,17 @@ pre.code-block {
    V. Print
    ========================================================================== */
 
-footer { font-size: var(--font-size-label); line-height: var(--line-height-label); color: var(--text-dim); }
+footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-label);
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
 
 @media print {
   nav, .dark-mode-toggle, .lang-switcher, .inpage-search-bar, .search-bar { display: none !important; }

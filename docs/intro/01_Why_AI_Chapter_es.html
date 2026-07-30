@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 1 · Transformación Laboral en la Era de la IA - Material del Manual de Ingeniería de Arnés de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 1 · Transformación Laboral en la Era de la IA</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 1 · Introducción</div>
+  <a href="#s0">Por qué la IA, ahora</a>
+  <a href="#s1">Tres Etapas del Uso de la IA</a>
+  <a href="#s2">Por qué se Necesita la Ingeniería de Arnés</a>
+  <a href="#s3">Multiagente: El Principio de un Equipo de Expertos</a>
+  <a href="#s4">Dónde se Aplica</a>
+  <a href="#s5">Lo que Obtendrás del Taller de Hoy</a>
+  <div class="nav-section">Otros Capítulos</div>
+  <a href="../concepts/02_Concepts_Chapter_es.html">Capítulo 2 · Conceptos de Ingeniería de Arnés</a>
+  <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Guardarraíles y Modelos de Permisos</a>
+  <a href="../glossary/00_Glossary_es.html">Glosario</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 1 · Introducción</div>
+  <h1>Transformación Laboral en la Era de la IA</h1>
+  <p class="lead">Tres años y medio después del debut de ChatGPT, la IA ya no es una herramienta que simplemente "pruebas" -- se ha convertido en un colaborador con el que "trabajas." Este capítulo explora por qué necesitamos aprender IA ahora, los tres tipos de personas que usan IA y por qué el diseño sistemático (un arnés) es esencial al delegar trabajo complejo a la IA. Antes de los conceptos técnicos del Capítulo 2, este capítulo establece el "por qué" -- la motivación.</p>
+  <p class="source-line">Referencias: Encuesta Global de McKinsey sobre IA (2024-2025), Predicciones de IA Empresarial de Gartner (2025-2026), Anthropic "Building Effective Agents" (dic. 2024)</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que Cubre Este Capítulo</div>
+    <ul>
+      <li>El estado acelerado de la adopción de IA en empresas de todo el mundo, con estadísticas</li>
+      <li>Las tres etapas del uso de IA -- usuario, practicante, diseñador -- y el objetivo de este taller</li>
+      <li>La diferencia entre comandos simples y el diseño sistemático (ingeniería de arnés)</li>
+      <li>Una comparación entre una sola IA y un equipo de expertos (multiagente)</li>
+      <li>El ahorro de tiempo concreto que la IA aporta en el trabajo real</li>
+      <li>La hoja de ruta completa y los resultados esperados del taller de dos días</li>
+    </ul>
+  </div>
+
+  <h2 id="s0">Por qué la IA, ahora</h2>
+
+  <p>En los tres años desde el debut de ChatGPT a finales de 2022, la IA ha cambiado fundamentalmente nuestra forma de trabajar. Ha evolucionado más allá de una simple herramienta de búsqueda o asistente de autocompletado hasta convertirse en un <strong>colaborador</strong> que escribe informes, genera código, analiza datos y diseña presentaciones. Ahora es una realidad que incluso los no especialistas pueden usar la IA para construir directamente aplicaciones, documentos y entregables analíticos.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num">78%</div>
+      <div class="stat-label">Tasa global de adopción de IA empresarial<br>(del 35% en 2022 a 2025)</div>
+      <div class="stat-source">Encuesta Global de McKinsey sobre IA</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">80%+</div>
+      <div class="stat-label">Proporción de empresas que se espera<br>adopten IA generativa para 2026</div>
+      <div class="stat-source">Predicciones de IA Empresarial de Gartner</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">25%</div>
+      <div class="stat-label">Aumento medio de productividad<br>para trabajadores que usan IA</div>
+      <div class="stat-source">Escuela de Negocios de Harvard / investigación de BCG</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">30%+</div>
+      <div class="stat-label">Proporción de software empresarial que se espera<br>incorpore IA agente para 2026</div>
+      <div class="stat-source">Predicciones de Gartner 2025</div>
+    </div>
+  </div>
+
+  <p>Corea del Sur no es la excepción. La adopción de IA en grandes empresas ha superado el 70%, y el respaldo político también se acelera con la entrada en vigor de la Ley Básica de IA y la iniciativa K-Digital Platform. Las empresas que han adoptado la IA reportan aumentos medios de productividad del 15-30%. Sin embargo, la adopción entre las pequeñas y medianas empresas aún se sitúa en torno al 30-40%, lo que convierte la <strong>brecha de adopción</strong> en un desafío importante.</p>
+
+  <div class="pullquote">
+    La IA no es opcional -- es una cuestión de supervivencia. Pero la adopción por sí sola no es el objetivo; <strong>cómo</strong> la usas es lo que determina la verdadera competitividad.
+  </div>
+
+  <p>Lo que importa no es el hecho de "estamos usando IA", sino "cómo" la usamos. Simplemente hacerle una pregunta a ChatGPT no crea ventaja competitiva. Lo que se necesita es la capacidad de diseñar directamente sistemas de agentes de IA, integrarlos en los procesos de trabajo de una organización y verificar la calidad de los resultados. Este es el núcleo de lo que cubre este taller.</p>
+
+  <h2 id="s1">Tres Etapas del Uso de la IA</h2>
+
+  <p>Las personas que trabajan con IA se pueden agrupar en tres etapas de competencia. La mayoría permanece en la Etapa 1, y el objetivo de este taller es darte un primer vislumbre del salto de la Etapa 2 a la Etapa 3.</p>
+
+  <table class="step-table">
+    <thead>
+      <tr><th style="width:60px"></th><th>Etapa</th><th>Lo que Hacen</th><th>Analogía</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="step-num">1</span></td>
+        <td><strong>Usuario</strong></td>
+        <td>Hace preguntas a la IA y recibe respuestas. Se centra en refinar los prompts para obtener mejores resultados.</td>
+        <td>Un comensal pidiendo del menú en un restaurante</td>
+      </tr>
+      <tr>
+        <td><span class="step-num">2</span></td>
+        <td><strong>Practicante</strong></td>
+        <td>Integra la IA en los procesos de trabajo. Delega tareas repetitivas a la IA y usa los resultados directamente en su propio trabajo.</td>
+        <td>Alguien que sigue una receta y cocina por sí mismo</td>
+      </tr>
+      <tr>
+        <td><span class="step-num">3</span></td>
+        <td><strong>Diseñador</strong></td>
+        <td>Diseña directamente sistemas de agentes de IA. Divide roles, establece criterios de validación y construye flujos de trabajo complejos.</td>
+        <td>Un chef que crea la receta y diseña el propio sistema de cocina</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <svg viewBox="0 0 640 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Etapa 1 -->
+        <rect x="20" y="30" width="150" height="60" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="95" y="52" text-anchor="middle" font-size="14" fill="#0550ae" font-weight="700">Etapa 1</text>
+        <text x="95" y="70" text-anchor="middle" font-size="11" fill="#0550ae">Usuario -- Preguntas y respuestas</text>
+
+        <!-- Flecha 1→2 -->
+        <line x1="170" y1="60" x2="230" y2="60" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="200" y="52" text-anchor="middle" font-size="9" fill="#636c76">Integración laboral</text>
+
+        <!-- Etapa 2 -->
+        <rect x="235" y="30" width="150" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="310" y="52" text-anchor="middle" font-size="14" fill="#116329" font-weight="700">Etapa 2</text>
+        <text x="310" y="70" text-anchor="middle" font-size="11" fill="#116329">Practicante -- Integración de procesos</text>
+
+        <!-- Flecha 2→3 -->
+        <line x1="385" y1="60" x2="445" y2="60" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="415" y="52" text-anchor="middle" font-size="9" fill="#636c76">Diseño de sistemas</text>
+
+        <!-- Etapa 3 -->
+        <rect x="450" y="30" width="170" height="60" rx="10" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="535" y="52" text-anchor="middle" font-size="14" fill="#6639ba" font-weight="700">Etapa 3</text>
+        <text x="535" y="70" text-anchor="middle" font-size="11" fill="#6639ba">Diseñador -- Construcción de sistemas de agentes</text>
+
+        <!-- Etiqueta del taller -->
+        <text x="320" y="110" text-anchor="middle" font-size="10" fill="#cf222e" font-weight="600">▲ Este taller apunta al salto de la Etapa 2 → 3</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>Los usuarios de la Etapa 1 lanzan solicitudes aisladas como "traduce esto" o "encuentra el error en este código." Útil, pero limitado para el trabajo complejo. Los practicantes de la Etapa 2 rediseñan su trabajo alrededor de la IA, pensando "la IA redacta este informe mientras yo me concentro en el juicio estratégico." Los diseñadores de la Etapa 3 van más allá, pensando "este informe necesita investigación, análisis, redacción y revisión, así que dividamos cada paso entre agentes especializados" -- <strong>diseñando el propio sistema de agentes</strong>.</p>
+
+  <div class="note">El objetivo de este taller es darte un primer vislumbre del <strong>salto de la Etapa 2 a la Etapa 3</strong>. Hoy, el Día 1 ofrece práctica de Etapa 2 usando una variante existente para ejecutar un equipo de agentes de IA, mientras que el Día 2 ofrece práctica de Etapa 3 diseñando una nueva variante desde cero.</div>
+
+  <h2 id="s2">Por qué se Necesita la Ingeniería de Arnés</h2>
+
+  <p>Al usar la IA en tu trabajo, naturalmente te encuentras con limitaciones: "los errores se acumulan cuanto más pido revisiones", "la calidad del resultado es inconsistente cada vez", "las tareas complejas no se pueden producir de una sola vez." Así es como se trabaja con la IA sin <strong>diseño sistemático (un arnés)</strong>.</p>
+
+  <div class="compare-grid">
+    <div class="compare-box without">
+      <div class="cb-title">✗ Sin Arnés</div>
+      <ul>
+        <li>Todo se solicita a una sola IA</li>
+        <li>Los errores se acumulan con cada revisión</li>
+        <li>Sobrecarga de contexto -- las partes anteriores se olvidan a medida que crece el contenido</li>
+        <li>La calidad del resultado es inconsistente cada vez</li>
+        <li>Las tareas complejas son casi imposibles</li>
+      </ul>
+    </div>
+    <div class="compare-box with">
+      <div class="cb-title">✓ Con Arnés</div>
+      <ul>
+        <li>Los roles se separan y se asignan a agentes especializados</li>
+        <li>La verificación paso a paso detecta errores temprano</li>
+        <li>Cada agente se concentra únicamente en su propio rol</li>
+        <li>Los criterios de validación hacen que los resultados sean estables</li>
+        <li>Las tareas complejas se vuelven estructuralmente alcanzables</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>La Ingeniería de Arnés es una disciplina de diseño que otorga a la IA <strong>roles, reglas y criterios de validación</strong>. Transforma un simple comando de prompt en un sistema estructurado de instrucciones de trabajo.</p>
+
+  <p>Para ponerlo en analogía, una IA sin arnés es como un nuevo empleado al que solo se le ha dicho: "¡trabaja libremente!" Está motivado, pero no sabe por dónde empezar, no reconoce sus propios errores y tiene un ámbito de responsabilidad poco claro. Una IA con arnés es como un equipo con <strong>separación de roles, verificación y salvaguardas</strong> establecidas: "este rol se encarga exclusivamente de la investigación de datos, este rol se encarga exclusivamente de la redacción de documentos, la revisión debe ser siempre realizada por un rol diferente, y las ediciones solo se realizan dentro de un rango que se pueda revertir mediante git."</p>
+
+  <div class="note">Los detalles técnicos de la ingeniería de arnés (contratos orquestador-especialista-traspaso, patrones de orquestación y más) se cubren en profundidad en el Capítulo 2. Este capítulo solo establece la motivación de "por qué se necesita un arnés."</div>
+
+  <h2 id="s3">Multiagente: El Principio de un Equipo de Expertos</h2>
+
+  <p>Delegar todo a una sola IA crea tres limitaciones estructurales: <strong>sobrecarga de contexto</strong> (empaquetar toda la información en un solo lugar hace que las partes anteriores se desvanezcan), <strong>conflicto de roles</strong> (revisar tu propia redacción significa pasar por alto tus propios puntos ciegos) y <strong>falta de paralelismo</strong> (procesar tareas secuencialmente aunque podrían ejecutarse al mismo tiempo, desperdiciando tiempo). Estas mismas limitaciones también aparecen en las organizaciones humanas.</p>
+
+  <p>La solución es sencilla. Por el mismo principio por el que una empresa separa planificadores, desarrolladores y control de calidad, la IA también se puede dividir en <strong>agentes basados en roles</strong> que colaboran. Este es el sistema <strong>multiagente</strong>.</p>
+
+  <table class="step-table">
+    <thead>
+      <tr><th></th><th>Agente Único</th><th>Equipo Multiagente</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Analogía</strong></td>
+        <td>Un solo empleado polivalente recién contratado</td>
+        <td>Un equipo de expertos (planificación · desarrollo · QA)</td>
+      </tr>
+      <tr>
+        <td><strong>Contexto</strong></td>
+        <td>Toda la información en un solo lugar → sobrecarga</td>
+        <td>Separado por rol → enfoque</td>
+      </tr>
+      <tr>
+        <td><strong>Verificación</strong></td>
+        <td>Revisa su propio resultado → limitado</td>
+        <td>Autor ≠ revisor → perspectiva independiente garantizada</td>
+      </tr>
+      <tr>
+        <td><strong>Paralelismo</strong></td>
+        <td>Procesamiento secuencial → tiempo lineal</td>
+        <td>Tareas independientes se ejecutan concurrentemente → ahorro de tiempo</td>
+      </tr>
+      <tr>
+        <td><strong>Complejidad</strong></td>
+        <td>Apto para tareas simples</td>
+        <td>Apto para flujos de trabajo complejos</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Este principio no está ligado a ninguna herramienta de IA específica. Ya sea que uses Claude Code, Claude App, Antigravity, Cursor, GitHub Copilot o cualquier otra, el concepto de "separar roles y separar la verificación" se aplica de la misma manera. En este taller, usaremos las cuatro herramientas y experimentaremos de primera mano cómo el mismo concepto multiagente se implementa de manera diferente en cada una.</p>
+
+  <h2 id="s4">Dónde se Aplica</h2>
+
+  <p>Los equipos multiagente adoptan muchas formas diferentes dependiendo del dominio empresarial. Un patrón común es la estructura de pipeline de "investigación → análisis → redacción → revisión", donde cada paso es manejado por un agente especializado. Aquí hay algunos ejemplos de las áreas donde el ahorro de tiempo es más pronunciado en el trabajo real.</p>
+
+  <table class="time-table">
+    <thead>
+      <tr><th>Tarea</th><th>Tiempo Tradicional</th><th>Con un Equipo de Agentes de IA</th><th>Reducción</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="task-name">Informe de investigación de mercado</td>
+        <td class="old">3 horas</td>
+        <td class="new">~20 min</td>
+        <td class="ratio">~90%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">Análisis de competidores</td>
+        <td class="old">Medio día</td>
+        <td class="new">~30 min</td>
+        <td class="ratio">~85%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">Redacción de propuesta</td>
+        <td class="old">Medio día</td>
+        <td class="new">~1 hora</td>
+        <td class="ratio">~75%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">Creación de presentación</td>
+        <td class="old">2 horas</td>
+        <td class="new">~10 min</td>
+        <td class="ratio">~90%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">Redacción de informe periódico</td>
+        <td class="old">1 hora</td>
+        <td class="new">~15 min</td>
+        <td class="ratio">~75%↓</td>
+      </tr>
+      <tr>
+        <td class="task-name">Revisión de código y corrección de errores</td>
+        <td class="old">1-2 horas</td>
+        <td class="new">~20 min</td>
+        <td class="ratio">~80%↓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="320" y="18" text-anchor="middle" font-size="12" fill="#1f2328" font-weight="700">Comparación Relativa del Tiempo de Tarea</text>
+        <!-- Trabajo manual 100% -->
+        <text x="110" y="48" text-anchor="end" font-size="12" fill="#636c76" font-weight="600">Trabajo manual</text>
+        <rect x="120" y="34" width="480" height="22" rx="4" fill="#d0d7de"/>
+        <text x="608" y="50" text-anchor="end" font-size="12" fill="#1f2328" font-weight="700">100%</text>
+        <!-- Agente único 40% -->
+        <text x="110" y="80" text-anchor="end" font-size="12" fill="#636c76" font-weight="600">Agente único</text>
+        <rect x="120" y="66" width="192" height="22" rx="4" fill="#a5d5f7"/>
+        <text x="320" y="82" text-anchor="start" font-size="12" fill="#0550ae" font-weight="700">~40%</text>
+        <!-- Equipo multiagente 15% -->
+        <text x="110" y="112" text-anchor="end" font-size="12" fill="#636c76" font-weight="600">Equipo multiagente</text>
+        <rect x="120" y="98" width="72" height="22" rx="4" fill="#1a7f37"/>
+        <text x="200" y="114" text-anchor="start" font-size="12" fill="#1a7f37" font-weight="700">~15%</text>
+        <!-- Etiqueta de ahorro -->
+        <text x="608" y="114" text-anchor="end" font-size="11" fill="#1a7f37" font-weight="600">85%↓</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>Una advertencia: el ahorro de tiempo no significa que "la IA reemplaza a las personas." Cuando la IA produce un borrador rápido, las personas pueden invertir el tiempo ahorrado en actividades de alto valor que la IA no puede hacer, como el <strong>juicio estratégico, la revisión crítica y la comunicación con clientes</strong>. Si un borrador está listo en 20 minutos, las 2 horas y 40 minutos restantes se pueden dedicar a verificar la precisión, añadir perspicacia estratégica y adaptar el mensaje para la audiencia.</p>
+
+  <div class="pullquote">
+    Cuando la IA entrega rápidamente el 80% del trabajo, las personas crean el 100% del valor en el 20% restante.
+    <span class="by">La estrategia central del uso de la IA</span>
+  </div>
+
+  <p>Klarna (la empresa fintech sueca) ofrece un caso representativo. En el primer mes después de desplegar un asistente de IA, la IA gestionó 2,3 millones de conversaciones con clientes -- equivalente a la carga de trabajo de aproximadamente 700 agentes. Pero en lugar de despedir a esos 700 agentes, la empresa los reasignó a casos de soporte complejos y gestión de relaciones con clientes. Es una estructura donde la IA maneja tareas simples y repetitivas mientras las personas se encargan del juicio complejo.</p>
+
+  <h2 id="s5">Lo que Obtendrás del Taller de Hoy</h2>
+
+  <p>Este taller no es teórico -- es un taller práctico y <strong>experiencial</strong>. Durante dos días, ejecutarás directamente un equipo de agentes de IA y diseñarás un nuevo equipo de agentes por ti mismo.</p>
+
+  <h3>Día 1 -- Usuarios Generales: Práctica Multiagente</h3>
+  <ul>
+    <li>Partiendo del "por qué la IA" que aprendiste en este capítulo, ejecutarás realmente un equipo de agentes</li>
+    <li>Ejecutarás un proyecto de consultoría de "Investigación de mercado de IA física" con la variante <strong>co-consult</strong> -- 10 agentes especializados impulsan automáticamente un flujo de trabajo de consultoría de 7 pasos</li>
+    <li>Producirás una presentación "Globalizando la Cocina Coreana" con la variante <strong>co-deck</strong> -- un pipeline de 11 pasos (investigación → diseño → PDF) que se ejecuta automáticamente</li>
+    <li>Compararás directamente las diferencias estructurales entre las dos variantes, experimentando de primera mano que "los sistemas multiagente se diseñan de manera diferente para cada dominio"</li>
+  </ul>
+
+  <h3>Día 2 -- Profesionales de TI: Arquitectura, Creación Nueva, Proyecto Final</h3>
+  <ul>
+    <li>Un análisis profundo de la arquitectura de ai-workspace-standards -- la estructura de niveles L0→L1→L2, niveles de modelo</li>
+    <li>Comparación de herramientas y estrategia de operación empresarial -- diferencias técnicas entre las cuatro herramientas, modelo de ticket de servicio vs. modelo de variante</li>
+    <li>Diseñarás directamente una nueva variante llamada <strong>co-marketing</strong> como prototipo de Fase A</li>
+    <li>Proyecto final: elige una de tus propias tareas recurrentes y rediseñala como equipo multiagente</li>
+  </ul>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 660 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Día 1 -->
+        <text x="160" y="18" text-anchor="middle" font-size="13" fill="#1f2328" font-weight="700">Día 1</text>
+        <rect x="10" y="28" width="140" height="36" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="80" y="43" text-anchor="middle" font-size="11" fill="#0550ae" font-weight="700">Fundamentos</text>
+        <text x="80" y="57" text-anchor="middle" font-size="10" fill="#0550ae">Cap. 1-3</text>
+        <rect x="158" y="28" width="10" height="36" rx="0" fill="#d0d7de"/>
+        <rect x="176" y="28" width="140" height="36" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="246" y="43" text-anchor="middle" font-size="11" fill="#116329" font-weight="700">Práctica</text>
+        <text x="246" y="57" text-anchor="middle" font-size="10" fill="#116329">Cap. 4</text>
+        <rect x="324" y="28" width="10" height="36" rx="0" fill="#d0d7de"/>
+        <rect x="342" y="28" width="140" height="36" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="412" y="43" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">Visión de Herramientas</text>
+        <text x="412" y="57" text-anchor="middle" font-size="10" fill="#6639ba">Cap. 5-6</text>
+
+        <!-- Separador de días -->
+        <line x1="10" y1="82" x2="650" y2="82" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Día 2 -->
+        <text x="160" y="102" text-anchor="middle" font-size="13" fill="#1f2328" font-weight="700">Día 2</text>
+        <rect x="10" y="110" width="170" height="36" rx="8" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.2"/>
+        <text x="95" y="125" text-anchor="middle" font-size="11" fill="#7d4e00" font-weight="700">Arquitectura Avanzada</text>
+        <text x="95" y="139" text-anchor="middle" font-size="10" fill="#7d4e00">Cap. 7-9</text>
+        <rect x="188" y="110" width="10" height="36" rx="0" fill="#d0d7de"/>
+        <rect x="206" y="110" width="170" height="36" rx="8" fill="#ffe1e1" stroke="#cf222e" stroke-width="1.2"/>
+        <text x="291" y="125" text-anchor="middle" font-size="11" fill="#cf222e" font-weight="700">Práctica Creativa</text>
+        <text x="291" y="139" text-anchor="middle" font-size="10" fill="#cf222e">Cap. 11-13</text>
+        <rect x="384" y="110" width="10" height="36" rx="0" fill="#d0d7de"/>
+        <rect x="402" y="110" width="170" height="36" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="487" y="125" text-anchor="middle" font-size="11" fill="#116329" font-weight="700">Proyecto Final de Integración</text>
+        <text x="487" y="139" text-anchor="middle" font-size="10" fill="#116329">Cap. 13</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="note">Llevando adelante la motivación del "por qué" de este capítulo, el Capítulo 2 cubre el "qué" (los conceptos técnicos de la ingeniería de arnés), y el Capítulo 4 cubre el "cómo" (métodos de implementación en herramientas reales). Seguir este flujo conecta naturalmente por qué deberías diseñar un equipo de agentes de IA → qué estás diseñando → hasta construir uno tú mismo.</div>
+
+  <div class="chapter-nav">
+    <a href="../concepts/02_Concepts_Chapter_es.html" class="next" style="margin-left:auto;"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Capítulo 2 · Ingeniería de Arnés y Conceptos de Equipos Multiagente</div></a>
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">Videos de Referencia</h3>
+  <ul>
+    <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=3dXpDGNo5_4" target="_blank">Escape AI Agent Beginner Level in Just 8 Minutes!</a><span class="video-meta">(8:48)</span> -- Explica los conceptos básicos de los agentes de IA en coreano en solo 8 minutos</li>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=KrRD7r7y7NY" target="_blank">Andrew Ng Explores The Rise Of AI Agents</a><span class="video-meta">(26:52)</span> -- El auge de los agentes de IA y el futuro del razonamiento agente (conferencia BUILD 2024)</li>
+  </ul>
+</div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

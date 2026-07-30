@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Preguntas Frecuentes · Errores Comunes y Soluciones · Manual de Ingeniería de Arnes Multiagente - material de referencia del Manual de Ingeniería de Arnes Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preguntas Frecuentes · Errores Comunes y Soluciones · Manual de Ingeniería de Arnes Multiagente</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Preguntas Frecuentes · Solución de Problemas</div>
+  <a href="#setup">Configuración y Entorno</a>
+  <a href="#subagent">Ejecución de Subagentes</a>
+  <a href="#parallel">Paralelismo y Colaboración en Equipo</a>
+  <a href="#workspace">Espacio de Trabajo / Variante</a>
+  <a href="#cost">Costo y Rendimiento</a>
+  <a href="#platform">Problemas Específicos de Plataforma</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>Preguntas Frecuentes · Errores Comunes y Soluciones</h1>
+  <p class="lead">Esta página recoge los cuadros de advertencia y consejo dispersos en cada capítulo, ordenados por la frecuencia con que aparecen durante la práctica. Busque primero su síntoma y luego siga el enlace "Detalles" si necesita la explicación original.</p>
+
+  <h2 id="setup">Configuración y Entorno</h2>
+
+  <div class="q">Ejecuté el script de configuración del Capítulo 4 §2, pero algunos elementos muestran ❌.</div>
+  <p class="faq-answer">Independientemente del sistema operativo, <code>setup-common.ts</code> revalida la lista de verificación. En Windows, primero confirme que ejecutó el script con <strong>privilegios de administrador</strong>; en macOS/Linux, verifique que no olvidó opciones opcionales como <code>--wezterm</code>/<code>--docker</code>. Los registros de instalación se guardan en <code>%USERPROFILE%\workshop-setup-logs\</code> en Windows.</p>
+  <span class="see">Detalles: <a href="../practice/04_Practice_Examples_A_es.html#setup">Capítulo 4 §2-A Configuración</a></span>
+
+  <div class="q">Estoy intentando instalar Antigravity CLI globalmente mediante npm, pero no funciona.</div>
+  <p class="faq-answer">A partir del 2026-06-18, el servicio de Gemini CLI fue retirado y reemplazado por Antigravity CLI (<code>agy</code>). <code>agy</code> es un solo binario compilado que no requiere instalación de runtime separada — simplemente descomprímalo y añádalo a su PATH. Las instrucciones de instalación por npm están desactualizadas.</p>
+  <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html">Referencia Común §Comparación de Herramientas</a></span>
+
+  <h2 id="subagent">Ejecución de Subagentes</h2>
+
+  <div class="q">Hice que el subagente redactor escribiera un archivo, pero el revisor dice "el archivo no existe."</div>
+  <p class="faq-answer">Lo más probable es que invocó al redactor y al revisor al mismo tiempo (en paralelo) dentro de un solo mensaje. El revisor intentó su revisión antes de que el redactor hubiera creado el archivo, causando el fallo. Para tareas con dependencias, solicite explícitamente la ejecución secuencial, por ejemplo "ejecuta estos dos pasos en orden."</p>
+  <span class="see">Detalles: <a href="../practice/04_Practice_Examples_A_es.html#scenario-2">Capítulo 4 §2-A D-1</a></span>
+
+  <div class="q">Después de guardar un archivo en Claude App, el script de auditoría no se ejecuta automáticamente.</div>
+  <p class="faq-answer">Esto es esperado. Hooks como <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> no se activan en Claude App (Escritorio) — solo se ejecutan automáticamente en sesiones de Claude Code (CLI). Los equipos que usan la Aplicación de Escritorio deben ejecutar manualmente lo que el hook habría hecho después de que termine la sesión. Pasar esto por alto puede llevar a incidentes donde se asume "la auditoría se ejecutó" cuando en realidad no lo hizo.</p>
+  <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-1">Referencia Común §1</a>, <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registro de Auditoría y Observabilidad</a></span>
+
+  <div class="q">Le pedí al revisor que solo revisara, pero modificó el archivo de todos modos.</div>
+  <p class="faq-answer">Verifique si el campo <code>tools</code> incluye <code>Write</code>. Para roles de solo lectura como el revisor, conceda desde el principio solo los permisos mínimos necesarios — por ejemplo <code>tools: Read, Grep</code> — de modo que incluso si el prompt se interpreta de manera ambigua, el agente sea estructuralmente incapaz de hacer ediciones.</p>
+  <span class="see">Detalles: <a href="../guardrails/03_Guardrails_Chapter_es.html#s3">Capítulo 3 §Principio de Mínimo Privilegio</a></span>
+
+  <div class="q">El agente sigue repitiendo la misma tarea y nunca termina.</div>
+  <p class="faq-answer">Este es un estado de <strong>bucle</strong> en un ciclo evaluador-optimizador, donde el evaluador sigue juzgando la salida "insuficiente" y el optimizador sigue reintentando. La solución: establecer un número máximo de iteraciones por adelantado, y terminar automáticamente si los criterios no se cumplen dentro de ese límite. En lugar de resolver esto a nivel de patrón individual como se describe en el <a href="../concepts/02_Concepts_Chapter_es.html#s4">Capítulo 2 §Patrones de Orquestación</a>, es más fácil prevenirlo estructurando todo el flujo de trabajo como un Plan de Ejecución, como se describe en el <a href="../workflows/09_Workflows_Chapter_es.html">Capítulo 9</a>.</p>
+  <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s4">Capítulo 2 §Patrones de Orquestación</a>, <a href="../workflows/09_Workflows_Chapter_es.html">Capítulo 9 · Patrones de Diseño de Flujos de Trabajo</a></span>
+
+  <div class="q">Un subagente llama a una herramienta, falla, y luego simplemente se detiene.</div>
+  <p class="faq-answer">Hay dos causas comunes. Primera, un <strong>tiempo de espera de red</strong> — la llamada a la API o la conexión al servidor MCP se interrumpió brevemente. En Claude Code, verifique el estado de la sesión con el comando <code>/cost</code>; en Antigravity, verifique el estado del agente en el Administrador de Agentes, luego reintente. Segunda, un <strong>servidor MCP no conectado</strong> — verifique si el servidor MCP local está en ejecución usando <code>claude mcp list</code> (Claude Code) o el comando equivalente de estado del servidor para su plataforma. Para errores transitorios, consulte la solución de problemas de tiempo de espera en <a href="#cost">Costo y Rendimiento</a>.</p>
+  <span class="see">Detalles: <a href="#cost">Preguntas Frecuentes · Costo y Rendimiento</a>, <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registro de Auditoría y Observabilidad</a></span>
+
+  <div class="q">¿Cómo puedo monitorear y auditar las acciones destructivas de un agente o el historial de modificaciones de archivos en un entorno empresarial?</div>
+  <p class="faq-answer">La ejecución de comandos de terminal y el historial de uso de herramientas del agente deben recopilarse en tiempo real como registros de auditoría del sistema. Para ello, use un demonio de auditoría o técnica de enlace de shell dentro del entorno sandbox para reenviar los registros de ejecución a un servidor de registros remoto. Además, las operaciones destructivas importantes (por ejemplo, eliminar una base de datos, destruir una clave secreta) deben aplicar una Puerta de Aprobación Humana, aislando estructuralmente la operación para que no pueda ejecutarse sin la firma final de un administrador del sistema o parte responsable.</p>
+  <span class="see">Detalles: <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registro de Auditoría y Observabilidad</a></span>
+
+  <h2 id="parallel">Paralelismo y Colaboración en Equipo</h2>
+
+  <div class="q">En el Administrador de Agentes de Antigravity, dos agentes están editando diferentes archivos, pero los resultados se mezclan.</div>
+  <p class="faq-answer">Lo más probable es que asignó ambos agentes al mismo espacio de trabajo (la misma carpeta). Compartir un código base puede causar "superposición cognitiva," donde un agente confunde el contexto de trabajo de otro agente con el suyo. Siempre separe los agentes por espacio de trabajo o por git worktree.</p>
+  <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-2">Referencia Común §2</a>, <a href="../guardrails/03_Guardrails_Chapter_es.html#s5">Capítulo 3 §Aislamiento</a></span>
+
+  <div class="q">Activé Agent Teams en Claude App, pero no veo la opción <code>tmux</code>.</div>
+  <p class="faq-answer">Esto es esperado. La Aplicación de Escritorio solo soporta <code>teammateMode: in-process</code>; el modo panel dividido tmux solo es adicionalmente soportado en Claude Code (CLI).</p>
+  <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-1">Referencia Común §1</a></span>
+
+  <div class="q">¿Cómo debe manejar un agente la necesidad de aprobación humana final o entrada intermedia mientras realiza una tarea?</div>
+  <p class="faq-answer">Use el patrón <code>Human-in-the-Loop (HITL)</code>. A medida que el orquestador avanza a través de una tarea, se detiene en un punto de decisión crítico o en una operación que requiere autorización (por ejemplo, despliegue, fusión de código), preserva el estado y solicita retroalimentación del usuario. El agente debe estructurar el contexto de la pregunta y la información que necesita al transmitirla, y si se deniega la aprobación o se solicita una revisión, el equipo de agentes debe volver al estado anterior, incorporar la retroalimentación y controlar el flujo para intentar la tarea nuevamente.</p>
+  <span class="see">Detalles: <a href="../workflows/09_Workflows_Chapter_es.html">Capítulo 9 · Patrones de Diseño de Flujos de Trabajo</a></span>
+
+  <h2 id="workspace">Espacio de Trabajo / Variante</h2>
+
+  <div class="q">Ejecuté <code>new-project.ts</code>, pero la scaffolding fue rechazada o las rutas parecen incorrectas.</div>
+  <p class="faq-answer">Es probable que lo ejecutó desde dentro de una carpeta de proyecto en lugar de la raíz del espacio de trabajo. ai-workspace-standards debe clonarse directamente en la raíz del espacio de trabajo mismo (<code>C:\git</code> en Windows, <code>~/git</code> en macOS/Linux); colocarlo como un submódulo dentro de otra carpeta de proyecto rompe la resolución de rutas.</p>
+  <span class="see">Detalles: <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-1">Capítulo 6 §1</a></span>
+
+  <div class="q">El conteo de "Agentes documentados" de <code>bun run agent:verify</code> no coincide con lo que espero.</div>
+  <p class="faq-answer">La tabla de AGENTS.md y la lista real de archivos <code>agents/*.md</code> están des sincronizadas. Verifique si los agentes solo del espacio de trabajo (auditor, gestor de ciclo de vida, etc.) aún permanecen en la tabla, o si un agente recién creado falta en ella.</p>
+  <span class="see">Detalles: <a href="../variant-practice/06_VariantPractice_Examples_es.html#scenario-2">Capítulo 6 D-1</a></span>
+
+  <div class="q">No estoy seguro de si es seguro ejecutar el pipeline de promoción (<code>l2-to-variant-pipeline.ts</code>).</div>
+  <p class="faq-answer">Este comando deja rastros en el historial real de git y es difícil de deshacer. En un entorno de clase o taller, es suficiente que el instructor lo demuestre una vez en lugar de que cada participante lo ejecute. Consulte <a href="../lecture-guide/00_Lecture_Guide_es.html#per-section">la Guía del Instructor</a> para más detalles.</p>
+  <span class="see">Detalles: <a href="../variant-advanced/12_VariantAdvanced_Examples_es.html">Ejercicios del Capítulo 12</a></span>
+
+  <div class="q">¿Cómo uso ai-workspace-standards en un entorno de producción real (Docker/Kubernetes)?</div>
+  <p class="faq-answer">Actualmente, ai-workspace-standards solo funciona integrándose directamente con herramientas locales de codificación con IA (Claude Code/App, Antigravity, etc.). El soporte de equipos de agentes por usuario en un entorno Docker o Kubernetes en conjunto con un servicio frontend como Open WebUI está en discusión como una <strong>mejora futura</strong>, pero aún no se ha implementado.
+    <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#container">Capítulo 8 §5 Hoja de Ruta Avanzada</a></span></p>
+
+  <div class="q">¿Puedo consolidar <code>memory/MEMORY.md</code> de múltiples proyectos en un solo lugar?</div>
+  <p class="faq-answer">Actualmente, cada proyecto mantiene un <code>memory/MEMORY.md</code> independiente, y una función a nivel del espacio de trabajo para consolidar y organizar la memoria está planificada como una <strong>mejora futura</strong>. Esto está pensado para abordar la dificultad de identificar tendencias generales entre archivos de memoria individuales a medida que crece el número de proyectos.
+    <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#memory">Capítulo 8 §5 Hoja de Ruta Avanzada</a></span></p>
+
+  <div class="q">Si se actualiza una plantilla de variante, ¿se propaga automáticamente a los proyectos existentes?</div>
+  <p class="faq-answer">No. ai-workspace-standards utiliza un <strong>Modelo de Bifurcación</strong>. Los cambios a L1 (la plantilla común) no se propagan automáticamente a los proyectos L2 ya con scaffolding. Esto es por diseño para preservar la divergencia intencional, pero crea la carga operativa de aplicar manualmente parches de seguridad o correcciones de errores. Un modelo de adhesión basado en consentimiento y un pipeline de despliegue asíncrono están en discusión como mejoras futuras.
+    <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#variant-deploy">Capítulo 8 §5 Hoja de Ruta Avanzada</a></span></p>
+
+  <div class="q">Crear una nueva variante falla la validación de <code>agent:verify</code> o <code>validate-templates</code>.</div>
+  <p class="faq-answer">La causa más común es no mantener la **simetría** entre las declaraciones de agentes. Por ejemplo, si el <code>handoff_to</code> del agente <code>researcher</code> lista <code>writer</code>, entonces el <code>handoff_from</code> del agente <code>writer</code> también debe definir <code>researcher</code> como par correspondiente. También verifique si hay errores de sintaxis JSON en <code>variant.json</code> o campos obligatorios faltantes (como la lista de agentes).</p>
+  <span class="see">Detalles: <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 §Crear una Nueva Variante</a></span>
+
+  <div class="q">¿Cómo se verifica que un equipo de agentes diseñado y construido por uno mismo consistentemente funcione a la calidad prevista en producción?</div>
+  <p class="faq-answer">Necesita construir un <strong>banco de pruebas de agentes</strong> para evaluar la operación normal. Primero, defina requisitos de entrada representativos y salidas esperadas (un conjunto de datos de referencia). Segundo, ejecute pruebas de regresión automatizadas contra ese conjunto de datos cada vez que modifique un prompt o una regla de agente. Tercero, para la salida en lenguaje natural que es difícil de puntuar cuantitativamente, configure un modelo de alto rendimiento como Juez-LLM, evaluando contra una puntuación cuantitativa preacordada.</p>
+  <span class="see">Detalles: <a href="../capstone/13_Capstone_es.html">Capítulo 13 §Proyecto Integrador</a></span>
+
+  <h2 id="cost">Costo y Rendimiento</h2>
+
+  <div class="q">¿Cuánto cuesta ejecutar un equipo multiagente en tokens?</div>
+  <p class="faq-answer">El costo se determina por la cantidad de agentes × el nivel de modelo de cada agente × la frecuencia de ejecución. La jerarquía de niveles de modelo (<code>tier: high/medium/low</code>) descrita en el Capítulo 5 es el mecanismo clave de control de costos. Por ejemplo, ejecutar los 10 agentes de la variante co-consult en nivel alto puede consumir decenas de miles de tokens en una sola sesión, pero reducir los roles de implementación real a medio/bajo puede recortar los costos entre un 40-60%. El comando <code>/cost</code> de Claude Code permite verificar el uso acumulado de tokens para la sesión actual en tiempo real.</p>
+  <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §Plantillas y las 7 Variantes</a></span>
+
+  <div class="q">Las respuestas de los agentes de repente se vuelven lentas o agotan el tiempo de espera.</div>
+  <p class="faq-answer">Cuando la ventana de contexto se llena, la velocidad de procesamiento del modelo disminuye drásticamente. Claude Code permite comprimir la longitud de la conversación con el comando <code>/compact</code>. Además, al ejecutar múltiples agentes en paralelo, las solicitudes a la API pueden acumularse y causar retrasos — en este caso, cambie a ejecución secuencial o reduzca su límite WIP para disminuir el número de ejecuciones concurrentes.</p>
+  <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-1">Referencia Común §1</a></span>
+
+  <div class="q">Ejecutar un ciclo multiagente o un flujo de trabajo largo consume demasiados tokens de API. ¿Cómo lo optimizo?</div>
+  <p class="faq-answer">Primero, asigne **niveles de modelo** distintos por rol de agente. Use modelos medio/bajo para escrituras simples de archivos o ejecución de pruebas, y reserve modelos de nivel alto para el control general del flujo o el diseño integral — esto por sí solo puede reducir los costos en un 40% o más. Segundo, mantenga el contexto de la conversación estable para que funcione el caché de prompts — evite cambiar el prompt del sistema y mantenga una sesión continua. Tercero, establezca límites estrictos claros, como <code>Max Turns</code>, para que la conversación entre el orquestador y los especialistas no gire indefinidamente.</p>
+  <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §Plantillas y las 7 Variantes</a></span>
+
+  <h2 id="platform">Problemas Específicos de Plataforma</h2>
+
+  <div class="q">Ejecutar <code>new-project.ts</code> en Windows produce un error de separador de ruta.</div>
+  <p class="faq-answer">Los scripts de ai-workspace-standards usan el módulo <code>path</code> del runtime Node.js/Bun para manejar rutas específicas de la plataforma, por lo que son compatibles con Windows y macOS/Linux por defecto. Sin embargo, pueden surgir problemas si una ruta estilo PowerShell (<code>C:\Users\...</code>) se mezcla cuando ejecuta <code>git clone</code> directamente dentro de una sesión de Claude Code en lugar de Git Bash. En Claude Code, use siempre rutas estilo <code>/</code> o formato Git Bash, y se recomienda clonar la raíz del espacio de trabajo en una ubicación corta y superficial como <code>C:\git</code>.</p>
+  <span class="see">Detalles: <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-1">Capítulo 6 §1</a></span>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

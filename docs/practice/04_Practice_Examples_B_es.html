@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 4 §2-B · Práctica de equipos multiagente — Guía de aprendizaje basada en escenarios centrada en Antigravity - Parte del Manual de Ingeniería de Arneses de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 4 §2-B · Práctica de equipos multiagente — Guía de aprendizaje basada en escenarios centrada en Antigravity</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 Situación'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ Bajo el capó'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 Consejo'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ Precaución'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar ── -->
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Cap.4 §2-B · Práctica de equipos multiagente (Centrada en Antigravity)</div>
+  <a href="#setup">🛠 Configuración: instalación de los programas necesarios</a>
+  <a href="#beginner"><span class="dot dot-g"></span>Principiante (Primeros pasos)</a>
+
+  <div class="nav-group">Escenarios principiante</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 Crear y llamar a tu primer subagente personalizado</a>
+
+  <div class="nav-group">Escenarios intermedios</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 Canalización de dos etapas escritor → revisor</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 Observar cómo cambia la composición del equipo y el flujo de trabajo según la solicitud</a>
+
+  <div class="nav-group">Escenarios avanzados</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 Ejecución de tareas independientes en paralelo — Administrador de agentes</a>
+
+  <div class="nav-group">Accesos rápidos</div>
+  <a href="04_Practice_Manual_es.html">📖 Cap.4 §1 Referencia →</a>
+  <a href="04_Practice_Examples_A_es.html">🖥 Cap.4 §2-A Práctica centrada en Claude →</a>
+</nav>
+
+<!-- ── Main content ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 4 §2-B</div>
+  <h1>Capítulo 4 §2-B · Práctica de equipos multiagente</h1>
+  <p class="subtitle">Una guía práctica que comienza desde una carpeta de práctica vacía y avanza a través de escenarios centrados en Antigravity (Escritorio)/Antigravity CLI — la guía se presenta primero desde la perspectiva de la aplicación de escritorio, seguida del equivalente en CLI &nbsp;|&nbsp; <a href="04_Practice_Manual_es.html">← Volver al documento de referencia del Cap.4 §1</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Versión/ámbito objetivo</span><span class="vvalue">Antigravity CLI (agy) 1.1.0+, Antigravity 2.0 — centrado en Antigravity; para el equivalente de Claude App/Code consulte el Cap.4 §2-A</span></div>
+    <div class="version-row"><span class="vlabel">Propósito de este archivo</span><span class="vvalue">Práctica práctica de 4 etapas que cubre definición/invocación de subagentes, canalizaciones secuenciales, composición dinámica de equipo/combinación de flujos de trabajo y ejecución en paralelo, centrada en Antigravity (Escritorio)/Antigravity CLI</span></div>
+    <div class="version-row"><span class="vlabel">Documentos de referencia</span><span class="vvalue"><a href="04_Practice_Manual_es.html">Cap.4 §1 Común</a> · <a href="04_Practice_Manual_A_es.html">Cap.4 §1-A Detalles de Claude</a> · <a href="04_Practice_Manual_B_es.html">Cap.4 §1-B Detalles de Antigravity</a> — enlazados desde cada escenario</span></div>
+    <div class="version-row"><span class="vlabel">Escrito el</span><span class="vvalue">14 de julio de 2026</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>El principio detrás de todo el curso</strong> — si se aprende la práctica alrededor de una sola herramienta, tendrá que reaprender todo desde cero al cambiar a otra. Por eso, cada escenario a continuación primero escribe el rol del subagente como una especificación <code>AGENTS.md</code> neutral a la herramienta, y luego la "implementa" como un objetivo en lenguaje natural en la familia Antigravity (consulte Cap.2 §5 AGENTS.md). El enfoque correspondiente en la familia Claude se cubre en <a href="04_Practice_Examples_A_es.html">Cap.4 §2-A</a>. Confirmar en la práctica que existe una única definición pero el método de ejecución difiere según la herramienta es el objetivo central de esta práctica.
+  </div>
+
+  <!-- ══════════════════════════════ Pre-Practice Setup ══════════════════════════════ -->
+  <h2 id="setup">Configuración: instalación de los programas necesarios</h2>
+  <p>La práctica a continuación se centra en Antigravity (Escritorio) y Antigravity CLI (<code>agy</code>). Si su entorno local aún no tiene estas herramientas, la automatización de configuración del entorno incluida con este manual — la <a href="../setup/SETUP_es.html">guía de configuración</a> — instalará automáticamente exactamente lo que necesitan los ejercicios de este capítulo. Siga las instrucciones para descargar y ejecutar el script localmente.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 Antes de instalar — Cosas que verificar</div>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antes de ejecutar el script, lea primero la <a href="../setup/SETUP_CHECKLIST_es.html">lista de verificación previa a la instalación</a>. Este documento enumera los siguientes requisitos previos.</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>Una cuenta de Google para usar Antigravity (debe ser un plan basado en suscripción/cuenta, no una clave API individual)</li>
+      <li>Una cuenta de GitHub que pueda completar <code>gh auth login</code></li>
+      <li>Al menos 5 GB de espacio libre en disco</li>
+      <li>Privilegios de administrador o sudo</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>Si aún no tiene una cuenta de GitHub</strong><br>
+    ① Vaya a <a href="https://github.com/signup" target="_blank">github.com/signup</a> en su navegador.<br>
+    ② Ingrese su dirección de correo electrónico, contraseña y nombre de usuario — el nombre de usuario se usará tal cual en la URL del repositorio (<code>github.com/&lt;nombredeusuario&gt;/...</code>), así que elíjalo con cuidado.<br>
+    ③ Complete el rompecabezas/verificación de código para evitar registros automatizados.<br>
+    ④ Abra el correo de verificación enviado a la dirección con la que se registró y complete la <strong>verificación de correo electrónico</strong> — omitir este paso puede bloquear más tarde <code>gh auth login</code> o la creación de repositorios.<br>
+    ⑤ Registrarse en el plan gratuito es suficiente — los ejercicios de práctica/PR de este manual no requieren un plan de pago.<br>
+    Una vez completado el registro, el <a href="https://cli.github.com/" target="_blank">GitHub CLI (<code>gh</code>)</a> se instala junto con el script de configuración anterior, y conecta su terminal a esa cuenta con el comando <code>gh auth login</code> a continuación.
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# Siga los prompts: elija GitHub.com → HTTPS → Iniciar sesión con un navegador web (recomendado)
+# Cuando el navegador se abra, inicie sesión con la cuenta que acaba de crear y confirme el código de autenticación</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+
+  <h3>Instalación en Windows</h3>
+  <p>Dado que la notación de rutas de este manual está basada en Windows, los usuarios de Windows deben descargar <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>, colocarlo en una carpeta de práctica dedicada (por ejemplo, <code>harness-lab/setup/</code>), abrir PowerShell <strong>como administrador</strong> y ejecutar el siguiente comando.</p>
+  <div class="tip-box">
+    <strong>Cómo abrir PowerShell como administrador</strong><br>
+    ① Abra el menú Inicio y busque <code>PowerShell</code>.<br>
+    ② <strong>Haga clic derecho</strong> en "Windows PowerShell" en los resultados de búsqueda.<br>
+    ③ Seleccione <strong>"Ejecutar como administrador"</strong> en el menú que aparece.<br>
+    ④ Cuando aparezca el aviso de Control de cuentas de usuario (UAC), haga clic en <strong>"Sí"</strong> para aprobar.<br>
+    Si la barra de título muestra algo como <code>Administrador: Windows PowerShell</code> con "Administrador" adjunto, se abrió correctamente. Algunos pasos, como la instalación de winget, pueden generar errores u omitirse silenciosamente sin privilegios de administrador.
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup
+.\setup-windows.ps1
+# Indicadores opcionales: -WSL2, -WezTerm, -Docker, -Force (reinstalar también las herramientas ya instaladas)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>Después de que el script termine, cierre y vuelva a abrir completamente su terminal para que los cambios en PATH surtan efecto.</p>
+
+  <h3>Instalación en macOS / Linux</h3>
+  <p>En macOS, descargue y use <a href="../setup/setup-mac.sh">setup-mac.sh</a>; en Linux, use <a href="../setup/setup-linux.sh">setup-linux.sh</a>. Ambos admiten los indicadores opcionales <code>--wezterm</code> y <code>--docker</code>.</p>
+  <div style="position:relative">
+  <pre class="code-block"># macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <h3>Verificación de la instalación</h3>
+  <p>Independientemente del sistema operativo, ejecutar <a href="../setup/setup-common.ts">setup-common.ts</a> con <code>bun</code> imprime una tabla de verificación que muestra el estado de su instalación. Si cada elemento muestra ✅, está listo para continuar con la práctica a continuación.</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <p>Entre las herramientas que este proyecto instala, las directamente relevantes para la práctica de este capítulo son: Antigravity (Escritorio), <code>agy</code> (CLI de Antigravity), y también <code>gh</code> (GitHub CLI), que se utiliza en capítulos posteriores.</p>
+
+  <div class="tip-box">
+    El CLI de Antigravity (<code>agy</code>) es un solo binario compilado que no requiere instalación de runtime separada — simplemente descomprímalo y colóquelo en el PATH para ejecutarlo inmediatamente. Orientaciones anteriores que aún circulan, como "instalar la interfaz de línea de comandos (CLI) de Gemini globalmente a través de npm", ya no son válidas. Consulte el método de instalación más reciente en <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a>.
+  </div>
+
+  <div class="tip-box">
+    Si ocurre un problema durante la instalación, los registros se guardan en la carpeta <code>%USERPROFILE%\workshop-setup-logs\</code> en Windows. Verifique estos registros primero al solucionar problemas.
+  </div>
+
+  <!-- ══════════════════════════════ Beginner ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● Principiante</span>
+    <span class="level-title level-title-g">Primeros pasos</span>
+    <span class="level-desc">El primer paso: dar un objetivo en Antigravity (Escritorio) y observar la generación dinámica</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">Principiante</span>
+      <strong class="card-title">Crear y llamar a tu primer subagente personalizado</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        Un desarrollador que prueba el arnés por primera vez crea una nueva carpeta de práctica vacía, <code>harness-lab/</code>, primero escribe el rol <code>reviewer</code> como una especificación <code>AGENTS.md</code> neutral a la herramienta, y luego lo "implementa" como un objetivo en lenguaje natural en Antigravity (Escritorio) para invocarlo. Dado que esta carpeta está dedicada a la práctica, no se mezclará con otros archivos del proyecto.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elementos utilizados</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Cap.2)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_es.html#section-1">Definición de un subagente</a>
+          <a class="cmd-chip" href="04_Practice_Manual_es.html#section-2">Invocación de un subagente</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Paso a paso</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① Crear y entrar en la carpeta de práctica</strong>
+            <p>Cree una nueva carpeta <code>harness-lab</code> debajo de la carpeta actual y muévase a ella. Ejecute todos los comandos posteriores dentro de esta carpeta.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② Escribir la especificación de rol común — <code>AGENTS.md</code></strong>
+            <p>Escriba el rol <code>reviewer</code> como texto plano, libre de expresiones específicas de herramientas, para que se lea con el mismo significado ya sea en Claude, Antigravity o cualquier otra herramienta que admita el estándar AGENTS.md. Este único archivo se convierte en la única fuente de verdad de "qué hace este rol," y Antigravity a continuación simplemente implementa esta fuente como un objetivo en lenguaje natural. En macOS/Linux/Git Bash, use el comando tal cual.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement points
+Permissions: Read-only — does not modify the file directly.
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>En Windows PowerShell</strong>, el comando <code>cat</code> en sí es un alias para <code>Get-Content</code> y puede usarse tal cual para leer archivos. Sin embargo, la sintaxis heredoc para ingresar múltiples líneas directamente, como <code>&lt;&lt; 'EOF'</code>, no es compatible, así que escriba el mismo contenido como una cadena here-string entre comillas (<code>@'...'@</code>) y escríbalo en el archivo con <code>Set-Content</code>.</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement points
+Permissions: Read-only — does not modify the file directly.
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Escritorio)</span> — Implementar la misma especificación AGENTS.md como un objetivo en lenguaje natural</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity no tiene concepto de archivos predefinidos como <code>.claude/agents</code>. En su lugar, mantenga el <code>AGENTS.md</code> que acaba de escribir en el espacio de trabajo tal cual, y proporcione la misma especificación en su objetivo.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Preparar el archivo a revisar de antemano (terminal)</strong>
+              <div style="position:relative">
+                <pre class="code-block">echo "This project is very good. This is really great." > notes.txt</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Crear un Espacio de trabajo en el Administrador de agentes de Antigravity</strong>
+              <p>Abra el Administrador de agentes y cree un nuevo Espacio de trabajo apuntando a la carpeta <code>harness-lab/</code> (que ya contiene AGENTS.md).</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Dar el objetivo — Pegue la oración a continuación en el chat del Espacio de trabajo y envíela</strong>
+              <div style="position:relative">
+                <pre class="code-block">Review notes.txt according to the reviewer role spec written in AGENTS.md.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <div class="flow-box">
+                El agente que maneja el Espacio de trabajo lee AGENTS.md, toma la especificación de rol/entrada/salida/permisos como su objetivo y decide por sí mismo las tareas necesarias (leer el archivo, compilar puntos de mejora). Dado que AGENTS.md es la única fuente de verdad de "qué criterios usar para la revisión," los criterios de revisión (erratas, lagunas lógicas, puntos de mejora) se determinan por esta especificación.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>El CLI de Antigravity (<code>agy</code>)</strong> también permite practicar el mismo concepto — proporcione solo el objetivo a través de <code>/goal</code>, sin archivo predefinido.</p>
+        <div style="position:relative">
+          <pre class="code-block">cd harness-lab && agy
+/goal Review the notes.txt file and summarize the improvement points</pre>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        Dado que Antigravity no tiene archivo de definición, no se pueden restringir los permisos de antemano con un campo <code>tools</code> como en la familia Claude. En su lugar, es más seguro acotar claramente el propio objetivo, como "solo leer y resumir." La especificación <code>Permissions: Read-only</code> escrita en AGENTS.md también sirve para comunicar el límite de permisos al orquestador.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Intermediate ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● Intermedio</span>
+    <span class="level-title level-title-b">Flujo de trabajo diario</span>
+    <span class="level-desc">Un patrón práctico donde la sesión principal actúa como orquestador dirigiendo a dos agentes especialistas, escritor y revisor, en secuencia</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">Intermedio</span>
+      <strong class="card-title">Canalización de dos etapas escritor → revisor</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        Un practicante que ha terminado G-1 primero especifica un segundo rol, <code>writer</code>, en la misma carpeta <code>harness-lab/</code>, en <code>AGENTS.md</code> de la misma manera que en G-1, y luego lo implementa en Antigravity (Escritorio) como un objetivo en lenguaje natural. Se hace que el orquestador mantenga el orden en una canalización donde escritor redacta primero y revisor critica el resultado.
+      </div>
+
+      <div class="note">
+        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+            <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+            <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+            <marker id="arrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+          </defs>
+          <!-- Box 1: User request (gray) -->
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="#6b7280">Solicitud del usuario</text>
+          <!-- Arrow 1 -->
+          <line x1="115" y1="43" x2="150" y2="43" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+          <!-- Box 2: writer.md (blue) -->
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#3b82f6">writer</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#3b82f6">Redacción de borrador</text>
+          <!-- Arrow 2 -->
+          <line x1="295" y1="43" x2="330" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow1g)"/>
+          <!-- Return arrow (curved, below) -->
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="#f59e0b"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#f59e0b">Vuelve al escritor si se solicitan revisiones</text>
+          <!-- Box 3: reviewer.md (green) -->
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#22c55e">reviewer</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">Retroalimentación/Aprobación</text>
+          <!-- Arrow 3 -->
+          <line x1="475" y1="43" x2="510" y2="43" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow1p)"/>
+          <!-- Box 4: Final output (purple) -->
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="#8b5cf6">Resultado final</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">Completado</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elementos utilizados</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Cap.2)</a>
+          <a class="cmd-chip" href="04_Practice_Manual_es.html#section-1">Definición de un subagente</a>
+          <a class="cmd-chip" href="04_Practice_Manual_es.html#section-2">Invocación de un subagente</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Paso a paso</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>Agregar la especificación de rol común — Añadir la entrada de escritor a <code>AGENTS.md</code></strong>
+            <p>Continúe escribiendo el rol <code>writer</code> en el mismo <code>AGENTS.md</code> creado en G-1. Deje la entrada de revisor tal cual y agregue solo el contenido a continuación. En macOS/Linux/Git Bash, use el comando tal cual.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+Role: Write a short 3–5 sentence draft on a given topic.
+Input: Topic, path to save the file
+Output: A draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (proceeds to review once the draft is complete)
+EOF</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>En Windows PowerShell</strong>, agregue la cadena here-string con <code>Add-Content</code> (debe usar <code>Add-Content</code>, ya que <code>Set-Content</code> sobrescribe el archivo y borraría la entrada de revisor).</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+Role: Write a short 3–5 sentence draft on a given topic.
+Input: Topic, path to save the file
+Output: A draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (proceeds to review once the draft is complete)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Escritorio)</span> — El orquestador descompone dos especificaciones AGENTS.md en un solo objetivo por sí mismo</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Antigravity no divide <code>writer</code>/<code>reviewer</code> en archivos predefinidos separados de antemano. En su lugar, simplemente haga referencia a las dos especificaciones de rol ya escritas en AGENTS.md (revisor en G-1, escritor ahora). Continúe en el chat del mismo Espacio de trabajo creado en G-1.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Dar el objetivo de dos etapas — Pegue la oración a continuación en el chat del Espacio de trabajo y envíela</strong>
+              <div style="position:relative">
+                <pre class="code-block">Following the writer spec in AGENTS.md, first write a draft in draft.txt on the topic 'The advantages of remote work', and once it's done, review that draft following the reviewer spec in AGENTS.md. Proceed through the two stages in order.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <div class="flow-box">
+                El orquestador lee la relación <code>handoff_to: reviewer</code> en AGENTS.md y divide el objetivo por sí mismo en dos subtareas, "escribir borrador → revisar," iniciando la tarea de revisión solo después de que la redacción del borrador esté completa. El punto distintivo es que la responsabilidad de la secuencia recae dentro del orquestador, no en el usuario — aunque "qué criterios usar para la revisión" sigue teniendo a AGENTS.md como única fuente de verdad.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>El CLI de Antigravity (<code>agy</code>)</strong> también permite dar el mismo objetivo de una vez. Ponga toda la canalización en una sola oración con <code>/goal</code> y el orquestador la descompondrá por sí mismo; si es necesario, también puede delegar la etapa de revisión al fondo con <code>/agent</code> y continuar con otro trabajo.</p>
+        <div style="position:relative">
+          <pre class="code-block">agy
+/goal First write a draft in draft.txt on the topic 'The advantages of remote work',
+then once it's done, review that draft and summarize the improvement points</pre>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">Intermedio</span>
+      <strong class="card-title">Observar cómo cambia la composición del equipo y el flujo de trabajo según la solicitud</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        Este escenario permite ver de primera mano la "composición dinámica del equipo" y las "combinaciones de flujos de trabajo diversos" cubiertas en Cap.2 §4b. Deje las dos especificaciones de rol <code>writer</code> y <code>reviewer</code> creadas en D-1 tal cual, y varíe solo la naturaleza de la solicitud para observar exactamente qué tareas realiza realmente el orquestador, cuántas veces y en qué orden — el punto clave es que nunca se crea una nueva definición de subagente.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elementos utilizados</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s4b">Composición dinámica del equipo y flujos de trabajo diversos</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Escritorio)</span> — La misma flexibilidad se manifiesta incluso solo con objetivos en lenguaje natural</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Dado que Antigravity genera subagentes dinámicamente desde el principio, esta flexibilidad se manifiesta más directamente. Continúe en el mismo chat del Espacio de trabajo usado en D-1.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Una instrucción de objetivo simple</strong>
+              <div style="position:relative">
+                <pre class="code-block">Just skim draft.txt for typos.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <div class="flow-box">
+                El orquestador juzga que esta solicitud no necesita un rol de escritura y ensambla solo un rol de revisión sobre la marcha. Este es el ejemplo más simple que muestra que, aunque ambos roles están definidos en AGENTS.md, la composición real desplegada la decide el orquestador cada vez, por solicitud.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Una instrucción de objetivo compuesta</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a new draft in draft2.txt on the topic 'The four-day workweek' first, and once it's done, review that draft independently and simultaneously from both a grammar perspective and a logic perspective.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+              <div class="flow-box">
+                El orquestador ensambló solo un rol de revisión sobre la marcha en ①, y en ② ensambla un nuevo equipo con un rol de escritura y dos roles de revisión (con perspectivas diferentes). Dado que no hay archivos de subagente predefinidos en absoluto, el principio "ensamblar un nuevo equipo adecuado para esta tarea cada vez" se destaca más claramente.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          Comparar ① y ② lado a lado deja claro que "qué roles están definidos en AGENTS.md" y "qué composición se despliega realmente para esta tarea" son capas diferentes. La primera se fija de antemano en AGENTS.md, pero la segunda la decide el orquestador de nuevo con cada solicitud.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>Ver también:</strong> <a href="../concepts/02_Concepts_Chapter_en.html#s4b">Cap.2 §4b — Composición dinámica del equipo y flujos de trabajo diversos</a>, <a href="04_Practice_Manual_es.html#section-3">Cap.4 §1 Referencia — Ejecución en paralelo</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Advanced ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● Avanzado</span>
+    <span class="level-title level-title-p">Usuario avanzado</span>
+    <span class="level-desc">Operación en paralelo ejecutando escritor y revisor simultáneamente contra dos archivos independientes — usando el Administrador de agentes</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">Avanzado</span>
+      <strong class="card-title">Ejecución de tareas independientes en paralelo — Administrador de agentes</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        Un practicante experimentado que ha terminado hasta D-1 ejecuta dos tareas mutuamente independientes (redactar <code>topic-a.txt</code> y <code>topic-b.txt</code>) en paralelo en el Administrador de agentes de Antigravity (Escritorio).
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elementos utilizados</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="04_Practice_Manual_es.html#section-3">Ejecución en paralelo — Escalar al nivel de equipo</a>
+          <a class="cmd-chip" href="04_Practice_Manual_es.html#section-3">Ejecución en paralelo</a>
+        </div>
+      </div>
+
+      <div class="platform-block antigravity">
+        <div class="platform-block-title"><span class="badge badge-antigravity">Antigravity (Escritorio)</span> — Administrador de agentes, un agente por Espacio de trabajo</div>
+        <p style="font-size:13.5px;color:var(--text-dim);margin-bottom:10px;">Abra Antigravity y prepare un Proyecto apuntando a <code>harness-lab/</code> en el Administrador de agentes. Esta vez, en lugar de meter dos agentes en un solo Espacio de trabajo, cree <strong>dos Espacios de trabajo separados</strong> y asigne un agente a cada uno.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Crear el Espacio de trabajo A</strong>
+              <p>Cree un Espacio de trabajo usando el Modo de nuevo árbol de trabajo.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Pegue la oración a continuación en el chat del Espacio de trabajo A y envíela</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a 3–5 sentence draft in topic-a.txt on the topic 'Working from home'.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Crear el Espacio de trabajo B</strong>
+              <p>Cree otro Espacio de trabajo separado (se recomienda el Modo de nuevo árbol de trabajo). Es una instancia completamente separada del agente del Espacio de trabajo A.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ Pegue la oración a continuación en el chat del Espacio de trabajo B y envíela</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a 3–5 sentence draft in topic-b.txt on the topic 'The four-day workweek'.</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>⑤ Verificar el progreso de los dos agentes en la Bandeja de entrada</strong>
+              <p>Mientras ambos agentes trabajan simultáneamente en sus propios Espacios de trabajo, verifique la Bandeja de entrada para ver si hay mensajes que requieran aprobación o retroalimentación, y responda según sea necesario.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          No asigne los dos agentes al <strong>mismo Espacio de trabajo</strong> — compartir la misma carpeta puede causar "superposición cognitiva," donde un agente confunde el contexto de trabajo de otro agente con el suyo propio. Separarlos siempre mediante Espacio de trabajo o árbol de trabajo es la práctica recomendada de Antigravity.
+        </div>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>El CLI de Antigravity (<code>agy</code>)</strong> puede lograr el mismo efecto abriendo múltiples terminales en lugar del Administrador de agentes del escritorio — trabaje en topic-a.txt con <code>agy</code> en una terminal, y en topic-b.txt con una sesión <code>agy</code> separada en otra terminal, simultáneamente (paralelo entre sesiones). Siempre y cuando las dos sesiones toquen archivos diferentes, no entrarán en conflicto.</p>
+      </div>
+
+      <div class="related-cmds">
+        <strong>Ver también:</strong> <a href="04_Practice_Manual_es.html#section-3">Cap.4 §1 Referencia — Ejecución en paralelo</a>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <p style="color: var(--text-dim); font-size: 12px; text-align: center;">
+    Basado en Antigravity CLI (agy) 1.1.0+ · Antigravity 2.0 | Escrito el 14 de julio de 2026<br>
+    <a href="04_Practice_Examples_A_es.html">← Ir al Cap.4 §2-A Práctica centrada en Claude</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_B_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Cap.4 §1-B · Detalles de Antigravity</div></a>
+    <div class="branch">
+      <div class="branch-label">Cap.4 §2</div>
+      <a href="04_Practice_Examples_A_es.html" >Claude (A)</a>
+      <a href="04_Practice_Examples_B_es.html" >Antigravity (B)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Cap.5 · ai-workspace-standards</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

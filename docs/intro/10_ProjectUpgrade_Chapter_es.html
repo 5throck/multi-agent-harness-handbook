@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+  Plantilla de capítulo (narrativa) — para temas de "lectura" sin ejercicios prácticos. Ancho de lectura (720px), interlineado generoso, navegación entre capítulos.
+  Los colores usan solo tokens de diseño — el tema se aplica en el despliegue mediante references/apply-theme.sh que sustituye el color de marca en docs/.
+  Premisa del índice de búsqueda: las secciones del cuerpo deben mantener la estructura <h2 id="..."> (y <h3> cuando sea necesario).
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 10 · Actualización de Proyecto L2 — parte del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 10 · Actualización de Proyecto L2</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 10 · Actualización de Proyecto L2</div>
+  <a href="#why">Por qué es necesario — la otra cara del modelo de bifurcación</a>
+  <a href="#usage">Cómo usar upgrade-project.ts</a>
+  <a href="#categories">Las 5 categorías de manejo de archivos</a>
+  <a href="#safety">Redes de seguridad — instantáneas y reversión</a>
+  <a href="#vs-promotion">Cómo se diferencia de la promoción</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="08_Intro_Advanced_Deploy_es.html">Cap.8 §1 - Despliegue y SSOT</a>
+  <a href="../workflows/09_Workflows_Chapter_es.html">Cap.9 - Patrones de Diseño de Flujos de Trabajo</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Cap.11 - Crear una Nueva Variante</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 10</div>
+  <h1>Actualización de Proyecto L2</h1>
+  <p class="lead">Una vez que has creado un proyecto L2, ¿qué ocurre cuando los estándares upstream (L0/L1) cambian? La respuesta es: "no ocurre absolutamente nada." Debido al modelo de bifurcación discutido en el Capítulo 8 §1, para incorporar realmente los cambios upstream nuevos a un proyecto ya creado, una persona debe ejecutar explícitamente <code>upgrade-project.ts</code>. Este capítulo cubre ese procedimiento.</p>
+  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.6.0) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y SSOT</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo Que Cubre Este Capítulo</div>
+    <ul>
+      <li>Por qué la "actualización" en el modelo de bifurcación es un comando que ejecutas, no algo que ocurre automáticamente</li>
+      <li>Uso básico de <code>upgrade-project.ts</code> y el principio de ejecutar primero <code>--dry-run</code></li>
+      <li>Los 5 modos de manejo de archivos: LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER y PRUNE</li>
+      <li>La instantánea automática con git stash y la red de seguridad de <code>--rollback</code></li>
+      <li>Cómo esto es exactamente la dirección opuesta a la "promoción" cubierta en el Capítulo 11</li>
+    </ul>
+  </div>
+
+  <h2 id="why">Por qué es necesario — la otra cara del modelo de bifurcación</h2>
+  <p>Como se estableció en el <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1</a>, L1 entrega su contenido a un proyecto exactamente una vez — en el momento en que <code>new-project.ts</code> lo estructura. A partir de ese momento, L2 evoluciona de forma completamente independiente, y sin importar cuánto cambie L1 después, nada se refleja automáticamente en un proyecto L2 que ya existe.</p>
+  <p>El problema es que, con el tiempo, los scripts de hooks se corrigen en el lado de L1, se añaden nuevas habilidades, y las configuraciones de seguridad se endurecen. Cuando deseas traer esos cambios a un proyecto L2 individual, comparar archivos manualmente uno por uno no es realista. <code>upgrade-project.ts</code> automatiza este proceso de reflexión mientras sigue respetando el principio fundamental del modelo de bifurcación — "nunca sobrescribir a ciegas las partes que L2 ha cambiado deliberadamente."</p>
+
+  <h2 id="usage">Cómo usar upgrade-project.ts</h2>
+  <p>Comienza ejecutando <code>--dry-run</code> para previsualizar lo que cambiará. No toca ningún archivo — solo imprime el plan en la consola.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>Si el resultado se ve bien, ejecútalo nuevamente sin <code>--dry-run</code>.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
+# Opciones opcionales: --variant &lt;variant&gt;  --platform claude|antigravity|both
+#            --prune-removed  --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente.</p>
+
+  <h2 id="categories">Las 5 categorías de manejo de archivos</h2>
+  <p>El script trata los archivos de manera diferente según su naturaleza — no es un "sobrescribir todo con la nueva versión" indiscriminado.</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Categoría</th><th>Comportamiento</th><th>Ejemplos de objetivos</th></tr></thead>
+    <tbody>
+      <tr><td><strong>LOCKED</strong></td><td>Siempre sobrescrita con el contenido de la plantilla</td><td><code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code></td></tr>
+      <tr><td><strong>MERGE</strong></td><td>Solo se fusionan las secciones envueltas en marcadores <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>; el resto del contenido local se conserva tal cual</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code> (según <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>Solo se listan, nunca se tocan</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>docs/context.md</code>, <code>src/</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copiados solo cuando la versión de la plantilla es más reciente que la versión del proyecto</td><td><code>scripts/*.ts</code> (comentario <code>@version</code>), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRUNE (opcional)</strong></td><td>Cuando se especifica <code>--prune-removed</code>, los archivos de scripts/agents/skills que fueron eliminados de la plantilla también se eliminan del proyecto</td><td>Los mismos directorios que los objetivos SYNC_IF_NEWER anteriores</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Si un objetivo SYNC_IF_NEWER ha sido editado localmente pero la versión de la plantilla es más reciente, el script lo marca como <code>⚠️ CONFLICT</code> pero aun así lo sobrescribe con el contenido de la plantilla al final. Ten en cuenta que esto es "advertir y continuar," no "preguntar antes de sobrescribir" — por eso la red de seguridad descrita a continuación es importante.</p>
+
+  <h2 id="safety">Redes de seguridad — instantáneas y reversión</h2>
+  <p>Antes de ejecutarse (cuando no está en modo <code>--dry-run</code>), el script ejecuta automáticamente <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code> para tomar una instantánea del estado actual de tu árbol de trabajo. Si no estás satisfecho con el resultado de la actualización, puedes revertirlo inmediatamente con el siguiente comando.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>Este comando encuentra la instantánea <code>pre-upgrade-snapshot-*</code> que se acaba de crear y la restaura mediante <code>git stash pop</code>. La propia actualización no crea un commit, así que después de revisar el resultado, necesitarás verificar los cambios con <code>git diff</code> como de costumbre y confirmarlos tú mismo.</p>
+  <p>Como paso final, <code>.claude/template-version.txt</code> se actualiza a la nueva versión, y los elementos de arranque de seguridad — <code>.gitleaks.toml</code>, hooks de pre-commit, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (patrones .env), y <code>git core.hooksPath</code> — se verifican automáticamente (estos son los mismos elementos cubiertos por los principios de barreras de protección del Capítulo 3). Si <code>core.hooksPath</code> está mal configurado, el script lo corrige por sí solo.</p>
+
+  <h2 id="vs-promotion">Cómo se diferencia de la promoción</h2>
+  <p>La "promoción" cubierta en el Capítulo 11 y la "actualización" de este capítulo suenan similares, pero se ejecutan en direcciones exactamente opuestas.</p>
+  <ul>
+    <li><strong>Promoción</strong> (<code>l2-to-variant-pipeline.ts</code>, Capítulo 11) — <strong>L2 → L1</strong>. Eleva los cambios de un proyecto que creaste a la plantilla oficial, convirtiéndolos en una variante que otros pueden usar.</li>
+    <li><strong>Actualización</strong> (<code>upgrade-project.ts</code>, este capítulo) — <strong>L1 → L2</strong>. Extrae los últimos cambios de la plantilla oficial a un proyecto que ya has creado.</li>
+  </ul>
+  <p>Los dos scripts simplemente mueven archivos en direcciones opuestas — ninguno reemplaza al otro. Si deseas contribuir de vuelta a la plantilla, usa la promoción; si deseas mantener un proyecto existente actualizado, usa la actualización.</p>
+
+  <div class="note">
+    El comportamiento del script descrito en este capítulo (opciones, categorías de archivos, redes de seguridad) se escribió examinando directamente la fuente de <code>scripts/upgrade-project.ts</code> (v1.6.0) en el repositorio <code>ai-workspace-standards</code>. Este repositorio del manual no incluye ese script, así que siempre contrasta los resultados de ejecución reales con la última fuente.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../workflows/09_Workflows_Chapter_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Cap.9 - Patrones de Diseño de Flujos de Trabajo</div></a>
+    <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html" class="next"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Cap.11 - Crear una Nueva Variante</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

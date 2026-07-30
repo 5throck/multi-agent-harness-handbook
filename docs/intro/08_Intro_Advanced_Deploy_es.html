@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "read-only" topics without hands-on exercises. Reading width (720px), generous line-height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Sections to edit: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) "Key points of this section"
+            (4) <h2 id>/<h3> sections and body  (5) previous/next chapter links
+  Fill in {{double braces}}/[description: ...] with actual content. All links are relative.
+  Colors use design tokens only — the theme is applied at deploy time by references/apply-theme.sh, which replaces the brand colors in docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 8 §1 · Despliegue y SSOT - Material del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 8 §1 · Despliegue y SSOT</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 8 · Arquitectura Avanzada</div>
+  <a href="#s1" >§1 · Despliegue y SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_es.html">§2 · Gestión del Ciclo de Vida</a>
+  <a href="08_Intro_Advanced_AGENTS_es.html">§3 · AGENTS.md en Profundidad</a>
+  <a href="08_Intro_Advanced_Architecture_es.html">§4 · Arquitectura en Profundidad</a>
+  <a href="08_Intro_Advanced_Roadmap_es.html">§5 · Hoja de Ruta Avanzada</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="05_Intro_Chapter_es.html">Capítulo 5 · Introducción a ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Operación de un Equipo Multiagente Dentro de una Empresa</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 · Crear una Nueva Variante</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 8 §1</div>
+  <h1>Despliegue y SSOT</h1>
+  <p class="lead">Esta sección cubre la jerarquía de tres niveles L0→L1→L2 de ai-workspace-standards, la justificación de diseño detrás del modelo de bifurcación, y el flujo SSOT (Fuente Única de Verdad) por archivo. La fuente siempre fluye de arriba hacia abajo, y no hay sincronización automática que fluya hacia arriba.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo Que Cubre Esta Sección</div>
+    <ul>
+      <li>El principio de tres niveles L0→L1→L2</li>
+      <li>El modelo de bifurcación y por qué no es posible la retro-sincronización automática</li>
+      <li>El flujo SSOT por archivo</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">La Jerarquía L0 → L1 → L2 (3 Niveles)</h2>
+  <p>El CONSTITUTION.md, templates/, variantes, y new-project.ts cubiertos hasta ahora operan todos bajo un único principio general. El repositorio está diseñado como una jerarquía de tres niveles — <strong>L0 (raíz del espacio de trabajo) → L1 (plantillas comunes) → L2 (variante/proyecto)</strong> — y la fuente única de verdad siempre fluye de arriba hacia abajo. No hay sincronización automática fluyendo hacia arriba. La plantilla base discutida en la sección anterior corresponde a L1 en este modelo de tres niveles. Esta plantilla base se publica desde L0 y se entrega como una instantánea única en el momento en que nace un L2.</p>
+
+  <h3>Responsabilidades de Cada Uno de los Tres Niveles</h3>
+  <p><strong>L0 (raíz del espacio de trabajo)</strong> es la fuente única de verdad para archivos como <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, y <code>scripts/*.ts</code>. La edición ocurre aquí, y solo aquí. <strong>L1 (<code>templates/common/</code>)</strong> es una instantánea de la infraestructura común publicada desde L0, sirviendo puramente como el punto de partida base cuando se crea una nueva variante L2. <strong>L2</strong> toma dos formas. Una es <code>templates/co-&lt;nombre&gt;/</code>, que se ha consolidado como una plantilla oficial; la otra es <code>Projects/&lt;nombre&gt;/</code>, un proyecto vivo realmente creado mediante <code>new-project.ts</code>. En ambos casos, una vez bifurcado por variante, cada uno evoluciona independientemente.</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">L0 — Raíz del espacio de trabajo (C:\git\, fuente única de verdad)
+  │  L0→L1: publish-to-template.ts (automático y continuo, en cada dev-sync)
+  ▼
+L1 — templates/common/ (instantánea de plantilla común)
+  │  L1→L2: create-l2-scaffold.ts (una vez, en el momento de creación de la variante)
+  ▼
+L2 — templates/co-&lt;nombre&gt;/ o Projects/co-&lt;nombre&gt;/
+     └─ Evoluciona independientemente después de la bifurcación, sin retro-sincronización automática
+     └─ Ejecute l2-to-variant-pipeline.ts explícitamente para promover a una plantilla oficial</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:0 0 28px;">
+    <svg viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="20" y="80" width="110" height="50" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="102" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">L0</text>
+        <text x="75" y="118" text-anchor="middle" font-size="10" fill="#6639ba">Raíz del Espacio de Trabajo</text>
+
+        <line x1="130" y1="105" x2="185" y2="105" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowL)"/>
+        <text x="157" y="96" text-anchor="middle" font-size="9" fill="#636c76">Automático, Continuo</text>
+
+        <rect x="190" y="80" width="130" height="50" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="255" y="102" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">L1</text>
+        <text x="255" y="118" text-anchor="middle" font-size="10" fill="#0550ae">templates/common/</text>
+
+        <line x1="320" y1="90" x2="400" y2="35" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <line x1="320" y1="105" x2="400" y2="105" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <line x1="320" y1="120" x2="400" y2="175" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowL)"/>
+        <text x="355" y="55" text-anchor="middle" font-size="9" fill="#636c76">Una vez, en el Momento de Generación</text>
+
+        <rect x="405" y="10" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="30" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-develop</text>
+        <text x="500" y="46" text-anchor="middle" font-size="9.5" fill="#116329">Evoluciona independientemente después de la bifurcación</text>
+
+        <rect x="405" y="80" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — Projects/mi-app</text>
+        <text x="500" y="116" text-anchor="middle" font-size="9.5" fill="#116329">Evoluciona independientemente después de la bifurcación</text>
+
+        <rect x="405" y="150" width="190" height="50" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="500" y="170" text-anchor="middle" font-size="11.5" fill="#116329" font-weight="700">L2 — co-marketing</text>
+        <text x="500" y="186" text-anchor="middle" font-size="9.5" fill="#116329">Evoluciona independientemente después de la bifurcación</text>
+
+        <path d="M500,60 C440,60 440,70 500,80" fill="none" stroke="#cf222e" stroke-width="1.1" stroke-dasharray="3,2"/>
+        <text x="360" y="200" font-size="9.5" fill="#cf222e">✕ Sin retro-sincronización automática — no existe una flecha L2→L1</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>Por Qué L1 → L2 Termina en una "Bifurcación"</h3>
+  <p>Al principio, se probó un enfoque donde cada cambio en L1 se propagaba automáticamente a todas las variantes L2 existentes, pero tres problemas seguían reapareciendo. Los cambios en L1 sobreescribían silenciosamente partes que una variante había personalizado deliberadamente de manera diferente; cada vez que se añadía una nueva variante, la lista codificada de variantes en el script de propagación tenía que actualizarse manualmente; y no había forma de distinguir "una diferencia intencional" de "una diferencia causada por una sincronización omitida." Por lo tanto, se utiliza el <strong>Modelo de Bifurcación</strong>. L1 entrega su contenido exactamente una vez, en el momento de generar la variante, y desde entonces L2 evoluciona completamente de forma independiente. Reflejar un cambio de L2 de vuelta en la plantilla oficial requiere que una persona ejecute explícitamente <code>l2-to-variant-pipeline.ts</code> en lugar de cualquier proceso automático (el Capítulo 11 cubre este procedimiento de promoción directamente). Mientras tanto, <code>publish-to-template.ts --check-drift</code> reporta periódicamente las diferencias entre L1 y cada L2, pero este reporte es de solo lectura y nunca sobreescribe automáticamente valores. La dirección inversa — el procedimiento para aplicar realmente los últimos cambios de L1 a un proyecto L2 ya creado — se cubre en el <a href="10_ProjectUpgrade_Chapter_es.html">Capítulo 10 · Actualización de un Proyecto L2</a>.</p>
+
+  <h3>SSOT por Archivo — Qué Fluye Hacia Dónde, Desde Dónde</h3>
+  <div class="table-compare">
+  <table>
+    <thead><tr>
+      <th >Archivo</th>
+      <th >Fuente (SSOT)</th>
+      <th >Método de Sincronización</th>
+    </tr></thead>
+    <tbody>
+      <tr><td ><code>CLAUDE.md</code> / <code>GEMINI.md</code></td><td >Raíz del espacio de trabajo</td><td >Propagación manual + <code>validate-templates.ts</code></td></tr>
+      <tr><td ><code>agents/*.md</code></td><td ><code>agents/</code> de la raíz del espacio de trabajo</td><td ><code>bun run agent:verify</code></td></tr>
+      <tr><td ><code>AGENTS.md</code></td><td >Raíz del espacio de trabajo</td><td ><code>bun run agent:verify</code></td></tr>
+      <tr><td ><code>variant.json</code></td><td ><code>templates/co-&lt;nombre&gt;/</code> mismo</td><td >Esa variante es en sí misma la fuente</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><code>agents/pm.md</code> es el caso que mejor ilustra la relación L0→L1. El <code>agents/pm.md</code> de L0 es la fuente completa, mientras que el <code>templates/common/agents/pm.md</code> de L1 es un archivo de "extensión pura" que referencia L0 mediante el frontmatter <code>extends: ../../../agents/pm.md</code> mientras elimina las secciones exclusivas del espacio de trabajo (ej., Auto-Mode, campos de estado del ciclo de vida). El <code>templates/co-*/agents/pm.md</code> de L2 hereda de L1 pero no copia el contenido textualmente — en su lugar regenera lo que necesita desde cero basándose en anulaciones específicas de la variante ("Reconstrucción de Disposición"). Por eso incluso cuando el <code>agents/pm.md</code> de L0 supera las 300 líneas, el pm.md de L2 se mantiene alrededor de 50-100 líneas.</p>
+
+  <div class="note">L0→L1→L2 en una frase: <strong>la fuente se edita solo en la parte superior. Las capas inferiores son instantáneas de la fuente o copias tomadas en el momento de la generación. El flujo siempre se mueve de arriba hacia abajo, nunca en sentido inverso.</strong> Un error representativo que viola este principio es "editar un archivo de agente en un nuevo proyecto (L2) sin reflejar el cambio en la raíz del espacio de trabajo (L0)" — dado que no existe flujo inverso de L2 hacia L0 en primer lugar, esa edición es válida solo dentro de ese proyecto y nunca se refleja en ningún otro lugar.</div>
+
+  <h3>Estrategia de Plantilla Base — Qué Bloquear y Qué Dejar Abierto</h3>
+  <p>El Capítulo 5 definió la plantilla base como "un punto de partida preensamblado para que no tenga que reescribir lo mismo para cada proyecto." Desde una perspectiva arquitectónica, esta definición plantea inmediatamente una pregunta práctica — <strong>cuánto de lo que L1 entrega a L2 deberían los proyectos poder modificar libremente?</strong> Este repositorio responde esa pregunta de manera diferente por archivo. Las cinco categorías de <code>upgrade-project.ts</code> cubiertas en §5 (LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER, PRUNE) son esencialmente esta estrategia fijada en código.</p>
+  <ul>
+    <li><strong>Lo que se bloquea como LOCKED</strong> (<code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code>) — archivos correspondientes a la línea base mínima de seguridad de las barreras de protección del Capítulo 3. No hay razón para que estos difieran entre proyectos, y diferir llevaría a un incidente de seguridad, por lo que no se da margen de personalización.</li>
+    <li><strong>Lo que se abre parcialmente mediante MERGE</strong> (<code>CLAUDE.md</code>/<code>GEMINI.md</code>, <code>.gitignore</code>, <code>agents/pm.md</code>) — solo las secciones envueltas en marcadores <code>WORKSPACE-MANAGED</code> continúan siendo gestionadas por L1, mientras que todo lo fuera de los marcadores es libre para que el proyecto lo escriba como considere conveniente. Este es el compromiso que satisface "reglas comunes desde arriba, contexto del proyecto desde abajo" dentro de un solo archivo al mismo tiempo.</li>
+    <li><strong>Lo que se abre completamente mediante PRESERVE</strong> (<code>README.md</code>, <code>docs/context.md</code>, <code>src/</code>) — L1 solo verifica que estos archivos existen y no interfiere con su contenido, porque este es el espacio que contiene la identidad del proyecto.</li>
+  </ul>
+  <p>Al diseñar una nueva variante (Capítulos 6 y 11), decidir de antemano a cuál de estas tres categorías pertenece un nuevo archivo evita que surjan preguntas como "por qué este archivo se sobreescribe cada vez que actualizamos." El criterio de juicio es simple — <strong>clasificar como LOCKED todo lo que deba ser idéntico en toda la organización, como seguridad y gobernanza; como MERGE todo donde las reglas organizacionales y el contexto del proyecto deban coexistir; y como PRESERVE todo lo que sea único del proyecto.</strong></p>
+
+  <h3>Estrategia de Niveles de Modelo — Operación de Niveles a Escala Organizacional</h3>
+  <p>El Capítulo 5 mostró cómo se asigna <code>tier: high/medium/low</code> a roles individuales de agentes. Aquí examinamos, desde una perspectiva arquitectónica, el flujo de <strong>cambio y mantenimiento</strong> de esa asignación. El valor del nivel vive en el frontmatter de <code>agents/*.md</code>, y como se vio en la tabla SSOT anterior, L0 es la fuente para este archivo, gestionado por <code>upgrade-project.ts</code> en §5 bajo <strong>SYNC_IF_NEWER</strong> — lo que significa que la estrategia de niveles sigue exactamente el principio L0→L1→L2.</p>
+  <ul>
+    <li><strong>La asignación predeterminada se decide una vez, en L0.</strong> Una vez que el principio de que los roles tipo PM/Arquitecto son high, los roles tipo escritor-de-código/escritor-de-documentación son medium, y los roles tipo ingeniero-de-automatización son low se establece en los <code>agents/*.md</code> de la raíz del espacio de trabajo, cada plantilla L1 de cada variante lo hereda.</li>
+    <li><strong>Cuando cambian los criterios de nivel, se incrementa la versión.</strong> Un reevaluación a nivel de organización como "este rol ahora debería ser high en lugar de medium" toma la forma de editar los <code>agents/*.md</code> de L0 e incrementar <code>@version</code> (o el <code>version:</code> del frontmatter). Esto no se refleja automáticamente en los proyectos L2 ya creados; cada proyecto debe ejecutar <code>upgrade-project.ts</code> (Capítulo 10) para recibir el nuevo nivel — los cambios de nivel también siguen el modelo de bifurcación sin excepción.</li>
+    <li><strong>Las excepciones específicas del proyecto se dejan solo en L2.</strong> Si un rol específico en una variante específica necesita un nivel diferente (por ejemplo, dar high en lugar de medium a un escritor-de-código que maneja lógica de dominio inusualmente compleja), el <code>agents/*.md</code> de ese proyecto se edita directamente, localmente. Sin embargo, dado que este archivo está sujeto a SYNC_IF_NEWER, tenga en cuenta que si la versión de L1 es superior en la próxima actualización, puede ser sobrescrito junto con una advertencia <code>⚠️ CONFLICT</code> (vea las salvaguardas en §5).</li>
+  </ul>
+  <div class="note">La estrategia de plantilla base y la estrategia de niveles son, al final, dos respuestas a la misma pregunta — <strong>"hacer cumplir en L0/L1 todo lo que deba ser idéntico en toda la organización, y delegar a L2 todo lo que pueda diferir por proyecto."</strong> Ambas estrategias comparten el rasgo común de dibujar ese límite explícitamente, una a nivel de archivo (LOCKED/MERGE/PRESERVE) y la otra a nivel de campo (nivel).</div>
+
+  <div class="chapter-nav">
+    <a href="../enterprise/07_Enterprise_Chapter_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Capítulo 7 · Operación de un Equipo Multiagente Dentro de una Empresa</div></a>
+    <a href="08_Intro_Advanced_Chapter_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 8 §2 · Gestión del Ciclo de Vida</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

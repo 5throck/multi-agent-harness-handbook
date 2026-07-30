@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Comparación de herramientas — Claude Code / Claude App / Antigravity CLI / Antigravity - material para el Manual de Ingeniería de Arnes de Equipo Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparación de Herramientas — Claude Code / Claude App / Antigravity CLI / Antigravity</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific: tree-box inner spans */
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Referencia Común · Comparación de Herramientas</div>
+  <a href="#tree">Las Cuatro Herramientas en Resumen</a>
+  <div class="nav-section">Características de Plataforma</div>
+  <a href="#section-1">1. Claude App (Escritorio) vs Claude Code (CLI)</a>
+  <a href="#section-2">2. Antigravity (Escritorio) vs Antigravity CLI (agy)</a>
+  <a href="#section-3">3. Tabla Comparativa de Soporte Multiagente</a>
+  <a href="#section-4">4. Qué Herramienta Elegir para Este Manual</a>
+  <a href="#section-5">5. AGENTS.md — Uniendo las Cuatro Herramientas</a>
+  <div class="nav-section">Referencias</div>
+  <a href="#refs">Enlaces de Referencia</a>
+  <div class="nav-section">Otros Capítulos</div>
+  <a href="../variant-practice/06_VariantPractice_Examples_es.html">Capítulo 6 · Ejemplos de Práctica de Variantes</a>
+  <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Comparando los Dos Modelos</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Referencia Común</div>
+  <h1>Comparación de Herramientas — Claude Code / Claude App / Antigravity CLI / Antigravity</h1>
+  <p class="subtitle">Incluso el mismo "equipo multiagente" funciona de manera diferente y encuentra restricciones distintas según qué herramienta lo construya &nbsp;|&nbsp; Documentación oficial: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Subagentes de Claude Code</a>, <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI</a>, <a href="https://antigravity.google/docs/agent-manager" target="_blank">Administrador de Agentes de Antigravity</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Versión objetivo</span><span class="vvalue">Claude Code 2026-07 / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
+    <div class="version-row"><span class="vlabel">URLs de documentos de referencia</span><span class="vvalue"><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com/claude-code/sub-agents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google/docs/agent-manager</a></span></div>
+    <div class="version-row"><span class="vlabel">Documentos recopilados el</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">Cómo verificar la versión</span><span class="vvalue">Claude Code: <code>claude --version</code> · Antigravity CLI: <code>agy --version</code> o <code>/usage</code> dentro de una sesión · Antigravity Escritorio: la pantalla Acerca de de la aplicación</span></div>
+    <div class="version-row"><span class="vlabel">Para reverificar en revisión</span><span class="vvalue">Si las etiquetas de funciones experimentales de cada herramienta han pasado a estables, y si el ámbito de hooks no soportados de la aplicación de escritorio se ha reducido</span></div>
+  </div>
+
+  <div class="warning-box">A partir del 2026-06-18, Google <strong>discontinuó el servicio de Gemini CLI</strong> para usuarios individuales (Gratis/Pro/Ultra), y <strong>Antigravity CLI (<code>agy</code>)</strong> tomó su lugar. Este manual fue escrito originalmente alrededor de la interfaz de línea de comandos de Gemini antes de esa fecha, pero se ha actualizado completamente a la interfaz de línea de comandos de Antigravity a la fecha actual. Si encuentra el comando <code>gemini</code> o una ruta <code>.gemini/agents/</code> en material antiguo, trátelo como una referencia a una versión que ha sido reemplazada.</div>
+
+  <h2 id="tree">Las Cuatro Herramientas en Resumen (Escritorio Primero, CLI en Paralelo)</h2>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
+Familia Anthropic
+├── <span class="cmd">Claude App (Escritorio)</span> ★ Predeterminado     <span class="desc">Basada en GUI; los subagentes funcionan pero los hooks/paralelismo tmux son limitados</span>
+└── <span class="cmd">Claude Code (CLI)</span>               <span class="desc">Basada en terminal; soporte completo para hooks, Agent Teams, subagentes</span>
+
+Familia Google
+├── <span class="cmd">Antigravity (Escritorio)</span> ★ Predeterminado    <span class="desc">Aplicación de escritorio independiente; el Administrador de Agentes supervisa el paralelismo por espacio de trabajo</span>
+└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">Basada en terminal, sucesor de Gemini CLI — el orquestador crea subagentes dinámicamente</span>
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div></div>
+
+  <hr>
+
+  <h2 id="section-1">1. Claude App (Escritorio) vs Claude Code (CLI)</h2>
+  <p>Este manual trata a <strong>Claude App (Escritorio)</strong> como su herramienta práctica predeterminada. Dado que el flujo de creación e invocación de subagentes a través de la GUI es el mismo, puede seguir el contenido a continuación igual de fácilmente usando Claude Code (CLI). Ambas herramientas funcionan con el mismo motor de Claude, pero dado que sus entornos de ejecución difieren, algunos de los mecanismos que componen un arnés multiagente solo funcionan en la CLI. Las mayores diferencias están en los <strong>hooks de automatización</strong> y los <strong>modos de ejecución de Agent Teams</strong>.</p>
+
+  <h3>Claude App (o Claude Code) — Subagentes <code>.claude/agents/*.md</code></h3>
+  <p>Claude App define subagentes personalizados a través de archivos <code>.claude/agents/*.md</code> y los invoca con la herramienta <code>Agent</code>/<code>Task</code>, exactamente igual que Claude Code. Sin embargo, los hooks <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> definidos en <code>.claude/settings.json</code> no se activan en Claude App. Solo se activan automáticamente en eventos como guardar archivos o completar tareas dentro de una sesión CLI. Los equipos que usan Claude App deben ejecutar manualmente lo que el hook habría hecho (por ejemplo, ejecutar un script de auditoría) después de que termine la sesión.</p>
+  <p>Veamos un accidente concreto que esta diferencia puede causar. Supongamos que un equipo ha configurado un hook <code>PostToolUse</code> en la CLI para que "cada vez que se guarda un archivo, <code>bun scripts/audit.ts</code> se ejecute automáticamente para detectar fugas de secretos o violaciones de reglas." Cuando el mismo miembro del equipo hace la edición idéntica en Claude App (Escritorio), el hook nunca se activa — sin embargo, en pantalla se ve exactamente igual que en la CLI: "el archivo fue guardado," sin ningún signo visible de que el hook no se ejecutó. Si ese estado llega hasta un commit, un problema que el hook debería haber detectado se desliza silenciosamente. El verdadero peligro no es "olvidamos ejecutar la auditoría" — es "pensamos que la auditoría se ejecutó, pero no lo hizo."</p>
+
+  <h3><code>teammateMode</code> — Claude App Solo Soporta <code>in-process</code>, Claude Code También Soporta <code>tmux</code></h3>
+  <p>Agent Teams, una función experimental, lanza múltiples instancias de Claude en paralelo. Claude App solo puede usar el modo <code>in-process</code>, que paraleliza dentro del mismo proceso, y algunas navegaciones por teclado (por ejemplo, Shift+Abajo) están restringidas. El modo <code>tmux</code>, que usa un panel dividido de terminal, solo es adicionalmente soportado en Claude Code (CLI).</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Función</th><th>Claude App (Escritorio)</th><th>Claude Code (CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Invocar subagentes mediante la herramienta <code>Agent</code>/<code>Task</code></td>
+        <td>Soportado</td>
+        <td>Soportado</td>
+      </tr>
+      <tr>
+        <td>Subagentes personalizados mediante <code>.claude/agents/*.md</code></td>
+        <td>Soportado</td>
+        <td>Soportado</td>
+      </tr>
+      <tr>
+        <td>Hooks PostToolUse / TeammateIdle / TaskCompleted</td>
+        <td>No soportado (ejecución manual requerida)</td>
+        <td>Soportado (se activa automáticamente)</td>
+      </tr>
+      <tr>
+        <td>Agent Teams — <code>teammateMode: in-process</code></td>
+        <td>Soportado (algunos atajos limitados)</td>
+        <td>Soportado</td>
+      </tr>
+      <tr>
+        <td>Agent Teams — <code>teammateMode: tmux</code></td>
+        <td>No soportado</td>
+        <td>Soportado</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="warning-box">Para usar Agent Teams en la Aplicación de Escritorio, debe establecer explícitamente <code>teammateMode</code> en <code>in-process</code>. Las reglas de su equipo también deben reflejar el hecho de que los hooks no se activan. Tenga cuidado de no confundir una auditoría automatizada omitida silenciosamente con un "aprobado."</div>
+
+  <hr>
+
+  <h2 id="section-2">2. Antigravity (Escritorio) vs Antigravity CLI (agy)</h2>
+  <p>En el lado de Google también, este manual trata a <strong>Antigravity (Escritorio)</strong> como su herramienta práctica predeterminada. Es una aplicación de escritorio independiente diseñada desde cero para supervisar múltiples agentes en múltiples espacios de trabajo simultáneamente. <strong>Antigravity CLI (<code>agy</code>)</strong> es la cara CLI de la misma plataforma, estructurada de modo que una sola sesión de terminal recibe un objetivo y lo descompone en subtareas por sí sola. Ambas herramientas también comparten la misma carpeta de configuración (<code>antigravity-cli/</code> bajo <code>~/.gemini</code>).</p>
+
+  <h3>Espacios de Trabajo · Bandeja de Entrada · Zona de Pruebas — Administrador de Agentes de Antigravity (Escritorio)</h3>
+  <p>El Administrador de Agentes de Antigravity es una interfaz de nivel superior que supervisa múltiples espacios de trabajo desde una sola pantalla. El principio es asignar un agente por espacio de trabajo, y los mensajes que necesitan aprobación o retroalimentación se acumulan en la Bandeja de Entrada. La Zona de Pruebas es un espacio para experimentar ligeramente antes de comprometerse con un espacio de trabajo formal. Al lanzar un agente, se elige entre el Modo Local, que trabaja directamente en la carpeta activa, y el Modo Nuevo Worktree, que trabaja en un git worktree aislado.</p>
+
+  <div class="warning-box">Aunque puede asignar múltiples agentes al mismo espacio de trabajo (misma carpeta) a la vez, hay informes reales de diferentes agentes confundiendo y mezclando el contexto del código base ("superposición cognitiva"). Es más seguro separar el trabajo paralelo por espacio de trabajo o por git worktree.</div>
+
+  <h3>Comandos Slash de Antigravity CLI (<code>agy</code>) — <code>/goal</code>, <code>/agent</code>, <code>/agents</code></h3>
+  <p>A diferencia de Claude Code/App, que predefine subagentes en archivos como <code>.claude/agents/*.md</code>, la interfaz de línea de comandos de Antigravity funciona haciendo que el agente orquestador decida por sí mismo cómo dividir un objetivo en tareas una vez que se le asigna uno, creando subagentes sobre la marcha y ejecutándolos en paralelo. Cada subagente tiene su propia ventana de contexto independiente, evitando que el contexto de la sesión principal se diluya.</p>
+  <p>Para usar una analogía: Claude Code/App trabaja con "una plantilla precontratada de miembros de tiempo completo," mientras que la interfaz de línea de comandos de Antigravity se acerca más a "contratar un trabajador freelance en el momento para cualquier trabajo que surja." Lo primero facilita el control de permisos porque siempre se sabe quiénes son los miembros del equipo; lo segundo ofrece la flexibilidad de obtener nuevo talento cada vez, pero se necesita una forma de verificar después "quién fue realmente traído esta vez." Eso es para lo que sirve <code>/agents</code> a continuación.</p>
+  <div class="note">Algo que vale la pena señalar aquí: <strong>la capacidad de crear subagentes dinámicamente no es exclusiva de Antigravity CLI.</strong> La herramienta <code>Agent</code>(Task) de Claude Code/App también genera subagentes sobre la marcha a partir de solicitudes en lenguaje natural, juzgando qué tarea se necesita en el momento (Capítulo 1 §3b), y el Administrador de Agentes de Antigravity (Escritorio) también permite dar un objetivo en lenguaje natural sin un archivo predefinido (§1). Los comandos <code>/goal</code>·<code>/agent</code>·<code>/agents</code> introducidos en esta sección son simplemente <strong>sintaxis para manejar esa misma capacidad de orquestación dinámica mediante comandos slash en la pantalla CLI</strong>. Claude Code/App hace lo mismo a través de oraciones en el chat en lugar de esta sintaxis, y Antigravity Escritorio hace lo mismo a través de botones GUI (aprobaciones de Bandeja de Entrada, Zona de Pruebas, etc.) en lugar de esta sintaxis.</div>
+  <p>A continuación se muestran cuatro comandos slash específicos de CLI que usará frecuentemente al trabajar con <code>agy</code>. Lea la tabla a continuación no como "una lista de funciones exclusivas de Antigravity CLI" sino como "los nombres dados a la misma capacidad en la interfaz de línea de comandos."</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Comando</th><th>Acción</th></tr></thead>
+    <tbody>
+      <tr><td><code>agy</code></td><td>Inicia una sesión TUI.</td></tr>
+      <tr><td><code>/goal &lt;objetivo&gt;</code></td><td>Ejecuta un objetivo hasta su finalización sin confirmación intermedia. El orquestador divide las subtareas por sí solo.</td></tr>
+      <tr><td><code>/agent &lt;tarea&gt;</code></td><td>Delega una tarea de larga duración a un agente en segundo plano y le permite continuar con otro prompt sin esperar a que termine.</td></tr>
+      <tr><td><code>/agents</code></td><td>Muestra una lista de subagentes creados hasta el momento, con su estado de ejecución/completado/bloqueado.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Aquí está el flujo real de iniciar una sesión y ejecutar un objetivo.</p>
+  <div style="position:relative">
+    <div style="position:relative">
+  <pre class="code-block">agy</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+  <p style="font-size:13.5px;color:var(--text-dim);margin:10px 0 6px;">Dentro de la sesión (interactivo):</p>
+  <div style="position:relative">
+    <div style="position:relative">
+  <pre class="code-block">/goal Añade un resumen a cada archivo de texto en esta carpeta</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+  <p style="font-size:13.5px;color:var(--text-dim);margin:10px 0 6px;">Si, como en CI/automatización, desea una sola ejecución sin conversación (no interactivo):</p>
+  <div style="position:relative">
+    <div style="position:relative">
+  <pre class="code-block">agy -p "Redacta un mensaje de commit"</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+  <p>También en el lado CLI, es más seguro mantener las sesiones separadas. Si una sesión de <code>agy</code> está refactorizando la capa API mientras otra escribe pruebas, no entrarán en conflicto siempre que no toquen los mismos archivos.</p>
+
+  <hr>
+
+  <h2 id="section-3">3. Tabla Comparativa de Soporte Multiagente</h2>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Elemento</th><th>Claude App</th><th>Antigravity (Escritorio)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Forma de ejecución</td>
+        <td>GUI de escritorio</td>
+        <td>Aplicación de escritorio independiente</td>
+        <td>CLI de terminal</td>
+        <td>CLI de terminal (binario compilado único)</td>
+      </tr>
+      <tr>
+        <td>Método de definición de subagentes</td>
+        <td><code>.claude/agents/*.md</code> (predefinidos)</td>
+        <td>(El Administrador de Agentes opera por espacio de trabajo. El aislamiento es por espacio de trabajo/proyecto en lugar de un concepto separado de archivo de definición de agente.)</td>
+        <td><code>.claude/agents/*.md</code> (predefinidos)</td>
+        <td>El orquestador los crea dinámicamente a partir del objetivo (no se necesita predefinición)</td>
+      </tr>
+      <tr>
+        <td>Método de invocación de subagentes</td>
+        <td>Herramienta <code>Agent</code>/<code>Task</code></td>
+        <td>El Administrador de Agentes crea un agente por espacio de trabajo</td>
+        <td>Herramienta <code>Agent</code>/<code>Task</code></td>
+        <td><code>/goal</code> (ejecución hasta completar) o confirmación paso a paso predeterminada; <code>/agent</code> para delegación en segundo plano</td>
+      </tr>
+      <tr>
+        <td>Unidad de ejecución paralela</td>
+        <td>Agent Teams (solo <code>in-process</code>)</td>
+        <td>Agente independiente por espacio de trabajo (Modo Local / Modo Nuevo Worktree)</td>
+        <td>Múltiples llamadas <code>Agent</code> en un mensaje / Agent Teams</td>
+        <td>Dentro de la sesión (el orquestador ejecuta múltiples subagentes en paralelo) + entre sesiones (múltiples terminales)</td>
+      </tr>
+      <tr>
+        <td>Ejecución no interactiva/automatizada</td>
+        <td>No soportado</td>
+        <td>(No aplicable. Centrado en GUI.)</td>
+        <td>(Manejado mediante hooks de script)</td>
+        <td><code>agy -p "prompt"</code>. Se ejecuta una vez y sale, adecuado para CI</td>
+      </tr>
+      <tr>
+        <td>Hooks de automatización</td>
+        <td>No soportado</td>
+        <td>(No aplicable)</td>
+        <td>Soportado</td>
+        <td>(En lugar de hooks, verificar los registros de ejecución por subagente mediante <code>agy inspect</code>)</td>
+      </tr>
+      <tr>
+        <td>Enviar mensajes adicionales a un subagente en ejecución</td>
+        <td>Llamada <code>Agent</code> única: no posible (debe esperar a completar) / Agent Teams: posible (<code>SendMessage</code>)</td>
+        <td>Posible. Puede intercambiar mensajes de aprobación/retroalimentación en la Bandeja de Entrada e intervenir en un agente en progreso</td>
+        <td>Igual que Claude App. No posible para una llamada <code>Agent</code> única; posible para Agent Teams mediante <code>SendMessage</code></td>
+        <td>Puede verificar el estado (<code>/agents</code>) para una tarea en segundo plano delegada mediante <code>/agent</code>, pero hay capacidad limitada para intervenir y cambiar instrucciones durante la ejecución</td>
+      </tr>
+      <tr>
+        <td>Comunicación directa entre subagentes</td>
+        <td>Llamada <code>Agent</code> única: no posible (debe pasar por la sesión principal) / Agent Teams: posible (los compañeros usan <code>SendMessage</code> entre sí)</td>
+        <td>No posible. Los espacios de trabajo (agentes) están deliberadamente aislados entre sí (ver la advertencia de "superposición cognitiva" en §2); la comunicación siempre pasa por un humano</td>
+        <td>Igual que Claude App</td>
+        <td>No posible. Los resultados de los subagentes creados dinámicamente se agregan solo a través del orquestador; los subagentes no se comunican directamente entre sí</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p>
+    <span class="badge badge-workflow">Guía primero escritorio</span>
+    <span class="badge badge-alias">Soporte completo de paridad CLI</span>
+    <span class="badge badge-new">Muchas funciones experimentales</span>
+  </p>
+  <div class="note">Hay un criterio que separa las dos filas anteriores. <strong>¿El subagente es "una llamada de un solo uso que solo devuelve un resultado una vez delegado" o "una entidad tipo compañero que permanece activa"?</strong> La llamada <code>Agent</code>(Task) única de Claude Code/App y los subagentes dinámicos de la interfaz de línea de comandos de Antigravity se acercan más a lo primero. Una vez generados, manejan todo solos hasta el final y solo devuelven un resumen, por lo que no hay forma de dar nuevas instruccaciones a mitad de camino ni hacer que conversen con otro subagente. Los Agent Teams de Claude Code/App, por el contrario, son lo segundo — cada compañero puede enviar mensajes directamente a otro mediante <code>SendMessage</code> (ya cubierto en el ejercicio P-1 del Capítulo 2 §1). Antigravity (Escritorio) no soporta la comunicación entre agentes en absoluto, pero en su lugar permite que un humano converse individualmente con cada agente en progreso a través de la Bandeja de Entrada — esto es lo que lo distingue de las otras tres herramientas.</div>
+
+  <hr>
+
+  <h2 id="section-4">4. Qué Herramienta Elegir para Este Manual</h2>
+  <p>Este manual lo guía usando <strong>Claude App</strong> y <strong>Antigravity (Escritorio)</strong> como sus herramientas prácticas predeterminadas, porque comenzar con una GUI tiene una barrera de entrada más baja. El Capítulo 2 igualmente muestra primero estas dos herramientas de escritorio, y luego sigue inmediatamente con los procedimientos de Claude Code (CLI) y Antigravity CLI (<code>agy</code>) lado a lado. Puede elegir solo una herramienta y seguirla, o comparar y practicar con las cuatro juntas. Los siguientes criterios facilitan la elección.</p>
+  <ol style="margin:0 0 16px 20px;line-height:2;">
+    <li><strong>Si solo quiere familiarizarse primero mediante GUI.</strong> Comience con Claude App o Antigravity (Escritorio). Este es el camino predeterminado del manual.</li>
+    <li><strong>Si necesita supervisar varios proyectos diferentes a la vez.</strong> El Administrador de Agentes de Antigravity (Escritorio) (aislamiento por espacio de trabajo) está diseñado exactamente para este escenario.</li>
+    <li><strong>Si necesita automatización basada en hooks (puertas de auditoría/QA).</strong> Cambie a Claude Code (CLI). Claude App y la familia Antigravity no tienen hooks automáticos correspondientes.</li>
+    <li><strong>Si quiere que un orquestador divida las cosas por sí mismo sin definir subagentes uno por uno.</strong> Antigravity CLI (<code>agy</code>) crea subagentes dinámicamente a partir de un objetivo. A cambio, el control granulado es relativamente limitado.</li>
+  </ol>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowDt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+        <marker id="arrowDtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+        </marker>
+        <marker id="arrowDtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+        <marker id="arrowDtP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6639ba"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Title -->
+        <text x="360" y="20" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Flujo de Decisión de Selección de Herramienta</text>
+
+        <!-- Diamond 1: Do you need CLI? -->
+        <polygon points="260,46 340,80 260,114 180,80" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
+        <text x="260" y="76" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">¿Necesita</text>
+        <text x="260" y="90" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">CLI?</text>
+
+        <!-- Start arrow to diamond 1 -->
+        <line x1="80" y1="80" x2="180" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+        <rect x="10" y="64" width="68" height="32" rx="6" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+        <text x="44" y="84" text-anchor="middle" font-size="10" fill="#636c76" font-weight="600">Inicio</text>
+
+        <!-- Yes path (down) from diamond 1 -->
+        <line x1="260" y1="114" x2="260" y2="140" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#arrowDtG)"/>
+        <text x="246" y="130" text-anchor="end" font-size="9" fill="#1a7f37" font-weight="700">Sí</text>
+
+        <!-- Yes branch: Claude Code -->
+        <rect x="148" y="142" width="120" height="40" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="208" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude Code</text>
+        <text x="208" y="174" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · hooks soportados</text>
+
+        <!-- Yes branch: Antigravity CLI -->
+        <rect x="280" y="142" width="120" height="40" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="340" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity CLI</text>
+        <text x="340" y="174" text-anchor="middle" font-size="8.5" fill="#6639ba">Experimental · agentes dinámicos</text>
+
+        <!-- No path (right) from diamond 1 -->
+        <line x1="340" y1="80" x2="380" y2="80" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrowDtB)"/>
+        <text x="362" y="74" text-anchor="middle" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- No branch boxes -->
+        <rect x="382" y="62" width="110" height="36" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="437" y="80" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude App</text>
+        <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · GUI predeterminada</text>
+
+        <rect x="382" y="104" width="110" height="36" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="437" y="122" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity</text>
+        <text x="437" y="134" text-anchor="middle" font-size="8.5" fill="#6639ba">Experimental · Administrador de Agentes</text>
+
+        <!-- Connecting lines from No to the two boxes -->
+        <line x1="378" y1="80" x2="378" y2="122" stroke="#0969da" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="378" y1="80" x2="382" y2="80" stroke="#0969da" stroke-width="1"/>
+        <line x1="378" y1="122" x2="382" y2="122" stroke="#6639ba" stroke-width="1"/>
+
+        <!-- Diamond 2: Do you need team-level parallelism? -->
+        <polygon points="260,206 380,250 260,294 140,250" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
+        <text x="260" y="244" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">¿Necesita</text>
+        <text x="260" y="258" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">paralelismo a nivel de equipo?</text>
+
+        <!-- Arrow from first-level results down to diamond 2 -->
+        <line x1="208" y1="182" x2="208" y2="208" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="208" y1="208" x2="180" y2="230" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+        <line x1="437" y1="140" x2="437" y2="206" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="437" y1="206" x2="380" y2="235" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+
+        <!-- Yes path (down) from diamond 2 -->
+        <line x1="260" y1="294" x2="260" y2="298" stroke="#1a7f37" stroke-width="1"/>
+        <text x="246" y="307" text-anchor="end" font-size="9" fill="#1a7f37" font-weight="700">Sí</text>
+
+        <!-- Yes branch from diamond 2: two boxes side by side -->
+        <rect x="160" y="296" width="95" height="12" rx="4" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+        <text x="208" y="305" text-anchor="middle" font-size="7" fill="#0969da" font-weight="600">Agent Teams (Claude)</text>
+
+        <rect x="265" y="296" width="120" height="12" rx="4" fill="#f1e8fd" stroke="#6639ba" stroke-width="1"/>
+        <text x="325" y="305" text-anchor="middle" font-size="7" fill="#6639ba" font-weight="600">Agente Manager (Antigravity)</text>
+
+        <!-- Legend -->
+        <rect x="530" y="62" width="14" height="14" rx="3" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+        <text x="550" y="73" font-size="9" fill="#636c76">Familia Claude</text>
+        <rect x="530" y="82" width="14" height="14" rx="3" fill="#f1e8fd" stroke="#6639ba" stroke-width="1"/>
+        <text x="550" y="93" font-size="9" fill="#636c76">Familia Antigravity</text>
+        <polygon points="537,112 544,118 537,124 530,118" fill="#fef7e0" stroke="#953800" stroke-width="1"/>
+        <text x="550" y="122" font-size="9" fill="#636c76">Nodo de decisión</text>
+
+        <!-- Platform labels -->
+        <text x="270" y="36" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">Eligiendo un entorno de ejecución</text>
+        <text x="270" y="200" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">Si se necesita paralelismo</text>
+      </g>
+    </svg>
+  </div>
+
+  <p >💡 <strong>Idea clave:</strong> Las cuatro herramientas comparten la misma estructura básica de ingeniería de arnés: "dar a los subagentes un rol estrecho y dejar que un orquestador los coordine." Lo que cambia es en qué entorno de ejecución (CLI/GUI, hooks o no, si los subagentes están predefinidos o creados sobre la marcha) se construye esa estructura.</p>
+
+  <hr>
+
+  <h2 id="section-5">5. AGENTS.md — Uniendo las Cuatro Herramientas</h2>
+  <p>Los hooks, la ejecución paralela y los métodos de definición de subagentes comparados hasta ahora difieren de herramienta a herramienta, pero la configuración en la raíz del repositorio aún puede unificarse en una sola. <strong>AGENTS.md</strong> es un estándar abierto creado en agosto de 2025 por OpenAI junto con Google, Cursor y Factory, y donado a la Fundación de IA Agente de Linux Foundation en diciembre de 2025. Es soportado por más de 30 herramientas, incluyendo Codex, Cursor, GitHub Copilot y Google Jules, así como Claude Code (vía importación) y la familia Antigravity.</p>
+  <p>Colocar un solo <code>AGENTS.md</code> en la raíz del repositorio permite que las cuatro herramientas lo lean al inicio de la sesión y compartan reglas comunes como comandos de compilación/prueba, estilo de código y áreas restringidas. El comportamiento específico de cada herramienta (hooks, teammateMode, dónde se definen los subagentes, etc.) sigue registrándose por separado, como se compara en la tabla anterior, en archivos específicos como <code>CLAUDE.md</code> y <code>GEMINI.md</code>. AGENTS.md maneja el denominador común, y los archivos específicos manejan las diferencias.</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Archivo</th><th>Rol</th><th>Herramientas que lo leen</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>AGENTS.md</code></td>
+        <td>Reglas comunes neutrales a la herramienta (comandos de compilación/prueba, estilo de código, áreas restringidas)</td>
+        <td>Claude Code (importación) · Familia Antigravity · Codex · Cursor · Copilot y más de 30</td>
+      </tr>
+      <tr>
+        <td><code>CLAUDE.md</code></td>
+        <td>Comportamiento detallado específico de Claude Code/App (hooks, comandos slash, reglas de despacho de agentes)</td>
+        <td>Claude Code, Claude App</td>
+      </tr>
+      <tr>
+        <td><code>GEMINI.md</code></td>
+        <td>Comportamiento detallado específico de Antigravity CLI/Escritorio</td>
+        <td>Antigravity CLI, Antigravity (Escritorio)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p >💡 <strong>Idea clave:</strong> El repositorio ai-workspace-standards descrito en el Capítulo 5 §1 implementa exactamente esta estructura. El <code>AGENTS.md</code> raíz sirve como la única fuente de verdad (SSOT) para la plantilla de agentes, y la carpeta <code>.agents/</code> se sitúa junto con <code>.claude/</code>·<code>.gemini/</code>, conteniendo comandos y habilidades agnósticas a la herramienta.</p>
+
+  <hr>
+
+  <h2 id="refs">Enlaces de Referencia</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Documentación Oficial de Subagentes</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Documentación Oficial de Primeros Pasos</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Documentación Oficial de Uso de la CLI AGY</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Documentación Oficial del Administrador de Agentes</a></li>
+    <li>📖 <a href="https://agents.md/" target="_blank">AGENTS.md — Sitio Oficial del Estándar Abierto</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Basado en Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 | Julio de 2026</p>
+
+  <div class="video-refs">
+    <h3 id="videos">Videos de Referencia</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=7fQcsPOm8ys" target="_blank">Gemini CLI vs Claude Code vs Codex Compared!</a><span class="video-meta">(8:34)</span> — Un análisis comparativo de las características clave de tres herramientas CLI de IA</li>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=_ixVAwp_KHE" target="_blank">Claude Code vs Gemini CLI vs Codex: Which One is Best?</a><span class="video-meta">(11:55)</span> — Comparación práctica y criterios de selección de herramientas</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../variant-practice/06_VariantPractice_Examples_es.html" class="prev"><div class="dir">← Capítulo 6</div><div class="ttl">Ejemplos de Práctica de Variantes</div></a>
+    <a href="../enterprise/07_Enterprise_Chapter_es.html" class="next"><div class="dir">Capítulo 7 →</div><div class="ttl">Operando un Equipo Multiagente Dentro de una Empresa</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

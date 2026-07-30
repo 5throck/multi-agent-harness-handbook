@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+  Ejercicio de calentamiento -- página de práctica independiente sin número de capítulo.
+  Secuencia: Día 1 Capítulo 3 (Guardarraíles) → Descanso 1 → Calentamiento (40 min) → Capítulo 4 (práctica práctica).
+  Los colores usan solo tokens de diseño -- el tema se intercambia en el momento del despliegue mediante references/apply-theme.sh reemplazando los colores de marca bajo docs/.
+  Suposición del índice de búsqueda: las secciones del cuerpo deben mantener la estructura <h2 id="...">.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Ejercicio de calentamiento · De Tetris a Pac-Man - material del Manual de Ingeniería de Arnés de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio de Calentamiento · De Tetris a Pac-Man</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .step {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 20px; margin: 16px 0;
+    }
+    .quiz ol { margin: 0 0 0 20px; font-size: var(--font-size-compact); line-height: 1.85; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Calentamiento · De Tetris a Pac-Man</div>
+  <a href="#tetris">Tetris -- Complejidad manejable con programación intuitiva</a>
+  <a href="#pacman">Pac-Man -- Límites creados por la complejidad</a>
+  <a href="#takeaway">Conclusión</a>
+  <a href="#quiz">Preguntas de Repaso</a>
+  <div class="nav-section">Siguientes Capítulos</div>
+  <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Guardarraíles y el Modelo de Permisos</a>
+  <a href="../practice/04_Practice_Manual_es.html">Capítulo 4 · Trabajo con un Equipo Multiagente Basado en Arnés</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Ejercicio de Calentamiento · Justo después del Descanso 1 del Día 1</div>
+  <h1>De Tetris a Pac-Man</h1>
+  <p class="lead">Incluso cuando la tarea es la misma -- "construir un juego" -- el enfoque correcto cambia a medida que crece la complejidad. Construirás Tetris mediante programación intuitiva, luego fracasarás con Pac-Man con un solo prompt, lo intentarás de nuevo con un enfoque multiagente en tres etapas de planificación/desarrollo/QA y sentirás la diferencia de primera mano.</p>
+  <p class="source-line">Plataforma: claude.ai o Claude Code · Duración: 40 minutos (Tetris 10 min + Pac-Man 25 min + conclusión 5 min) · Relacionado: <a href="../concepts/02_Concepts_Chapter_es.html">Capítulo 2 §2 Límites de un Agente Único</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que enseña este calentamiento</div>
+    <ul>
+      <li><strong>Tetris (10 min)</strong> -- completado con un solo prompt de programación intuitiva; las ediciones también se aplican sin problemas</li>
+      <li><strong>Pac-Man (25 min)</strong> -- experimentar el fracaso con un solo prompt → éxito con un enfoque multiagente en tres etapas de planificación/desarrollo/QA</li>
+      <li><strong>Conclusión (5 min)</strong> -- cuanto mayor es la complejidad, más exponencialmente valiosa se vuelve la separación de roles</li>
+    </ul>
+  </div>
+
+  <h2 id="tetris">Tetris -- Complejidad manejable con programación intuitiva (10 min)</h2>
+
+  <p>En el ejercicio del Capítulo 4, los participantes se dividen en 4 grupos como Claude / Antigravity, pero en este calentamiento <strong>todos usan la misma plataforma</strong> (claude.ai o Claude Code). Esto mantiene el enfoque en la <strong>diferencia de enfoque</strong> más que en las diferencias entre herramientas de arnés.</p>
+
+  <h3>Cómo ejecutarlo</h3>
+
+  <ol>
+    <li><strong>Demostración del instructor (1 min)</strong>: Introduce el siguiente prompt en claude.ai (o Claude Code).</li>
+  </ol>
+  <div style="position:relative">
+  <pre class="code-block">Construye un juego de Tetris usando HTML Canvas</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>En 10-20 segundos, aparece un juego de Tetris jugable.</p>
+
+  <ol start="2">
+    <li><strong>Los participantes siguen along (5 min)</strong>: Cada participante introduce el mismo prompt para construir su propio juego de Tetris.</li>
+    <li><strong>Solicitar ediciones (4 min)</strong>: Solicitar libremente modificaciones al juego de Tetris terminado.</li>
+  </ol>
+  <div style="position:relative">
+  <pre class="code-block">Cambia el fondo a un color más oscuro
+Haz el marcador más grande
+Añade una vista previa del siguiente bloque</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <div class="note">
+    <strong>Mensaje clave:</strong> Tetris es un juego relativamente simple que se puede completar en aproximadamente 200 líneas de código. A este nivel de complejidad, un solo prompt de programación intuitiva -- sin arnés -- es suficiente para producir un resultado funcional, y las solicitudes de edición se aplican sin problemas.
+  </div>
+
+  <h2 id="pacman">Pac-Man -- Límites creados por la complejidad (25 min)</h2>
+
+  <p>Esta vez construirás un juego que se ve similar pero es mucho más complejo. Pac-Man tiene muchos más elementos -- movimiento de personajes, IA de fantasmas, detección de colisiones, diseño del mapa, un sistema de ítems -- y alcanza aproximadamente <strong>1.000-1.500 líneas</strong> una vez completado.</p>
+
+  <h3>Etapa 1: Experimentar el fracaso (2-3 min)</h3>
+
+  <p>Primero, inténtalo exactamente de la misma manera que con Tetris.</p>
+  <div style="position:relative">
+  <pre class="code-block">Construye un juego de Pac-Man usando HTML Canvas</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>Cuando el movimiento de personajes, la IA de fantasmas, la detección de colisiones y el diseño del mapa se empaquetan todos en un solo prompt a la vez, el código se enreda y no funciona como se pretende. Este "fracaso" es la experiencia central de este calentamiento.</p>
+
+  <div class="note">
+    <strong>¿Por qué falla?</strong> Darle a un solo agente demasiados roles a la vez causa la <strong>sobrecarga de contexto</strong> discutida en el <a href="../concepts/02_Concepts_Chapter_es.html">Capítulo 2 §2</a>. Cada funcionalidad puede ser implementable por sí sola, pero coordinarlas todas simultáneamente produce conflictos y omisiones.
+  </div>
+
+  <h3>Etapa 2: Reintentar con múltiples agentes (aproximadamente 7-8 min por paso)</h3>
+
+  <p>Esta vez, en lugar de un solo agente, divide el trabajo en <strong>tres roles</strong> y procede secuencialmente.</p>
+
+  <div class="step">
+    <div class="step-label">Paso 1 -- Agente de planificación</div>
+    <p>Escribe una especificación para la lista de funcionalidades y la estructura del mapa de Pac-Man. Este paso define qué personajes existen, cómo es el mapa y cuáles son las reglas del juego.</p>
+    <div style="position:relative">
+  <pre class="code-block">Escribe una especificación para la lista de funcionalidades y la estructura del mapa de un juego de Pac-Man. Incluye lo siguiente:
+- Cómo se comportan los personajes (Pac-Man, 4 tipos de fantasmas)
+- Estructura del mapa (paredes, puntos, ubicaciones de power-ups)
+- Reglas del juego (puntuación, vidas, niveles)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+
+  <div class="step">
+    <div class="step-label">Paso 2 -- Agente de desarrollo</div>
+    <p>Basado en la especificación producida en el Paso 1, escribe el código HTML real de Pac-Man. Dado que el plan ahora está claro, el agente de desarrollo puede concentrarse puramente en la implementación sin necesidad de averiguar "qué" construir.</p>
+    <div style="position:relative">
+  <pre class="code-block">Basado en la especificación a continuación, escribe el código del juego de Pac-Man usando HTML Canvas:
+[Pega aquí el resultado del Paso 1]</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+
+  <div class="step">
+    <div class="step-label">Paso 3 -- Agente de QA</div>
+    <p>Encuentra y corrige errores en el código terminado. Ejecuta realmente el juego para verificar si los personajes atraviesan paredes, si la IA de los fantasmas se comporta correctamente y si la puntuación se calcula correctamente.</p>
+    <div style="position:relative">
+  <pre class="code-block">Encuentra y corrige errores en este código del juego de Pac-Man:
+[Pega aquí el resultado del Paso 2]
+En particular, verifica lo siguiente:
+- Si la detección de colisión con paredes es precisa
+- Si la IA de cada fantasma se mueve con un patrón distinto
+- Si la puntuación y las vidas se calculan correctamente</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+
+  <div class="warn">
+    <strong>Nota:</strong> En cada paso, debes copiar y pegar el resultado del paso anterior tal cual. A diferencia del traspaso automático que aprenderás mediante la invocación de subagentes en el Capítulo 4, ahora estás experimentando de primera mano un <strong>traspaso manual</strong>.
+  </div>
+
+  <h2 id="takeaway">Conclusión -- cuanto mayor es la complejidad, más exponencialmente valiosa se vuelve la separación de roles (5 min)</h2>
+
+  <table>
+    <thead><tr><th></th><th>Tetris</th><th>Pac-Man</th></tr></thead>
+    <tbody>
+      <tr><td>Volumen de código</td><td>~200 líneas</td><td>~1.000-1.500 líneas</td></tr>
+      <tr><td>Elementos principales</td><td>Caída de bloques, rotación, limpieza de líneas</td><td>Movimiento de personajes, IA de fantasmas, detección de colisiones, diseño del mapa, ítems</td></tr>
+      <tr><td>Prompt único</td><td>✅ Tiene éxito</td><td>❌ Fracasa</td></tr>
+      <tr><td>Multiagente en 3 etapas</td><td>Innecesario</td><td>✅ Tiene éxito</td></tr>
+    </tbody>
+  </table>
+
+  <p>Tareas simples como Tetris son manejadas perfectamente por la programación intuitiva (un solo prompt). Pero a medida que aumenta la complejidad, como con Pac-Man, dejar cada rol a un solo agente tiene sus límites.</p>
+
+  <p>Esta es una experiencia de primera mano de los <strong>límites de un agente único</strong> cubiertos en el <a href="../concepts/02_Concepts_Chapter_es.html">Capítulo 2 §2</a>. Sobrecarga de contexto, conflictos de roles, omisiones -- todos estos problemas se resuelven una vez que los roles se separan.</p>
+
+  <p><strong>Mensaje clave:</strong></p>
+  <div class="note" style="font-weight:600;">
+    "Cuanto mayor es la complejidad, más exponencialmente valiosa se vuelve la separación de roles"
+  </div>
+
+  <p>El traspaso (planificar → construir → QA) que experimentaste manualmente en este calentamiento se experimentará más profundamente en el próximo <a href="../practice/04_Practice_Manual_es.html">Capítulo 4</a>, automatizado a través de las <strong>características de subagentes</strong> de Claude Code, Claude App y Antigravity.</p>
+
+  <h2 id="quiz">Preguntas de Repaso</h2>
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de Repaso del Ejercicio de Calentamiento</div>
+    <ol>
+      <li>Tetris se construyó bien con programación intuitiva, pero ¿por qué fue difícil construir Pac-Man con un solo prompt?</li>
+      <li>¿Cuál es la diferencia entre dividir Pac-Man en planificar → construir → QA y dejar todo a un solo agente? (<a href="../concepts/02_Concepts_Chapter_es.html">→ Capítulo 2 §2 Conflictos de Roles</a>)</li>
+    </ol>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../guardrails/03_Guardrails_Chapter_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 3 · Guardarraíles y el Modelo de Permisos</div></a>
+    <a href="../practice/04_Practice_Manual_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 4 · Trabajo con un Equipo Multiagente Basado en Arnés</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Guía de configuración del entorno del taller · Manual de ingeniería de arnés de equipos multiagente - Materiales para el Manual de ingeniería de arnés de equipos multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de configuración del entorno del taller · Manual de ingeniería de arnés de equipos multiagente</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .flow-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 16px 0; overflow-x: auto; }
+    .flow-box::before { content: none; }
+    .flow-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del manual</a>
+  <div class="nav-title">Guía de configuración del entorno del taller</div>
+  <a href="#flow">Flujo de configuración</a>
+  <a href="#step1">Paso 1 — Lista de verificación</a>
+  <a href="#step2">Paso 2 — Scripts específicos del sistema operativo</a>
+  <a href="#step3">Paso 3 — Verificar la instalación</a>
+  <a href="#tools">Lista de herramientas</a>
+  <a href="#terminal">Aplicaciones de terminal recomendadas</a>
+  <a href="#trouble">Solución de problemas</a>
+  <div class="nav-section">Otros documentos</div>
+  <a href="SETUP_CHECKLIST_es.html">Lista de verificación de preinstalación</a>
+  <a href="../practice/04_Practice_Examples_A_en.html#setup">Sección de preparación de la práctica del Capítulo 4 §2</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>Guía de configuración del entorno del taller</h1>
+  <p class="subtitle">Complete la instalación <strong>antes de que comience el taller</strong> — el objetivo es estar listo para comenzar directamente con la práctica cuando inicie la sesión, sin necesidad de configuración adicional del entorno.</p>
+
+  <h2 id="flow">Flujo de configuración</h2>
+  <div class="flow-box"><div style="position:relative">
+  <pre>1. Actualizaciones del sistema operativo
+   └─ Windows: winget upgrade --all
+   └─ macOS:   brew update &amp;&amp; brew upgrade
+   └─ Linux:   apt update &amp;&amp; apt upgrade
+
+2. Herramientas fundamentales
+   └─ Windows: PowerShell 7+, Windows Terminal, Git (+ Git Bash)
+   └─ macOS / Linux: curl, git
+
+3. Entornos de ejecución
+   └─ bun  (entorno de ejecución y gestor de paquetes predeterminado)
+   └─ python3
+   └─ uv   (gestor de paquetes de Python)
+
+4. Herramientas de CLI
+   └─ gh  (GitHub CLI)
+   └─ claude  (Claude Code CLI)
+   └─ agy  (Antigravity CLI)
+
+5. Aplicaciones de escritorio
+   └─ Google Chrome
+   └─ Claude aplicación de escritorio
+   └─ Antigravity aplicación de escritorio
+   └─ Mark  (visor de Markdown)
+
+6. Verificación final ✅
+   └─ bun setup-common.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div></div>
+
+  <h2 id="step1">Paso 1 — Complete la lista de verificación</h2>
+  <p>Antes de ejecutar el script, lea y complete primero la <a href="SETUP_CHECKLIST_es.html">Lista de verificación de preinstalación</a>.</p>
+  <p><strong>Elementos clave a confirmar</strong></p>
+  <ul>
+    <li>Suscripción activa a <strong>Claude Pro/Max</strong> y <strong>Gemini Advanced</strong> (un plan de suscripción, no una clave API)</li>
+    <li>Una <strong>cuenta de GitHub</strong> creada, lista para <code>gh auth login</code></li>
+    <li>Al menos <strong>5 GB</strong> de espacio libre en disco y <strong>privilegios de administrador/sudo</strong> confirmados</li>
+  </ul>
+
+  <h2 id="step2">Paso 2 — Ejecute el script específico del sistema operativo</h2>
+  <p>Abra una terminal con privilegios de administrador / sudo y ejecute el script para su sistema operativo.</p>
+
+  <h3>macOS</h3>
+  <div style="position:relative">
+    <pre class="code-block">bash setup-mac.sh
+# Opcional: también instalar WezTerm (terminal con aceleración GPU)
+bash setup-mac.sh --wezterm
+# Opcional: también instalar Docker Desktop
+bash setup-mac.sh --docker
+# Ambos:
+bash setup-mac.sh --wezterm --docker</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+
+  <h3>Linux (Ubuntu / Debian)</h3>
+  <div style="position:relative">
+    <pre class="code-block">bash setup-linux.sh
+# Opcional: también instalar WezTerm
+bash setup-linux.sh --wezterm
+# Opcional: también instalar Docker
+bash setup-linux.sh --docker
+# Ambos:
+bash setup-linux.sh --wezterm --docker</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+
+  <h3>Windows</h3>
+  <p><strong>Ejecute PowerShell como administrador</strong>, luego ingrese el comando a continuación.</p>
+  <div style="position:relative">
+    <pre class="code-block"># Ejecución predeterminada (el script configura la política de ejecución automáticamente)
+.\setup-windows.ps1
+
+# Opciones:
+.\setup-windows.ps1 -WSL2             # También instalar WSL2 (requiere reinicio)
+.\setup-windows.ps1 -WezTerm          # También instalar WezTerm
+.\setup-windows.ps1 -Docker           # También instalar Docker Desktop
+.\setup-windows.ps1 -Force            # Reinstalar todas las herramientas, incluso las ya instaladas
+.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Instalar todos los complementos opcionales</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <div class="note"><strong>Después de ejecutar</strong>: cierre y vuelva a abrir su terminal para aplicar los cambios en PATH.</div>
+
+  <h2 id="step3">Paso 3 — Verificar la instalación</h2>
+  <div style="position:relative">
+    <pre class="code-block">bun setup-common.ts</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <p>Esto imprime una tabla de verificación de las herramientas instaladas. <strong>Está listo una vez que cada elemento muestre ✅.</strong></p>
+
+  <h2 id="tools">Lista de herramientas</h2>
+  <div class="table-code">
+  <table class="wide">
+    <thead><tr><th>Herramienta</th><th>Propósito</th><th>macOS</th><th>Linux</th><th>Windows</th></tr></thead>
+    <tbody>
+      <tr><td><strong>bun</strong></td><td>Entorno de ejecución y gestor de paquetes</td><td><code>bun.sh/install</code></td><td><code>bun.sh/install</code></td><td><code>bun.sh/install.ps1</code></td></tr>
+      <tr><td><strong>git</strong></td><td>Control de versiones</td><td><code>brew install git</code></td><td><code>apt install git</code></td><td><code>winget Git.Git</code></td></tr>
+      <tr><td><strong>gh</strong></td><td>GitHub CLI</td><td><code>brew install gh</code></td><td>apt (repositorio oficial)</td><td><code>winget GitHub.cli</code></td></tr>
+      <tr><td><strong>python3</strong></td><td>Entorno de ejecución de Python</td><td><code>brew install python3</code></td><td><code>apt install python3</code></td><td><code>winget Python.Python.3.13</code></td></tr>
+      <tr><td><strong>uv</strong></td><td>Gestor de paquetes de Python</td><td><code>brew install uv</code></td><td><code>astral.sh/uv/install.sh</code></td><td><code>winget astral-sh.uv</code></td></tr>
+      <tr><td><strong>claude</strong></td><td>Claude Code CLI</td><td colspan="3"><code>bun install -g @anthropic-ai/claude-code</code></td></tr>
+      <tr><td><strong>agy</strong></td><td>Antigravity CLI</td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.ps1</code></td></tr>
+      <tr><td><strong>Google Chrome</strong></td><td>Navegador</td><td><code>brew install --cask google-chrome</code></td><td>Descarga directa .deb</td><td><code>winget Google.Chrome</code></td></tr>
+      <tr><td><strong>Claude Desktop</strong></td><td>Aplicación de escritorio Claude</td><td><code>brew install --cask claude</code></td><td>⚠️ Instalación manual</td><td><code>winget Anthropic.Claude</code></td></tr>
+      <tr><td><strong>Antigravity Desktop</strong></td><td>Aplicación de escritorio Antigravity</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td></tr>
+      <tr><td><strong>Mark</strong></td><td>Visor de Markdown</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td></tr>
+      <tr><td><strong>PowerShell 7+</strong></td><td>Shell</td><td>—</td><td>—</td><td><code>winget Microsoft.PowerShell</code></td></tr>
+      <tr><td><strong>Windows Terminal</strong></td><td>Terminal</td><td>—</td><td>—</td><td><code>winget Microsoft.WindowsTerminal</code></td></tr>
+      <tr><td><strong>unzip</strong></td><td>Extracción de archivos</td><td>— (integrado)</td><td><code>apt install unzip</code></td><td>— (integrado)</td></tr>
+      <tr><td><strong>curl</strong></td><td>Cliente HTTP</td><td>— (integrado)</td><td><code>apt install curl</code></td><td>— (integrado)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim);">⚠️ Los elementos marcados requieren una descarga directa e instalación manual.</p>
+
+  <h3>Herramientas opcionales (<code>--wezterm</code>, <code>--docker</code>)</h3>
+  <table>
+    <thead><tr><th>Herramienta</th><th>macOS</th><th>Linux</th><th>Windows</th></tr></thead>
+    <tbody>
+      <tr><td><strong>WezTerm</strong> (<code>--wezterm</code>)</td><td><code>brew install --cask wezterm</code></td><td>apt (repositorio fury.io)</td><td><code>winget wez.wezterm</code></td></tr>
+      <tr><td><strong>Docker</strong> (<code>--docker</code>)</td><td><code>brew install --cask docker</code></td><td>Script de <code>get.docker.com</code></td><td><code>winget Docker.DockerDesktop</code></td></tr>
+      <tr><td><strong>WSL2</strong> (<code>-WSL2</code>, solo Windows)</td><td>—</td><td>—</td><td><code>wsl --install</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="terminal">Aplicaciones de terminal recomendadas (Windows)</h2>
+  <table>
+    <thead><tr><th>Aplicación</th><th>Descripción</th><th>Instalación</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Windows Terminal</strong> ⭐</td><td>Aplicación oficial de Microsoft, pestañas e integración con WSL — la recomendación predeterminada</td><td><code>winget install Microsoft.WindowsTerminal</code></td></tr>
+      <tr><td><strong>WezTerm</strong></td><td>Con aceleración GPU, multiplexor integrado, multiplataforma — recomendado para usuarios avanzados</td><td><code>winget install wez.wezterm</code></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;color:var(--text-dim);">Instalación automática de WezTerm: <code>.\setup-windows.ps1 -WezTerm</code></p>
+
+  <h2 id="trouble">Solución de problemas</h2>
+
+  <p><strong><code>bun: command not found</code> después de la instalación</strong></p>
+  <p>Reinicie su terminal. En Windows, bun se registra automáticamente en las variables de entorno del usuario. macOS/Linux:</p>
+  <div style="position:relative">
+  <pre class="code-block">export PATH="$HOME/.bun/bin:$PATH"</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <p><strong><code>claude: command not found</code> después de <code>bun install -g</code></strong></p>
+  <p>El script reintenta automáticamente con un respaldo a npm si bun falla. Si el problema persiste, verifique la ruta con <code>bun pm ls -g</code> y agréguela a su PATH.</p>
+
+  <p><strong><code>agy: command not found</code> después de la instalación</strong></p>
+  <p>El instalador de Antigravity CLI coloca el binario en <code>~/.local/bin</code> o <code>/usr/local/bin</code>. Ejecute <code>source ~/.bashrc</code> o reinicie su terminal.</p>
+
+  <p><strong>Windows: "running scripts is disabled on this system"</strong></p>
+  <p>El script configura esto automáticamente como <code>RemoteSigned</code>. Para cambiarlo manualmente:</p>
+  <div style="position:relative">
+  <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <div class="warn"><strong>Windows: ejecución sin privilegios de administrador</strong> — el script muestra una advertencia pero continúa. Algunas instalaciones, como winget, pueden fallar, por lo que se recomienda volver a ejecutar PowerShell como administrador.</div>
+
+  <p><strong>Verificación de registros de instalación</strong></p>
+  <p>Los registros de ejecución del script de Windows se guardan automáticamente en <code>%USERPROFILE%\workshop-setup-logs\</code>.</p>
+
+  <hr>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Ejecute <code>bun setup-common.ts</code>, y una vez que cada elemento muestre ✅, el entorno del taller está listo.</p>
+ </article>
+</main>
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

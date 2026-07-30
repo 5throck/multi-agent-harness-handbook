@@ -33,11 +33,12 @@
   var STORAGE_KEY    = 'lang';
   var SWITCHER_ID    = 'lang-switcher';
   var SELECT_ID      = 'lang-select';
-  var SUFFIX_REGEX   = /(?:_en|_ja|_ko)(?=\.html$)/;
+  var SUFFIX_REGEX   = /(?:_en|_ja|_ko|_es)(?=\.html$)/;
   var LANGUAGES      = [
     { value: '',  label: '한국어',  suffix: ''    },
     { value: 'en', label: 'English', suffix: '_en' },
-    { value: 'ja', label: '日本語',  suffix: '_ja' }
+    { value: 'ja', label: '日本語',  suffix: '_ja' },
+    { value: 'es', label: 'Español', suffix: '_es' }
   ];
 
   /* -----------------------------------------------------------------------

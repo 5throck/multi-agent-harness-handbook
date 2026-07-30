@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 4 §1 · Uso de equipos multiagente basados en arnés - Material del Manual de Ingeniería de Arneses de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 4 §1 · Uso de equipos multiagente basados en arnés</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar navigation ── -->
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 4 §1 · Uso de equipos multiagente basados en arnés</div>
+  <a href="#tree">Visión general — Estructura completa</a>
+  <div class="nav-section">Subagente único</div>
+  <a href="#section-1">1. Definición de subagentes — Predefinidos vs. creación dinámica</a>
+  <a href="#section-2">2. Invocación/delegación de subagentes</a>
+  <div class="nav-section">Colaboración en paralelo / equipo</div>
+  <a href="#section-3">3. Ejecución en paralelo — Comparación de 4 herramientas</a>
+  <a href="#section-4">4. Automatización/ganchos — Lo que se ejecuta automáticamente</a>
+  <div class="nav-section">Referencia</div>
+  <a href="#refs">Enlaces de referencia</a>
+  <div class="nav-section">Documentos relacionados</div>
+  <a href="04_Practice_Manual_A_es.html">Capítulo 4 §1-A · Centrado en Claude</a>
+  <a href="04_Practice_Manual_B_es.html">Capítulo 4 §1-B · Centrado en Antigravity</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Barreras de seguridad y modelos de permisos</a>
+  <a href="../intro/05_Intro_Chapter_es.html">Capítulo 5 · Introducción</a>
+</nav>
+
+<!-- ── Main content ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 4 §1</div>
+  <h1>Capítulo 4 §1 · Uso de equipos multiagente basados en arnés</h1>
+  <p class="subtitle">Una referencia comparativa para definir, invocar y escalar subagentes en unidades paralelas/automatizadas a través de cuatro herramientas — Claude Code / Claude App / Antigravity CLI / Antigravity (Escritorio) &nbsp;|&nbsp; Documentación oficial: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Subagentes</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Primeros pasos</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Uso</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Administrador de agentes</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Versión objetivo</span><span class="vvalue">Claude Code versión 2026-07 / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
+    <div class="version-row"><span class="vlabel">URL del documento de referencia</span><span class="vvalue"><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com/en/docs/claude-code/sub-agents</a> · <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">antigravity.google/docs/cli-getting-started</a> · <a href="https://antigravity.google/docs/cli-using" target="_blank">antigravity.google/docs/cli-using</a> · <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google/docs/agent-manager</a></span></div>
+    <div class="version-row"><span class="vlabel">Fecha de recopilación</span><span class="vvalue">2026-07-14</span></div>
+    <div class="version-row"><span class="vlabel">Cómo verificar la versión</span><span class="vvalue">Claude Code/App: <code>claude --version</code> · Antigravity CLI: <code>agy --version</code> o <code>/usage</code> dentro de una sesión · Antigravity Escritorio: pantalla de información de la aplicación</span></div>
+    <div class="version-row"><span class="vlabel">Notas para revisión</span><span class="vvalue">Tanto los equipos de agentes de Claude Code como el Administrador de agentes de Antigravity CLI son funciones en rápida evolución, por lo que los nombres de indicadores, comandos y disposiciones de interfaz pueden cambiar con cada versión — siempre consulte las notas de la última versión primero</span></div>
+  </div>
+
+  <div class="warning-box">A partir del 2026-06-18, Google discontinuó el servicio de Gemini CLI para usuarios individuales (Free/Pro/Ultra), y <strong>Antigravity CLI (<code>agy</code>)</strong> lo reemplazó. Este capítulo se escribió originalmente alrededor de la interfaz de línea de comandos (CLI) de Gemini antes de esa fecha, pero desde entonces se ha actualizado completamente para reflejar Antigravity CLI/Escritorio en la fecha actual. Para una comparación detallada de las características específicas de cada herramienta, consulte <a href="../tools/00_Tools_Manual_es.html">Comparación de herramientas</a>.</div>
+
+  <!-- ── Concept/command tree ── -->
+  <h2 id="tree">Visión general — Estructura completa</h2>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
+Uso de equipos multiagente basados en arnés (basado en la aplicación de escritorio, con CLI como alternativa equivalente)
+├── Definición de subagentes
+│   ├── Claude App / Claude Code    .claude/agents/*.md (frontmatter YAML, predefinidos — igual para ambos)
+│   └── Antigravity(Escritorio) / CLI  Sin archivo de definición — el orquestador crea subagentes dinámicamente según el objetivo
+├── Invocación/delegación de subagentes
+│   ├── Claude App / Claude Code    Herramienta Agent(Task) — description / prompt / subagent_type
+│   └── Antigravity(Escritorio)/CLI    Interfaz del Administrador de agentes (Escritorio) · /goal, /agent, panel /agents (CLI)
+├── Ejecución en paralelo
+│   ├── Claude App                  Equipos de agentes (solo en proceso)
+│   ├── Claude Code                 Equipos de agentes (en proceso/tmux) + múltiples llamadas Agent en un mensaje
+│   ├── Antigravity Escritorio       Administrador de agentes — agentes por espacio de trabajo (Modo Local/Nuevo Worktree)
+│   └── Antigravity CLI             Subagentes en paralelo dentro de una sesión + en paralelo entre sesiones (múltiples terminales)
+└── Automatización/ganchos
+    ├── Claude App                  Los ganchos no se activan — se requiere ejecución manual
+    ├── Claude Code                 Ganchos PostToolUse/TeammateIdle/TaskCompleted se activan automáticamente
+    ├── Antigravity Escritorio       No aplicable — centrado en la GUI
+    └── Antigravity CLI             agy -p "prompt" (para CI no interactivo), agy inspect (verificar configuración)
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div></div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div >Ejemplo de composición de un equipo de agentes</div>
+    <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="teamArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+      </defs>
+      <!-- Main Session -->
+      <rect x="160" y="10" width="200" height="44" rx="10" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="260" y="32" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">Sesión Principal</text>
+      <text x="260" y="46" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" fill="#0969da">Orquestador</text>
+
+      <!-- Vertical line down -->
+      <line x1="260" y1="54" x2="260" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+      <!-- Horizontal branch -->
+      <line x1="90" y1="85" x2="430" y2="85" stroke="#d0d7de" stroke-width="1.5"/>
+
+      <!-- writer -->
+      <line x1="90" y1="85" x2="90" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="20" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="90" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#6639ba">escritor</text>
+      <text x="90" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Redacción de borradores</text>
+
+      <!-- reviewer -->
+      <line x1="260" y1="85" x2="260" y2="108" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#teamArrow)"/>
+      <rect x="190" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="260" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#1a7f37">revisor</text>
+      <text x="260" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Revisión / retroalimentación</text>
+
+      <!-- researcher (optional) -->
+      <line x1="430" y1="85" x2="430" y2="108" stroke="#d0d7de" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#teamArrow)"/>
+      <rect x="355" y="110" width="150" height="40" rx="8" fill="#ffffff" stroke="#953800" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <text x="430" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#953800">investigador</text>
+      <text x="430" y="144" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">Investigación (opcional)</text>
+
+      <!-- Connection lines between specialists -->
+      <path d="M90,150 L90,175 L260,175" fill="none" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <polygon points="260,175 254,172 254,178" fill="#6639ba"/>
+      <text x="175" y="172" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#6639ba">Entrega del borrador</text>
+
+      <!-- Bottom note -->
+      <text x="260" y="210" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">El orquestador ensambla dinámicamente especialistas según la solicitud</text>
+    </svg>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 1 ── -->
+  <h2 id="section-1">1. Definición de subagentes — Predefinidos vs. creación dinámica</h2>
+
+  <p>La familia Anthropic (Claude App/Claude Code) predefine cada subagente como un único archivo markdown en la carpeta del proyecto. La familia Google (Antigravity Escritorio/CLI) no tiene un archivo de definición separado — el orquestador crea subagentes al vuelo según el objetivo dado. A continuación, cubriremos primero Claude App y Antigravity(Escritorio) como base, y luego presentaremos el equivalente de CLI de cada uno.</p>
+
+  <p >
+    El método concreto de definición/invocación para la familia Claude se cubre en <a href="04_Practice_Manual_A_es.html">§1-A Centrado en Claude</a>,
+    y el método concreto para la familia Antigravity se cubre en <a href="04_Practice_Manual_B_es.html">§1-B Centrado en Antigravity</a>.
+  </p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Campo del frontmatter</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Escritorio/CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td>Obligatorio. Debe coincidir con el valor de <code>subagent_type</code> para ser invocable</td>
+        <td rowspan="4">No aplicable — no existe archivo de definición; el orquestador determina el rol y alcance de herramientas por sí mismo en tiempo de ejecución para crear el subagente</td>
+      </tr>
+      <tr>
+        <td><code>description</code></td>
+        <td>Explica cuándo se utiliza este agente; se referencia para decisiones de activación automática</td>
+      </tr>
+      <tr>
+        <td><code>tools</code></td>
+        <td>Lista de herramientas disponibles; hereda el conjunto predeterminado si se omite</td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td>Especifica un alias como <code>sonnet</code> / <code>opus</code> / <code>haiku</code></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="warning-box">Antigravity (Escritorio/CLI) no tiene en absoluto el concepto de "archivo de definición de subagente" — forzar un ejercicio introductorio que replique el ejemplo <code>reviewer.md</code> de Claude App/Code en Antigravity sería una tergiversación de los hechos. El "ejercicio introductorio" para Antigravity no consiste en crear un archivo, sino en darle un objetivo y observar cómo el orquestador descompone el trabajo por sí solo.</div>
+
+  <hr>
+
+  <!-- ── Section 2 ── -->
+  <h2 id="section-2">2. Invocación/delegación de subagentes</h2>
+
+  <p>La familia Anthropic (Claude App/Claude Code) inicia un subagente en un contexto separado utilizando la herramienta <code>Agent</code>/<code>Task</code>. La familia Google (Antigravity Escritorio/CLI) delega un objetivo a un agente a través de la interfaz del Administrador de agentes o comandos de barra diagonal.</p>
+
+  <p >
+    El método concreto de invocación para la familia Claude se cubre en <a href="04_Practice_Manual_A_es.html#section-2">§1-A Sección 2</a>,
+    y el método concreto para la familia Antigravity se cubre en <a href="04_Practice_Manual_B_es.html#section-2">§1-B Sección 2</a>.
+  </p>
+
+  <hr>
+
+  <!-- ── Section 3 ── -->
+  <h2 id="section-3">3. Ejecución en paralelo — Comparación de 4 herramientas</h2>
+
+  <p>Las cuatro herramientas admiten ejecución en paralelo, pero el enfoque difiere. La familia Claude utiliza equipos de agentes / múltiples llamadas Agent, mientras que la familia Antigravity utiliza el Administrador de agentes / paralelismo entre sesiones.</p>
+
+  <div class="warning-box">Ejecutar múltiples agentes simultáneamente en el mismo directorio/espacio de trabajo puede causar "superposición cognitiva" — un problema donde un agente confunde la salida de otro agente que trabaja en la misma carpeta como su propio contexto de trabajo (alucinación). Aislar agentes por espacio de trabajo o worktree es la práctica recomendada, y no es un problema menor que pueda omitirse como excepción.</div>
+
+  <p >
+    El método de ejecución en paralelo de la familia Claude se cubre en <a href="04_Practice_Manual_A_es.html#section-3">§1-A Sección 3</a>,
+    y el método de ejecución en paralelo de la familia Antigravity se cubre en <a href="04_Practice_Manual_B_es.html#section-3">§1-B Sección 3</a>.
+  </p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Elemento</th><th>Antigravity (Escritorio)</th><th>Claude App (Escritorio)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Unidad de ejecución en paralelo</td>
+        <td>Agente independiente por espacio de trabajo</td>
+        <td>Equipos de agentes (solo en proceso)</td>
+        <td>Dentro de una sesión + entre sesiones (múltiples terminales)</td>
+        <td>Múltiples llamadas Agent en un mensaje / Equipos de agentes (en proceso + tmux)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 4 ── -->
+  <h2 id="section-4">4. Automatización/ganchos — Lo que se ejecuta automáticamente</h2>
+
+  <p>Claude Code (CLI) activa automáticamente ganchos de eventos (PostToolUse/TeammateIdle/TaskCompleted), pero Claude App y Antigravity Escritorio no activan ganchos automáticamente. La interfaz de línea de comandos (CLI) de Antigravity proporciona ejecución no interactiva a través de <code>agy -p</code> e inspección de configuración a través de <code>agy inspect</code>.</p>
+
+  <p >
+    Los detalles sobre automatización/ganchos para la familia Claude se cubren en <a href="04_Practice_Manual_A_es.html#section-4">§1-A Sección 4</a>,
+    y los detalles para la familia Antigravity se cubren en <a href="04_Practice_Manual_B_es.html#section-4">§1-B Sección 4</a>.
+  </p>
+
+  <p >Consejo práctico: Antigravity tiene una cuota de uso que se renueva periódicamente según el trabajo calculado realizado. Las cifras exactas pueden variar según la cuenta/plan, por lo que es más seguro tenerlo en cuenta al planificar ejecutar múltiples agentes en paralelo durante un período prolongado.</p>
+
+  <div class="warning-box">Tanto los equipos de agentes como el Administrador de agentes son funciones en rápida evolución — los nombres de indicadores, el comportamiento predeterminado y las disposiciones de interfaz pueden cambiar con cada versión, así que consulte las notas de la última versión antes de confiar en ellos en un flujo de trabajo de producción.</div>
+
+  <hr>
+
+  <!-- ── Reference links ── -->
+  <h2 id="refs">Enlaces de referencia</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Claude Code — Documentación oficial de subagentes</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-getting-started" target="_blank">Antigravity CLI — Documentación oficial de primeros pasos</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/cli-using" target="_blank">Antigravity CLI — Documentación oficial de uso del CLI de AGY</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/agent-manager" target="_blank">Antigravity — Documentación oficial del Administrador de agentes</a></li>
+    <li>⚙️ <a href="04_Practice_Examples_A_es.html">Capítulo 4 §2 Ejemplos de práctica — 04_Practice_Examples_A_es.html</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Basado en Claude Code 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 | Julio 2026</p>
+  <div class="chapter-nav">
+    <a href="../guardrails/03_Guardrails_Chapter_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 3 · Barreras de seguridad</div></a>
+    <div class="branch">
+      <div class="branch-label">Elegir herramienta</div>
+      <a href="04_Practice_Manual_A_es.html" >Claude (A)</a>
+      <a href="04_Practice_Manual_B_es.html" >Antigravity (B)</a>
+    </div>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

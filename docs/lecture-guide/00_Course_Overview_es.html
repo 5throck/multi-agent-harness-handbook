@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Resumen del curso · Manual de ingeniería de arnés de equipos multiagente - Materiales para el Manual de ingeniería de arnés de equipos multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumen del curso · Manual de ingeniería de arnés de equipos multiagente</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .hero p { font-size: 14px; line-height: 1.75; margin: 0; }
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px; letter-spacing: .04em;
+      margin-right: 6px; margin-bottom: 6px;
+    }
+    h2 {
+      font-weight: 700; margin: 44px 0 14px;
+      scroll-margin-top: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2 .icon { font-size: 1.2rem; }
+    tr.schedule-total td { font-weight: 700; background: var(--bg2); }
+    .obj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0 22px; }
+    .obj-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 18px; font-size: 14px; line-height: 1.65; text-align: left;
+    }
+    .obj-card .obj-num {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: var(--tag-bg); border-radius: 10px; padding: 2px 8px; margin-bottom: 8px; display: inline-block;
+    }
+    .obj-card strong { color: var(--accent-dark); }
+    .takeaway-list { list-style: none; padding: 0; margin: 14px 0 22px; }
+    .takeaway-list li {
+      padding: 10px 16px 10px 42px; position: relative; margin-bottom: 8px;
+      background: var(--bg-success); border: 1px solid var(--badge-green-border); border-radius: 8px; font-size: 14px;
+    }
+    .takeaway-list li::before {
+      content: "✓"; position: absolute; left: 14px; top: 10px;
+      color: var(--accent-green); font-weight: 700; font-size: 14px;
+    }
+    .instructor-box p { margin: 6px 0; }
+    .schedule-block {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 6px 0; border-bottom: 1px solid var(--bg3);
+    }
+    .schedule-block:last-child { border-bottom: none; }
+    .schedule-time {
+      min-width: 70px; font-weight: 700; color: var(--accent-dark);
+      text-align: right; padding-top: 2px;
+    }
+    .schedule-body { flex: 1; }
+    .schedule-body h4 { font-size: 14px; font-weight: 700; margin: 0 0 3px; }
+    .schedule-body p { font-size: 13px; color: var(--text-dim); margin: 2px 0; line-height: 1.6; }
+    footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+      color: var(--text-dim); font-size: 12px; line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 640px) {
+      .wrap { padding: 32px 18px 60px; }
+      h1 { font-size: 1.7rem; }
+      .obj-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Taller de ingeniería de arnés de equipos multiagente</h1>
+  <p class="subtitle">De la ingeniería de prompts a la ingeniería de arnés. Un taller práctico de dos días en el que diseñarás y operarás equipos multiagente en cuatro herramientas: Claude Code, Claude App, Antigravity y Antigravity CLI.</p>
+</header>
+
+<!-- ── One-line summary ── -->
+<div class="hero">
+  <p><strong>¿Qué es este taller?</strong> Partiendo de la premisa de que "la ingeniería de prompts por sí sola no es suficiente", este <strong>taller práctico de dos días</strong> enseña una metodología de diseño para equipos multiagente en la que los agentes de IA reciben <strong>roles estrechos</strong> y son coordinados por un <strong>orquestador</strong>, mientras los participantes construyen subagentes y canalizaciones reales en las cuatro herramientas: Claude Code, Claude App, Antigravity y Antigravity CLI.</p>
+  <p><strong>El día 1</strong> está dirigido a usuarios generales y se centra en conceptos multiagente, práctica con las herramientas y uso de variantes existentes. <strong>El día 2</strong> está dirigido a profesionales de TI y abarca la arquitectura en profundidad, comparación de herramientas, estrategia de operación empresarial, creación de nuevas variantes y un proyecto integrador.</p>
+</div>
+
+<!-- ────────────────── 1. Objetivos de aprendizaje ────────────────── -->
+<h2 id="objectives"><span class="icon">🎯</span>Objetivos de aprendizaje</h2>
+<p>Al completar este taller, los participantes serán capaces de:</p>
+<div class="obj-grid">
+  <div class="obj-card">
+    <div class="obj-num">LO-1</div>
+    <strong>Explicar</strong> la definición de ingeniería de arnés en comparación con la ingeniería de prompts y de contexto, e identificar las tres limitaciones estructurales de un solo agente (sobrecarga de contexto, conflicto de roles, falta de paralelismo).
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-2</div>
+    <strong>Diseñar</strong> un equipo multiagente compuesto por un orquestador, especialistas y contratos de traspaso, y seleccionar el patrón adecuado de los cinco patrones de orquestación de Anthropic (encadenamiento, enrutamiento, paralelización, orquestador-trabajador, evaluador-optimizador) para una situación dada.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-3</div>
+    <strong>Aplicar</strong> un sistema de barreras de seguridad a subagentes que incluya una clasificación de tres niveles de acciones riesgosas (lectura/escritura/destructivas), el principio de privilegio mínimo, puertas de aprobación humana, aislamiento y registro de auditoría.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-4</div>
+    <strong>Ejecutar</strong> la definición e invocación de subagentes en las cuatro herramientas — Claude Code, Claude App, Antigravity y Antigravity CLI — e implementar directamente canalizaciones secuenciales y ejecución en paralelo.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-5</div>
+    <strong>Comparar</strong> los métodos de definición de subagentes, teammateMode, soporte de hooks y diferencias del Agent Manager de las cuatro herramientas, a partir de la experiencia práctica.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-6</div>
+    <strong>Juzgar</strong> cuál de los dos modelos operativos empresariales de equipos multiagente (modelo de tickets de servicio vs. modelo de herramienta de desarrollo + variante) se adapta a su organización y explicar por qué.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-7</div>
+    <strong>Implementar</strong> su comprensión de la estructura de capas L0→L1→L2 del repositorio ai-workspace-standards y sus cuatro archivos principales, creando un prototipo de nueva variante (co-marketing) y redactando una lista de verificación de promoción.
+  </div>
+  <div class="obj-card">
+    <div class="obj-num">LO-8</div>
+    <strong>Sintetizar</strong> su propia tarea recurrente en un enunciado de problema, y luego diseñar y ejecutar el ciclo completo: definición del problema → diseño de barreras de seguridad → implementación del subagente → verificación y retrospectiva.
+  </div>
+</div>
+
+<!-- ────────────────── 2. Público objetivo ────────────────── -->
+<h2 id="audience"><span class="icon">👥</span>Público objetivo</h2>
+<p>Este taller se desarrolla en dos días, cada uno dirigido a un <strong>público diferente</strong>. Puede asistir a un solo día que se ajuste a su perfil, o asistir a ambos días para una ruta de aprendizaje completa.</p>
+
+<h3>📅 Día 1 — Usuarios generales</h3>
+<p>Dirigido a profesionales que desean aplicar herramientas de IA en su trabajo. No se requiere experiencia amplia en programación — es suficiente estar familiarizado con operaciones básicas de línea de comandos.</p>
+<ul>
+  <li><strong>Profesionales que adoptan recientemente o ya usan herramientas de IA para programación a diario.</strong> Si utiliza Claude Code, GitHub Copilot, Cursor o herramientas similares pero siente las limitaciones de las interacciones con un solo prompt, este taller es para usted.</li>
+  <li><strong>Líderes de equipo o planificadores que están considerando la adopción de agentes de IA.</strong> Para quienes están evaluando cómo desplegar agentes dentro de su equipo.</li>
+  <li><strong>Instructores y consultores que enseñan herramientas de IA.</strong> Para quienes cubren Claude Code y Antigravity en sus materiales de capacitación.</li>
+</ul>
+<div class="note">
+  <strong>Nota:</strong> El ejercicio de calentamiento del día 1 (Tetris/Pac-Man) utiliza claude.ai o Claude Code. Puede participar únicamente con entrada de prompts, incluso sin experiencia en programación, aunque la familiaridad con entornos de navegador hará más fluido el ejercicio del juego basado en HTML Canvas.
+</div>
+
+<h3>📅 Día 2 — Profesionales de TI</h3>
+<p>Construyendo sobre la experiencia del día 1, esta sesión está dirigida a profesionales de TI y abarca la arquitectura y material técnico más profundo.</p>
+<ul>
+  <li><strong>Ingenieros de software que usan herramientas de IA para programación a diario.</strong> Si utiliza Claude Code, GitHub Copilot, Cursor o herramientas similares pero necesita experiencia diseñando arquitecturas multiagente, este taller es para usted.</li>
+  <li><strong>Ingenieros de DevOps y plataformas.</strong> Para aquellos cuyo trabajo incluye la creación de espacios de trabajo de IA a nivel organizacional y la gestión de variantes.</li>
+  <li><strong>Líderes técnicos que diseñan la adopción de agentes de IA.</strong> Para quienes son responsables de desplegar agentes de forma segura en todo un equipo.</li>
+</ul>
+<div class="note">
+  <strong>Nota:</strong> Este taller se centra en la familia de herramientas Claude Code y Antigravity, y asume familiaridad con la instalación y el uso de las operaciones básicas de línea de comandos de las cuatro herramientas. Se recomienda a los principiantes sin experiencia en CLI practicar a fondo los pasos preparatorios en la <a href="../setup/SETUP_es.html">guía de instalación</a> con anticipación.
+</div>
+
+<!-- ────────────────── 3. Requisitos previos ────────────────── -->
+<h2 id="prerequisites"><span class="icon">📋</span>Requisitos previos</h2>
+
+<h3>Suscripciones y cuentas</h3>
+<div class="chk">☐ Una suscripción activa a Claude Pro/Max (una cuenta de suscripción, no una clave API)</div>
+<div class="chk">☐ Una cuenta de Google para usar Antigravity</div>
+<div class="chk">☐ Una cuenta de GitHub capaz de ejecutar <code>gh auth login</code></div>
+
+<h3>Requisitos del sistema</h3>
+<div class="chk">☐ Al menos 5 GB de espacio libre en disco y privilegios de administrador/sudo</div>
+<div class="chk">☐ Claude App (Escritorio), Claude Code (CLI), Antigravity (Escritorio) y Antigravity CLI (<code>agy</code>) instalados</div>
+<div class="chk">☐ Confirmar que <code>bun --version</code> y <code>git --version</code> muestran salida normal</div>
+<div class="chk">☐ Clonar <code>git clone https://github.com/5throck/ai-workspace-standards.git</code> en la raíz de su espacio de trabajo con anticipación</div>
+
+<div class="warn">
+  <strong>⚠️ La preinstalación es obligatoria.</strong> Para evitar perder tiempo con problemas de instalación el día del taller, complete todos los elementos de la <a href="../setup/SETUP_CHECKLIST_es.html">lista de verificación de preinstalación</a> al menos un día antes de que comience el curso. Hay scripts de instalación automatizados específicos para cada sistema operativo en la <a href="../setup/SETUP_es.html">guía de instalación</a>.
+</div>
+
+<!-- ────────────────── 4. Formato del curso ────────────────── -->
+<h2 id="format"><span class="icon">📖</span>Formato del curso</h2>
+<div class="table-schedule">
+<table>
+  <thead><tr><th>Formato</th><th>Contenido</th><th>Día 1</th><th>Día 2</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tag tag-lecture">Clase</span></td><td>Explicación de conceptos, introducción de patrones, comparación de herramientas, comparación de modelos</td><td>~30%</td><td>~40%</td></tr>
+    <tr><td><span class="tag tag-lab">Práctica</span></td><td>Los participantes definen/invocan subagentes, construyen canalizaciones y crean variantes ellos mismos</td><td>~55%</td><td>~45%</td></tr>
+    <tr><td><span class="tag tag-discuss">Discusión</span></td><td>Discusión en grupos pequeños, comprobación de comprensión, retrospectiva grupal</td><td>~15%</td><td>~10%</td></tr>
+    <tr><td><span class="tag tag-demo">Demostración</span></td><td>Compartición de pantalla del instructor (solo operaciones irreversibles, p.ej. la canalización de promoción)</td><td>—</td><td>~5%</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="highlight">
+  <div class="hl-title">Entorno práctico</div>
+  <p>Las cuatro herramientas (Claude App, Claude Code, Antigravity Escritorio, Antigravity CLI) están instaladas, y los participantes se dividen en cuatro grupos, cada uno ejecutando el mismo escenario en una herramienta diferente. Al final, se comparan los resultados, brindando experiencia directa de primer mano del contenido del capítulo "comparación de herramientas".</p>
+</div>
+
+<!-- ────────────────── 5. Horario del curso ────────────────── -->
+<h2 id="agenda"><span class="icon">🕐</span>Horario del curso</h2>
+    <p>La duración total de ambos días es de <strong>aproximadamente 11 horas y 15 minutos</strong> (excluyendo descansos). Con 2 descansos el día 1 y 2 descansos el día 2 (de 10-15 minutos cada uno), esto equivale aproximadamente a <strong>5h 55m-6h 25m el día 1 y 6h-6h 30m el día 2</strong>.</p>
+
+<div class="highlight">
+  <div class="hl-title">Principios de programación</div>
+  <p><strong>El día 1 (usuarios generales)</strong> se centra en los conceptos de ingeniería de arnés, barreras de seguridad y práctica con las herramientas, presenta ai-workspace-standards de forma ligera, y luego dedica amplio tiempo a la práctica con <strong>variantes existentes</strong>. Está estructurado para que los participantes con poca experiencia en programación puedan seguir. <strong>El día 2 (profesionales de TI)</strong> se basa en el día 1 para cubrir en profundidad la arquitectura de ai-workspace-standards, la comparación de herramientas y la estrategia de operación empresarial, y luego trabaja en <strong>crear una nueva variante</strong> y un <strong>proyecto integrador</strong>.</p>
+</div>
+
+<h3>📅 Día 1 — Usuarios generales: Aplicación práctica multiagente</h3>
+
+<div class="schedule-block">
+  <div class="schedule-time">10 min</div>
+  <div class="schedule-body">
+    <h4>Introducción</h4>
+    <p>Objetivos del curso y panorama general de la ruta de dos días, confirmación de requisitos previos</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">30 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 1 · Transformación del trabajo en la era de la IA</h4>
+    <p>Por qué la IA ahora (estadísticas de adopción), las tres etapas de uso de la IA (usuario→utilizador→diseñador), la necesidad de la ingeniería de arnés, los principios de los sistemas multiagente, casos reales de ahorro de tiempo y la ruta de este taller</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">45 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 2 · Ingeniería de arnés y conceptos de equipos multiagente</h4>
+    <p>El flujo Prompt→Contexto→Arnés, limitaciones de un solo agente, contratos de orquestador-especialista-traspaso, los 5 patrones de orquestación, composición dinámica de equipos, el estándar AGENTS.md</p>
+    <p><span class="tag tag-lecture">Clase</span> <span class="tag tag-discuss">Comprobación de comprensión</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">20 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 3 · Barreras de seguridad y modelo de permisos</h4>
+    <p>Clasificación de tres niveles de acciones riesgosas, el principio de privilegio mínimo, puertas de aprobación humana, aislamiento, registro de auditoría</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Descanso 1 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Ejercicio de calentamiento — De Tetris a Pac-Man</h4>
+    <p>Programar por vibes un clon de Tetris (10 min) → intentar Pac-Man con un solo prompt y experimentar el fracaso de primera mano → reintentar con un equipo multiagente de 3 etapas: planificación/desarrollo/QA (25 min) → conclusión: "el valor de la separación de roles crece exponencialmente a medida que aumenta la complejidad" (5 min)</p>
+    <p><span class="tag tag-lab">Práctica</span> <span class="tag tag-discuss">Conclusión</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">80 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 4 §1 + Capítulo 4 §2-A/B · Práctica de equipo multiagente</h4>
+    <p>Definición/invocación de subagentes, canalizaciones secuenciales, composición dinámica de equipos, ejecución en paralelo y comparación de niveles de modelos en Claude (A)/Antigravity (B) (G-1/D-1/D-2/P-1/P-2)</p>
+    <p><span class="tag tag-lab">Práctica</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Descanso 2 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">20 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 5 · Introducción a ai-workspace-standards (panorama ligero)</h4>
+    <p>Panorama del repositorio, los cuatro archivos principales (AGENTS.md, CONSTITUTION.md, CLAUDE.md, GEMINI.md), qué es una variante y lo básico de la creación de proyectos mediante andamiaje</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 6 · Uso de una variante existente (G-1)</h4>
+    <p>Crear un proyecto de investigación de mercado de IA física con co-consult, aplicar el marco de diseño de 4 etapas, ejecutar el equipo de agentes (el flujo de trabajo de consultoría de 7 etapas), revisar entregables y rastrear traspasos</p>
+    <p><span class="tag tag-lab">Práctica</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 6 · Uso de una variante existente (G-2)</h4>
+    <p>Crear una presentación de globalización de la comida coreana con co-deck, definir el tema de la presentación, ejecutar la canalización de 11 etapas, revisar y mejorar el entregable, configurar TTS y generación automática de diapositivas</p>
+    <p><span class="tag tag-lab">Práctica</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">10 min</div>
+  <div class="schedule-body">
+    <h4>Cierre del día 1</h4>
+    <p>Resumen del material del día, retrospectiva comparando las estructuras de las dos variantes (co-consult vs. co-deck), avance del día 2 (sesión para profesionales de TI)</p>
+    <p><span class="tag tag-discuss">Discusión</span></p>
+  </div>
+</div>
+
+<h3 style="margin-top:36px">📅 Día 2 — Profesionales de TI: Arquitectura, creación de nuevas variantes y proyecto integrador</h3>
+
+<div class="schedule-block">
+  <div class="schedule-time">10 min</div>
+  <div class="schedule-body">
+    <h4>Resumen del día 1</h4>
+    <p>Resumen de conceptos clave (patrones de orquestación, barreras de seguridad, AGENTS.md), compartir resultados de la práctica con variantes existentes del capítulo 6</p>
+    <p><span class="tag tag-discuss">Discusión</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 8 §1 · Despliegue y SSOT</h4>
+    <p>La estructura de capas L0→L1→L2 en detalle, el modelo de bifurcación, flujo SSOT por archivo</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 8 §2 · Gestión del ciclo de vida</h4>
+    <p>Gestión del ciclo de vida de agentes, habilidades y scripts</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 10 · Actualización de un proyecto L2</h4>
+    <p>El procedimiento para actualizar un proyecto existente a la estructura de variante L2, la clasificación de manejo de archivos en 5 categorías, instantáneas y reversión, y cómo difiere en dirección de la promoción</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 9 · Patrones de diseño de flujos de trabajo</h4>
+    <p>Bloques de construcción de flujos de trabajo (pasos, ramificación, paralelismo, agregación, puertas, bucles), cinco estudios de caso por dominio, guía de selección de patrones</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">25 min</div>
+  <div class="schedule-body">
+    <h4>Referencia común · Comparación de herramientas (técnico)</h4>
+    <p>Vista general de las estructuras de las cuatro herramientas, Claude App vs. Code (definiciones de subagentes, teammateMode), Antigravity vs. agy (Agent Manager, /goal·/agent·/agents), tabla comparativa del alcance de soporte multiagente, guía para elegir herramientas de práctica, integración con AGENTS.md</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">30 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 7 · Comparación de estrategias operativas empresariales</h4>
+    <p>Modelo de tickets de servicio vs. modelo de herramienta de desarrollo + variante, operaciones basadas en kanban, comparación de ventajas y desventajas de ambos modelos</p>
+    <p><span class="tag tag-lecture">Clase</span> <span class="tag tag-discuss">Discusión</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Descanso 1 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">40 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 11 · Creación de una nueva variante (D-1)</h4>
+    <p>Construcción del prototipo Fase A de co-marketing — create-l2-scaffold, definición de agentes de dominio (investigador, redactor), actualización del registro AGENTS.md, agent:verify</p>
+    <p><span class="tag tag-lab">Práctica</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">20 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 11 · Creación de una nueva variante — Clase</h4>
+    <p>Construir desde cero (Fase A→B) vs. promover un proyecto existente — las diferencias entre las dos rutas y criterios para elegir</p>
+    <p><span class="tag tag-lecture">Clase</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">60 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 12 · Promoción de una nueva variante</h4>
+    <p>Validación del prototipo (validate-templates, agent:verify), redacción de la lista de verificación/manifesto de promoción (ejercicio del participante), ejecución de la canalización de promoción (demostración del instructor)</p>
+    <p><span class="tag tag-lab">Práctica</span> <span class="tag tag-demo">Demostración</span></p>
+  </div>
+</div>
+
+<div class="schedule-break">☕ Descanso 2 (10-15 min)</div>
+
+<div class="schedule-block">
+  <div class="schedule-time">60 min</div>
+  <div class="schedule-body">
+    <h4>Capítulo 13 · Práctica integradora</h4>
+    <p>Elija su propia tarea recurrente y diseñe las 4 etapas usted mismo (definición del problema, diseño de barreras de seguridad, implementación del subagente, verificación y retrospectiva)</p>
+    <p><span class="tag tag-lab">Práctica</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Presentaciones del proyecto integrador</h4>
+    <p>1-2 participantes comparten brevemente su propio flujo de trabajo, seguido de retroalimentación entre pares</p>
+    <p><span class="tag tag-discuss">Presentación</span></p>
+  </div>
+</div>
+<div class="schedule-block">
+  <div class="schedule-time">15 min</div>
+  <div class="schedule-body">
+    <h4>Cierre</h4>
+    <p>Retrospectiva completa de los dos días, preguntas y respuestas, enlace al glosario/FAQ y próximos pasos</p>
+    <p><span class="tag tag-discuss">Discusión</span></p>
+  </div>
+</div>
+
+<!-- ────────────────── 6. Temas cubiertos ────────────────── -->
+<h2 id="topics"><span class="icon">📚</span>Temas cubiertos</h2>
+<div class="table-schedule">
+<table>
+  <thead><tr><th>Bloque</th><th>Tema</th><th>Capítulo relacionado</th><th>Programación</th></tr></thead>
+  <tbody>
+        <tr><td>Introducción</td><td>Estado de adopción de la IA y estadísticas, las 3 etapas de uso de la IA, la necesidad de ingeniería de arnés, principios multiagente, casos reales de ahorro de tiempo</td><td>Cap. 1</td><td>Día 1</td></tr>
+        <tr><td>Conceptos</td><td>El paradigma de ingeniería de arnés, patrones de orquestación, el estándar AGENTS.md</td><td>Cap. 2</td><td>Día 1</td></tr>
+        <tr><td>Seguridad</td><td>Diseño de barreras de seguridad, clasificación de acciones riesgosas, privilegio mínimo, puertas de aprobación, aislamiento</td><td>Cap. 3</td><td>Día 1</td></tr>
+        <tr><td>Calentamiento</td><td>Experimentar la diferencia de enfoque según la complejidad: vibe-coding (Tetris) vs. multiagente (Pac-Man)</td><td>Calentamiento</td><td>Día 1</td></tr>
+            <tr><td>Práctica</td><td>Definición/invocación de subagentes, canalizaciones, ejecución en paralelo, comparación de niveles de modelos</td><td>Cap. 4 §1, §2-A/B</td><td>Día 1</td></tr>
+    <tr><td>Diseño</td><td>Introducción a ai-workspace-standards, los 4 archivos principales, panorama de variantes</td><td>Cap. 5 (ligero)</td><td>Día 1</td></tr>
+    <tr><td>Implementación</td><td>Uso de variantes existentes (andamiaje y ejecución de co-consult, co-deck)</td><td>Cap. 6</td><td>Día 1</td></tr>
+            <tr><td>Diseño en profundidad</td><td>La estructura de capas L0→L1→L2, flujo SSOT por archivo, gestión del ciclo de vida de agentes/habilidades/scripts</td><td>Cap. 8 §1, §2</td><td>Día 2</td></tr>
+                <tr><td>Actualización</td><td>Conversión de un proyecto existente a la estructura de variante L2, clasificación de manejo de archivos en 5 categorías, instantáneas y reversión</td><td>Cap. 10</td><td>Día 2</td></tr>
+        <tr><td>Flujo de trabajo</td><td>Bloques de construcción de flujos de trabajo, 5 estudios de caso de patrones por dominio, guía de selección de patrones</td><td>Cap. 9</td><td>Día 2</td></tr>
+    <tr><td>Herramientas</td><td>Análisis comparativo de Claude Code, Claude App, Antigravity y Antigravity CLI</td><td>Referencia común</td><td>Día 2</td></tr>
+    <tr><td>Operaciones</td><td>Modelo de tickets de servicio vs. modelo de variantes, operaciones basadas en kanban</td><td>Cap. 7</td><td>Día 2</td></tr>
+        <tr><td>Creación</td><td>Creación de una nueva variante (prototipo co-marketing), la canalización de promoción</td><td>Cap. 11, 12</td><td>Día 2</td></tr>
+    <tr><td>Síntesis</td><td>Proyecto integrador: aplicación de un equipo multiagente a su propio trabajo</td><td>Cap. 13</td><td>Día 2</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ────────────────── 7. Lo que obtendrá ────────────────── -->
+<h2 id="takeaways"><span class="icon">✅</span>Lo que obtendrá al completar el taller</h2>
+<ul class="takeaway-list">
+  <li><strong>Habilidades de diseño de equipos multiagente.</strong> Domine la metodología de diseño para pasar de un solo agente a una estructura de equipo, lista para aplicar inmediatamente en su propio trabajo.</li>
+  <li><strong>Experiencia práctica con las cuatro herramientas.</strong> Ejecute el mismo escenario usted mismo en Claude Code, Claude App, Antigravity y la interfaz de línea de comandos (CLI) de Antigravity, y experimente directamente las fortalezas y debilidades de cada una.</li>
+  <li><strong>Una lista de verificación de diseño de barreras de seguridad.</strong> Lleve una plantilla práctica de diseño de barreras de seguridad que cubre clasificación de acciones riesgosas, privilegio mínimo y puertas de aprobación.</li>
+  <li><strong>Un prototipo de variante.</strong> Construya usted mismo un prototipo de co-marketing basado en ai-workspace-standards, obteniendo un punto de partida concreto para introducir variantes en su organización.</li>
+  <li><strong>Criterios para elegir un modelo operativo.</strong> Compare las ventajas y desventajas del modelo de tickets de servicio y el modelo de variantes para que pueda definir una estrategia operativa que se ajuste a su organización.</li>
+  <li><strong>Su propio flujo de trabajo.</strong> En la práctica integradora, reformule una de sus tareas recurrentes como un problema de equipo multiagente y experimente el ciclo completo desde la definición del problema hasta la verificación.</li>
+</ul>
+
+<!-- ────────────────── 8. Información del instructor ────────────────── -->
+<h2 id="instructor"><span class="icon">🎤</span>Información del instructor</h2>
+<div class="instructor-box">
+  <p class="placeholder">[Nombre del instructor · Afiliación · Cargo]</p>
+  <p class="placeholder">[Perfil del instructor: experiencia en la introducción/operación de agentes de IA, áreas de interés principales, información de contacto]</p>
+  <p style="margin-top:12px;font-size:12px;color:var(--text-dim);">Esta sección se deja intencionalmente en blanco para que el instructor la complete.</p>
+</div>
+
+<!-- ────────────────── 9. Recursos ────────────────── -->
+<h2 id="resources"><span class="icon">🔗</span>Recursos</h2>
+<ul>
+  <li><a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Documentación oficial de subagentes de Claude Code</a></li>
+  <li><a href="https://antigravity.google/docs/agent-manager" target="_blank">Documentación oficial del Agent Manager de Antigravity</a></li>
+  <li><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">Repositorio GitHub de ai-workspace-standards</a></li>
+  <li><a href="../setup/SETUP_es.html">Guía de instalación del entorno del taller</a></li>
+  <li><a href="../setup/SETUP_CHECKLIST_es.html">Lista de verificación de preinstalación</a></li>
+  <li><a href="../glossary/00_Glossary.html">Glosario</a></li>
+  <li><a href="../faq/00_FAQ.html">FAQ · Errores comunes y soluciones</a></li>
+</ul>
+
+<footer>
+  Basado en Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08) · Material de capacitación en español<br>
+  Recursos oficiales: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> ·
+  <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google</a> ·
+  <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a>
+</footer>
+
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

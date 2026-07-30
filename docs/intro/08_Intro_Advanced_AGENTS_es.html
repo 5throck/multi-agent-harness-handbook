@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!--
+  Chapter 8 §3 · AGENTS.md en Profundidad — estructura de la especificación del registro de agentes, guía de redacción, mapeo de implementación por herramienta, vínculos de verificación y ciclo de vida
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 8 §3 · AGENTS.md en Profundidad - material del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 8 §3 · AGENTS.md en Profundidad</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 8 §3 · AGENTS.md en Profundidad</div>
+  <a href="#spec-format" >Formato de la Especificación</a>
+  <a href="#impl-mapping">Mapeo de Implementación por Herramienta</a>
+  <a href="#authoring-guide">Guía de Redacción</a>
+  <a href="#verify-lifecycle">Verificación y Ciclo de Vida</a>
+  <div class="nav-section">Otras Secciones del Capítulo 8</div>
+  <a href="08_Intro_Advanced_Deploy_es.html">§1 · Despliegue y SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_es.html">§2 · Gestión del Ciclo de Vida</a>
+  <a href="08_Intro_Advanced_Architecture_es.html">§4 · Arquitectura en Profundidad</a>
+  <a href="08_Intro_Advanced_Roadmap_es.html">§5 · Hoja de Ruta Avanzada</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="05_Intro_Chapter_es.html">Capítulo 5 · Introducción a ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Ejecución de un Equipo Multiagente Dentro de una Empresa</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 · Crear una Nueva Variante</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 8 §3</div>
+  <h1>AGENTS.md en Profundidad</h1>
+  <p class="lead">Esta sección cubre el formato de especificación de AGENTS.md, cómo se implementa en diferentes herramientas, los principios de redacción y el proceso de verificación. Se basa en la introducción conceptual a AGENTS.md presentada en el Capítulo 5, adoptando una perspectiva de practicante.</p>
+  <p class="source-line">Especificación estándar: <a href="https://agents.md/" target="_blank">agents.md</a> · Ejemplos prácticos: <a href="../practice/04_Practice_Examples_A_es.html">Capítulo 4 §2-A</a> / <a href="../practice/04_Practice_Examples_B_es.html">Capítulo 4 §2-B</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que cubre esta sección</div>
+    <ul>
+      <li>Estructura de campos y significado de una entrada de agente</li>
+      <li>Cómo la especificación común de AGENTS.md se "implementa" de manera diferente en la familia Claude y la familia Antigravity</li>
+      <li>El principio de mínimo privilegio y las declaraciones de entrega</li>
+      <li>La herramienta de verificación (<code>agent:verify</code>) y su conexión con el ciclo de vida</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. Spec Format
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="spec-format">Formato de la Especificación</h2>
+
+  <p>Cada entrada de agente en AGENTS.md es una sección de Markdown que comienza con <code>## Agent: {nombre}</code>. Dentro de esta sección, se describen campos como rol, entrada, salida, permisos y entrega de manera libre. La especificación estándar no impone un esquema estricto; se basa en convenciones que las herramientas reconocen comúnmente.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Campo</th><th>Significado</th><th>¿Requerido?</th><th>Ejemplo de la Práctica del Capítulo 4</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>## Agent: {nombre}</code></td>
+        <td>Identificador del agente. En la familia Claude, debe coincidir con el valor de <code>subagent_type</code> para ser invocable</td>
+        <td>Requerido</td>
+        <td><code>## Agent: reviewer</code></td>
+      </tr>
+      <tr>
+        <td><code>Role</code></td>
+        <td>Lo que hace este agente</td>
+        <td>Requerido</td>
+        <td>"Revisa archivos de texto en busca de errores tipográficos, lagunas lógicas y puntos de mejora."</td>
+      </tr>
+      <tr>
+        <td><code>Input</code></td>
+        <td>Qué entrada recibe</td>
+        <td>Recomendado</td>
+        <td>"Ruta al archivo de texto que se va a revisar"</td>
+      </tr>
+      <tr>
+        <td><code>Output</code></td>
+        <td>Qué salida produce</td>
+        <td>Recomendado</td>
+        <td>"Lista de errores tipográficos, lagunas lógicas y puntos de mejora"</td>
+      </tr>
+      <tr>
+        <td><code>Permissions</code></td>
+        <td>Alcance de acceso a archivos. Principio de mínimo privilegio — permitir solo lo necesario</td>
+        <td>Recomendado</td>
+        <td>"Solo lectura — no modifica archivos directamente"</td>
+      </tr>
+      <tr>
+        <td><code>handoff_to</code></td>
+        <td>El otro agente al que se pasan los resultados después de la finalización. Una pista declarativa referenciada por el orquestador</td>
+        <td>Opcional</td>
+        <td><code>handoff_to: reviewer</code></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Ejemplo Completo</h3>
+  <p>A continuación se muestra la imagen completa de un archivo AGENTS.md que contiene los dos agentes redactados en los ejercicios prácticos del Capítulo 4 (G-1, D-1).</p>
+  <div style="position:relative">
+  <pre class="code-block">## Agent: reviewer
+
+Role: Revisa archivos de texto en busca de errores tipográficos, lagunas lógicas y puntos de mejora.
+Input: Ruta al archivo de texto que se va a revisar
+Output: Lista de errores tipográficos, lagunas lógicas y puntos de mejora
+Permissions: Solo lectura — no modifica archivos directamente.
+
+## Agent: writer
+
+Role: Escribe un borrador corto de 3-5 oraciones sobre un tema dado.
+Input: Tema, ruta donde guardar el archivo
+Output: Archivo de texto borrador
+Permissions: Escritura permitida — guarda solo en el archivo especificado.
+handoff_to: reviewer (procede a la revisión después de que el borrador esté completo)</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <div class="note">AGENTS.md no es una instrucción dirigida a una herramienta de IA sino un <strong>registro de roles definidos por un humano</strong>. La familia Claude lee este registro y lo "traduce" a archivos de definición específicos de la herramienta (<code>.claude/agents/*.md</code>), mientras que la familia Antigravity tiene su orquestación que lee e interpreta el registro directamente.</div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. Tool-Specific Implementation Mapping
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="impl-mapping">Mapeo de Implementación por Herramienta</h2>
+
+  <p>AGENTS.md es una especificación común neutral frente a herramientas. Sin embargo, la forma en que los subagentes se "implementan" realmente difiere fundamentalmente entre la familia Claude y la familia Antigravity.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Capa</th><th>Claude App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Lectura de AGENTS.md</td>
+        <td>La sesión principal lee <code>AGENTS.md</code> e identifica el registro de agentes</td>
+        <td>El orquestador lee <code>AGENTS.md</code> y crea subagentes dinámicamente</td>
+      </tr>
+      <tr>
+        <td>Definición de subagente</td>
+        <td>Archivos <code>.claude/agents/{nombre}.md</code> con frontmatter YAML (<code>name</code>, <code>description</code>, <code>tools</code>, <code>model</code>) más un prompt del sistema</td>
+        <td>Sin archivo de definición — el orquestador determina autónomamente el rol y alcance de herramientas en tiempo de ejecución</td>
+      </tr>
+      <tr>
+        <td>Implementación de permisos</td>
+        <td>Solo las herramientas mínimas necesarias (<code>Read</code>, <code>Grep</code>, etc.) se enumeran en el campo <code>tools</code> de <code>.claude/agents/*.md</code></td>
+        <td>El orquestador interpreta el campo <code>Permissions</code> de AGENTS.md y restringe el acceso a herramientas por su cuenta</td>
+      </tr>
+      <tr>
+        <td>Entrega</td>
+        <td><code>handoff_to</code> es una pista de referencia. La sesión principal coordina la relación invocando la herramienta <code>Agent</code> secuencialmente</td>
+        <td>El orquestador lee <code>handoff_to</code> y construye automáticamente un pipeline secuencial</td>
+      </tr>
+      <tr>
+        <td>Referencia detallada</td>
+        <td><a href="../practice/04_Practice_Manual_A_es.html">Capítulo 4 §1-A Centrado en Claude</a></td>
+        <td><a href="../practice/04_Practice_Manual_B_es.html">Capítulo 4 §1-B Centrado en Antigravity</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div >AGENTS.md → Flujo de Implementación Específico por Herramienta</div>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
+        <marker id="agArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+      </defs>
+      <!-- AGENTS.md at top -->
+      <rect x="180" y="10" width="200" height="40" rx="8" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
+      <text x="280" y="34" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">AGENTS.md (Especificación Común)</text>
+      <!-- Branch arrows -->
+      <line x1="220" y1="50" x2="140" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="340" y1="50" x2="420" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <!-- Claude side -->
+      <rect x="40" y="82" width="200" height="44" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="140" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#1a7f37">Claude App / Claude Code</text>
+      <text x="140" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">.claude/agents/*.md (predefinido)</text>
+      <line x1="140" y1="126" x2="140" y2="152" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="50" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="140" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#1a7f37">frontmatter YAML + prompt del sistema</text>
+      <!-- Antigravity side -->
+      <rect x="320" y="82" width="200" height="44" rx="8" fill="#faf5ff" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="420" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#6639ba">Antigravity Desktop / CLI</text>
+      <text x="420" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">Sin archivo de definición (generación dinámica)</text>
+      <line x1="420" y1="126" x2="420" y2="152" stroke="#6639ba" stroke-width="1.5" marker-end="url(#agArrowP)"/>
+      <rect x="330" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6639ba">El orquestador interpreta en tiempo real</text>
+    </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. Authoring Guide
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="authoring-guide">Guía de Redacción</h2>
+
+  <h3>1. Comience con una Sección</h3>
+  <p>Comience cada entrada de agente con <code>## Agent: {nombre}</code>. El nombre debe estar en <strong>inglés en minúsculas</strong>, con múltiples palabras unidas por <code>-</code> (ej., <code>code-reviewer</code>, <code>api-tester</code>). Este nombre se usa como el valor de <code>subagent_type</code> en la familia Claude.</p>
+
+  <h3>2. Mantenga el Rol Conciso</h3>
+  <p>Describa el <code>Role</code> — "lo que hace" — claramente en una o dos oraciones. Evite la superposición con otros agentes, y asegúrese de que el área de responsabilidad independiente de cada agente sea clara.</p>
+
+  <h3>3. Establezca Permisos con Mínimo Privilegio</h3>
+  <p>El campo <code>Permissions</code> restringe el alcance de acceso a archivos. No seguir este principio puede permitir que un subagente sobreescriba accidentalmente archivos importantes. En la familia Claude, este permiso se traduce en el campo <code>tools</code> (<code>Read</code>, <code>Grep</code>, <code>Write</code>, etc.) de <code>.claude/agents/*.md</code>.</p>
+
+  <div class="pullquote">Dado que el revisor no puede escribir en primer lugar, los errores simplemente no pueden ocurrir.
+    <span class="by">— Capítulo 4 §2-A, Principio de Mínimo Privilegio</span>
+  </div>
+
+  <h3>4. Declare el Orden con Entrega</h3>
+  <p><code>handoff_to</code> declara "a dónde van los resultados una vez que este agente termina su trabajo." Esto es <strong>una pista, no una orden</strong>. Construir realmente el pipeline secuencial es responsabilidad de la sesión principal (el orquestador).</p>
+
+  <div style="position:relative">
+  <pre class="code-block">## Agent: draft-writer
+Role: Escribe un borrador sobre un tema dado.
+handoff_to: reviewer (procede a la revisión después de que el borrador esté completo)
+
+## Agent: reviewer
+Role: Revisa el texto en busca de errores tipográficos y problemas lógicos.
+handoff_to: editor (procede a la edición final después de que la revisión esté completa)
+
+## Agent: editor
+Role: Finaliza el documento incorporando la retroalimentación.</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <div class="note">Un agente sin <code>handoff_to</code> declarado (<code>editor</code> en el ejemplo anterior) es el punto final del pipeline. El orquestador devuelve el resultado de ese agente al usuario final.</div>
+
+  <h3>5. Verificación</h3>
+  <p>Una vez completada la redacción, verifique la estructura con <code>bun run agent:verify</code>. Este script verifica la completitud del frontmatter del agente, la presencia de las secciones requeridas y la consistencia con el registro de <code>AGENTS.md</code>.</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. Verification and Lifecycle
+       ═══════════════════════════════════════════════════════ -->
+  <h2 id="verify-lifecycle">Verificación y Ciclo de Vida</h2>
+
+  <p>Registrar un agente en AGENTS.md corresponde a la <strong>fase de Creación del ciclo de vida</strong> (ver Capítulo 8 §2). Un agente registrado luego pasa por las siguientes etapas.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Etapa del Ciclo de Vida</th><th>Comportamiento en AGENTS.md</th><th>Verificación</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Crear</strong></td>
+        <td>Añade una sección <code>## Agent: {nombre}</code> a AGENTS.md</td>
+        <td><code>bun run agent:verify</code> — completitud estructural</td>
+      </tr>
+      <tr>
+        <td><strong>Verificar</strong></td>
+        <td>Confirma que el registro es consistente con otros archivos del espacio de trabajo (CONSTITUTION.md, agents/*.md)</td>
+        <td><code>bun run agent:verify</code> — verificación de integridad</td>
+      </tr>
+      <tr>
+        <td><strong>Operar</strong></td>
+        <td>El orquestador lee el registro e invoca agentes durante una sesión real</td>
+        <td>Rastrear invocaciones de agentes en registros de sesión</td>
+      </tr>
+      <tr>
+        <td><strong>Mejorar</strong></td>
+        <td>Modifica definiciones de roles, permisos o relaciones de entrega</td>
+        <td>Reejecutar <code>agent:verify</code> después de la modificación</td>
+      </tr>
+      <tr>
+        <td><strong>Deprecar</strong></td>
+        <td>Elimina o comenta la entrada del agente correspondiente en AGENTS.md</td>
+        <td><code>agent:verify</code> — integridad referencial (asegura que el <code>handoff_to</code> de ningún otro agente apunte a un agente deprecado)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Acostumbrarse a ejecutar <code>agent:verify</code> cada vez que crea o modifica un agente le permite detectar inconsistencias desde el principio — como "listado en el registro pero no existe un archivo de definición real" o "el agente al que apunta handoff_to ha sido eliminado."</p>
+
+  <p>Automatizar este flujo de verificación puede integrarse como un paso de <code>validate-templates.ts</code> en el pipeline de CI/CD cubierto en el Capítulo 8 §1 (Despliegue y SSOT).</p>
+
+  <div class="note"><strong>FAQ:</strong> Si al ejecutar <code>bun run agent:verify</code> se produce un error como "la tabla de AGENTS.md y la lista real de archivos <code>agents/*.md</code> están desincronizadas", compare los nombres de agente en AGENTS.md con los nombres de archivo en la carpeta <code>.claude/agents/</code>, luego añada las entradas faltantes o elimine los archivos innecesarios. → <a href="../faq/00_FAQ_es.html">FAQ</a></div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Chapter_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 8 §2 · Gestión del Ciclo de Vida</div></a>
+    <a href="08_Intro_Advanced_Architecture_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 8 §4 · Arquitectura en Profundidad</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

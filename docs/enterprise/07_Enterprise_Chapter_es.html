@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template - for "reading" topics without hands-on exercises. Reading width (720px), generous line-height, chapter navigation flow.
+  Unlike Manual (reference)/Examples (hands-on), the focus is body-text flow rather than version boxes or code emphasis.
+  Edit here: (1) <title>/chapter number/title/lead (2) nav (this chapter's sections + other chapters) (3) 'What this chapter covers'
+             (4) <h2 id>/<h3> sections and body (5) previous/next chapter links
+  Fill {{double braces}}/[description: ...] with actual content. All links are relative paths.
+  Colors use design tokens only - the theme is swapped at deploy time by references/apply-theme.sh substituting the brand colors in docs/.
+  Search index precondition: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 7 - Ejecución de equipos multiagente dentro de la empresa, comparación de dos modelos - material del Manual de Ingeniería de Arnés Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 7 - Ejecución de Equipos Multiagente Dentro de la Empresa: Comparación de Dos Modelos</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Cap. 7 - Comparación de Dos Modelos</div>
+  <a href="#s1">El Modelo de Tickets de Servicio</a>
+  <a href="#s1">↳ Por Qué Debe Basarse en Kanban</a>
+  <a href="#s2">El Modelo de Herramienta de Desarrollo + Variante</a>
+  <a href="#s3">Comparación Lado a Lado</a>
+  <a href="#s3b">Ventajas y Desventajas de Cada Modelo</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="../tools/00_Tools_Manual_es.html">Referencia Compartida - Referencia de Herramientas del Arnés</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_es.html">Capítulo 8 - Lectura Adicional</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 7</div>
+  <h1>Ejecución de Equipos Multiagente Dentro de la Empresa: Comparación de Dos Modelos</h1>
+  <p class="lead">Las organizaciones que adoptan un entorno de desarrollo multiagente generalmente terminan eligiendo uno de dos caminos. Uno es centralizado: un único equipo recibe todas las solicitudes como tickets. El otro es distribuido: cada equipo recibe las herramientas para construir su propio equipo. Este capítulo simplemente presenta los dos modelos uno al lado del otro e identifica lo que los diferencia.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que cubre este capítulo</div>
+    <ul>
+      <li>Una breve descripción de qué es el modelo de tickets de servicio y cómo funciona</li>
+      <li>Por qué el modelo de tickets de servicio necesita funcionar sobre una base de Kanban</li>
+      <li>Una breve descripción de qué es el modelo de herramienta de desarrollo + variante y cómo funciona</li>
+      <li>Una comparación lado a lado de los dos modelos en cuanto a centralización, continuidad del contexto, costo de configuración, carga de gobernanza y casos de uso adecuados</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">El Modelo de Tickets de Servicio</h2>
+  <p>Un único equipo multiagente acepta solicitudes continuamente, dentro de un alcance definido, como tickets. Un agente que actúa como PM sirve como punto de recepción, recibiendo solicitudes a través de Slack o un sistema interno de tickets, dirigiendo el trabajo al agente especialista apropiado y devolviendo el resultado. Los usuarios no instalan nada en sus propias máquinas — simplemente dejan un mensaje en una herramienta interna familiar.</p>
+  <p>Aquí, "alcance definido" no siempre significa toda la empresa. En una organización pequeña, es aceptable que toda la empresa comparta este único equipo; pero a medida que la organización crece, resulta más práctico que cada división o unidad de negocio gestione su propio punto de recepción de tickets independiente. Marketing tiene su propio equipo de agentes dedicado, Finanzas tiene el suyo, y así sucesivamente. De cualquier manera, la esencia del modelo es la misma: <strong>dentro de ese alcance</strong>, las solicitudes se canalizan hacia un único punto de recepción en lugar de hacia múltiples equipos.</p>
+  <p>Concretamente: en una organización pequeña, la solicitud "pulir el texto de la página de destino de esta campaña" del equipo de Marketing A y la solicitud "limpiar los datos de gastos del mes pasado" del equipo de Finanzas B llegan al mismo único agente PM/punto de recepción de tickets, que luego asigna cada una a un agente de redacción de documentos y a un agente de análisis de datos respectivamente. En una organización grande, las solicitudes de los equipos de la división de Marketing se canalizan hacia un punto de recepción exclusivo de Marketing, y las solicitudes de los equipos de la división de Finanzas se canalizan hacia un punto de recepción exclusivo de Finanzas. Cada división opera su propio equipo de agentes independiente, pero dentro de cada división el principio de "todo se canaliza hacia una única recepción" sigue vigente. El atractivo de este modelo es que el solicitante no necesita conocer a otros solicitantes que comparten el mismo punto de recepción, y dentro de ese alcance, solo un equipo de agentes necesita ser operado y mantenido.</p>
+
+  <h3>Por Qué Debe Funcionar con Kanban</h3>
+  <p>El problema surge precisamente de esa característica de "todo dentro del alcance se canaliza hacia una única recepción". Cuando solicitudes de diferentes equipos y de diferente naturaleza llegan simultáneamente, y se manejan en orden de llegada crudo, las solicitudes no urgentes desplazan a las urgentes, el trabajo en curso se interrumpe por nuevas solicitudes, y nadie puede distinguir qué se está manejando actualmente frente a qué está acumulado. Es la misma razón por la que un servicio de asistencia con personal humano colapsa una vez que el volumen de tickets crece.</p>
+  <p>Kanban resuelve esto con tres mecanismos. Primero, una <strong>cola visualizada</strong>. Colocar cada solicitud en un tablero clasificado en columnas como "En espera → En progreso → Revisión → Completado" permite a cualquiera ver de un vistazo cuántos elementos están acumulados y cuáles llevan más tiempo estancados. Segundo, un <strong>límite de trabajo en curso (WIP)</strong>. Limitar deliberadamente cuántas tareas maneja a la vez el agente PM (o los agentes especialistas detrás de él) evita que el problema de "sobrecarga de contexto" discutido en el Capítulo 2 §2 resurja a nivel organizacional. Sin un límite, un agente termina manejando y mezclando el contexto de múltiples solicitudes a la vez, degradando la calidad. Tercero, <strong>extracción basada en prioridad</strong>. Extraer la siguiente tarea por prioridad en lugar de por orden de llegada evita que una solicitud urgente de un plazo financiero quede enterrada durante días detrás de una solicitud de baja prioridad de pulido de texto.</p>
+  <p>Al final, el modelo de tickets de servicio conlleva tanto la ventaja de una "única recepción" como el riesgo de que "cada solicitud en el alcance se canalice hacia un solo lugar", y Kanban es la disciplina operativa mínima que mantiene esto último bajo control. Adopte el modelo de tickets sin Kanban, y aunque pueda parecer conveniente al principio, en el momento en que el volumen de solicitudes crezca, los retrasos de procesamiento, la inversión de prioridades y la mezcla de contextos aparecerán casi inevitablemente.</p>
+
+  <h2 id="s2">El Modelo de Herramienta de Desarrollo + Variante</h2>
+  <p>En lugar de que una empresa maneje cada solicitud en nombre de un equipo, a cada equipo se le entrega "herramientas de desarrollo que le permiten construir su propio equipo multiagente dedicado". Un equipo elige una de las plantillas de proyecto predefinidas (variantes), genera su propio proyecto a partir de ella, y el proyecto resultante se convierte en un repositorio independiente que el equipo posee y opera en adelante. Cómo ai-workspace-standards implementa este modelo en la práctica se cubre en detalle en el Capítulo 5 §3.</p>
+  <p>Usar el mismo ejemplo aclara el contraste. El equipo de Marketing genera su propio proyecto dedicado con la variante <code>co-work</code> y continúa refinando el texto de la campaña dentro de él, mientras que el equipo de Finanzas se equipa con un pipeline de análisis de datos dedicado usando la variante <code>co-develop</code> o <code>co-consult</code>. Ninguno de los equipos comparte una cola de solicitudes con el otro; cada uno posee independientemente su propio repositorio, registros de memoria y configuración de agentes. El problema de la "cola de recepción única" del modelo de tickets simplemente no surge aquí — pero a cambio, cada equipo debe asumir su propio costo de configuración inicial y carga operativa continua.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowE" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="150" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">Modelo de Tickets de Servicio — Centralizado</text>
+        <circle cx="150" cy="110" r="42" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="150" y="106" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">PM /</text>
+        <text x="150" y="120" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">Equipo de Agentes</text>
+
+        <rect x="18" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="54" text-anchor="middle" font-size="10" fill="#116329">Marketing</text>
+        <line x1="70" y1="65" x2="115" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="18" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="58" y="169" text-anchor="middle" font-size="10" fill="#116329">Finanzas</text>
+        <line x1="70" y1="150" x2="115" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="35" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="54" text-anchor="middle" font-size="10" fill="#116329">Ventas</text>
+        <line x1="230" y1="65" x2="185" y2="90" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="150" width="80" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="242" y="169" text-anchor="middle" font-size="10" fill="#116329">RRHH</text>
+        <line x1="230" y1="150" x2="185" y2="128" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <text x="150" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">Todas las solicitudes se canalizan hacia una única recepción</text>
+
+        <rect x="328" y="10" width="1" height="210" fill="#d0d7de"/>
+
+        <text x="480" y="18" text-anchor="middle" font-size="12.5" fill="#0550ae" font-weight="700">Modelo de Herramienta de Desarrollo + Variante — Distribuido</text>
+
+        <rect x="345" y="60" width="90" height="70" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="390" y="88" text-anchor="middle" font-size="10.5" fill="#116329" font-weight="700">Marketing</text>
+        <text x="390" y="104" text-anchor="middle" font-size="9.5" fill="#116329">co-work</text>
+        <text x="390" y="118" text-anchor="middle" font-size="9.5" fill="#116329">equipo de agentes dedicado</text>
+
+        <rect x="450" y="60" width="90" height="70" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="495" y="88" text-anchor="middle" font-size="10.5" fill="#0550ae" font-weight="700">Finanzas</text>
+        <text x="495" y="104" text-anchor="middle" font-size="9.5" fill="#0550ae">co-consult</text>
+        <text x="495" y="118" text-anchor="middle" font-size="9.5" fill="#0550ae">equipo de agentes dedicado</text>
+
+        <rect x="555" y="60" width="70" height="70" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="590" y="88" text-anchor="middle" font-size="10.5" fill="#6639ba" font-weight="700">RRHH</text>
+        <text x="590" y="104" text-anchor="middle" font-size="9.5" fill="#6639ba">co-work</text>
+        <text x="590" y="118" text-anchor="middle" font-size="9.5" fill="#6639ba">equipo de agentes dedicado</text>
+
+        <text x="480" y="210" text-anchor="middle" font-size="10.5" fill="#636c76">Cada equipo: su propio repositorio, cola y configuración</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2 id="s3">Comparación Lado a Lado</h2>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Title -->
+        <text x="300" y="22" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Matriz de Lista de Verificación de Adopción — Comparación de Dos Modelos</text>
+
+        <!-- Header row -->
+        <rect x="10" y="34" width="580" height="30" rx="6" fill="#eef1f4" stroke="#d0d7de" stroke-width="1"/>
+        <text x="140" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Criterio</text>
+        <text x="340" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Modelo de Tickets</text>
+        <text x="510" y="54" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="700">Modelo de Variantes</text>
+
+        <!-- Column dividers -->
+        <line x1="240" y1="34" x2="240" y2="238" stroke="#d0d7de" stroke-width="1"/>
+        <line x1="430" y1="34" x2="430" y2="238" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Row 1: Initial cost — Low(green) vs High(orange) -->
+        <rect x="10" y="68" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="102" x2="590" y2="102" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="90" font-size="11" fill="#1f2328" font-weight="600">Costo Inicial</text>
+        <rect x="290" y="76" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="316" y="90" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Bajo</text>
+        <rect x="470" y="76" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="496" y="90" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Alto</text>
+
+        <!-- Row 2: Operational autonomy — Low(orange) vs High(green) -->
+        <rect x="10" y="104" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="138" x2="590" y2="138" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="126" font-size="11" fill="#1f2328" font-weight="600">Autonomía Operativa</text>
+        <rect x="290" y="112" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="316" y="126" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Baja</text>
+        <rect x="470" y="112" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="496" y="126" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Alta</text>
+
+        <!-- Row 3: Scalability — Limited(orange) vs Good(green) -->
+        <rect x="10" y="140" width="580" height="34" rx="0" fill="#fff"/>
+        <line x1="10" y1="174" x2="590" y2="174" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="162" font-size="11" fill="#1f2328" font-weight="600">Escalabilidad</text>
+        <rect x="276" y="148" width="72" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="312" y="162" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Limitada</text>
+        <rect x="480" y="148" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="162" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Buena</text>
+
+        <!-- Row 4: Governance — Central(green) vs Distributed(orange) -->
+        <rect x="10" y="176" width="580" height="34" rx="0" fill="#f6f8fa"/>
+        <line x1="10" y1="210" x2="590" y2="210" stroke="#d0d7de" stroke-width="0.5"/>
+        <text x="30" y="198" font-size="11" fill="#1f2328" font-weight="600">Gobernanza</text>
+        <rect x="276" y="184" width="72" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="312" y="198" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Centralizada</text>
+        <rect x="450" y="184" width="106" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="503" y="198" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Distribuida (necesita estándares)</text>
+
+        <!-- Row 5: Context retention — Fragmented(orange) vs Deep(green) -->
+        <rect x="10" y="212" width="580" height="34" rx="0" fill="#fff"/>
+        <text x="30" y="234" font-size="11" fill="#1f2328" font-weight="600">Retención de Contexto</text>
+        <rect x="284" y="220" width="52" height="20" rx="4" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
+        <text x="310" y="234" text-anchor="middle" font-size="10" fill="#7d4e00" font-weight="700">Roto</text>
+        <rect x="480" y="220" width="52" height="20" rx="4" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
+        <text x="506" y="234" text-anchor="middle" font-size="10" fill="#116329" font-weight="700">Profundo</text>
+
+        <!-- Table outer border -->
+        <rect x="10" y="34" width="580" height="212" rx="6" fill="none" stroke="#d0d7de" stroke-width="1"/>
+
+        <!-- Legend -->
+        <rect x="140" y="252" width="12" height="12" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.5"/>
+        <text x="157" y="262" font-size="9" fill="#636c76">Ventaja</text>
+        <rect x="240" y="252" width="12" height="12" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.5"/>
+        <text x="257" y="262" font-size="9" fill="#636c76">Compromiso</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>Modelo de Tickets de Servicio</h4>
+      <ul>
+        <li><strong>Centralización:</strong> un único equipo, una única recepción. Compartido por toda la empresa en una organización pequeña, o por división/unidad de negocio en una grande</li>
+        <li><strong>Continuidad del contexto:</strong> el contexto se rompe frecuentemente entre solicitudes a medida que proyectos no relacionados pasan por la misma cola</li>
+        <li><strong>Costo de configuración:</strong> bajo. Los nuevos equipos pueden usar la misma recepción inmediatamente</li>
+        <li><strong>Carga de gobernanza:</strong> baja. Las operaciones se concentran en un solo lugar, facilitando el control</li>
+        <li><strong>Mejor para:</strong> solicitudes estrechas y repetitivas (estilo de servicio de asistencia interno)</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>Modelo de Herramienta de Desarrollo + Variante</h4>
+      <ul>
+        <li><strong>Centralización:</strong> distribuida. Cada equipo posee su propio equipo de agentes</li>
+        <li><strong>Continuidad del contexto:</strong> excelente, ya que referencia continuamente el repositorio y los registros de memoria del propio proyecto</li>
+        <li><strong>Costo de configuración:</strong> cada equipo incurre en su propio costo inicial de generación y configuración</li>
+        <li><strong>Carga de gobernanza:</strong> alta. Sin estándares compartidos (un documento tipo CONSTITUTION.md), los equipos se desvían</li>
+        <li><strong>Mejor para:</strong> casos donde un equipo debe operar su propio proyecto profundamente a largo plazo</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pullquote">La verdadera línea divisoria entre los dos modelos no es cuán repetitivas son las solicitudes, sino qué tan profundamente necesitan contexto de proyecto esas solicitudes.
+    <span class="by">— La diferencia fundamental entre modelos operativos centralizados y distribuidos</span></div>
+
+  <p>Si las solicitudes son estrechas, repetitivas y no requieren contexto de dominio profundo, el modelo de tickets es eficiente. Por el contrario, si cada equipo debe operar su propio proyecto profundamente durante un largo período, poseer un equipo de agentes dedicado por equipo es más sostenible, incluso al costo de una mayor inversión inicial.</p>
+  <div class="note">Los dos modelos no son mutuamente excluyentes. Dentro de una misma organización, es perfectamente posible ejecutar trabajo de estilo servicio de asistencia bajo el modelo de tickets mientras se ejecutan equipos de desarrollo de producto bajo el modelo de variantes en paralelo.</div>
+
+  <h2 id="s3b">Ventajas y Desventajas de Cada Modelo</h2>
+  <p>Donde la tabla del §3 presentó "lo que difiere" atributo por atributo, esta sección organiza esas diferencias en las ganancias y costos concretos que cada modelo produce en la operación real.</p>
+
+  <h3>Modelo de Tickets de Servicio</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >Ventajas</h4>
+      <ul>
+        <li><strong>Baja barrera de entrada.</strong> Un nuevo equipo puede comenzar a usar la misma recepción inmediatamente, sin configuración separada.</li>
+        <li><strong>Gobernanza simple.</strong> Las operaciones se concentran en un equipo, por lo que las violaciones de reglas pueden controlarse y auditarse desde un único punto (el único lugar donde necesita aplicarse el principio de registro de auditoría del Capítulo 3).</li>
+        <li><strong>Calidad de respuesta estandarizada.</strong> Cada solicitud pasa por el mismo equipo PM/agente, por lo que el formato y la calidad del resultado se mantienen uniformes.</li>
+        <li><strong>Costo inicial de adopción minimizado.</strong> Solo un equipo de agentes necesita ser construido y operado dentro del alcance cubierto (toda la empresa o una división).</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >Desventajas</h4>
+      <ul>
+        <li><strong>El contexto se rompe cada vez.</strong> Los solicitantes deben reexplicar el contexto cada vez, y el conocimiento de dominio profundo nunca se acumula.</li>
+        <li><strong>El cuello de botella es estructural.</strong> Cuanto más grande crece el alcance (toda la empresa o división), más una única recepción dicta la velocidad de procesamiento. Dividir la recepción por división alivia el cuello de botella en comparación con toda la empresa compartiendo una, pero el mismo problema se reproduce dentro de cada división. Sin la disciplina Kanban del §1, este cuello de botella llega mucho antes y mucho más severamente.</li>
+        <li><strong>Sin propiedad por parte del equipo.</strong> El equipo solicitante no puede refinar directamente el flujo de trabajo, y la responsabilidad por el resultado tiende a difuminarse.</li>
+        <li><strong>Límites de escalabilidad.</strong> Si el volumen de solicitudes crece más rápido de lo que se puede añadir personal, la cola no puede mantenerse al día.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Modelo de Herramienta de Desarrollo + Variante</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >Ventajas</h4>
+      <ul>
+        <li><strong>El contexto se mantiene profundo.</strong> Dado que referencia continuamente el repositorio y los registros de memoria del propio proyecto, la calidad del resultado mejora con la repetición.</li>
+        <li><strong>Mayor autonomía del equipo.</strong> Un equipo puede diseñar y personalizar un flujo de trabajo adaptado a su propio dominio directamente, como una variante.</li>
+        <li><strong>Escala bien.</strong> A medida que se añaden más equipos, no comparten las colas entre sí, por lo que ningún equipo se convierte en un cuello de botella para toda la organización.</li>
+        <li><strong>Fácil de reutilizar.</strong> Una variante construida una vez puede clonarse tal cual por otros equipos para comenzar (el concepto de plantilla del Capítulo 5 §3).</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >Desventajas</h4>
+      <ul>
+        <li><strong>Conlleva costo de configuración inicial.</strong> Cada equipo debe poner en marcha su propia generación, definiciones de agentes y pipeline de gobernanza.</li>
+        <li><strong>La gobernanza corre riesgo de fragmentarse.</strong> Sin un estándar compartido (CONSTITUTION.md) que realmente se siga, los equipos tienden hacia sus propias reglas. Este es el precio de la libertad que proporciona el modelo de bifurcación (Capítulo 5 §3).</li>
+        <li><strong>La infraestructura se duplica.</strong> Múltiples proyectos deben mantener cada uno una configuración similar. La estructura L0→L1→L2 mitiga esto pero no lo elimina completamente.</li>
+        <li><strong>Requiere competencia.</strong> Los miembros del equipo necesitan cierta comprensión de la configuración del arnés mismo (conceptos del Capítulo 2 §1 y Capítulo 3) para usarlo eficazmente.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">Al final, el compromiso se resume en una frase. <strong>El modelo de tickets compra "una baja barrera de entrada y control simple", y lo paga con "contexto roto y límites de escalabilidad." El modelo de variantes compra "contexto profundo y escalabilidad", y lo paga con "costo inicial y necesidad de competencia."</strong> Ninguno es el modelo "mejor" — la verdadera pregunta es qué costo puede permitirse pagar la organización ahora mismo.</div>
+
+  <div class="chapter-nav">
+    <a href="../tools/00_Tools_Manual_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Referencia Compartida - Comparación de Herramientas</div></a>
+    <a href="../intro/08_Intro_Advanced_Deploy_es.html" class="next"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Cap. 8 §1 - Despliegue y SSOT</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

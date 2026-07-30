@@ -1,0 +1,215 @@
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on practice. Reading width (720px), generous line height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is body-text flow rather than version boxes and code highlighting.
+  Where to edit: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) "Key points of this chapter"
+            (4) <h2 id>/<h3> sections and body  (5) prev/next chapter links
+  Fill {{double braces}}/[description: ...] with actual content. All links are relative paths.
+  Colors use design tokens only — the theme is applied at deploy time via references/apply-theme.sh, which replaces docs/ brand colors.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 5 · Introducción a ai-workspace-standards - Material del Manual de Ingeniería de Arneses de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 5 · Introducción a ai-workspace-standards</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 5 · Introducción a ai-workspace-standards</div>
+  <a href="#s1">Qué es el repositorio</a>
+  <a href="#s1b">La arquitectura general de un vistazo</a>
+  <a href="#s2">Los cuatro archivos principales</a>
+  <a href="#s3">Plantillas y las 7 variantes</a>
+  <a href="#s4">Lista de verificación de inicio de sesión y andamiaje</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Barreras de seguridad y el modelo de permisos</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_es.html">Capítulo 8 · Profundización en la arquitectura</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 5</div>
+  <h1>Introducción a ai-workspace-standards</h1>
+  <p class="lead">ai-workspace-standards es el repositorio que implementa realmente el modelo "herramientas de desarrollo + variante" presentado en el Capítulo 7. Este capítulo explica exactamente qué es este repositorio, de qué archivos consta y qué plantillas de proyecto proporciona.</p>
+  <p class="source-line">Fuentes: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/adr/0031-l1-l2-fork-model.md" target="_blank">ADR-0031 Modelo de bifurcación L1–L2</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/constitution/00-ssot-architecture.md" target="_blank">CONSTITUTION.md §0 Arquitectura SSOT</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que cubre este capítulo</div>
+    <ul>
+      <li>Qué es ai-workspace-standards y por qué debe clonarse como la "raíz del espacio de trabajo"</li>
+      <li>La estructura general de directorios del repositorio y el orden real en que una sesión lee y ejecuta archivos (el flujo de ejecución)</li>
+      <li>Los roles de los cuatro archivos principales: CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md</li>
+      <li>Para qué dominio está diseñada cada una de las 7 variantes bajo templates/</li>
+      <li>Una imagen conceptual de la lista de verificación de inicio de sesión y el flujo de andamiaje de new-project.ts</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">Qué es el repositorio</h2>
+  <p>ai-workspace-standards se describe a sí mismo como un "modelo operativo para equipos multiagente para Vibe Coding e Ingeniería de Arneses." Es un repositorio diseñado para aplicar los mismos comportamientos, flujos de trabajo y estándares de calidad en múltiples herramientas de codificación con IA (Claude Code/App, Antigravity CLI/Escritorio, y así sucesivamente).</p>
+  <p>La forma en que se usa este repositorio es un poco inusual. En lugar de incorporarse a un solo proyecto como una biblioteca ordinaria, el repositorio en sí se clona como la raíz de su espacio de trabajo — por ejemplo en <code>C:\git</code> en Windows o <code>~/git</code> en macOS/Linux. Una vez configurado de esta manera, cada nuevo proyecto creado debajo hereda automáticamente las reglas compartidas del espacio de trabajo.</p>
+
+  <div class="pullquote">ai-workspace-standards es un repositorio que distribuye "una forma de construir proyectos," no "un proyecto terminado."
+    <span class="by">— por qué se clona como la raíz del espacio de trabajo</span></div>
+
+  <h2 id="s1b">La arquitectura general de un vistazo</h2>
+  <p>Antes de diseccionar los cuatro archivos principales, las variantes y el modelo L0→L1→L2 uno por uno en las secciones siguientes, conviene ver primero el panorama general de dónde se ubican realmente estas piezas en el repositorio y bajo qué nombres, para no perder la orientación. Clonar la raíz del espacio de trabajo produce la siguiente estructura de nivel superior.</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">C:\git\  (raíz del espacio de trabajo = L0)
+├── CONSTITUTION.md          ← §2: lo que debe seguirse (estándar maestro, original L0)
+├── CLAUDE.md                ← §2: cómo se ejecuta en Claude Code/App
+├── GEMINI.md                ← §2: cómo se ejecuta en Antigravity CLI/Escritorio
+├── AGENTS.md                ← §2: quién hace el trabajo (registro de agentes, original L0)
+├── agents/                  ← §5: definiciones originales de agentes como pm.md (L0, editar solo aquí)
+│   └── pm.md
+├── .claude/                 ← §2: comandos/habilidades solo para Claude (/sync, create-variant, etc.)
+├── .gemini/                 ← §2: comandos/habilidades solo para Antigravity (mismos nombres, implementación diferente)
+├── .agents/                 ← §2: comandos/habilidades neutrales a la herramienta (para herramientas compatibles con el estándar AGENTS.md)
+├── scripts/                 ← §4·§5: scripts operativos como new-project.ts, publish-to-template.ts
+├── templates/                (L1 + L2 oficiales)
+│   ├── common/              ← §5: L1 — una instantánea de L0, el punto de partida al crear una variante
+│   │   └── agents/pm.md     ← extends: ../../../agents/pm.md (referencia L0 + elimina secciones solo del espacio de trabajo)
+│   ├── co-develop/          ← §3: variante L2 oficial (desarrollo de software, 6 etapas)
+│   ├── co-design/           ← §3: variante L2 oficial (UI/UX, 5 etapas)
+│   ├── co-work/             ← §3: variante L2 oficial (colaboración/documentos, 6 etapas)
+│   ├── co-security/         ← §3: variante L2 oficial (red team, 6 etapas)
+│   ├── co-consult/          ← §3: variante L2 oficial (consultoría, 7 etapas)
+│   ├── co-deck   [beta]     ← §3: variante L2 oficial (conferencias/presentaciones, 11 etapas)
+│   └── co-game   [beta]     ← §3: variante L2 oficial (desarrollo de juegos)
+├── Projects/                 (L2 en activo — proyectos reales creados vía new-project.ts)
+│   └── &lt;mi-proyecto&gt;/
+│       ├── docs/context.md  ← §4: SSOT propio de este proyecto (el esqueleto vacío de la variante, rellenado)
+│       ├── agents/          ← heredado de la variante, continúa evolucionando para este proyecto
+│       └── (un repositorio git independiente — separado de la raíz del espacio de trabajo)
+└── memory/
+    └── MEMORY.md            ← §4: contexto transportado entre sesiones</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  </div>
+
+  <p>Lo que vale la pena señalar en este árbol es que las tres capas aparecen directamente como la estructura de directorios real. Justo debajo de la raíz (CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md, <code>agents/</code>, <code>scripts/</code>) está L0, <code>templates/common/</code> es L1, y <code>templates/co-*/</code> y <code>Projects/*/</code> son L2. En otras palabras, "L0→L1→L2" no es un diagrama abstracto — es una disposición física que se puede ver con un solo <code>ls</code> en la carpeta clonada.</p>
+
+  <p>El orden real en que el trabajo procede sobre esta estructura (el flujo de ejecución) es el siguiente.</p>
+  <ol style="margin:0 0 16px 22px;line-height:2;">
+    <li><strong>Inicio de sesión.</strong> El agente lee, en orden: CONSTITUTION.md → el docs/context.md del proyecto actual → AGENTS.md → memory/MEMORY.md (cubierto en §4).</li>
+    <li><strong>Se aplican las reglas de ejecución específicas de la herramienta.</strong> Para Claude Code/App, CLAUDE.md y <code>.claude/</code> gobiernan la ejecución detallada; para la familia Antigravity, lo hacen GEMINI.md y <code>.gemini/</code>.</li>
+    <li><strong>Cuando se necesita un nuevo proyecto.</strong> <code>scripts/new-project.ts</code> clona toda la configuración de <code>templates/co-&lt;variante&gt;/</code> (L2) en <code>Projects/&lt;nombre&gt;/</code>. En este punto, <code>templates/co-&lt;variante&gt;/</code> ya se había creado una generación antes al tomar una instantánea de <code>templates/common/</code> (L1).</li>
+    <li><strong>Cuando L0 cambia durante la operación.</strong> <code>scripts/publish-to-template.ts</code>, como parte del pipeline <code>/sync</code>, publica automáticamente y de forma continua los cambios de L0 a L1 (<code>templates/common/</code>). Esto no se propaga automáticamente a las instancias L2 que ya han nacido (Projects/*, templates/co-*). Este es el principio de "bifurcación" cubierto en el Capítulo 8.</li>
+  </ol>
+  <div class="note">En una frase: <strong>L0 es "justo debajo de la raíz," L1 es "templates/common/," y L2 es "templates/co-*/ y Projects/*/"</strong> — recordar solo estas tres coordenadas permite seguir cada explicación del resto de este capítulo contra las ubicaciones reales de las carpetas.</div>
+
+  <h2 id="s2">Los cuatro archivos principales</h2>
+  <p>En la raíz del espacio de trabajo hay cuatro archivos principales a los que cada proyecto hace referencia en común.</p>
+  <p><code>CONSTITUTION.md</code> es el estándar compartido maestro, el documento que debe leerse primero al inicio de cualquier sesión. Define las reglas de gobernanza, el flujo de trabajo de PR y los principios de arquitectura multiagente para todo el espacio de trabajo. <code>CLAUDE.md</code> contiene el comportamiento concreto para Claude Code/App (ganchos, comandos de barra, reglas de despacho de agentes), mientras que <code>GEMINI.md</code> define el comportamiento equivalente para Antigravity CLI/Escritorio. <code>AGENTS.md</code> sirve como el registro canónico de agentes disponibles en todo el espacio de trabajo. Este nombre de archivo es el mismo que el estándar abierto AGENTS.md introducido en el Capítulo 2, que se lee en común por más de 30 herramientas incluyendo Claude Code — aunque en este repositorio también hace las veces de un "registro de agentes y referencia de orquestación" más específico. La parte superior del archivo indica explícitamente que "este archivo no es una instrucción dirigida a herramientas de IA, sino un registro de roles definidos por humanos."</p>
+  <p>Para resumir la relación entre estos cuatro archivos en una frase: CONSTITUTION.md define "qué debe seguirse," CLAUDE.md/GEMINI.md definen "cómo se ejecuta eso en cada plataforma," y AGENTS.md define "quién hace el trabajo."</p>
+
+  <p>Una entrada de agente en AGENTS.md consta de los siguientes campos. <strong>La guía concreta de redacción y la asignación de implementación específica por herramienta se cubren en el Capítulo 8 §3, Profundización en AGENTS.md.</strong></p>
+  <div class="table-compare narrow-col-3">
+  <table>
+    <thead><tr><th>Campo</th><th>Significado</th><th>Obligatorio</th><th>Ejemplo</th></tr></thead>
+    <tbody>
+      <tr><td><code>## Agent: {nombre}</code></td><td>Identificador del agente</td><td>Obligatorio</td><td><code>## Agent: reviewer</code></td></tr>
+      <tr><td><code>Role</code></td><td>Qué hace este agente</td><td>Obligatorio</td><td>"Revisa archivos de texto en busca de erratas"</td></tr>
+      <tr><td><code>Input</code></td><td>Qué entrada recibe</td><td>Recomendado</td><td>"Ruta del archivo de texto a revisar"</td></tr>
+      <tr><td><code>Output</code></td><td>Qué salida produce</td><td>Recomendado</td><td>"Lista de erratas, lagunas y mejoras"</td></tr>
+      <tr><td><code>Permissions</code></td><td>Alcance de acceso a archivos</td><td>Recomendado</td><td>"Solo lectura" / "Escritura permitida — solo para archivos especificados"</td></tr>
+      <tr><td><code>handoff_to</code></td><td>A quién entregar el trabajo tras la finalización</td><td>Opcional</td><td><code>handoff_to: reviewer</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Tracemos esta relación usando una regla concreta como ejemplo. Supongamos que hay una regla que dice "los títulos y cuerpos de los PR deben estar escritos en inglés." Esta regla se escribe exactamente una vez, en <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> define <em>cómo</em> hacer cumplir esta regla en Claude Code — por ejemplo, especificando que el filtro de idioma del comando <code>/sync</code> (language-guard.ts) verifique automáticamente esta regla antes de cada commit. <code>GEMINI.md</code> define cómo se hace cumplir la misma regla en el pipeline del lado de Antigravity. Y quién realiza realmente esta verificación — qué agente es responsable de este filtro — se registra en el registro de <code>AGENTS.md</code>. Una sola regla aparece en los cuatro archivos, cada uno desde un ángulo diferente. Esto no es duplicación; son tres respuestas diferentes a las tres preguntas de "qué, cómo y quién."</p>
+  <p>Debajo de los cuatro archivos principales se encuentran carpetas que contienen activos ejecutables. Los comandos y habilidades se dividen en tres ubicaciones: <code>.claude/</code> es solo para Claude Code/App, <code>.gemini/</code> es solo para Antigravity CLI/Escritorio, y <code>.agents/</code> contiene comandos y habilidades <strong>neutrales a la herramienta (neutrales al motor)</strong> no vinculados a una sola herramienta. Por ejemplo, comandos de barra como <code>/sync</code>/<code>/meeting</code> o habilidades como <code>create-variant</code>/<code>audit-workspace</code> existen bajo el mismo nombre en las tres carpetas, pero cada implementación difiere ligeramente para coincidir con las convenciones de herramienta de su propia plataforma (sintaxis de la herramienta <code>Agent</code> de Claude Code, enfoque de subagente de Antigravity, etc.). Las herramientas externas que admiten el estándar AGENTS.md (Codex, Cursor, etc.) harán referencia a la carpeta <code>.agents/</code> cuando abran este repositorio.</p>
+
+  <h2 id="s3">Plantillas y las 7 variantes</h2>
+  <p>El directorio <code>templates/</code> es una colección de "variantes" de plantillas de proyecto con control de versiones. Cada variante contiene una configuración completa de equipo multiagente para un dominio específico, incluyendo un PM, agentes especialistas y un pipeline de gobernanza por etapas. Las variantes que proporciona el repositorio son las siguientes.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">co-develop</span><span>Para desarrollo de software. Un pipeline de gobernanza de 6 etapas compuesto por PM, Arquitecto, Diseñador, Escritor de código, Ejecutor de pruebas y Monitor de seguridad.</span></div>
+    <div class="variant-row"><span class="variant-name">co-design</span><span>Para UI/UX. Un flujo de trabajo iterativo de 5 etapas con Líder de diseño, Investigador de UX, Diseñador visual, Ingeniero de prototipos y otros.</span></div>
+    <div class="variant-row"><span class="variant-name">co-work</span><span>Para colaboración general/trabajo documental. Un flujo de trabajo asíncrono de 6 etapas con Analista, Redactor técnico, Redactor de contenido y otros.</span></div>
+    <div class="variant-row"><span class="variant-name">co-security</span><span>Para red team/pruebas de penetración. Un pipeline de 6 etapas con Líder de red team, Pentester, Modelador de amenazas y otros.</span></div>
+    <div class="variant-row"><span class="variant-name">co-consult</span><span>Para consultoría estratégica. Un flujo de trabajo de 7 etapas (Fase 0–6) liderado por un PM (Líder de compromiso), compuesto por 10 agentes especialistas incluyendo Analista de estrategia, Socio de gestión del cambio, Experto en la industria y SME. Cubre todo el ciclo de vida del proyecto de consultoría — análisis de mercado → diagnóstico organizacional → validación cruzada (Fase 1.5) → filtro de aprobación de propuesta (Fase 2) → diseño de solución práctica → entrega → PR/entrega.</span></div>
+    <div class="variant-row"><span class="variant-name">co-deck <span class="badge" >beta</span></span><span>Para producir materiales de conferencia y presentación. Un pipeline de 11 etapas (Etapa 0–11) liderado por un PM. Automatiza todo el proceso desde la investigación hasta un PDF listo para imprimir: Investigación → Verificador de fuentes (verificación de credibilidad) → Línea argumental → Diseño → Curación de imágenes + Generación de diagramas (en paralelo) → Construcción HTML → Medición de diseño → Exportación a PDF. Admite 5 temas (outline, pitch, pitch-enhanced, vertical, zen) y 5 estilos (premium-dark, classic, minimal, visual-heavy, academic).</span></div>
+    <div class="variant-row"><span class="variant-name">co-game <span class="badge" >beta</span></span><span>Para desarrollo de juegos HTML5 Canvas.</span></div>
+  </div>
+
+  <p>Cada variante se versiona con la etiqueta git <code>template-vX.Y.Z</code>, y <code>bun scripts/validate-templates.ts</code> verifica el cumplimiento estructural — la completitud del frontmatter de los agentes, las secciones requeridas, la coherencia con el registro de AGENTS.md y la paridad de plataformas entre <code>.claude/</code> y <code>.gemini/</code>.</p>
+  <p>Como sugiere el nombre <code>templates/</code>, lo que este repositorio distribuye en última instancia es <strong>plantilla base</strong> — un punto de partida que ya tiene las definiciones del rol de PM, el pipeline de gobernanza y la conexión de comandos/habilidades específicos de plataforma que de otro modo tendría que escribir desde cero para cada proyecto. Pero a diferencia de la plantilla base habitual de "cópiala y cada uno la adapta a su manera," este repositorio expone explícitamente, como una estructura en capas, <em>de dónde proviene ese punto de partida y cómo se actualiza</em>. Ese es el modelo L0 → L1 → L2 cubierto en la siguiente sección.</p>
+  <p>Una de las cosas que esta plantilla base ya ha configurado de antemano es la <strong>asignación de modelo por rol de agente</strong>. Cada archivo de definición de agente (<code>agents/*.md</code>) dentro de una variante tiene un campo <code>tier</code> en su frontmatter, y este valor asigna <code>high</code>/<code>medium</code>/<code>low</code> por plataforma (<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>). Los roles que requieren juicio pesado (PM, Arquitecto) obtienen <code>high</code>, los roles que manejan la implementación real (code-writer, docs-writer) obtienen <code>medium</code>, y las tareas estandarizadas repetitivas (automation-engineer, etc.) obtienen <code>low</code>. El campo <code>model</code> real generalmente se deja como <code>inherit</code>, porque cada plataforma traduce este valor de tier a su propio alias de modelo (<code>opus</code>/<code>sonnet</code>/<code>haiku</code>) en el momento del despliegue. En otras palabras, en el momento en que clona la plantilla base, un nuevo proyecto ya comienza con "quién trabaja usando qué nivel de costo de modelo" ya decidido.</p>
+  <p>¿Qué sale realmente mal sin esta jerarquización? Si cada agente se asignara uniformemente al modelo de mayor rendimiento (high), incluso un rol como automation-engineer que solo repite la ejecución estandarizada de scripts incurriría en costos de inferencia innecesariamente caros cada vez, haciendo que el costo operativo de todo el equipo sea pointlessemente grande. Por el contrario, si todo se unificara en el modelo de menor costo (low), un rol como PM — que necesita sintetizar la salida de múltiples agentes y tomar decisiones de juicio — frecuentemente tomaría malas decisiones de coordinación a partir de un razonamiento superficial. La jerarquización es un mecanismo que equilibra previamente el costo y la calidad por rol, ajustado a "cuánta profundidad de razonamiento necesita realmente este rol."</p>
+  <div class="note">Este <strong>nivel de costo de modelo (high/medium/low)</strong> comparte solo la sensación de "tres niveles" de su nombre con el <strong>L0 → L1 → L2 de 3 niveles</strong> (la jerarquización de de dónde provienen los archivos y cómo fluyen) cubierto en el Capítulo 8 — por lo demás son conceptos diferentes. Uno es "qué modelo asignar a un agente," y el otro es "dónde vive el original de un archivo."</div>
+
+  <h2 id="s4">Lista de verificación de inicio de sesión y andamiaje</h2>
+  <p>CONSTITUTION.md define el orden que toda sesión debe seguir al inicio. Primero, establecer la ruta de los ganchos de git con <code>git config core.hooksPath .githooks</code>, luego leer el propio CONSTITUTION.md, luego leer el <code>docs/context.md</code> del proyecto en el que se está trabajando. A continuación, verificar AGENTS.md para los agentes disponibles, comprobar si queda contexto de una sesión anterior en <code>memory/MEMORY.md</code>, y finalmente cargar las habilidades que especifique docs/context.md.</p>
+  <p>El flujo para crear un nuevo proyecto es conceptualmente simple. Ejecute el script <code>bun scripts/new-project.ts</code> con un nombre de proyecto y la variante deseada, y toda la configuración de esa variante se clona en un repositorio git completamente independiente. Este repositorio está separado de la raíz del espacio de trabajo, pero desde su nacimiento ya ha heredado los estándares compartidos de CONSTITUTION.md. El equipo luego hace evolucionar el equipo rellenando el <code>docs/context.md</code> propio del proyecto y cualquier anulación de CLAUDE.md/GEMINI.md a nivel de proyecto. La sintaxis exacta y las opciones de este comando se practican de forma práctica en el Capítulo 6 §1.</p>
+
+  <div class="note">
+    <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3b82f6"/></marker>
+        <marker id="arrow2g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#22c55e"/></marker>
+        <marker id="arrow2p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8b5cf6"/></marker>
+      </defs>
+      <!-- Box 1: L0 workspace root (blue) -->
+      <rect x="5" y="25" width="160" height="36" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="85" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3b82f6">L0 Raíz del espacio de trabajo</text>
+      <text x="85" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#6b7280">C:\git\</text>
+      <!-- Arrow 1 with label -->
+      <line x1="165" y1="43" x2="235" y2="43" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrow2)"/>
+      <text x="200" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#3b82f6" font-weight="600">new-project.ts</text>
+      <!-- Box 2: L2 template (green) -->
+      <rect x="240" y="25" width="180" height="36" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="330" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#22c55e">templates/co-consult/</text>
+      <text x="330" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#22c55e">Clon de plantilla L2</text>
+      <!-- Small text below Box 2 -->
+      <text x="330" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#6b7280">Incluye AGENTS.md · CONSTITUTION.md · agents/</text>
+      <!-- Arrow 2 with label -->
+      <line x1="420" y1="43" x2="490" y2="43" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrow2p)"/>
+      <text x="455" y="37" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="#8b5cf6" font-weight="600">inicialización git independiente</text>
+      <!-- Box 3: Projects/my-project/ (purple) -->
+      <rect x="495" y="25" width="180" height="36" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#8b5cf6">Projects/mi-proyecto/</text>
+      <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#8b5cf6">Repositorio independiente</text>
+    </svg>
+  </div>
+
+  <p>Vale la pena aclarar aquí la relación entre CONSTITUTION.md y context.md. Ambos son documentos que se leen durante la "lista de verificación de inicio de sesión," pero se sitúan en diferentes capas de la jerarquía SSOT. <code>CONSTITUTION.md</code> existe exactamente una vez, en L0 (la raíz del espacio de trabajo), y define reglas compartidas por <em>todos</em> los proyectos — la gobernanza, el flujo de trabajo de PR y los principios multiagente están todos aquí. <code>context.md</code>, por el contrario, existe por separado para cada L2 (proyecto individual), y es el <strong>SSOT específico del proyecto</strong> que contiene los objetivos, el conocimiento del dominio y el progreso actual de ese proyecto. La diferencia es que CONSTITUTION.md no es un archivo que se rellena por mandato desde arriba — es un archivo que cada equipo de proyecto escribe para sí mismo. Por eso la lista de verificación tiene un orden: primero confirmar "qué debe seguirse (compartido)" vía CONSTITUTION.md, luego confirmar "qué está haciendo este proyecto ahora (individual)" vía context.md.</p>
+  <p>Nótese, sin embargo, que un archivo con el mismo nombre también existe dentro de cada variante, en <code>templates/&lt;variante&gt;/docs/context.md</code>. Comparte solo su nombre con el context.md de un proyecto L2 — su rol es diferente. El context.md dentro de una variante sigue siendo un esqueleto vacío sin rellenar (un marcador de posición), y en el momento en que <code>new-project.ts</code> se ejecuta, se clona exactamente una vez, igual que los demás archivos L1→L2. Una vez clonado, su conexión con el original (el context.md de la variante) se corta completamente, y se convierte en un documento independiente que el equipo del proyecto rellena con contenido real a partir de ese momento. Por lo tanto, incluso si el esqueleto context.md de la variante cambia más adelante, no se refleja automáticamente en el context.md de un proyecto que ya ha sido creado.</p>
+
+  <div class="note">Los archivos en la raíz del espacio de trabajo (CONSTITUTION.md, CLAUDE.md, etc.) y los archivos en los proyectos individuales creados pertenecen a repositorios git separados. Es un principio fundamental de este repositorio que los dos nunca se modifiquen juntos en la misma pieza de trabajo.</div>
+
+  <div class="chapter-nav">
+    <a href="../practice/04_Practice_Manual_es.html" class="prev"><div class="dir">← Capítulo anterior</div><div class="ttl">Capítulo 4 · Uso de un equipo multiagente basado en arnés</div></a>
+    <a href="../variant-practice/06_VariantPractice_Manual_es.html" class="next"><div class="dir">Capítulo siguiente →</div><div class="ttl">Capítulo 6 · Trabajo con una variante existente</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

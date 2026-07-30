@@ -443,7 +443,7 @@ em-dash는 부연 설명이 불가피한 곳에만 **최소한으로** 쓴다.
 ### 17-1. 영상 선정 기준
 
 - **공식 출처 우선**: Anthropic, Google DeepMind, DeepLearning.AI 등 공식 채널을 우선한다.
-- **언어**: 한국어 영상을 최우선으로 찾고, 없으면 영어 영상을 링크하되 언어를 명시한다.
+- **언어**: 각 번역판에는 해당 언어의 영상을 최우선으로 배치한다. 예: 한국어판에는 KO 영상, 일본어판에는 JA 영상, 스페인어판에는 ES 영상. 해당 언어의 적절한 영상이 없으면 EN 영상을 공통으로 포함한다. 영상 badge(`video-badge`)로 언어를 명시한다.
 - **길이**: 20분 이내의 짧은 영상을 선호한다. 긴 영상은 타임스탬프를 안내한다.
 - **시의성**: 발행일이 최근 2년 이내인 것을 선호한다.
 - **무료 접근**: YouTube 등 누구나 볼 수 있는 플랫폼에 게시된 것만 링크한다.
@@ -497,6 +497,8 @@ CSS:
 }
 .video-badge.en { background: #0969da; }
 .video-badge.ko { background: #1a7f37; }
+.video-badge.ja { background: #cf222e; }
+.video-badge.es { background: #bf8700; }
 .video-meta { font-size: 12px; color: var(--text-dim); }
 ```
 

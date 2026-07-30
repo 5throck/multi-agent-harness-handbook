@@ -578,9 +578,9 @@ diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-market
 function copyCode(btn) {
   const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
   navigator.clipboard.writeText(pre.textContent).then(() => {
-    btn.textContent = 'Copied!';
+    btn.textContent = '完了!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
   });
 }
 </script>

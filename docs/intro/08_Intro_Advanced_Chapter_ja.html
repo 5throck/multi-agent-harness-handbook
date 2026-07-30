@@ -64,7 +64,7 @@
   <p>マルチエージェントシステムを運用していると、ワークスペース内のエージェント、スキル、スクリプトは増え続けます。新しいものを作るだけでは十分ではありません。各コンポーネントが<strong>どの段階にあるか</strong>を明確にする必要があります。そうすることで、次のような問題を回避できます。</p>
 
   <ul>
-    <li><strong>未検証のコンポーネントが本番に投入される問題。</strong> エージェントが <code>agent:verify</code> を通過せずにデプロイされると、フロントマターの欠落フィールドや誤った役割定義により、実際のセションでエラーが発生します。</li>
+    <li><strong>未検証のコンポーネントが本番に投入される問題。</strong> エージェントが <code>agent:verify</code> を通過せずにデプロイされると、フロントマターの欠落フィールドや誤った役割定義により、実際のセッションでエラーが発生します。</li>
     <li><strong>廃止対象が依然として呼び出される問題。</strong> 有効でなくなったスキルがレジストリに残っていると、エージェントが意図せずそのスキルを選択して失敗します。</li>
     <li><strong>バージョンの不一致による再現不能の問題。</strong> スクリプトが更新されたのに、あるvariantでは旧バージョンを参照したままだと、同じ入力に対して異なる結果が生じます。</li>
   </ul>
@@ -96,7 +96,7 @@
         <!-- Operate -->
         <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
         <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Operate</text>
-        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">セションで実行</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">セッションで実行</text>
         <!-- Improve -->
         <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
         <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Improve</text>
@@ -126,7 +126,7 @@
     <li>フロントマターに <code>name</code>、<code>role</code>、<code>model</code>、<code>status</code> フィールドがすべて含まれているか</li>
     <li>本文に当該エージェントの動作原則と制約条件が明示されているか</li>
   </ul>
-  <p>初期の <code>status</code> フィールド値は <code>draft</code> に設定します。この状態では、エージェントは運用セションで自動的に選択されません。</p>
+  <p>初期の <code>status</code> フィールド値は <code>draft</code> に設定します。この状態では、エージェントは運用セッションで自動的に選択されません。</p>
 
   <h3 id="s2-agent-verify">Verify — エージェントの検証</h3>
   <p>生成されたエージェントファイルがワークスペースの規格に適合しているかを <code>bun run agent:verify</code> で検証します。このコマンドは次の点を確認します。</p>
@@ -139,7 +139,7 @@
   <p>検証に合格すると、<code>status</code> を <code>active</code> に変更します。合格しない場合は <code>draft</code> の状態を維持し、エラーメッセージをもとに修正して再検証します。</p>
 
   <h3 id="s2-agent-operate">Operate — エージェントの運用</h3>
-  <p><code>active</code> 状態のエージェントは実際のセションで呼び出されるようになります。運用段階では、エージェントの実際の動作を観察し、セションログで次の点をモニタリングします。</p>
+  <p><code>active</code> 状態のエージェントは実際のセッションで呼び出されるようになります。運用段階では、エージェントの実際の動作を観察し、セッションログで次の点をモニタリングします。</p>
   <ul>
     <li>エージェントが定義された役割どおりに動作しているか</li>
     <li>他のエージェントとの協働において干渉や衝突がないか</li>
@@ -173,7 +173,7 @@
 
   <h2 id="s2-skill-lifecycle">スキルのライフサイクル</h2>
 
-  <p>スキルは、エージェントがセション中に呼び出せる再利用可能な動作単位です。<code>SKILL.md</code> ファイルとして定義され、プラグインやワークスペースの <code>.zcode/skills/</code> に配置されます。スキルのライフサイクルは次の5段階で構成されます。</p>
+  <p>スキルは、エージェントがセッション中に呼び出せる再利用可能な動作単位です。<code>SKILL.md</code> ファイルとして定義され、プラグインやワークスペースの <code>.zcode/skills/</code> に配置されます。スキルのライフサイクルは次の5段階で構成されます。</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -244,7 +244,7 @@
     <li>必要に応じてワークスペースの <code>.zcode/skills/</code> やプラグインレジストリに登録する</li>
     <li>当該スキルを使用するエージェントのフロントマターに依存関係を明示する</li>
   </ul>
-  <p>配備後は、エージェントのセション内でスキルが正常にトリガーされ実行されるかを確認する手動レビューを実施します。</p>
+  <p>配備後は、エージェントのセッション内でスキルが正常にトリガーされ実行されるかを確認する手動レビューを実施します。</p>
 
   <h3 id="s2-skill-version">Version — スキルのバージョン管理</h3>
   <p>運用環境で使用中のスキルに変更が必要になった場合、バージョン管理によって安全に更新します。</p>

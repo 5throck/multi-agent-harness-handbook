@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
-  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
-  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
--->
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -118,9 +113,9 @@
 function copyCode(btn) {
   const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
   navigator.clipboard.writeText(pre.textContent).then(() => {
-    btn.textContent = '완료!';
+    btn.textContent = '完了!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
   });
 }
 </script>

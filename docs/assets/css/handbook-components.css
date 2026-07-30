@@ -1269,6 +1269,8 @@ pre.code-block {
 .video-badge { display: inline-block; font-size: var(--font-size-micro); font-weight: 700; padding: 1px 6px; border-radius: 3px; color: var(--text-inverse); vertical-align: middle; margin-right: 6px; }
 .video-badge.en { background: var(--accent); }
 .video-badge.ko { background: var(--accent-green); }
+.video-badge.ja { background: var(--accent-red); }
+.video-badge.es { background: var(--accent-amber); }
 .video-meta { font-size: var(--font-size-label); color: var(--text-dim); }
 
 /* Preview banner (multilingual preview page) */

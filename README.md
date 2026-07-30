@@ -25,3 +25,7 @@
 Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08)
 
 Built with the Teach Me skill for Claude Code.
+
+## License
+- Source code (scripts, configuration): [GNU AGPL-3.0](LICENSE)
+- Handbook content (chapters, docs): [CC BY-NC-SA 4.0](LICENSE-CC-BY-NC-SA) (저작자표시-비영리-동일조건변경허락 4.0 국제)

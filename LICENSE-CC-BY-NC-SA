@@ -1,0 +1,32 @@
+Multi-Agent Harness Engineering Handbook — Content License
+============================================================
+
+The written content of this handbook (chapter text, diagrams, and other
+documentation under this repository, excluding source code) is licensed
+under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+International License (CC BY-NC-SA 4.0).
+
+저작자표시-비영리-동일조건변경허락 4.0 국제 (CC BY-NC-SA 4.0)
+
+You are free to:
+  - Share — copy and redistribute the material in any medium or format
+  - Adapt — remix, transform, and build upon the material
+
+Under the following terms:
+  - Attribution (저작자표시) — You must give appropriate credit, provide a
+    link to the license, and indicate if changes were made.
+  - NonCommercial (비영리) — You may not use the material for commercial
+    purposes.
+  - ShareAlike (동일조건변경허락) — If you remix, transform, or build upon
+    the material, you must distribute your contributions under the same
+    license as the original.
+
+Full legal code: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+License deed:    https://creativecommons.org/licenses/by-nc-sa/4.0/
+License deed (한국어): https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko
+
+---
+
+Source code contained in this repository (scripts, configuration, and any
+software components) is licensed separately under the GNU Affero General
+Public License v3.0 (AGPL-3.0). See the LICENSE file for details.

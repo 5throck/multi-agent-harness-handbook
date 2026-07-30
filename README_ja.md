@@ -29,8 +29,6 @@
 - Antigravity CLI 1.1.0+ / Antigravity 2.0
 - `ai-workspace-standards` main (2026-07-08)
 
-*Built with the Teach Me skill for Claude Code.*
-
 ## 📜 ライセンス
 - **ソースコード** (スクリプト・設定ファイル): [GNU AGPL-3.0](LICENSE)
 - **ハンドブックコンテンツ** (各章・ドキュメント): [CC BY-NC-SA 4.0](LICENSE-CC-BY-NC-SA) (表示 - 非営利 - 継承 4.0 国際)

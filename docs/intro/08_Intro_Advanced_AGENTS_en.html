@@ -302,7 +302,7 @@ Role: Finalizes the document by incorporating feedback.</pre>
 function copyCode(btn) {
   const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
   navigator.clipboard.writeText(pre.textContent).then(() => {
-    btn.textContent = 'Done!';
+    btn.textContent = 'Copied!';
     btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
   });

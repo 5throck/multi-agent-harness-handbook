@@ -296,19 +296,39 @@ CSS flex에서 **flex 자식의 기본 `min-width`는 `auto`**이므로, 내부 
 
 ### 12-1. 종결 어미
 
-본문·부제·설명문 모두 **해라체(`~다`/`~한다`/`~이다`)**로 통일한다.
-하십시오체(`~습니다`/`~해요`)는 UI 버튼 문구 등에서만 허용한다.
+본문·부제·설명문은 해당 언어의 **격식 있는 평어체(plain/formal register)**로 통일한다.
+높임말(polite register)은 UI 버튼 문구·오류 메시지 등 사용자에게 직접 보이는 인터랙션 요소에서만 허용한다.
+
+| 언어 | 본문 문체 | 허용되지 않는 문체 | 비고 |
+|------|----------|-------------------|------|
+| 한국어 | 해라체 (`~다`/`~한다`/`~이다`) | 하십시오체 (`~습니다`/`~해요`) | 교재적 어조 유지 |
+| 日本語 | だ/である체 (plain form) | です/ます체 (polite form) | 論文スタイルと統一 |
+| English | declarative (no contractions in prose) | informal/casual | academic technical prose |
+| Español | registro neutro/formal (usted) | registro informal (tuteo/voseo) | tono académico |
 
 ```
-✗ "이 핸드북은 다르게 구성되어 달라집니다."  (하십시오체)
-✓ "이 핸드북은 다르게 구성되어 달라진다."     (해라체)
+KO: ✓ "이 핸드북은 다르게 구성되어 달라진다."     ✗ "이 핸드북은 달라집니다."
+JA: ✓ "このハンドブックは構成が異なる。"            ✗ "このハンドブックは構成が異なります。"
+EN: ✓ "This handbook is structured differently."  ✗ "This handbook's structured diff'rently."
+ES: ✓ "Este manual tiene una estructura diferente."  ✗ "Este manual está estructurao distinto."
 ```
 
-### 12-2. 영어 기술 용어 표기
+### 12-2. 기술 용어 표기
 
-본문에서 영어 기술 용어를 쓸 때는 **문서(파일) 안에서 처음 등장할 때만** 한글(English) 괄호 풀이를 쓰고,
+본문에서 영어 기술 용어를 쓸 때는 **문서(파일) 안에서 처음 등장할 때만** 해당 언어 번역(English) 괄호 풀이를 쓰고,
 같은 문서 안에서 그 뒤로 다시 나올 때는 영어 단어만 그대로 쓴다.
 코드·파일명·CLI 식별자는 `<code>` 태그로 표기하되, 이와 구분되는 개념적 용어는 괄호 풀이를 쓴다.
+
+| 언어 | 첫 등장 풀이 형식 | 예시 |
+|------|-----------------|------|
+| 한국어 | 한글(English) | 훅(hook) |
+| 日本語 | 日本語(English) | フック(hook) |
+| English | *(no parenthetical — English-only)* | hook |
+| Español | español(English) *(if translated)* or English-only *(if untranslated)* | enlace(hook) / hook |
+
+※ English edition은 영어가 원어이므로 괄호 풀이가 필요 없다.
+※ Español edition은 번역이 관습화된 용어(hook→enlace, branch→rama)는 풀이를 쓰고,
+   관습화되지 않은 용어는 영어 단독으로 쓴다.
 
 ```
 ✗ "hook은 셸 명령 실행 전후에 호출된다."                     (첫 등장인데 영어만 — 풀이 없음)
@@ -320,7 +340,16 @@ CSS flex에서 **flex 자식의 기본 `min-width`는 `auto`**이므로, 내부 
 
 이 규칙은 **문서(파일) 단위**로 적용된다 — 다른 문서에서는 그 문서에서의 첫 등장이 다시 기준이 된다(예: 4장에서 이미 "훅(hook)"을 풀이했어도 8장에서 처음 나오면 다시 풀이한다).
 
-**제목은 예외**다. `<title>`, `<h1>`, `chapter-eyebrow`, nav의 장 제목처럼 **제목 역할을 하는 텍스트**는 괄호 풀이 없이 **영어 단어만** 쓴다(한글 단독 표기도 쓰지 않는다).
+**제목은 예외**다. `<title>`, `<h1>`, `chapter-eyebrow`, nav의 장 제목처럼 **제목 역할을 하는 텍스트**에서 기술 용어는 괄호 풀이 없이 영어 단어만 쓴다. 모든 언어판에 공통으로 적용된다.
+
+| 언어 | 제목 형식 | 예시 |
+|------|----------|------|
+| 한국어 | 한국어 구조어 + 영어 기술 용어 | `<h1>신규 variant 만들기</h1>` |
+| 日本語 | 日本語 구조어 + 英語 기술 용어 | `<h1>新規 variant の作成</h1>` |
+| English | 영어만 | `<h1>Creating a New Variant</h1>` |
+| Español | español 구조어 + English 기술 용어 | `<h1>Creación de un nuevo variant</h1>` |
+
+공통 원칙: 제목에는 괄호 풀이를 쓰지 않는다.
 
 ```
 ✗ <h1>신규 베리언트(variant) 만들기</h1>   (제목에 괄호 풀이)
@@ -426,9 +455,9 @@ em-dash는 부연 설명이 불가피한 곳에만 **최소한으로** 쓴다.
 
 ## 16. 언어 정책
 
-- 교재 본문·실습 지문·UI 문구는 **한국어**로 쓴다(한국어 교육 자료).
-- 단, **코드 주석·식별자·커밋 메시지·PR 제목/본문·브랜치명**은 영어로 쓴다.
-- 파일명은 영어·kebab/snake case를 따른다.
+- 교재 본문·실습 지문·UI 문구는 **해당 번역판의 언어**로 쓴다 (KO/JA/EN/ES 각각).
+- 단, **코드 주석·식별자·커밋 메시지·PR 제목/본문·브랜치명**은 모든 언어판 공통으로 영어로 쓴다.
+- 파일명은 영어·kebab/snake case를 따른다 (모든 언어판 공통).
 
 ---
 
@@ -838,9 +867,9 @@ A/B 파일 상호 간에는 prev/next 링크로 순차 연결한다.
 - [ ] §11-1 flex 자식 `.step-content`에 `min-width: 0`이 있고, 글상자에 `overflow-wrap: break-word`가 있는가?
 - [ ] §11-1 `.platform-block` 안 글상자에 음수 마진 보정이 있는가?
 - [ ] §11-2 flex 컨테이너 안 고정 요소(배지·타이틀)에 `flex-shrink: 0`이 있는가?
-- [ ] §12-1 종결 어미가 해라체(`~다`)로 통일되어 있는가?
-- [ ] §12-2 영어 기술 용어가 문서 내 첫 등장에만 한글(English) 괄호 풀이로 되어 있고, 이후로는 영어 단독인가?
-- [ ] §12-2 `<title>`/`<h1>`/`chapter-eyebrow`/nav 제목 텍스트에 괄호 풀이나 한글 단독 표기 없이 영어만 쓰였는가?
+- [ ] §12-1 종결 어미가 해당 언어의 평어체로 통일되어 있는가? (KO: 해라체, JA: だ/である, EN: declarative, ES: registro neutro)
+- [ ] §12-2 기술 용어가 문서 내 첫 등장에만 해당 언어 관습에 맞게 괄호 풀이로 되어 있고, 이후로는 영어 단독인가?
+- [ ] §12-2 `<title>`/`<h1>`/`chapter-eyebrow`/nav 제목 텍스트에 괄호 풀이 없이 영어 기술 용어만 쓰였는가?
 - [ ] §12-3 장·절 참조가 `N장 §M` 형식으로 통일되어 있는가?
 - [ ] §12-4 em-dash가 최소한으로 사용되었는가?
 - [ ] §13 도구 비교가 오해 없이, 항목 누락 없이, 균형 있게 있는가?
@@ -848,7 +877,7 @@ A/B 파일 상호 간에는 prev/next 링크로 순차 연결한다.
 - [ ] §14 강의 소개의 학습 목표가 본문 섹션과 1:1로 매핑되는가?
 - [ ] §15 각 장이 다음 장과 연결되고, 보조 문서가 빠짐없는가?
 - [ ] §15-1 마지막 장에 "수료 후 다음 단계" 섹션이 있는가?
-- [ ] §16 본문은 한국어, 코드/식별자/커밋은 영어인가?
+- [ ] §16 본문은 해당 언어판의 언어로, 코드/식별자/커밋은 영어인가?
 - [ ] §17 공식 영상 자료가 있는 섹션에 "참고 영상" 블록이 있는가?
 - [ ] §17 영상 링크가 `.video-refs` 패턴으로 일관되게 스타일링되어 있는가?
 - [ ] §17-4 영상 신뢰성 검증 절차(5단계)를 거쳤는가? 모든 영상이 TRUSTWORTHY인가?
@@ -876,13 +905,14 @@ A/B 파일 상호 간에는 prev/next 링크로 순차 연결한다.
 | 한국어 (기본) | *(없음)* | `01_Why_AI_Chapter.html` |
 | English | `_en` | `01_Why_AI_Chapter_en.html` |
 | 日本語 | `_ja` | `01_Why_AI_Chapter_ja.html` |
+| Español | `_es` | `01_Why_AI_Chapter_es.html` |
 
-index 페이지도 동일: `index.html` / `index_en.html` / `index_ja.html`.
+index 페이지도 동일: `index.html` / `index_en.html` / `index_ja.html` / `index_es.html`.
 
 ### 23-2. 페이지 구조 요구사항
 
 번역 파일은 한국어 원본의 **전체 복사본**이어야 한다. 각 파일에:
-- `<html lang="en">` 또는 `<html lang="ja">` 속성
+- `<html lang="en">`, `<html lang="ja">` 또는 `<html lang="es">` 속성
 - 자체 사이드바 네비게이션 (같은 언어의 다른 파일로 링크)
 - `<script src="../assets/lang-switcher.js">` 포함
 - 코드 블록, 파일 경로, URL, 기술 식별자는 번역하지 않음
@@ -902,7 +932,7 @@ index 페이지도 동일: `index.html` / `index_en.html` / `index_ja.html`.
 
 ### 23-5. 검증
 
-`bun run scripts/validate-nav.ts`로 링크 무결성을 자동 검증한다. 언어별 파일 간의 번역 누락은 수동으로 확인한다 (각 장마다 ko/en/ja 3파일이 모두 존재하는지).
+`bun run scripts/validate-nav.ts`로 링크 무결성을 자동 검증한다. 언어별 파일 간의 번역 누락은 수동으로 확인한다 (각 장마다 ko/en/ja/es 4파일이 모두 존재하는지).
 
 ---
 

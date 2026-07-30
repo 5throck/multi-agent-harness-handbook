@@ -1,0 +1,36 @@
+# マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック
+
+言語: [English](README.md) | [한국어](README_ko.md) | [日本語](README_ja.md) | [Español](README_es.md)
+
+**マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック**は、AIワークスペース（AI Workspace）の構築と運用を学ぶための総合実践教育プログラムです。
+ハーネスエンジニアリングの基本概念をはじめ、Claude Code、Claude App、Antigravity CLI、Antigravity Desktopなどの最新AIツールを用いた実践、ワークフローデザインパターン、企業における運用戦略の比較、そして `ai-workspace-standards` を活用した独自エージェントバリアントの構築実習までを体系的に網羅しています。
+
+## 🌐 オンライン教育プログラム（ハンドブック）
+👉 **[ハンドブック公式サイトを見る](https://5throck.github.io/multi-agent-harness-handbook/)**
+
+## 📚 カリキュラム / 目次
+- **第1章 · 導入** — なぜAIエージェントチームなのか＆現代のAIワークスペース
+- **第2章 · ハーネスエンジニアリング** — マルチエージェントチームの基本概念とオーケストレーション
+- **第3章 · ガードレールと権限モデル** — エージェントのガバナンスとアクセス制御
+- **第4章 · ハーネス型マルチエージェントチームの活用** — リファレンスとClaude / Antigravityハンズオン
+- **第5章 · `ai-workspace-standards` 入門** — AIワークスペース標準化フレームワーク
+- **第6章 · 既存バリアントの活用** — リファレンス構成と実践
+- **第7章 · 企業運用戦略の比較** — 導入・ガバナンス戦略の分析
+- **第8章 · `ai-workspace-standards` アーキテクチャ深掘り** — デプロイ・SSOT・ライフサイクル・AGENTS.md・ロードマップ
+- **第9章 · ワークフローデザインパターン** — エージェント協調パターン
+- **第10章 · L2プロジェクトのアップグレード** — 実践プロジェクトでのエージェント拡張
+- **第11章 · 新規バリアントの作成 (Phase A)** — カスタムハーネスの設計
+- **第12章 · 新規バリアントの昇格 (Phase B)** — プロダクション適用と検証
+- **第13章 · キャップストーン** — 独自ワークフローの設計と構築
+- **共通参考 · ツール比較** — Claude Code / Claude App / Antigravity CLI / Antigravity
+
+## 🎯 対象バージョン
+- Claude Code 2026-07
+- Antigravity CLI 1.1.0+ / Antigravity 2.0
+- `ai-workspace-standards` main (2026-07-08)
+
+*Built with the Teach Me skill for Claude Code.*
+
+## 📜 ライセンス
+- **ソースコード** (スクリプト・設定ファイル): [GNU AGPL-3.0](LICENSE)
+- **ハンドブックコンテンツ** (各章・ドキュメント): [CC BY-NC-SA 4.0](LICENSE-CC-BY-NC-SA) (表示 - 非営利 - 継承 4.0 国際)

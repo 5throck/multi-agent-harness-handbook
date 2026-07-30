@@ -1,27 +1,35 @@
-# 멀티 에이전트팀 하네스 엔지니어링 핸드북
+# Multi-Agent Harness Engineering Handbook
 
-하네스 엔지니어링 개념부터 Claude Code/Claude App/Antigravity CLI/Antigravity Desktop 실습, 워크플로우 디자인 패턴, 기업 내 운영 전략 비교, ai-workspace-standards로 variant를 직접 만들어보는 실습까지 다루는 한국어 핸드북.
+*[한국어](README_ko.md)*
+
+A Korean-language handbook covering harness engineering concepts, hands-on practice with Claude Code / Claude App / Antigravity CLI / Antigravity Desktop, workflow design patterns, a comparison of enterprise operating strategies, and hands-on exercises building your own variant with ai-workspace-standards.
+
+> **Note:** The handbook content itself (the published site and chapters) is written in Korean. This README is provided in English for discoverability; see [README_ko.md](README_ko.md) for the full Korean README.
 
 ## Read it live
 → https://5throck.github.io/multi-agent-harness-handbook/
 
 ## Contents
-- 1장 · 도입 — 왜 AI 에이전트 팀인가
-- 2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념
-- 3장 · 가드레일과 권한 모델
-- 4장 · 하네스 기반 멀티 에이전트 팀 활용 (레퍼런스 + Claude/Antigravity 실습)
-- 5장 · ai-workspace-standards 소개
-- 6장 · 기존 variant 활용 (레퍼런스 + 실습)
-- 7장 · 기업 내 운영 전략 비교
-- 8장 · ai-workspace-standards 아키텍처 심화 (배포·SSOT, 생애주기, AGENTS.md 심화, 아키텍처 심화, 고도화 로드맵)
-- 9장 · 워크플로우 디자인 패턴
-- 10장 · L2 프로젝트 업그레이드
-- 11장 · 신규 variant 생성 (Phase A)
-- 12장 · 신규 variant 승격 (Phase B)
-- 13장 · 캡스톤 — 나만의 워크플로우 설계하기
-- 공통 참고 · 도구 비교 — Claude Code / Claude App / Antigravity CLI / Antigravity
+- Ch. 1 · Introduction — Why AI agent teams
+- Ch. 2 · Harness engineering and multi-agent team concepts
+- Ch. 3 · Guardrails and permission models
+- Ch. 4 · Using harness-based multi-agent teams (reference + Claude/Antigravity hands-on)
+- Ch. 5 · Introduction to ai-workspace-standards
+- Ch. 6 · Working with existing variants (reference + hands-on)
+- Ch. 7 · Comparing enterprise operating strategies
+- Ch. 8 · ai-workspace-standards architecture deep dive (deployment/SSOT, lifecycle, AGENTS.md deep dive, architecture deep dive, roadmap)
+- Ch. 9 · Workflow design patterns
+- Ch. 10 · L2 project upgrade
+- Ch. 11 · Creating a new variant (Phase A)
+- Ch. 12 · Promoting a new variant (Phase B)
+- Ch. 13 · Capstone — Designing your own workflow
+- Common reference · Tool comparison — Claude Code / Claude App / Antigravity CLI / Antigravity
 
-## 대상 버전
+## Target versions
 Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08)
 
 Built with the Teach Me skill for Claude Code.
+
+## License
+- Source code (scripts, configuration): [GNU AGPL-3.0](LICENSE)
+- Handbook content (chapters, docs): [CC BY-NC-SA 4.0](LICENSE-CC-BY-NC-SA) (Attribution-NonCommercial-ShareAlike 4.0 International)

@@ -189,9 +189,9 @@ In particular, check the following:
 function copyCode(btn) {
   const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
   navigator.clipboard.writeText(pre.textContent).then(() => {
-    btn.textContent = '완료!';
+    btn.textContent = 'Copied!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
   });
 }
 </script>

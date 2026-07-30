@@ -1,6 +1,6 @@
 # Multi-Agent Harness Engineering Handbook
 
-*[한국어](README_ko.md)*
+*[Korean](README_ko.md)*
 
 A Korean-language handbook covering harness engineering concepts, hands-on practice with Claude Code / Claude App / Antigravity CLI / Antigravity Desktop, workflow design patterns, a comparison of enterprise operating strategies, and hands-on exercises building your own variant with ai-workspace-standards.
 
@@ -17,7 +17,7 @@ A Korean-language handbook covering harness engineering concepts, hands-on pract
 - Ch. 5 · Introduction to ai-workspace-standards
 - Ch. 6 · Working with existing variants (reference + hands-on)
 - Ch. 7 · Comparing enterprise operating strategies
-- Ch. 8 · ai-workspace-standards architecture deep dive (deployment/SSOT, lifecycle, AGENTS.md deep dive, architecture deep dive, roadmap)
+- Ch. 8 · ai-workspace-standards deep dive (deployment/SSOT, lifecycle, AGENTS.md, architecture, roadmap)
 - Ch. 9 · Workflow design patterns
 - Ch. 10 · L2 project upgrade
 - Ch. 11 · Creating a new variant (Phase A)

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Lista de verificación de preinstalación del taller · Manual de ingeniería de arnés de equipos multiagente - parte de los materiales del Manual de ingeniería de arnés de equipos multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de verificación de preinstalación del taller · Manual de ingeniería de arnés de equipos multiagente</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    h2 { color: var(--accent-dark); margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); scroll-margin-top: 20px; }
+    .chk-list li.sub { margin-left: 22px; color: var(--text-dim); }
+    .chk-list li.sub::before { content: '—'; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del manual</a>
+  <div class="nav-title">Lista de verificación de preinstalación</div>
+  <a href="#s1">1. Verificar suscripción</a>
+  <a href="#s2">2. Preparación de cuentas</a>
+  <a href="#s3">3. Requisitos del sistema</a>
+  <a href="#s4">4. Configuración de usuario de Git</a>
+  <a href="#s5">5. Autenticación en GitHub</a>
+  <a href="#s6">6. Configuración del entorno del proyecto</a>
+  <a href="#s7">7. Verificación final del entorno</a>
+  <div class="nav-section">Otros documentos</div>
+  <a href="SETUP_es.html">Guía de configuración del entorno del taller</a>
+  <a href="../practice/04_Practice_Examples_A_en.html#setup">Sección de preparación de la práctica del Capítulo 4 §2-A</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>Lista de verificación de preinstalación del taller</h1>
+  <p class="subtitle">Complete esta lista de verificación <strong>antes</strong> de ejecutar el script de instalación. Los elementos a continuación no pueden automatizarse y requieren acción manual.</p>
+
+  <h2 id="s1">1. Verificar suscripción (Prioridad máxima)</h2>
+  <p>Las herramientas utilizadas en las sesiones prácticas del taller requieren una suscripción válida.</p>
+  <table>
+    <thead><tr><th>Herramienta</th><th>Plan requerido</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Claude Code CLI</strong> (<code>claude</code>)</td><td>Claude Pro o Max</td></tr>
+      <tr><td><strong>Claude App de escritorio</strong></td><td>Claude Pro o superior</td></tr>
+      <tr><td><strong>Antigravity CLI</strong> (<code>agy</code>)</td><td>Gemini Advanced</td></tr>
+      <tr><td><strong>Antigravity App de escritorio</strong></td><td>Gemini Advanced</td></tr>
+    </tbody>
+  </table>
+  <div class="warn"><strong>Sobre las claves API</strong>: Las claves API solo son necesarias para integraciones fuera de su plan de suscripción. Las sesiones prácticas del taller están completamente cubiertas por el modelo de suscripción, por lo que solo emita una clave API si es verdaderamente necesario.</div>
+
+  <h2 id="s2">2. Preparación de cuentas</h2>
+  <ul class="chk-list">
+    <li><strong>Cuenta de Google</strong> — necesaria para usar Antigravity / Gemini Advanced</li>
+    <li><strong>Cuenta de GitHub</strong> — necesaria para <code>gh auth login</code> y ejercicios de PR</li>
+    <li class="sub">Si no tiene una, regístrese con anticipación en <a href="https://github.com/signup" target="_blank">github.com/signup</a>, siguiendo las instrucciones de registro en la <a href="../practice/04_Practice_Examples_A_en.html#setup">sección de preparación de la práctica del Capítulo 4 §2-A</a></li>
+  </ul>
+
+  <h2 id="s3">3. Requisitos del sistema</h2>
+  <ul class="chk-list">
+    <li>Sistema operativo: Windows 11 (Intel) / macOS Sequoia 15 o posterior en Apple Silicon (serie M) / Ubuntu 24.04 o posterior</li>
+    <li>Espacio libre en disco: <strong>5 GB o más</strong></li>
+    <li>Privilegios de administrador / sudo</li>
+    <li class="sub"><strong>Windows</strong>: Inicio → buscar "PowerShell" → clic derecho → "Ejecutar como administrador" (o <code>Win + X</code> → "Terminal (Admin)"), luego haga clic en "Sí" en el cuadro de confirmación de UAC</li>
+    <li class="sub"><strong>macOS / Linux</strong>: anteponga <code>sudo</code> al comando</li>
+    <li>Conexión a internet estable (tamaño total de descarga aprox. 1–2 GB)</li>
+  </ul>
+
+  <h2 id="s4">4. Configuración de usuario de Git</h2>
+  <p>Después de instalar git, registre su información de usuario con los comandos a continuación.</p>
+  <div style="position:relative">
+    <pre class="code-block">git config --global user.name  "Jane Doe"
+git config --global user.email "you@example.com"</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <ul class="chk-list">
+    <li><code>git config --global user.name</code> configurado</li>
+    <li><code>git config --global user.email</code> configurado</li>
+  </ul>
+
+  <h2 id="s5">5. Autenticación en GitHub</h2>
+  <div style="position:relative">
+    <pre class="code-block">gh auth login</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <p>Siga las indicaciones para completar la autenticación en su navegador.</p>
+  <ul class="chk-list">
+    <li>Confirme que se muestra "Logged in" al ejecutar <code>gh auth status</code></li>
+  </ul>
+
+  <h2 id="s6">6. Configuración del entorno del proyecto (después de clonar el repositorio)</h2>
+  <p>Al usar las variantes <strong>co-develop</strong> o <strong>co-consult</strong>:</p>
+  <div style="position:relative">
+    <pre class="code-block">cp .env.sample .env
+# Abra el archivo .env y complete los valores requeridos</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <ul class="chk-list">
+    <li>Creado <code>.env</code> a partir de <code>.env.sample</code></li>
+    <li>Ingresadas las claves API / valores de configuración requeridos</li>
+  </ul>
+
+  <p>Proyectos Python de <strong>co-develop</strong> — use <strong>uv</strong> (obligatorio):</p>
+  <div style="position:relative">
+    <pre class="code-block">uv sync          # Instalar dependencias basadas en pyproject.toml
+# O, si usa requirements.txt:
+uv pip install -r requirements.txt</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <ul class="chk-list">
+    <li>Confirmado que <code>uv</code> está instalado y disponible (<code>uv --version</code>)</li>
+    <li>Dependencias de Python instaladas mediante <code>uv</code></li>
+  </ul>
+
+  <div class="note"><strong>Docker</strong> es opcional. Instálelo solo si el facilitador se lo indica específicamente. Agregue la opción <code>--docker</code> en macOS/Linux o la opción <code>-Docker</code> en Windows al script de instalación.
+  <ul class="chk-list" style="margin-top:8px;"><li><em>(Opcional)</em> Confirme que Docker está instalado y el daemon se está ejecutando</li></ul></div>
+
+  <h2 id="s7">7. Verificación final del entorno (debe ejecutarse antes del taller)</h2>
+  <p>Ejecute el siguiente comando desde la carpeta raíz del proyecto.</p>
+  <div style="position:relative">
+    <pre class="code-block">bun setup-common.ts</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <p>Está listo una vez que cada elemento en la tabla de salida muestre ✅.</p>
+
+  <hr>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Para cualquier consulta, contacte al facilitador antes de que comience el taller.</p>
+ </article>
+</main>
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

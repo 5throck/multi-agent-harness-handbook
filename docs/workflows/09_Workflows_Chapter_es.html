@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on exercises. Reading width (720px), generous line height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Where to edit: (1) <title>/chapter number/title/lead (2) nav (this chapter's sections + other chapters) (3) 'Key points of this chapter'
+                 (4) <h2 id>/<h3> sections and body (5) previous/next chapter links
+  Colors use design tokens only — the theme is applied at deployment time via references/apply-theme.sh, which substitutes the brand colors in docs/.
+  Search index premise: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 9 · Patrones de Diseño de Flujos de Trabajo - material del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 9 · Patrones de Diseño de Flujos de Trabajo</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+    .variant-name { min-width: 130px; }
+    /* ── Case cards ── */
+    .wf-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px 22px; margin: 24px 0;
+    }
+    .wf-card h3 { margin-top: 0; font-size: 1.15rem; color: var(--text); }
+    .wf-card h3 .wf-domain {
+      display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+      border-radius: 10px; color: var(--text-inverse); vertical-align: middle; margin-left: 8px;
+    }
+    .wf-card .wf-patterns { font-size: 13px; color: var(--text-dim); margin: 6px 0 12px; }
+    .wf-card .wf-patterns code { background: var(--bg-note); border-color: var(--border-note); color: var(--accent-amber); }
+    .wf-card .wf-stages { font-size: var(--font-size-small); line-height: 1.8; }
+    .wf-card .wf-stages strong { color: var(--accent-dark); }
+    .wf-card svg { margin: 14px 0 8px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 9 · Patrones de Diseño de Flujos de Trabajo</div>
+  <a href="#s1">Qué Es un Flujo de Trabajo</a>
+  <a href="#s2">Componentes de un Flujo de Trabajo</a>
+  <a href="#s3">Casos Reales de Flujos de Trabajo</a>
+  <a href="#subagent-roster">Registro de Subagentes</a>
+  <a href="#role-boundary">Matriz de Límites de Roles</a>
+  <a href="#pm-phases">Pipeline de Fases del PM</a>
+  <a href="#s4">Guía de Selección de Flujos de Trabajo</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="../tools/00_Tools_Manual_es.html">Referencia Común · Comparación de Herramientas</a>
+  <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Ejecución de Equipos Multiagente en la Empresa</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_es.html">Capítulo 8 §1 · Despliegue y SSOT</a>
+  <a href="../glossary/00_Glossary_es.html">Glosario</a>
+  <a href="../faq/00_FAQ_es.html">FAQ</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 9</div>
+  <h1>Patrones de Diseño de Flujos de Trabajo</h1>
+  <p class="lead">Este capítulo cubre cómo combinar patrones de orquestación para diseñar flujos de trabajo completos usados en dominios reales, junto con una variedad de estudios de caso.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo Que Cubre Este Capítulo</div>
+    <ul>
+      <li>La relación entre patrones de orquestación y flujos de trabajo — los patrones son los bloques, los flujos de trabajo son el ensamblaje terminado</li>
+      <li>Los seis componentes que conforman un flujo de trabajo: etapa, ramificación, fan-out, fan-in, puerta, bucle</li>
+      <li>Cinco casos reales de flujos de trabajo por dominio con diagramas de flujo</li>
+      <li>El registro de subagentes — nivel, paralelizabilidad y permisos de escritura de cada agente</li>
+      <li>La matriz de límites de roles — qué agente usar para qué escenario</li>
+      <li>El pipeline de fases del PM — el flujo de ejecución desde la Fase 0 hasta la Fase 6</li>
+      <li>Una guía para decidir qué patrones seleccionar y combinar según la naturaleza del trabajo</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">Qué Es un Flujo de Trabajo</h2>
+
+  <p>Los cinco patrones de orquestación aprendidos en el Capítulo 2 §4 — encadenamiento de prompts (pipeline), enrutamiento, paralelización (fan-out/votación), orquestador-trabajador, y evaluador-optimizador (verificar-luego-aplicar) — son <strong>bloques constructivos fundamentales</strong> para estructurar la cooperación entre agentes dentro de una unidad de trabajo. En la práctica, sin embargo, es mucho más común conectar y superponer múltiples bloques en un flujo completo que completar una tarea con un solo bloque.</p>
+
+  <p>Un <strong>flujo de trabajo</strong> se refiere a "todo el proceso por el cual uno o más agentes cooperan para completar una tarea compleja." Si los patrones de orquestación responden <em> cómo cooperan los agentes</em>, los flujos de trabajo responden <em>en qué orden y estructura procede todo el proceso</em>. Los flujos de trabajo típicamente combinan los siguientes tres elementos.</p>
+
+  <ul>
+    <li><strong>Una combinación de patrones de orquestación</strong> — algunas etapas son secuenciales (pipeline), otras son paralelas (fan-out), y algunas ramas son condicionales (routing).</li>
+    <li><strong>Reglas de dominio</strong> — reglas requeridas por el dominio de negocio específico, como "la revisión de código debe examinar por separado las perspectivas de seguridad y rendimiento."</li>
+    <li><strong>Puertas de aprobación humana</strong> — siguiendo los principios de barreras de protección aprendidos en el Capítulo 3, un paso donde una persona debe confirmar antes de un punto irreversible.</li>
+  </ul>
+
+  <div class="pullquote">
+    Los patrones de orquestación son bloques de LEGO. Uno solo funciona por sí mismo, pero ensamblar varios produce formas mucho más complejas y útiles. Un flujo de trabajo es el resultado de ese ensamblaje.
+  </div>
+
+  <!-- §1 SVG: Pattern → Workflow relationship -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
+    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif">
+        <!-- Title -->
+        <text x="340" y="22" text-anchor="middle" font-size="13" fill="#636c76" font-weight="600">Patrones de Orquestación (Bloques) → Flujo de Trabajo (Ensamblaje)</text>
+
+        <!-- Pattern blocks -->
+        <rect x="20" y="50" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.5"/>
+        <text x="70" y="73" text-anchor="middle" font-size="11" fill="#0969da" font-weight="700">Pipeline</text>
+
+        <rect x="130" y="50" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="170" y="73" text-anchor="middle" font-size="11" fill="#1a7f37" font-weight="700">Routing</text>
+
+        <rect x="220" y="50" width="90" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="265" y="73" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">Fan-out</text>
+
+        <rect x="320" y="50" width="120" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="380" y="73" text-anchor="middle" font-size="11" fill="#cf5800" font-weight="700">Orchestrador</text>
+
+        <rect x="450" y="50" width="110" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="505" y="73" text-anchor="middle" font-size="11" fill="#cf222e" font-weight="700">Verificar-Luego-Aplicar</text>
+
+        <!-- Arrow down -->
+        <line x1="340" y1="95" x2="340" y2="125" stroke="#636c76" stroke-width="1.5" marker-end="url(#wfArrow)"/>
+        <text x="355" y="115" font-size="10" fill="#636c76">Combinar</text>
+
+        <!-- Workflow assembly -->
+        <rect x="40" y="130" width="600" height="70" rx="10" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="340" y="150" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">Flujo de Trabajo (ej., Revisión de Código)</text>
+
+        <!-- Stage flow inside workflow box -->
+        <rect x="65" y="158" width="70" height="28" rx="5" fill="#e16f24" opacity="0.2" stroke="#e16f24" stroke-width="1"/>
+        <text x="100" y="177" text-anchor="middle" font-size="9.5" fill="#cf5800" font-weight="600">Routing</text>
+
+        <line x1="135" y1="172" x2="160" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="165" y="158" width="80" height="28" rx="5" fill="#6639ba" opacity="0.2" stroke="#6639ba" stroke-width="1"/>
+        <text x="205" y="177" text-anchor="middle" font-size="9.5" fill="#6639ba" font-weight="600">Fan-out</text>
+
+        <line x1="245" y1="172" x2="270" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="275" y="158" width="70" height="28" rx="5" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1"/>
+        <text x="310" y="177" text-anchor="middle" font-size="9.5" fill="#1a7f37" font-weight="600">Fan-in</text>
+
+        <line x1="345" y1="172" x2="370" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="375" y="158" width="90" height="28" rx="5" fill="#0969da" opacity="0.2" stroke="#0969da" stroke-width="1"/>
+        <text x="420" y="177" text-anchor="middle" font-size="9.5" fill="#0969da" font-weight="600">Pipeline</text>
+
+        <line x1="465" y1="172" x2="490" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+
+        <rect x="495" y="158" width="80" height="28" rx="5" fill="#cf222e" opacity="0.2" stroke="#cf222e" stroke-width="1"/>
+        <text x="535" y="177" text-anchor="middle" font-size="9.5" fill="#cf222e" font-weight="600">Verificar</text>
+
+        <!-- Loop arrow -->
+        <path d="M575,172 Q595,172 595,150 Q595,130 575,130 L420,130" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="500" y="126" text-anchor="middle" font-size="9" fill="#636c76">Bucle si se rechaza</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>Este capítulo asume que ya conoces los patrones del Capítulo 2. Si algún término te resulta desconocido, primero lee el <a href="../concepts/02_Concepts_Chapter_es.html#s4">Capítulo 2 §4 Patrones de Orquestación</a> y la <a href="../concepts/02_Concepts_Chapter_es.html#s4b">§4b Composición Dinámica de Equipos</a>. La siguiente sección va más allá de los patrones y presenta los seis componentes que conforman un flujo de trabajo.</p>
+
+
+  <h2 id="s2">Componentes de un Flujo de Trabajo</h2>
+
+  <p>Descomponer un flujo de trabajo complejo revela algunos elementos estructurales recurrentes. Los cinco patrones del Capítulo 2 se enfocaron en cómo cooperan los agentes entre sí, pero aquí nos enfocamos en el <em>esqueleto estructural</em> del flujo de trabajo.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">Etapa</span><span>Una unidad de trabajo ejecutada secuencialmente. El bloque constructivo más básico de un flujo de trabajo. La salida de la etapa anterior se convierte en la entrada de la siguiente.</span></div>
+    <div class="variant-row"><span class="variant-name">Ramificación</span><span>Un punto donde el camino se divide según una condición. La aplicación práctica del patrón de routing — por ejemplo, enviar una solicitud a un agente o etapa diferente según su naturaleza, como "una revisión rápida para cambios pequeños, una revisión completa para cambios grandes."</span></div>
+    <div class="variant-row"><span class="variant-name">Fan-out</span><span>Un punto donde subtareas independientes se ejecutan simultáneamente. La expresión estructural del patrón de fan-out. El tiempo de ejecución converge al subtask más lento. Ejemplo: revisar simultáneamente las perspectivas de seguridad, rendimiento y legibilidad.</span></div>
+    <div class="variant-row"><span class="variant-name">Fan-in</span><span>Una etapa que reúne múltiples resultados ejecutados en paralelo en uno solo. <strong>Un concepto no cubierto en el Capítulo 2.</strong> Fan-in requiere reglas para decidir qué resultado priorizar (votación) y cómo fusionarlos (agregar/seleccionar). Ejemplo: sintetizar las opiniones de tres revisores en retroalimentación final.</span></div>
+    <div class="variant-row"><span class="variant-name">Puerta</span><span>Un punto que requiere verificación o aprobación humana antes de pasar a la siguiente etapa. El punto de aplicación práctica de las <a href="../guardrails/03_Guardrails_Chapter_es.html">barreras de protección del Capítulo 3</a>. Se coloca antes de acciones difíciles de revertir (modificación de archivos, despliegue, fusión de PR).</span></div>
+    <div class="variant-row"><span class="variant-name">Bucle</span><span>Una estructura repetitiva que vuelve a una etapa anterior cuando se rechaza en una etapa de verificación. La expresión estructural del patrón evaluador-optimizador (verificar-luego-aplicar). Debe establecerse un conteo máximo de reintentos para evitar bucles infinitos.</span></div>
+  </div>
+
+  <div class="note">Estos seis componentes no se mapean 1:1 con los cinco patrones del Capítulo 2. Un solo patrón puede incluir múltiples componentes (ej., el patrón de fan-out = fan-out + fan-in), y un solo componente puede aparecer en múltiples patrones (ej., una puerta aparece tanto en verificar-luego-aplicar como en pipeline).</div>
+
+  <p>Combinando estos elementos se puede expresar casi cualquier flujo de trabajo real. La siguiente sección presenta estudios de caso de cómo estos elementos se organizan en dominios reales.</p>
+
+
+  <h2 id="s3">Casos Reales de Flujos de Trabajo</h2>
+
+  <p>Cinco flujos de trabajo por dominio se organizan por caso. Cada caso muestra la combinación de patrones principales, el flujo de etapas, los agentes responsables y la ubicación de la puerta humana. También se incluyen casos ya conectados a variantes implementadas en ai-workspace-standards.</p>
+
+  <!-- Case 1: Code Review -->
+  <div class="wf-card">
+    <h3>Revisión de Código <span class="wf-domain" style="background:var(--accent)">Desarrollo de Software</span></h3>
+    <p class="wf-patterns">Patrones principales: <code>Routing</code> → <code>Fan-out</code> → <code>Fan-in</code> → <code>Pipeline</code> → <code>Verificar-Luego-Aplicar</code>(bucle)</p>
+    <p class="wf-stages">
+      <strong>① Análisis de Cambios (Routing)</strong>: Analiza la escala y el tipo de los archivos modificados para determinar el alcance de la revisión. Correcciones de errores tipográficos se ramifican a una vía rápida; cambios de funcionalidad importante se ramifican a una vía de revisión completa.<br>
+      <strong>② Revisión Multiperspectiva (Fan-out)</strong>: Agentes revisores especializados examinan simultáneamente las perspectivas de seguridad, rendimiento y legibilidad.<br>
+      <strong>③ Agregación de Opiniones (Fan-in)</strong>: Un agente de síntesis compila la retroalimentación de los tres revisores en un único informe.<br>
+      <strong>④ Propuesta de Corrección (Pipeline)</strong>: Genera propuestas de corrección de código basadas en la retroalimentación.<br>
+      <strong>⑤ Aprobación Final (Verificar-Luego-Aplicar)</strong>: Revisa el código modificado. Si pasa, va a la <span class="wf-gate">puerta de aprobación humana</span>; si se rechaza, vuelve a ④.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="100" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① Análisis de Cambios</text>
+        <line x1="105" y1="48" x2="125" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="180" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② Multiperspectiva</text>
+        <line x1="230" y1="48" x2="250" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="30" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="295" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ Fan-in</text>
+        <line x1="335" y1="48" x2="355" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="30" width="90" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="405" y="53" text-anchor="middle" font-weight="700" fill="#0969da">④ Propuesta de Corrección</text>
+        <line x1="450" y1="48" x2="470" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="475" y="30" width="80" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="515" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">⑤ Aprobación</text>
+        <!-- gate -->
+        <rect x="555" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="580" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Humano</text>
+        <!-- loop -->
+        <path d="M515,66 L515,85 L405,85 L405,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="460" y="96" text-anchor="middle" font-size="9" fill="#636c76">Bucle si se rechaza</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variante: estructuralmente similar al pipeline de gobernanza de 6 etapas de <code>co-develop</code>. Ver <a href="../variant-practice/06_VariantPractice_Manual_es.html">Capítulo 6 §1</a>.</p>
+  </div>
+
+  <!-- Case 2: Market Research Report -->
+  <div class="wf-card">
+    <h3>Informe de Investigación de Mercado <span class="wf-domain" style="background:var(--accent-purple)">Consultoría · Investigación</span></h3>
+    <p class="wf-patterns">Patrones principales: <code>Orchestrador-Trabajador</code> → <code>Fan-out</code> → <code>Pipeline</code> → <code>Verificar-Luego-Aplicar</code></p>
+    <p class="wf-stages">
+      <strong>① Orquestación (PM)</strong>: El agente PM define el alcance de la investigación, el mercado objetivo y el formato del entregable, luego delega a los trabajadores.<br>
+      <strong>② Investigación Paralela (Fan-out)</strong>: Tres agentes realizan simultáneamente análisis del tamaño del mercado, análisis de competidores e investigación de tendencias tecnológicas.<br>
+      <strong>③ Agregación y Redacción (Pipeline)</strong>: Sintetiza los tres resultados de investigación en un informe borrador y genera visualizaciones (gráficos).<br>
+      <strong>④ Verificación Cruzada (Verificar-Luego-Aplicar)</strong>: Un revisor especializado verifica las fuentes de datos, la consistencia lógica y las omisiones. Después de la <span class="wf-gate">puerta de aprobación humana</span>, se confirma el informe final.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="30" width="110" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① Orquestación PM</text>
+        <line x1="115" y1="48" x2="135" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="140" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="190" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② Paralelo ×3</text>
+        <line x1="240" y1="48" x2="260" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="265" y="30" width="90" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="310" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ Agregar/Borrador</text>
+        <line x1="355" y1="48" x2="375" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="380" y="30" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="430" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">④ Verificación Cruzada</text>
+        <line x1="480" y1="48" x2="500" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="505" y="30" width="70" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="540" y="53" text-anchor="middle" font-weight="700" fill="#0969da">⑤ Finalizar</text>
+        <rect x="575" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Humano</text>
+        <path d="M430,66 L430,85 L310,85 L310,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="370" y="96" text-anchor="middle" font-size="9" fill="#636c76">Si se necesitan revisiones</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variante: basado en la estructura de pipeline de 7 etapas (Fase 0-6) de <code>co-consult</code>. Puedes experimentarlo directamente en el <a href="../variant-practice/06_VariantPractice_Examples_es.html">ejercicio (G-1) del Capítulo 6 §2</a>.</p>
+  </div>
+
+  <!-- Case 3: Presentation Production -->
+  <div class="wf-card">
+    <h3>Producción de Presentaciones <span class="wf-domain" style="background:var(--accent-green)">Conferencia · Presentación</span></h3>
+    <p class="wf-patterns">Patrones principales: <code>Pipeline</code>(pipeline largo) + <code>Fan-out</code>(paralelismo intermedio)</p>
+    <p class="wf-stages">
+      <strong>① Investigación</strong>: Recopila material relevante al tema y verifica las fuentes.<br>
+      <strong>② Guión</strong>: Planifica el flujo general del contenido y la estructura de diapositivas.<br>
+      <strong>③ Diseño</strong>: Selecciona el diseño visual y el tema.<br>
+      <strong>④ Curación de Imágenes + Generación de Diagramas (Fan-out)</strong>: Genera ilustraciones y diagramas <em>simultáneamente</em> para ahorrar tiempo.<br>
+      <strong>⑤⑥⑦ Construir · Medir · Exportar (Pipeline)</strong>: Procesamiento secuencial desde construcción HTML → medición de disposición → exportación PDF.<br>
+      <strong>⑧⑨⑩⑩ Revisión Final (Verificar-Luego-Aplicar)</strong>: Revisión cruzada del PDF completado, luego la <span class="wf-gate">puerta de aprobación humana</span>.
+    </p>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="#1f2328">
+        <rect x="5" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="#0969da">① Investigación</text>
+        <line x1="65" y1="46" x2="80" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="85" y="30" width="65" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="117" y="50" text-anchor="middle" font-weight="700" fill="#0969da">② Guión</text>
+        <line x1="150" y1="46" x2="165" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="170" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="197" y="50" text-anchor="middle" font-weight="700" fill="#0969da">③ Diseño</text>
+        <line x1="225" y1="46" x2="240" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <!-- Fan-out split -->
+        <rect x="245" y="15" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="35" text-anchor="middle" font-weight="700" fill="#6639ba">Imagen</text>
+        <rect x="245" y="52" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="72" text-anchor="middle" font-weight="700" fill="#6639ba">Diagrama</text>
+        <!-- Fan-in merge -->
+        <line x1="320" y1="30" x2="345" y2="46" stroke="#636c76" stroke-width="1"/>
+        <line x1="320" y1="67" x2="345" y2="50" stroke="#636c76" stroke-width="1"/>
+        <rect x="350" y="30" width="55" height="32" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="377" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37">Fusionar</text>
+        <line x1="405" y1="46" x2="420" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="425" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="455" y="50" text-anchor="middle" font-weight="700" fill="#0969da">Construir</text>
+        <line x1="485" y1="46" x2="495" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="500" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="527" y="50" text-anchor="middle" font-weight="700" fill="#0969da">PDF</text>
+        <line x1="555" y1="46" x2="570" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="575" y="32" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Humano</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">variante: este es exactamente el pipeline de 11 etapas (Etapa 0-11) de <code>co-deck</code>. Puedes experimentarlo directamente con una presentación de globalización de la cocina coreana en el <a href="../variant-practice/06_VariantPractice_Examples_es.html">ejercicio (G-2) del Capítulo 6 §2</a>.</p>
+  </div>
+
+  <!-- Case 4: Issue Triage -->
+  <div class="wf-card">
+    <h3>Clasificación de Incidencias <span class="wf-domain" style="background:var(--accent-amber)">Operaciones · Incidentes</span></h3>
+    <p class="wf-patterns">Patrones principales: <code>Routing</code> → <code>Orchestrador-Trabajador</code> → <code>Escalada</code></p>
+    <p class="wf-stages">
+      <strong>① Clasificación (Routing)</strong>: Analiza la urgencia y el tipo de una incidencia entrante para determinar la ruta. Los errores se ramifican a una vía de corrección, las solicitudes de funcionalidad a una vía de planificación, y los problemas de seguridad a una vía urgente.<br>
+      <strong>② Investigación Automatizada (Orchestrador-Trabajador)</strong>: Agentes trabajadores investigan la incidencia clasificada dividiéndola en subtareas — búsqueda de registros relevantes, intentos de reproducción, evaluación del alcance del impacto.<br>
+      <strong>③ Determinación de Prioridad</strong>: Recomienda prioridad y un asignado basándose en los resultados de la investigación.<br>
+      <strong>④ Escalada o Auto-resolución</strong>: Las incidencias menores que pueden resolverse automáticamente (ej., errores de configuración) se corrigen inmediatamente; las incidencias complejas se escalan a la <span class="wf-gate">puerta de aprobación humana</span>.
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="80" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="#cf5800">① Clasificar</text>
+        <line x1="85" y1="46" x2="105" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="110" y="28" width="120" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="170" y="51" text-anchor="middle" font-weight="700" fill="#6639ba">② Investigar Automáticamente</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="110" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="310" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ Priorizar</text>
+        <line x1="365" y1="46" x2="385" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <!-- Branch -->
+        <rect x="390" y="8" width="80" height="30" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="430" y="28" text-anchor="middle" font-weight="700" fill="#1a7f37">Autoresolver</text>
+        <rect x="390" y="52" width="80" height="30" rx="5" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1"/><text x="430" y="72" text-anchor="middle" font-weight="700" fill="#cf222e">Escalar</text>
+        <rect x="475" y="57" width="50" height="22" rx="11" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="500" y="73" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Humano</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">Aún no hay una variante dedicada a la gestión de incidentes, pero puede implementarse combinando el rol PM de <code>co-develop</code> con los patrones de manejo de fallos del Capítulo 2 (reintento, reversión, escalada).</p>
+  </div>
+
+  <!-- Case 5: PR Creation and Verification -->
+  <div class="wf-card">
+    <h3>Creación y Verificación de PR <span class="wf-domain" style="background:var(--accent-red)">Gobernanza</span></h3>
+    <p class="wf-patterns">Patrones principales: <code>Pipeline</code> → <code>Verificar-Luego-Aplicar</code>(bucle) → <code>Puerta</code></p>
+    <p class="wf-stages">
+      <strong>① Recopilación de Cambios</strong>: Recopila el historial de commits y diffs para redactar el PR (título, cuerpo).<br>
+      <strong>② Verificación de Reglas (Verificar-Luego-Aplicar)</strong>: Verifica automáticamente si el PR cumple con las reglas de CONSTITUTION.md (título en inglés, formato específico, etc.). Si existe alguna violación, vuelve a ① para su corrección.<br>
+      <strong>③ Análisis de Impacto</strong>: Analiza cómo el cambio afecta a otros archivos/funcionalidades y añade los hallazgos al cuerpo del PR.<br>
+      <strong>④ Revisión Final + Aprobación</strong>: Revisa todo el PR nuevamente, luego la <span class="wf-gate">puerta de aprobación humana</span>. Una vez aprobado, transición a estado pendiente de fusión.
+    </p>
+    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <rect x="5" y="28" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="#0969da">① Recopilar Cambios</text>
+        <line x1="105" y1="46" x2="125" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="28" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="180" y="51" text-anchor="middle" font-weight="700" fill="#cf222e">② Verificar Reglas</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="295" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ Análisis de Impacto</text>
+        <line x1="335" y1="46" x2="355" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="400" y="51" text-anchor="middle" font-weight="700" fill="#0969da">④ Revisar</text>
+        <line x1="440" y1="46" x2="460" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="465" y="33" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="490" y="51" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">Humano</text>
+        <!-- loop -->
+        <path d="M180,64 L180,82 L55,82 L55,64" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="117" y="93" text-anchor="middle" font-size="9" fill="#636c76">Bucle si hay violación</text>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--text-dim)">Estructura donde los agentes automatizan el flujo de trabajo de PR definido en el CONSTITUTION.md de ai-workspace-standards. Cubierto junto con el pipeline de despliegue en el <a href="../intro/05_Intro_Chapter_es.html#s2">Capítulo 5 §2 Archivos Principales</a> y el <a href="../intro/08_Intro_Advanced_Deploy_es.html">Capítulo 8 §1 Despliegue y SSOT</a>.</p>
+  </div>
+
+  <h3 id="s3-note">Patrones Comunes Entre los Casos</h3>
+  <p>De los cinco casos emergen algunas estructuras comunes.</p>
+  <ul>
+    <li><strong>Todo flujo de trabajo tiene una puerta humana.</strong> No importa cuánto avance la automatización, se requiere aprobación humana antes de decisiones irreversibles como la finalización de entregables, la fusión o el despliegue. Este es el punto de aplicación práctica de las barreras de protección aprendidas en el Capítulo 3.</li>
+    <li><strong>Un fan-out siempre va seguido de un fan-in.</strong> Si los resultados que se dividen en ramas paralelas simplemente se dejan uno al lado del otro, el consumidor (el agente en la siguiente etapa, o una persona) debe sintetizarlos manualmente. Se necesita una etapa explícita de fan-in para producir un único entregable que pueda moverse limpiamente a la siguiente etapa del pipeline.</li>
+    <li><strong>Si una etapa de verificación hace un bucle o escala determina la complejidad de un flujo de trabajo.</strong> Los problemas que pueden autocorregirse (violaciones de formato, errores tipográficos) se resuelven mediante un bucle, mientras que los problemas que requieren juicio (defectos de diseño, vulnerabilidades de seguridad) se entregan a una persona mediante escalada.</li>
+    <li><strong>Los pipelines simples rara vez se usan.</strong> Ninguno de los cinco casos son flujos de trabajo "puramente secuenciales." Al menos un punto incluye routing (ramificación) o fan-out (paralelismo).</li>
+  </ul>
+
+
+  <h2 id="subagent-roster">Registro de Subagentes — la Lista de Agentes que Conforman un Flujo de Trabajo</h2>
+
+  <p>El Capítulo 2 te enseñó a modelar un "agente" como un rol. En un espacio de trabajo real, estos roles se definen con <strong>archivos concretos y asignaciones de nivel</strong> y se registran en un registro. El registro de subagentes en AGENTS.md es una tabla que muestra esta definición de un vistazo.</p>
+
+  <div class="table-compare narrow-col-3">
+  <table>
+    <thead><tr><th>Agente</th><th>Archivo</th><th>Nivel</th><th>Ejecución Paralela</th><th>Permiso de Escritura</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PM Orquestador</strong></td><td><code>agents/pm.md</code></td><td>Alto</td><td>—</td><td>Solo orquestación</td></tr>
+      <tr><td>Auditor de Consistencia</td><td><code>agents/auditor.md</code></td><td>Medio</td><td>QA independiente</td><td>Ninguno</td></tr>
+      <tr><td>Gestor del Ciclo de Vida</td><td><code>agents/lifecycle-manager.md</code></td><td>Medio</td><td>Gobernanza bajo demanda</td><td>Solo documentos de gobernanza (solo L0)</td></tr>
+      <tr><td>Arquitecto de Plantillas</td><td><code>agents/architect.md</code></td><td>Alto</td><td>Fase de diseño</td><td>Ninguno</td></tr>
+      <tr><td>Ingeniero de Automatización</td><td><code>agents/automation-engineer.md</code></td><td>Bajo</td><td>Secuencial</td><td>Scripts de automatización TypeScript (.ts)</td></tr>
+      <tr><td>Escritor de Documentación</td><td><code>agents/docs-writer.md</code></td><td><strong>Medio</strong></td><td>Post-diseño</td><td>Solo archivos .md</td></tr>
+      <tr><td>Experto en Generación</td><td><code>agents/scaffolding-expert.md</code></td><td>Bajo</td><td>Fase de investigación</td><td>Solo scripts de instalación (post-aprobación)</td></tr>
+      <tr><td>Experto en Seguridad y Git</td><td><code>agents/security-expert.md</code></td><td>Medio</td><td>Fase de revisión</td><td>Solo configuración de hooks</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>La columna "Ejecución Paralela" de esta tabla debe interpretarse junto con las Reglas de Ajuste de Nivel cubiertas en el Capítulo 8 §4. Por ejemplo, docs-writer solo puede ejecutarse en paralelo "post-diseño," porque escribir documentación en paralelo antes de que el diseño esté finalizado corre el riesgo de tener que rehacerlo todo después. En contraste, Auditor es "QA independiente" y puede ejecutarse de forma independiente en cualquier momento, independientemente del trabajo de otros agentes.</p>
+
+  <h2 id="role-boundary">Matriz de Límites de Roles — "Quién Debería Hacer Esta Tarea"</h2>
+
+  <p>Cuando hay múltiples agentes, "quién debería manejar esta tarea" puede volverse ambiguo. La siguiente matriz define los límites de roles que resuelven esa ambigüedad.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Escenario</th><th>Agente a Usar</th><th>Agente a No Usar</th></tr></thead>
+    <tbody>
+      <tr><td>Diseñar el enfoque de implementación y la estructura de carpetas</td><td><code>architect</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>Escribir/modificar scripts de automatización (.ts)</td><td><code>automation-engineer</code></td><td><code>architect</code></td></tr>
+      <tr><td>Actualizar documentación</td><td><code>docs-writer</code></td><td><code>architect</code></td></tr>
+      <tr><td>Generar un nuevo proyecto a partir de una plantilla</td><td><code>scaffolding-expert</code></td><td><code>automation-engineer</code></td></tr>
+      <tr><td>Revisión de seguridad, configuración de hooks de Git</td><td><code>security-expert</code></td><td><code>architect</code></td></tr>
+      <tr><td>Verificación cruzada de la consistencia de la documentación</td><td><code>auditor</code></td><td><code>docs-writer</code></td></tr>
+      <tr><td>Orquestar trabajo entre múltiples agentes</td><td><code>pm</code></td><td>Cualquier agente de ejecución</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>El principio central de esta matriz es <strong>"separar el diseño de la ejecución."</strong> architect solo diseña y no escribe scripts directamente, mientras que automation-engineer escribe scripts pero no diseña la estructura. docs-writer no verifica la documentación — auditor la verifica, y docs-writer revisa la documentación para reflejar la retroalimentación del auditor.</p>
+
+  <h2 id="pm-phases">Pipeline de Fases del PM — la Vista de Gobernanza de un Flujo de Trabajo</h2>
+
+  <p>Los patrones de flujo de trabajo cubiertos en este capítulo (routing, fan-out, pipeline, etc.) representan el punto de vista del <strong>componente técnico</strong>. En un espacio de trabajo real, las <strong>fases de gobernanza</strong> se superponen sobre estos patrones técnicos. Las siete fases gestionadas por el PM, organizadas desde una perspectiva de flujo de trabajo, son las siguientes.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">Fase 0</span><span><strong>Inicialización del Proyecto</strong> (exclusiva del PM) — evalúa los requisitos del espacio de trabajo, genera dinámicamente agentes/habilidades, actualiza AGENTS.md. <em>Flujo de trabajo: solo el orquestador</em></span></div>
+    <div class="variant-row"><span class="variant-name">Fase 1-2</span><span><strong>Planificación · Arquitectura</strong> (autonomía del especialista) — el PM clasifica la solicitud, el Architect escribe un plan de implementación + ADR, y se despachan agentes de investigación en paralelo. <em>Flujo de trabajo: routing → fan-out (investigación paralela)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Fase 3</span><span><strong>Entrega de Diseño</strong> (por variante) — el Architect entrega el plan aprobado a los agentes de ejecución. Entrega autónoma entre agentes. <em>Flujo de trabajo: orquestador-trabajador (entrega)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Fase 4</span><span><strong>Ejecución</strong> (autonomía del especialista) — el Ingeniero de Automatización implementa según el plan aprobado, el Escritor de Documentación actualiza la documentación. <em>Flujo de trabajo: pipeline (ejecución secuencial)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Fase 5</span><span><strong>Cierre del Ciclo de Vida</strong> (exclusiva del PM) — el PM actualiza el registro de gobernanza de los artefactos modificados. <em>Flujo de trabajo: solo el orquestador (registro)</em></span></div>
+    <div class="variant-row"><span class="variant-name">Fase 6</span><span><strong>Aseguramiento de Calidad</strong> (autonomía del espacio de trabajo) — el Auditor ejecuta automáticamente <code>qa-gate.ts</code>. Escala al PM después de un máximo de 2 iteraciones. <em>Flujo de trabajo: verificar-luego-aplicar (bucle)</em></span></div>
+  </div>
+
+  <p>Estas siete fases corresponden directamente a los casos de flujo de trabajo del §3. Por ejemplo, el flujo general del caso "revisión de código" es una miniatura de Fase 1-2 (análisis) → Fase 4 (ejecución de revisión) → Fase 6 (QA). Tener estas fases en mente al diseñar un nuevo flujo de trabajo en la práctica facilita decidir sistemáticamente "dónde colocar la puerta humana" y "qué etapas son seguras para la ejecución en paralelo."</p>
+
+
+  <h2 id="s4">Guía de Selección de Flujos de Trabajo</h2>
+
+  <p>Para introducir un flujo de trabajo multiagente para una nueva tarea, necesitas decidir con qué patrón comenzar y cómo expandir desde ahí. El siguiente árbol de decisión te ayuda a elegir el primer paso.</p>
+
+  <!-- Decision tree SVG -->
+  <div class="decision-box">
+    <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#636c76"/></marker>
+        <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/></marker>
+        <marker id="dtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+        <!-- Q1 -->
+        <rect x="220" y="5" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="30" text-anchor="middle" font-weight="700">¿Hay dependencias entre las subtareas?</text>
+        <!-- Yes branch -->
+        <line x1="330" y1="45" x2="330" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="58" font-size="9" fill="#1a7f37" font-weight="700">Sí</text>
+        <!-- No branch -->
+        <line x1="440" y1="25" x2="560" y2="25" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="560" y1="25" x2="560" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="490" y="20" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Q2 (Yes from Q1) -->
+        <rect x="220" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="95" text-anchor="middle" font-weight="700">¿Pueden ejecutarse en orden secuencial?</text>
+        <!-- Yes → Pipeline -->
+        <line x1="220" y1="90" x2="140" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="90" x2="140" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="85" font-size="9" fill="#1a7f37" font-weight="700">Sí</text>
+        <!-- No → Orchestrator -->
+        <line x1="330" y1="110" x2="330" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="125" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Pipeline result -->
+        <rect x="60" y="135" width="160" height="40" rx="8" fill="#0969da" opacity="0.1" stroke="#0969da" stroke-width="1.5"/>
+        <text x="140" y="153" text-anchor="middle" font-weight="700" fill="#0969da">Pipeline</text>
+        <text x="140" y="166" text-anchor="middle" font-size="9" fill="#636c76">Diseñar etapas secuenciales</text>
+
+        <!-- Q3 (No from Q2) -->
+        <rect x="220" y="135" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="330" y="160" text-anchor="middle" font-weight="700">¿Se requiere verificación?</text>
+        <!-- Yes → Verify -->
+        <line x1="270" y1="175" x2="270" y2="190" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="270" y1="190" x2="140" y2="190" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="140" y1="190" x2="140" y2="198" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="205" y="188" font-size="9" fill="#1a7f37" font-weight="700">Sí</text>
+        <!-- No → Orchestrator-Worker -->
+        <line x1="330" y1="175" x2="330" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="190" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Verify result -->
+        <rect x="60" y="200" width="160" height="40" rx="8" fill="#cf222e" opacity="0.1" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="140" y="218" text-anchor="middle" font-weight="700" fill="#cf222e">Verificar-Luego-Aplicar + Pipeline</text>
+        <text x="140" y="231" text-anchor="middle" font-size="9" fill="#636c76">Diseñar etapas con un bucle</text>
+
+        <!-- Orchestrator-Worker result -->
+        <rect x="230" y="200" width="200" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="330" y="218" text-anchor="middle" font-weight="700" fill="#cf5800">Orchestrador-Trabajador</text>
+        <text x="330" y="231" text-anchor="middle" font-size="9" fill="#636c76">El PM distribuye el trabajo dinámicamente</text>
+
+        <!-- Q4 (No from Q1) -->
+        <rect x="440" y="70" width="240" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <text x="560" y="95" text-anchor="middle" font-weight="700">¿Pueden ejecutarse simultáneamente?</text>
+        <!-- Yes → Fan-out -->
+        <line x1="560" y1="110" x2="560" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="575" y="125" font-size="9" fill="#1a7f37" font-weight="700">Sí</text>
+        <!-- No → Routing -->
+        <line x1="680" y1="90" x2="710" y2="90" stroke="#636c76" stroke-width="1.2"/>
+        <line x1="710" y1="90" x2="710" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="686" y="85" font-size="9" fill="#0969da" font-weight="700">No</text>
+
+        <!-- Fan-out result -->
+        <rect x="490" y="135" width="140" height="40" rx="8" fill="#6639ba" opacity="0.1" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="560" y="153" text-anchor="middle" font-weight="700" fill="#6639ba">Fan-out + Fan-in</text>
+        <text x="560" y="166" text-anchor="middle" font-size="9" fill="#636c76">Trabajo paralelo + agregación de resultados</text>
+
+        <!-- Routing result -->
+        <rect x="655" y="135" width="110" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
+        <text x="710" y="153" text-anchor="middle" font-weight="700" fill="#cf5800">Routing</text>
+        <text x="710" y="166" text-anchor="middle" font-size="9" fill="#636c76">Ramificación condicional</text>
+
+        <!-- Combination note -->
+        <rect x="60" y="265" width="660" height="55" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+        <text x="390" y="285" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">💡 En la práctica, se combinan múltiples patrones</text>
+        <text x="390" y="302" text-anchor="middle" font-size="10" fill="#636c76">Revisión de código = Routing + Fan-out + Fan-in + Pipeline + Verificar-Luego-Aplicar (Caso 1 del §3 de este capítulo)</text>
+        <text x="390" y="315" text-anchor="middle" font-size="10" fill="#636c76">El árbol de decisión sirve solo para <strong>elegir el primer patrón</strong>. Para tareas complejas, diseña las etapas de arriba hacia abajo, añadiendo patrones naturalmente a medida que avanzas.</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>Patrón Inicial por Tipo de Tarea</h3>
+  <p>Organizando los resultados del árbol de decisión por tipo de tarea se obtiene lo siguiente.</p>
+
+  <div class="table-compare narrow-col-2">
+  <table>
+    <thead>
+      <tr><th>Tipo de Tarea</th><th>Dependencia</th><th>Paralelizable</th><th>Verificación Necesaria</th><th>Patrón Inicial Recomendado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Traducción/resumen de documentos</td><td>Secuencial</td><td>×</td><td>Moderada</td><td><code>Pipeline</code></td></tr>
+      <tr><td>Revisión de código</td><td>Parcial</td><td>○</td><td>Requerida</td><td><code>Routing → Fan-out → Verificar</code></td></tr>
+      <tr><td>Investigación de mercado</td><td>Parcial</td><td>○</td><td>Requerida</td><td><code>Orchestrador-Trabajador → Fan-out</code></td></tr>
+      <tr><td>Corrección de errores</td><td>Secuencial</td><td>×</td><td>Requerida</td><td><code>Pipeline + Verificar-Luego-Aplicar</code></td></tr>
+      <tr><td>Clasificación de incidencias</td><td>Ninguna</td><td>Condicional</td><td>Moderada</td><td><code>Routing → Orchestrador-Trabajador</code></td></tr>
+      <tr><td>Producción de presentaciones</td><td>Parcial</td><td>○</td><td>Requerida</td><td><code>Pipeline(largo) + Fan-out(intermedio)</code></td></tr>
+      <tr><td>Creación de PR</td><td>Secuencial</td><td>×</td><td>Requerida</td><td><code>Pipeline + Verificar-Luego-Aplicar</code></td></tr>
+      <tr><td>Generación de contenido multilingüe</td><td>Ninguna</td><td>○</td><td>Moderada</td><td><code>Fan-out + Fan-in</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Guía de Combinación de Patrones</h3>
+  <p>A continuación se muestra un resumen de qué patrones producen sinergia cuando se usan juntos.</p>
+
+  <div class="variant-list">
+    <div class="variant-row"><span class="variant-name">Fan-out + Pipeline</span><span>Revisión paralela, traducción multilingüe seguida de postprocesamiento. Fan-out proporciona velocidad, y Pipeline garantiza el orden.</span></div>
+    <div class="variant-row"><span class="variant-name">Routing + Fan-out</span><span>Clasificación de incidencias, revisión basada en tamaño. Routing clasifica, y cada ruta realiza una tarea paralela diferente.</span></div>
+    <div class="variant-row"><span class="variant-name">Orchestrador + Verificar</span><span>Análisis complejo, revisión de diseño. El PM distribuye dinámicamente, luego el resultado se verifica.</span></div>
+    <div class="variant-row"><span class="variant-name">Pipeline + Verificar (bucle)</span><span>Generación de código, creación de PR. Se escribe secuencialmente, pero se vuelve a una etapa anterior cuando no se cumple la barra de calidad.</span></div>
+    <div class="variant-row"><span class="variant-name">Routing + Orchestrador</span><span>Nivelación de modelos. Las tareas fáciles se distribuyen a un modelo más ligero, las difíciles a uno más fuerte.</span></div>
+  </div>
+
+  <div class="note">
+    Puedes experimentar directamente los casos de flujo de trabajo de este capítulo a través de D-1 (pipeline secuencial) y D-2 (composición dinámica de equipos) en los <a href="../practice/04_Practice_Examples_A_es.html">ejercicios del Capítulo 4</a>, y G-1 (co-consult), G-2 (co-deck) en los <a href="../variant-practice/06_VariantPractice_Examples_es.html">ejercicios del Capítulo 6</a>. En el <a href="../capstone/13_Capstone_es.html">ejercicio de integración del Capítulo 13</a>, diseñarás "tu propio flujo de trabajo" basándote en los principios de este capítulo.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../intro/08_Intro_Advanced_Roadmap_es.html" class="prev">
+      <div class="dir">← Capítulo Anterior</div>
+      <div class="ttl">Capítulo 8 §5 · Hoja de Ruta Avanzada</div>
+    </a>
+    <a href="../intro/10_ProjectUpgrade_Chapter_es.html" class="next">
+      <div class="dir">Siguiente Capítulo →</div>
+      <div class="ttl">Capítulo 10 · Actualización de Proyecto L2</div>
+    </a>
+  </div>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

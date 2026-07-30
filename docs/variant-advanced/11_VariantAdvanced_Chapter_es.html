@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on exercises. Reading width (720px), generous line spacing, chapter navigation flow.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Where to edit: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) 'Key points of this chapter'
+            (4) <h2 id>/<h3> sections and body  (5) previous/next chapter links
+  Fill in {{double braces}}·[description: ...] with actual content. All links are relative.
+  Colors use design tokens only — themes are swapped in at deploy time by references/apply-theme.sh, which replaces the brand colors in docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 11 · Crear una nueva variante vs. promover un proyecto existente a variante - Material del Manual de Ingeniería de Arnes Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 11 · Crear una Nueva Variante vs. Promover un Proyecto Existente a Variante</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 11 · Nueva Variante vs. Promoción</div>
+  <a href="#s1">La Diferencia Entre los Dos Caminos</a>
+  <a href="#s2">El Camino de Construcción Desde Cero</a>
+  <a href="#s3">El Camino de Promover un Proyecto Existente</a>
+  <a href="#s4">Qué Camino Elegir y Cuándo</a>
+  <div class="nav-section">Otros Capítulos</div>
+  <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Integración Empresarial</a>
+  <a href="../intro/10_ProjectUpgrade_Chapter_es.html">Capítulo 10 · Actualización de Proyecto L2</a>
+  <a href="12_VariantAdvanced_Examples_es.html">Capítulo 12 · Ejemplos Prácticos de Promoción de Nueva Variante →</a>
+  <a href="../index_es.html">Volver al Inicio del Manual</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 11</div>
+  <h1>Crear una Nueva Variante vs. Promover un Proyecto Existente a Variante</h1>
+  <p class="lead">En el Capítulo 6 §2, practicamos la creación de una variante completamente nueva llamada co-marketing desde cero. Pero ai-workspace-standards tiene un segundo camino conceptualmente bastante diferente: "promover" un proyecto que ya funciona bien — uno que nunca se pensó que se convertiría en plantilla — a una variante oficial más adelante. Este capítulo explica cómo difieren los dos caminos conceptualmente, y qué situaciones requieren cada camino.</p>
+  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Qué Cubre Este Capítulo</div>
+    <ul>
+      <li>La diferencia fundamental entre "construir desde cero" y "promover un proyecto existente"</li>
+      <li>El concepto del camino de construcción desde cero, que fluye desde la Fase A (create-variant) hasta la Fase B (promote-variant)</li>
+      <li>El concepto de promover un proyecto ya existente mediante el skill <code>promote-variant</code> y <code>l2-to-variant-pipeline.ts</code></li>
+      <li>Criterios para juzgar cuál de los dos caminos se adapta a la situación de su organización</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">La Diferencia Entre los Dos Caminos</h2>
+  <p>Hay más de una manera de añadir una nueva variante al espacio de trabajo. ai-workspace-standards reconoce dos puntos de partida distintos. Uno es el camino de "diseñar desde el principio, con la intención de que se convierta en plantilla, antes de que exista ningún proyecto." El otro es el camino donde "un proyecto que nunca fue pensado para ser plantilla se promueve a tal solo después de que haya pasado suficiente tiempo y múltiples equipos lo hayan copiado manualmente porque demostró su utilidad."</p>
+  <p>La diferencia entre ambos no es simplemente "diferentes comandos." En el primero, el diseño precede al uso; en el segundo, el uso (y la validación) preceden a la plantilla. La razón por la que el espacio de trabajo soporta ambos caminos es que la situación real de construir un equipo de agentes para un nuevo dominio tiende a converger en una de estas dos formas.</p>
+
+  <div class="pullquote">Construir desde cero pone el diseño por delante del uso; la promoción deja que el uso, validado a través de la práctica, preceda al diseño.
+    <span class="by">— la diferencia fundamental de orden entre los dos caminos</span></div>
+
+  <h2 id="s2">El Camino de Construcción Desde Cero</h2>
+  <p>Este camino, que parte de un estado en verde, se divide en dos etapas. Primero, utilizando el skill <code>create-variant</code> y <code>bun scripts/create-l2-scaffold.ts &lt;nombre-variante&gt; --domain &lt;tipo&gt;</code>, se crea un "prototipo de Fase A" independiente bajo <code>Projects/&lt;nombre-variante&gt;/</code>. Esta etapa es parte de la estructura que la documentación del espacio de trabajo denomina "Modelo de Bifurcación L1-L2"; como aún no pertenece al directorio oficial <code>templates/</code>, se tiene libertad de experimentar y cambiar de dirección. El prototipo de co-marketing construido en el ejercicio del Capítulo 11 (D-1) es exactamente esta etapa de Fase A. Este ejercicio se remite a <a href="../variant-practice/06_VariantPractice_Examples_es.html">el ejercicio del Capítulo 6 §2 (D-1)</a>.</p>
+  <p>Una vez que el prototipo ha madurado lo suficiente, pasa por una "promoción de Fase B" mediante el skill <code>promote-variant</code> para convertirse en un <code>templates/co-&lt;nombre&gt;/</code> oficial. En otras palabras, incluso el camino de construcción desde cero finalmente atraviesa una etapa de promoción. Lo que lo distingue del camino de la siguiente sección es que el prototipo en sí fue diseñado desde el principio con la premisa de que se convertiría en plantilla.</p>
+
+  <div class="note">
+    <svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker>
+      </defs>
+      <!-- Left: create-l2-scaffold.ts -->
+      <rect x="16" y="28" width="160" height="36" rx="8" fill="#3b82f6"/>
+      <text x="96" y="51" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">create-l2-scaffold.ts</text>
+      <!-- Arrow left → right -->
+      <line x1="176" y1="46" x2="218" y2="46" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow1)"/>
+      <!-- Right: folder box -->
+      <rect x="222" y="20" width="200" height="52" rx="8" fill="#8b5cf6"/>
+      <text x="322" y="42" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">Projects/co-marketing/</text>
+      <text x="322" y="60" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="#e0d5f7" text-anchor="middle">creado</text>
+      <!-- Sub-items -->
+      <line x1="322" y1="72" x2="322" y2="86" stroke="#6b7280" stroke-width="1.2"/>
+      <!-- agents/ -->
+      <rect x="240" y="86" width="164" height="24" rx="5" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+      <text x="322" y="102" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#6b7280" text-anchor="middle">agents/ (investigador, redactor)</text>
+      <!-- AGENTS.md -->
+      <rect x="240" y="114" width="164" height="24" rx="5" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+      <text x="322" y="130" font-family="system-ui,-apple-system,sans-serif" font-size="10.5" fill="#6b7280" text-anchor="middle">AGENTS.md lista actualizada</text>
+      <!-- agent:verify badge -->
+      <rect x="470" y="108" width="154" height="30" rx="15" fill="#22c55e"/>
+      <text x="547" y="128" font-family="system-ui,-apple-system,sans-serif" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="600">✓ agent:verify superado</text>
+    </svg>
+  </div>
+
+  <h2 id="s3">El Camino de Promover un Proyecto Existente</h2>
+  <p>El segundo camino tiene un punto de partida completamente diferente. Un equipo construye un proyecto para resolver un problema de dominio específico, sin modelarlo en ninguna otra plantilla y sin pensar en la reutilización desde el inicio. Pero con el tiempo, la configuración del proyecto funciona tan bien que otros equipos dentro de la empresa empiezan a copiar sus archivos manualmente para construir cosas similares. El propósito de la promoción es convertir este tipo de proyecto "ya validado, pero no nacido como plantilla" en una variante oficial.</p>
+  <p>Este camino utiliza finalmente el mismo skill <code>promote-variant</code> y el mismo pipeline <code>bun scripts/l2-to-variant-pipeline.ts --source Projects/&lt;nombre&gt; --variant co-&lt;nombre&gt; --variantType &lt;tipo&gt;</code>, por lo que el mecanismo es idéntico a la Fase B del camino de construcción desde cero. Antes de la promoción, hay una puerta de entrada que requiere que se satisfagan todas las condiciones de <code>PROMOTION_CHECKLIST.md</code> (ya sea que <code>bun run agent:verify</code>, <code>bun scripts/validate-skills.ts</code> y <code>bun scripts/audit.ts</code> superen las verificaciones, entre otras). Después de ejecutar el pipeline, se verifica la versión <code>inherits_common</code> en <code>variant.json</code>, un paso de "conciliación" que elimina las partes duplicadas con los archivos comunes, y la validación de paridad de plataforma entre <code>.claude/</code> y <code>.gemini/</code>. Los directorios específicos del dominio que el pipeline no puede manejar automáticamente (como workflows/ o regulations/) deben moverse manualmente según lo especificado en <code>_ORIGIN.md</code>.</p>
+  <div class="note">El procedimiento mecánico es el mismo para ambos caminos, pero "lo que se valida" difiere. En el camino de promoción, el hecho de que ya se estaba utilizando en producción es en sí la base de calidad, y el papel del pipeline es organizar eso en una forma reutilizable.</div>
+  <p>Veamos con un ejemplo concreto qué hacen realmente la "conciliación" y la "migración manual vía <code>_ORIGIN.md</code>". Supongamos que el <code>Projects/budget-review/</code> del equipo de finanzas se está promoviendo. Este proyecto mezcla dos tipos de archivos: ① archivos comunes copiados tal cual de <code>templates/common/</code>, como definiciones de PM o listas de verificación de sesión, y ② activos propios de este proyecto, como documentos internos de regulación contable dentro de la carpeta <code>regulations/</code>. El paso de conciliación revierte los archivos que coinciden con ① de "copias" a "referencias que heredan el archivo común", de modo que cuando <code>templates/common/</code> se actualice más adelante, esta variante se actualice junto con él. Por otro lado, el pipeline no tiene forma de conocer ②, por lo que se deja en el <code>_ORIGIN.md</code> del proyecto original bajo una lista de "Pasos Manuales de Fase B" — algo como "copiar manualmente la carpeta regulations/ a la nueva variante" — y la persona encargada de la promoción mueve cada elemento manualmente, siguiendo la lista de verificación.</p>
+
+  <h2 id="s4">Qué Camino Elegir y Cuándo</h2>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>Construir Desde Cero (Fase A → B)</h4>
+      <ul>
+        <li>Un dominio nuevo sin ningún proyecto existente como referencia</li>
+        <li>El diseño precede al uso. Se construye desde el principio pensando en la reutilización</li>
+        <li>Libertad para cambiar de dirección durante la etapa de Fase A</li>
+        <li>Ejemplo: introducir un equipo de agentes en un área de trabajo completamente nueva por primera vez</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>Promover un Proyecto Existente (Solo Fase B)</h4>
+      <ul>
+        <li>Un proyecto ya construido y validado en producción por un equipo</li>
+        <li>El uso y la validación preceden al diseño. Ya está comprobado en la práctica</li>
+        <li>Debe superar la puerta de entrada de PROMOTION_CHECKLIST.md</li>
+        <li>Ejemplo: formalizar un proyecto estándar interno que múltiples equipos han estado copiando manualmente</li>
+      </ul>
+    </div>
+  </div>
+  <p>Al final, el criterio de elección se reduce a una cosa. Si es un dominio nuevo sin ningún precedente al que referirse, el camino de diseño desde cero es la elección natural. Por el contrario, si ya existe un proyecto dentro de la organización que ha sido validado al menos una vez y que todos están copiando, es más seguro y eficiente respetar ese resultado validado y formalizarlo a través del camino de promoción. Dado que ambos caminos finalmente convergen en la misma forma <code>templates/co-&lt;nombre&gt;/</code>, se trata de la pregunta de "qué montaña escalar," no de "en qué montaña se termina."</p>
+
+  <div class="video-refs">
+    <h3 id="videos">Videos de Referencia</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=kFey6jjUeJQ" target="_blank">Simple AI Agent Workflow in 14 min</a><span class="video-meta">(14:38)</span> — Un tutorial práctico para construir un flujo de trabajo de agente de IA desde cero en 14 minutos</li>
+      <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=OydayHQWknI" target="_blank">An AI Design Agent That Actually Works</a><span class="video-meta">(13:58)</span> — Una demostración en coreano de la construcción de un prototipo que combina un agente de IA con herramientas UX</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="../intro/10_ProjectUpgrade_Chapter_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Capítulo 10 · Actualización de Proyecto L2</div></a>
+    <a href="12_VariantAdvanced_Examples_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 12 · Ejemplos Prácticos de Promoción de Nueva Variante</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

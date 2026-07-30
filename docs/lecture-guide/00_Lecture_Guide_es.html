@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Guía del instructor · Manual de ingeniería de arnés de equipos multiagente - materiales para el Manual de ingeniería de arnés de equipos multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía del instructor · Manual de ingeniería de arnés de equipos multiagente</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    tr.schedule-total td { font-weight: 700; background: var(--bg2); }
+    h3 { margin: 28px 0 10px; }
+    #agenda p { font-size: 14px; color: var(--text-dim); margin: 8px 0; }
+    footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+      color: var(--text-dim); font-size: 12px; line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del manual</a>
+  <div class="nav-title">Guía del instructor</div>
+  <a href="#prereq">Lista consolidada de requisitos previos</a>
+  <a href="#agenda">Tabla completa de distribución de tiempo</a>
+  <a href="#per-section">Notas del instructor por capítulo</a>
+  <a href="#recap">Preguntas de comprensión por capítulo</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>Guía del instructor</h1>
+  <p class="lead">Este material es para instructores que imparten una clase utilizando todo el manual (Capítulos 1–13 más la Referencia Común).</p>
+
+  <div class="note">Este documento no forma parte del cuerpo del manual, sino que es material operativo exclusivamente para instructores. No es necesario compartirlo con los alumnos.</div>
+  <div class="warn">Antes de finalizar, asegúrese de releer cada oración para comprobar que no haya <strong>errores tipográficos, frases que no se ajusten al contexto o discordancias en los números de capítulo/sección</strong>. Los borradores generados por IA pueden contener errores o frases inadecuadas.</div>
+
+  <h2 id="prereq">Lista consolidada de requisitos previos</h2>
+  <p>Esta lista consolida los elementos dispersos en los documentos de configuración de cada capítulo (<a href="../setup/SETUP_CHECKLIST_es.html">Lista de verificación de preinstalación</a>) para que puedan verificarse de una sola vez antes de comenzar la clase. Anuncie esta lista a los participantes <strong>al menos un día antes</strong> de que inicie la clase, para no desperdiciar tiempo en el sitio con problemas de instalación.</p>
+  <div class="chk">☐ Una suscripción activa a Claude Pro/Max (una cuenta de suscripción, no una clave API)</div>
+  <div class="chk">☐ Una cuenta de Google para usar Antigravity</div>
+  <div class="chk">☐ Una cuenta de GitHub que pueda ejecutar <code>gh auth login</code>. Los participantes sin cuenta deben ser notificados con antelación para que sigan las instrucciones de registro en la <a href="../practice/04_Practice_Examples_A.html#setup">sección de preparación de la práctica del Capítulo 4 §2-A</a></div>
+  <div class="chk">☐ Al menos 5 GB de espacio libre en disco y privilegios de administrador/sudo</div>
+  <div class="chk">☐ Claude App (Escritorio), Claude Code (CLI), Antigravity (Escritorio) y Antigravity CLI (<code>agy</code>) instalados. Verifique usando los scripts específicos del sistema operativo en la <a href="../practice/04_Practice_Examples_A.html#setup">sección de preparación de la práctica del Capítulo 4 §2-A</a></div>
+  <div class="chk">☐ Confirmar que <code>bun --version</code> y <code>git --version</code> muestran salida normal</div>
+  <div class="chk">☐ (Para ejercicios de los capítulos 6/11) Clonar <code>git clone https://github.com/5throck/ai-workspace-standards.git</code> con anticipación en la ubicación raíz del espacio de trabajo (Windows <code>C:\git</code>, macOS/Linux <code>~/git</code>)</div>
+  <div class="warn">El escenario P-1 del ejercicio de promoción de nueva variante del capítulo 11 ejecuta una canalización de promoción que afecta el historial real de git y la estructura de archivos. No haga que todos los participantes la ejecuten en su propio entorno — siga las indicaciones de la sección "Notas del instructor por capítulo" a continuación.</div>
+
+  <h2 id="agenda">Tabla completa de distribución de tiempo</h2>
+  <p>Cada sección se cubre a fondo, y los tiempos de ejercicio incluyen el tiempo que los participantes necesitan para escribir (o copiar/pegar) ellos mismos. El tiempo de descanso se calcula por separado.</p>
+
+  <h3>📅 Día 1 — Usuarios generales: Uso práctico multiagente</h3>
+  <div class="table-schedule">
+  <table>
+    <thead><tr><th>Elemento</th><th>Contenido</th><th>Formato</th><th>Tiempo estimado</th></tr></thead>
+    <tbody>
+      <tr><td>Introducción</td><td>Objetivos de la clase, panorama general de los dos días, comprobación de requisitos previos</td><td>Clase</td><td>10 min</td></tr>
+	      <tr><td>Cap. 1</td><td>Por qué la IA ahora (estadísticas introductorias), las tres etapas de adopción de la IA (usuario → usuario avanzado → diseñador), la necesidad de la ingeniería de arnés (comparación con y sin arnés), principios multiagente (tabla comparativa single vs. multi), casos reales de ahorro de tiempo, ruta de este taller</td><td>Clase</td><td>30 min</td></tr>
+	      <tr><td>Cap. 2</td><td>El flujo Prompt→Contexto→Arnés, definición de ingeniería de arnés, limitaciones de un solo agente, componentes del equipo multiagente (orquestador, especialistas, contratos de traspaso), subagentes (predefinidos vs. generados dinámicamente), los 5 patrones de orquestación más reintento/reversión/escalamiento, composición dinámica de equipos y combinación de flujos de trabajo, el estándar AGENTS.md</td><td>Clase + preguntas de comprensión</td><td>45 min</td></tr>
+		      <tr><td>Cap. 3</td><td>Por qué se necesitan barreras de seguridad, la clasificación de riesgo en 3 niveles (lectura/escritura/destructivo), el principio de privilegio mínimo (el campo de herramientas), puertas de aprobación humana, aislamiento (worktree, sandbox), registros de auditoría y observabilidad</td><td>Clase</td><td>20 min</td></tr>
+		      <tr><td>Ejercicio de calentamiento</td><td>Tetris (vibe-coding, sin arnés, 10 min) + Pac-Man (experimentar el fracaso con un solo prompt, luego ejercicio multiagente de 3 etapas planificar→desarrollar→QA, 25 min) + conclusiones (5 min)</td><td>Práctica (participantes)</td><td>40 min</td></tr>
+		      <tr><td>Cap. 4 §1 + Cap. 4 §2</td><td>En las cuatro herramientas (Claude App/Code, Antigravity Escritorio/CLI): definir e invocar subagentes, canalizaciones secuenciales, composición dinámica de equipos, ejecución en paralelo y ejercicios de comparación de niveles de modelos (G-1/D-1/D-2/P-1/P-2)</td><td>Práctica (participantes)</td><td>80 min</td></tr>
+      <tr><td>Cap. 5 (toque ligero)</td><td>Panorama del repositorio ai-workspace-standards, los 4 archivos principales (AGENTS.md, CONSTITUTION.md, CLAUDE.md, GEMINI.md), qué es una variante, conceptos básicos de creación de un proyecto mediante andamiaje</td><td>Clase</td><td>20 min</td></tr>
+      <tr><td>Cap. 6 (① uso de variante existente G-1)</td><td>Andamiaje y ejecución de un proyecto de investigación de mercado de IA física con co-consult — aplicar el marco de diseño de 4 etapas, ejecutar el flujo de consultoría de 7 etapas, revisar entregables y rastrear traspasos</td><td>Práctica (participantes)</td><td>40 min</td></tr>
+	      <tr><td>Cap. 6 (② uso de variante existente G-2)</td><td>Andamiaje y ejecución de una presentación de globalización de la cocina coreana con co-deck — definir el marco del tema de la presentación, ejecutar la canalización de 11 etapas, revisar y mejorar el entregable, configurar TTS y diapositivas automáticas</td><td>Práctica (participantes)</td><td>40 min</td></tr>
+	      <tr><td>Cierre del día 1</td><td>Resumen del aprendizaje del día, retrospectiva comparando las estructuras de las dos variantes (co-consult vs. co-deck), avance del día 2 (sesión para profesionales de TI)</td><td>Discusión</td><td>10 min</td></tr>
+				      <tr class="schedule-total"><td colspan="3">Total día 1</td><td>aprox. 5 h 35 min (sin descansos)</td></tr>
+    </tbody>
+  </table>
+  </div>
+			  <div class="note">Incluyendo dos descansos del día 1 (10–15 min cada uno), el total es de <strong>aprox. 5 h 55 min – 6 h 25 min</strong>.</div>
+
+  <h3>📅 Día 2 — Profesionales de TI: Arquitectura, creación de nuevas variantes y proyecto integrador</h3>
+  <div class="table-schedule">
+  <table>
+    <thead><tr><th>Elemento</th><th>Contenido</th><th>Formato</th><th>Tiempo estimado</th></tr></thead>
+    <tbody>
+      <tr><td>Resumen del día 1</td><td>Resumen de conceptos clave, compartir resultados de los ejercicios con variantes existentes del capítulo 6</td><td>Discusión</td><td>10 min</td></tr>
+      <tr><td>Cap. 8 §1</td><td>Detalles de la estructura de capas L0→L1→L2, el modelo de bifurcación, flujo SSOT por archivo</td><td>Clase</td><td>15 min</td></tr>
+      <tr><td>Cap. 8 §2</td><td>Gestión del ciclo de vida de agentes, habilidades y scripts</td><td>Clase</td><td>15 min</td></tr>
+      <tr><td>Cap. 10</td><td>Cómo actualizar un proyecto L2, el esquema de manejo de archivos en 5 categorías, instantáneas y reversión, cómo difiere en dirección de la promoción</td><td>Clase</td><td>15 min</td></tr>
+      <tr><td>Cap. 9</td><td>Patrones de diseño de flujos de trabajo — componentes, ejemplos específicos por dominio, guía de selección</td><td>Clase</td><td>15 min</td></tr>
+      <tr><td>Referencia común</td><td>Panorama de las estructuras de las cuatro herramientas, Claude App vs. Code (definiciones de subagentes, teammateMode), Antigravity vs. agy (Agent Manager, /goal, /agent, /agents), tabla comparativa de soporte multiagente, guía de selección de herramientas de práctica, la estructura integrada de AGENTS.md</td><td>Clase</td><td>25 min</td></tr>
+      <tr><td>Cap. 7</td><td>El modelo de tickets de servicio, el modelo de herramienta de desarrollo + variante, la necesidad de operaciones basadas en kanban, comparación de ventajas y desventajas de los dos modelos</td><td>Clase + discusión</td><td>30 min</td></tr>
+	      <tr><td>Cap. 11 (① nueva creación D-1)</td><td>Construcción del prototipo Fase A de co-marketing — create-l2-scaffold, definición de agentes de dominio (investigador, redactor), actualización del registro AGENTS.md, agent:verify</td><td>Práctica (participantes)</td><td>40 min</td></tr>
+	      <tr><td>Cap. 11 (② clase)</td><td>Construir desde cero (Fase A→B) vs. promover un proyecto existente, las diferencias entre las dos rutas y criterios para elegir</td><td>Clase</td><td>20 min</td></tr>
+		      <tr><td>Cap. 12 · Promoción de nueva variante</td><td>Validación del prototipo (validate-templates, agent:verify), redacción de la lista de verificación/manifesto de promoción (ejercicio del participante), ejecución real de la canalización de promoción (solo demostración del instructor)</td><td>Práctica + demostración</td><td>60 min</td></tr>
+		      <tr><td>Cap. 13 · Ejercicio integrador</td><td>Elegir su propia tarea recurrente y diseñar las 4 etapas (definición del problema, diseño de barreras de seguridad, implementación del subagente, retrospectiva de verificación) usted mismo</td><td>Práctica (participantes)</td><td>60 min</td></tr>
+      <tr><td>Presentaciones del proyecto integrador</td><td>1–2 participantes comparten brevemente su propio flujo de trabajo, con retroalimentación de los participantes</td><td>Presentación</td><td>15 min</td></tr>
+      <tr><td>Cierre</td><td>Retrospectiva de los dos días completos, preguntas y respuestas, enlace al glosario/FAQ, guía de próximos pasos</td><td>Discusión</td><td>15 min</td></tr>
+			      <tr class="schedule-total"><td colspan="3">Total día 2</td><td>aprox. 5 h 40 min (sin descansos)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note">Incluyendo dos descansos del día 2 (10–15 min cada uno), el total es de <strong>aprox. 6 h – 6 h 10 min</strong>. Esta es una sesión enfocada en profesionales de TI que enfatiza el trabajo práctico y el diseño.</div>
+
+  <h2 id="per-section">Notas del instructor por capítulo</h2>
+
+  <h3>Capítulo 1: Transformación del trabajo en la era de la IA (Introducción)</h3>
+  <p>Este capítulo es una introducción que establece la motivación de "por qué aprender IA" antes de los conceptos técnicos del capítulo 2. Muestre las tarjetas de estadísticas (McKinsey 78%, Gartner 80%+, etc.) para transmitir la aceleración de la adopción de la IA, y utilice la tabla de 3 etapas de uso de la IA (usuario → usuario avanzado → diseñador) para ayudar a los participantes a identificar en qué etapa se encuentran actualmente.</p>
+  <p>El cuadro comparativo de la necesidad de ingeniería de arnés (sin arnés vs. con arnés) es un adelanto de un concepto que se cubre en detalle en el capítulo 2. Aquí, transmita solo la "sensación" y deje los detalles técnicos para el capítulo 2. El caso de Klarna (2,3 millones de conversaciones = 700 agentes) es útil para enfatizar que la IA redistribuye roles en lugar de reemplazar personas.</p>
+  <span class="badge badge-do">Actividad de los participantes</span> Pedir a los participantes que levanten la mano para votar "¿De las tres etapas de uso de la IA, cuál se siente más cercana a usted ahora?" genera curiosidad que se extiende al capítulo 2.
+
+  <h3>Capítulo 2: Conceptos</h3>
+  <p>Como este capítulo establece la terminología base (orquestador, especialista, traspaso, subagente) utilizada en todos los capítulos posteriores, es conveniente reducir el ritmo aquí. La comprensión mejora significativamente si dibuja las analogías (cocina, un nuevo empleado, una factura de entrega) en una pizarra mientras explica.</p>
+  <span class="badge badge-do">Actividad de los participantes</span> Se recomienda pedir a los participantes que elijan uno de los tres patrones en §4 (distribución/canalización/verificar-luego-aplicar) y dediquen un minuto a discutir con un compañero "¿Cómo se aplicaría esto al trabajo de nuestro equipo?"</p>
+
+  <h3>Capítulo 3: Barreras de seguridad y modelo de permisos</h3>
+  <p>Hay una razón para ubicar esto justo antes del ejercicio del capítulo 4 §2: construye el hábito de decidir "qué permitir y qué bloquear" antes de construir realmente un subagente. Mostrar la tabla de clasificación de riesgo en 3 niveles y preguntar de antemano "¿En qué nivel caería el revisor que está a punto de construir?" conduce naturalmente al ejercicio del capítulo 4 §2.</p>
+
+  <h3>Ejercicio de calentamiento: De Tetris a Pac-Man</h3>
+  <p>Ejecute esto justo después del descanso 1, antes de los ejercicios principales del capítulo 4. Use claude.ai o Claude Code; a diferencia del capítulo 4, donde los grupos usan diferentes herramientas, todos usan la misma plataforma aquí.</p>
+  <p><strong>Tetris (10 min)</strong>: El instructor demuestra primero durante 1 minuto, luego los participantes siguen. Escribir "Construye un juego de Tetris con HTML Canvas" produce un resultado funcional inmediatamente, solo con vibe-coding. Las solicitudes de modificación (color de fondo, marcador, etc.) también se manejan sin problemas. En este punto, enfatice que "la complejidad a este nivel (~200 líneas) está bien incluso sin un arnés."</p>
+  <p><strong>Pac-Man (25 min)</strong>: Primero haga que los participantes intenten un solo prompt ("Construye un juego de Pac-Man con HTML Canvas") y experimenten el fracaso durante 2–3 minutos — cuando el movimiento de personajes, la IA de los fantasmas, la detección de colisiones y el diseño del mapa se amontonan, el código se enreda y no funciona. Luego muestre el prompt de 3 pasos en pantalla. Paso 1, agente de planificación ("Escribe una especificación con la lista de características de Pac-Man y la estructura del mapa"); Paso 2, agente de desarrollo ("Escribe el código HTML de Pac-Man basado en la especificación anterior"); Paso 3, agente de QA ("Encuentra y corrige errores en este código"). Aproximadamente 7–8 minutos por paso.</p>
+  <p><strong>Conclusiones (5 min)</strong>: Muestre la diferencia en volumen de código entre Tetris (~200 líneas) y Pac-Man (~1.000–1.500 líneas), y recuerde a los participantes que acaban de experimentar directamente la limitación de un solo agente (sobrecarga de contexto) del §2 del capítulo 2. Conecte con el capítulo 4 diciendo "Profundizará en subagentes específicos de cada herramienta en el ejercicio del capítulo 4, construyendo sobre lo que acaban de sentir en este calentamiento."</p>
+
+  <h3>Capítulo 4 §1 / Capítulo 4 §2: Ejercicios</h3>
+  <p>Dividir a los participantes en 4 grupos (Claude App / Claude Code / Antigravity Escritorio / Antigravity CLI) y hacer que cada grupo ejecute el mismo escenario con una herramienta diferente hace que el contenido de "comparación de herramientas" de la Referencia Común tenga mucho más impacto cuando se comparan los resultados al final.</p>
+  <span class="badge badge-do">Actividad de los participantes</span> G-1, D-1 y D-2 (observación de composición dinámica de equipos) deben ser ejecutados por todos. P-1 (ejecución en paralelo) y P-2 (comparación de niveles de modelos) pueden reemplazarse con una demostración del instructor por pantalla si el tiempo es escaso. Incluso con solo una persona por grupo intentando la configuración de Agent Teams (`.claude/settings.json`) o cambiando el campo `model` es suficiente para transmitir el concepto.
+
+  <h3>Capítulo 5 (toque ligero): Introducción a ai-workspace-standards</h3>
+  <p>En el día 1, cubra solo los conceptos mínimos necesarios para el ejercicio del capítulo 6. Es suficiente transmitir qué es el repositorio, los roles de los 4 archivos principales, qué es una variante y el flujo básico de creación de un proyecto mediante andamiaje. La estructura de capas L0→L1→L2 y la jerarquía de modelos se cubren en la profundización del día 2.</p>
+
+  <h3>Referencia común: Comparación de herramientas (Día 2)</h3>
+  <p>Ubicado en el día 2. Dado que los participantes experimentaron directamente las herramientas durante los ejercicios del capítulo 4 §1/§2 del día 1, revisitarlo en la forma de "¿por qué la herramienta que acaba de usar se comportó así?" es mucho más atractivo que una clase pura. Como la audiencia son profesionales de TI, los detalles técnicos como teammateMode (en proceso vs. tmux) y la estructura interna del Agent Manager pueden cubrirse en profundidad.</p>
+
+  <h3>Capítulo 7: Comparación de los dos modelos + Kanban (Día 2)</h3>
+  <p>Ubicado en el día 2. Para la sección de kanban, es efectivo pedir primero a los participantes con experiencia real en operaciones de soporte/helpdesk interno que compartan esa experiencia antes de comenzar. En lugar de explicar "por qué se necesita" en teoría primero, abrir con "¿Alguna vez han experimentado un acumulado de tickets?" genera conexión rápidamente. Como la audiencia son profesionales de TI, también es bueno mencionar métodos de implementación práctica como la integración con GitHub Projects/Jira.</p>
+  <span class="badge badge-do">Discusión</span> Tenga una discusión grupal de 5 minutos sobre "¿Qué modelo se ajustaría a nuestra organización?" seguida de presentaciones.
+
+  <h3>Capítulo 8: La arquitectura de ai-workspace-standards (Día 2)</h3>
+  <p>El día 2 retoma donde dejó la introducción ligera del día 1, cubriendo en detalle la estructura de capas L0→L1→L2, la estructura interna de las 7 plantillas/variantes, la jerarquía de modelos, la lista de verificación al inicio de sesión e incluso la hoja de ruta de avance aún no implementada (§5). Las actualizaciones de proyectos L2 se cubren por separado en el capítulo 10. No es necesario que los participantes memoricen todo — es suficiente que quede claro el motivo de "por qué se necesita esta estructura de capas".</p>
+
+  <h3>Capítulo 10: Actualizaciones de proyectos L2 (Día 2)</h3>
+  <p>Este es el capítulo de aplicación práctica del modelo de bifurcación aprendido en el capítulo 8 §1. Comience recordando a los participantes que "los cambios en la plantilla L1 no se reflejan automáticamente en su proyecto." La comprensión mejora si se muestra visualmente la estructura de marcadores de gestión del espacio de trabajo para la categoría MERGE entre las 5 clasificaciones (LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER). Enfatice el hábito de ejecutar <code>--dry-run</code> primero, y se recomienda que el instructor demuestre la ejecución real del script.</p>
+  <span class="badge badge-do">Actividad de los participantes</span> Si el tiempo lo permite, hacer que los participantes ejecuten <code>--dry-run</code> contra su propio proyecto del ejercicio del capítulo 6 (G-1 o G-2) lo hace más tangible.
+
+  <h3>Capítulo 6: Uso de una variante existente (Día 1)</h3>
+  <p>Este ejercicio dedica todo el capítulo 6 al uso de una variante existente. <strong>G-1 (co-consult investigación de mercado de IA física)</strong> tiene 40 minutos y <strong>G-2 (co-deck presentación de globalización de la cocina coreana)</strong> tiene 40 minutos, dando un total combinado de 80 minutos para los dos ejercicios — tiempo amplio. Este es el núcleo práctico del taller de dos días.</p>
+  <p>Dado que ejecutar <code>new-project.ts</code> puede tomar mucho tiempo debido al clon de GitHub, es importante anunciar con anticipación que los participantes deben clonar el espacio de trabajo <strong>antes</strong> de comenzar este ejercicio (ver la lista de requisitos previos arriba).</p>
+  <span class="badge badge-do">Actividad de los participantes</span> En G-1, haga que los participantes apliquen directamente el marco de diseño de 4 etapas (objetivo, entrada, salida, criterios de verificación), ejecuten el equipo de agentes y rastreen los traspasos. En G-2, haga que definan directamente el marco del tema de la presentación (audiencia, propósito, tiempo), revisen y mejoren las diapositivas terminadas, e incluso experimenten la configuración de TTS y diapositivas automáticas. Guíelos para comparar directamente las diferencias estructurales entre las dos variantes usando los entregables de G-1 y G-2.
+  <span class="badge badge-do">Actividad de los participantes</span> Durante el cierre del día 1 (10 min), haga que todos compartan su entregable del informe de G-1 y el entregable de la presentación de G-2. Preguntar "¿Qué pasaría si alimentara el informe de co-consult como entrada a co-deck?" construye naturalmente la motivación para crear una nueva variante el día 2.
+
+  <h3>Capítulo 11: Creación de una nueva variante</h3>
+  <p>Este capítulo está ubicado en el día 2. Basándose en la experiencia de trabajar directamente con una variante existente el día 1, los participantes ahora <strong>construyen su propia variante desde cero</strong>. Consiste en un ejercicio de 40 minutos (D-1) más una clase de 20 minutos.</p>
+  <span class="badge badge-do">Actividad de los participantes</span> D-1 (construcción del prototipo Fase A de co-marketing) lo realizan todos. Dado que los participantes ya revisaron la estructura del frontmatter de los archivos de definición de agentes durante G-1 el día 1, esta vez construyen el investigador y el redactor ellos mismos. Si el tiempo es escaso, el trabajo en parejas (una persona escribe, otra ejecuta los comandos de verificación) también funciona bien.</p>
+
+  <h3>Capítulo 9: Patrones de diseño de flujos de trabajo</h3>
+  <p>Después de revisar los 5 patrones de orquestación, muestre estudios de caso reales de flujos de trabajo como revisión de código, investigación de mercado y presentaciones. Trabajen juntos en un árbol de decisión de "¿Qué patrón se ajusta a esta tarea?"</p>
+
+  <h3>Capítulo 12: Promoción de nueva variante</h3>
+  <p>Ubicado en la segunda mitad del día 2. Esta es la etapa de preparar el prototipo de co-marketing construido en el capítulo 11 para la promoción.</p>
+  <span class="badge badge-demo">Solo demostración del instructor</span> Ejecutar realmente <code>l2-to-variant-pipeline.ts</code> es una operación irreversible que afecta el historial de git. No haga que todos los participantes lo sigan — es suficiente que el instructor lo demuestre una vez por pantalla. Si los participantes quieren probarlo, guíelos para que lo hagan después de que termine la clase, en su propio entorno (una carpeta de clon exclusiva para el taller).
+  <span class="badge badge-do">Actividad de los participantes</span> Todos pueden practicar verificando los elementos de PROMOTION_CHECKLIST.md y redactando el manifiesto <code>variant.json</code>.</p>
+
+  <h3>Capítulo 13: Ejercicio integrador</h3>
+  <p>Este es el ejercicio central del día 2. Combinando la experiencia del día 1 (uso de una variante existente) y el capítulo 11 (creación de una nueva variante), haga que los participantes diseñen directamente la aplicación de un equipo multiagente a su propio trabajo real.</p>
+  <p>Deje claro desde el principio que no hay una única respuesta correcta para este capítulo. Si los participantes se sienten bloqueados en "¿qué debería construir?", es efectivo que el instructor demuestre primero su propio ejemplo (p.ej. "organizar los elementos de acción de las actas de reuniones semanales") para mostrar el flujo de preguntas. Si el tiempo es escaso, en lugar de completar las 4 etapas, es suficiente que todos terminen al menos las etapas 1–2 (definición del problema, decisiones de barreras de seguridad) y dejen las etapas 3–4 como tarea.</p>
+  <span class="badge badge-do">Actividad de los participantes</span> Use la lista de verificación de finalización para que cada participante marque hasta dónde llegó, y durante el tiempo de presentaciones del proyecto integrador, haga que 1–2 participantes compartan brevemente su propio flujo de trabajo.
+
+  <h3>Cierre</h3>
+  <p>Una retrospectiva de los dos días completos. Vincule la experiencia de ejecutar un equipo de agentes con una variante existente el día 1 con la experiencia de construir y promover una nueva variante el día 2.</p>
+
+  <h2 id="recap">Preguntas de comprensión por capítulo</h2>
+  <p>Formule las preguntas siguientes al final de cada capítulo para comprobar la comprensión. El objetivo no es obtener la respuesta correcta — es que los participantes la expliquen con sus propias palabras.</p>
+
+  <h3>📅 Preguntas de comprensión del día 1</h3>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 1</div>
+    <ol>
+      <li>De las 3 etapas de uso de la IA (usuario, usuario avanzado, diseñador), ¿cuál se siente más cercana a usted actualmente?</li>
+      <li>¿Cuál es la mayor diferencia entre "usar IA sin arnés" y "usar IA con arnés"?</li>
+      <li>¿Cuáles son las ventajas y desventajas respectivas de una sola IA frente a un equipo multiagente en términos de contexto, verificación y paralelismo?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 2</div>
+    <ol>
+      <li>Explique la diferencia entre ingeniería de prompts e ingeniería de arnés en una oración.</li>
+      <li>¿Cuáles son las ventajas y desventajas de "predefinir" subagentes frente a "generarlos dinámicamente"?</li>
+      <li>¿Qué determina si debe usar distribución en paralelo frente a una canalización?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 3</div>
+    <ol>
+      <li>Entre los 3 niveles de riesgo (lectura/escritura/destructivo), ¿en qué nivel caen un subagente revisor y una tarea de eliminación de archivos, respectivamente?</li>
+      <li>¿Qué criterios determinan si se elige reintento, reversión o escalamiento?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del ejercicio de calentamiento</div>
+    <ol>
+      <li>Tetris se construyó bien con vibe-coding, ¿entonces por qué fue difícil construir Pac-Man con un solo prompt?</li>
+      <li>¿Cuál es la diferencia entre dividir Pac-Man en planificar → desarrollar → QA frente a entregar todo a un solo agente? (→ Capítulo 2 §2 conflicto de roles)</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 4 §1/§2</div>
+    <ol>
+      <li>¿Por qué podría fallar llamar al redactor y al revisor en paralelo?</li>
+      <li>¿Qué tipo de incidente podría ocurrir si no supiera que los hooks no se activan en Claude App?</li>
+      <li>En D-2, ¿por qué la composición de agentes desplegados difirió según la solicitud aunque era el mismo equipo de subagentes?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 5 (toque ligero)</div>
+    <ol>
+      <li>¿Qué papel desempeña cada uno de AGENTS.md, CONSTITUTION.md, CLAUDE.md y GEMINI.md?</li>
+      <li>¿Qué se crea en una carpeta de proyecto cuando se genera una variante mediante andamiaje?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 6 · Uso de una variante existente</div>
+    <ol>
+      <li>¿Por qué se necesita la fase 1.5 (validación cruzada) en el flujo de consultoría de 7 etapas de co-consult?</li>
+      <li>¿Por qué los "criterios de verificación" en el marco de diseño de 4 etapas deben ser medibles numéricamente?</li>
+      <li>¿Por qué las composiciones de agentes de co-consult (informe) y co-deck (presentación) son tan diferentes?</li>
+    </ol>
+  </div>
+
+  <h3>📅 Preguntas de comprensión del día 2</h3>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 8</div>
+    <ol>
+      <li>¿Qué capa (L0/L2) es el SSOT para CONSTITUTION.md y para context.md, respectivamente?</li>
+      <li>¿Por qué L1→L2 termina con una "bifurcación"?</li>
+      <li>¿Qué problemas surgen si no hay jerarquía de modelos por rol de agente?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 10</div>
+    <ol>
+      <li>¿Cuál es la diferencia entre las clasificaciones LOCKED y MERGE?</li>
+      <li>¿Por qué debería ejecutar <code>--dry-run</code> primero?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión de la Referencia común/Capítulo 7</div>
+    <ol>
+      <li>¿Cuál es la diferencia entre el modo en proceso y tmux de teammateMode?</li>
+      <li>¿Qué problemas específicos surgen si el modelo de tickets de servicio no tiene kanban? (Explique eligiendo uno: cola visible, límites WIP o priorización)</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 11 · Creación de nueva variante</div>
+    <ol>
+      <li>¿Por qué el prototipo de la fase A se construye en <code>Projects/</code>? ¿Por qué no construirlo directamente en <code>templates/</code>?</li>
+      <li>Si el <code>handoff_to</code> y el <code>handoff_from</code> de una definición de agente no coinciden, ¿cómo se manifiesta en <code>agent:verify</code>?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 9 · Patrones de diseño de flujos de trabajo</div>
+    <ol>
+      <li>¿Por qué el patrón "verificar-luego-aplicar" es esencial en un flujo de trabajo de revisión de código?</li>
+      <li>Entre los 5 estudios de caso por dominio, ¿cuál se asemeja más a su propio trabajo?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 12 · Promoción de nueva variante</div>
+    <ol>
+      <li>Entre la ruta de construcción desde cero y la ruta de promoción, ¿a cuál se aplica la frase "el diseño precede al uso"?</li>
+      <li>¿Qué maneja la etapa de conciliación, frente a la migración manual de <code>_ORIGIN.md</code>?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 13 · Proyecto integrador</div>
+    <ol>
+      <li>¿Cuál de las tres limitaciones del §2 (sobrecarga de contexto / conflicto de roles / falta de paralelismo) hizo necesario un equipo para la tarea recurrente que eligió?</li>
+      <li>¿Por qué decidió las barreras de seguridad antes de construir el subagente?</li>
+    </ol>
+  </div>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

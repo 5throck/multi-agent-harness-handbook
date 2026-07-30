@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 13 · Ejercicio Integrador — Diseñar Tu Propio Flujo de Trabajo - Material del Manual de Ingeniería de Arnes de Equipo Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 13 · Ejercicio Integrador — Diseñar Tu Propio Flujo de Trabajo</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	    .checklist .ct { color: var(--badge-green-fg); text-transform: uppercase; letter-spacing: .04em; }
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 13 · Ejercicio Integrador</div>
+  <a href="#s1">Objetivo de Este Ejercicio</a>
+  <a href="#s2">Paso 1 — Definir el Problema y Diseñar el Equipo</a>
+  <a href="#s3">Paso 2 — Establecer Primero las Barreras de Protección</a>
+  <a href="#s4">Paso 3 — Definir Subagentes e Implementar el Flujo de Trabajo</a>
+  <a href="#s4">Paso 4 — Verificar y Reflexionar</a>
+  <a href="#checklist">Lista de Verificación de Finalización</a>
+  <a href="#next-steps">Próximos Pasos Después de Completar</a>
+  <div class="nav-section">Otros Capítulos</div>
+  <a href="../variant-advanced/12_VariantAdvanced_Examples_es.html">Capítulo 11 · Ejemplo de Ejercicio de Promoción de Nueva Variante</a>
+  <a href="../glossary/00_Glossary_es.html">Glosario</a>
+  <a href="../faq/00_FAQ_es.html">Preguntas Frecuentes</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 13 · Ejercicio Integrador</div>
+  <h1>Ejercicio Integrador — Diseñar Tu Propio Flujo de Trabajo</h1>
+  <p class="lead">Este ejercicio final reúne todo lo que ha aprendido hasta ahora — los conceptos (Capítulos 2 y 3), las herramientas (Capítulo 4), el sentido operativo para dirigir un equipo (Capítulo 7) y la estructura del espacio de trabajo (Capítulos 5 y 8) — en un proyecto que usted diseña y ejecuta de principio a fin, incluso a pequeña escala. No hay una única respuesta correcta. Este capítulo lo guía no en "qué construir," sino en "en qué orden tomar las decisiones para no omitir nada."</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Qué Hará en Este Capítulo</div>
+    <ul>
+      <li>Elegir una tarea que repite realmente y reformularla como un problema de equipo multiagente en miniatura</li>
+      <li>Decidir las barreras de protección (permisos y puertas de aprobación) antes de construir cualquier subagente</li>
+      <li>Implementar el orquestador, los especialistas y el contrato de entrega como archivos reales</li>
+      <li>Verificar los resultados y reflexionar sobre lo que difirió del plan</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">Objetivo de Este Ejercicio</h2>
+  <p>En el Capítulo 4 §2 siguió un escenario predefinido (revisor, redactor), y en el Capítulo 11 construyó una variante para un dominio predefinido (co-marketing). Esta vez, usted elige tanto el escenario como el dominio. Es válido mantener una escala pequeña — una sola tarea de cinco minutos que repite cada semana es suficiente. Lo que importa es ser capaz de explicar, con sus propias palabras, por qué tomó cada decisión en este orden particular.</p>
+
+  <div class="note">
+    <svg viewBox="0 0 680 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="cap-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+        </marker>
+        <marker id="cap-return" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8b5cf6"/>
+        </marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,sans-serif">
+        <!-- Step 1: Define the problem (blue) -->
+        <rect x="10" y="12" width="130" height="56" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <circle cx="35" cy="30" r="10" fill="#3b82f6"/>
+        <text x="35" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">①</text>
+        <text x="85" y="34" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">Definir Problema</text>
+        <text x="75" y="52" text-anchor="middle" font-size="9" fill="#6b7280">Ver Cap. 2, 3</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="143" y1="40" x2="170" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 2: Design guardrails (orange) -->
+        <rect x="175" y="12" width="130" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+        <circle cx="200" cy="30" r="10" fill="#f59e0b"/>
+        <text x="200" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">②</text>
+        <text x="255" y="34" text-anchor="middle" font-size="12" fill="#92400e" font-weight="700">Diseñar Barreras</text>
+        <text x="240" y="52" text-anchor="middle" font-size="9" fill="#6b7280">Ver Cap. 3</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="308" y1="40" x2="335" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 3: Implement agents (green) -->
+        <rect x="340" y="12" width="130" height="56" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+        <circle cx="365" cy="30" r="10" fill="#22c55e"/>
+        <text x="365" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">③</text>
+        <text x="420" y="34" text-anchor="middle" font-size="12" fill="#166534" font-weight="700">Implementar Agentes</text>
+        <text x="405" y="52" text-anchor="middle" font-size="9" fill="#6b7280">Ver Cap. 4, 6</text>
+
+        <!-- Arrow 3→4 -->
+        <line x1="473" y1="40" x2="500" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+
+        <!-- Step 4: Verify & reflect (purple) -->
+        <rect x="505" y="12" width="130" height="56" rx="8" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5"/>
+        <circle cx="530" cy="30" r="10" fill="#8b5cf6"/>
+        <text x="530" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">④</text>
+        <text x="585" y="34" text-anchor="middle" font-size="12" fill="#5b21b6" font-weight="700">Verificar y Reflexionar</text>
+        <text x="570" y="52" text-anchor="middle" font-size="9" fill="#6b7280">Integra todos los capítulos</text>
+
+        <!-- Return arrow: ④ → ① -->
+        <path d="M570,71 C570,108 75,108 75,71" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#cap-return)"/>
+        <text x="340" y="106" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="600">Iterar y Mejorar</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2 id="s2">Paso 1 — Definir el Problema y Diseñar el Equipo</h2>
+  <div class="stage">
+    <div class="stage-title">Pregunta 1. ¿Qué estás repitiendo?</div>
+    <p>Piense en una tarea que ha estado haciendo repetidamente últimamente. Por ejemplo: "cada semana leo las notas de la reunión y extraigo solo los elementos de acción," "redacto una nueva publicación de blog y verifico el tono," o "escribo una descripción de PR y me aseguro de que la lista de verificación esté completa."</p>
+  </div>
+  <div class="stage">
+    <div class="stage-title">Pregunta 2. Si le encomendara esta tarea a un solo agente individual, ¿cuál de los tres problemas del Capítulo 1 §2 (límites de un solo agente) aparecería?</div>
+    <p>¿Es sobrecarga de contexto (múltiples etapas mezclándose en una sola sesión)? ¿Conflicto de roles (el redactor teniendo que revisar su propio resultado)? ¿O falta de paralelismo (varias subtareas independientes)? Su respuesta aquí determina la estructura del equipo del Capítulo 1 §3.</p>
+  </div>
+  <div class="stage">
+    <div class="stage-title">Pregunta 3. ¿En cuántos orquestadores y especialistas dividirá esto?</div>
+    <p>Esboce una configuración mínima, refiriéndose al Capítulo 1 §3–§4b. Es válido tener solo un especialista — un orquestador (la sesión principal) más un solo especialista (subagente) ya cuenta como un equipo. Anote la entrada y la salida de cada especialista en una frase ("este agente toma X y produce Y").</p>
+  </div>
+
+  <h2 id="s3">Paso 2 — Establecer Primero las Barreras de Protección</h2>
+  <p>Siguiendo el principio del Capítulo 3, decida los permisos <em>antes</em> de construir realmente el subagente. Complete la tabla a continuación.</p>
+  <div class="note">
+    <strong>¿Cuál es el mínimo que este especialista necesita poder hacer?</strong> (por ejemplo, solo leer archivos / leer y escribir archivos / llamar a una API externa)<br>
+    <strong>¿Hay alguna acción que nunca deba ejecutarse sin confirmación humana?</strong> (Corresponde al nivel "destructivo / de impacto externo" del Capítulo 3 — por ejemplo, enviar realmente un mensaje, hacer realmente un commit.)<br>
+    <strong>¿En caso de fallo, debe reintentar, revertir o escalar a un humano?</strong> (Consulte los criterios de reintento/reversión/escalamiento del Capítulo 2 §4.)
+  </div>
+  <p>Las respuestas a estas tres preguntas se convierten en el campo <code>tools</code> en el frontmatter del subagente, y en la formulación de "detente aquí" que incluirá al instruir al orquestador.</p>
+
+  <h2 id="s4">Paso 3 — Definir Subagentes e Implementar el Flujo de Trabajo</h2>
+  <p>Usando el mismo enfoque que el ejercicio del Capítulo 4 §2, pida a Claude App (o Code) directamente en el chat que cree el subagente por usted. A continuación hay una plantilla en blanco — reemplace las partes entre corchetes con sus propias respuestas y péguela en la ventana de chat.</p>
+  <div class="note">Los usuarios de Antigravity CLI (<code>agy</code>) pueden seguir la misma estructura de cuatro pasos. Simplemente escriban la definición del subagente en <code>AGENTS.md</code> en lugar de <code>.claude/agents/</code>, y asignen tareas basadas en roles con el comando <code>/goal</code> en lugar de la herramienta Agent de Claude.</div>
+  <div style="position:relative">
+    <pre class="code-block">Crea un subagente llamado [nombre del rol] en .claude/agents/[nombre del rol].md.
+[Una frase describiendo lo que hace este agente]. Permite solo [los permisos mínimos decididos en el Paso 2]
+para tools, y establece el modelo en [el nivel elegido usando los criterios de los Cap. 1 y 5].</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
+  <p>Si tiene dos o más especialistas, cree cada uno de la misma manera que en el escenario D-1, y luego instruya explícitamente el modo de orquestación al final — por ejemplo, "ejecuta estas dos etapas en secuencia" o "ejecútalas concurrentemente." Confirme para sí mismo cuál eligió y, como aprendió en el Capítulo 1 §4b, que esta elección depende de las relaciones de dependencia en la solicitud.</p>
+
+  <h2 id="s5">Paso 4 — Verificar y Reflexionar</h2>
+  <p>Después de ejecutarlo una vez, responda las siguientes preguntas.</p>
+  <ul>
+    <li>¿El resultado salió en el formato esperado (el contrato de entrega)? Si no, ¿acaso la <code>description</code> del subagente era demasiado vaga?</li>
+    <li>¿Las barreras de protección que estableció en el Paso 2 fueron realmente respetadas? ¿Algún lugar terminó con un ámbito de <code>tools</code> más amplio de lo necesario?</li>
+    <li>Si este flujo de trabajo necesita repetirse regularmente, ¿vale la pena promoverlo más adelante a una variante o una habilidad reutilizable, como se describe en el Capítulo 11?</li>
+  </ul>
+  <div class="note">Una vez que complete esta reflexión, habrá recorrido por su cuenta el ciclo completo que este manual ha enfatizado desde el principio (<strong>conceptos (Cap. 2) → salvaguardas (Cap. 3) → herramientas (Cap. 4) → organización/estructura (Cap. 5, 7, 8)</strong>). La próxima vez que encuentre una tarea repetitiva similar, simplemente hacer estas mismas preguntas nuevamente, en el mismo orden, le permitirá diseñar un nuevo flujo de trabajo.</div>
+
+  <h2 id="checklist">Lista de Verificación de Finalización</h2>
+  <div class="checklist">
+    <div class="ct">Autoevaluación</div>
+    <div class="chk">☐ Definió una tarea repetitiva como problema</div>
+    <div class="chk">☐ Puede explicar qué limitación de un solo agente hace necesario un equipo</div>
+    <div class="chk">☐ Decidió los permisos y las puertas de aprobación antes de construir cualquier subagente</div>
+    <div class="chk">☐ Construyó realmente un subagente y lo ejecutó al menos una vez</div>
+    <div class="chk">☐ Verificó los resultados y anotó lo que difirió de las expectativas</div>
+    <div class="ct">Verificación de Reproducibilidad</div>
+    <div class="chk">☐ Ejecutó la misma solicitud 2+ veces y confirmó que los resultados fueron consistentes</div>
+    <div class="chk">☐ Confirmó que las barreras de protección se activan correctamente con entradas anormales (archivo vacío, formato incorrecto, etc.)</div>
+    <div class="chk">☐ Comparó instantáneas antes/después para confirmar que no hubo cambios de archivo inesperados</div>
+  </div>
+
+  <h2 id="next-steps">Próximos Pasos Después de Completar</h2>
+  <p>Este manual termina aquí, pero la aplicación en el mundo real comienza ahora. Una vez que aplique el flujo de trabajo que diseñó hoy al trabajo real, naturalmente lo llevará en una de las siguientes tres direcciones.</p>
+  <div class="checklist">
+    <div class="ct">Dentro de Esta Semana</div>
+    <div class="chk">☐ Ejecute el subagente que construyó hoy en la tarea recurrente real una vez más, y esta vez comparta los resultados con un colega</div>
+    <div class="chk">☐ Pregunte a una persona si este flujo de trabajo podría ser útil para otro equipo en su organización</div>
+    <div class="ct">Una Vez Establecido Este Flujo de Trabajo</div>
+    <div class="chk">☐ Considere seguir el proceso de promoción descrito en los Capítulos 10 y 12 para convertirlo en una variante formal — para que todo su equipo pueda reutilizarlo</div>
+    <div class="chk">☐ Aprender el proceso de actualización de proyecto L2 del Capítulo 8 §5 significa que no tendrá que aplicar manualmente cada cambio futuro a los estándares compartidos</div>
+    <div class="ct">Si Se Queda Atascado</div>
+    <div class="chk">☐ Consulte el concepto nuevamente en el <a href="../glossary/00_Glossary_es.html">Glosario</a></div>
+    <div class="chk">☐ Revise las <a href="../faq/00_FAQ_es.html">Preguntas Frecuentes</a> para ver si alguien ha tenido un problema similar</div>
+  </div>
+  <div class="note">Lo más importante no es "memorizar la respuesta correcta," sino ser capaz de recorrer la secuencia que este manual ha seguido — definir el problema → verificar las limitaciones → diseñar permisos → implementar → verificar — por su cuenta, cada vez que enfrente una nueva tarea repetitiva.</div>
+
+  <div class="chapter-nav">
+    <a href="../variant-advanced/12_VariantAdvanced_Examples_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Capítulo 12 · Ejemplo de Ejercicio de Promoción de Nueva Variante</div></a>
+    <a href="../glossary/00_Glossary_es.html" class="next"><div class="dir">Referencia →</div><div class="ttl">Glosario</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
+  });
+}
+</script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

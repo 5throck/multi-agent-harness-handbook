@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "reading" topics without hands-on exercises. Reading width (720px), generous line height, chapter navigation.
+  Unlike Manual (reference)/Examples (hands-on), the focus is on prose flow rather than version boxes or code highlighting.
+  Edit points: (1) <title>/chapter number/title/lead  (2) nav (this chapter's sections + other chapters)  (3) 'Key points of this chapter'
+            (4) <h2 id>/<h3> sections and body  (5) prev/next chapter links
+  Fill in the {{double braces}}/[description: ...] with actual content. All links are relative.
+  Colors use design tokens only — theming is applied at deploy time by references/apply-theme.sh substituting the brand color in docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 8 §4 · Arquitectura Avanzada - Material del Manual de Ingeniería del Arnés de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 8 §4 · Arquitectura Avanzada</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 8 §4 · Arquitectura Avanzada</div>
+  <a href="#layout-reconstruction">Reconstrucción de Disposición</a>
+  <a href="#extends">Orden de Resolución del Frontmatter extends</a>
+  <a href="#boilerplate-example">Estrategia de Plantilla Base en la Práctica</a>
+  <a href="#tier-strategy-deep">Análisis Profundo de la Estrategia de 3 Niveles</a>
+  <a href="#platform-parity">Paridad de Plataformas</a>
+  <a href="#execution-plan-templates">Plantillas de Plan de Ejecución</a>
+  <div class="nav-section">Otras Secciones del Capítulo 8</div>
+  <a href="08_Intro_Advanced_Deploy_es.html">Cap. 8 §1 · Despliegue y SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_es.html">Cap. 8 §2 · Gestión del Ciclo de Vida</a>
+  <a href="08_Intro_Advanced_AGENTS_es.html">Cap. 8 §3 · Análisis Profundo de AGENTS.md</a>
+  <a href="08_Intro_Advanced_Roadmap_es.html">Cap. 8 §5 · Hoja de Ruta Avanzada</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="05_Intro_Chapter_es.html">Cap. 5 · Introducción a ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_es.html">Cap. 7 · Ejecución de Equipos Multiagente Dentro de la Empresa</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Cap. 11 · Crear una Nueva Variante</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Cap. 8 §4</div>
+  <h1>Arquitectura Avanzada</h1>
+  <p class="lead">Donde el §1 cubrió "qué fluye hacia dónde" a través de L0→L1→L2, esta sección profundiza en <strong>cómo se implementa realmente ese flujo</strong> — por qué los archivos se regeneran en lugar de copiarse textualmente, el orden en que se resuelve el frontmatter heredado, ejemplos concretos de cómo se aplican la plantilla base y la estrategia de niveles en la práctica, y cómo se evita que las dos plataformas (.claude/.gemini) se desvíen estructuralmente.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo Que Cubre Esta Sección</div>
+    <ul>
+      <li>Por qué los archivos L2 se "regeneran" en lugar de copiarse textualmente de L1 (Reconstrucción de Disposición)</li>
+      <li>El orden de resolución real del campo de frontmatter <code>extends</code></li>
+      <li>Ejemplos de aplicación de la clasificación LOCKED/MERGE/PRESERVE a archivos reales</li>
+      <li>La estrategia de 3 niveles — definiciones Alto/Medio/Bajo, ejemplos de frontmatter, Reglas de Ajuste de Nivel y la Regla del Techo de Nivel</li>
+      <li>Cómo se aplica la paridad de plataformas <code>.claude/</code>/<code>.gemini/</code></li>
+      <li>Plantillas de plan de ejecución — la Puerta de Diseño (Fila 0), categorías de excepción (E1–E5), y un ejemplo resuelto</li>
+    </ul>
+  </div>
+
+  <h2 id="layout-reconstruction">Reconstrucción de Disposición — Por Qué L2 No Copia L1 Textualmente</h2>
+  <p>Profundicemos en el caso de <code>agents/pm.md</code> mencionado brevemente en §1. El <code>agents/pm.md</code> de L0 contiene la gobernanza de todo el espacio de trabajo y supera las 300 líneas. Mezcla <strong>secciones que solo tienen sentido en la raíz del espacio de trabajo</strong>, como el comportamiento de Auto-Mode y los campos de estado del ciclo de vida. Si el <code>templates/common/agents/pm.md</code> de L1 copiara esto textualmente, cada vez que se generara una nueva variante arrastraría contenido exclusivo del espacio de trabajo que no tiene nada que ver con el proyecto.</p>
+  <p>Por eso L1 realiza una <strong>reconstrucción filtrada</strong> en lugar de copiar — selecciona del original de L0 solo las secciones realmente necesarias para la generación de variantes, elimina las secciones exclusivas del espacio de trabajo, y enlaza el resto mediante una referencia <code>extends</code>. El mismo principio se repite en el camino hacia L2. Las anulaciones específicas de la variante (por ejemplo, las reglas de PM específicas del dominio de marketing de co-marketing) se superponen sobre L1 y se <strong>regeneran desde cero</strong>, en lugar de parchear el archivo de L1 mediante diff. Como resultado, aunque el pm.md de L0 supera las 300 líneas, el pm.md de L2 se mantiene alrededor de 50-100 líneas — porque el enfoque es "construir de nuevo solo con lo necesario," no "copiar y eliminar los sobrantes."</p>
+  <p>Este diseño importa por el modo de fallo que previene. Si L1→L2 fuera una simple copia, cada vez que L0 añadiera una única sección exclusiva del espacio de trabajo, <strong>el pm.md de cada proyecto L2 se hincharía innecesariamente</strong>. La Reconstrucción de Disposición bloquea esto desde la raíz colocando siempre un filtro entre "lo que L0 sabe" y "lo que L2 necesita saber."</p>
+
+  <h2 id="extends">Frontmatter extends — El Orden en que Se Resuelve la Herencia</h2>
+  <p>Un campo de frontmatter como <code>extends: ../../../agents/pm.md</code> es una declaración de "este archivo referencia ese archivo" — no es una macro que fusiona archivos. El orden de resolución es el siguiente.</p>
+  <ol>
+    <li><strong>Cuando una herramienta lee el archivo</strong> (por ejemplo, cuando Claude Code carga <code>agents/pm.md</code>), primero verifica la ruta <code>extends</code> del frontmatter.</li>
+    <li>Lee el original referenciado (L0 o L1) y <strong>hereda el cuerpo</strong>, pero si el archivo actual reescribe explícitamente una sección, solo esa sección se <strong>anula</strong>.</li>
+    <li>Las secciones que existen solo en el archivo actual y no en el original (ej., reglas específicas de la variante) se <strong>añaden tal cual</strong>.</li>
+  </ol>
+  <p>En otras palabras, <code>extends</code> se resuelve en tres etapas — "heredar + anulación selectiva + añadir" — no concatenando dos archivos como texto. Debido a esta estructura, el <code>templates/common/agents/pm.md</code> de L1 puede contener casi nada de contenido real (mayormente solo un puntero <code>extends</code> hacia L0) y seguir funcionando como un archivo válido, y cuando cambia una regla compartida en L0, cada archivo descendente que usa <code>extends</code> refleja automáticamente el último contenido la próxima vez que se lee — <strong>sin embargo, esto es "resuelto en tiempo de lectura," un mecanismo diferente de la "sincronización de archivos (SYNC_IF_NEWER)" cubierta en §1</strong>. <code>extends</code> es una referencia en vivo que se resuelve en el momento en que una herramienta abre el archivo, mientras que SYNC_IF_NEWER es una copia estática de archivo que solo se actualiza cuando se ejecuta <code>upgrade-project.ts</code>. Ambos mecanismos parecen "herencia," pero no debe confundir el hecho de que se actualizan en momentos diferentes.</p>
+
+  <h2 id="boilerplate-example">Estrategia de Plantilla Base en la Práctica</h2>
+  <p>Repasemos uno por uno cómo se aplica la clasificación LOCKED/MERGE/PRESERVE cubierta en §1 a archivos reales.</p>
+  <ul>
+    <li><strong>Ejemplo de LOCKED — <code>.githooks/pre-commit</code></strong>: este archivo ejecuta puertas de seguridad como escaneo de secretos y validación de mensajes de commit. Si esta validación difiriera por proyecto, la barra de seguridad general de la organización variaría de proyecto en proyecto — por lo que <code>upgrade-project.ts</code> siempre sobreescribe este archivo con la última versión de L1 independientemente de las modificaciones locales.</li>
+    <li><strong>Ejemplo de MERGE — <code>CLAUDE.md</code></strong>: este archivo contiene un bloque envuelto en <code>&lt;!-- WORKSPACE-MANAGED --&gt;...&lt;!-- /WORKSPACE-MANAGED --&gt;</code> (ej., reglas de puerta de enlace del PM) junto con reglas específicas del proyecto fuera de ese bloque (ej., "este proyecto siempre escribe mensajes de commit en coreano"). Durante la actualización, solo el interior del marcador se reemplaza con la última versión de L1, mientras que las reglas específicas del proyecto fuera del marcador se dejan intactas.</li>
+    <li><strong>Ejemplo de PRESERVE — <code>docs/context.md</code></strong>: este archivo documenta de qué trata el proyecto, por lo que L1 solo verifica que existe y nunca toca su contenido.</li>
+  </ul>
+  <p>Observar los tres ejemplos lado a lado aclara los criterios de clasificación — <strong>¿un cambio llevaría a un incidente de seguridad/gobernanza (LOCKED)? ¿Deben coexistir reglas organizacionales y contexto del proyecto en un mismo archivo (MERGE)? ¿Es la identidad misma del proyecto (PRESERVE)?</strong> Al añadir un nuevo archivo a la plantilla base de este repositorio, hacer estas tres preguntas en orden suele hacer obvia la categoría de inmediato.</p>
+
+  <h2 id="tier-strategy-deep">Análisis Profundo de la Estrategia de 3 Niveles — Aplicación de Optimización de Costos en Tiempo de Ejecución</h2>
+  <p>La asignación de niveles introducida en el Capítulo 5 se define estáticamente en el frontmatter de <code>agents/*.md</code>. El campo <code>tier</code> de cada archivo de agente se traduce a un alias de modelo específico de la plataforma y se aplica en tiempo de ejecución.</p>
+
+  <h3>Ejemplo de Frontmatter</h3>
+  <div style="position:relative">
+  <pre class="code-block">---
+name: pm                       # pm, code-writer, automation-engineer ...
+tier:                          # alias de modelo específico de plataforma (traducido en tiempo de ejecución)
+  claude: high                 #   high = claude-opus-4-7
+  antigravity: high            #   high = gemini-3.1-pro
+---</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>Debido a que esta traducción ocurre automáticamente detrás de <code>model: inherit</code>, quien escribe agents/*.md nunca necesita conocer un nombre de modelo concreto — solo necesita pensar en "qué tan pesado es el juicio que hace este rol."</p>
+
+  <h3>Definiciones de Niveles y Mapeo de Modelos</h3>
+  <div class="table-compare narrow-col-1">
+  <table>
+    <thead><tr><th>Nivel</th><th>Propósito</th><th>Ejemplo de la Familia Claude</th><th>Ejemplo de la Familia Antigravity</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Alto</strong></td><td>Razonamiento complejo, diseño de arquitectura, planificación</td><td>claude-opus-4-7</td><td>gemini-3.1-pro</td></tr>
+      <tr><td><strong>Medio</strong></td><td>Revisión de código, pruebas, revisión de PR, puertas de calidad</td><td>claude-sonnet-4-6</td><td>gemini-3.5-flash</td></tr>
+      <tr><td><strong>Bajo</strong></td><td>Codificación rápida y repetitiva, mantenimiento de scripts</td><td>claude-haiku-4-5</td><td>gemini-3.5-flash</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Esta asignación estática forma la línea base, pero en el tiempo de ejecución real el PM aplica <strong>Reglas de Ajuste de Nivel</strong> para optimizar dinámicamente el costo. Un agente con una línea base alta (architect, pm) necesita el modelo más fuerte porque debe hacer juicios de diseño complejos. automation-engineer, por otro lado, escribe scripts estandarizados según ADR-0036, por lo que el nivel bajo es suficiente — la única pregunta que importa es si se requiere "juicio pesado."</p>
+
+  <h3>Reglas de Ajuste de Nivel — Optimización de Costos en Tiempo de Ejecución</h3>
+  <p>Cuando el PM construye un plan de ejecución, se permiten ajustes de nivel respecto a la línea base. Las reglas son simples.</p>
+  <ul>
+    <li><strong>Las reducciones están permitidas</strong> — para tareas simples, el PM puede reducir el nivel de un agente por debajo de su línea base. Por ejemplo, cuando docs-writer (línea base media) recibe una tarea como "corregir un único error tipográfico en README.md," puede reducirse a bajo para ahorrar costo.</li>
+    <li><strong>Los aumentos están prohibidos</strong> — por el contrario, elevar un agente por encima de su nivel base está <strong>siempre prohibido</strong>. Elevar automation-engineer (bajo) a alto para diseñar arquitectura compleja es una violación de gobernanza.</li>
+    <li><strong>Restaurar en caso de fallo</strong> — si una tarea reducida falla, el PM debe restaurar el nivel base del agente y reintentar.</li>
+  </ul>
+  <p>El núcleo de esta regla es el principio de que <strong>"el techo de complejidad del rol de un agente está fijo, pero su piso puede ajustarse a la situación."</strong> El PM puede reducir el nivel a bajo para ahorrar costo, pero en el momento en que una tarea excede la capacidad de bajo, vuelve inmediatamente a la línea base. El impacto en el costo se puede sentir directamente en el ejercicio P-2 del Capítulo 4 §2-A.</p>
+
+  <h3>Regla del Techo de Nivel</h3>
+  <p>La tabla de Determinación de Fase de AGENTS.md (§3.5) especifica el techo de nivel permitido para cada tipo de entregable. Por ejemplo, "implementación de script (con un plan aprobado ya en su lugar)" es Fase 4, y el agente responsable es automation-engineer (bajo) — asignar alto aquí sería una violación del Techo de Nivel. Por el contrario, "diseñar nuevos archivos, definir esquemas" es Fase 1-2, manejado por architect (alto).</p>
+  <div class="pullquote">
+    La Regla del Techo de Nivel no es "nunca asignar más del nivel mejor adaptado a esta tarea" — es "nunca usar más del nivel definido de este agente." Es basada en roles, no en tareas.
+  </div>
+
+  <h2 id="platform-parity">Paridad de Plataformas — Manteniendo .claude/ y .gemini/ Estructuralmente Idénticos</h2>
+  <p>Este repositorio soporta dos plataformas simultáneamente — la familia Claude (<code>.claude/</code>) y la familia Antigravity/Gemini (<code>.gemini/</code>). Si los dos directorios se desvían con el tiempo (por ejemplo, si <code>.claude/agents/reviewer.md</code> existe pero <code>.gemini/agents/reviewer.md</code> falta), los usuarios de una herramienta terminan sin poder usar una función determinada. El mecanismo que previene esto es la <strong>verificación de paridad de plataformas</strong> en <code>validate-templates.ts</code>.</p>
+  <p>Esta verificación referencias cruzadas estructuralmente los dos directorios para confirmar que no hay ningún agente, habilidad o comando que exista solo en un lado. El pipeline de promoción cubierto en el Capítulo 11 también incluye esta verificación como una puerta obligatoria antes de la promoción, por lo que un estado donde algo fue "construido solo para Claude y Antigravity fue olvidado" nunca puede convertirse en una variante oficial en primer lugar. Aunque las dos plataformas usan mecanismos de ejecución diferentes (ver el ejemplo MERGE de CLAUDE.md/GEMINI.md en §1), el principio de que <strong>el conjunto de funciones proporcionadas debe ser siempre el mismo</strong> se aplica a través de esta verificación estructural.</p>
+
+  <h2 id="execution-plan-templates">Plantillas de Plan de Ejecución — Diseño de Ejecución Estructurado para Trabajo Multiagente</h2>
+  <p>Cuando el PM distribuye trabajo complejo entre múltiples agentes, usa el formato de <strong>Plan de Ejecución</strong>. Este plan detalla "quién hace qué, a qué nivel, en qué orden" en una tabla, garantizando la consistencia de la ejecución.</p>
+
+  <h3>Formato Estándar del Plan de Ejecución</h3>
+  <div class="table-plan">
+  <table>
+    <thead><tr><th>#</th><th>Tarea</th><th>Agente</th><th>Nivel</th><th>Modelo</th><th>Espec.</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Crear/actualizar documento de diseño → <code>docs/designs/&lt;spec-id&gt;-design.md</code></td><td>architect</td><td>Alto</td><td>[modelo]</td><td>NUEVO</td></tr>
+      <tr><td>1</td><td>[descripción de la tarea]</td><td>[especialista]</td><td>Alto/Medio/Bajo</td><td>[modelo]</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>N</td><td><code>/sync "tipo(alcance): mensaje"</code></td><td>pm</td><td>Medio</td><td>[modelo]</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Puerta de Diseño (Fila 0)</h3>
+  <p>La Fila 0 es <strong>obligatoria solo para L0 (raíz del espacio de trabajo) y L1 (plantillas comunes)</strong>. El Architect debe escribir primero el documento de diseño, y solo después de que el PM lo verifique puede proceder la implementación (Fila 1 en adelante). Los proyectos de variantes L2 gestionan su propio flujo de trabajo, por lo que esta puerta no se aplica a ellos.</p>
+
+  <h3>Categorías de Excepción de la Puerta de Diseño</h3>
+  <p>Para tareas simples donde la Fila 0 es una sobrecarga excesiva, solo se reconocen las siguientes 5 categorías de excepción (E1–E5). El PM no puede inventar excepciones por su cuenta — solo se pueden usar las categorías definidas a continuación.</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>ID</th><th>Categoría</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>E1</td><td>memory-log</td><td>Escritura de un registro de sesión <code>memory/YYYY-MM-DD.md</code></td></tr>
+      <tr><td>E2</td><td>changelog</td><td>Solo actualización de <code>CHANGELOG.md</code></td></tr>
+      <tr><td>E3</td><td>hotfix-typo</td><td>Corrección de error tipográfico, cambio de una sola línea, corrección menor</td></tr>
+      <tr><td>E4</td><td>pure-readme</td><td>Solo texto del cuerpo de README.md (sin cambio estructural/de diseño)</td></tr>
+      <tr><td>E5</td><td>sync-only</td><td>Solo ejecución de <code>/sync</code> (cierre del ciclo de vida)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Cuando se aplica una excepción, las columnas Agente/Nivel/Modelo de la Fila 0 se muestran en blanco (<code>—</code>).</p>
+
+  <h3>Ejemplo Resuelto: Un Plan de Ejecución Escrito por el PM</h3>
+  <p>A continuación se muestra un ejemplo real de plan de ejecución para "una tarea de paridad de plataformas actualizando agents/pm.md y scripts."</p>
+  <div class="table-plan">
+  <table>
+    <thead><tr><th>#</th><th>Tarea</th><th>Agente</th><th>Nivel</th><th>Modelo</th><th>Espec.</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Actualizar agents/pm.md</td><td>docs-writer</td><td>Medio</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>2</td><td>Actualizar scripts/audit.ts</td><td>automation-engineer</td><td>Bajo</td><td>haiku</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>3</td><td>Actualizar CLAUDE.md §5</td><td>docs-writer</td><td>Medio</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>4</td><td>Actualizar GEMINI.md §5</td><td>docs-writer</td><td>Medio</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
+      <tr><td>5</td><td><code>/sync "docs(agents): actualizar pm.md y reglas de despacho de plataformas"</code></td><td>pm</td><td>Medio</td><td>sonnet</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Orden de ejecución</strong>: Secuencial — porque CLAUDE.md y GEMINI.md deben actualizarse juntos para la <a href="#platform-parity">paridad de plataformas</a>, la ejecución es secuencial. Que automation-engineer se asigne como bajo se deriva de la Regla de Ajuste de Nivel.</p>
+
+  <div class="note">
+    Esta sección cubre el <strong>comportamiento real y ejemplos concretos</strong> de los conceptos introducidos en §1 (L0→L1→L2, el modelo de bifurcación, LOCKED/MERGE/PRESERVE) — todo aquí es la implementación actual. Las direcciones avanzadas aún no implementadas (integración de contenedores, consolidación de memoria, expansión futura de la estrategia de plantilla/niveles, etc.) se cubren por separado en la <a href="08_Intro_Advanced_Roadmap_es.html">§5 Hoja de Ruta Avanzada</a>.
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_AGENTS_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Cap. 8 §3 · Análisis Profundo de AGENTS.md</div></a>
+    <a href="08_Intro_Advanced_Roadmap_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Cap. 8 §5 · Hoja de Ruta Avanzada</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

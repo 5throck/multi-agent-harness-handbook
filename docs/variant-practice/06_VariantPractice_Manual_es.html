@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 6 §1 · Instalación local de ai-workspace-standards y andamiaje de proyecto - Material del Manual de Ingeniería de Arneses de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 6 §1 · Instalación local de ai-workspace-standards y andamiaje de proyecto</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific: tree-box inner spans */
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    /* Mode table (first column monospace) */
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 6 §1 · Referencia de práctica de variantes</div>
+  <a href="#tree">Vista general de la estructura completa</a>
+  <a href="#repository-walk">Recorrido por la estructura del repositorio</a>
+  <div class="nav-section">Instalación y verificación</div>
+  <a href="#section-1">1. Configuración del entorno local</a>
+  <a href="#section-2">2. Comandos de andamiaje de proyecto</a>
+  <div class="nav-section">Referencia</div>
+  <a href="#session-checklist">3. Lista de verificación de inicio de sesión</a>
+  <a href="#section-3">Enlaces de referencia</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="../intro/05_Intro_Chapter_es.html">Capítulo 5 §1 · Introducción a ai-workspace-standards</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 · Creación de una nueva variante</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 6 §1</div>
+  <h1>Instalación local de ai-workspace-standards y andamiaje de proyecto</h1>
+  <p class="subtitle">Una referencia que cubre cómo configurar el espacio de trabajo localmente y crear un proyecto a partir de una variante existente &nbsp;|&nbsp; Documentación oficial: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Repositorio objetivo</span><span class="vvalue">ai-workspace-standards</span></div>
+    <div class="version-row"><span class="vlabel">Rama objetivo</span><span class="vvalue">main</span></div>
+    <div class="version-row"><span class="vlabel">URL del documento de referencia</span><span class="vvalue"><a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a></span></div>
+    <div class="version-row"><span class="vlabel">Documentación recopilada el</span><span class="vvalue">14 de julio de 2026</span></div>
+    <div class="version-row"><span class="vlabel">Cómo verificar la versión</span><span class="vvalue">Verifique las versiones de las herramientas locales con <code>git --version</code> y <code>bun --version</code>. El espacio de trabajo en sí se versiona a través de <code>templates/VERSION</code> y la etiqueta <code>template-vX.Y.Z</code> de cada variante.</span></div>
+    <div class="version-row"><span class="vlabel">Qué verificar en cada revisión</span><span class="vvalue">Volver a verificar en el repositorio original si <code>CONSTITUTION.md</code>, <code>scripts/new-project.ts</code> o <code>scripts/list-template-versions.ts</code> han cambiado.</span></div>
+  </div>
+
+  <h2 id="tree">Vista general de la estructura completa</h2>
+  <div class="tree-box"><div style="position:relative">
+  <pre>
+ai-workspace-standards/                (clonado como la raíz del espacio de trabajo)
+├── CONSTITUTION.md                    Estándares compartidos — léalo primero
+├── CLAUDE.md / GEMINI.md / AGENTS.md  Comportamiento específico de plataforma / registro de agentes
+├── templates/                         Colección de variantes (plantillas de proyecto)
+│   ├── co-develop/                    Pipeline de desarrollo de software de 6 etapas
+│   ├── co-design/                     Flujo de trabajo de UI/UX de 5 etapas
+│   ├── co-work/                       Flujo de trabajo de colaboración/documentación general de 6 etapas
+│   └── ...                            co-security, co-consult, co-deck y más
+├── scripts/                           Scripts operativos como new-project.ts (TypeScript, ejecutados vía bun)
+└── Projects/                          Proyectos individuales en la forma &lt;nombre-del-proyecto&gt;/ (cada uno un repositorio git independiente)
+</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div></div>
+
+  <h3>Lista completa de las 7 variantes</h3>
+  <table>
+    <thead><tr><th>Variante</th><th>Propósito</th></tr></thead>
+    <tbody>
+      <tr><td><code>co-work</code></td><td>Colaboración/documentación general — flujo de trabajo empresarial común de 6 etapas</td></tr>
+      <tr><td><code>co-consult</code></td><td>Consultoría/análisis — diagnóstico de problemas del cliente y redacción de propuestas</td></tr>
+      <tr><td><code>co-deck</code></td><td>Presentaciones — construcción de diapositivas y generación de borradores</td></tr>
+      <tr><td><code>co-marketing</code></td><td>Marketing — pipeline de planificación, creación y revisión de contenido</td></tr>
+      <tr><td><code>co-develop</code></td><td>Desarrollo de software — pipeline de desarrollo de 6 etapas</td></tr>
+      <tr><td><code>co-research</code></td><td>Investigación — flujo de trabajo de revisión y resumen bibliográfico</td></tr>
+      <tr><td><code>co-review</code></td><td>Revisión de código/documentos — revisión de PR y verificación de calidad</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="repository-walk">Recorrido por la estructura del repositorio — 5 lugares para verificar primero después de clonar</h3>
+  <p>Después de clonar el repositorio en la raíz del espacio de trabajo con <code>git clone</code>, recorramos en orden los 5 directorios principales que debe verificar primero. Este orden coincide con el "flujo de ejecución" cubierto en el Capítulo 5.</p>
+  <ol style="margin:0 0 16px 20px;line-height:2.2;">
+    <li><strong><code>CONSTITUTION.md</code></strong> — El archivo que debe leerse primero. Define los estándares compartidos para todo el espacio de trabajo (gobernanza, flujo de trabajo de PR, principios multiagente).</li>
+    <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — Verifique el archivo que coincide con la herramienta de codificación con IA que usa. Cada uno define el comportamiento específico de la plataforma (ganchos, comandos de barra, reglas de despacho de agentes).</li>
+    <li><strong><code>AGENTS.md</code></strong> — El registro de agentes invocables en este espacio de trabajo. Permite ver de un vistazo "quién hace qué."</li>
+    <li><strong><code>templates/</code></strong> — Todas las 7 variantes disponibles se encuentran bajo este directorio. Abra cada carpeta de variante para examinar su composición de agentes y su pipeline de gobernanza.</li>
+    <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code> se encuentra aquí. Este script es el comando principal que clona una variante en un proyecto real.</li>
+  </ol>
+  <div class="note">Este recorrido es una guía breve destinada a darle una idea de "qué contiene este repositorio" antes de trabajar de forma práctica con agentes en los ejercicios del Capítulo 4. Durante el ejercicio, abra primero estos 5 lugares, y vuelve para explorar el resto de la estructura según sea necesario.</div>
+
+  <hr>
+
+  <h2 id="section-1">1. Configuración del entorno local</h2>
+
+  <h3><code>git clone</code>. Clonar en la raíz del espacio de trabajo</h3>
+  <p>ai-workspace-standards no está diseñado para colocarse dentro de un proyecto como una biblioteca típica — está diseñado para clonarse como la raíz del espacio de trabajo mismo. Por ejemplo, si clona este repositorio en una ubicación como <code>C:\git</code> en Windows o <code>~/git</code> en macOS/Linux, cada proyecto que cree debajo hereda automáticamente las reglas compartidas de <code>CONSTITUTION.md</code>.</p>
+  <p>¿Qué pasa si ignora esta regla y lo coloca en una carpeta de proyecto específica como un submódulo (por ejemplo, <code>mi-proyecto/ai-workspace-standards/</code>)? Scripts como <code>new-project.ts</code> verifican por sí mismos si se ejecutaron "desde la raíz del espacio de trabajo," y dado que esta condición se rompe, el andamiaje se rechaza de plano, o los cálculos de ruta salen mal y el proyecto se crea en la ubicación equivocada. Peor aún, solo ese proyecto heredaría las reglas compartidas, mientras que cualquier otro proyecto que cree más adelante no heredaría ninguna de ellas — socavando la razón misma por la que existe este repositorio: que todo el espacio de trabajo use los mismos estándares.</p>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
+cd C:\git</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <h3><code>bun</code>. Instalar el runtime</h3>
+  <p>Cada script operativo del espacio de trabajo (<code>scripts/*.ts</code>) está escrito en TypeScript y se ejecuta con <code>bun</code>. No hay versiones <code>.sh</code>/<code>.ps1</code> separadas, por lo que necesita instalar bun antes de poder ejecutar cualquier script.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun --version
+git --version</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p >💡 <strong>Clave:</strong> una vez que ambos comandos imprimen un número de versión con éxito, su entorno local está listo.</p>
+
+  <h3 id="session-checklist">Lista de verificación de inicio de sesión</h3>
+  <p>La lista de verificación de inicio de sesión definida en <code>CONSTITUTION.md</code> sigue este orden.</p>
+  <ol style="margin:0 0 16px 20px;line-height:2;">
+    <li><strong>Establecer la ruta de los ganchos de git:</strong> <code>git config core.hooksPath .githooks</code></li>
+    <li><strong>Leer CONSTITUTION.md:</strong> confirmar los estándares compartidos del espacio de trabajo</li>
+    <li><strong>Leer el docs/context.md del proyecto:</strong> confirmar la única fuente de verdad del proyecto</li>
+    <li><strong>Leer AGENTS.md:</strong> confirmar el registro de agentes del proyecto</li>
+    <li><strong>Verificar memory/MEMORY.md:</strong> confirmar el contexto dejado por sesiones anteriores</li>
+    <li><strong>Cargar las habilidad(es) especificadas por docs/context.md</strong></li>
+  </ol>
+
+  <hr>
+
+  <h2 id="section-2">2. Comandos de andamiaje de proyecto</h2>
+
+  <h3><code>bun scripts/list-template-versions.ts</code>. Verificar las variantes disponibles</h3>
+  <p>Antes de crear un nuevo proyecto, verifique primero qué variantes existen en el espacio de trabajo y con qué versiones está etiquetada cada una.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/list-template-versions.ts</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <h3><code>bun scripts/new-project.ts</code>. Crear un proyecto a partir de una variante existente</h3>
+  <p>El comando más utilizado con frecuencia. Elija una variante y ejecútela junto con un nombre de proyecto, y toda la composición debajo de <code>templates/&lt;variante&gt;/</code> (definiciones de agentes, habilidades, comandos, pipeline de gobernanza) se clona en un nuevo repositorio independiente.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/new-project.ts "mi-nombre-de-proyecto" --variant co-develop</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>Si desea fijar una versión específica al crear el proyecto, también especifique <code>--version</code>.</p>
+  <div style="position:relative">
+  <pre class="code-block">bun scripts/new-project.ts "mi-nombre-de-proyecto" --variant co-develop --version 1.4.0</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+
+  <table>
+    <thead><tr><th>Opción</th><th>Descripción</th><th>Notas</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>--variant</code></td>
+        <td>Especifica qué plantilla de proyecto usar (co-develop, co-design, co-work, etc.)</td>
+        <td>Si se omite, se usa una selección interactiva o un valor predeterminado (depende del comportamiento del script)</td>
+      </tr>
+      <tr>
+        <td><code>--version</code></td>
+        <td>Fija una etiqueta <code>template-vX.Y.Z</code> específica para la variante dada</td>
+        <td>Si se omite, se usa la versión más reciente</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    <span class="badge badge-workflow">Andamiaje</span>
+    <span class="badge badge-alias">Repositorio git independiente</span>
+    <span class="badge badge-skill">Hereda estándares compartidos</span>
+  </p>
+
+  <div class="warning-box">Un proyecto creado se genera como un repositorio git independiente separado de la raíz del espacio de trabajo. Tenga cuidado de no mezclar ediciones a archivos de la raíz del espacio de trabajo y archivos del nuevo proyecto dentro de la misma tarea/commit.</div>
+
+  <h3>Si desea crear una variante completamente nueva</h3>
+  <p>Si ninguna de las variantes existentes se ajusta y necesita una composición de equipo de dominio completamente nueva, puede primero crear un prototipo independiente de Fase A bajo <code>Projects/&lt;nombre-de-variante&gt;/</code> usando la habilidad <code>create-variant</code> junto con el comando <code>bun scripts/create-l2-scaffold.ts &lt;nombre-de-variante&gt; --domain &lt;tipo&gt;</code>. Este prototipo puede desarrollarse libremente hasta que se promocione a una variante oficial <code>templates/</code>. Los pasos detallados de este flujo y el procedimiento de promoción se cubren en el Capítulo 11 (Nueva creación D-1) y el Capítulo 12 (Promoción P-1).</p>
+
+  <hr>
+
+  <h2 id="section-3">3. Enlaces de referencia</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></li>
+    <li>⚙️ <a href="../variant-practice/06_VariantPractice_Examples_es.html">Capítulo 6 §2 Ejercicio. Uso de variantes existentes (co-consult, co-deck)</a></li>
+    <li>⚙️ <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11. Creación de una nueva variante</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Basado en la rama main de ai-workspace-standards | Julio de 2026</p>
+
+  <div class="chapter-nav">
+    <a href="../intro/05_Intro_Chapter_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 5 · ai-workspace-standards</div></a>
+    <a href="06_VariantPractice_Examples_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 6 §2 · Práctica de variantes</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

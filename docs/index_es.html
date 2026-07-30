@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Manual de Ingeniería de Arnés de Equipos Multiagente - materiales completos para comprender y aplicar la ingeniería de arnés de equipos multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual de Ingeniería de Arnés de Equipos Multiagente</title>
+  <link rel="stylesheet" href="assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="assets/css/handbook-components.css">
+  <style>
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    .tag-ref { background: var(--tag-bg); color: var(--tag-text); border: 1px solid var(--border-info); }
+    .tag-ex  { background: var(--bg-success); color: var(--accent-green); border: 1px solid var(--border-success); }
+    .tag-ch  { background: var(--bg-info); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+    .card h2 {
+      font-size: 1.06rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Manual de Ingeniería de Arnés de Equipos Multiagente</h1>
+      <p class="subtitle">Desde conceptos fundamentales hasta ejercicios prácticos con Claude Code, Claude App y Antigravity -- estrategia de despliegue empresarial y creación de tu propia variante con ai-workspace-standards</p>
+    </header>
+
+    <div class="meta">
+      Basado en <strong>Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (al 2026-07-08)</strong> &nbsp;|&nbsp; Recursos oficiales:
+      <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Documentación de subagentes de Claude Code</a>,
+      <a href="https://antigravity.google/docs/agent-manager" target="_blank">Documentación del gestor de agentes de Antigravity</a>,
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">Repositorio de ai-workspace-standards</a>
+      &nbsp;|&nbsp; Cada documento se clasifica como <strong>Referencia</strong> (consulta rápida), <strong>Práctico</strong> (aprendizaje basado en escenarios) o <strong>Capítulo Narrativo</strong> (lectura conceptual).
+      <br>Última actualización <strong>17 de julio de 2026</strong>
+    </div>
+
+    <!-- ─── Materiales del Instructor ─── -->
+    <div class="group">
+      <p class="section-label">Materiales del Instructor</p>
+      <div class="grid">
+        <a class="card" href="lecture-guide/00_Course_Overview_es.html">
+          <span class="tag tag-ref">Vista General del Curso</span>
+          <h2>Vista General del Curso -- Objetivos de Aprendizaje, Audiencia, Horario y Resultados</h2>
+          <p>Una introducción rápida que cubre de qué trata el taller, para quién es, cómo está estructurado el horario de dos días y las competencias que los participantes obtendrán al finalizar.</p>
+          <div class="go">Abrir Vista General →</div>
+        </a>
+        <a class="card" href="lecture-guide/00_Lecture_Guide_es.html">
+          <span class="tag tag-ref">Guía del Instructor</span>
+          <h2>Guía de Impartición -- Lista de Preparación, Asignación de Tiempo, Notas del Instructor por Capítulo y Preguntas de Repaso</h2>
+          <p>Una guía completa para impartir el manual completo: lista de verificación integrada, asignación de tiempo por sección, segmentos de solo demostración durante los ejercicios y preguntas de repaso capítulo por capítulo.</p>
+          <div class="go">Abrir Guía →</div>
+        </a>
+        <a class="card" href="setup/SETUP_es.html">
+          <span class="tag tag-ref">Guía de Configuración</span>
+          <h2>Guía de Configuración del Entorno del Taller -- Scripts Específicos por SO y Lista de Herramientas</h2>
+          <p>Instalación con un solo comando de todas las herramientas necesarias para los ejercicios (bun, git, gh, claude, agy) mediante scripts específicos por sistema operativo, más un inventario de herramientas y una guía de solución de problemas.</p>
+          <div class="go">Abrir Configuración →</div>
+        </a>
+        <a class="card" href="setup/SETUP_CHECKLIST_es.html">
+          <span class="tag tag-ref">Lista de Verificación</span>
+          <h2>Lista de Verificación Pre-Instalación -- Suscripciones, Cuentas y Requisitos del Sistema</h2>
+          <p>Una lista de verificación de planes de suscripción, cuentas, requisitos del sistema y configuración de Git/GitHub para comprobar antes de ejecutar los scripts de instalación.</p>
+          <div class="go">Abrir Lista →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Día 1: Conceptos ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day">Día 1</span> <span class="type">Conceptos</span> Usuarios Generales -- Conceptos Fundamentales</p>
+      <div class="grid">
+        <a class="card" href="intro/01_Why_AI_Chapter_es.html">
+          <span class="tag tag-ch">Cap.1</span>
+          <h2>Innovación Laboral en la Era de la IA</h2>
+          <p>Comprender por qué la IA importa ahora, las tres etapas de adopción de IA (Usuario → Practicante → Diseñador), la necesidad de la ingeniería de arnés, principios multiagente, ejemplos reales de ahorro de tiempo y la hoja de ruta de este taller para construir motivación.</p>
+          <div class="go">Leer Cap.1 →</div>
+        </a>
+        <a class="card" href="concepts/02_Concepts_Chapter_es.html">
+          <span class="tag tag-ch">Cap.2</span>
+          <h2>Ingeniería de Arnés y Conceptos de Equipos Multiagente</h2>
+          <p>Aprender por qué es necesaria la ingeniería de arnés, las limitaciones de los agentes individuales, el marco de equipos multiagente (orquestador, especialista, contratos de traspaso) y cinco patrones de orquestación.</p>
+          <div class="go">Leer Cap.2 →</div>
+        </a>
+        <a class="card" href="guardrails/03_Guardrails_Chapter_es.html">
+          <span class="tag tag-ch">Cap.3</span>
+          <h2>Guardarraíles y Modelos de Permisos</h2>
+          <p>Explorar qué permitir y restringir a los subagentes, la clasificación de riesgo en tres niveles (lectura/escritura/destructivo), el principio de menor privilegio, puertas de aprobación humana, aislamiento y registro de auditoría.</p>
+          <div class="go">Leer Cap.3 →</div>
+        </a>
+        <a class="card" href="warm-up/Warmup_Tetris_Pacman_es.html">
+          <span class="tag tag-ex">Calentamiento</span> <span class="tag" style="background:var(--bg-note);color:var(--accent-amber);border:1px solid var(--border-warn);">Obligatorio</span>
+          <h2>De Tetris a Pac-Man -- Experimentando el Impacto de la Complejidad en el Enfoque</h2>
+          <p>Construye Tetris mediante programación intuitiva, intenta construir Pac-Man con un solo prompt y fracasa, luego reinténtalo con un enfoque multiagente en tres etapas (planificación, desarrollo, QA) para experimentar que el valor de la separación de roles crece exponencialmente con la complejidad.</p>
+          <div class="go">Iniciar Calentamiento →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Día 1: Práctica ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day">Día 1</span> <span class="type">Práctico</span> Usuarios Generales -- Ejecución Práctica de Equipos de Agentes</p>
+      <div class="grid">
+        <a class="card" href="practice/04_Practice_Manual_es.html">
+          <span class="tag tag-ref">Cap.4 §1</span>
+          <h2>Uso de Equipos Multiagente con Arneses</h2>
+          <p>Una referencia comparativa para definir, invocar, ejecutar en paralelo y automatizar subagentes en Claude Code, Claude App, Antigravity CLI y Antigravity Desktop.</p>
+          <div class="go">Leer →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Manual_A_es.html">
+          <span class="tag tag-ref">Cap.4 §1-A</span>
+          <h2>Uso de Subagentes en Detalle -- Enfoque en Claude</h2>
+          <p>Definición de subagentes (.claude/agents), invocación de herramientas Agent(Task), ejecución de Agent Teams en paralelo y activación automática de hooks en Claude App/Code.</p>
+          <div class="go">Detalles de Claude →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Manual_B_es.html">
+          <span class="tag tag-ref">Cap.4 §1-B</span>
+          <h2>Uso de Subagentes en Detalle -- Enfoque en Antigravity</h2>
+          <p>Creación dinámica de subagentes, Agent Manager, comandos /goal y /agent, y paralelismo entre sesiones en Antigravity Desktop y CLI.</p>
+          <div class="go">Detalles de Antigravity →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Examples_A_es.html">
+          <span class="tag tag-ex">Cap.4 §2-A</span>
+          <h2>Ejercicios de Equipos Multiagente -- Enfoque en Claude</h2>
+          <p>Práctica con subagentes revisor y redactor, pipelines, ejecución en paralelo de Agent Teams y comparación de niveles de modelo en Claude App/Code.</p>
+          <div class="go">Iniciar Ejercicio →</div>
+        </a>
+        <a class="card" href="practice/04_Practice_Examples_B_es.html">
+          <span class="tag tag-ex">Cap.4 §2-B</span>
+          <h2>Ejercicios de Equipos Multiagente -- Enfoque en Antigravity</h2>
+          <p>Ejercicio práctico implementando la misma especificación AGENTS.md utilizando objetivos en lenguaje natural en Antigravity Desktop y CLI.</p>
+          <div class="go">Iniciar Ejercicio →</div>
+        </a>
+        <a class="card" href="intro/05_Intro_Chapter_es.html">
+          <span class="tag tag-ch">Cap.5</span>
+          <h2>Introducción a ai-workspace-standards</h2>
+          <p>Explorar la estructura del repositorio ai-workspace-standards: cuatro documentos principales, siete variantes, listas de verificación al inicio de sesión y flujos de trabajo de andamiaje para implementar modelos de herramientas de desarrollo de tipo variante.</p>
+          <div class="go">Leer Cap.5 →</div>
+        </a>
+        <a class="card" href="variant-practice/06_VariantPractice_Manual_es.html">
+          <span class="tag tag-ref">Cap.6 §1</span>
+          <h2>Uso de Variantes Existentes</h2>
+          <p>Referencia rápida para clonación de espacio de trabajo, instalación de bun, uso de new-project.ts y listas de verificación al inicio de sesión.</p>
+          <div class="go">Leer →</div>
+        </a>
+        <a class="card" href="variant-practice/06_VariantPractice_Examples_es.html">
+          <span class="tag tag-ex">Cap.6 §2</span>
+          <h2>Uso de Variantes Existentes (Práctico)</h2>
+          <p>Ejecuta un proyecto de consultoría de investigación de mercado con co-consult y luego genera automáticamente materiales de presentación con co-deck.</p>
+          <div class="go">Iniciar Ejercicio →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Día 2: Conceptos ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day day2">Día 2</span> <span class="type">Conceptos</span> Profesionales de TI -- Arquitectura Avanzada y Estrategia</p>
+      <div class="grid">
+        <a class="card" href="enterprise/07_Enterprise_Chapter_es.html">
+          <span class="tag tag-ch">Cap.7</span>
+          <h2>Comparación de Estrategias de Operación Empresarial</h2>
+          <p>Una comparación lado a lado de la operación de tickets de servicio a nivel empresarial frente a la operación de herramientas de desarrollo de variantes, examinando las fortalezas y limitaciones de cada enfoque.</p>
+          <div class="go">Leer Cap.7 →</div>
+        </a>
+        <a class="card" href="intro/08_Intro_Advanced_Deploy_es.html">
+          <span class="tag tag-ch">Cap.8</span>
+          <h2>Arquitectura Avanzada de ai-workspace-standards</h2>
+          <p>Cubre despliegue y SSOT (tres niveles L0→L1→L2), gestión del ciclo de vida de agentes/habilidades/scripts, AGENTS.md avanzado, Reconstrucción de Layout, paridad entre plataformas y la hoja de ruta de mejoras futuras (§5). Las actualizaciones de proyectos L2 se cubren de forma independiente en el <strong>Cap.10</strong>.</p>
+          <div class="go">Leer Cap.8 →</div>
+        </a>
+        <a class="card" href="workflows/09_Workflows_Chapter_es.html">
+          <span class="tag tag-ch">Cap.9</span>
+          <h2>Patrones de Diseño de Flujos de Trabajo</h2>
+          <p>Casos prácticos de flujos de trabajo multiagente en diversos dominios -- revisión de código, investigación de mercado, presentaciones, triaje de incidencias, verificación de PR -- además de un catálogo de patrones y guía de selección.</p>
+          <div class="go">Leer Cap.9 →</div>
+        </a>
+        <a class="card" href="intro/10_ProjectUpgrade_Chapter_es.html">
+          <span class="tag tag-ch">Cap.10</span>
+          <h2>Actualización de Proyecto L2</h2>
+          <p>El procedimiento de actualización (upgrade-project.ts) para llevar proyectos L2 existentes a las últimas plantillas, incluyendo las cinco categorías de clasificación de archivos y mecanismos de seguridad.</p>
+          <div class="go">Leer Cap.10 →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Día 2: Práctica ─── -->
+    <div class="group">
+      <p class="section-label"><span class="day day2">Día 2</span> <span class="type">Práctico</span> Profesionales de TI -- Creación y Promoción de Nuevas Variantes</p>
+      <div class="grid">
+        <a class="card" href="variant-advanced/11_VariantAdvanced_Chapter_es.html">
+          <span class="tag tag-ch">Cap.11</span>
+          <h2>Crear una Nueva Variante (Fase A)</h2>
+          <p>Diseñar una nueva variante llamada co-marketing desde cero como prototipo de Fase A. Experimentar el proceso de construir una composición de equipo de agentes utilizando create-l2-scaffold.ts.</p>
+          <div class="go">Leer Cap.11 →</div>
+        </a>
+        <a class="card" href="variant-advanced/12_VariantAdvanced_Examples_es.html">
+          <span class="tag tag-ex">Cap.12</span>
+          <h2>Promover una Nueva Variante (Fase B)</h2>
+          <p>Seguir el proceso paso a paso para promover el prototipo co-marketing a una variante oficial en templates/, incluyendo el PROMOTION_CHECKLIST y el proceso de conciliación.</p>
+          <div class="go">Iniciar Ejercicio →</div>
+        </a>
+        <a class="card" href="capstone/13_Capstone_es.html">
+          <span class="tag tag-ex">Cap.13</span>
+          <h2>Proyecto Final -- Diseña Tu Propio Flujo de Trabajo</h2>
+          <p>Un ejercicio final donde eliges una tarea recurrente real y diseñas una solución completa desde el concepto hasta los guardarraíles, la implementación de subagentes y la verificación.</p>
+          <div class="go">Iniciar Proyecto Final →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Referencias Compartidas ─── -->
+    <div class="group">
+      <p class="section-label">Referencias Compartidas</p>
+      <div class="grid">
+        <a class="card" href="tools/00_Tools_Manual_es.html">
+          <span class="tag tag-ref">Herramientas</span>
+          <h2>Comparación de Herramientas -- Claude Code / Claude App / Antigravity CLI / Antigravity</h2>
+          <p>Comparar cómo los mismos conceptos de equipos multiagente se implementan de manera diferente en cuatro herramientas, incluyendo diferencias en hooks, ejecución en paralelo y enfoques de aislamiento.</p>
+          <div class="go">Ver Comparación →</div>
+        </a>
+        <a class="card" href="glossary/00_Glossary_es.html">
+          <span class="tag tag-ref">Glosario</span>
+          <h2>Glosario -- Consulta Términos de Cada Capítulo en un Solo Lugar</h2>
+          <p>Definiciones de términos recurrentes en todo el manual: orquestador, traspaso, SSOT, nivel, L0/L1/L2, variante, andamiaje, modelo de bifurcación y más.</p>
+          <div class="go">Abrir Glosario →</div>
+        </a>
+        <a class="card" href="faq/00_FAQ_es.html">
+          <span class="tag tag-ref">Preguntas Frecuentes</span>
+          <h2>Preguntas Frecuentes -- Errores Comunes y Soluciones</h2>
+          <p>Guía de solución de problemas para incidencias frecuentes durante los ejercicios: fallos de invocación secuencial, hooks que no se activan, sobrecarga cognitiva, errores de andamiaje, problemas de costo y tiempo de espera -- organizados por síntoma con causa raíz y resolución.</p>
+          <div class="go">Abrir FAQ →</div>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      Basado en Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-07-08) &middot; Materiales de capacitación en español<br>
+      Recursos oficiales: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">docs.claude.com</a> &middot;
+      <a href="https://antigravity.google/docs/agent-manager" target="_blank">antigravity.google</a> &middot;
+      <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">github.com/5throck/ai-workspace-standards</a><br>
+      Construido con la habilidad Teach Me para Claude Code.
+    </footer>
+  </div>
+  <script src="assets/site-search.js" defer></script>
+<script src="assets/dark-mode-toggle.js"></script>
+<script src="assets/lang-switcher.js"></script>
+</body>
+</html>

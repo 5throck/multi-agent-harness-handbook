@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 2 · Ingeniería de Arnés y Conceptos de Equipos Multiagente - parte del Manual de Ingeniería de Arnés de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 2 · Ingeniería de Arnés y Conceptos de Equipos Multiagente</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 2 · Comprensión de los Conceptos</div>
+  <a href="#agent-definition">Qué es un Agente</a>
+  <a href="#s0">Prompt → Contexto → Arnés</a>
+  <a href="#architecture-diagram">Diagrama Completo de la Arquitectura del Arnés</a>
+  <a href="#s1">Qué es la Ingeniería de Arnés</a>
+  <a href="#s2">Límites de un Agente Único</a>
+  <a href="#s3">Componentes de un Equipo Multiagente</a>
+  <a href="#s3b">Qué es un Subagente</a>
+  <a href="#s4">Patrones de Orquestación</a>
+  <a href="#s4b">Composición Dinámica de Equipos y Flujos de Trabajo Diversos</a>
+  <a href="#s5">Un Arnés Multi-Herramienta -- AGENTS.md</a>
+  <div class="nav-section">Otros Capítulos</div>
+  <a href="../intro/01_Why_AI_Chapter_es.html">Capítulo 1 · Introducción</a>
+  <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Guardarraíles y Modelos de Permisos</a>
+  <a href="../glossary/00_Glossary_es.html">Glosario</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 2</div>
+  <h1>Ingeniería de Arnés y Conceptos de Equipos Multiagente</h1>
+  <p class="lead">Para que un agente de IA funcione de manera confiable en tareas reales, importa más "dentro de qué marco opera" que "qué le dices que haga." El Capítulo 1 examinó por qué se necesitan los agentes de IA. Este capítulo analiza la perspectiva de la ingeniería de arnés y la estructura básica de los equipos multiagente, donde múltiples agentes colaboran como equipo en lugar de depender de un solo agente.</p>
+  <p class="source-line">Fuentes: <a href="https://docs.claude.com/en/docs/claude-code/sub-agents" target="_blank">Documentación Oficial de Claude Code -- Subagentes</a>, <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">Repositorio de ai-workspace-standards</a>, <a href="https://www.faros.ai/blog/harness-engineering" target="_blank">Faros AI -- Harness Engineering</a>, <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank">Anthropic -- Building Effective Agents</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que Cubre Este Capítulo</div>
+    <ul>
+      <li>La progresión de Ingeniería de Prompts → Ingeniería de Contexto → Ingeniería de Arnés</li>
+      <li>Qué es la ingeniería de arnés y por qué la ingeniería de prompts por sí sola no es suficiente</li>
+      <li>Las limitaciones estructurales que surgen cuando un solo agente maneja trabajo complejo</li>
+      <li>Los tres componentes que forman un equipo multiagente: orquestador, especialista y contrato de traspaso</li>
+      <li>Los subagentes, el mecanismo para implementar especialistas en la práctica: cómo se definen, predefinidos vs. generados dinámicamente y cuándo usarlos</li>
+      <li>Los cinco patrones de orquestación de Anthropic: encadenamiento de prompts, enrutamiento, paralelización (seccionamiento/votación), orquestador-trabajadores, evaluador-optimizador (verificar-y-aplicar) y reintento/reversión/escalada para fallos</li>
+      <li>Cómo la composición del equipo puede cambiar dinámicamente según la tarea y cómo se pueden implementar libremente diferentes flujos de trabajo por dominio</li>
+      <li>El estándar AGENTS.md, que permite que herramientas diferentes como Claude Code/App y Antigravity CLI/Desktop compartan el mismo arnés</li>
+    </ul>
+  </div>
+
+  <h2 id="agent-definition">Qué es un Agente</h2>
+  <p>Antes de profundizar en la ingeniería de arnés en este capítulo, definamos exactamente qué es un "agente." Un agente de IA es un <strong>sistema de IA al que se le ha asignado un propósito</strong>, distinto de un simple chatbot.</p>
+
+  <p>El trabajo de un chatbot es simplemente "responder preguntas." El usuario introduce un prompt, se genera una respuesta y, una vez que termina la conversación, nada persiste. Un agente difiere en tres aspectos.</p>
+
+  <ul>
+    <li><strong>Persistencia del propósito:</strong> Un agente tiene un propósito definido por un "rol." A medida que la conversación crece, actúa de manera consistente sin perder su rol (investigador, revisor, redactor, etc.).</li>
+    <li><strong>Uso de herramientas:</strong> Un agente puede hacer más que generar texto -- puede leer archivos, buscar código y ejecutar comandos. El Capítulo 4 explica cómo controlar estas herramientas mediante el campo <code>tools</code>.</li>
+    <li><strong>Comportamiento autónomo:</strong> En lugar de una sola respuesta a un solo prompt, un agente puede realizar de forma autónoma múltiples pasos para lograr un objetivo. Juzga por sí mismo cuándo ramificarse según las condiciones, cuándo reintentar ante errores y cuándo verificar los resultados.</li>
+  </ul>
+
+  <div class="diagram-frame">
+    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+        <marker id="arrow-ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Izquierda: Chatbot -->
+        <text x="155" y="18" text-anchor="middle" font-size="13" fill="#636c76" font-weight="700">Chatbot</text>
+        <rect x="20" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="55" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">Usuario</text>
+        <line x1="90" y1="48" x2="120" y2="48" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow-ca)"/>
+        <rect x="122" y="32" width="70" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="157" y="52" text-anchor="middle" font-size="11" fill="#0550ae" font-weight="600">LLM</text>
+        <line x1="192" y1="48" x2="222" y2="48" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrow-ca)"/>
+        <rect x="224" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="259" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">Respuesta</text>
+        <text x="155" y="86" text-anchor="middle" font-size="10" fill="#636c76">Ciclo único: pregunta → respuesta</text>
+
+        <!-- Divisor -->
+        <line x1="330" y1="8" x2="330" y2="196" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Derecha: Agente -->
+        <text x="495" y="18" text-anchor="middle" font-size="13" fill="#0969da" font-weight="700">Agente</text>
+        <rect x="350" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="385" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">Usuario</text>
+        <line x1="420" y1="48" x2="450" y2="48" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <rect x="452" y="32" width="70" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="487" y="52" text-anchor="middle" font-size="11" fill="#0550ae" font-weight="700">LLM</text>
+        <!-- Flecha hacia abajo -->
+        <line x1="487" y1="64" x2="487" y2="86" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <!-- Caja de herramienta/subagente -->
+        <rect x="432" y="90" width="110" height="36" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="487" y="105" text-anchor="middle" font-size="10" fill="#116329" font-weight="600">Herramienta / Subagente</text>
+        <text x="487" y="119" text-anchor="middle" font-size="9" fill="#116329">Buscar · ejecutar · analizar</text>
+        <!-- Caja de resultado -->
+        <line x1="487" y1="126" x2="487" y2="146" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <rect x="452" y="148" width="70" height="28" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="487" y="166" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="600">Resultado</text>
+        <!-- Volver al LLM -->
+        <path d="M452,162 C400,162 400,52 450,52" fill="none" stroke="#0969da" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arrow-ag)"/>
+        <text x="418" y="110" font-size="9" fill="#0969da" transform="rotate(-90 418 110)">Re-revisión</text>
+        <!-- Respuesta final -->
+        <line x1="522" y1="48" x2="570" y2="48" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-ag)"/>
+        <rect x="572" y="32" width="70" height="32" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+        <text x="607" y="52" text-anchor="middle" font-size="11" fill="#1f2328" font-weight="600">Respuesta</text>
+        <text x="495" y="196" text-anchor="middle" font-size="10" fill="#0969da">Ciclo extendido: verificar después de usar herramientas/subagentes</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="note">El concepto de "multiagente" introducido en el Capítulo 1 es un sistema que divide dichos agentes en múltiples roles y los hace colaborar. Este capítulo cubre la estructura de esa colaboración -- orquestador, especialista, traspaso.</div>
+
+  <h2 id="s0">Prompt → Contexto → Arnés -- Cómo Llegamos Aquí</h2>
+  <p>La ingeniería de arnés no apareció de la nada; es el resultado de tres etapas construidas en cómo abordamos la IA. Cada etapa no reemplazó a la anterior -- se superpuso después de revelar que la etapa anterior por sí sola no era suficiente.</p>
+  <p>Una analogía culinaria hace que las tres etapas sean fáciles de entender. La ingeniería de prompts es "qué palabras le das al chef para el pedido", la ingeniería de contexto es "qué ingredientes y receta le entregas al chef", y la ingeniería de arnés es "construir un sistema donde la propia cocina -- procedimientos de inspección, herramientas, reglas de higiene -- produzca la misma calidad cada vez." No importa qué tan bien formules el pedido ni qué tan buenos sean los ingredientes, si el sistema de la cocina en sí es descuidado, los resultados serán inconsistentes cada vez.</p>
+
+  <div class="diagram-frame">
+    <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="10" y="15" width="190" height="115" rx="10" fill="#ffffff" stroke="#a5d5f7" stroke-width="1.5"/>
+        <text x="105" y="42" text-anchor="middle" font-size="11" fill="#0969da" font-weight="700">Etapa 1 · 2022-2024</text>
+        <text x="105" y="66" text-anchor="middle" font-size="15" fill="#1f2328" font-weight="700">Ingeniería de Prompts</text>
+        <text x="105" y="90" text-anchor="middle" font-size="12" fill="#636c76">Qué decir</text>
+        <text x="105" y="114" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Enfoque: comportamiento</text>
+
+        <line x1="205" y1="72" x2="245" y2="72" stroke="#636c76" stroke-width="2" marker-end="url(#arrow0)"/>
+
+        <rect x="250" y="15" width="190" height="115" rx="10" fill="#ffffff" stroke="#a2d9b1" stroke-width="1.5"/>
+        <text x="345" y="42" text-anchor="middle" font-size="11" fill="#1a7f37" font-weight="700">Etapa 2 · 2024-2025</text>
+        <text x="345" y="66" text-anchor="middle" font-size="15" fill="#1f2328" font-weight="700">Ingeniería de Contexto</text>
+        <text x="345" y="90" text-anchor="middle" font-size="12" fill="#636c76">Qué hacer que sepa</text>
+        <text x="345" y="114" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Enfoque: comprensión</text>
+
+        <line x1="445" y1="72" x2="485" y2="72" stroke="#636c76" stroke-width="2" marker-end="url(#arrow0)"/>
+
+        <rect x="490" y="15" width="180" height="115" rx="10" fill="#ffffff" stroke="#d2b9ff" stroke-width="1.5"/>
+        <text x="580" y="42" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">Etapa 3 · 2026~</text>
+        <text x="580" y="66" text-anchor="middle" font-size="15" fill="#1f2328" font-weight="700">Ingeniería de Arnés</text>
+        <text x="580" y="90" text-anchor="middle" font-size="12" fill="#636c76">Cómo confiar en ella</text>
+        <text x="580" y="114" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Enfoque: fiabilidad</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>Etapa 1 -- Ingeniería de Prompts (2022-2024)</h3>
+  <p>El interés inicial era puramente lingüístico. Una vez que quedó claro que la calidad del resultado variaba enormemente según cómo se formulaba una solicitud, "cómo escribir un mejor prompt" se trató como la habilidad central. La IA en esta etapa se acercaba más a un autocompletado sofisticado, y los humanos tenían que guiar la dirección en cada paso.</p>
+  <p>Por ejemplo, simplemente pedir "revisa este código" deja al modelo inseguro sobre qué criterios usar, produciendo una respuesta vaga, mientras que una instrucción específica como "revisa individualmente el manejo de casos límite de esta función, la consistencia de nomenclatura y los problemas de rendimiento" produce un resultado drásticamente mejor. Este saber sobre "cómo refinar lo que dices" era todo en esta etapa.</p>
+  <h3>Etapa 2 -- Ingeniería de Contexto (2024-2025)</h3>
+  <p>A medida que mejoró el rendimiento del modelo, el cuello de botella se desplazó de la "expresión" al "suministro de información." Se volvió importante curar qué llenar en la ventana de contexto del modelo -- archivos relevantes, reglas del proyecto, restricciones arquitectónicas -- y herramientas como RAG y MCP sistematizaron este proceso. En septiembre de 2025, Anthropic definió oficialmente esto como "la técnica de curar y mantener el conjunto óptimo de tokens durante la inferencia."</p>
+  <p>No importa qué tan bueno sea el prompt, si el modelo no conoce las convenciones de codificación de nuestro proyecto o la estructura de funciones existentes, producirá código en el estilo equivocado. La ingeniería de contexto es la técnica de llenar la ventana de contexto solo con lo que el modelo realmente necesita -- un puñado de archivos relacionados con la solicitud, documentos de reglas del proyecto, resúmenes de conversaciones pasadas. Poca información conduce a suposiciones; demasiada información entierra lo importante en ruido.</p>
+  <h3>Etapa 3 -- Ingeniería de Arnés (2026)</h3>
+  <p>Este es el paradigma dominante a partir de 2026. El modelo en sí se acerca más a la inteligencia en bruto, y es el arnés lo que convierte esa inteligencia en comportamiento autónomo en el que realmente puedes confiar. Orquestación de herramientas, bucles de verificación, gestión de contexto/memoria, guardarraíles y observabilidad -- solo cuando estas cinco capas están en su lugar, un agente alcanza un nivel donde puedes "realmente delegarle trabajo." El dicho "el agente en sí no es la parte difícil -- el arnés lo es" resume esta época.</p>
+  <p>Si el mismo prompt y el mismo contexto producen una calidad diferente de resultado cada vez, es inutilizable en la práctica. La ingeniería de arnés consiste en diseñar el sistema alrededor de la respuesta del modelo -- no la respuesta en sí -- haciendo preguntas como "¿hay alguna manera de verificar automáticamente este resultado", "¿están bloqueadas las operaciones peligrosas (eliminación de archivos, ejecución de pagos, etc.) sin aprobación humana" y "¿podemos rastrear qué salió mal en los registros cuando algo falla".</p>
+  <div class="note">Las tres etapas desplazan el enfoque de <strong>comportamiento (qué hacer que haga el modelo) → comprensión (qué hacer que sepa el modelo) → fiabilidad (cómo hacer que el resultado sea repetible y verificable)</strong>. Los equipos multiagente que cubre este manual son el producto de la tercera etapa: la ingeniería de arnés.</div>
+
+  <h2 id="architecture-diagram">Diagrama Completo de la Arquitectura del Arnés</h2>
+  <p>La ingeniería de arnés se puede pensar como una estructura de cinco capas entre el modelo y el usuario. El diagrama de abajo muestra, de un vistazo, la arquitectura que recorre todo este manual -- <a href="#s1">la siguiente sección</a> conecta qué capítulo cubre cada una de estas cinco capas.</p>
+
+  <div class="diagram-frame">
+  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <defs>
+      <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
+        <path d="M0,0 L10,3 L0,6 Z" fill="#636c76"/>
+      </marker>
+    </defs>
+    <g font-family="-apple-system,Segoe UI,sans-serif">
+      <!-- Capa 1: Espacio de trabajo -->
+      <rect x="40" y="10" width="600" height="48" rx="10" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+      <text x="340" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#6639ba">Espacio de Trabajo</text>
+      <text x="610" y="40" text-anchor="end" font-size="10" fill="#636c76">Cap. 5, 8, 10-12</text>
+      <!-- Flecha 1 -->
+      <line x1="340" y1="58" x2="340" y2="78" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Capa 2: Arnés (5 subcapas) -->
+      <rect x="40" y="80" width="600" height="170" rx="10" fill="#e8f4fd" stroke="#0969da" stroke-width="1.5"/>
+      <text x="60" y="102" font-size="13" font-weight="700" fill="#0550ae">Arnés -- 5 Capas</text>
+      <!-- Subcapa 1 -->
+      <rect x="60" y="110" width="108" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="114" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Orquestación de Herramientas</text>
+      <!-- Subcapa 2 -->
+      <rect x="176" y="110" width="80" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="216" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Bucle de Verificación</text>
+      <!-- Subcapa 3 -->
+      <rect x="264" y="110" width="116" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="322" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Contexto · Memoria</text>
+      <!-- Subcapa 4 -->
+      <rect x="388" y="110" width="80" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="428" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Guardarraíles</text>
+      <!-- Subcapa 5 -->
+      <rect x="476" y="110" width="72" height="36" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+      <text x="512" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#0550ae">Observabilidad</text>
+      <!-- Descripciones de subcapas -->
+      <text x="114" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Llamadas a herramientas, hooks, habilidades</text>
+      <text x="114" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Procedimientos automatizados</text>
+      <text x="216" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Bucle evaluar-mejorar</text>
+      <text x="216" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Puertas de QA</text>
+      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">MEMORY.md · traspasos</text>
+      <text x="322" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Contratos, gestión de estado</text>
+      <text x="428" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Menor privilegio, aprobación</text>
+      <text x="428" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Aislamiento, registros de auditoría</text>
+      <text x="512" y="163" text-anchor="middle" font-size="9.5" fill="#636c76">Traza de ejecución, costo</text>
+      <text x="512" y="175" text-anchor="middle" font-size="9.5" fill="#636c76">Línea temporal, reproducción</text>
+      <!-- Referencias a capítulos -->
+      <text x="114" y="195" text-anchor="middle" font-size="9" fill="#0969da">Cap. 4</text>
+      <text x="216" y="195" text-anchor="middle" font-size="9" fill="#0969da">Cap. 4, 9</text>
+      <text x="322" y="195" text-anchor="middle" font-size="9" fill="#0969da">Cap. 8 §2</text>
+      <text x="428" y="195" text-anchor="middle" font-size="9" fill="#0969da">Cap. 3</text>
+      <text x="512" y="195" text-anchor="middle" font-size="9" fill="#0969da">Cap. 3 §6</text>
+      <!-- Conectores de subcapas -->
+      <line x1="60" y1="210" x2="640" y2="210" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="60" y="228" font-size="9" fill="#636c76">→ Solo cuando estas 5 capas se combinan un agente se vuelve "confiable para trabajar"</text>
+      <!-- Flecha 2 -->
+      <line x1="340" y1="250" x2="340" y2="270" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Capa 3: Agente -->
+      <rect x="40" y="272" width="285" height="48" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+      <text x="182" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="#116329">Agente</text>
+      <text x="200" y="301" font-size="10" fill="#636c76">  Cap. 2, 4, 8 §3</text>
+      <!-- Capa 4: Herramienta (lado derecho) -->
+      <rect x="355" y="272" width="285" height="48" rx="10" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
+      <text x="497" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="#7d4e00">Herramienta</text>
+      <text x="510" y="301" font-size="10" fill="#636c76">  Cap. 4, AGENTS.md</text>
+      <!-- Flecha bidireccional entre Agente y Herramienta -->
+      <line x1="325" y1="296" x2="355" y2="296" stroke="#636c76" stroke-width="1.5" marker-start="url(#archArrow)" marker-end="url(#archArrow)"/>
+      <!-- Flecha 3 hacia abajo desde Agente -->
+      <line x1="182" y1="320" x2="182" y2="340" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Flecha 4 hacia abajo desde Herramienta -->
+      <line x1="497" y1="320" x2="497" y2="340" stroke="#636c76" stroke-width="1.5" marker-end="url(#archArrow)"/>
+      <!-- Capa 5: Modelo -->
+      <rect x="40" y="342" width="600" height="48" rx="10" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+      <text x="340" y="371" text-anchor="middle" font-size="14" font-weight="700" fill="#cf222e">Modelo</text>
+      <text x="610" y="371" text-anchor="end" font-size="10" fill="#636c76">Claude / Gemini</text>
+      <!-- Etiquetas de niveles -->
+      <text x="20" y="34" font-size="10" font-weight="700" fill="#6639ba">L0</text>
+      <text x="20" y="165" font-size="10" font-weight="700" fill="#0550ae">L0/L1</text>
+      <text x="20" y="301" font-size="10" font-weight="700" fill="#116329">L1/L2</text>
+      <text x="20" y="371" font-size="10" font-weight="700" fill="#cf222e">Tiempo de ejecución</text>
+    </g>
+  </svg>
+  <p class="fig-caption">Figura 2-1. La estructura de cinco capas de la ingeniería de arnés -- la arquitectura que recorre todo este manual, desde el espacio de trabajo hasta el modelo</p>
+  </div>
+
+  <h2 id="s1">Qué es la Ingeniería de Arnés</h2>
+  <p>Si la ingeniería de prompts se centra en "qué palabras darle al modelo", la ingeniería de arnés da un paso atrás y diseña "con qué herramientas, reglas y mecanismos de verificación debería trabajar el modelo." El término "arnés" aquí proviene de la arnés ecuestre utilizado para controlar un caballo -- se refiere al marco que evita que la IA se escape en cualquier dirección, moviéndose de manera predecible dentro de procedimientos, herramientas y límites de permiso definidos.</p>
+  <p>En la práctica, este marco se manifiesta como varios mecanismos concretos: la lista de herramientas que un agente puede llamar y una política de aprobación basada en el nivel de riesgo de cada herramienta; hooks que se ejecutan automáticamente en ciertos eventos (justo después de guardar un archivo, al completar una tarea, etc.); habilidades que estandarizan y reutilizan procedimientos de tareas recurrentes; y scripts de orquestación que combinan todo esto para ejecutar múltiples agentes en un orden fijo y bajo condiciones fijas. Una vez que estos mecanismos se acumulan, se obtiene un "flujo de trabajo de IA reproducible" cuya calidad y formato no fluctúan sin importar cuántas veces se repita la misma solicitud.</p>
+  <p>Pongamos un ejemplo concreto. Cuando llega una solicitud como "elimina este archivo", una IA sin arnés podría ejecutar la eliminación inmediatamente. Una IA con arnés se comporta de manera diferente: la eliminación se clasifica como una "herramienta peligrosa" sujeta a una política que requiere la aprobación del usuario antes de la ejecución; una vez completada la eliminación, el hecho se registra; e incluso existe un procedimiento para deshacer una eliminación accidental del archivo equivocado (por ejemplo, verificando el estado pre-commit con git). El juicio del modelo es el mismo de cualquier manera -- es la presencia o ausencia de "mecanismos de seguridad" que rodean ese juicio lo que determina la fiabilidad del resultado.</p>
+
+  <div class="pullquote">Un buen prompt hace que responda bien una vez. Un buen arnés hace que responda bien siempre.</div>
+
+  <h2 id="s2">Límites de un Agente Único</h2>
+  <p>Asignar cada rol a un solo agente es conveniente al principio, pero a medida que el trabajo escala, tres problemas se vuelven claros. Primero, la sobrecarga de contexto: cuando la revisión de diseño, la escritura de código, las pruebas y la documentación se manejan secuencialmente dentro de una sesión, los detalles de los pasos anteriores se desvanecen a medida que se avanza, y la consistencia de los resultados disminuye. Segundo, el conflicto de roles: un agente que revisa su propio código pasa por alto muchos defectos que él mismo escribió -- el mismo problema que se tiene cuando el autor y el revisor son la misma persona. Tercero, la falta de paralelismo: incluso subtareas independientes (por ejemplo, refactorizar varios archivos, revisar código desde múltiples perspectivas) deben procesarse secuencialmente por un solo agente, por lo que el tiempo total crece linealmente.</p>
+  <div class="diagram-frame">
+    <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Bloques de tareas -->
+        <rect x="20" y="16" width="120" height="30" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="80" y="36" text-anchor="middle" font-size="11" fill="#0550ae" font-weight="600">Tarea A: Diseño</text>
+        <rect x="155" y="16" width="120" height="30" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="215" y="36" text-anchor="middle" font-size="11" fill="#116329" font-weight="600">Tarea B: Desarrollo</text>
+        <rect x="290" y="16" width="120" height="30" rx="6" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="350" y="36" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="600">Tarea C: Pruebas</text>
+        <rect x="425" y="16" width="120" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.2"/>
+        <text x="485" y="36" text-anchor="middle" font-size="11" fill="#7d4e00" font-weight="600">Tarea D: Documentación</text>
+        <!-- Flechas hacia abajo -->
+        <line x1="80" y1="46" x2="200" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="215" y1="46" x2="280" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="350" y1="46" x2="340" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="485" y1="46" x2="420" y2="68" stroke="#636c76" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Caja de ventana de contexto (sobrecarga) -->
+        <rect x="80" y="70" width="480" height="70" rx="8" fill="#fff0f0" stroke="#cf222e" stroke-width="2"/>
+        <text x="320" y="96" text-anchor="middle" font-size="13" fill="#cf222e" font-weight="700">Ventana de Contexto</text>
+        <text x="320" y="116" text-anchor="middle" font-size="11" fill="#cf222e">Todas las tareas comprimidas en una ventana → sobrecarga</text>
+        <!-- Área de icono de advertencia -->
+        <text x="580" y="100" text-anchor="middle" font-size="22" fill="#cf222e">&#9888;</text>
+        <!-- Etiqueta inferior -->
+        <text x="320" y="166" text-anchor="middle" font-size="12" fill="#636c76" font-weight="600">Un agente = una ventana de contexto</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>Una analogía con la estructura organizativa de una empresa hace que esto sea fácil de entender. Si asignas a un solo empleado nuevo para que maneje la planificación, el desarrollo, las pruebas y la documentación todo a la vez, al principio parece rápido sin sobrecarga de comunicación -- pero a medida que crece la carga de trabajo, la mente (contexto) de esa persona se convierte en un caos, pasa por alto los defectos de su propio código (conflicto de roles) y no puede trabajar en tres tareas no relacionadas al mismo tiempo (falta de paralelismo), convirtiéndose en un cuello de botella. La razón por la que las organizaciones separan planificadores, desarrolladores y control de calidad es exactamente la misma por la que el trabajo de IA también se divide entre múltiples agentes.</p>
+  <p>Un equipo multiagente resuelve estructuralmente los tres problemas: separa el contexto por rol para que cada agente se concentre en su propio rol, separa al autor del verificador para garantizar una perspectiva independiente y ejecuta tareas sin dependencia mutua de forma concurrente para reducir el tiempo total.</p>
+
+  <h2 id="s3">Componentes de un Equipo Multiagente</h2>
+  <p>Un equipo multiagente está compuesto por tres elementos principales.</p>
+
+  <div class="diagram-frame">
+    <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0550ae"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="220" y="10" width="200" height="56" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="320" y="33" text-anchor="middle" font-size="14" fill="#0550ae" font-weight="700">Orquestador</text>
+        <text x="320" y="52" text-anchor="middle" font-size="11" fill="#0550ae">(Agente PM)</text>
+
+        <line x1="270" y1="66" x2="120" y2="160" stroke="#0550ae" stroke-width="1.5" marker-end="url(#arrow3)"/>
+        <line x1="320" y1="66" x2="320" y2="160" stroke="#0550ae" stroke-width="1.5" marker-end="url(#arrow3)"/>
+        <line x1="370" y1="66" x2="520" y2="160" stroke="#0550ae" stroke-width="1.5" marker-end="url(#arrow3)"/>
+
+
+        <text x="195" y="105" text-anchor="middle" font-size="10.5" fill="#636c76" font-style="italic">Traspaso</text>
+        <text x="320" y="105" text-anchor="middle" font-size="10.5" fill="#636c76" font-style="italic">Traspaso</text>
+        <text x="450" y="105" text-anchor="middle" font-size="10.5" fill="#636c76" font-style="italic">Traspaso</text>
+
+        <rect x="20" y="166" width="200" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="120" y="192" text-anchor="middle" font-size="13" fill="#116329" font-weight="700">arquitecto</text>
+        <text x="120" y="211" text-anchor="middle" font-size="10.5" fill="#116329">Revisión de diseño</text>
+
+        <rect x="220" y="166" width="200" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="320" y="192" text-anchor="middle" font-size="13" fill="#116329" font-weight="700">redactor-de-codigo</text>
+        <text x="320" y="211" text-anchor="middle" font-size="10.5" fill="#116329">Implementación</text>
+
+        <rect x="420" y="166" width="200" height="60" rx="10" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="520" y="192" text-anchor="middle" font-size="13" fill="#116329" font-weight="700">ejecutor-de-pruebas</text>
+        <text x="520" y="211" text-anchor="middle" font-size="10.5" fill="#116329">Pruebas</text>
+      </g>
+    </svg>
+    <p class="fig-caption">Estructura básica: el orquestador divide el trabajo y lo traspasa a especialistas mediante contratos de traspaso (como se cubre en §4b, la composición de especialistas varía dinámicamente según la tarea)</p>
+  </div>
+
+  <h3>Orquestador</h3>
+  <p>El rol que descompone la tarea general en pasos, llama al agente especialista adecuado para cada paso y detiene el progreso en los puntos (puertas) donde se necesita confirmación del usuario. A menudo llamado el "agente PM", no escribe código por sí mismo y se concentra en la coordinación.</p>
+  <p>Piensa en ello como un director de proyecto (PM). Un PM no escribe código directamente, sino que asigna "esta tarea al desarrollador backend, esta otra a control de calidad", y antes de decisiones importantes, le pregunta al líder del equipo (el usuario) "¿debemos proceder con esto?" antes de pasar al siguiente paso. Un orquestador se comporta igual. Por ejemplo, dada una solicitud de "añadir una nueva funcionalidad", el orquestador mismo la descompone en "1) revisión de diseño → 2) implementación → 3) pruebas → 4) documentación" y traspasa cada paso al agente responsable.</p>
+  <h3>Especialista</h3>
+  <p>Un agente con una responsabilidad estrecha y claramente definida -- diseño, implementación, pruebas, revisión de seguridad, etc. Cada especialista tiene claramente definidas las entradas que recibe y las salidas que debe producir, por lo que el orquestador puede juzgar fácilmente "en qué se puede confiar a este agente".</p>
+  <p>Por ejemplo, el especialista <code>ejecutor-de-pruebas</code> tiene solo la responsabilidad de "ejecutar pruebas e informar los elementos fallidos." Escribir código nuevo o cambiar la arquitectura no es su trabajo. Al recortar las responsabilidades de manera tan estrecha, el orquestador puede decidir instantáneamente "si necesito pruebas, llamo al ejecutor-de-pruebas", mientras que el especialista puede concentrarse únicamente en su propio rol y producir resultados más precisos.</p>
+  <h3>Contrato de Traspaso</h3>
+  <p>El formato de la información intercambiada al traspasar trabajo entre agentes. Si se traspasa solo en lenguaje natural, el siguiente agente tiene que volver a adivinar el contexto; pero con una entrada estructurada (por ejemplo, JSON) que detalla "el propósito de esta tarea, su alcance y los entregables anteriores", el siguiente agente puede comenzar a trabajar de inmediato.</p>
+  <p>Piensa en un traspaso de mensajería. Decir "solo lleva esto allá" obliga al destinatario a volver a preguntar sobre la dirección, la cantidad y las precauciones, pero entregar una guía de envío (un documento que enumera número de rastreo, destinatario, cantidad, notas especiales) permite al destinatario iniciar la entrega de inmediato. El contrato de traspaso es la "guía de envío" entre agentes. Cuando un redactor traspasa explícitamente a un revisor con "revisa este archivo contra estos criterios en este formato", el revisor puede comenzar de inmediato sin volver a preguntar.</p>
+  <p>En la práctica, esto se traspasa como un documento estructurado como el siguiente.</p>
+  <div style="position:relative">
+  <pre class="code-block">{
+  "task": "Revisión de Código",
+  "agent": "revisor",
+  "scope": {
+    "target_file": "src/api/handler.ts",
+    "change_description": "Middleware de autenticación añadido — lógica de verificación de token JWT"
+  },
+  "deliverables": {
+    "from": "redactor-de-codigo",
+    "files": ["src/api/handler.ts", "src/auth/verify.ts"],
+    "commit_hash": "a3f7c21"
+  },
+  "review_criteria": [
+    "Seguridad: ¿se maneja la expiración del token",
+    "Manejo de errores: ¿hay respuesta 401 para tokens inválidos",
+    "Pruebas: ¿se añadieron pruebas relevantes"
+  ],
+  "output_format": {
+    "type": "comentario_estructurado",
+    "fields": ["aprobado_rechazado", "hallazgos", "sugerencias"]
+  },
+  "failure_conditions": [
+    "Informar inmediatamente si target_file no existe",
+    "Marcar como bloqueante si no se cumplen los criterios de seguridad"
+  ]
+}</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+</div>
+  <p>En este ejemplo, <code>task</code>, <code>scope</code> y <code>review_criteria</code> definen "qué revisar", y <code>output_format</code> define "en qué formato devolver los resultados." <code>failure_conditions</code> cubre cómo manejar problemas en el objetivo de la revisión en sí. De esta manera, un contrato de traspaso define explícitamente <strong>propósito, alcance, criterios, formato y manejo de excepciones</strong> para que el siguiente agente pueda comenzar a trabajar de inmediato sin necesidad de volver a preguntar.</p>
+  <div class="note">Si falta alguno de los tres elementos, lo que se obtiene no es un equipo sino "varios agentes cada uno trabajando por separado." La coordinación (orquestador) y los contratos (traspaso) son lo que hacen que un equipo sea realmente un equipo.</div>
+
+  <h2 id="s3b">Qué es un Subagente</h2>
+  <p>El especialista descrito anteriormente es un concepto; un <strong>subagente</strong> es el mecanismo que implementa ese concepto dentro de una herramienta real. Un subagente es un agente auxiliar con una <strong>ventana de contexto independiente</strong> separada de la sesión principal -- maneja solo la tarea estrecha que se le ha asignado, luego resume el resultado y lo devuelve a la sesión principal. Dado que el historial de conversación de la sesión principal no acumula el detallado ir y venir del subagente y solo retiene el resumen final, esto mitiga estructuralmente el problema de "sobrecarga de contexto" señalado en §2.</p>
+
+  <h3>Predefinidos vs. Generados Dinámicamente</h3>
+  <p>Cómo se manejan los subagentes difiere según la herramienta. Claude Code/App utiliza un enfoque <strong>predefinido</strong>. Colocas un archivo <code>name.md</code> bajo <code>.claude/agents/</code>, y especificas <code>name</code> (el identificador referenciado al invocarlo), <code>description</code> (cuándo usar este subagente), <code>tools</code> (la lista de herramientas permitidas, para minimizar privilegios) y <code>model</code> (con qué modelo ejecutarlo) en el frontmatter YAML. La sesión principal invoca esta definición mediante la herramienta <code>Agent</code> (Task), llamando <code>subagent_type="name"</code>.</p>
+  <p>Antigravity, por el contrario, se acerca más a la <strong>generación dinámica</strong>. En lugar de crear archivos de antemano, le das al orquestador un objetivo en lenguaje natural, y él compone y maneja el rol necesario en el momento. Es menos "invocar un subagente llamado revisor" y más el agente construyendo el rol que sea adecuado para la tarea, según sea necesario, cada vez. Ambos enfoques en última instancia logran el mismo objetivo -- "manejar una tarea de alcance estrecho en un contexto aislado" -- pero la predefinición es más fuerte en reutilización y control de permisos, mientras que la generación dinámica es más fuerte en flexibilidad.</p>
+
+  <h3>Cuándo Usar Subagentes</h3>
+  <p>No todas las tareas necesitan dividirse en un subagente. Los buenos candidatos son tareas con límites claros (claras sobre qué entra y qué sale) que son repetitivas o paralelizables -- revisión de código, ejecución de pruebas, revisión de documentos y similares. Por el contrario, el trabajo exploratorio que requiere intercambiar contexto continuamente con la sesión principal termina costando más en sobrecarga de traspaso si se separa en un subagente.</p>
+  <div class="note">Un subagente es la "implementación" que hace que el concepto de "rol" de un especialista sea ejecutable en una herramienta real. En el Capítulo 4, construiremos nosotros mismos este método de definición y enfoque de invocación, centrados en Claude App/Antigravity Desktop.</div>
+
+  <h2 id="s4">Patrones de Orquestación</h2>
+  <p>Los cinco patrones de flujo de trabajo que Anthropic presentó en su documento de diciembre de 2024 "Building Effective Agents" son los más ampliamente utilizados en la práctica: encadenamiento de prompts (pipeline), enrutamiento, paralelización (seccionamiento/votación), orquestador-trabajadores y evaluador-optimizador (verificar-y-aplicar). Los cinco patrones no son alternativas mutuamente excluyentes -- son una caja de herramientas de la que elegir o combinar, basándose en "¿hay dependencia entre tareas", "¿se pueden predecir las subtareas con anticipación" y "¿es necesaria la verificación".</p>
+
+  <div class="note">
+    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+      <defs>
+        <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+        </marker>
+        <marker id="pat-arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+        </marker>
+        <marker id="pat-arrow-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#22c55e"/>
+        </marker>
+        <marker id="pat-arrow-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/>
+        </marker>
+        <marker id="pat-arrow-p" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8b5cf6"/>
+        </marker>
+        <marker id="pat-arrow-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/>
+        </marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,sans-serif">
+
+        <!-- Columna 1: Encadenamiento (azul) centro=78 -->
+        <text x="78" y="16" text-anchor="middle" font-size="12" fill="#3b82f6" font-weight="700">Encadenamiento</text>
+        <rect x="30" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="46" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">A</text>
+        <line x1="62" y1="36" x2="76" y2="36" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#pat-arrow-b)"/>
+        <rect x="78" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="94" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">B</text>
+        <line x1="110" y1="36" x2="124" y2="36" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#pat-arrow-b)"/>
+        <rect x="126" y="26" width="32" height="20" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="142" y="40" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">C</text>
+        <text x="78" y="64" text-anchor="middle" font-size="9" fill="#6b7280">A → B → C</text>
+
+        <!-- Columna 2: Enrutamiento (naranja) centro=234 -->
+        <text x="234" y="16" text-anchor="middle" font-size="12" fill="#f59e0b" font-weight="700">Enrutamiento</text>
+        <rect x="186" y="26" width="32" height="20" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+        <text x="202" y="40" text-anchor="middle" font-size="9" fill="#92400e" font-weight="600">A</text>
+        <line x1="218" y1="36" x2="226" y2="36" stroke="#f59e0b" stroke-width="1.2"/>
+        <rect x="226" y="26" width="40" height="20" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+        <text x="246" y="40" text-anchor="middle" font-size="8" fill="#92400e" font-weight="600">B o C</text>
+        <line x1="218" y1="40" x2="226" y2="44" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <text x="234" y="64" text-anchor="middle" font-size="9" fill="#6b7280">A→{B o C}</text>
+
+        <!-- Columna 3: Seccionamiento/fan-out (verde) centro=390 -->
+        <text x="390" y="16" text-anchor="middle" font-size="12" fill="#22c55e" font-weight="700">Fan-out</text>
+        <rect x="342" y="26" width="32" height="20" rx="5" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="358" y="40" text-anchor="middle" font-size="9" fill="#166534" font-weight="600">A</text>
+        <line x1="358" y1="46" x2="344" y2="56" stroke="#22c55e" stroke-width="1.2" marker-end="url(#pat-arrow-g)"/>
+        <line x1="358" y1="46" x2="390" y2="56" stroke="#22c55e" stroke-width="1.2" marker-end="url(#pat-arrow-g)"/>
+        <rect x="330" y="58" width="28" height="18" rx="4" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="344" y="71" text-anchor="middle" font-size="8" fill="#166534" font-weight="600">B</text>
+        <rect x="376" y="58" width="28" height="18" rx="4" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
+        <text x="390" y="71" text-anchor="middle" font-size="8" fill="#166534" font-weight="600">C</text>
+        <text x="390" y="92" text-anchor="middle" font-size="9" fill="#6b7280">A→B,C (paralelo)</text>
+
+        <!-- Columna 4: Orquestador-trabajadores (púrpura) centro=546 -->
+        <text x="546" y="16" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="700">Orquestador</text>
+        <text x="546" y="28" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="700">-Trabajadores</text>
+        <rect x="504" y="36" width="42" height="22" rx="5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="525" y="50" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">Orq</text>
+        <line x1="546" y1="58" x2="522" y2="64" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#pat-arrow-p)"/>
+        <line x1="546" y1="58" x2="570" y2="64" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#pat-arrow-p)"/>
+        <rect x="510" y="66" width="36" height="18" rx="4" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="528" y="79" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">T1</text>
+        <rect x="554" y="66" width="36" height="18" rx="4" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="572" y="79" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="600">T2</text>
+        <text x="546" y="100" text-anchor="middle" font-size="9" fill="#6b7280">Orq→Trabajador</text>
+
+        <!-- Columna 5: Evaluador-optimizador (rojo/rosa) centro=702 -->
+        <text x="702" y="16" text-anchor="middle" font-size="11" fill="#ef4444" font-weight="700">Evaluador</text>
+        <text x="702" y="28" text-anchor="middle" font-size="11" fill="#ef4444" font-weight="700">-Optimizador</text>
+        <rect x="674" y="34" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="47" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Borrador</text>
+        <line x1="702" y1="52" x2="702" y2="58" stroke="#ef4444" stroke-width="1.2" marker-end="url(#pat-arrow-r)"/>
+        <rect x="674" y="60" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="73" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Evaluar</text>
+        <line x1="702" y1="78" x2="702" y2="84" stroke="#ef4444" stroke-width="1.2" marker-end="url(#pat-arrow-r)"/>
+        <rect x="674" y="86" width="56" height="18" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
+        <text x="702" y="99" text-anchor="middle" font-size="8" fill="#991b1b" font-weight="600">Revisar</text>
+        <path d="M702,104 C730,120 730,30 702,34" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#pat-arrow-r)"/>
+        <text x="740" y="68" font-size="8" fill="#ef4444" transform="rotate(90 740 68)">Repetir</text>
+        <text x="702" y="122" text-anchor="middle" font-size="9" fill="#6b7280">Borrador→Eval→Revisar</text>
+
+      </g>
+    </svg>
+  </div>
+
+  <ul>
+    <li><strong>Encadenamiento de Prompts / Pipeline.</strong> Divide una tarea en una serie ordenada de pasos y coloca una puerta de verificación entre cada uno. Si transmites múltiples elementos de forma concurrente, obtienes un pipeline donde los elementos no esperan entre sí -- el elemento A puede estar en el paso 3 mientras el elemento B todavía está en el paso 1, aumentando el rendimiento total. <br><span style="color:var(--text-dim);font-size:14px;">Ejemplo: como una línea de ensamblaje de fábrica. El producto A está en la etapa de pintura mientras que el producto B ya está en la etapa de ensamblaje. Si procesas tres documentos a través de "borrador → revisión → corrección", el documento 2 puede empezar a redactarse en cuanto el documento 1 pasa a revisión.</span></li>
+    <li><strong>Enrutamiento.</strong> Primero clasifica una solicitud entrante y luego la dirige al agente especialista o modelo adecuado a su naturaleza. La clasificación de modelos del Capítulo 5 es un ejemplo principal -- enviar preguntas fáciles a un modelo económico (haiku) y preguntas difíciles y raras a un modelo de alto rendimiento (opus), equilibrando costo y calidad. <br><span style="color:var(--text-dim);font-size:14px;">Ejemplo: cuando llega una consulta de cliente, un agente clasificador primero juzga "¿es una pregunta simple de FAQ o una pregunta técnica compleja?", dirigiendo la primera a un agente de respuestas formateadas y la segunda a un agente capaz de investigación más profunda.</span></li>
+    <li><strong>Paralelización.</strong> Se divide en dos ramas. <strong>Seccionamiento (fan-out)</strong> entrega varias subtareas independientes (por ejemplo, una revisión de código desde cuatro perspectivas) a múltiples agentes a la vez y recopila los resultados -- el tiempo total converge al de la tarea más lenta. <strong>Votación</strong> en cambio repite la <em>misma</em> tarea independientemente en múltiples agentes y luego elige una respuesta por mayoría o consenso. <br><span style="color:var(--text-dim);font-size:14px;">Ejemplo de seccionamiento: "revisa este código simultáneamente desde las perspectivas de rendimiento, seguridad, legibilidad y cobertura de pruebas." Ejemplo de votación: haz que tres agentes analicen independientemente la causa raíz del mismo error, y si dos o más apuntan a la misma causa, adopta esa conclusión -- filtrando el error de un agente mediante voto mayoritario.</span></li>
+    <li><strong>Orquestador-Trabajadores.</strong> La estructura de equipo descrita en §3 es en sí misma este patrón. En lugar de predeterminar cómo dividir el trabajo, un orquestador central decide dinámicamente sobre la marcha basándose en la entrada, delegando a trabajadores (especialistas) y sintetizando los resultados. Es especialmente adecuado para tareas complejas cuyas subtareas no se pueden predecir con anticipación (cambios de código que abarcan muchos archivos, investigación que debe sintetizar múltiples fuentes). La "composición dinámica de equipos" cubierta en §4b es otro nombre para este mismo patrón.</li>
+    <li><strong>Evaluador-Optimizador / Verificar-y-Aplicar.</strong> Un agente produce un borrador, y solo después de que un agente independiente (o el consenso de múltiples agentes) challenge y verifique ese borrador se aplica realmente. Es un mecanismo que evita que resultados plausibles pero incorrectos se cuelen. <br><span style="color:var(--text-dim);font-size:14px;">Ejemplo: antes de modificar código, un agente independiente vuelve a revisar desde una postura escéptica si "este cambio es realmente seguro", y solo si se juzga adecuado el archivo se modifica realmente. Es el mismo principio por el que otra persona detecta errores que el autor pasa por alto al corregir su propia escritura. Dicho esto, tiene un límite -- si el evaluador mismo no puede distinguir buenos resultados de malos, este bucle puede girar sin hacer progresos.</span></li>
+  </ul>
+  <div class="note">Los cinco patrones se combinan más a menudo en capas que se usan de forma aislada -- el enrutamiento puede alimentar el primer paso de un encadenamiento, orquestador-trabajadores puede incorporar un evaluador-optimizador dentro de la unidad de trabajo de cada trabajador, y la paralelización puede insertarse en medio de otro patrón. §4b cubre un ejemplo concreto de esta combinación.</div>
+
+  <div class="diagram-frame">
+    <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Fan-out -->
+        <text x="105" y="18" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Fan-out Paralelo</text>
+        <rect x="85" y="28" width="40" height="26" rx="6" fill="#ddf4ff" stroke="#0969da"/>
+        <text x="105" y="45" text-anchor="middle" font-size="10" fill="#0550ae">Solicitud</text>
+        <line x1="105" y1="54" x2="35" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="105" y1="54" x2="105" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="105" y1="54" x2="175" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <rect x="10" y="90" width="50" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37"/>
+        <rect x="80" y="90" width="50" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37"/>
+        <rect x="150" y="90" width="50" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="105" y="106" text-anchor="middle" font-size="9" fill="#116329" opacity="0"> </text>
+        <line x1="35" y1="114" x2="105" y2="146" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="105" y1="114" x2="105" y2="146" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <line x1="175" y1="114" x2="105" y2="146" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <rect x="70" y="150" width="70" height="26" rx="6" fill="#f1e8fd" stroke="#6639ba"/>
+        <text x="105" y="167" text-anchor="middle" font-size="10" fill="#6639ba">Consolidar</text>
+        <text x="105" y="198" text-anchor="middle" font-size="10.5" fill="#636c76">Se ejecuta concurrentemente → converge al más lento</text>
+
+        <!-- Pipeline -->
+        <line x1="230" y1="105" x2="230" y2="105" stroke="#d0d7de"/>
+        <rect x="228" y="10" width="1" height="185" fill="#d0d7de"/>
+        <text x="360" y="18" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Pipeline</text>
+        <text x="255" y="52" font-size="10" fill="#636c76">A</text>
+        <rect x="270" y="38" width="46" height="24" rx="5" fill="#ddf4ff" stroke="#0969da"/>
+        <rect x="326" y="38" width="46" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37" opacity="0.35"/>
+        <rect x="382" y="38" width="46" height="24" rx="5" fill="#f1e8fd" stroke="#6639ba" opacity="0.25"/>
+        <text x="255" y="90" font-size="10" fill="#636c76">B</text>
+        <rect x="270" y="76" width="46" height="24" rx="5" fill="#fff8c5" stroke="#d4a72c" opacity="0.4"/>
+        <rect x="326" y="76" width="46" height="24" rx="5" fill="#ddf4ff" stroke="#0969da"/>
+        <rect x="382" y="76" width="46" height="24" rx="5" fill="#dafbe1" stroke="#1a7f37" opacity="0.35"/>
+        <text x="293" y="115" text-anchor="middle" font-size="9" fill="#636c76">Borrador</text>
+        <text x="349" y="115" text-anchor="middle" font-size="9" fill="#636c76">Revisión</text>
+        <text x="405" y="115" text-anchor="middle" font-size="9" fill="#636c76">Corrección</text>
+        <text x="349" y="150" text-anchor="middle" font-size="10.5" fill="#636c76">Mientras B está en paso 1,</text>
+        <text x="349" y="166" text-anchor="middle" font-size="10.5" fill="#636c76">A ya está en paso 2 -- sin espera</text>
+
+        <!-- Verificar-y-aplicar -->
+        <rect x="448" y="10" width="1" height="185" fill="#d0d7de"/>
+        <text x="565" y="18" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Verificar-y-Aplicar</text>
+        <rect x="475" y="35" width="70" height="26" rx="6" fill="#ddf4ff" stroke="#0969da"/>
+        <text x="510" y="52" text-anchor="middle" font-size="10" fill="#0550ae">Borrador</text>
+        <line x1="510" y1="61" x2="510" y2="86" stroke="#636c76" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <rect x="472" y="90" width="76" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c"/>
+        <text x="510" y="109" text-anchor="middle" font-size="10" fill="#7d4e00">Verificación independiente</text>
+        <line x1="510" y1="120" x2="510" y2="145" stroke="#1a7f37" stroke-width="1.3" marker-end="url(#arrow4)"/>
+        <text x="530" y="135" font-size="9" fill="#1a7f37">Aprobado</text>
+        <rect x="470" y="149" width="80" height="26" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+        <text x="510" y="166" text-anchor="middle" font-size="10" fill="#116329">Aplicar</text>
+        <path d="M472,105 C420,105 420,48 473,48" fill="none" stroke="#cf222e" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arrow4)"/>
+        <text x="440" y="80" font-size="9" fill="#cf222e" transform="rotate(-90 440 80)">Rechazar</text>
+      </g>
+    </svg>
+    <p class="fig-caption">Tres de los cinco patrones visualizados: pipeline, fan-out y verificar-y-aplicar. Consulta el texto principal para la lista completa incluyendo enrutamiento y orquestador-trabajadores. Los patrones no son sustitutos entre sí -- son una caja de herramientas diseñada para combinarse.</p>
+  </div>
+
+  <h3>Ante el Fallo -- Reintento, Reversión, Escalada</h3>
+  <p>Los tres patrones anteriores asumen "cuando las cosas terminan normalmente", pero en la práctica, los subagentes a veces producen resultados incorrectos o fallan por completo. Verificar-y-aplicar es un mecanismo para "filtrar antes de la ejecución", mientras que qué hacer una vez que se ha descubierto un problema después de que la ejecución ya ocurrió es un asunto separado. Hay tres respuestas típicas.</p>
+  <ul>
+    <li><strong>Reintento.</strong> Si es un error transitorio (tiempo de espera de red, fallo de llamada a herramienta, etc.), reintentar la misma tarea. Sin embargo, reintentar el mismo prompt indefinidamente solo repite el mismo error, por lo que generalmente se establece un límite en el número de reintentos.</li>
+    <li><strong>Reversión.</strong> Si un resultado incorrecto ya se ha aplicado a archivos o a un repositorio, volver al estado anterior al cambio. El principio del Capítulo 3 -- "los pasos de escritura deben permanecer dentro de un rango que git pueda deshacer" -- realmente da sus frutos aquí. El trabajo debe dividirse a nivel de commits para que la reversión llegue al punto exacto.</li>
+    <li><strong>Escalada.</strong> Si los reintentos siguen fallando, o si la situación es inherentemente ambigua para que el orquestador la juzgue, delegarla a un humano. Sin un techo predefinido como "detener los reintentos automáticos después de 3 fallos e informar a un humano", se termina consumiendo tiempo y costo reintentando indefinidamente una tarea que sigue fallando.</li>
+  </ul>
+  <div class="note">El criterio para elegir entre los tres se reduce en última instancia a "¿es este fallo transitorio, ya ha llegado a un estado irreversible, o el juicio en sí es ambiguo." El reintento aborda el primero, la reversión el segundo y la escalada el tercero. Cuanto más riesgosa sea la tarea, más seguro es bajar el umbral hacia la escalada en lugar del reintento automático (véase también la clasificación de niveles de riesgo en el Capítulo 3 §2).</div>
+
+  <h2 id="s4b">Composición Dinámica de Equipos y Flujos de Trabajo Diversos</h2>
+  <p>Hasta ahora hemos cubierto el orquestador, especialista, traspaso y patrones de orquestación por separado, pero el verdadero poder de la ingeniería de arnés radica en que estos elementos <strong>no están bloqueados en una combinación fija única</strong>. Los scripts de automatización convencionales codifican el orden y los participantes en el código -- "A luego siempre B, luego siempre B luego C" -- pero un equipo multiagente construido sobre un arnés tiene al orquestador juzgando nuevamente, para cada solicitud, "quién se necesita esta vez y en qué orden."</p>
+
+  <h3>La Composición del Equipo No Es Fija</h3>
+
+  <div class="diagram-frame">
+    <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Izquierda: Equipo estático -->
+        <text x="155" y="18" text-anchor="middle" font-size="12" fill="#636c76" font-weight="700">Equipo Estático</text>
+        <rect x="30" y="30" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="70" y="50" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agente A</text>
+        <rect x="120" y="30" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="160" y="50" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agente B</text>
+        <rect x="210" y="30" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="250" y="50" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agente C</text>
+        <rect x="30" y="76" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="70" y="96" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agente D</text>
+        <rect x="120" y="76" width="80" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.2"/>
+        <text x="160" y="96" text-anchor="middle" font-size="10" fill="#0550ae" font-weight="600">Agente E</text>
+        <!-- Marcador siempre-fijo -->
+        <rect x="26" y="26" width="270" height="86" rx="10" fill="none" stroke="#636c76" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="160" y="130" text-anchor="middle" font-size="10" fill="#636c76">Mismos agentes desplegados para cada solicitud</text>
+
+        <!-- Divisor -->
+        <line x1="330" y1="8" x2="330" y2="160" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Derecha: Equipo dinámico -->
+        <text x="500" y="18" text-anchor="middle" font-size="12" fill="#1a7f37" font-weight="700">Equipo Dinámico</text>
+        <!-- Solicitud 1: simple -->
+        <text x="355" y="42" font-size="9" fill="#636c76">Solicitud 1 (simple)</text>
+        <rect x="420" y="30" width="80" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="460" y="46" text-anchor="middle" font-size="10" fill="#116329" font-weight="600">revisor</text>
+        <text x="510" y="46" font-size="9" fill="#636c76">solo</text>
+        <!-- Solicitud 2: moderada -->
+        <text x="355" y="72" font-size="9" fill="#636c76">Solicitud 2 (moderada)</text>
+        <rect x="420" y="60" width="70" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="455" y="76" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">redactor</text>
+        <rect x="498" y="60" width="70" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="533" y="76" text-anchor="middle" font-size="9" fill="#116329" font-weight="600">revisor</text>
+        <!-- Solicitud 3: compleja -->
+        <text x="355" y="104" font-size="9" fill="#636c76">Solicitud 3 (compleja)</text>
+        <rect x="420" y="90" width="60" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="450" y="106" text-anchor="middle" font-size="8" fill="#116329" font-weight="600">arquitecto</text>
+        <rect x="486" y="90" width="60" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="516" y="106" text-anchor="middle" font-size="8" fill="#116329" font-weight="600">redactor</text>
+        <rect x="552" y="90" width="60" height="24" rx="6" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="582" y="106" text-anchor="middle" font-size="8" fill="#116329" font-weight="600">probador</text>
+        <!-- Marcador + -->
+        <rect x="420" y="120" width="192" height="24" rx="6" fill="none" stroke="#1a7f37" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="516" y="136" text-anchor="middle" font-size="9" fill="#1a7f37">Seguridad, docs, etc. se pueden añadir</text>
+        <text x="500" y="162" text-anchor="middle" font-size="10" fill="#1a7f37">Solo los agentes necesarios se movilizan dinámicamente por solicitud</text>
+      </g>
+    </svg>
+  </div>
+
+  <p>Incluso el mismo equipo convoca un número y combinación diferentes de especialistas dependiendo de la naturaleza de la solicitud. Para una solicitud simple como "solo corrige los errores tipográficos", el orquestador puede llamar solo al revisor y terminar; para una solicitud como "llevar una nueva funcionalidad desde el diseño hasta el despliegue", moviliza a arquitecto · redactor-de-codigo · ejecutor-de-pruebas · monitor-de-seguridad · redactor-de-documentos en secuencia (o parcialmente en paralelo). Incluso si la plantilla misma (qué subagentes están definidos) está fijada de antemano, <strong>quién se despliega realmente para una tarea dada se decide de nuevo cada vez</strong>. Es como un equipo de fútbol cuya plantilla completa de 22 jugadores está fija, pero cuyo once inicial para cada partido se elige de nuevo cada vez según el rival y la táctica.</p>
+  <p>Esta flexibilidad también se conecta con los dos enfoques de implementación para subagentes cubiertos en <a href="#s3b">§3b</a>. Incluso bajo el enfoque predefinido (Claude Code/App), el orquestador selecciona dinámicamente cada vez "cuál de los subagentes definidos llamar esta vez"; bajo el enfoque de generación dinámica (Antigravity), va un paso más allá -- la propia existencia del subagente se construye en el momento para ajustarse a las necesidades del instante. De cualquier manera, el principio "la tarea decide la composición del equipo" se mantiene.</p>
+
+  <h3>Se Pueden Construir Flujos de Trabajo Diversos sobre el Mismo Arnés</h3>
+  <p>Lo que la ingeniería de arnés fija es solo el <em>esqueleto</em> -- "hay un orquestador, llama especialistas y pasa información mediante traspasos." Cuántas etapas de pipeline construir sobre ese esqueleto y con cuántos participantes se puede diseñar completamente diferente por dominio. Las variantes de ai-workspace-standards, cubiertas en el Capítulo 5, demuestran esto. Construidas sobre los mismos principios de arnés, <code>co-develop</code> es un pipeline de gobernanza de 6 etapas que involucra a PM, Arquitecto, Diseñador, Redactor de Código, Ejecutor de Pruebas y Monitor de Seguridad; <code>co-design</code> es un flujo de trabajo iterativo de 5 etapas; y <code>co-deck</code> es un flujo de trabajo de 11 etapas -- cada uno completamente diferente. La ventaja central de la ingeniería de arnés es que no fuerza un único "flujo de trabajo correcto" sino que te permite diseñar el propio flujo de trabajo para que se ajuste a cualquier número de etapas, participantes y rigor de verificación que un dominio demande.</p>
+  <p>Esto también significa que los cinco patrones de orquestación de §4 (encadenamiento de prompts, enrutamiento, paralelización, orquestador-trabajadores, evaluador-optimizador) no son mutuamente excluyentes y se pueden <strong>combinar libremente dentro de un solo flujo de trabajo</strong>. Por ejemplo, un flujo de trabajo de revisión de código podría primero usar enrutamiento para clasificar si un cambio es pequeño o grande; para cambios grandes, un orquestador-trabajador divide dinámicamente los archivos afectados y fan-out revisa cada uno desde cuatro perspectivas simultáneamente; los resultados se procesan secuencialmente en un pipeline para la documentación; y finalmente, evaluador-optimizador (verificar-y-aplicar) decide si realmente aplicar el cambio -- mezclando los cinco patrones en un solo flujo.</p>
+  <div class="note">La composición dinámica de equipos y la diversidad de flujos de trabajo son dos caras del mismo principio. El arnés solo fija "qué debe mantenerse", dejando "quién se mueve cuándo y cómo" abierto para que la tarea y el dominio lo decidan. Sin esta flexibilidad, cada variante habría necesitado un sistema de automatización completamente diferente construido desde cero. Si deseas verificar esto de forma práctica, el escenario D-2 en los <a href="../practice/04_Practice_Examples_A_es.html#scenario-2b">ejercicios prácticos del Capítulo 4 §2</a> te permite observar cómo la composición del equipo y el flujo de trabajo cambian realmente con el mismo equipo de subagentes, simplemente variando la solicitud.</div>
+
+  <h2 id="s5">Un Arnés Multi-Herramienta -- AGENTS.md</h2>
+  <p>El orquestador, especialista y traspaso descritos hasta ahora no son conceptos ligados a una herramienta específica. El problema ha sido que cada herramienta configura este arnés de manera diferente. Claude Code lee <code>CLAUDE.md</code>, Cursor lee <code>.cursorrules</code>, GitHub Copilot lee <code>.github/copilot-instructions.md</code> -- por lo que los equipos que usan múltiples herramientas juntas tenían que mantener copias duplicadas del mismo contenido en cada archivo.</p>
+  <p>Si copias el mismo contenido (por ejemplo, "siempre ejecuta pruebas con <code>npm test</code> y nunca modifiques la carpeta <code>src/legacy/</code>") una vez por cada herramienta que use tu equipo (CLAUDE.md, .cursorrules, copilot-instructions.md...), cada cambio de regla requiere encontrar y editarlos todos, y si falta uno, quien use esa herramienta trabajará bajo reglas diferentes. Es el mismo problema que traducir y mantener por separado el mismo contrato en múltiples idiomas, y luego tener versiones que divergen cuando solo uno se modifica.</p>
+  <p><strong>AGENTS.md</strong> es un estándar abierto creado en agosto de 2025, liderado por OpenAI con la participación de Google, Cursor, Factory y otros, para resolver este problema, y fue donado a la Agentic AI Foundation bajo la Linux Foundation en diciembre de 2025. Colocar un solo AGENTS.md en la raíz del repositorio permite que más de 30 herramientas -- incluyendo Codex, Claude Code (vía importación), GitHub Copilot, Cursor, Google Jules y la familia Antigravity -- lo lean al inicio de sesión y compartan reglas comunes como comandos de compilación/pruebas, estilo de código y áreas prohibidas.</p>
+  <p>El énfasis continuo de este manual en "soporte para las cuatro herramientas" proviene en última instancia de la misma conciencia del problema. Ya sea que un equipo use Claude App o Antigravity Desktop, mantener reglas compartidas en la raíz del repositorio (AGENTS.md) separadas de la configuración detallada por herramienta (<code>CLAUDE.md</code>, <code>GEMINI.md</code>, etc.) significa que el arnés en sí se mantiene estable incluso cuando se cambian o mezclan herramientas. El repositorio de ai-workspace-standards, examinado en el Capítulo 5, es una implementación real de este principio. El archivo raíz <code>AGENTS.md</code> sirve como la fuente única de verdad (SSOT) para todos los agentes en el espacio de trabajo, y la carpeta <code>.agents/</code> se encuentra junto a <code>.claude/</code> y <code>.gemini/</code>, conteniendo comandos y habilidades agnósticos del motor.</p>
+  <div class="diagram-frame">
+    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- project/ raíz -->
+        <text x="60" y="22" font-size="13" fill="#1f2328" font-weight="700">project/</text>
+
+        <!-- AGENTS.md -->
+        <rect x="24" y="34" width="220" height="32" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+        <text x="80" y="55" font-size="12" fill="#0550ae" font-weight="700">AGENTS.md</text>
+        <text x="178" y="55" font-size="10" fill="#0550ae">(especificación compartida · SSOT)</text>
+
+        <!-- Flecha AGENTS.md → archivos de plataforma -->
+        <line x1="134" y1="66" x2="134" y2="90" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-agt)"/>
+        <line x1="134" y1="90" x2="280" y2="90" stroke="#0969da" stroke-width="1.5"/>
+        <line x1="280" y1="90" x2="280" y2="110" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-agt)"/>
+        <line x1="280" y1="90" x2="480" y2="90" stroke="#0969da" stroke-width="1.5"/>
+        <line x1="480" y1="90" x2="480" y2="110" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-agt)"/>
+
+        <!-- Rama .claude/ -->
+        <text x="210" y="130" font-size="12" fill="#636c76" font-weight="600">.claude/</text>
+        <text x="230" y="152" font-size="12" fill="#636c76">agents/</text>
+        <rect x="230" y="158" width="110" height="24" rx="6" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="244" y="175" font-size="11" fill="#6639ba" font-weight="600">writer.md</text>
+        <rect x="348" y="158" width="120" height="24" rx="6" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.2"/>
+        <text x="362" y="175" font-size="11" fill="#6639ba" font-weight="600">reviewer.md</text>
+        <text x="260" y="200" font-size="10" fill="#6639ba" font-style="italic">Agentes específicos de Claude</text>
+
+        <!-- CLAUDE.md -->
+        <rect x="410" y="114" width="130" height="30" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.2"/>
+        <text x="422" y="134" font-size="12" fill="#116329" font-weight="700">CLAUDE.md</text>
+        <text x="505" y="134" font-size="9" fill="#116329">(config. Claude)</text>
+
+        <!-- GEMINI.md -->
+        <rect x="560" y="114" width="130" height="30" rx="8" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.2"/>
+        <text x="572" y="134" font-size="12" fill="#7d4e00" font-weight="700">GEMINI.md</text>
+        <text x="655" y="134" font-size="9" fill="#7d4e00">(config. Gemini)</text>
+
+        <!-- Leyenda de flechas -->
+
+      </g>
+    </svg>
+    <p class="fig-caption">AGENTS.md actúa como la especificación compartida (SSOT), mientras que los archivos por herramienta solo añaden cómo ejecutarla en cada herramienta -- una separación por capas que reduce la duplicación</p>
+  </div>
+
+  <div class="note">AGENTS.md define de forma neutral frente a las herramientas "qué debe mantenerse", y los archivos por herramienta como CLAUDE.md/GEMINI.md solo definen adicionalmente "cómo ejecutar eso en esta herramienta particular." Es una separación por capas que reduce la duplicación.</div>
+
+  <p>Antes de pasar al siguiente capítulo, necesitamos cubrir las salvaguardas requeridas al entregarle herramientas reales a este equipo. El Capítulo 3 cubre qué permitir y bloquear para los subagentes, y dónde los humanos deben revisar obligatoriamente. Después de eso, el Capítulo 4 construye estos conceptos de forma práctica, centrado en Claude App/Antigravity Desktop (con procedimientos de Claude Code/Antigravity CLI junto a ellos), para ver cómo el orquestador, especialista y traspaso se manifiestan de manera diferente entre herramientas.</p>
+
+  <div class="chapter-nav">
+    <a href="../intro/01_Why_AI_Chapter_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Capítulo 1 · Introducción</div></a>
+    <a href="../guardrails/03_Guardrails_Chapter_es.html" class="next" style="margin-left:auto;"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Capítulo 3 · Guardarraíles y Modelos de Permisos</div></a>
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">Videos de Referencia</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=jqx18KgIzAE" target="_blank">Claude | Computer use for orchestrating tasks</a><span class="video-meta">(2:04)</span> -- Demo oficial de Anthropic de Claude orquestando múltiples tareas</li>
+    <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=zAjKqKHY1LE" target="_blank">Multi-Agent Orchestration — Simply Explained</a><span class="video-meta">(9:50)</span> -- Un recorrido visual de los conceptos de orquestación multiagente</li>
+    <li><span class="video-badge ko">KO</span><a href="https://www.youtube.com/watch?v=3MPEFYmprAM" target="_blank">AI Agent Engineering | Lecture 5. Orchestration</a><span class="video-meta">(21:48)</span> -- Conferencia oficial en coreano sobre orquestación de Hanbit Media</li>
+  </ul>
+</div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

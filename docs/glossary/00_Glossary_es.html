@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Glosario · Manual de Ingeniería de Arnes de Equipo Multiagente - material del Manual de Ingeniería de Arnes de Equipo Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glosario · Manual de Ingeniería de Arnes de Equipo Multiagente</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    dl { margin: 0 0 8px; }
+    dt { font-weight: 700; font-family: var(--font-mono); font-size: var(--font-size-compact); margin-top: 18px; color: var(--text); }
+    dt .en { color: var(--text-dim); font-weight: 400; font-size: var(--font-size-label); }
+    dd { margin: 4px 0 0 0; color: var(--text); font-size: var(--font-size-compact); }
+    dd .see { display: block; margin-top: 4px; font-size: var(--font-size-label); color: var(--text-dim); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Glosario</div>
+  <a href="#core">Conceptos Fundamentales</a>
+  <a href="#team">Componentes del Equipo Multiagente</a>
+  <a href="#workspace">Estructura de ai-workspace-standards</a>
+  <a href="#tools">Herramientas y Plataformas</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <h1>Glosario</h1>
+  <p class="lead">Esta página recoge los términos utilizados repetidamente a lo largo de este manual en un solo lugar. El enlace "Detalles" de cada entrada lo lleva al capítulo que explica el término por primera vez en profundidad.</p>
+
+  <div class="jump">
+    <a href="#core">Conceptos Fundamentales</a>
+    <a href="#team">Componentes del Equipo</a>
+    <a href="#workspace">Estructura del Espacio de Trabajo</a>
+    <a href="#tools">Herramientas y Plataformas</a>
+  </div>
+
+  <h2 id="core">Conceptos Fundamentales</h2>
+  <dl>
+    <dt>Ingeniería de Arnes <span class="en">Harness Engineering</span></dt>
+    <dd>La disciplina de diseñar a través de qué herramientas, reglas y mecanismos de verificación trabaja un modelo. Es la tercera etapa en la progresión desde la ingeniería de prompts (qué decir) hasta la ingeniería de contexto (qué dar a conocer).
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s1">Capítulo 2 §1</a></span></dd>
+
+    <dt>Subagente <span class="en">Subagent</span></dt>
+    <dd>Un agente auxiliar que tiene una ventana de contexto independiente de la sesión principal, maneja una tarea estrecha y devuelve solo un resumen. Es el mecanismo mediante el cual el concepto de "especialista" se implementa en herramientas reales.
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s3b">Capítulo 2 §3b</a></span></dd>
+
+    <dt>Entrega <span class="en">Handoff</span></dt>
+    <dd>El acto, o el punto, en el que el trabajo se transfiere entre agentes. Un Contrato de Entrega estructura el formato de la información intercambiada — al detallar el propósito, el alcance y los entregables del paso anterior, permite que el siguiente agente comience inmediatamente sin necesidad de hacer preguntas de seguimiento.
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s3">Capítulo 2 §3</a></span></dd>
+
+    <dt>Composición Dinámica del Equipo <span class="en">Dynamic Team Composition</span></dt>
+    <dd>El orquestador decide, para cada solicitud, qué subagentes desplegar realmente, cuántas veces y en qué orden. Aunque la plantilla del equipo definida es fija, la configuración de despliegue real varía de tarea en tarea.
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s4b">Capítulo 2 §4b</a> · Práctica: <a href="../practice/04_Practice_Examples_A_es.html#scenario-2b">Capítulo 4 D-2</a></span></dd>
+
+    <dt>Patrón de Orquestación <span class="en">Orchestration Pattern</span></dt>
+    <dd>El conocido conjunto de cinco patrones representativos de Anthropic: encadenamiento de prompts (procesamiento secuencial paso a paso), enrutamiento (clasificar una solicitud y despacharla al agente/modelo apropiado), paralelización (distribución para ejecutar tareas independientes concurrentemente, o votación para repetir la misma tarea y tomar la mayoría), orquestador-trabajadores (descomponer dinámicamente subtareas en lugar de fijarlas de antemano), y evaluador-optimizador (verificar independientemente un borrador antes de incorporarlo — verificar y luego aplicar). Estos pueden combinarse libremente dentro de un solo flujo de trabajo.
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s4">Capítulo 2 §4</a></span></dd>
+
+    <dt>Ventana de Contexto / Sobrecarga de Contexto <span class="en">Context Window / Context Overload</span></dt>
+    <dd>La ventana de contexto es el límite en la cantidad de tokens (texto) que un modelo de IA puede procesar a la vez. Dentro de este límite debe contener la definición del rol, la conversación pasada, las instrucciones de la tarea y la salida todo junto; a medida que el contenido crece, la información anterior comienza a desvanecerse — esto se llama sobrecarga de contexto. Distribuir el trabajo por roles para abordar esto es una de las motivaciones centrales detrás de los equipos multiagente.
+      <span class="see">Detalles: <a href="../intro/01_Why_AI_Chapter_es.html#s3">Capítulo 1 §Multiagente: El Principio de un Equipo de Expertos</a></span></dd>
+
+    <dt>Frontmatter <span class="en">Frontmatter</span></dt>
+    <dd>Un bloque de metadatos escrito en YAML en la parte superior de un archivo de definición de agente (<code>agents/*.md</code>). Define cosas como el nombre del agente, rol, herramientas permitidas (<code>tools</code>) y nivel de modelo (<code>tier</code>) para que puedan analizarse mecánicamente. El campo <code>extends</code> puede usarse para heredar de otro archivo de agente.
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y el SSOT</a></span></dd>
+
+    <dt>Scaffolding <span class="en">Scaffolding</span></dt>
+    <dd>El acto de usar <code>bun scripts/new-project.ts</code> para clonar la configuración completa de una plantilla de variante (agentes, habilidades, comandos, pipeline de gobernanza) en un repositorio git independiente. La idea es: "no se construye un proyecto desde cero — se comienza a partir de un esqueleto pre-diseñado."
+      <span class="see">Detalles: <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-2">Capítulo 6 §2</a></span></dd>
+
+    <dt>Hook <span class="en">Hook</span></dt>
+    <dd>Un script que se ejecuta automáticamente antes o después de que un agente llame a una herramienta en particular. Ejemplo: un hook <code>PostToolUse</code> que ejecuta una verificación de auditoría automatizada después de una edición de archivo. En Claude Code (CLI), los hooks definidos bajo <code>.claude/hooks/</code> se activan como se espera, pero no se activan en Claude App (Escritorio) — por lo que es importante conocer estas diferencias de comportamiento por herramienta.
+      <span class="see">Detalles: <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registros de Auditoría y Observabilidad</a></span></dd>
+
+    <dt>Kanban / Límite WIP <span class="en">Kanban / WIP Limit</span></dt>
+    <dd>Un método de control de concurrencia que limita la cantidad de tareas en progreso (Work In Progress) en un momento dado. Al distribuir para ejecutar muchos agentes simultáneamente, establecer un límite WIP previene la contención de recursos y la pérdida de contexto que surgen de demasiada ejecución concurrente.
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s4">Capítulo 2 §Patrones de Orquestación</a></span></dd>
+
+    <dt>Modelo de Ticket de Servicio <span class="en">Service Ticket Model</span></dt>
+    <dd>Un modelo operativo que usa la IA puramente como "un servicio que maneja solicitudes conforme llegan" — similar al sistema de tickets de una organización de TI tradicional. El usuario debe dirigir cada solicitud explícitamente, lo que limita la autonomía del equipo de agentes. Este es el enfoque que este manual contrasta con su modelo propuesto de "herramienta de desarrollo + modelo de variante."
+      <span class="see">Detalles: <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Comparando Estrategias Operativas Empresariales</a></span></dd>
+
+    <dt>Ciclo de Vida / Estado <span class="en">Lifecycle / State</span></dt>
+    <dd>Ciclo de vida se refiere a la secuencia completa de etapas por las que pasa un agente, habilidad o script (por ejemplo, Crear → Verificar → Operar → Mejorar → Deprecar). Estado es una instantánea de en qué etapa del ciclo de vida se encuentra ese componente en un momento dado. El campo <code>status</code> en el frontmatter YAML (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) almacena el valor del estado. El ciclo de vida puede pensarse como un "mapa del metro," y el estado como el letrero que muestra "en qué estación está el tren actual."
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#state-vs-lifecycle">Capítulo 8 §2 · Distinguiendo Estado de Ciclo de Vida</a></span></dd>
+  </dl>
+
+  <h2 id="team">Componentes del Equipo Multiagente</h2>
+  <dl>
+    <dt>Orquestador <span class="en">Orchestrator</span></dt>
+    <dd>El rol que divide la tarea general en etapas, llama a los especialistas y se detiene en puntos donde se necesita la confirmación del usuario. Comúnmente denominado "agente PM."</dd>
+
+    <dt>Especialista <span class="en">Specialist</span></dt>
+    <dd>Un agente con una responsabilidad estrecha y claramente definida — como diseño, implementación, prueba o revisión de seguridad — cuyas entradas y salidas están claramente especificadas.</dd>
+
+    <dt>Nivel de Modelo <span class="en">Model Tier</span></dt>
+    <dd>El nivel de costo del modelo (<code>high</code>/<code>medium</code>/<code>low</code>) asignado por rol de agente. Los roles que requieren mucho juicio se asignan como high; el trabajo estandarizado y repetitivo se asigna como low — equilibrando costo y calidad. Se especifica a través del campo <code>tier</code> en el frontmatter de <code>agents/*.md</code>, y la plataforma lo traduce a un nombre de modelo real mediante <code>model: inherit</code>.
+      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §3</a>. Nota: este es un concepto diferente al "3 niveles" de L0→L1→L2 — no los confunda.</span></dd>
+  </dl>
+
+  <h2 id="workspace">Estructura de ai-workspace-standards</h2>
+  <dl>
+    <dt>SSOT <span class="en">Single Source of Truth</span></dt>
+    <dd>El principio de que una pieza de información dada tiene su copia original en exactamente un lugar. Ejemplo: CONSTITUTION.md es el SSOT para las reglas de todo el espacio de trabajo; context.md es el SSOT para un proyecto individual.
+      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s4">Capítulo 5 §4</a></span></dd>
+
+    <dt>L0 / L1 / L2</dt>
+    <dd>La jerarquía de tres niveles que va desde la raíz del espacio de trabajo (L0, la única original) → la instantánea de la plantilla común (L1, <code>templates/common/</code>) → la variante/proyecto (L2, <code>templates/co-*/</code> o <code>Projects/*/</code>). El flujo siempre se mueve de arriba hacia abajo, y la transferencia L1→L2 es una "bifurcación" que ocurre exactamente una vez, en el momento de la scaffolding.
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y el SSOT</a></span></dd>
+
+    <dt>Modelo de Bifurcación <span class="en">Fork Model</span></dt>
+    <dd>El enfoque por el cual, una vez que L2 se ramifica de L1, evoluciona independientemente sin sincronización inversa automática. Para promoverlo a una plantilla oficial se requiere que un humano ejecute explícitamente <code>l2-to-variant-pipeline.ts</code>.</dd>
+
+    <dt>variante</dt>
+    <dd>Una configuración completa de equipo multiagente para un dominio específico — que reside bajo <code>templates/</code> — que agrupa un PM, agentes especialistas y un pipeline de gobernanza. co-develop, co-design y co-work son ejemplos.
+      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §3</a></span></dd>
+
+    <dt>Fase A / Fase B</dt>
+    <dd>Las dos etapas de creación de una nueva variante. La Fase A es la etapa de experimentar libremente como un prototipo independiente bajo <code>Projects/</code>; la Fase B es la etapa de promoverlo a una variante oficial <code>templates/</code> mediante <code>promote-variant</code>.
+      <span class="see">Detalles: <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 · Crear una Nueva Variante</a></span></dd>
+
+    <dt>Plantilla Base <span class="en">Boilerplate</span></dt>
+    <dd>Un punto de partida pre-construido — definiciones de rol PM, pipeline de gobernanza y cableado de comandos/habilidades — que de otro modo tendrían que escribirse desde cero para cada proyecto. Esta es la esencia de lo que distribuye ai-workspace-standards.</dd>
+
+    <dt>Integración con Contenedores <span class="en">Container Integration</span></dt>
+    <dd>Una dirección para el avance de ai-workspace-standards: el requisito de que un proyecto con scaffolding pueda integrarse con servicios como Open WebUI en un entorno Docker/Kubernetes y ser soportado por usuario individual. Actualmente solo se soporta la integración directa con herramientas locales de codificación con IA.
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#container">Capítulo 8 §5 Hoja de Ruta de Avance</a></span></dd>
+
+    <dt>Consolidación de Memoria <span class="en">Memory Consolidation</span></dt>
+    <dd>Una dirección para el avance de ai-workspace-standards: una función que reúne y organiza los archivos <code>memory/MEMORY.md</code> dispersos en proyectos individuales a nivel del espacio de trabajo para que puedan identificarse las tendencias generales.
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#memory">Capítulo 8 §5 Hoja de Ruta de Avance</a></span></dd>
+  </dl>
+
+  <h2 id="tools">Herramientas y Plataformas</h2>
+  <dl>
+    <dt>AGENTS.md</dt>
+    <dd>Un archivo de estándar abierto leído en común por más de 30 herramientas de codificación con IA. Define reglas neutrales a la herramienta como comandos de compilación/prueba y estilo de código. En este repositorio adicionalmente sirve como "plantilla de agentes."
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s5">Capítulo 2 §AGENTS.md, el Arnes que Cruza Herramientas</a></span></dd>
+
+    <dt>teammateMode</dt>
+    <dd>El modo de ejecución paralela para Agent Teams (una función experimental). Claude App (Escritorio) solo soporta <code>in-process</code>, mientras que Claude Code (CLI) adicionalmente soporta el modo panel dividido <code>tmux</code>.
+      <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-1">Referencia Común §1</a></span></dd>
+
+    <dt>Administrador de Agentes</dt>
+    <dd>Una interfaz de nivel superior en Antigravity (Escritorio) para supervisar múltiples espacios de trabajo desde una sola pantalla. El principio es asignar un agente por espacio de trabajo.</dd>
+
+    <dt><code>/goal</code> / <code>/agent</code> / <code>/agents</code></dt>
+    <dd>Comandos slash en Antigravity CLI (<code>agy</code>) que invocan la orquestación dinámica de subagentes. <code>/goal</code> ejecuta un objetivo hasta su finalización, <code>/agent</code> delega una tarea de larga duración en segundo plano, y <code>/agents</code> enumera el estado de los subagentes creados hasta el momento. Esta capacidad no es exclusiva de agy — Claude Code/App realiza la misma orquestación dinámica mediante la herramienta <code>Agent</code> (Task) y solicitudes en lenguaje natural, mientras que Antigravity (Escritorio) lo hace mediante la GUI del Administrador de Agentes. Estos tres comandos son simplemente los nombres dados a ese comportamiento en la pantalla CLI.
+      <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-2">Referencia Común §2</a></span></dd>
+  </dl>
+
+ </article>
+</main>
+</div>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

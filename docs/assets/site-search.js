@@ -99,7 +99,39 @@
     { path: 'setup/SETUP_ja.html', title: 'ワークショップ環境セットアップガイド · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
     { path: 'setup/SETUP_CHECKLIST_ja.html', title: 'ワークショップ事前インストールチェックリスト · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
     { path: 'lecture-guide/00_Course_Overview_ja.html', title: '講義紹介・マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック', lang: 'ja' },
-    { path: 'lecture-guide/00_Lecture_Guide_ja.html', title: '講義進行ガイド · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' }
+    { path: 'lecture-guide/00_Lecture_Guide_ja.html', title: '講義進行ガイド · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
+    /* ── Spanish ── */
+    { path: 'index_es.html', title: 'Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
+    { path: 'intro/01_Why_AI_Chapter_es.html', title: 'Capítulo 1 · Transformación del Trabajo en la Era de la IA', lang: 'es' },
+    { path: 'concepts/02_Concepts_Chapter_es.html', title: 'Capítulo 2 · Ingeniería de Harness y Conceptos de Equipos Multiagente', lang: 'es' },
+    { path: 'guardrails/03_Guardrails_Chapter_es.html', title: 'Capítulo 3 · Guardrails y Modelos de Permisos', lang: 'es' },
+    { path: 'warm-up/Warmup_Tetris_Pacman_es.html', title: 'Ejercicio de Calentamiento · De Tetris a Pac-Man', lang: 'es' },
+    { path: 'practice/04_Practice_Manual_es.html', title: 'Capítulo 4 §1 · Uso de Equipos Multiagente Basados en Harness', lang: 'es' },
+    { path: 'practice/04_Practice_Manual_A_es.html', title: 'Cap. 4 §1-A · Uso Detallado de Subagentes — Enfoque en Claude', lang: 'es' },
+    { path: 'practice/04_Practice_Manual_B_es.html', title: 'Capítulo 4 §1-B · Uso Detallado de Subagentes — Enfoque en Antigravity', lang: 'es' },
+    { path: 'practice/04_Practice_Examples_A_es.html', title: 'Capítulo 4 §2-A · Práctica de Equipos Multiagente — Guía de Aprendizaje por Escenarios con Claude', lang: 'es' },
+    { path: 'practice/04_Practice_Examples_B_es.html', title: 'Capítulo 4 §2-B · Práctica de Equipos Multiagente — Guía de Aprendizaje por Escenarios con Antigravity', lang: 'es' },
+    { path: 'intro/05_Intro_Chapter_es.html', title: 'Capítulo 5 · Introducción a ai-workspace-standards', lang: 'es' },
+    { path: 'variant-practice/06_VariantPractice_Manual_es.html', title: 'Capítulo 6 §1 · Instalación Local de ai-workspace-standards y Scaffolding de Proyectos', lang: 'es' },
+    { path: 'variant-practice/06_VariantPractice_Examples_es.html', title: 'Capítulo 6 §2 · Ejemplos de Práctica de Variantes — Guía de Aprendizaje por Escenarios', lang: 'es' },
+    { path: 'enterprise/07_Enterprise_Chapter_es.html', title: 'Capítulo 7 · Operación de Equipos Multiagente en la Empresa: Comparación de Dos Modelos', lang: 'es' },
+    { path: 'intro/08_Intro_Advanced_Deploy_es.html', title: 'Capítulo 8 §1 · Despliegue y SSOT', lang: 'es' },
+    { path: 'intro/08_Intro_Advanced_Chapter_es.html', title: 'Capítulo 8 §2 · Gestión del Ciclo de Vida', lang: 'es' },
+    { path: 'intro/08_Intro_Advanced_AGENTS_es.html', title: 'Capítulo 8 §3 · AGENTS.md en Profundidad', lang: 'es' },
+    { path: 'intro/08_Intro_Advanced_Architecture_es.html', title: 'Capítulo 8 §4 · Arquitectura Avanzada', lang: 'es' },
+    { path: 'intro/08_Intro_Advanced_Roadmap_es.html', title: 'Capítulo 8 §5 · Hoja de Ruta Avanzada', lang: 'es' },
+    { path: 'workflows/09_Workflows_Chapter_es.html', title: 'Capítulo 9 · Patrones de Diseño de Flujos de Trabajo', lang: 'es' },
+    { path: 'intro/10_ProjectUpgrade_Chapter_es.html', title: 'Capítulo 10 · Actualización de Proyectos L2', lang: 'es' },
+    { path: 'variant-advanced/11_VariantAdvanced_Chapter_es.html', title: 'Capítulo 11 · Crear una Nueva Variante vs. Promover un Proyecto Existente a Variante', lang: 'es' },
+    { path: 'variant-advanced/12_VariantAdvanced_Examples_es.html', title: 'Capítulo 12 · Ejemplos Prácticos de Promoción de Nueva Variante — Guía de Aprendizaje por Escenarios', lang: 'es' },
+    { path: 'capstone/13_Capstone_es.html', title: 'Capítulo 13 · Proyecto Final — Diseñar Tu Propio Flujo de Trabajo', lang: 'es' },
+    { path: 'tools/00_Tools_Manual_es.html', title: 'Comparación de Herramientas — Claude Code / Claude App / Antigravity CLI / Antigravity', lang: 'es' },
+    { path: 'glossary/00_Glossary_es.html', title: 'Glosario · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
+    { path: 'faq/00_FAQ_es.html', title: 'FAQ · Errores Comunes y Soluciones · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
+    { path: 'setup/SETUP_es.html', title: 'Guía de Configuración del Entorno del Taller · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
+    { path: 'setup/SETUP_CHECKLIST_es.html', title: 'Lista de Verificación Preinstalación del Taller · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
+    { path: 'lecture-guide/00_Course_Overview_es.html', title: 'Resumen del Curso · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
+    { path: 'lecture-guide/00_Lecture_Guide_es.html', title: 'Guía del Docente · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' }
   ];
 
   var LABELS = {
@@ -123,6 +155,13 @@
       noResult: '結果なし',
       hint: function(n){ return n + '文書から検索し、該当箇所に移動します。'; },
       building: 'インデックス準備中…'
+    },
+    es: {
+      placeholder: 'Buscar en todo el manual — secciones, elementos, escenarios…',
+      section: 'Sección', scenario: 'Escenario', item: 'Elemento',
+      noResult: 'Sin resultados',
+      hint: function(n){ return n + ' documentos buscados. Navega a la posición exacta.'; },
+      building: 'Construyendo índice…'
     }
   };
 

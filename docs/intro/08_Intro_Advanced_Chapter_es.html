@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--
+  Chapter (narrative) template — for "read-only" topics without hands-on exercises. 720px reading width, generous line-height, chapter-navigation flow.
+  Unlike Manual (reference)/Examples (hands-on), the focus is prose flow rather than version boxes or code highlighting.
+  Edit here: (1) <title>/chapter number/title/lead (2) nav (this chapter's sections + other chapters) (3) 'Key points of this section'
+             (4) <h2 id>/<h3> sections and body (5) previous/next chapter links
+  Fill in {{double braces}}/[description: ...] with actual content. Links are all relative.
+  Colors use design tokens only — the theme is swapped in at deploy time by references/apply-theme.sh, which replaces brand colors under docs/.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 8 §2 · Gestión del Ciclo de Vida - Material del Manual de Ingeniería del Arnés de Equipos Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capítulo 8 §2 · Gestión del Ciclo de Vida</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    .variant-row:nth-child(even) { background: var(--bg2); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 8 · Arquitectura Avanzada</div>
+  <a href="08_Intro_Advanced_Deploy_es.html">§1 · Despliegue y SSOT</a>
+  <a href="#s2-lifecycle-why">Por Qué Es Necesaria la Gestión del Ciclo de Vida</a>
+  <a href="#s2-agent-lifecycle">Ciclo de Vida del Agente</a>
+  <a href="#s2-skill-lifecycle">Ciclo de Vida de la Habilidad</a>
+  <a href="#s2-script-lifecycle">Ciclo de Vida del Script</a>
+  <a href="#state-vs-lifecycle">Estado vs. Ciclo de Vida</a>
+  <div class="nav-section">Otras secciones de este capítulo</div>
+  <a href="08_Intro_Advanced_AGENTS_es.html">§3 · Análisis Profundo de AGENTS.md</a>
+  <a href="08_Intro_Advanced_Architecture_es.html">§4 · Análisis Profundo de la Arquitectura</a>
+  <a href="08_Intro_Advanced_Roadmap_es.html">§5 · Hoja de Ruta Avanzada</a>
+  <div class="nav-section">Otros capítulos</div>
+  <a href="../intro/05_Intro_Chapter_es.html">Capítulo 5 · Introducción a ai-workspace-standards</a>
+  <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Ejecución de un Equipo Multiagente Dentro de una Empresa</a>
+  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 · Crear una Nueva Variante</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 8 §2</div>
+  <h1>Gestión del Ciclo de Vida</h1>
+  <p class="lead">Esta sección cubre las etapas que los agentes, las habilidades y los scripts atraviesan cada uno desde su creación hasta su retiro, y cómo se gestionan estas etapas dentro de un espacio de trabajo real.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que cubre esta sección</div>
+    <ul>
+      <li>Ciclo de vida del agente: crear → verificar → operar → mejorar → deprecación</li>
+      <li>Ciclo de vida de la habilidad: definir → probar → desplegar → versionar → retirar</li>
+      <li>Ciclo de vida del script: escribir → analizar → probar → registrar → deprecación</li>
+      <li>La distinción entre estado y ciclo de vida</li>
+      <li>Por qué es necesaria la gestión del ciclo de vida</li>
+    </ul>
+  </div>
+
+  <h2 id="s2-lifecycle-why">Por Qué Es Necesaria la Gestión del Ciclo de Vida</h2>
+
+  <p>A medida que opera un sistema multiagente, el número de agentes, habilidades y scripts en el espacio de trabajo sigue creciendo. Simplemente crear nuevos componentes no es suficiente — debe establecerse claramente <strong>en qué etapa se encuentra cada componente</strong>. Hacer esto permite evitar los siguientes problemas.</p>
+
+  <ul>
+    <li><strong>Componentes no verificados que entran en producción.</strong> Si un agente se despliega sin pasar por <code>agent:verify</code>, campos de frontmatter faltantes o una definición de rol incorrecta pueden causar errores en sesiones en vivo.</li>
+    <li><strong>Componentes deprecados que siguen siendo invocados.</strong> Si una habilidad que ya no es válida permanece en el registro, un agente puede seleccionarla involuntariamente y fallar.</li>
+    <li><strong>Irreproducibilidad por desajustes de versión.</strong> Si un script se actualiza pero algunas variantes aún referencian una versión anterior, la misma entrada produce diferentes resultados.</li>
+  </ul>
+
+  <p>Para prevenir sistemáticamente estos problemas, ai-workspace-standards define <strong>etapas con nombre</strong> para agentes, habilidades y scripts respectivamente, junto con las condiciones de validación y transición requeridas en cada etapa. Esta sección explica cada uno de los tres ciclos de vida y cómo se gestionan realmente dentro del espacio de trabajo.</p>
+
+  <!-- ─── Agent Lifecycle ─── -->
+
+  <h2 id="s2-agent-lifecycle">Ciclo de Vida del Agente</h2>
+
+  <p>Los agentes se definen como archivos <code>.md</code> bajo el directorio <code>agents/</code>. Desde su nacimiento a través de la operación hasta su eventual retiro, un agente atraviesa las siguientes cinco etapas.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6639ba"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Create -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Crear</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">escribir agents/*.md</text>
+        <!-- Verify -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Verificar</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">agent:verify</text>
+        <!-- Operate -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Operar</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">ejecutar en sesiones</text>
+        <!-- Improve -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Mejorar</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">aplicar retroalimentación</text>
+        <!-- Deprecate -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecar</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">descontinuar</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+
+        <!-- Feedback loop: Improve → Verify -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowA)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">ciclo de reverificación</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s2-agent-create">Crear — Creación de un Agente</h3>
+  <p>El ciclo de vida del agente comienza creando un nuevo archivo <code>.md</code> en el directorio <code>agents/</code>. Este archivo contiene frontmatter (campos como nombre, rol, modelo) y un cuerpo (el prompt del sistema). En el momento de la creación, confirme lo siguiente.</p>
+  <ul>
+    <li>Si el nombre del archivo refleja claramente el rol del agente (ej. <code>pm.md</code>, <code>reviewer.md</code>)</li>
+    <li>Si el frontmatter incluye todos los campos <code>name</code>, <code>role</code>, <code>model</code> y <code>status</code></li>
+    <li>Si el cuerpo establece claramente los principios operativos y las restricciones del agente</li>
+  </ul>
+  <p>Establezca el campo <code>status</code> inicial en <code>draft</code>. En este estado, el agente no es seleccionado automáticamente en sesiones de producción.</p>
+
+  <h3 id="s2-agent-verify">Verificar — Verificación de un Agente</h3>
+  <p>Verifique que el archivo de agente creado se ajuste a la especificación del espacio de trabajo ejecutando <code>bun run agent:verify</code>. Este comando verifica lo siguiente.</p>
+  <ul>
+    <li>Si hay campos de frontmatter faltantes o con errores tipográficos</li>
+    <li>Si el agente está correctamente registrado en <code>AGENTS.md</code></li>
+    <li>Si las habilidades y scripts que referencia existen realmente</li>
+    <li>Si su rol se superpone con el de otro agente</li>
+  </ul>
+  <p>Una vez que la verificación pasa, cambie <code>status</code> a <code>active</code>. Si falla, el agente permanece en <code>draft</code>; corrija los problemas según los mensajes de error y reverifique.</p>
+
+  <h3 id="s2-agent-operate">Operar — Operación de un Agente</h3>
+  <p>Un agente en estado <code>active</code> puede ser invocado en sesiones reales. Durante la etapa de operación, observe el comportamiento real del agente y monitoree los registros de sesión para lo siguiente.</p>
+  <ul>
+    <li>Si el agente se comporta de manera consistente con su rol definido</li>
+    <li>Si hay interferencia o conflicto al colaborar con otros agentes</li>
+    <li>Si la calidad de respuesta cumple con el estándar esperado</li>
+  </ul>
+  <p>Los problemas descubiertos durante la operación se registran y se convierten en entrada para la etapa de Mejora.</p>
+
+  <h3 id="s2-agent-improve">Mejorar — Mejora de un Agente</h3>
+  <p>Actualice el archivo del agente según la retroalimentación operativa. Las mejoras típicas incluyen lo siguiente.</p>
+  <ul>
+    <li>Aclarar instrucciones ambiguas en el prompt del sistema</li>
+    <li>Añadir restricciones o reglas de manejo de excepciones faltantes</li>
+    <li>Actualizar el campo <code>model</code> cuando se necesita un cambio de modelo</li>
+  </ul>
+  <p>Después de modificar el archivo, debe ejecutar <code>bun run agent:verify</code> nuevamente para <strong>reverificar</strong>lo. Este bucle de regreso a la etapa de Verificar es el ciclo de retroalimentación central en el ciclo de vida del agente. Una vez que la verificación pasa, el agente vuelve a entrar en la etapa de Operar.</p>
+
+  <h3 id="s2-agent-deprecate">Deprecar — Deprecación de un Agente</h3>
+  <p>Cuando un agente ya no es necesario, cambie su <code>status</code> a <code>deprecated</code>. En el momento de la deprecación, realice lo siguiente.</p>
+  <ul>
+    <li>Elimine o comente la entrada del agente en <code>AGENTS.md</code></li>
+    <li>Elimine las dependencias de cualquier variante o script que referenciaba al agente</li>
+    <li>Conserve el archivo en sí (en lugar de eliminarlo) con <code>status: deprecated</code>, para que pueda restaurarse si es necesario</li>
+  </ul>
+  <p>Después de un período establecido (ej. 30 días), una vez confirmado que no quedan referencias, mueva el archivo a un directorio de archivo o elimínelo permanentemente.</p>
+
+  <div class="note">
+    <code>bun run agent:verify</code> es la herramienta central de la etapa de Verificar en el ciclo de vida del agente. Este comando va más allá de la simple verificación sintáctica — confirma que el agente está conectado consistentemente con otros componentes en el espacio de trabajo. Incluir esta verificación en un pipeline de CI/CD previene sistemáticamente que agentes no verificados entren en producción.
+  </div>
+
+  <!-- ─── Skill Lifecycle ─── -->
+
+  <h2 id="s2-skill-lifecycle">Ciclo de Vida de la Habilidad</h2>
+
+  <p>Una habilidad es una unidad reutilizable de comportamiento que un agente puede invocar durante una sesión. Se define mediante un archivo <code>SKILL.md</code> y se coloca en un plugin o en el directorio <code>.zcode/skills/</code> del espacio de trabajo. El ciclo de vida de una habilidad consta de las siguientes cinco etapas.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Define -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Definir</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">escribir SKILL.md</text>
+        <!-- Test -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Probar</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">validate-skills.ts</text>
+        <!-- Deploy -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Desplegar</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">registrar en el registro</text>
+        <!-- Version -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Versionar</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">gestión de versiones</text>
+        <!-- Retire -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Retirar</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">descontinuar</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+
+        <!-- Feedback loop: Version → Test -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowS)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">reprobar después de actualización</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s2-skill-define">Definir — Definición de una Habilidad</h3>
+  <p>Una habilidad se define mediante un archivo <code>SKILL.md</code>. Este archivo contiene frontmatter (nombre, descripción, disparadores, etc.) junto con una descripción de lo que hace la habilidad. En el momento de la definición, aclare lo siguiente.</p>
+  <ul>
+    <li><code>name</code>: el identificador único de la habilidad</li>
+    <li><code>description</code>: la explicación que determina cuándo un agente debe seleccionar esta habilidad</li>
+    <li><code>triggers</code>: las condiciones bajo las cuales la habilidad se activa automáticamente</li>
+    <li>Cuerpo: el procedimiento que el agente debe seguir al ejecutar la habilidad</li>
+  </ul>
+  <p>Deje inicialmente como <code>status: draft</code> para que los agentes aún no puedan seleccionar automáticamente esta habilidad.</p>
+
+  <h3 id="s2-skill-test">Probar — Verificación de una Habilidad</h3>
+  <p>Verifique que la definición de la habilidad es correcta ejecutando <code>validate-skills.ts</code>. Este script verifica lo siguiente.</p>
+  <ul>
+    <li>Completitud y consistencia de formato de los campos de frontmatter</li>
+    <li>Si las condiciones de disparador se superponen ambiguamente con otras habilidades</li>
+    <li>Si las herramientas que referencia (ej. herramientas MCP) están disponibles en el entorno actual</li>
+    <li>Si la descripción de la habilidad es lo suficientemente específica para que el agente la entienda correctamente</li>
+  </ul>
+  <p>Una vez que la verificación pasa, la habilidad está lista para pasar a la etapa de Despliegue.</p>
+
+  <h3 id="s2-skill-deploy">Desplegar — Despliegue de una Habilidad</h3>
+  <p>Despliegue una habilidad verificada en un entorno donde los agentes puedan realmente invocarla. Concretamente, el despliegue significa lo siguiente.</p>
+  <ul>
+    <li>Cambiar <code>status</code> a <code>active</code> para que se incluya entre los candidatos de autoselección del agente</li>
+    <li>Registrarla en el directorio <code>.zcode/skills/</code> del espacio de trabajo o en un registro de plugin según sea necesario</li>
+    <li>Declarar la dependencia en el frontmatter de cualquier agente que use esta habilidad</li>
+  </ul>
+  <p>Después del despliegue, realice una revisión manual para confirmar que la habilidad se dispara y ejecuta correctamente durante una sesión de agente.</p>
+
+  <h3 id="s2-skill-version">Versionar — Gestión de Versiones de Habilidades</h3>
+  <p>Cuando una habilidad en uso activo necesita un cambio, actualícela de forma segura a través de la gestión de versiones.</p>
+  <ul>
+    <li>Registre el historial de cambios del archivo de habilidad en el comentario de encabezado de <code>SKILL.md</code> o en un registro de cambios</li>
+    <li>Para cambios rupturistas, mantenga la habilidad existente intacta y clónela en una nueva versión antes de actualizar</li>
+    <li>Siempre reverifique con <code>validate-skills.ts</code> después de realizar cambios</li>
+  </ul>
+  <p>El bucle desde la etapa de Versionar de vuelta a la etapa de Probar es el ciclo de retroalimentación central del ciclo de vida de las habilidades. Una vez que la habilidad actualizada pasa la verificación, vuelve a entrar en la etapa de Despliegue.</p>
+
+  <h3 id="s2-skill-retire">Retirar — Retiro de una Habilidad</h3>
+  <p>Retire una habilidad una vez que ya no se usa o ha sido reemplazada por otra habilidad.</p>
+  <ul>
+    <li>Cambie <code>status</code> a <code>retired</code> para excluirlo de los candidatos de selección de agentes</li>
+    <li>Elimine la dependencia del frontmatter de cualquier agente que referenciaba la habilidad</li>
+    <li>Conserve el archivo pero márquelo explícitamente como <code>retired</code> para que el original aún pueda ser referenciado si se reutiliza</li>
+  </ul>
+
+  <div class="note">
+    <code>validate-skills.ts</code> es la herramienta central de la etapa de Probar en el ciclo de vida de las habilidades. Este script verifica no solo el formato básico sino también los conflictos de disparadores entre habilidades y la integridad referencial. Debe ejecutarse cada vez que se añade una nueva habilidad o se modifica una existente. Al igual que <code>agent:verify</code> para los agentes, incluirlo en un pipeline de CI/CD previene automáticamente el despliegue de habilidades no verificadas.
+  </div>
+
+  <!-- ─── Script Lifecycle ─── -->
+
+  <h2 id="s2-script-lifecycle">Ciclo de Vida del Script</h2>
+
+  <p>Los scripts se gestionan como archivos <code>.ts</code> bajo el directorio <code>scripts/</code>. Son código ejecutable que automatiza la infraestructura del espacio de trabajo — verificación de creación de agentes, publicación de plantillas, generación de proyectos y más. El ciclo de vida de un script consta de las siguientes cinco etapas.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Write -->
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Escribir</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">escribir scripts/*.ts</text>
+        <!-- Lint -->
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Analizar</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">análisis estático</text>
+        <!-- Test -->
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Probar</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">pruebas unitarias/integración</text>
+        <!-- Register -->
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Registrar</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">registrar en package.json</text>
+        <!-- Deprecate -->
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecar</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">descontinuar</text>
+
+        <!-- Arrows -->
+        <line x1="120" y1="83" x2="148" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+
+        <!-- Feedback loop: Register → Lint -->
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowSc)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">reverificar después de edición</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3 id="s2-script-write">Escribir — Escritura de un Script</h3>
+  <p>Un nuevo script se escribe como un archivo <code>.ts</code> en el directorio <code>scripts/</code>. Al escribir, siga estas pautas.</p>
+  <ul>
+    <li>El nombre del archivo debe indicar claramente el propósito del script (ej. <code>publish-to-template.ts</code>, <code>validate-skills.ts</code>)</li>
+    <li>Registre el propósito, el uso y las descripciones de argumentos como comentarios en la parte superior del script</li>
+    <li>Defina los tipos claramente y minimice las dependencias externas</li>
+    <li>Incluya manejo de errores que produzca un mensaje significativo en caso de fallo</li>
+  </ul>
+  <p>Se considera que un script está en estado <code>draft</code> inmediatamente después de ser escrito.</p>
+
+  <h3 id="s2-script-lint">Analizar — Análisis Estático</h3>
+  <p>Ejecute análisis estático (lint) sobre el script escrito. En un espacio de trabajo basado en TypeScript, use <code>bun run lint</code> o <code>tsc --noEmit</code> para verificar lo siguiente.</p>
+  <ul>
+    <li>Sin errores de tipo</li>
+    <li>Sin variables o imports no utilizados</li>
+    <li>Estilo de código consistente</li>
+    <li>Advertencias para posibles errores en tiempo de ejecución (ej. referencias nulas)</li>
+  </ul>
+  <p>Todos los problemas encontrados durante el análisis estático deben corregirse antes de pasar a la siguiente etapa.</p>
+
+  <h3 id="s2-script-test">Probar — Pruebas</h3>
+  <p>Ejecute pruebas unitarias y de integración en un script que ha pasado el análisis estático. Si el script depende del sistema de archivos o la red, pruébelo en un entorno simulado.</p>
+  <ul>
+    <li>Camino feliz: ¿produce la salida correcta para la entrada esperada?</li>
+    <li>Caminos de excepción: ¿maneja los errores apropiadamente para entrada inválida, archivos faltantes, errores de permisos, etc.?</li>
+    <li>Pruebas de integración: ¿funciona correctamente cuando se integra con otros scripts o agentes en el entorno real del espacio de trabajo?</li>
+  </ul>
+  <p>Solo los scripts que pasan las pruebas pueden pasar a la etapa de Registro.</p>
+
+  <h3 id="s2-script-register">Registrar — Registro de un Script</h3>
+  <p>Registre un script que ha pasado las pruebas en la sección <code>scripts</code> de <code>package.json</code> para que pueda ejecutarse como <code>bun run &lt;nombre&gt;</code>.</p>
+  <ul>
+    <li>Añada un nombre de script apropiado y comando de ejecución a <code>package.json</code></li>
+    <li>Registre las instrucciones de uso en la documentación del script (este manual o un README separado)</li>
+    <li>Documente la dependencia si otros scripts o agentes llaman a este script</li>
+  </ul>
+  <p>Después de que el registro esté completo, haga una verificación final de que <code>bun run &lt;nombre&gt;</code> se ejecuta correctamente.</p>
+
+  <h3 id="s2-script-deprecate">Deprecar — Deprecación de un Script</h3>
+  <p>Deprece un script una vez que ya no es necesario o ha sido reemplazado por otro script.</p>
+  <ul>
+    <li>Elimine la entrada del script de <code>package.json</code></li>
+    <li>Elimine la dependencia de cualquier otro script que lo llamaba, y actualícelo para usar la ruta de reemplazo</li>
+    <li>Mueva el archivo en sí a un directorio de archivo como <code>scripts/_deprecated/</code>, o consérvelo con un marcador de comentario <code>@deprecated</code></li>
+  </ul>
+
+  <div class="note">
+    En el ciclo de vida de los scripts, se recomienda una <strong>revisión manual</strong> realizada por humanos una vez entre Analizar y Probar, y otra vez entre Probar y Registrar. Las comprobaciones automatizadas no pueden detectar todos los problemas. Esto es especialmente crítico cuando un script modifica la estructura de archivos del espacio de trabajo (ej. <code>publish-to-template.ts</code>) — que una persona confirme visualmente el resultado real es esencial.
+  </div>
+
+  <!-- ─── Relationship Between the Three Lifecycles ─── -->
+
+  <h2 id="s2-lifecycle-summary">Principios Compartidos e Interdependencias Entre los Tres Ciclos de Vida</h2>
+
+  <h3 id="state-vs-lifecycle">La Distinción Entre Estado y Ciclo de Vida</h3>
+  <p>Hasta ahora hemos descrito tres tipos de ciclos de vida como pipelines. Hay una distinción aquí que no debe confundirse — <strong>ciclo de vida</strong> y <strong>estado</strong> son conceptos diferentes.</p>
+  <ul>
+    <li>Un <strong>ciclo de vida</strong> se refiere a la <strong>secuencia completa de etapas</strong> por las que pasa un componente. Para un agente, el pipeline de cinco etapas mismo — Crear → Verificar → Operar → Mejorar → Deprecar — es el ciclo de vida.</li>
+    <li>El <strong>estado</strong> es una instantánea de <strong>dónde se encuentra el componente actualmente</strong> en un momento dado. El campo <code>status</code> en el frontmatter YAML (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) es el mecanismo que almacena este valor de estado.</li>
+  </ul>
+  <p>Para usar una analogía, el ciclo de vida es un "mapa de ruta del metro", y el estado es la pantalla en tiempo real que muestra "en qué estación está el tren actualmente." Hacia dónde se dirige el tren (la ruta) está fijo, pero dónde se encuentra actualmente (la estación) cambia momento a momento.</p>
+  <div class="note">El estado a nivel de ejecución del flujo de trabajo — por ejemplo, el Pipeline de Fases definido por el PM en el <a href="../workflows/09_Workflows_Chapter_es.html">Capítulo 9</a> (Fase 0: solicitud recibida → Fase 1: diseño → … → Fase 6: sincronización completada) — es una dimensión diferente del estado del campo <code>status</code> de un componente individual. El primero es "en qué etapa está el trabajo", mientras que el segundo es "dónde está el componente mismo en su ciclo de vida."</div>
+
+  <p>Aunque los ciclos de vida de agentes, habilidades y scripts se definen cada uno independientemente, están estrechamente interconectados en un espacio de trabajo real.</p>
+
+  <p>Aunque los ciclos de vida de agentes, habilidades y scripts se definen cada uno independientemente, están estrechamente interconectados en un espacio de trabajo real.</p>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr>
+      <th >Herramienta de Verificación</th>
+      <th >Ciclo de Vida Relacionado</th>
+      <th >Rol</th>
+    </tr></thead>
+    <tbody>
+      <tr><td ><code>bun run agent:verify</code></td><td >Agente</td><td >Verifica la estructura del archivo de agente, la integridad referencial y el registro en AGENTS.md</td></tr>
+      <tr><td ><code>validate-skills.ts</code></td><td >Habilidad</td><td >Verifica el frontmatter de habilidades, los conflictos de disparadores y la validez de las referencias a herramientas</td></tr>
+      <tr><td >Revisión manual</td><td >Todos los ciclos de vida</td><td >Confirma la corrección semántica, la usabilidad y el alcance de impacto que las comprobaciones automatizadas no pueden detectar</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Los tres ciclos de vida comparten los siguientes tres principios comunes.</p>
+
+  <ul>
+    <li><strong>Marcado explícito de etapas:</strong> cada componente debe indicar claramente su etapa actual mediante un campo <code>status</code> o ubicación de archivo. Todo lo que esté en <code>draft</code> no se pone en producción, y todo lo que esté <code>deprecated</code>/<code>retired</code> se excluye de los nuevos objetivos de invocación.</li>
+    <li><strong>Compuertas de verificación:</strong> antes de pasar de una etapa a la siguiente, debe pasar una verificación definida. Si la verificación falla, vuelva a la etapa anterior, corrija el problema y reverifique.</li>
+    <li><strong>Conservar después de la deprecación:</strong> los componentes deprecados no se eliminan inmediatamente sino que se conservan durante un período de tiempo. Esto permite la restauración si es necesario y mantiene un registro rastreable de la decisión de deprecación.</li>
+  </ul>
+
+  <p>La siguiente sección (§3 Análisis Profundo de la Arquitectura) cubre cómo estos principios de gestión del ciclo de vida se combinan con direcciones avanzadas reales — contenedorización, gestión de memoria y pipelines de despliegue de variantes.</p>
+
+  <div class="video-refs">
+    <h3 id="videos">Vídeos de Referencia</h3>
+    <ul>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=zkDqFMF9B9o" target="_blank">Why AI Agents Need a Lifecycle</a><span class="video-meta">(6:49)</span> — Por qué importa la gestión del ciclo de vida de los agentes de IA y los puntos de gestión que las empresas pasan por alto</li>
+      <li><span class="video-badge en">EN</span><a href="https://www.youtube.com/watch?v=Odj-x2OZODw" target="_blank">The Agent Development Lifecycle (ADLC)</a><span class="video-meta">(5:22)</span> — Un plan sistemático para lanzar agentes de IA confiables</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <a href="08_Intro_Advanced_Deploy_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 8 §1 · Despliegue y SSOT</div></a>
+    <a href="08_Intro_Advanced_AGENTS_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 8 §3 · Análisis Profundo de AGENTS.md</div></a>
+  </div>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

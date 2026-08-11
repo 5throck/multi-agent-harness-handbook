@@ -9,7 +9,7 @@
 //     --repo owner/handbook-name \
 //     --visibility public
 
-import { writeFileSync, existsSync, readFileSync, mkdirSync, cpSync } from "node:fs";
+import { writeFileSync, existsSync, readFileSync, mkdirSync, cpSync, readdirSync } from "node:fs";
 import { join, resolve, basename } from "node:path";
 import { execSync } from "node:child_process";
 
@@ -53,6 +53,82 @@ function run(cmd: string, opts?: { cwd?: string; silent?: boolean }): string {
     const err = e as { stderr?: string; message?: string };
     throw new Error(`Command failed: ${cmd}\n${err.stderr || err.message || e}`);
   }
+}
+
+// --- README patch helpers ---
+
+/**
+ * Detect language from README filename.
+ * README_ko.md → "ko", README_ja.md → "ja", README.md → "en", etc.
+ */
+function detectReadmeLang(filename: string): string {
+  const match = filename.match(/^README_([a-z]{2}(?:-[A-Z]{2})?)\.md$/);
+  return match ? match[1] : "en";
+}
+
+/**
+ * Insert or update the 🌐 GitHub Pages section in a README file.
+ *
+ * Three cases:
+ * 1. No 🌐 section → insert before 🎯 Target Versions (or 📜 License as fallback)
+ * 2. 🌐 section with different URL → replace URL in the markdown link
+ * 3. 🌐 section with same URL → no-op
+ */
+function patchReadmePagesUrl(readmePath: string, url: string, title: string): boolean {
+  let content = readFileSync(readmePath, "utf-8");
+  const lang = detectReadmeLang(basename(readmePath));
+  const isKo = lang === "ko";
+
+  // Build the expected 🌐 section (matches scaffold-handbook.ts format)
+  const sectionHeading = isKo
+    ? "## 🌐 교육 프로그램 바로가기 (웹사이트)"
+    : "## 🌐 Read the Handbook Live";
+  const linkText = isKo
+    ? `${title} 교육 사이트 보기`
+    : "Online Handbook & Educational Program";
+  const newSection = `${sectionHeading}\n👉 **[${linkText}](${url})**`;
+
+  // Case 2/3: 🌐 section already exists
+  if (content.includes("## 🌐")) {
+    // Check if URL is already present
+    if (content.includes(url)) return false;
+
+    // Replace the URL in the existing markdown link within the 🌐 section
+    const globeSectionRegex = /(## 🌐[^\n]*\n)(\S+)/;
+    const match = content.match(globeSectionRegex);
+    if (match) {
+      // Replace the entire link line after the heading
+      content = content.replace(
+        /(## 🌐[^\n]*\n)(?:👉 \*\[[^\]]*\]\([^)]+\)\*\*|\[?[^\]]*\]?\([^)]+\))/,
+        `$1👉 **[${linkText}](${url})**`,
+      );
+      writeFileSync(readmePath, content);
+      return true;
+    }
+
+    // Fallback: couldn't parse — insert new section, remove old
+    content = content.replace(/## 🌐[^\n]*\n(?:.*\n?)*?(?=\n## )/, "");
+    content = content.trimEnd() + "\n\n" + newSection + "\n";
+    writeFileSync(readmePath, content);
+    return true;
+  }
+
+  // Case 1: No 🌐 section — insert before 🎯 or 📜
+  const insertBefore = content.includes("## 🎯")
+    ? "## 🎯"
+    : content.includes("## 📜")
+      ? "## 📜"
+      : null;
+
+  if (insertBefore) {
+    content = content.replace(insertBefore, `${newSection}\n\n${insertBefore}`);
+  } else {
+    // No standard section found — append at end
+    content = content.trimEnd() + "\n\n" + newSection + "\n";
+  }
+
+  writeFileSync(readmePath, content);
+  return true;
 }
 
 // --- Step 0: Validate inputs ---
@@ -244,8 +320,22 @@ try {
 run(`git add ${outputDir}/.github/workflows/deploy-pages.yml ${outputDir}/docs/.nojekyll`);
 log("✅", "Staged deploy workflow and .nojekyll");
 
+// Patch README files with GitHub Pages URL
+const readmeFiles = readdirSync(handbookDir).filter(f => f.startsWith("README") && f.endsWith(".md"));
+for (const readmeFile of readmeFiles) {
+  const readmePath = join(handbookDir, readmeFile);
+  const patched = patchReadmePagesUrl(readmePath, pagesUrl, repoName);
+  if (patched) {
+    run(`git add ${readmePath}`);
+    log("📝", `Patched ${readmeFile} with GitHub Pages URL`);
+  } else {
+    log("ℹ️", `${readmeFile} already has correct GitHub Pages URL`);
+  }
+}
+
 // Check if there are changes to commit
-const status = run("git status --porcelain -- ${outputDir}/.github/workflows/deploy-pages.yml ${outputDir}/docs/.nojekyll", { silent: true });
+const readmeArgs = readmeFiles.map(f => `${outputDir}/${f}`).join(" ");
+const status = run(`git status --porcelain -- ${outputDir}/.github/workflows/deploy-pages.yml ${outputDir}/docs/.nojekyll ${readmeArgs}`, { silent: true });
 if (status) {
   run(`git commit -m "ci(handbook): add GitHub Pages deploy workflow"`);
   log("✅", "Committed deploy workflow");

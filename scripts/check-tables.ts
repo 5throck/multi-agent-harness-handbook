@@ -1,6 +1,9 @@
-// scripts/check-tables.ts
+#!/usr/bin/env bun
+// scripts/co-deck/handbook/check-tables.ts
 // Enforces the "TABLE COLUMN-SIZING POLICY" documented in
 // docs/assets/css/handbook-components.css (search for that heading).
+// Vendored from Handbooks/multi-agent-harness-handbook/scripts/check-tables.ts
+// (canonical source: scripts/co-deck/handbook/).
 // Hand-tuned per-table column ratios are forbidden:
 //   1. No <colgroup> / <col style="width:..."> markup in docs/**/*.html
 //   2. No per-table `col.col-*` percentage width rules in the CSS
@@ -11,9 +14,13 @@
 //   4. No `max-width` on a table-column rule without an accompanying
 //      `width` — max-width alone gives auto layout no real target and
 //      collapses the column to its single-word min-content instead.
+//
+// Usage:
+//   bun run scripts/co-deck/handbook/check-tables.ts --docs-dir docs
 
-import { findAllHtmlFiles, readFile, getDocsDir } from "./nav-utils.ts";
-import { relative, join } from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
+import { join, relative } from "node:path";
+import { getDocsDir, configureDocsDir } from "./nav-utils.ts";
 
 export interface TableError {
   file: string;
@@ -26,6 +33,19 @@ interface CssRule {
   selector: string;
   body: string;
   startLine: number;
+}
+
+function findAllHtmlFiles(docsDir: string): string[] {
+  const results: string[] = [];
+  function walk(dir: string) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith(".html")) results.push(full);
+    }
+  }
+  walk(docsDir);
+  return results;
 }
 
 // Blanks out comment contents (keeping line breaks, so line numbers stay
@@ -49,13 +69,13 @@ function parseCssRules(css: string): CssRule[] {
   return rules;
 }
 
-export function checkTables(): TableError[] {
+export function checkTables(docsDir?: string): TableError[] {
+  const dir = docsDir ? docsDir : getDocsDir();
   const errors: TableError[] = [];
-  const docsDir = getDocsDir();
 
-  for (const filePath of findAllHtmlFiles()) {
-    const html = readFile(filePath);
-    const relFile = relative(docsDir, filePath);
+  for (const filePath of findAllHtmlFiles(dir)) {
+    const html = readFileSync(filePath, "utf-8");
+    const relFile = relative(dir, filePath).replace(/\\/g, "/");
     const lines = html.split("\n");
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
@@ -68,8 +88,8 @@ export function checkTables(): TableError[] {
   }
 
   const cssRelPath = "assets/css/handbook-components.css";
-  const cssPath = join(docsDir, "assets", "css", "handbook-components.css");
-  const css = readFile(cssPath);
+  const cssPath = join(dir, "assets", "css", "handbook-components.css");
+  const css = readFileSync(cssPath, "utf-8");
   const cssLines = css.split("\n");
 
   for (let i = 0; i < cssLines.length; i++) {
@@ -116,6 +136,10 @@ export function checkTables(): TableError[] {
 }
 
 if (import.meta.main) {
+  const args = process.argv.slice(2);
+  const idx = args.indexOf("--docs-dir");
+  if (idx !== -1 && args[idx + 1]) configureDocsDir(args[idx + 1]);
+
   const errors = checkTables();
   if (errors.length === 0) {
     console.log("check-tables: OK — no hand-tuned table column ratios found.");

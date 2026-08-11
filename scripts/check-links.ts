@@ -1,5 +1,7 @@
-// scripts/check-links.ts
+// scripts/co-deck/handbook/check-links.ts
 // Check ①: Verify all internal a href targets resolve to existing files.
+// Canonical source of the handbook toolkit (adapted from
+// Handbooks/multi-agent-harness-handbook/scripts/check-links.ts).
 
 import { findAllHtmlFiles, readFile, resolveHref, fileExists, getDocsDir } from "./nav-utils.ts";
 import { relative } from "node:path";

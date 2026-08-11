@@ -1,5 +1,7 @@
-// scripts/check-symmetry.ts
+// scripts/co-deck/handbook/check-symmetry.ts
 // Check ②: If A's chapter-nav next → B, then B's chapter-nav prev → A.
+// Canonical source of the handbook toolkit (adapted from
+// Handbooks/multi-agent-harness-handbook/scripts/check-symmetry.ts).
 
 import { findAllHtmlFiles, readFile, extractChapterNav, resolveHref, getDocsDir } from "./nav-utils.ts";
 import { relative } from "node:path";
@@ -16,15 +18,12 @@ export function checkSymmetry(): SymmetryError[] {
   const htmlFiles = findAllHtmlFiles();
   const docsDir = getDocsDir();
 
-  // Build map: absPath → { prev?, next?, others[] }
   const navMap = new Map<string, ReturnType<typeof extractChapterNav>>();
   for (const filePath of htmlFiles) {
     const html = readFile(filePath);
     navMap.set(filePath, extractChapterNav(html));
   }
 
-  // Files that act as hubs (branch divs instead of next link) — their "next"
-  // is effectively through branch links, so don't require a symmetric prev→next.
   const hubFiles = new Set<string>();
   for (const [filePath, nav] of navMap) {
     if (!nav.next && nav.others.length > 0 && nav.prev) {
@@ -32,7 +31,6 @@ export function checkSymmetry(): SymmetryError[] {
     }
   }
 
-  // Files with no chapter-nav at all (e.g. glossary, index) — skip as targets
   const noNavFiles = new Set<string>();
   for (const [filePath, nav] of navMap) {
     if (!nav.prev && !nav.next && nav.others.length === 0) {
@@ -40,8 +38,6 @@ export function checkSymmetry(): SymmetryError[] {
     }
   }
 
-  // Files that participate in branching (have branch div links) — their prev/next
-  // may converge at different points than the linear chain expects.
   const branchFiles = new Set<string>();
   for (const [filePath, nav] of navMap) {
     if (nav.others.length > 0) {
@@ -52,7 +48,6 @@ export function checkSymmetry(): SymmetryError[] {
   for (const [filePath, nav] of navMap) {
     const relFile = relative(docsDir, filePath);
 
-    // Check: if this file has a "next" link, the target should have a "prev" pointing back
     if (nav.next) {
       const nextAbs = resolveHref(filePath, nav.next.href);
       if (nextAbs) {
@@ -65,7 +60,6 @@ export function checkSymmetry(): SymmetryError[] {
             detail: `next → ${nav.next.href} but target file not found in docs/`,
           });
         } else if (!targetNav.prev) {
-          // Skip if target has no nav at all (e.g. glossary)
           if (!noNavFiles.has(nextAbs)) {
             errors.push({
               type: "missing-back-link",
@@ -75,10 +69,8 @@ export function checkSymmetry(): SymmetryError[] {
             });
           }
         } else {
-          // Verify prev points back to this file
-          // Skip if target is a hub, or if either file participates in branching
           if (hubFiles.has(nextAbs) || branchFiles.has(filePath) || branchFiles.has(nextAbs)) {
-            // Acceptable: branching navigation has convergence points
+            // Acceptable: branching navigation
           } else {
             const prevAbs = resolveHref(nextAbs, targetNav.prev.href);
             if (prevAbs !== filePath) {
@@ -94,7 +86,6 @@ export function checkSymmetry(): SymmetryError[] {
       }
     }
 
-    // Check: if this file has a "prev" link, the target should have a "next" pointing back
     if (nav.prev) {
       const prevAbs = resolveHref(filePath, nav.prev.href);
       if (prevAbs) {
@@ -107,8 +98,6 @@ export function checkSymmetry(): SymmetryError[] {
             detail: `prev → ${nav.prev.href} but target file not found in docs/`,
           });
         } else if (!targetNav.next) {
-          // Skip: hub files use branch divs instead of next
-          // Skip: terminal files like capstone, glossary
           if (!hubFiles.has(prevAbs) && !noNavFiles.has(prevAbs)) {
             const targetRel = relative(docsDir, prevAbs);
             errors.push({
@@ -119,9 +108,8 @@ export function checkSymmetry(): SymmetryError[] {
             });
           }
         } else {
-          // Skip mismatch check if either file participates in branching
           if (branchFiles.has(filePath) || branchFiles.has(prevAbs)) {
-            // Acceptable: branching navigation has convergence points
+            // Acceptable
           } else {
             const nextAbs = resolveHref(prevAbs, targetNav.next.href);
             if (nextAbs !== filePath) {

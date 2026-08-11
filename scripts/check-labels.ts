@@ -1,5 +1,7 @@
-// scripts/check-labels.ts
+// scripts/co-deck/handbook/check-labels.ts
 // Check ③: chapter-nav link labels should match the target file's title or h1.
+// Canonical source of the handbook toolkit (adapted from
+// Handbooks/multi-agent-harness-handbook/scripts/check-labels.ts).
 
 import { findAllHtmlFiles, readFile, extractChapterNav, resolveHref, extractTitle, extractH1, getDocsDir } from "./nav-utils.ts";
 import { relative } from "node:path";
@@ -24,7 +26,6 @@ export function checkLabels(): LabelError[] {
   const htmlFiles = findAllHtmlFiles();
   const docsDir = getDocsDir();
 
-  // Pre-load all titles/h1s
   const fileMeta = new Map<string, { title: string; h1: string }>();
   for (const filePath of htmlFiles) {
     const html = readFile(filePath);
@@ -43,11 +44,10 @@ export function checkLabels(): LabelError[] {
 
     for (const { type, entry } of links) {
       const absTarget = resolveHref(filePath, entry.href);
-      if (!absTarget) continue; // skip external
+      if (!absTarget) continue;
       const meta = fileMeta.get(absTarget);
-      if (!meta) continue; // skip if target not found (broken link catches this)
+      if (!meta) continue;
 
-      // Compare chapter numbers if present in both label and title
       const labelNum = extractChapterNum(entry.label);
       const titleNum = extractChapterNum(meta.title);
 

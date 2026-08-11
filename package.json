@@ -7,6 +7,10 @@
     "validate-nav": "bun run scripts/validate-nav.ts --docs-dir docs",
     "check-structure": "bun run scripts/check-structure.ts --docs-dir docs",
     "check-tables": "bun run scripts/check-tables.ts --docs-dir docs",
-    "update-footers": "bun run scripts/update-footers.ts --docs-dir docs"
+    "update-footers": "bun run scripts/update-footers.ts --docs-dir docs",
+    "check-authoring": "bun run scripts/check-authoring.ts --docs-dir docs",
+    "apply-theme": "bun run scripts/apply-handbook-theme.ts --docs-dir docs",
+    "doctor": "bun run scripts/handbook-doctor.ts --docs-dir docs",
+    "deploy": "bun run scripts/deploy-handbook.ts --project . --output ."
   }
 }

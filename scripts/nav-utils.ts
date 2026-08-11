@@ -1,10 +1,34 @@
-// scripts/nav-utils.ts
-// HTML parsing helpers for navigation validation — zero external deps.
+// scripts/co-deck/handbook/nav-utils.ts
+// HTML parsing helpers for handbook validation — zero external deps.
+// This file is the canonical source of the handbook validation toolkit.
+// The two handbook repos (intro-to-ai-harness, multi-agent-harness-handbook)
+// vendor their copies from here — see the validate-handbook.ts unified runner.
 
 import { readdirSync, readFileSync, existsSync } from "node:fs";
-import { join, relative, dirname } from "node:path";
+import { join, dirname } from "node:path";
 
-const DOCS_DIR = join(import.meta.dirname || ".", "..", "docs");
+// Resolved lazily so `configureDocsDir()` (called by the unified runner
+// before any check runs) takes effect even after the module is imported.
+let configuredDocsDir: string | null = null;
+
+/** Programmatically point the toolkit at a docs directory (unified runner). */
+export function configureDocsDir(dir: string): void {
+  configuredDocsDir = dir;
+}
+
+/** Resolve the docs dir from (1) configureDocsDir, (2) --docs-dir CLI, (3) default. */
+function resolveDocsDir(): string {
+  if (configuredDocsDir) return configuredDocsDir;
+  const args = process.argv.slice(2);
+  const idx = args.indexOf("--docs-dir");
+  if (idx !== -1 && args[idx + 1]) {
+    // If absolute path, use as-is; if relative, resolve from cwd
+    const raw = args[idx + 1];
+    return join(process.cwd(), raw);
+  }
+  // Default: handbook/docs relative to project root
+  return join(import.meta.dirname || ".", "..", "..", "..", "handbook", "docs");
+}
 
 /** Find all .html files under docs/ (recursively), returning absolute paths. */
 export function findAllHtmlFiles(): string[] {
@@ -16,7 +40,7 @@ export function findAllHtmlFiles(): string[] {
       else if (entry.name.endsWith(".html")) results.push(full);
     }
   }
-  walk(DOCS_DIR);
+  walk(resolveDocsDir());
   return results;
 }
 
@@ -47,36 +71,32 @@ export function extractChapterNav(html: string): {
   const result: { prev?: { href: string; label: string }; next?: { href: string; label: string }; others: { href: string; label: string }[] } = { others: [] };
 
   // Extract <div class="chapter-nav">...</div> block using depth-aware parsing
-  // (simple regex can't handle nested divs reliably)
   const openIdx = html.indexOf('<div class="chapter-nav"');
   if (openIdx === -1) return result;
 
-  // Find the end of the opening tag
-  const tagEnd = html.indexOf('>', openIdx);
+  const tagEnd = html.indexOf(">", openIdx);
   if (tagEnd === -1) return result;
 
   let depth = 1;
   let pos = tagEnd + 1;
   while (pos < html.length && depth > 0) {
-    const nextOpen = html.indexOf('<div', pos);
-    const nextClose = html.indexOf('</div>', pos);
-    if (nextClose === -1) break; // malformed
+    const nextOpen = html.indexOf("<div", pos);
+    const nextClose = html.indexOf("</div>", pos);
+    if (nextClose === -1) break;
     if (nextOpen !== -1 && nextOpen < nextClose) {
-      // Check it's a proper opening tag (not <divsomething without space or >)
       const charAfter = html[nextOpen + 4];
-      if (charAfter === ' ' || charAfter === '>') {
+      if (charAfter === " " || charAfter === ">") {
         depth++;
         pos = nextOpen + 4;
         continue;
       }
     }
     depth--;
-    pos = nextClose + 6; // length of '</div>'
+    pos = nextClose + 6;
   }
 
-  const navHtml = html.slice(tagEnd + 1, pos - 6); // exclude the final </div>
+  const navHtml = html.slice(tagEnd + 1, pos - 6);
 
-  // Extract individual <a ...>...</a> tags from the nav block
   const aTagRe = /<a\s+href="([^"]*)"\s*((?:class="[^"]*")?\s*(?:style="[^"]*")?\s*)>([\s\S]*?)<\/a>/g;
   let m: RegExpExecArray | null;
 
@@ -85,11 +105,9 @@ export function extractChapterNav(html: string): {
     const attrs = m[2] || "";
     const inner = m[3];
 
-    // Extract class from attributes
     const classMatch = attrs.match(/class="([^"]*)"/);
     const cls = classMatch ? classMatch[1] : "";
 
-    // Extract label: prefer <div class="ttl"> content, fall back to plain text
     const ttlMatch = inner.match(/<div\s+class="ttl">([\s\S]*?)<\/div>/);
     const label = ttlMatch ? ttlMatch[1].trim() : inner.trim();
     const entry = { href, label };
@@ -143,5 +161,5 @@ export function fileExists(absPath: string): boolean {
 
 /** Get the docs directory path. */
 export function getDocsDir(): string {
-  return DOCS_DIR;
+  return resolveDocsDir();
 }

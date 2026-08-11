@@ -1,6 +1,8 @@
 #!/usr/bin/env bun
-// scripts/validate-nav.ts
+// scripts/co-deck/handbook/validate-nav.ts
 // Navigation integrity validator — runs all 4 checks and exits with code 1 on failure.
+// Canonical source of the handbook toolkit (adapted from
+// Handbooks/multi-agent-harness-handbook/scripts/validate-nav.ts).
 
 import { checkBrokenLinks } from "./check-links.ts";
 import { checkSymmetry } from "./check-symmetry.ts";

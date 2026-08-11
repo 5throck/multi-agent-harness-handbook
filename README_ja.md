@@ -30,5 +30,4 @@
 - `ai-workspace-standards` main (2026-07-08)
 
 ## 📜 ライセンス
-- **ソースコード** (スクリプト・設定ファイル): [GNU AGPL-3.0](LICENSE)
-- **ハンドブックコンテンツ** (各章・ドキュメント): [CC BY-NC-SA 4.0](LICENSE-CC-BY-NC-SA) (表示 - 非営利 - 継承 4.0 国際)
+- **ハンドブックコンテンツ**: [CC BY-NC-SA 4.0](LICENSE) (表示 - 非営利 - 継承 4.0 国際)

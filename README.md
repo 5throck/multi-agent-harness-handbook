@@ -29,5 +29,4 @@ Welcome to the **Multi-Agent Harness Engineering Handbook**, an AI Workspace edu
 - Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-07-08)
 
 ## 📜 License
-- **Source code** (scripts, configuration): [GNU AGPL-3.0](LICENSE)
-- **Handbook content** (chapters, docs): [CC BY-NC-SA 4.0](LICENSE-CC-BY-NC-SA) (Attribution-NonCommercial-ShareAlike 4.0 International)
+- **Handbook content**: [CC BY-NC-SA 4.0](LICENSE) (Attribution-NonCommercial-ShareAlike 4.0 International)

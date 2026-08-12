@@ -111,30 +111,30 @@
       <!-- Top tier: Destructive operations (triangle apex) -->
       <polygon points="250,20 302,100 198,100" fill="url(#pyramidRed)" opacity="0.9"/>
       <!-- Red tier callout (outside the shape) -->
-      <rect x="430" y="29" width="200" height="62" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
-      <text x="530" y="47" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#cf222e">破壊的作業</text>
-      <text x="530" y="64" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">例: git push, rm -rf</text>
-      <text x="530" y="79" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">デプロイ、決済、外部メッセージ</text>
-      <line x1="276" y1="60" x2="430" y2="60" stroke="#ff8182" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="430" y="29" width="200" height="62" rx="6" fill="var(--bg-error)" stroke="var(--badge-red-fg)" stroke-width="1"/>
+      <text x="530" y="47" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-red)">破壊的作業</text>
+      <text x="530" y="64" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-red)">例: git push, rm -rf</text>
+      <text x="530" y="79" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-red)">デプロイ、決済、外部メッセージ</text>
+      <line x1="276" y1="60" x2="430" y2="60" stroke="var(--badge-red-fg)" stroke-width="1" stroke-dasharray="3,2"/>
 
       <!-- Middle tier: Write operations (trapezoid) -->
       <polygon points="198,100 302,100 361,190 139,190" fill="url(#pyramidOrange)" opacity="0.9"/>
-      <rect x="430" y="114" width="200" height="62" rx="6" fill="#fff8c5" stroke="#f5c518" stroke-width="1"/>
-      <text x="530" y="132" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#953800">書き込み作業</text>
-      <text x="530" y="149" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">例: ファイル修正、PR作成</text>
-      <text x="530" y="164" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#953800">ローカルコミット、設定変更</text>
-      <line x1="332" y1="145" x2="430" y2="145" stroke="#f5c518" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="430" y="114" width="200" height="62" rx="6" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1"/>
+      <text x="530" y="132" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-amber)">書き込み作業</text>
+      <text x="530" y="149" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-amber)">例: ファイル修正、PR作成</text>
+      <text x="530" y="164" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-amber)">ローカルコミット、設定変更</text>
+      <line x1="332" y1="145" x2="430" y2="145" stroke="var(--badge-amber-border)" stroke-width="1" stroke-dasharray="3,2"/>
 
       <!-- Bottom tier: Read operations (trapezoid) -->
       <polygon points="139,190 361,190 420,280 80,280" fill="url(#pyramidGreen)" opacity="0.9"/>
-      <rect x="430" y="204" width="200" height="62" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
-      <text x="530" y="222" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#116329">読み取り作業</text>
-      <text x="530" y="239" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">例: ファイル読み込み、検索</text>
-      <text x="530" y="254" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Web参照、ログ閲覧</text>
-      <line x1="391" y1="235" x2="430" y2="235" stroke="#a2d9b1" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="430" y="204" width="200" height="62" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1"/>
+      <text x="530" y="222" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--badge-green-fg)">読み取り作業</text>
+      <text x="530" y="239" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--badge-green-fg)">例: ファイル読み込み、検索</text>
+      <text x="530" y="254" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--badge-green-fg)">Web参照、ログ閲覧</text>
+      <line x1="391" y1="235" x2="430" y2="235" stroke="var(--badge-green-border)" stroke-width="1" stroke-dasharray="3,2"/>
 
       <!-- Least privilege label -->
-      <text x="250" y="320" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="600" fill="#636c76">▲ 最小権限の原則(Least Privilege) — 必要な権限のみ付与</text>
+      <text x="250" y="320" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="600" fill="var(--text-dim)">▲ 最小権限の原則(Least Privilege) — 必要な権限のみ付与</text>
     </svg>
   </div>
 
@@ -146,72 +146,72 @@
     <div>承認ゲート動作フローチャート</div>
     <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
       <defs>
-        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
-        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
-        <marker id="agArrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#cf222e"/></marker>
-        <marker id="agArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+        <marker id="agArrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-red)"/></marker>
+        <marker id="agArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
       </defs>
       <!-- 1. User request -->
-      <rect x="10" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#0969da" stroke-width="1.5"/>
-      <text x="65" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">ユーザー要求</text>
-      <text x="65" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">エージェント動作</text>
+      <rect x="10" y="130" width="110" height="40" rx="8" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="65" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">ユーザー要求</text>
+      <text x="65" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">エージェント動作</text>
       <!-- Arrow 1→2 -->
-      <line x1="120" y1="150" x2="155" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="120" y1="150" x2="155" y2="150" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#agArrow)"/>
 
       <!-- 2. Risk analysis -->
-      <rect x="160" y="130" width="110" height="40" rx="8" fill="#ffffff" stroke="#6639ba" stroke-width="1.5"/>
-      <text x="215" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#6639ba">リスク分類</text>
-      <text x="215" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">自動判定</text>
+      <rect x="160" y="130" width="110" height="40" rx="8" fill="var(--bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+      <text x="215" y="148" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent-purple)">リスク分類</text>
+      <text x="215" y="162" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">自動判定</text>
       <!-- Arrow 2→3 -->
-      <line x1="270" y1="150" x2="305" y2="150" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="270" y1="150" x2="305" y2="150" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#agArrow)"/>
 
       <!-- 3. Decision diamond -->
-      <polygon points="360,108 420,150 360,192 300,150" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.5"/>
-      <text x="360" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">リスク</text>
-      <text x="360" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">判定?</text>
+      <polygon points="360,108 420,150 360,192 300,150" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1.5"/>
+      <text x="360" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-amber)">リスク</text>
+      <text x="360" y="160" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-amber)">判定?</text>
 
       <!-- Low branch (up) -->
-      <line x1="360" y1="108" x2="360" y2="58" stroke="#1a7f37" stroke-width="1.5"/>
-      <line x1="360" y1="58" x2="440" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
-      <text x="365" y="78" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#1a7f37">低い</text>
+      <line x1="360" y1="108" x2="360" y2="58" stroke="var(--accent-green)" stroke-width="1.5"/>
+      <line x1="360" y1="58" x2="440" y2="58" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <text x="365" y="78" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent-green)">低い</text>
       <!-- Low: auto-execute -->
-      <rect x="445" y="40" width="100" height="36" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1.2"/>
-      <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#116329">自動実行</text>
-      <text x="495" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#116329">Read / Write</text>
+      <rect x="445" y="40" width="100" height="36" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+      <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">自動実行</text>
+      <text x="495" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--badge-green-fg)">Read / Write</text>
 
       <!-- High branch (down) -->
-      <line x1="360" y1="192" x2="360" y2="240" stroke="#cf222e" stroke-width="1.5"/>
-      <line x1="360" y1="240" x2="440" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
-      <text x="365" y="228" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#cf222e">高い</text>
+      <line x1="360" y1="192" x2="360" y2="240" stroke="var(--accent-red)" stroke-width="1.5"/>
+      <line x1="360" y1="240" x2="440" y2="240" stroke="var(--accent-red)" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <text x="365" y="228" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent-red)">高い</text>
       <!-- High: awaiting human approval -->
-      <rect x="445" y="222" width="100" height="36" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1.2"/>
-      <text x="495" y="237" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#cf222e">承認待ち</text>
-      <text x="495" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#cf222e">人による確認</text>
+      <rect x="445" y="222" width="100" height="36" rx="6" fill="var(--bg-error)" stroke="var(--badge-red-fg)" stroke-width="1.2"/>
+      <text x="495" y="237" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-red)">承認待ち</text>
+      <text x="495" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-red)">人による確認</text>
 
       <!-- Low → execute → result -->
-      <line x1="545" y1="58" x2="575" y2="58" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
-      <rect x="580" y="42" width="68" height="32" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1.2"/>
-      <text x="614" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#1a7f37">実行</text>
-      <text x="614" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#1a7f37"></text>
+      <line x1="545" y1="58" x2="575" y2="58" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="580" y="42" width="68" height="32" rx="6" fill="var(--bg)" stroke="var(--accent-green)" stroke-width="1.2"/>
+      <text x="614" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-green)">実行</text>
+      <text x="614" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-green)"></text>
       <!-- Execute → result -->
-      <line x1="545" y1="240" x2="575" y2="240" stroke="#cf222e" stroke-width="1.5" marker-end="url(#agArrowR)"/>
-      <rect x="580" y="224" width="68" height="32" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
-      <text x="614" y="238" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">承認</text>
-      <text x="614" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#0969da"></text>
+      <line x1="545" y1="240" x2="575" y2="240" stroke="var(--accent-red)" stroke-width="1.5" marker-end="url(#agArrowR)"/>
+      <rect x="580" y="224" width="68" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+      <text x="614" y="238" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent)">承認</text>
+      <text x="614" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent)"></text>
 
       <!-- Both paths converge to result -->
-      <line x1="614" y1="74" x2="614" y2="110" stroke="#1a7f37" stroke-width="1.2"/>
-      <line x1="614" y1="110" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
-      <line x1="614" y1="256" x2="614" y2="280" stroke="#cf222e" stroke-width="1.2"/>
-      <line x1="670" y1="280" x2="670" y2="110" stroke="#0969da" stroke-width="1.2"/>
-      <line x1="614" y1="280" x2="670" y2="280" stroke="#0969da" stroke-width="1.2"/>
+      <line x1="614" y1="74" x2="614" y2="110" stroke="var(--accent-green)" stroke-width="1.2"/>
+      <line x1="614" y1="110" x2="670" y2="110" stroke="var(--accent)" stroke-width="1.2"/>
+      <line x1="614" y1="256" x2="614" y2="280" stroke="var(--accent-red)" stroke-width="1.2"/>
+      <line x1="670" y1="280" x2="670" y2="110" stroke="var(--accent)" stroke-width="1.2"/>
+      <line x1="614" y1="280" x2="670" y2="280" stroke="var(--accent)" stroke-width="1.2"/>
       <!-- Result -->
-      <rect x="640" y="130" width="60" height="40" rx="6" fill="#f0f7ff" stroke="#0969da" stroke-width="1.5"/>
-      <text x="670" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#0969da">結果</text>
-      <text x="670" y="161" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">応答返却</text>
+      <rect x="640" y="130" width="60" height="40" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="670" y="147" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">結果</text>
+      <text x="670" y="161" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">応答返却</text>
 
       <!-- Bottom note -->
-      <text x="360" y="290" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 破壊的/外部影響作業は必ず人による承認ゲートを経なければならない</text>
+      <text x="360" y="290" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 破壊的/外部影響作業は必ず人による承認ゲートを経なければならない</text>
     </svg>
   </div>
 
@@ -227,93 +227,93 @@
     <div>監査ログの構造と監査フロー</div>
     <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
       <defs>
-        <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
-        <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/></marker>
-        <marker id="alArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+        <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+        <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+        <marker id="alArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
       </defs>
 
       <!-- Left side: Audit Log Structure -->
-      <text x="80" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">監査ログの構造</text>
+      <text x="80" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--text)">監査ログの構造</text>
       <!-- Log entry card -->
-      <rect x="10" y="32" width="140" height="140" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+      <rect x="10" y="32" width="140" height="140" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.2"/>
       <!-- Header row -->
-      <rect x="10" y="32" width="140" height="26" rx="8" fill="#eef1f4"/>
-      <rect x="10" y="46" width="140" height="12" fill="#eef1f4"/>
-      <text x="80" y="49" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="10" font-weight="700" fill="#0550ae">log_entry</text>
+      <rect x="10" y="32" width="140" height="26" rx="8" fill="var(--bg3)"/>
+      <rect x="10" y="46" width="140" height="12" fill="var(--bg3)"/>
+      <text x="80" y="49" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="10" font-weight="700" fill="var(--accent-dark)">log_entry</text>
       <!-- Fields -->
-      <text x="20" y="74" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">timestamp</text>
-      <rect x="78" y="64" width="60" height="16" rx="3" fill="#ddf4ff" stroke="#a5d5f7" stroke-width="0.8"/>
-      <text x="108" y="75" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#0550ae">ISO 8601</text>
+      <text x="20" y="74" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">timestamp</text>
+      <rect x="78" y="64" width="60" height="16" rx="3" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)" stroke-width="0.8"/>
+      <text x="108" y="75" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="var(--accent-dark)">ISO 8601</text>
 
-      <text x="20" y="98" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">agent</text>
-      <rect x="78" y="88" width="60" height="16" rx="3" fill="#fbefff" stroke="#d2b9ff" stroke-width="0.8"/>
-      <text x="108" y="99" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#6639ba">reviewer</text>
+      <text x="20" y="98" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">agent</text>
+      <rect x="78" y="88" width="60" height="16" rx="3" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="0.8"/>
+      <text x="108" y="99" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="var(--accent-purple)">reviewer</text>
 
-      <text x="20" y="122" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">action</text>
-      <rect x="78" y="112" width="60" height="16" rx="3" fill="#fff8c5" stroke="#f5c518" stroke-width="0.8"/>
-      <text x="108" y="123" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#953800">Read/Grep</text>
+      <text x="20" y="122" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">action</text>
+      <rect x="78" y="112" width="60" height="16" rx="3" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="0.8"/>
+      <text x="108" y="123" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="var(--accent-amber)">Read/Grep</text>
 
-      <text x="20" y="146" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">result</text>
-      <rect x="78" y="136" width="60" height="16" rx="3" fill="#dafbe1" stroke="#a2d9b1" stroke-width="0.8"/>
-      <text x="108" y="147" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#116329">ok / deny</text>
+      <text x="20" y="146" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">result</text>
+      <rect x="78" y="136" width="60" height="16" rx="3" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="0.8"/>
+      <text x="108" y="147" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="var(--badge-green-fg)">ok / deny</text>
 
-      <text x="20" y="168" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="#636c76">context</text>
-      <rect x="78" y="158" width="60" height="16" rx="3" fill="#f6f8fa" stroke="#d0d7de" stroke-width="0.8"/>
-      <text x="108" y="169" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="#636c76">filepath…</text>
+      <text x="20" y="168" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--text-dim)">context</text>
+      <rect x="78" y="158" width="60" height="16" rx="3" fill="var(--bg2)" stroke="var(--border)" stroke-width="0.8"/>
+      <text x="108" y="169" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="9" fill="var(--text-dim)">filepath…</text>
 
       <!-- Divider line -->
-      <line x1="170" y1="30" x2="170" y2="275" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="170" y1="30" x2="170" y2="275" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
 
       <!-- Right side: Flow -->
-      <text x="400" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="#1f2328">監査フロー</text>
+      <text x="400" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--text)">監査フロー</text>
 
       <!-- Step 1: Agent action -->
-      <rect x="200" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1.2"/>
-      <text x="250" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#6639ba">エージェント動作</text>
-      <text x="250" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">tool呼び出し</text>
+      <rect x="200" y="40" width="100" height="36" rx="6" fill="var(--bg)" stroke="var(--accent-purple)" stroke-width="1.2"/>
+      <text x="250" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">エージェント動作</text>
+      <text x="250" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">tool呼び出し</text>
       <!-- Arrow -->
-      <line x1="300" y1="58" x2="335" y2="58" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+      <line x1="300" y1="58" x2="335" y2="58" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#alArrow)"/>
 
       <!-- Step 2: Log record -->
-      <rect x="340" y="40" width="100" height="36" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
-      <text x="390" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#0969da">ログ記録</text>
-      <text x="390" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">audit.ts</text>
+      <rect x="340" y="40" width="100" height="36" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+      <text x="390" y="56" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent)">ログ記録</text>
+      <text x="390" y="68" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">audit.ts</text>
       <!-- Arrow down -->
-      <line x1="390" y1="76" x2="390" y2="100" stroke="#636c76" stroke-width="1.2" marker-end="url(#alArrow)"/>
+      <line x1="390" y1="76" x2="390" y2="100" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#alArrow)"/>
 
       <!-- Step 3: Inspection/analysis -->
-      <rect x="340" y="105" width="100" height="36" rx="6" fill="#ffffff" stroke="#953800" stroke-width="1.2"/>
-      <text x="390" y="121" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="#953800">検査 / 分析</text>
-      <text x="390" y="133" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">規則違反?</text>
+      <rect x="340" y="105" width="100" height="36" rx="6" fill="var(--bg)" stroke="var(--accent-amber)" stroke-width="1.2"/>
+      <text x="390" y="121" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-amber)">検査 / 分析</text>
+      <text x="390" y="133" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">規則違反?</text>
 
       <!-- Branch: Normal -->
-      <line x1="440" y1="115" x2="475" y2="115" stroke="#1a7f37" stroke-width="1.2" marker-end="url(#alArrowB)"/>
-      <text x="450" y="108" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#1a7f37">正常</text>
-      <rect x="480" y="100" width="80" height="30" rx="6" fill="#dafbe1" stroke="#a2d9b1" stroke-width="1"/>
-      <text x="520" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#116329">記録保存</text>
+      <line x1="440" y1="115" x2="475" y2="115" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#alArrowB)"/>
+      <text x="450" y="108" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="var(--accent-green)">正常</text>
+      <rect x="480" y="100" width="80" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1"/>
+      <text x="520" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--badge-green-fg)">記録保存</text>
 
       <!-- Branch: Violation -->
-      <line x1="440" y1="131" x2="475" y2="131" stroke="#cf222e" stroke-width="1.2"/>
-      <polygon points="480,131 475,128 475,134" fill="#cf222e"/>
-      <text x="450" y="140" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="#cf222e">違反</text>
-      <rect x="480" y="155" width="80" height="30" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
-      <text x="520" y="170" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#cf222e">警告 / 通知</text>
-      <line x1="475" y1="131" x2="475" y2="170" stroke="#cf222e" stroke-width="1" stroke-dasharray="3,2"/>
-      <line x1="475" y1="170" x2="480" y2="170" stroke="#cf222e" stroke-width="1"/>
+      <line x1="440" y1="131" x2="475" y2="131" stroke="var(--accent-red)" stroke-width="1.2"/>
+      <polygon points="480,131 475,128 475,134" fill="var(--accent-red)"/>
+      <text x="450" y="140" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="var(--accent-red)">違反</text>
+      <rect x="480" y="155" width="80" height="30" rx="6" fill="var(--bg-error)" stroke="var(--badge-red-fg)" stroke-width="1"/>
+      <text x="520" y="170" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--accent-red)">警告 / 通知</text>
+      <line x1="475" y1="131" x2="475" y2="170" stroke="var(--accent-red)" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="475" y1="170" x2="480" y2="170" stroke="var(--accent-red)" stroke-width="1"/>
 
       <!-- Arrow from warning down to post-review -->
-      <line x1="520" y1="185" x2="520" y2="210" stroke="#cf222e" stroke-width="1.2" marker-end="url(#alArrow)"/>
-      <rect x="470" y="215" width="100" height="30" rx="6" fill="#fff8c5" stroke="#d4a72c" stroke-width="1"/>
-      <text x="520" y="232" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="#953800">事後レビュー</text>
-      <text x="520" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">チームレビュー</text>
+      <line x1="520" y1="185" x2="520" y2="210" stroke="var(--accent-red)" stroke-width="1.2" marker-end="url(#alArrow)"/>
+      <rect x="470" y="215" width="100" height="30" rx="6" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1"/>
+      <text x="520" y="232" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="700" fill="var(--accent-amber)">事後レビュー</text>
+      <text x="520" y="243" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">チームレビュー</text>
 
       <!-- Loop arrow: post-review → agent action -->
-      <path d="M470,235 L200,235 L200,76" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
-      <polygon points="200,76 197,82 203,82" fill="#636c76"/>
-      <text x="335" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="#636c76">フィードバックループ — ガードレールの改善</text>
+      <path d="M470,235 L200,235 L200,76" fill="none" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="4,3"/>
+      <polygon points="200,76 197,82 203,82" fill="var(--text-dim)"/>
+      <text x="335" y="250" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">フィードバックループ — ガードレールの改善</text>
 
       <!-- Bottom note -->
-      <text x="320" y="275" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="#636c76">※ 完璧なガードレールは存在しない — 事故発生時に追跡できなければならない</text>
+      <text x="320" y="275" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 完璧なガードレールは存在しない — 事故発生時に追跡できなければならない</text>
     </svg>
   </div>
 

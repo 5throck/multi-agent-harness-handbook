@@ -53,53 +53,53 @@
     <svg viewBox="0 0 680 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
       <defs>
         <marker id="cap-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
         </marker>
         <marker id="cap-return" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#8b5cf6"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-purple)"/>
         </marker>
       </defs>
       <g font-family="system-ui,-apple-system,sans-serif">
         <!-- Step 1: 問題定義 (blue) -->
-        <rect x="10" y="12" width="130" height="56" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
-        <circle cx="35" cy="30" r="10" fill="#3b82f6"/>
-        <text x="35" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">①</text>
-        <text x="85" y="34" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="700">問題定義</text>
-        <text x="75" y="52" text-anchor="middle" font-size="9" fill="#6b7280">第2章・第3章参照</text>
+        <rect x="10" y="12" width="130" height="56" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="35" cy="30" r="10" fill="var(--accent)"/>
+        <text x="35" y="34" text-anchor="middle" font-size="11" fill="var(--text-inverse)" font-weight="700">①</text>
+        <text x="85" y="34" text-anchor="middle" font-size="12" fill="var(--badge-blue-fg)" font-weight="700">問題定義</text>
+        <text x="75" y="52" text-anchor="middle" font-size="9" fill="var(--text-dim)">第2章・第3章参照</text>
 
         <!-- Arrow 1→2 -->
-        <line x1="143" y1="40" x2="170" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+        <line x1="143" y1="40" x2="170" y2="40" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
 
         <!-- Step 2: ガードレール設計 (orange) -->
-        <rect x="175" y="12" width="130" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
-        <circle cx="200" cy="30" r="10" fill="#f59e0b"/>
-        <text x="200" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">②</text>
-        <text x="255" y="34" text-anchor="middle" font-size="12" fill="#92400e" font-weight="700">ガードレール設計</text>
-        <text x="240" y="52" text-anchor="middle" font-size="9" fill="#6b7280">第3章参照</text>
+        <rect x="175" y="12" width="130" height="56" rx="8" fill="var(--badge-amber-bg)" stroke="var(--accent-amber)" stroke-width="1.5"/>
+        <circle cx="200" cy="30" r="10" fill="var(--accent-amber)"/>
+        <text x="200" y="34" text-anchor="middle" font-size="11" fill="var(--text-inverse)" font-weight="700">②</text>
+        <text x="255" y="34" text-anchor="middle" font-size="12" fill="var(--badge-amber-fg)" font-weight="700">ガードレール設計</text>
+        <text x="240" y="52" text-anchor="middle" font-size="9" fill="var(--text-dim)">第3章参照</text>
 
         <!-- Arrow 2→3 -->
-        <line x1="308" y1="40" x2="335" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+        <line x1="308" y1="40" x2="335" y2="40" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
 
         <!-- Step 3: エージェント実装 (green) -->
-        <rect x="340" y="12" width="130" height="56" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
-        <circle cx="365" cy="30" r="10" fill="#22c55e"/>
-        <text x="365" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">③</text>
-        <text x="420" y="34" text-anchor="middle" font-size="12" fill="#166534" font-weight="700">エージェント実装</text>
-        <text x="405" y="52" text-anchor="middle" font-size="9" fill="#6b7280">第4章・第6章参照</text>
+        <rect x="340" y="12" width="130" height="56" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+        <circle cx="365" cy="30" r="10" fill="var(--accent-green)"/>
+        <text x="365" y="34" text-anchor="middle" font-size="11" fill="var(--text-inverse)" font-weight="700">③</text>
+        <text x="420" y="34" text-anchor="middle" font-size="12" fill="var(--badge-green-fg)" font-weight="700">エージェント実装</text>
+        <text x="405" y="52" text-anchor="middle" font-size="9" fill="var(--text-dim)">第4章・第6章参照</text>
 
         <!-- Arrow 3→4 -->
-        <line x1="473" y1="40" x2="500" y2="40" stroke="#6b7280" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
+        <line x1="473" y1="40" x2="500" y2="40" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#cap-arrow)"/>
 
         <!-- Step 4: 検証・振り返り (purple) -->
-        <rect x="505" y="12" width="130" height="56" rx="8" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5"/>
-        <circle cx="530" cy="30" r="10" fill="#8b5cf6"/>
-        <text x="530" y="34" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">④</text>
-        <text x="585" y="34" text-anchor="middle" font-size="12" fill="#5b21b6" font-weight="700">検証・振り返り</text>
-        <text x="570" y="52" text-anchor="middle" font-size="9" fill="#6b7280">全章統合</text>
+        <rect x="505" y="12" width="130" height="56" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <circle cx="530" cy="30" r="10" fill="var(--accent-purple)"/>
+        <text x="530" y="34" text-anchor="middle" font-size="11" fill="var(--text-inverse)" font-weight="700">④</text>
+        <text x="585" y="34" text-anchor="middle" font-size="12" fill="var(--badge-purple-fg)" font-weight="700">検証・振り返り</text>
+        <text x="570" y="52" text-anchor="middle" font-size="9" fill="var(--text-dim)">全章統合</text>
 
         <!-- Return arrow: ④ → ① -->
-        <path d="M570,71 C570,108 75,108 75,71" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#cap-return)"/>
-        <text x="340" y="106" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="600">循環改善</text>
+        <path d="M570,71 C570,108 75,108 75,71" fill="none" stroke="var(--accent-purple)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#cap-return)"/>
+        <text x="340" y="106" text-anchor="middle" font-size="11" fill="var(--accent-purple)" font-weight="600">循環改善</text>
       </g>
     </svg>
   </div>

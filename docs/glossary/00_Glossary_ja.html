@@ -109,8 +109,8 @@
     <dd>ある情報の原本がただ一箇所にのみ存在するという原則。例: CONSTITUTION.mdはワークスペース全体のルールのSSOTであり、context.mdは個々のプロジェクトのSSOTである。
       <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s4">第5章 §4</a></span></dd>
 
-    <dt>L0 / L1 / L2</dt>
-    <dd>ワークスペースルート(L0、唯一の原本)→共通テンプレートスナップショット(L1、<code>templates/common/</code>)→variant/プロジェクト(L2、<code>templates/co-*/</code>または<code>Projects/*/</code>)へと続く3層構造。流れは常に上から下へのみ進み、L1→L2はスキャフォールディング時点で一度だけ行われる「フォーク」である。
+    <dt>L0 / L1 / L2 / L3</dt>
+    <dd>ワークスペースルート(L0、唯一の原本)→共通テンプレートスナップショット(L1、<code>templates/common/</code>)→variant/プロジェクトテンプレート(L2、<code>templates/co-*/</code>または<code>Projects/*/</code>)→実際のプロジェクトインスタンス(L3、L2 variantをクローン/デプロイして作成された稼働中の作業ディレクトリ)へと続く4層構造。流れは常に上から下へのみ進み、L1→L2はスキャフォールディング時点で一度だけ行われる「フォーク」であり、L2→L3はプロジェクト作成時の一回限りのクローンである。
       <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></span></dd>
 
     <dt>フォークモデル <span class="en">Fork Model</span></dt>

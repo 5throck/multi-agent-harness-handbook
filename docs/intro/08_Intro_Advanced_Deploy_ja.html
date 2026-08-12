@@ -52,11 +52,11 @@
     </ul>
   </div>
 
-  <h2 id="s1">L0 → L1 → L2の階層構造（3層）</h2>
-  <p>これまで登場したCONSTITUTION.md・templates/・variant・new-project.tsはすべて、一つの大きな原則の上で動いている。リポジトリは<strong>L0（ワークスペースルート）→ L1（共通テンプレート）→ L2（variant/プロジェクト）</strong>という3段階の階層（3-tier）として設計されており、信頼できる原本（Single Source of Truth）は常に上から下へのみ流れる。逆方向にさかのぼる自動同期は存在しない。前節で扱ったボイラープレートは、まさにこの3層のうちL1に相当する。このボイラープレートはL0で発行され、L2が生まれる瞬間に一度だけ渡されるスナップショットである。</p>
+  <h2 id="s1">L0 → L1 → L2 → L3の階層構造（4層）</h2>
+  <p>これまで登場したCONSTITUTION.md・templates/・variant・new-project.tsはすべて、一つの大きな原則の上で動いている。リポジトリは<strong>L0（ワークスペースルート）→ L1（共通テンプレート）→ L2（variant/プロジェクトテンプレート）→ L3（実際のプロジェクトインスタンス）</strong>という4段階の階層（4-tier）として設計されており、信頼できる原本（Single Source of Truth）は常に上から下へのみ流れる。逆方向にさかのぼる自動同期は存在しない。前節で扱ったボイラープレートは、まさにこの4層のうちL1に相当する。このボイラープレートはL0で発行され、L2が生まれる瞬間に一度だけ渡されるスナップショットである。</p>
 
-  <h3>3つの層がそれぞれ担うもの</h3>
-  <p><strong>L0（ワークスペースルート）</strong>は<code>agents/pm.md</code>・<code>CLAUDE.md</code>・<code>GEMINI.md</code>・<code>scripts/*.ts</code>といったファイルの唯一の原本である。編集はここでのみ行う。<strong>L1（<code>templates/common/</code>）</strong>はL0から発行された共通インフラのスナップショットであり、新しいL2バリアント（variant）を作る際の出発点となるベースラインの役割のみを担う。<strong>L2</strong>は2つの形態に分かれる。一つは公式テンプレートとして固まった<code>templates/co-&lt;name&gt;/</code>であり、もう一つは<code>new-project.ts</code>によって実際に作られた生きたプロジェクト<code>Projects/&lt;name&gt;/</code>である。いずれの場合も、variantごとに分岐（フォーク）した後は独立して進化する。</p>
+  <h3>4つの層がそれぞれ担うもの</h3>
+  <p><strong>L0（ワークスペースルート）</strong>は<code>agents/pm.md</code>・<code>CLAUDE.md</code>・<code>GEMINI.md</code>・<code>scripts/*.ts</code>といったファイルの唯一の原本である。編集はここでのみ行う。<strong>L1（<code>templates/common/</code>）</strong>はL0から発行された共通インフラのスナップショットであり、新しいL2バリアント（variant）を作る際の出発点となるベースラインの役割のみを担う。<strong>L2</strong>は2つの形態に分かれる。一つは公式テンプレートとして固まった<code>templates/co-&lt;name&gt;/</code>であり、もう一つは<code>new-project.ts</code>によって作られたプロジェクトテンプレート<code>Projects/&lt;name&gt;/</code>である。いずれの場合も、variantごとに分岐（フォーク）した後は独立して進化する。<strong>L3</strong>は、L2テンプレートを実際の開発環境にクローン/デプロイして作成された<strong>稼働中のプロジェクト作業ディレクトリ</strong>（例: <code>C:\projects\my-app\</code>）である。開発者がエージェント（Claude Code、Gemini CLIなど）を実行して日常的なコーディング作業を行う場所がこのL3である。L3インスタンスはL2から派生するが、プロジェクトごとに独立して進化し、ローカルオーバーライドを持つことができる。</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
@@ -67,8 +67,12 @@ L1 — templates/common/（共通テンプレートのスナップショット�
   │  L1→L2: create-l2-scaffold.ts（variant作成時点、一度だけ）
   ▼
 L2 — templates/co-&lt;name&gt;/ または Projects/co-&lt;name&gt;/
+  │  L2→L3: new-project.ts または手動クローン（プロジェクト作成時点、一度だけ）
+  ▼
+L3 — 実際のプロジェクト作業ディレクトリ（例: C:\projects\my-app\）
+     └─ L2をベースに生成、開発者がエージェントを日常的に実行する場所
      └─ フォーク後は独立して進化、自動逆同期なし
-     └─ 公式テンプレートへ昇格するには明示的にl2-to-variant-pipeline.tsを実行</pre>
+     └─ L2を公式テンプレートへ昇格するには明示的にl2-to-variant-pipeline.tsを実行</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
   </div>

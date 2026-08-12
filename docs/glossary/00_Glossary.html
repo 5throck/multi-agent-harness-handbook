@@ -109,8 +109,8 @@
     <dd>어떤 정보의 원본이 오직 한 곳에만 존재한다는 원칙. 예: CONSTITUTION.md는 워크스페이스 전체 규칙의 SSOT, context.md는 개별 프로젝트의 SSOT.
       <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s4">5장 §4</a></span></dd>
 
-    <dt>L0 / L1 / L2</dt>
-    <dd>워크스페이스 루트(L0, 유일한 원본) → 공통 템플릿 스냅샷(L1, <code>templates/common/</code>) → variant/프로젝트(L2, <code>templates/co-*/</code> 또는 <code>Projects/*/</code>)로 이어지는 3단 계층. 흐름은 항상 위에서 아래로만 가고, L1→L2는 스캐폴딩 시점에 딱 한 번만 전달되는 "포크"다.
+    <dt>L0 / L1 / L2 / L3</dt>
+    <dd>워크스페이스 루트(L0, 유일한 원본) → 공통 템플릿 스냅샷(L1, <code>templates/common/</code>) → variant/프로젝트 템플릿(L2, <code>templates/co-*/</code> 또는 <code>Projects/*/</code>) → 실제 프로젝트 인스턴스(L3, L2를 클론/배포한 라이브 작업 디렉토리)로 이어지는 4단 계층. 흐름은 항상 위에서 아래로만 가고, L1→L2는 스캐폴딩 시점에 딱 한 번만 전달되는 "포크"며, L2→L3는 프로젝트 시작 시점에 일회성 복제로 생성된다.
       <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Deploy.html#s1">8장 §1 배포와 SSOT</a></span></dd>
 
     <dt>포크 모델 <span class="en">Fork Model</span></dt>

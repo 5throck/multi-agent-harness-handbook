@@ -52,11 +52,11 @@
     </ul>
   </div>
 
-  <h2 id="s1">L0 → L1 → L2 계층 구조 (3-tier)</h2>
-  <p>지금까지 나온 CONSTITUTION.md·templates/·variant·new-project.ts는 모두 하나의 큰 원칙 위에서 움직인다. 저장소는 <strong>L0(워크스페이스 루트) → L1(공통 템플릿) → L2(variant/프로젝트)</strong>라는 3단 계층(3-tier)으로 설계돼 있고, 신뢰할 수 있는 원본(Single Source of Truth)은 항상 위에서 아래로만 흐른다. 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다. 앞 절에서 다룬 보일러플레이트가 바로 이 3-tier 중 L1에 해당한다. 이 보일러플레이트는 L0에서 발행되고, L2가 태어날 때 딱 한 번 전달되는 스냅샷이다.</p>
+  <h2 id="s1">L0 → L1 → L2 → L3 계층 구조 (4-tier)</h2>
+  <p>지금까지 나온 CONSTITUTION.md·templates/·variant·new-project.ts는 모두 하나의 큰 원칙 위에서 움직인다. 저장소는 <strong>L0(워크스페이스 루트) → L1(공통 템플릿) → L2(variant/프로젝트 템플릿) → L3(실제 프로젝트 인스턴스)</strong>라는 4단 계층(4-tier)으로 설계돼 있고, 신뢰할 수 있는 원본(Single Source of Truth)은 항상 위에서 아래로만 흐른다. 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다. 앞 절에서 다룬 보일러플레이트가 바로 이 4-tier 중 L1에 해당한다. 이 보일러플레이트는 L0에서 발행되고, L2가 태어날 때 딱 한 번 전달되는 스냅샷이다.</p>
 
-  <h3>세 계층이 각각 담당하는 것</h3>
-  <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 베리언트(variant)를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 실제 만들어진 살아있는 프로젝트 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다.</p>
+  <h3>네 계층이 각각 담당하는 것</h3>
+  <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 베리언트(variant)를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 만들어진 살아있는 프로젝트 템플릿 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다. <strong>L3</strong>는 L2 템플릿을 실제 개발 환경으로 클론/배포하여 만들어진 <strong>라이브 프로젝트 작업 디렉토리</strong>(예: <code>C:\projects\my-app\</code>)다. 개발자가 에이전트(Claude Code, Gemini CLI 등)를 실행하며 일상적인 코딩 작업을 수행하는 곳이 바로 이 L3이다. L2에서 파생되지만, L3 인스턴스는 프로젝트별로 독립적으로 진화하며 로컬 오버라이드를 가질 수 있다.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
@@ -67,8 +67,12 @@ L1 — templates/common/ (공통 템플릿 스냅샷)
   │  L1→L2: create-l2-scaffold.ts (variant 생성 시점, 딱 1회)
   ▼
 L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
+  │  L2→L3: new-project.ts 또는 수동 복제 (프로젝트 시작 시점, 1회)
+  ▼
+L3 — 실제 프로젝트 작업 디렉토리 (예: C:\projects\my-app\)
+     └─ L2 기반 생성, 개발자가 에이전트를 실행하며 일상 작업 수행
      └─ 포크 이후 독립적으로 진화, 자동 역동기화 없음
-     └─ 공식 템플릿으로 승격하려면 명시적으로 l2-to-variant-pipeline.ts 실행</pre>
+     └─ L2에서 공식 템플릿으로 승격하려면 명시적으로 l2-to-variant-pipeline.ts 실행</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
 </div>
   </div>

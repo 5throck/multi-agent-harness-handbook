@@ -52,11 +52,11 @@
     </ul>
   </div>
 
-  <h2 id="s1">The L0 → L1 → L2 Hierarchy (3-Tier)</h2>
-  <p>The CONSTITUTION.md, templates/, variants, and new-project.ts covered so far all operate on a single overarching principle. The repository is designed as a three-tier hierarchy — <strong>L0 (workspace root) → L1 (common templates) → L2 (variant/project)</strong> — and the single source of truth always flows top-down. There is no automatic synchronization flowing back upward. The boilerplate discussed in the previous section corresponds to L1 in this three-tier model. This boilerplate is published from L0 and delivered as a one-time snapshot at the moment an L2 is born.</p>
+  <h2 id="s1">The L0 → L1 → L2 → L3 Hierarchy (4-Tier)</h2>
+  <p>The CONSTITUTION.md, templates/, variants, and new-project.ts covered so far all operate on a single overarching principle. The repository is designed as a four-tier hierarchy — <strong>L0 (workspace root) → L1 (common templates) → L2 (variant/project template) → L3 (live project instance)</strong> — and the single source of truth always flows top-down. There is no automatic synchronization flowing back upward. The boilerplate discussed in the previous section corresponds to L1 in this four-tier model. This boilerplate is published from L0 and delivered as a one-time snapshot at the moment an L2 is born.</p>
 
-  <h3>What Each of the Three Tiers Is Responsible For</h3>
-  <p><strong>L0 (workspace root)</strong> is the single source of truth for files such as <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, and <code>scripts/*.ts</code>. Editing happens here, and only here. <strong>L1 (<code>templates/common/</code>)</strong> is a snapshot of the common infrastructure published from L0, serving purely as the baseline starting point when a new L2 variant is created. <strong>L2</strong> takes two forms. One is <code>templates/co-&lt;name&gt;/</code>, which has solidified into an official template; the other is <code>Projects/&lt;name&gt;/</code>, a living project actually created via <code>new-project.ts</code>. In both cases, once forked off per variant, each evolves independently.</p>
+  <h3>What Each of the Four Tiers Is Responsible For</h3>
+  <p><strong>L0 (workspace root)</strong> is the single source of truth for files such as <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, and <code>scripts/*.ts</code>. Editing happens here, and only here. <strong>L1 (<code>templates/common/</code>)</strong> is a snapshot of the common infrastructure published from L0, serving purely as the baseline starting point when a new L2 variant is created. <strong>L2</strong> takes two forms. One is <code>templates/co-&lt;name&gt;/</code>, which has solidified into an official template; the other is <code>Projects/&lt;name&gt;/</code>, a project template created via <code>new-project.ts</code>. In both cases, once forked off per variant, each evolves independently. <strong>L3</strong> is the live project working directory — a clone/deployment of an L2 variant into an actual development environment (e.g., <code>C:\projects\my-app\</code>). This is where developers run AI agents (Claude Code, Gemini CLI, etc.) for their day-to-day coding work. An L3 instance is derived from L2 but evolves independently per project and may contain local overrides.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
@@ -67,8 +67,12 @@ L1 — templates/common/ (common template snapshot)
   │  L1→L2: create-l2-scaffold.ts (once, at variant creation time)
   ▼
 L2 — templates/co-&lt;name&gt;/ or Projects/co-&lt;name&gt;/
+  │  L2→L3: new-project.ts or manual clone (once, at project creation time)
+  ▼
+L3 — Live project working directory (e.g., C:\projects\my-app\)
+     └─ Created from L2; where developers run agents for day-to-day work
      └─ Evolves independently after forking, no automatic back-sync
-     └─ Run l2-to-variant-pipeline.ts explicitly to promote to an official template</pre>
+     └─ Run l2-to-variant-pipeline.ts explicitly to promote an L2 to an official template</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
   </div>

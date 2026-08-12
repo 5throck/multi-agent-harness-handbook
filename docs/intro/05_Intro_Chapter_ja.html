@@ -98,16 +98,16 @@
 </div>
   </div>
 
-  <p>このツリーで注目すべきは、3つの層が実際のディレクトリ構造としてそのまま現れている点である。ルート直下(CONSTITUTION.md・CLAUDE.md・GEMINI.md・AGENTS.md・<code>agents/</code>・<code>scripts/</code>)がL0であり、<code>templates/common/</code>がL1、<code>templates/co-*/</code>と<code>Projects/*/</code>がL2である。つまり「L0→L1→L2」は抽象的な概念図ではなく、クローンしたフォルダで<code>ls</code>を一度打つだけで見える物理的な配置なのである。</p>
+  <p>このツリーで注目すべきは、4つの層が実際のディレクトリ構造としてそのまま現れている点である。ルート直下(CONSTITUTION.md・CLAUDE.md・GEMINI.md・AGENTS.md・<code>agents/</code>・<code>scripts/</code>)がL0であり、<code>templates/common/</code>がL1、<code>templates/co-*/</code>と<code>Projects/*/</code>がL2である。L2をベースにして開発者が日常的に作業する実際のプロジェクトディレクトリ(例: <code>C:\projects\my-app\</code>)がL3インスタンスに該当する。つまり「L0→L1→L2→L3」は抽象的な概念図ではなく、クローンしたフォルダで<code>ls</code>を一度打つだけで見える物理的な配置なのである。</p>
 
   <p>この構造の上で実際に作業が進行する順序(ランタイムフロー)は次のとおりである。</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
     <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md → AGENTS.md → memory/MEMORY.mdの順に読み込む(§4で扱う)。</li>
     <li><strong>ツール別の実行規則を適用。</strong> Claude Code/AppであればCLAUDE.mdと<code>.claude/</code>が、Antigravity系であればGEMINI.mdと<code>.gemini/</code>が詳細な実行方式を定める。</li>
-    <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。</li>
-    <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/publish-to-template.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2(Projects/*、templates/co-*)には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
+    <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。このようにして作られたプロジェクトを実際の開発環境(例: <code>C:\projects\</code>)に持ち込んで作業すると、それがL3インスタンスになる。</li>
+    <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/publish-to-template.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2やL3には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
   </ol>
-  <div class="note">一言で言えば: <strong>L0は「ルート直下」、L1は「templates/common/」、L2は「templates/co-*/とProjects/*/」</strong> — この3つの座標さえ覚えておけば、以降の節のすべての説明を実際のフォルダ位置に対応させながら追うことができる。</div>
+  <div class="note">一言で言えば: <strong>L0は「ルート直下」、L1は「templates/common/」、L2は「templates/co-*/とProjects/*/」、L3は「実際のプロジェクト作業ディレクトリ」</strong> — この4つの座標さえ覚えておけば、以降の節のすべての説明を実際のフォルダ位置に対応させながら追うことができる。</div>
 
   <h2 id="s2">4つの中核ファイル</h2>
   <p>ワークスペースルートには、すべてのプロジェクトが共通して参照する4つの中核ファイルがある。</p>

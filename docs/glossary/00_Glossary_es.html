@@ -109,8 +109,8 @@
     <dd>El principio de que una pieza de información dada tiene su copia original en exactamente un lugar. Ejemplo: CONSTITUTION.md es el SSOT para las reglas de todo el espacio de trabajo; context.md es el SSOT para un proyecto individual.
       <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s4">Capítulo 5 §4</a></span></dd>
 
-    <dt>L0 / L1 / L2</dt>
-    <dd>La jerarquía de tres niveles que va desde la raíz del espacio de trabajo (L0, la única original) → la instantánea de la plantilla común (L1, <code>templates/common/</code>) → la variante/proyecto (L2, <code>templates/co-*/</code> o <code>Projects/*/</code>). El flujo siempre se mueve de arriba hacia abajo, y la transferencia L1→L2 es una "bifurcación" que ocurre exactamente una vez, en el momento de la scaffolding.
+    <dt>L0 / L1 / L2 / L3</dt>
+    <dd>La jerarquía de cuatro niveles que va desde la raíz del espacio de trabajo (L0, la única original) → la instantánea de la plantilla común (L1, <code>templates/common/</code>) → la variante/plantilla de proyecto (L2, <code>templates/co-*/</code> o <code>Projects/*/</code>) → la instancia de proyecto activa (L3, un directorio de trabajo clonado/desplegado desde una variante L2). El flujo siempre se mueve de arriba hacia abajo: la transferencia L1→L2 es una "bifurcación" que ocurre exactamente una vez en el momento de la scaffolding, y L2→L3 es un clon único en el momento de la creación del proyecto.
       <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y el SSOT</a></span></dd>
 
     <dt>Modelo de Bifurcación <span class="en">Fork Model</span></dt>

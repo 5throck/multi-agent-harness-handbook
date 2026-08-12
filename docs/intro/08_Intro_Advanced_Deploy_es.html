@@ -52,11 +52,11 @@
     </ul>
   </div>
 
-  <h2 id="s1">La Jerarquía L0 → L1 → L2 (3 Niveles)</h2>
-  <p>El CONSTITUTION.md, templates/, variantes, y new-project.ts cubiertos hasta ahora operan todos bajo un único principio general. El repositorio está diseñado como una jerarquía de tres niveles — <strong>L0 (raíz del espacio de trabajo) → L1 (plantillas comunes) → L2 (variante/proyecto)</strong> — y la fuente única de verdad siempre fluye de arriba hacia abajo. No hay sincronización automática fluyendo hacia arriba. La plantilla base discutida en la sección anterior corresponde a L1 en este modelo de tres niveles. Esta plantilla base se publica desde L0 y se entrega como una instantánea única en el momento en que nace un L2.</p>
+  <h2 id="s1">La Jerarquía L0 → L1 → L2 → L3 (4 Niveles)</h2>
+  <p>El CONSTITUTION.md, templates/, variantes, y new-project.ts cubiertos hasta ahora operan todos bajo un único principio general. El repositorio está diseñado como una jerarquía de cuatro niveles — <strong>L0 (raíz del espacio de trabajo) → L1 (plantillas comunes) → L2 (variante/plantilla de proyecto) → L3 (instancia de proyecto activa)</strong> — y la fuente única de verdad siempre fluye de arriba hacia abajo. No hay sincronización automática fluyendo hacia arriba. La plantilla base discutida en la sección anterior corresponde a L1 en este modelo de cuatro niveles. Esta plantilla base se publica desde L0 y se entrega como una instantánea única en el momento en que nace un L2.</p>
 
-  <h3>Responsabilidades de Cada Uno de los Tres Niveles</h3>
-  <p><strong>L0 (raíz del espacio de trabajo)</strong> es la fuente única de verdad para archivos como <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, y <code>scripts/*.ts</code>. La edición ocurre aquí, y solo aquí. <strong>L1 (<code>templates/common/</code>)</strong> es una instantánea de la infraestructura común publicada desde L0, sirviendo puramente como el punto de partida base cuando se crea una nueva variante L2. <strong>L2</strong> toma dos formas. Una es <code>templates/co-&lt;nombre&gt;/</code>, que se ha consolidado como una plantilla oficial; la otra es <code>Projects/&lt;nombre&gt;/</code>, un proyecto vivo realmente creado mediante <code>new-project.ts</code>. En ambos casos, una vez bifurcado por variante, cada uno evoluciona independientemente.</p>
+  <h3>Responsabilidades de Cada Uno de los Cuatro Niveles</h3>
+  <p><strong>L0 (raíz del espacio de trabajo)</strong> es la fuente única de verdad para archivos como <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, y <code>scripts/*.ts</code>. La edición ocurre aquí, y solo aquí. <strong>L1 (<code>templates/common/</code>)</strong> es una instantánea de la infraestructura común publicada desde L0, sirviendo puramente como el punto de partida base cuando se crea una nueva variante L2. <strong>L2</strong> toma dos formas. Una es <code>templates/co-&lt;nombre&gt;/</code>, que se ha consolidado como una plantilla oficial; la otra es <code>Projects/&lt;nombre&gt;/</code>, una plantilla de proyecto creada mediante <code>new-project.ts</code>. En ambos casos, una vez bifurcado por variante, cada uno evoluciona independientemente. <strong>L3</strong> es el directorio de trabajo del proyecto activo — un clon/despliegue de una variante L2 en un entorno de desarrollo real (por ejemplo, <code>C:\projects\mi-app\</code>). Es donde los desarrolladores ejecutan agentes de IA (Claude Code, Gemini CLI, etc.) para su trabajo de codificación diario. Una instancia L3 se deriva de L2 pero evoluciona independientemente por proyecto y puede contener overrides locales.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
@@ -67,8 +67,12 @@ L1 — templates/common/ (instantánea de plantilla común)
   │  L1→L2: create-l2-scaffold.ts (una vez, en el momento de creación de la variante)
   ▼
 L2 — templates/co-&lt;nombre&gt;/ o Projects/co-&lt;nombre&gt;/
+  │  L2→L3: new-project.ts o clon manual (una vez, en el momento de creación del proyecto)
+  ▼
+L3 — Directorio de trabajo del proyecto activo (ej., C:\projects\mi-app\)
+     └─ Creado a partir de L2; donde los desarrolladores ejecutan agentes diariamente
      └─ Evoluciona independientemente después de la bifurcación, sin retro-sincronización automática
-     └─ Ejecute l2-to-variant-pipeline.ts explícitamente para promover a una plantilla oficial</pre>
+     └─ Ejecute l2-to-variant-pipeline.ts explícitamente para promover un L2 a plantilla oficial</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
   </div>

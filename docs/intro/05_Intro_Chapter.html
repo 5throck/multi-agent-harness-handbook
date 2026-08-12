@@ -98,16 +98,16 @@
 </div>
   </div>
 
-  <p>이 트리에서 눈여겨볼 것은 세 가지 층이 실제 디렉터리 구조로 그대로 드러난다는 점이다. 루트 바로 아래(CONSTITUTION.md·CLAUDE.md·GEMINI.md·AGENTS.md·<code>agents/</code>·<code>scripts/</code>)가 L0이고, <code>templates/common/</code>이 L1이며, <code>templates/co-*/</code>와 <code>Projects/*/</code>가 L2다. 즉 "L0→L1→L2"는 추상적인 개념도가 아니라, 클론한 폴더를 <code>ls</code> 한 번만 쳐도 바로 눈에 보이는 물리적 배치다.</p>
+  <p>이 트리에서 눈여겨볼 것은 네 가지 층이 실제 디렉터리 구조로 그대로 드러난다는 점이다. 루트 바로 아래(CONSTITUTION.md·CLAUDE.md·GEMINI.md·AGENTS.md·<code>agents/</code>·<code>scripts/</code>)가 L0이고, <code>templates/common/</code>이 L1이며, <code>templates/co-*/</code>와 <code>Projects/*/</code>가 L2다. L2를 기반으로 실제 개발자가 작업하는 프로젝트 디렉토리(예: <code>C:\projects\my-app\</code>)가 L3에 해당한다. 즉 "L0→L1→L2→L3"는 추상적인 개념도가 아니라, 클론한 폴더를 <code>ls</code> 한 번만 쳐도 바로 눈에 보이는 물리적 배치다.</p>
 
   <p>이 구조 위에서 실제로 일이 진행되는 순서(런타임 흐름)는 다음과 같다.</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
     <li><strong>세션 시작.</strong> 에이전트가 CONSTITUTION.md → 현재 프로젝트의 docs/context.md → AGENTS.md → memory/MEMORY.md 순서로 읽는다(§4에서 다룸).</li>
     <li><strong>도구별 실행 규칙 적용.</strong> Claude Code/App이면 CLAUDE.md와 <code>.claude/</code>, Antigravity 계열이면 GEMINI.md와 <code>.gemini/</code>가 세부 실행 방식을 정한다.</li>
-    <li><strong>새 프로젝트가 필요하면.</strong> <code>scripts/new-project.ts</code>가 <code>templates/co-&lt;variant&gt;/</code>(L2)의 전체 구성을 <code>Projects/&lt;name&gt;/</code>로 복제한다. 이때 <code>templates/co-&lt;variant&gt;/</code> 자신은 한 세대 앞서 <code>templates/common/</code>(L1)에서 스냅샷을 받아 만들어진 상태였다.</li>
-    <li><strong>운영 중 L0가 바뀌면.</strong> <code>scripts/publish-to-template.ts</code>가 <code>/sync</code> 파이프라인의 일부로 L0의 변경을 L1(<code>templates/common/</code>)에 자동·지속적으로 발행한다. 이미 태어난 L2(Projects/*, templates/co-*)에는 자동으로 전파되지 않는다. 이것은 8장에서 다루는 "포크" 원칙이다.</li>
+    <li><strong>새 프로젝트가 필요하면.</strong> <code>scripts/new-project.ts</code>가 <code>templates/co-&lt;variant&gt;/</code>(L2)의 전체 구성을 <code>Projects/&lt;name&gt;/</code>로 복제한다. 이때 <code>templates/co-&lt;variant&gt;/</code> 자신은 한 세대 앞서 <code>templates/common/</code>(L1)에서 스냅샷을 받아 만들어진 상태였다. 이렇게 만들어진 프로젝트를 실제 개발 환경(예: <code>C:\projects\</code>)으로 가져와 작업하면 그것이 L3 인스턴스가 된다.</li>
+    <li><strong>운영 중 L0가 바뀌면.</strong> <code>scripts/publish-to-template.ts</code>가 <code>/sync</code> 파이프라인의 일부로 L0의 변경을 L1(<code>templates/common/</code>)에 자동·지속적으로 발행한다. 이미 태어난 L2나 L3에는 자동으로 전파되지 않는다. 이것은 8장에서 다루는 "포크" 원칙이다.</li>
   </ol>
-  <div class="note">한 문장으로: <strong>L0는 "루트 바로 아래", L1은 "templates/common/", L2는 "templates/co-*/와 Projects/*/"</strong> — 이 세 좌표만 기억하면 이후 절의 모든 설명을 실제 폴더 위치에 맞춰 따라갈 수 있다.</div>
+  <div class="note">한 문장으로: <strong>L0는 "루트 바로 아래", L1은 "templates/common/", L2는 "templates/co-*/와 Projects/*/", L3는 "실제 프로젝트 작업 디렉토리"</strong> — 이 네 좌표만 기억하면 이후 절의 모든 설명을 실제 폴더 위치에 맞춰 따라갈 수 있다.</div>
 
   <h2 id="s2">핵심 파일 네 가지</h2>
   <p>워크스페이스 루트에는 모든 프로젝트가 공통으로 참조하는 네 개의 핵심 파일이 있다.</p>

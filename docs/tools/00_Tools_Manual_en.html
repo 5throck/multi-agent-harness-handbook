@@ -247,97 +247,97 @@ Google family
     <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowDt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
         </marker>
         <marker id="arrowDtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/>
         </marker>
         <marker id="arrowDtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
         </marker>
         <marker id="arrowDtP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#6639ba"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-purple)"/>
         </marker>
       </defs>
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Title -->
-        <text x="360" y="20" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Tool Selection Decision Flow</text>
+        <text x="360" y="20" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Tool Selection Decision Flow</text>
 
         <!-- Diamond 1: Do you need CLI? -->
-        <polygon points="260,46 340,80 260,114 180,80" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
-        <text x="260" y="76" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Do you need</text>
-        <text x="260" y="90" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">CLI?</text>
+        <polygon points="260,46 340,80 260,114 180,80" fill="var(--badge-amber-bg)" stroke="var(--accent-amber)" stroke-width="1.5"/>
+        <text x="260" y="76" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Do you need</text>
+        <text x="260" y="90" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">CLI?</text>
 
         <!-- Start arrow to diamond 1 -->
-        <line x1="80" y1="80" x2="180" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
-        <rect x="10" y="64" width="68" height="32" rx="6" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
-        <text x="44" y="84" text-anchor="middle" font-size="10" fill="#636c76" font-weight="600">Start</text>
+        <line x1="80" y1="80" x2="180" y2="80" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+        <rect x="10" y="64" width="68" height="32" rx="6" fill="var(--bg2)" stroke="var(--border)" stroke-width="1"/>
+        <text x="44" y="84" text-anchor="middle" font-size="10" fill="var(--text-dim)" font-weight="600">Start</text>
 
         <!-- Yes path (down) from diamond 1 -->
-        <line x1="260" y1="114" x2="260" y2="140" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#arrowDtG)"/>
-        <text x="246" y="130" text-anchor="end" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <line x1="260" y1="114" x2="260" y2="140" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#arrowDtG)"/>
+        <text x="246" y="130" text-anchor="end" font-size="9" fill="var(--accent-green)" font-weight="700">Yes</text>
 
         <!-- Yes branch: Claude Code -->
-        <rect x="148" y="142" width="120" height="40" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
-        <text x="208" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude Code</text>
-        <text x="208" y="174" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · hooks supported</text>
+        <rect x="148" y="142" width="120" height="40" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="208" y="160" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Claude Code</text>
+        <text x="208" y="174" text-anchor="middle" font-size="8.5" fill="var(--accent)">Pro · hooks supported</text>
 
         <!-- Yes branch: Antigravity CLI -->
-        <rect x="280" y="142" width="120" height="40" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="340" y="160" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity CLI</text>
-        <text x="340" y="174" text-anchor="middle" font-size="8.5" fill="#6639ba">Experimental · dynamic agents</text>
+        <rect x="280" y="142" width="120" height="40" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="340" y="160" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Antigravity CLI</text>
+        <text x="340" y="174" text-anchor="middle" font-size="8.5" fill="var(--accent-purple)">Experimental · dynamic agents</text>
 
         <!-- No path (right) from diamond 1 -->
-        <line x1="340" y1="80" x2="380" y2="80" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrowDtB)"/>
-        <text x="362" y="74" text-anchor="middle" font-size="9" fill="#0969da" font-weight="700">No</text>
+        <line x1="340" y1="80" x2="380" y2="80" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arrowDtB)"/>
+        <text x="362" y="74" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="700">No</text>
 
         <!-- No branch boxes -->
-        <rect x="382" y="62" width="110" height="36" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
-        <text x="437" y="80" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Claude App</text>
-        <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="#0969da">Pro · GUI default</text>
+        <rect x="382" y="62" width="110" height="36" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="437" y="80" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Claude App</text>
+        <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="var(--accent)">Pro · GUI default</text>
 
-        <rect x="382" y="104" width="110" height="36" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="437" y="122" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Antigravity</text>
-        <text x="437" y="134" text-anchor="middle" font-size="8.5" fill="#6639ba">Experimental · Agent Manager</text>
+        <rect x="382" y="104" width="110" height="36" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="437" y="122" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Antigravity</text>
+        <text x="437" y="134" text-anchor="middle" font-size="8.5" fill="var(--accent-purple)">Experimental · Agent Manager</text>
 
         <!-- Connecting lines from No to the two boxes -->
-        <line x1="378" y1="80" x2="378" y2="122" stroke="#0969da" stroke-width="1" stroke-dasharray="3,2"/>
-        <line x1="378" y1="80" x2="382" y2="80" stroke="#0969da" stroke-width="1"/>
-        <line x1="378" y1="122" x2="382" y2="122" stroke="#6639ba" stroke-width="1"/>
+        <line x1="378" y1="80" x2="378" y2="122" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="378" y1="80" x2="382" y2="80" stroke="var(--accent)" stroke-width="1"/>
+        <line x1="378" y1="122" x2="382" y2="122" stroke="var(--accent-purple)" stroke-width="1"/>
 
         <!-- Diamond 2: Do you need team-level parallelism? -->
-        <polygon points="260,206 380,250 260,294 140,250" fill="#fef7e0" stroke="#953800" stroke-width="1.5"/>
-        <text x="260" y="244" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">Do you need</text>
-        <text x="260" y="258" text-anchor="middle" font-size="10" fill="#1f2328" font-weight="700">team-level parallelism?</text>
+        <polygon points="260,206 380,250 260,294 140,250" fill="var(--badge-amber-bg)" stroke="var(--accent-amber)" stroke-width="1.5"/>
+        <text x="260" y="244" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Do you need</text>
+        <text x="260" y="258" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">team-level parallelism?</text>
 
         <!-- Arrow from first-level results down to diamond 2 -->
-        <line x1="208" y1="182" x2="208" y2="208" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
-        <line x1="208" y1="208" x2="180" y2="230" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
-        <line x1="437" y1="140" x2="437" y2="206" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3"/>
-        <line x1="437" y1="206" x2="380" y2="235" stroke="#636c76" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+        <line x1="208" y1="182" x2="208" y2="208" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="208" y1="208" x2="180" y2="230" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowDt)"/>
+        <line x1="437" y1="140" x2="437" y2="206" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="437" y1="206" x2="380" y2="235" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowDt)"/>
 
         <!-- Yes path (down) from diamond 2 -->
-        <line x1="260" y1="294" x2="260" y2="298" stroke="#1a7f37" stroke-width="1"/>
-        <text x="246" y="307" text-anchor="end" font-size="9" fill="#1a7f37" font-weight="700">Yes</text>
+        <line x1="260" y1="294" x2="260" y2="298" stroke="var(--accent-green)" stroke-width="1"/>
+        <text x="246" y="307" text-anchor="end" font-size="9" fill="var(--accent-green)" font-weight="700">Yes</text>
 
         <!-- Yes branch from diamond 2: two boxes side by side -->
-        <rect x="160" y="296" width="95" height="12" rx="4" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
-        <text x="208" y="305" text-anchor="middle" font-size="7" fill="#0969da" font-weight="600">Agent Teams (Claude)</text>
+        <rect x="160" y="296" width="95" height="12" rx="4" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1"/>
+        <text x="208" y="305" text-anchor="middle" font-size="7" fill="var(--accent)" font-weight="600">Agent Teams (Claude)</text>
 
-        <rect x="265" y="296" width="120" height="12" rx="4" fill="#f1e8fd" stroke="#6639ba" stroke-width="1"/>
-        <text x="325" y="305" text-anchor="middle" font-size="7" fill="#6639ba" font-weight="600">Agent Manager (Antigravity)</text>
+        <rect x="265" y="296" width="120" height="12" rx="4" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1"/>
+        <text x="325" y="305" text-anchor="middle" font-size="7" fill="var(--accent-purple)" font-weight="600">Agent Manager (Antigravity)</text>
 
         <!-- Legend -->
-        <rect x="530" y="62" width="14" height="14" rx="3" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
-        <text x="550" y="73" font-size="9" fill="#636c76">Claude family</text>
-        <rect x="530" y="82" width="14" height="14" rx="3" fill="#f1e8fd" stroke="#6639ba" stroke-width="1"/>
-        <text x="550" y="93" font-size="9" fill="#636c76">Antigravity family</text>
-        <polygon points="537,112 544,118 537,124 530,118" fill="#fef7e0" stroke="#953800" stroke-width="1"/>
-        <text x="550" y="122" font-size="9" fill="#636c76">Decision node</text>
+        <rect x="530" y="62" width="14" height="14" rx="3" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1"/>
+        <text x="550" y="73" font-size="9" fill="var(--text-dim)">Claude family</text>
+        <rect x="530" y="82" width="14" height="14" rx="3" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1"/>
+        <text x="550" y="93" font-size="9" fill="var(--text-dim)">Antigravity family</text>
+        <polygon points="537,112 544,118 537,124 530,118" fill="var(--badge-amber-bg)" stroke="var(--accent-amber)" stroke-width="1"/>
+        <text x="550" y="122" font-size="9" fill="var(--text-dim)">Decision node</text>
 
         <!-- Platform labels -->
-        <text x="270" y="36" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">Choosing an execution environment</text>
-        <text x="270" y="200" text-anchor="middle" font-size="9" fill="#636c76" font-style="italic">Whether parallelism is needed</text>
+        <text x="270" y="36" text-anchor="middle" font-size="9" fill="var(--text-dim)" font-style="italic">Choosing an execution environment</text>
+        <text x="270" y="200" text-anchor="middle" font-size="9" fill="var(--text-dim)" font-style="italic">Whether parallelism is needed</text>
       </g>
     </svg>
   </div>

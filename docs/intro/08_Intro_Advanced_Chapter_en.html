@@ -81,40 +81,40 @@
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#6639ba"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-purple)"/>
         </marker>
       </defs>
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Create -->
-        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Create</text>
-        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">write agents/*.md</text>
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="var(--accent-purple)" font-weight="700">Create</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-purple)">write agents/*.md</text>
         <!-- Verify -->
-        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
-        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Verify</text>
-        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">agent:verify</text>
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Verify</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-dark)">agent:verify</text>
         <!-- Operate -->
-        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
-        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Operate</text>
-        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">run in sessions</text>
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="var(--badge-green-fg)" font-weight="700">Operate</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">run in sessions</text>
         <!-- Improve -->
-        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
-        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Improve</text>
-        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">apply feedback</text>
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="var(--badge-amber-bg)" stroke="var(--border-note)" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="var(--badge-amber-fg)" font-weight="700">Improve</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="var(--badge-amber-fg)">apply feedback</text>
         <!-- Deprecate -->
-        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
-        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecate</text>
-        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">discontinue</text>
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="var(--bg-error)" stroke="var(--accent-red)" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="var(--accent-red)" font-weight="700">Deprecate</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-red)">discontinue</text>
 
         <!-- Arrows -->
-        <line x1="120" y1="83" x2="148" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
-        <line x1="240" y1="83" x2="268" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
-        <line x1="360" y1="83" x2="388" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
-        <line x1="480" y1="83" x2="508" y2="83" stroke="#6639ba" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="120" y1="83" x2="148" y2="83" stroke="var(--accent-purple)" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="var(--accent-purple)" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="var(--accent-purple)" stroke-width="1.4" marker-end="url(#arrowA)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="var(--accent-purple)" stroke-width="1.4" marker-end="url(#arrowA)"/>
 
         <!-- Feedback loop: Improve → Verify -->
-        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowA)"/>
-        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">re-verification loop</text>
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="var(--border-note)" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowA)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="var(--border-note)">re-verification loop</text>
       </g>
     </svg>
   </div>
@@ -179,40 +179,40 @@
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#0969da"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
         </marker>
       </defs>
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Define -->
-        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Define</text>
-        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">write SKILL.md</text>
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="var(--accent-purple)" font-weight="700">Define</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-purple)">write SKILL.md</text>
         <!-- Test -->
-        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
-        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Test</text>
-        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">validate-skills.ts</text>
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Test</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-dark)">validate-skills.ts</text>
         <!-- Deploy -->
-        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
-        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Deploy</text>
-        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">register in registry</text>
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="var(--badge-green-fg)" font-weight="700">Deploy</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">register in registry</text>
         <!-- Version -->
-        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
-        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Version</text>
-        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">version management</text>
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="var(--badge-amber-bg)" stroke="var(--border-note)" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="var(--badge-amber-fg)" font-weight="700">Version</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="var(--badge-amber-fg)">version management</text>
         <!-- Retire -->
-        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
-        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Retire</text>
-        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">discontinue</text>
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="var(--bg-error)" stroke="var(--accent-red)" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="var(--accent-red)" font-weight="700">Retire</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-red)">discontinue</text>
 
         <!-- Arrows -->
-        <line x1="120" y1="83" x2="148" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
-        <line x1="240" y1="83" x2="268" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
-        <line x1="360" y1="83" x2="388" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
-        <line x1="480" y1="83" x2="508" y2="83" stroke="#0969da" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="120" y1="83" x2="148" y2="83" stroke="var(--accent)" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="var(--accent)" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="var(--accent)" stroke-width="1.4" marker-end="url(#arrowS)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="var(--accent)" stroke-width="1.4" marker-end="url(#arrowS)"/>
 
         <!-- Feedback loop: Version → Test -->
-        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowS)"/>
-        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">re-test after update</text>
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="var(--border-note)" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowS)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="var(--border-note)">re-test after update</text>
       </g>
     </svg>
   </div>
@@ -277,40 +277,40 @@
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/>
         </marker>
       </defs>
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Write -->
-        <rect x="30" y="60" width="90" height="46" rx="8" fill="#f1e8fd" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="75" y="80" text-anchor="middle" font-size="12" fill="#6639ba" font-weight="700">Write</text>
-        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="#6639ba">write scripts/*.ts</text>
+        <rect x="30" y="60" width="90" height="46" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="75" y="80" text-anchor="middle" font-size="12" fill="var(--accent-purple)" font-weight="700">Write</text>
+        <text x="75" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-purple)">write scripts/*.ts</text>
         <!-- Lint -->
-        <rect x="150" y="60" width="90" height="46" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
-        <text x="195" y="80" text-anchor="middle" font-size="12" fill="#0550ae" font-weight="700">Lint</text>
-        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="#0550ae">static analysis</text>
+        <rect x="150" y="60" width="90" height="46" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="195" y="80" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Lint</text>
+        <text x="195" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-dark)">static analysis</text>
         <!-- Test -->
-        <rect x="270" y="60" width="90" height="46" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
-        <text x="315" y="80" text-anchor="middle" font-size="12" fill="#116329" font-weight="700">Test</text>
-        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="#116329">unit/integration tests</text>
+        <rect x="270" y="60" width="90" height="46" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+        <text x="315" y="80" text-anchor="middle" font-size="12" fill="var(--badge-green-fg)" font-weight="700">Test</text>
+        <text x="315" y="95" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">unit/integration tests</text>
         <!-- Register -->
-        <rect x="390" y="60" width="90" height="46" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
-        <text x="435" y="80" text-anchor="middle" font-size="12" fill="#7a5300" font-weight="700">Register</text>
-        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="#7a5300">register in package.json</text>
+        <rect x="390" y="60" width="90" height="46" rx="8" fill="var(--badge-amber-bg)" stroke="var(--border-note)" stroke-width="1.5"/>
+        <text x="435" y="80" text-anchor="middle" font-size="12" fill="var(--badge-amber-fg)" font-weight="700">Register</text>
+        <text x="435" y="95" text-anchor="middle" font-size="9.5" fill="var(--badge-amber-fg)">register in package.json</text>
         <!-- Deprecate -->
-        <rect x="510" y="60" width="80" height="46" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.5"/>
-        <text x="550" y="80" text-anchor="middle" font-size="12" fill="#cf222e" font-weight="700">Deprecate</text>
-        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="#cf222e">discontinue</text>
+        <rect x="510" y="60" width="80" height="46" rx="8" fill="var(--bg-error)" stroke="var(--accent-red)" stroke-width="1.5"/>
+        <text x="550" y="80" text-anchor="middle" font-size="12" fill="var(--accent-red)" font-weight="700">Deprecate</text>
+        <text x="550" y="95" text-anchor="middle" font-size="9.5" fill="var(--accent-red)">discontinue</text>
 
         <!-- Arrows -->
-        <line x1="120" y1="83" x2="148" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
-        <line x1="240" y1="83" x2="268" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
-        <line x1="360" y1="83" x2="388" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
-        <line x1="480" y1="83" x2="508" y2="83" stroke="#1a7f37" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="120" y1="83" x2="148" y2="83" stroke="var(--accent-green)" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="240" y1="83" x2="268" y2="83" stroke="var(--accent-green)" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="360" y1="83" x2="388" y2="83" stroke="var(--accent-green)" stroke-width="1.4" marker-end="url(#arrowSc)"/>
+        <line x1="480" y1="83" x2="508" y2="83" stroke="var(--accent-green)" stroke-width="1.4" marker-end="url(#arrowSc)"/>
 
         <!-- Feedback loop: Register → Lint -->
-        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="#9a6700" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowSc)"/>
-        <text x="315" y="24" text-anchor="middle" font-size="9" fill="#9a6700">re-verify after edit</text>
+        <path d="M435,60 C435,30 195,30 195,58" fill="none" stroke="var(--border-note)" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowSc)"/>
+        <text x="315" y="24" text-anchor="middle" font-size="9" fill="var(--border-note)">re-verify after edit</text>
       </g>
     </svg>
   </div>

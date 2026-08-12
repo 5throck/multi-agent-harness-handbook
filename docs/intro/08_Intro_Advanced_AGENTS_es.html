@@ -168,30 +168,30 @@ handoff_to: reviewer (procede a la revisión después de que el borrador esté c
     <div >AGENTS.md → Flujo de Implementación Específico por Herramienta</div>
     <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0 auto;">
       <defs>
-        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#636c76"/></marker>
-        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/></marker>
-        <marker id="agArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6639ba"/></marker>
+        <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+        <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+        <marker id="agArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
       </defs>
       <!-- AGENTS.md at top -->
-      <rect x="180" y="10" width="200" height="40" rx="8" fill="#f0f7ff" stroke="#0969da" stroke-width="2"/>
-      <text x="280" y="34" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="#0550ae">AGENTS.md (Especificación Común)</text>
+      <rect x="180" y="10" width="200" height="40" rx="8" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="280" y="34" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="13" font-weight="700" fill="var(--accent-dark)">AGENTS.md (Especificación Común)</text>
       <!-- Branch arrows -->
-      <line x1="220" y1="50" x2="140" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
-      <line x1="340" y1="50" x2="420" y2="80" stroke="#636c76" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="220" y1="50" x2="140" y2="80" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#agArrow)"/>
+      <line x1="340" y1="50" x2="420" y2="80" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#agArrow)"/>
       <!-- Claude side -->
-      <rect x="40" y="82" width="200" height="44" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
-      <text x="140" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#1a7f37">Claude App / Claude Code</text>
-      <text x="140" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">.claude/agents/*.md (predefinido)</text>
-      <line x1="140" y1="126" x2="140" y2="152" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#agArrowG)"/>
-      <rect x="50" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1" stroke-dasharray="3,2"/>
-      <text x="140" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#1a7f37">frontmatter YAML + prompt del sistema</text>
+      <rect x="40" y="82" width="200" height="44" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+      <text x="140" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="var(--accent-green)">Claude App / Claude Code</text>
+      <text x="140" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--text-dim)">.claude/agents/*.md (predefinido)</text>
+      <line x1="140" y1="126" x2="140" y2="152" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#agArrowG)"/>
+      <rect x="50" y="154" width="180" height="36" rx="6" fill="var(--bg)" stroke="var(--accent-green)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="140" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-green)">frontmatter YAML + prompt del sistema</text>
       <!-- Antigravity side -->
-      <rect x="320" y="82" width="200" height="44" rx="8" fill="#faf5ff" stroke="#6639ba" stroke-width="1.5"/>
-      <text x="420" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#6639ba">Antigravity Desktop / CLI</text>
-      <text x="420" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#636c76">Sin archivo de definición (generación dinámica)</text>
-      <line x1="420" y1="126" x2="420" y2="152" stroke="#6639ba" stroke-width="1.5" marker-end="url(#agArrowP)"/>
-      <rect x="330" y="154" width="180" height="36" rx="6" fill="#ffffff" stroke="#6639ba" stroke-width="1" stroke-dasharray="3,2"/>
-      <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6639ba">El orquestador interpreta en tiempo real</text>
+      <rect x="320" y="82" width="200" height="44" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+      <text x="420" y="101" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="var(--accent-purple)">Antigravity Desktop / CLI</text>
+      <text x="420" y="117" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--text-dim)">Sin archivo de definición (generación dinámica)</text>
+      <line x1="420" y1="126" x2="420" y2="152" stroke="var(--accent-purple)" stroke-width="1.5" marker-end="url(#agArrowP)"/>
+      <rect x="330" y="154" width="180" height="36" rx="6" fill="var(--bg)" stroke="var(--accent-purple)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">El orquestador interpreta en tiempo real</text>
     </svg>
   </div>
 

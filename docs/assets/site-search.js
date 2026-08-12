@@ -101,7 +101,6 @@
     { path: 'lecture-guide/00_Course_Overview_ja.html', title: '講義紹介・マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック', lang: 'ja' },
     { path: 'lecture-guide/00_Lecture_Guide_ja.html', title: '講義進行ガイド · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
     /* ── Spanish ── */
-    { path: 'index_es.html', title: 'Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
     { path: 'intro/01_Why_AI_Chapter_es.html', title: 'Capítulo 1 · Transformación del Trabajo en la Era de la IA', lang: 'es' },
     { path: 'concepts/02_Concepts_Chapter_es.html', title: 'Capítulo 2 · Ingeniería de Harness y Conceptos de Equipos Multiagente', lang: 'es' },
     { path: 'guardrails/03_Guardrails_Chapter_es.html', title: 'Capítulo 3 · Guardrails y Modelos de Permisos', lang: 'es' },

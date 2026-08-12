@@ -96,64 +96,64 @@
     <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#636c76"/>
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
         </marker>
       </defs>
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif">
         <!-- Title -->
-        <text x="340" y="22" text-anchor="middle" font-size="13" fill="#636c76" font-weight="600">オーケストレーションパターン（ブロック） → ワークフロー（組み立て）</text>
+        <text x="340" y="22" text-anchor="middle" font-size="13" fill="var(--text-dim)" font-weight="600">オーケストレーションパターン（ブロック） → ワークフロー（組み立て）</text>
 
         <!-- Pattern blocks -->
-        <rect x="20" y="50" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.5"/>
-        <text x="70" y="73" text-anchor="middle" font-size="11" fill="#0969da" font-weight="700">パイプライン</text>
+        <rect x="20" y="50" width="100" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="70" y="73" text-anchor="middle" font-size="11" fill="var(--accent)" font-weight="700">パイプライン</text>
 
-        <rect x="130" y="50" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.5"/>
-        <text x="170" y="73" text-anchor="middle" font-size="11" fill="#1a7f37" font-weight="700">ルーティング</text>
+        <rect x="130" y="50" width="80" height="36" rx="6" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1.5"/>
+        <text x="170" y="73" text-anchor="middle" font-size="11" fill="var(--accent-green)" font-weight="700">ルーティング</text>
 
-        <rect x="220" y="50" width="90" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="265" y="73" text-anchor="middle" font-size="11" fill="#6639ba" font-weight="700">ファンアウト</text>
+        <rect x="220" y="50" width="90" height="36" rx="6" fill="var(--accent-purple)" opacity="0.15" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="265" y="73" text-anchor="middle" font-size="11" fill="var(--accent-purple)" font-weight="700">ファンアウト</text>
 
-        <rect x="320" y="50" width="120" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.5"/>
-        <text x="380" y="73" text-anchor="middle" font-size="11" fill="#cf5800" font-weight="700">オーケストレーター</text>
+        <rect x="320" y="50" width="120" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.5"/>
+        <text x="380" y="73" text-anchor="middle" font-size="11" fill="var(--badge-orange-fg)" font-weight="700">オーケストレーター</text>
 
-        <rect x="450" y="50" width="110" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.5"/>
-        <text x="505" y="73" text-anchor="middle" font-size="11" fill="#cf222e" font-weight="700">検証してから適用</text>
+        <rect x="450" y="50" width="110" height="36" rx="6" fill="var(--accent-red)" opacity="0.15" stroke="var(--accent-red)" stroke-width="1.5"/>
+        <text x="505" y="73" text-anchor="middle" font-size="11" fill="var(--accent-red)" font-weight="700">検証してから適用</text>
 
         <!-- Arrow down -->
-        <line x1="340" y1="95" x2="340" y2="125" stroke="#636c76" stroke-width="1.5" marker-end="url(#wfArrow)"/>
-        <text x="355" y="115" font-size="10" fill="#636c76">組み合わせ</text>
+        <line x1="340" y1="95" x2="340" y2="125" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#wfArrow)"/>
+        <text x="355" y="115" font-size="10" fill="var(--text-dim)">組み合わせ</text>
 
         <!-- Workflow assembly -->
-        <rect x="40" y="130" width="600" height="70" rx="10" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
-        <text x="340" y="150" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">ワークフロー（例：コードレビュー）</text>
+        <rect x="40" y="130" width="600" height="70" rx="10" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="340" y="150" text-anchor="middle" font-size="11" fill="var(--text-dim)" font-weight="600">ワークフロー（例：コードレビュー）</text>
 
         <!-- Stage flow inside workflow box -->
-        <rect x="65" y="158" width="70" height="28" rx="5" fill="#e16f24" opacity="0.2" stroke="#e16f24" stroke-width="1"/>
-        <text x="100" y="177" text-anchor="middle" font-size="9.5" fill="#cf5800" font-weight="600">ルーティング</text>
+        <rect x="65" y="158" width="70" height="28" rx="5" fill="var(--badge-orange-fg)" opacity="0.2" stroke="var(--badge-orange-fg)" stroke-width="1"/>
+        <text x="100" y="177" text-anchor="middle" font-size="9.5" fill="var(--badge-orange-fg)" font-weight="600">ルーティング</text>
 
-        <line x1="135" y1="172" x2="160" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <line x1="135" y1="172" x2="160" y2="172" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
 
-        <rect x="165" y="158" width="80" height="28" rx="5" fill="#6639ba" opacity="0.2" stroke="#6639ba" stroke-width="1"/>
-        <text x="205" y="177" text-anchor="middle" font-size="9.5" fill="#6639ba" font-weight="600">ファンアウト</text>
+        <rect x="165" y="158" width="80" height="28" rx="5" fill="var(--accent-purple)" opacity="0.2" stroke="var(--accent-purple)" stroke-width="1"/>
+        <text x="205" y="177" text-anchor="middle" font-size="9.5" fill="var(--accent-purple)" font-weight="600">ファンアウト</text>
 
-        <line x1="245" y1="172" x2="270" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <line x1="245" y1="172" x2="270" y2="172" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
 
-        <rect x="275" y="158" width="70" height="28" rx="5" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1"/>
-        <text x="310" y="177" text-anchor="middle" font-size="9.5" fill="#1a7f37" font-weight="600">ファンイン</text>
+        <rect x="275" y="158" width="70" height="28" rx="5" fill="var(--accent-green)" opacity="0.2" stroke="var(--accent-green)" stroke-width="1"/>
+        <text x="310" y="177" text-anchor="middle" font-size="9.5" fill="var(--accent-green)" font-weight="600">ファンイン</text>
 
-        <line x1="345" y1="172" x2="370" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <line x1="345" y1="172" x2="370" y2="172" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
 
-        <rect x="375" y="158" width="90" height="28" rx="5" fill="#0969da" opacity="0.2" stroke="#0969da" stroke-width="1"/>
-        <text x="420" y="177" text-anchor="middle" font-size="9.5" fill="#0969da" font-weight="600">パイプライン</text>
+        <rect x="375" y="158" width="90" height="28" rx="5" fill="var(--accent)" opacity="0.2" stroke="var(--accent)" stroke-width="1"/>
+        <text x="420" y="177" text-anchor="middle" font-size="9.5" fill="var(--accent)" font-weight="600">パイプライン</text>
 
-        <line x1="465" y1="172" x2="490" y2="172" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <line x1="465" y1="172" x2="490" y2="172" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
 
-        <rect x="495" y="158" width="80" height="28" rx="5" fill="#cf222e" opacity="0.2" stroke="#cf222e" stroke-width="1"/>
-        <text x="535" y="177" text-anchor="middle" font-size="9.5" fill="#cf222e" font-weight="600">検証</text>
+        <rect x="495" y="158" width="80" height="28" rx="5" fill="var(--accent-red)" opacity="0.2" stroke="var(--accent-red)" stroke-width="1"/>
+        <text x="535" y="177" text-anchor="middle" font-size="9.5" fill="var(--accent-red)" font-weight="600">検証</text>
 
         <!-- Loop arrow -->
-        <path d="M575,172 Q595,172 595,150 Q595,130 575,130 L420,130" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
-        <text x="500" y="126" text-anchor="middle" font-size="9" fill="#636c76">却下時はループ</text>
+        <path d="M575,172 Q595,172 595,150 Q595,130 575,130 L420,130" fill="none" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="500" y="126" text-anchor="middle" font-size="9" fill="var(--text-dim)">却下時はループ</text>
       </g>
     </svg>
   </div>
@@ -195,21 +195,21 @@
       <strong>⑤ 最終承認（検証してから適用）</strong>: 修正されたコードを再レビューします。合格すれば<span class="wf-gate">人間の承認ゲート</span>へ進み、却下されれば④にループバックします。
     </p>
     <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
-        <rect x="5" y="30" width="100" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① 変更分析</text>
-        <line x1="105" y1="48" x2="125" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="130" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="180" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② 多角的検討</text>
-        <line x1="230" y1="48" x2="250" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="255" y="30" width="80" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="295" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ 統合</text>
-        <line x1="335" y1="48" x2="355" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="360" y="30" width="90" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="405" y="53" text-anchor="middle" font-weight="700" fill="#0969da">④ 修正提案</text>
-        <line x1="450" y1="48" x2="470" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="475" y="30" width="80" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="515" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">⑤ 承認</text>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
+        <rect x="5" y="30" width="100" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① 変更分析</text>
+        <line x1="105" y1="48" x2="125" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="30" width="100" height="36" rx="6" fill="var(--accent-purple)" opacity="0.15" stroke="var(--accent-purple)" stroke-width="1.2"/><text x="180" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-purple)">② 多角的検討</text>
+        <line x1="230" y1="48" x2="250" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="30" width="80" height="36" rx="6" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1.2"/><text x="295" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-green)">③ 統合</text>
+        <line x1="335" y1="48" x2="355" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="30" width="90" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="405" y="53" text-anchor="middle" font-weight="700" fill="var(--accent)">④ 修正提案</text>
+        <line x1="450" y1="48" x2="470" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="475" y="30" width="80" height="36" rx="6" fill="var(--accent-red)" opacity="0.15" stroke="var(--accent-red)" stroke-width="1.2"/><text x="515" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-red)">⑤ 承認</text>
         <!-- gate -->
-        <rect x="555" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="580" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">人間</text>
+        <rect x="555" y="35" width="50" height="26" rx="13" fill="var(--accent-green)" opacity="0.2" stroke="var(--accent-green)" stroke-width="1.2"/><text x="580" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-green)" font-size="9.5">人間</text>
         <!-- loop -->
-        <path d="M515,66 L515,85 L405,85 L405,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
-        <text x="460" y="96" text-anchor="middle" font-size="9" fill="#636c76">却下時はループ</text>
+        <path d="M515,66 L515,85 L405,85 L405,66" fill="none" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="460" y="96" text-anchor="middle" font-size="9" fill="var(--text-dim)">却下時はループ</text>
       </g>
     </svg>
     <p style="font-size:13px;color:var(--text-dim)">バリアント: <code>co-develop</code>の6段階ガバナンスパイプラインと構造的に類似。<a href="../variant-practice/06_VariantPractice_Manual_ja.html">第6章 §1</a>を参照。</p>
@@ -226,19 +226,19 @@
       <strong>④ クロス検証（検証してから適用）</strong>: 専門レビュアーがデータソース、論理的一貫性、欠落をチェックします。<span class="wf-gate">人間の承認ゲート</span>を経て、最終レポートが確定します。
     </p>
     <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
-        <rect x="5" y="30" width="110" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="#cf5800">① PMオーケストレーション</text>
-        <line x1="115" y1="48" x2="135" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="140" y="30" width="100" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="190" y="53" text-anchor="middle" font-weight="700" fill="#6639ba">② 並列調査 ×3</text>
-        <line x1="240" y1="48" x2="260" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="265" y="30" width="90" height="36" rx="6" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1.2"/><text x="310" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37">③ 統合・ドラフト</text>
-        <line x1="355" y1="48" x2="375" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="380" y="30" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="430" y="53" text-anchor="middle" font-weight="700" fill="#cf222e">④ 相互検証</text>
-        <line x1="480" y1="48" x2="500" y2="48" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="505" y="30" width="70" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="540" y="53" text-anchor="middle" font-weight="700" fill="#0969da">⑤ 確定</text>
-        <rect x="575" y="35" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="53" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">人間</text>
-        <path d="M430,66 L430,85 L310,85 L310,66" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
-        <text x="370" y="96" text-anchor="middle" font-size="9" fill="#636c76">修正が必要時</text>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
+        <rect x="5" y="30" width="110" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① PMオーケストレーション</text>
+        <line x1="115" y1="48" x2="135" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="140" y="30" width="100" height="36" rx="6" fill="var(--accent-purple)" opacity="0.15" stroke="var(--accent-purple)" stroke-width="1.2"/><text x="190" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-purple)">② 並列調査 ×3</text>
+        <line x1="240" y1="48" x2="260" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="265" y="30" width="90" height="36" rx="6" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1.2"/><text x="310" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-green)">③ 統合・ドラフト</text>
+        <line x1="355" y1="48" x2="375" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="380" y="30" width="100" height="36" rx="6" fill="var(--accent-red)" opacity="0.15" stroke="var(--accent-red)" stroke-width="1.2"/><text x="430" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-red)">④ 相互検証</text>
+        <line x1="480" y1="48" x2="500" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="505" y="30" width="70" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="540" y="53" text-anchor="middle" font-weight="700" fill="var(--accent)">⑤ 確定</text>
+        <rect x="575" y="35" width="50" height="26" rx="13" fill="var(--accent-green)" opacity="0.2" stroke="var(--accent-green)" stroke-width="1.2"/><text x="600" y="53" text-anchor="middle" font-weight="700" fill="var(--accent-green)" font-size="9.5">人間</text>
+        <path d="M430,66 L430,85 L310,85 L310,66" fill="none" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="370" y="96" text-anchor="middle" font-size="9" fill="var(--text-dim)">修正が必要時</text>
       </g>
     </svg>
     <p style="font-size:13px;color:var(--text-dim)">バリアント: <code>co-consult</code>の7段階（フェーズ0-6）パイプライン構造に基づく。<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章 §2演習（G-1）</a>で直接体験できます。</p>
@@ -257,26 +257,26 @@
       <strong>⑧⑨⑩⑩ 最終レビュー（検証してから適用）</strong>: 完成したPDFをクロスレビューし、<span class="wf-gate">人間の承認ゲート</span>へ進みます。
     </p>
     <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="#1f2328">
-        <rect x="5" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="#0969da">① リサーチ</text>
-        <line x1="65" y1="46" x2="80" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
-        <rect x="85" y="30" width="65" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="117" y="50" text-anchor="middle" font-weight="700" fill="#0969da">② ストーリー</text>
-        <line x1="150" y1="46" x2="165" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
-        <rect x="170" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="197" y="50" text-anchor="middle" font-weight="700" fill="#0969da">③ デザイン</text>
-        <line x1="225" y1="46" x2="240" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="var(--text)">
+        <rect x="5" y="30" width="60" height="32" rx="5" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="var(--accent)">① リサーチ</text>
+        <line x1="65" y1="46" x2="80" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="85" y="30" width="65" height="32" rx="5" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1"/><text x="117" y="50" text-anchor="middle" font-weight="700" fill="var(--accent)">② ストーリー</text>
+        <line x1="150" y1="46" x2="165" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="170" y="30" width="55" height="32" rx="5" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1"/><text x="197" y="50" text-anchor="middle" font-weight="700" fill="var(--accent)">③ デザイン</text>
+        <line x1="225" y1="46" x2="240" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
         <!-- Fan-out split -->
-        <rect x="245" y="15" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="35" text-anchor="middle" font-weight="700" fill="#6639ba">画像</text>
-        <rect x="245" y="52" width="75" height="30" rx="5" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1"/><text x="282" y="72" text-anchor="middle" font-weight="700" fill="#6639ba">ダイアグラム</text>
+        <rect x="245" y="15" width="75" height="30" rx="5" fill="var(--accent-purple)" opacity="0.15" stroke="var(--accent-purple)" stroke-width="1"/><text x="282" y="35" text-anchor="middle" font-weight="700" fill="var(--accent-purple)">画像</text>
+        <rect x="245" y="52" width="75" height="30" rx="5" fill="var(--accent-purple)" opacity="0.15" stroke="var(--accent-purple)" stroke-width="1"/><text x="282" y="72" text-anchor="middle" font-weight="700" fill="var(--accent-purple)">ダイアグラム</text>
         <!-- Fan-in merge -->
-        <line x1="320" y1="30" x2="345" y2="46" stroke="#636c76" stroke-width="1"/>
-        <line x1="320" y1="67" x2="345" y2="50" stroke="#636c76" stroke-width="1"/>
-        <rect x="350" y="30" width="55" height="32" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="377" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37">統合</text>
-        <line x1="405" y1="46" x2="420" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
-        <rect x="425" y="30" width="60" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="455" y="50" text-anchor="middle" font-weight="700" fill="#0969da">ビルド</text>
-        <line x1="485" y1="46" x2="495" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
-        <rect x="500" y="30" width="55" height="32" rx="5" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1"/><text x="527" y="50" text-anchor="middle" font-weight="700" fill="#0969da">PDF</text>
-        <line x1="555" y1="46" x2="570" y2="46" stroke="#636c76" stroke-width="1" marker-end="url(#wfArrow)"/>
-        <rect x="575" y="32" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="600" y="50" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">人間</text>
+        <line x1="320" y1="30" x2="345" y2="46" stroke="var(--text-dim)" stroke-width="1"/>
+        <line x1="320" y1="67" x2="345" y2="50" stroke="var(--text-dim)" stroke-width="1"/>
+        <rect x="350" y="30" width="55" height="32" rx="5" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1"/><text x="377" y="50" text-anchor="middle" font-weight="700" fill="var(--accent-green)">統合</text>
+        <line x1="405" y1="46" x2="420" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="425" y="30" width="60" height="32" rx="5" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1"/><text x="455" y="50" text-anchor="middle" font-weight="700" fill="var(--accent)">ビルド</text>
+        <line x1="485" y1="46" x2="495" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="500" y="30" width="55" height="32" rx="5" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1"/><text x="527" y="50" text-anchor="middle" font-weight="700" fill="var(--accent)">PDF</text>
+        <line x1="555" y1="46" x2="570" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
+        <rect x="575" y="32" width="50" height="26" rx="13" fill="var(--accent-green)" opacity="0.2" stroke="var(--accent-green)" stroke-width="1.2"/><text x="600" y="50" text-anchor="middle" font-weight="700" fill="var(--accent-green)" font-size="9.5">人間</text>
       </g>
     </svg>
     <p style="font-size:13px;color:var(--text-dim)">バリアント: まさに<code>co-deck</code>の11段階（ステージ0-11）パイプライン。<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章 §2演習（G-2）</a>の韓国食品グローバル化プレゼンテーションで直接体験できます。</p>
@@ -293,17 +293,17 @@
       <strong>④ エスカレーションまたは自動解決</strong>: 自動的に解決できる軽微な問題（例：設定エラー）は即座に修正し、複雑な問題は<span class="wf-gate">人間の承認ゲート</span>にエスカレーションします。
     </p>
     <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
-        <rect x="5" y="28" width="80" height="36" rx="6" fill="#e16f24" opacity="0.15" stroke="#e16f24" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="#cf5800">① 分類</text>
-        <line x1="85" y1="46" x2="105" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="110" y="28" width="120" height="36" rx="6" fill="#6639ba" opacity="0.15" stroke="#6639ba" stroke-width="1.2"/><text x="170" y="51" text-anchor="middle" font-weight="700" fill="#6639ba">② 自動調査</text>
-        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="255" y="28" width="110" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="310" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ 優先順位決定</text>
-        <line x1="365" y1="46" x2="385" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
+        <rect x="5" y="28" width="80" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① 分類</text>
+        <line x1="85" y1="46" x2="105" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="110" y="28" width="120" height="36" rx="6" fill="var(--accent-purple)" opacity="0.15" stroke="var(--accent-purple)" stroke-width="1.2"/><text x="170" y="51" text-anchor="middle" font-weight="700" fill="var(--accent-purple)">② 自動調査</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="110" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="310" y="51" text-anchor="middle" font-weight="700" fill="var(--accent)">③ 優先順位決定</text>
+        <line x1="365" y1="46" x2="385" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
         <!-- Branch -->
-        <rect x="390" y="8" width="80" height="30" rx="5" fill="#1a7f37" opacity="0.15" stroke="#1a7f37" stroke-width="1"/><text x="430" y="28" text-anchor="middle" font-weight="700" fill="#1a7f37">自動解決</text>
-        <rect x="390" y="52" width="80" height="30" rx="5" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1"/><text x="430" y="72" text-anchor="middle" font-weight="700" fill="#cf222e">エスカレーション</text>
-        <rect x="475" y="57" width="50" height="22" rx="11" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="500" y="73" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">人間</text>
+        <rect x="390" y="8" width="80" height="30" rx="5" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1"/><text x="430" y="28" text-anchor="middle" font-weight="700" fill="var(--accent-green)">自動解決</text>
+        <rect x="390" y="52" width="80" height="30" rx="5" fill="var(--accent-red)" opacity="0.15" stroke="var(--accent-red)" stroke-width="1"/><text x="430" y="72" text-anchor="middle" font-weight="700" fill="var(--accent-red)">エスカレーション</text>
+        <rect x="475" y="57" width="50" height="22" rx="11" fill="var(--accent-green)" opacity="0.2" stroke="var(--accent-green)" stroke-width="1.2"/><text x="500" y="73" text-anchor="middle" font-weight="700" fill="var(--accent-green)" font-size="9.5">人間</text>
       </g>
     </svg>
     <p style="font-size:13px;color:var(--text-dim)">インシデント管理専用のバリアントはまだありませんが、<code>co-develop</code>のPMロールと第2章の障害対応パターン（リトライ、ロールバック、エスカレーション）を組み合わせることで実装できます。</p>
@@ -320,19 +320,19 @@
       <strong>④ 最終レビュー + 承認</strong>: PR全体を再レビューし、<span class="wf-gate">人間の承認ゲート</span>へ進みます。承認されるとマージ保留状態に移行します。
     </p>
     <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
-        <rect x="5" y="28" width="100" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="#0969da">① 変更収集</text>
-        <line x1="105" y1="46" x2="125" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="130" y="28" width="100" height="36" rx="6" fill="#cf222e" opacity="0.15" stroke="#cf222e" stroke-width="1.2"/><text x="180" y="51" text-anchor="middle" font-weight="700" fill="#cf222e">② ルール検証</text>
-        <line x1="230" y1="46" x2="250" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="255" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="295" y="51" text-anchor="middle" font-weight="700" fill="#0969da">③ 影響分析</text>
-        <line x1="335" y1="46" x2="355" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="360" y="28" width="80" height="36" rx="6" fill="#0969da" opacity="0.15" stroke="#0969da" stroke-width="1.2"/><text x="400" y="51" text-anchor="middle" font-weight="700" fill="#0969da">④ 検討</text>
-        <line x1="440" y1="46" x2="460" y2="46" stroke="#636c76" stroke-width="1.2" marker-end="url(#wfArrow)"/>
-        <rect x="465" y="33" width="50" height="26" rx="13" fill="#1a7f37" opacity="0.2" stroke="#1a7f37" stroke-width="1.2"/><text x="490" y="51" text-anchor="middle" font-weight="700" fill="#1a7f37" font-size="9.5">人間</text>
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
+        <rect x="5" y="28" width="100" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="var(--accent)">① 変更収集</text>
+        <line x1="105" y1="46" x2="125" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="130" y="28" width="100" height="36" rx="6" fill="var(--accent-red)" opacity="0.15" stroke="var(--accent-red)" stroke-width="1.2"/><text x="180" y="51" text-anchor="middle" font-weight="700" fill="var(--accent-red)">② ルール検証</text>
+        <line x1="230" y1="46" x2="250" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="255" y="28" width="80" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="295" y="51" text-anchor="middle" font-weight="700" fill="var(--accent)">③ 影響分析</text>
+        <line x1="335" y1="46" x2="355" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="360" y="28" width="80" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="400" y="51" text-anchor="middle" font-weight="700" fill="var(--accent)">④ 検討</text>
+        <line x1="440" y1="46" x2="460" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
+        <rect x="465" y="33" width="50" height="26" rx="13" fill="var(--accent-green)" opacity="0.2" stroke="var(--accent-green)" stroke-width="1.2"/><text x="490" y="51" text-anchor="middle" font-weight="700" fill="var(--accent-green)" font-size="9.5">人間</text>
         <!-- loop -->
-        <path d="M180,64 L180,82 L55,82 L55,64" fill="none" stroke="#636c76" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
-        <text x="117" y="93" text-anchor="middle" font-size="9" fill="#636c76">違反時はループ</text>
+        <path d="M180,64 L180,82 L55,82 L55,64" fill="none" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#wfArrow)"/>
+        <text x="117" y="93" text-anchor="middle" font-size="9" fill="var(--text-dim)">違反時はループ</text>
       </g>
     </svg>
     <p style="font-size:13px;color:var(--text-dim)">ai-workspace-standardsのCONSTITUTION.mdで定義されたPRワークフローをエージェントが自動化する構造。<a href="../intro/05_Intro_Chapter_ja.html#s2">第5章 §2 コアファイル</a>と<a href="../intro/08_Intro_Advanced_Deploy_ja.html">第8章 §1 デプロイとSSOT</a>でデプロイパイプラインと合わせて解説されています。</p>
@@ -415,86 +415,86 @@
   <div class="decision-box">
     <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
-        <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#636c76"/></marker>
-        <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/></marker>
-        <marker id="dtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0969da"/></marker>
+        <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/></marker>
+        <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/></marker>
+        <marker id="dtB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
       </defs>
-      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="#1f2328">
+      <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <!-- Q1 -->
-        <rect x="220" y="5" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <rect x="220" y="5" width="220" height="40" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
         <text x="330" y="30" text-anchor="middle" font-weight="700">サブタスク間に依存関係はあるか？</text>
         <!-- Yes branch -->
-        <line x1="330" y1="45" x2="330" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="345" y="58" font-size="9" fill="#1a7f37" font-weight="700">はい</text>
+        <line x1="330" y1="45" x2="330" y2="65" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="58" font-size="9" fill="var(--accent-green)" font-weight="700">はい</text>
         <!-- No branch -->
-        <line x1="440" y1="25" x2="560" y2="25" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="560" y1="25" x2="560" y2="65" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="490" y="20" font-size="9" fill="#0969da" font-weight="700">いいえ</text>
+        <line x1="440" y1="25" x2="560" y2="25" stroke="var(--text-dim)" stroke-width="1.2"/>
+        <line x1="560" y1="25" x2="560" y2="65" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="490" y="20" font-size="9" fill="var(--accent)" font-weight="700">いいえ</text>
 
         <!-- Q2 (Yes from Q1) -->
-        <rect x="220" y="70" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <rect x="220" y="70" width="220" height="40" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
         <text x="330" y="95" text-anchor="middle" font-weight="700">順番に実行すればよいか？</text>
         <!-- Yes → Pipeline -->
-        <line x1="220" y1="90" x2="140" y2="90" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="140" y1="90" x2="140" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="175" y="85" font-size="9" fill="#1a7f37" font-weight="700">はい</text>
+        <line x1="220" y1="90" x2="140" y2="90" stroke="var(--text-dim)" stroke-width="1.2"/>
+        <line x1="140" y1="90" x2="140" y2="130" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="175" y="85" font-size="9" fill="var(--accent-green)" font-weight="700">はい</text>
         <!-- No → Orchestrator -->
-        <line x1="330" y1="110" x2="330" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="345" y="125" font-size="9" fill="#0969da" font-weight="700">いいえ</text>
+        <line x1="330" y1="110" x2="330" y2="130" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="125" font-size="9" fill="var(--accent)" font-weight="700">いいえ</text>
 
         <!-- Pipeline result -->
-        <rect x="60" y="135" width="160" height="40" rx="8" fill="#0969da" opacity="0.1" stroke="#0969da" stroke-width="1.5"/>
-        <text x="140" y="153" text-anchor="middle" font-weight="700" fill="#0969da">パイプライン</text>
-        <text x="140" y="166" text-anchor="middle" font-size="9" fill="#636c76">順次的な段階を設計</text>
+        <rect x="60" y="135" width="160" height="40" rx="8" fill="var(--accent)" opacity="0.1" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="140" y="153" text-anchor="middle" font-weight="700" fill="var(--accent)">パイプライン</text>
+        <text x="140" y="166" text-anchor="middle" font-size="9" fill="var(--text-dim)">順次的な段階を設計</text>
 
         <!-- Q3 (No from Q2) -->
-        <rect x="220" y="135" width="220" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <rect x="220" y="135" width="220" height="40" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
         <text x="330" y="160" text-anchor="middle" font-weight="700">検証が必要か？</text>
         <!-- Yes → Verify -->
-        <line x1="270" y1="175" x2="270" y2="190" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="270" y1="190" x2="140" y2="190" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="140" y1="190" x2="140" y2="198" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="205" y="188" font-size="9" fill="#1a7f37" font-weight="700">はい</text>
+        <line x1="270" y1="175" x2="270" y2="190" stroke="var(--text-dim)" stroke-width="1.2"/>
+        <line x1="270" y1="190" x2="140" y2="190" stroke="var(--text-dim)" stroke-width="1.2"/>
+        <line x1="140" y1="190" x2="140" y2="198" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="205" y="188" font-size="9" fill="var(--accent-green)" font-weight="700">はい</text>
         <!-- No → Orchestrator-Worker -->
-        <line x1="330" y1="175" x2="330" y2="195" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="345" y="190" font-size="9" fill="#0969da" font-weight="700">いいえ</text>
+        <line x1="330" y1="175" x2="330" y2="195" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="345" y="190" font-size="9" fill="var(--accent)" font-weight="700">いいえ</text>
 
         <!-- Verify result -->
-        <rect x="60" y="200" width="160" height="40" rx="8" fill="#cf222e" opacity="0.1" stroke="#cf222e" stroke-width="1.5"/>
-        <text x="140" y="218" text-anchor="middle" font-weight="700" fill="#cf222e">検証してから適用 + パイプライン</text>
-        <text x="140" y="231" text-anchor="middle" font-size="9" fill="#636c76">ループを含む段階を設計</text>
+        <rect x="60" y="200" width="160" height="40" rx="8" fill="var(--accent-red)" opacity="0.1" stroke="var(--accent-red)" stroke-width="1.5"/>
+        <text x="140" y="218" text-anchor="middle" font-weight="700" fill="var(--accent-red)">検証してから適用 + パイプライン</text>
+        <text x="140" y="231" text-anchor="middle" font-size="9" fill="var(--text-dim)">ループを含む段階を設計</text>
 
         <!-- Orchestrator-Worker result -->
-        <rect x="230" y="200" width="200" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
-        <text x="330" y="218" text-anchor="middle" font-weight="700" fill="#cf5800">オーケストレーター・ワーカー</text>
-        <text x="330" y="231" text-anchor="middle" font-size="9" fill="#636c76">PMが動的に作業を分配</text>
+        <rect x="230" y="200" width="200" height="40" rx="8" fill="var(--badge-orange-fg)" opacity="0.1" stroke="var(--badge-orange-fg)" stroke-width="1.5"/>
+        <text x="330" y="218" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">オーケストレーター・ワーカー</text>
+        <text x="330" y="231" text-anchor="middle" font-size="9" fill="var(--text-dim)">PMが動的に作業を分配</text>
 
         <!-- Q4 (No from Q1) -->
-        <rect x="440" y="70" width="240" height="40" rx="8" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+        <rect x="440" y="70" width="240" height="40" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
         <text x="560" y="95" text-anchor="middle" font-weight="700">同時に実行できるか？</text>
         <!-- Yes → Fan-out -->
-        <line x1="560" y1="110" x2="560" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="575" y="125" font-size="9" fill="#1a7f37" font-weight="700">はい</text>
+        <line x1="560" y1="110" x2="560" y2="130" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="575" y="125" font-size="9" fill="var(--accent-green)" font-weight="700">はい</text>
         <!-- No → Routing -->
-        <line x1="680" y1="90" x2="710" y2="90" stroke="#636c76" stroke-width="1.2"/>
-        <line x1="710" y1="90" x2="710" y2="130" stroke="#636c76" stroke-width="1.2" marker-end="url(#dtY)"/>
-        <text x="686" y="85" font-size="9" fill="#0969da" font-weight="700">いいえ</text>
+        <line x1="680" y1="90" x2="710" y2="90" stroke="var(--text-dim)" stroke-width="1.2"/>
+        <line x1="710" y1="90" x2="710" y2="130" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#dtY)"/>
+        <text x="686" y="85" font-size="9" fill="var(--accent)" font-weight="700">いいえ</text>
 
         <!-- Fan-out result -->
-        <rect x="490" y="135" width="140" height="40" rx="8" fill="#6639ba" opacity="0.1" stroke="#6639ba" stroke-width="1.5"/>
-        <text x="560" y="153" text-anchor="middle" font-weight="700" fill="#6639ba">ファンアウト + ファンイン</text>
-        <text x="560" y="166" text-anchor="middle" font-size="9" fill="#636c76">並列作業 + 結果集約</text>
+        <rect x="490" y="135" width="140" height="40" rx="8" fill="var(--accent-purple)" opacity="0.1" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="560" y="153" text-anchor="middle" font-weight="700" fill="var(--accent-purple)">ファンアウト + ファンイン</text>
+        <text x="560" y="166" text-anchor="middle" font-size="9" fill="var(--text-dim)">並列作業 + 結果集約</text>
 
         <!-- Routing result -->
-        <rect x="655" y="135" width="110" height="40" rx="8" fill="#e16f24" opacity="0.1" stroke="#e16f24" stroke-width="1.5"/>
-        <text x="710" y="153" text-anchor="middle" font-weight="700" fill="#cf5800">ルーティング</text>
-        <text x="710" y="166" text-anchor="middle" font-size="9" fill="#636c76">条件分岐</text>
+        <rect x="655" y="135" width="110" height="40" rx="8" fill="var(--badge-orange-fg)" opacity="0.1" stroke="var(--badge-orange-fg)" stroke-width="1.5"/>
+        <text x="710" y="153" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">ルーティング</text>
+        <text x="710" y="166" text-anchor="middle" font-size="9" fill="var(--text-dim)">条件分岐</text>
 
         <!-- Combination note -->
-        <rect x="60" y="265" width="660" height="55" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
-        <text x="390" y="285" text-anchor="middle" font-size="11" fill="#636c76" font-weight="600">💡 実務では複数のパターンを組み合わせる</text>
-        <text x="390" y="302" text-anchor="middle" font-size="10" fill="#636c76">コードレビュー = ルーティング + ファンアウト + ファンイン + パイプライン + 検証してから適用（本章§3事例1）</text>
-        <text x="390" y="315" text-anchor="middle" font-size="10" fill="#636c76">この意思決定木は<strong>最初のパターンを選ぶ</strong>ためのものです。複雑な業務は上から下へ段階を設計しながら、パターンを自然に追加していきます。</text>
+        <rect x="60" y="265" width="660" height="55" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="1"/>
+        <text x="390" y="285" text-anchor="middle" font-size="11" fill="var(--text-dim)" font-weight="600">💡 実務では複数のパターンを組み合わせる</text>
+        <text x="390" y="302" text-anchor="middle" font-size="10" fill="var(--text-dim)">コードレビュー = ルーティング + ファンアウト + ファンイン + パイプライン + 検証してから適用（本章§3事例1）</text>
+        <text x="390" y="315" text-anchor="middle" font-size="10" fill="var(--text-dim)">この意思決定木は<strong>最初のパターンを選ぶ</strong>ためのものです。複雑な業務は上から下へ段階を設計しながら、パターンを自然に追加していきます。</text>
       </g>
     </svg>
   </div>

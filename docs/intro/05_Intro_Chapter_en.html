@@ -29,7 +29,7 @@
   <a href="#s1">What the repository is</a>
   <a href="#s1b">The overall architecture at a glance</a>
   <a href="#s2">The four core files</a>
-  <a href="#s3">templates and the 7 variants</a>
+  <a href="#s3">templates and the 9 variants</a>
   <a href="#s4">Session-start checklist and scaffolding</a>
   <div class="nav-section">Other chapters</div>
   <a href="../guardrails/03_Guardrails_Chapter_en.html">Chapter 3 · Guardrails and the permission model</a>
@@ -49,7 +49,7 @@
       <li>What ai-workspace-standards is, and why it must be cloned as the "workspace root"</li>
       <li>The overall directory structure of the repository, and the actual order in which a session reads and executes files (the runtime flow)</li>
       <li>The roles of the four core files: CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md</li>
-      <li>Which domain each of the 7 variants under templates/ is designed for</li>
+      <li>Which domain each of the 9 variants under templates/ is designed for</li>
       <li>A conceptual picture of the session-start checklist and the new-project.ts scaffolding flow</li>
     </ul>
   </div>
@@ -86,7 +86,9 @@
 │   ├── co-security/         ← §3: official L2 variant (red team, 6 stages)
 │   ├── co-consult/          ← §3: official L2 variant (consulting, 7 stages)
 │   ├── co-deck/   [beta]    ← §3: official L2 variant (lectures/presentations, 11 stages)
-│   └── co-game/   [beta]    ← §3: official L2 variant (game development)
+│   ├── co-game/             ← §3: official L2 variant (game development)
+│   ├── co-export/ [beta]    ← §3: official L2 variant (import/export trade consulting)
+│   └── co-news/   [beta]    ← §3: official L2 variant (financial journalism)
 ├── Projects/                 (L3 — live project working directories scaffolded via new-project.ts)
 │   └── &lt;my-project&gt;/
 │       ├── docs/context.md  ← §4: this project's own SSOT (the variant's empty skeleton, filled in)
@@ -131,7 +133,7 @@
   <p>Let's trace this relationship using a concrete rule as an example. Suppose there's a rule that says "PR titles and bodies must be written in English." This rule itself is written exactly once, in <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> defines <em>how</em> to enforce this rule in Claude Code — for instance, by specifying that the <code>/sync</code> command's language gate (language-guard.ts) automatically checks this rule before every commit. <code>GEMINI.md</code> defines how the same rule is enforced in the Antigravity-side pipeline. And who actually performs this check — which agent is responsible for this gate — is registered in the roster in <code>AGENTS.md</code>. A single rule shows up in all four files, each from a different angle. This isn't duplication; it's three different answers to the three questions of "what, how, and who."</p>
   <p>Below the four core files sit folders holding executable assets. Commands and skills are split across three locations: <code>.claude/</code> is Claude Code/App-only, <code>.gemini/</code> is Antigravity CLI/Desktop-only, and <code>.agents/</code> holds <strong>tool-agnostic (engine-agnostic)</strong> commands and skills not tied to a single tool. For example, slash commands like <code>/sync</code>/<code>/meeting</code> or skills like <code>create-variant</code>/<code>audit-workspace</code> exist under the same name in all three folders, but each implementation differs slightly to match its own platform's tooling conventions (Claude Code's <code>Agent</code> tool syntax, Antigravity's sub-agent approach, etc.). External tools that support the AGENTS.md standard (Codex, Cursor, etc.) will reference the <code>.agents/</code> folder when they open this repository.</p>
 
-  <h2 id="s3">templates and the 7 variants</h2>
+  <h2 id="s3">templates and the 9 variants</h2>
   <p>The <code>templates/</code> directory is a collection of version-controlled project template "variants." Each variant contains a complete multi-agent team configuration for a specific domain, including a PM, specialist agents, and a staged governance pipeline. The variants the repository provides are as follows.</p>
 
   <div class="variant-list">
@@ -141,7 +143,9 @@
     <div class="variant-row"><span class="variant-name">co-security</span><span>For red-team/penetration testing. A 6-stage pipeline with Red Team Lead, Pentester, Threat Modeler, and others.</span></div>
     <div class="variant-row"><span class="variant-name">co-consult</span><span>For strategy consulting. A 7-stage (Phase 0–6) workflow led by a PM (Engagement Leader), composed of 10 specialist agents including Strategy Analyst, Change Management Partner, Industry Expert, and SME. It covers the entire consulting project lifecycle — market analysis → organizational diagnosis → cross-validation (Phase 1.5) → proposal approval gate (Phase 2) → practical solution design → delivery → PR/handoff.</span></div>
     <div class="variant-row"><span class="variant-name">co-deck <span class="badge" >beta</span></span><span>For producing lecture and presentation materials. An 11-stage (Stage 0–11) pipeline led by a PM. It automates the entire process from research to a print-ready PDF: Research → Source Verifier (credibility verification) → Storyline → Design → Image Curation + Diagram Generation (parallel) → HTML Build → Layout Measure → PDF Export. Supports 5 themes (outline, pitch, pitch-enhanced, vertical, zen) and 5 styles (premium-dark, classic, minimal, visual-heavy, academic).</span></div>
-    <div class="variant-row"><span class="variant-name">co-game <span class="badge" >beta</span></span><span>For HTML5 Canvas game development.</span></div>
+    <div class="variant-row"><span class="variant-name">co-game</span><span>For HTML5 Canvas game development.</span></div>
+    <div class="variant-row"><span class="variant-name">co-export <span class="badge" >beta</span></span><span>For import/export trade consulting. PM plus 8 specialists — HS Classification Specialist, FTA Origin Analyst, Customs Duty Drawback Specialist, Export Control Compliance Specialist, Trade Documentation Specialist, Logistics Coordinator, Foreign Regulatory Intelligence Analyst, and Market Entry Strategist.</span></div>
+    <div class="variant-row"><span class="variant-name">co-news <span class="badge" >beta</span></span><span>For Korean business/finance journalism covering listed companies. PM (Editor-in-Chief) plus 6 specialists — Financial Analyst, Legal Researcher, Fact-Checker, Reporter, Style Editor, and Visual Editor. Synthesizes DART financial disclosures and Korean commercial-law research into fact-checked reporting.</span></div>
   </div>
 
   <p>Each variant is versioned with the git tag <code>template-vX.Y.Z</code>, and <code>bun scripts/validate-templates.ts</code> checks structural compliance — the completeness of agent frontmatter, required sections, consistency with the AGENTS.md roster, and platform parity between <code>.claude/</code> and <code>.gemini/</code>.</p>

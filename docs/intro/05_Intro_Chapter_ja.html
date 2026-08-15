@@ -29,7 +29,7 @@
   <a href="#s1">リポジトリとは何か</a>
   <a href="#s1b">全体アーキテクチャを俯瞰する</a>
   <a href="#s2">4つの中核ファイル</a>
-  <a href="#s3">templatesと7種のvariant</a>
+  <a href="#s3">templatesと9種のvariant</a>
   <a href="#s4">セッション開始チェックリストとスキャフォールディング</a>
   <div class="nav-section">他の章</div>
   <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章 · ガードレールと権限モデル</a>
@@ -49,7 +49,7 @@
       <li>ai-workspace-standardsとは何か、なぜ「ワークスペースルート」としてクローンすべきなのか</li>
       <li>リポジトリ全体のディレクトリ構造と、セッションが実際にどの順序でファイルを読み込み実行するか(ランタイムフロー)</li>
       <li>CONSTITUTION.md、CLAUDE.md、GEMINI.md、AGENTS.md、4つの中核ファイルの役割</li>
-      <li>templates/配下にある7種のvariantがそれぞれどのドメイン向けなのか</li>
+      <li>templates/配下にある9種のvariantがそれぞれどのドメイン向けなのか</li>
       <li>セッション開始チェックリストとnew-project.tsのスキャフォールディングフローの概念図</li>
     </ul>
   </div>
@@ -86,7 +86,9 @@
 │   ├── co-security/         ← §3: L2公式variant (レッドチーム、6段階)
 │   ├── co-consult/          ← §3: L2公式variant (コンサルティング、7段階)
 │   ├── co-deck/   [beta]    ← §3: L2公式variant (講義/プレゼン、11段階)
-│   └── co-game/   [beta]    ← §3: L2公式variant (ゲーム開発)
+│   ├── co-game/             ← §3: L2公式variant (ゲーム開発)
+│   ├── co-export/ [beta]    ← §3: L2公式variant (輸出入貿易コンサルティング)
+│   └── co-news/   [beta]    ← §3: L2公式variant (金融ジャーナリズム)
 ├── Projects/                 (L3 — new-project.tsでスキャフォールディングされた稼働中のプロジェクト作業ディレクトリ)
 │   └── &lt;my-project&gt;/
 │       ├── docs/context.md  ← §4: このプロジェクト専用のSSOT (variantの空の骨格を埋めたもの)
@@ -131,7 +133,7 @@
   <p>具体的な規則を1つ例にとって、この関係をたどってみよう。「PRのタイトルと本文は必ず英語で書く」という規則があるとすると、この規則自体は<code>CONSTITUTION.md</code>に一度だけ記載される。<code>CLAUDE.md</code>はこの規則をClaude Codeで<em>どのように</em>強制するかを定義する。例えば、<code>/sync</code>コマンドの言語ゲート(language-guard.ts)がコミット前にこの規則を自動的にチェックするよう明示する形だ。<code>GEMINI.md</code>は同じ規則をAntigravity側のパイプラインで強制する方法を定義する。そして、この検査を実際に実行するのが「誰」なのか、すなわちどのエージェントがこのゲートを担当するのかは<code>AGENTS.md</code>のロスターに登録されている。1つの規則が4つのファイルにそれぞれ異なる角度で現れるわけだ。これは重複ではなく、「何を・どのように・誰が」という3つの問いに対するそれぞれ異なる答えである。</p>
   <p>4つのファイルの下には、実行可能な資産を格納するフォルダがある。コマンド・スキルは3か所に分かれており、<code>.claude/</code>はClaude Code/App専用、<code>.gemini/</code>はAntigravity CLI/Desktop専用、そして<code>.agents/</code>はどれか1つのツールに縛られない<strong>ツール非依存(engine-agnostic)</strong>のコマンド・スキルを格納する。例えば<code>/sync</code>・<code>/meeting</code>のようなスラッシュコマンドや<code>create-variant</code>・<code>audit-workspace</code>のようなスキルは3つのフォルダすべてに同じ名前で存在するが、それぞれ自プラットフォームのツール規則(Claude Codeの<code>Agent</code>ツール構文、Antigravityのサブエージェント方式など)に合わせて実装が少しずつ異なる。AGENTS.md標準に対応する外部ツール(Codex、Cursorなど)がこのリポジトリを開くと、<code>.agents/</code>フォルダを参照することになる。</p>
 
-  <h2 id="s3">templatesと7種のvariant</h2>
+  <h2 id="s3">templatesと9種のvariant</h2>
   <p><code>templates/</code>ディレクトリは、バージョン管理されたプロジェクトテンプレート「variant」の集合である。各バリアント(variant)は特定のドメイン向けの完結したマルチエージェントチーム構成を持つ。PM、専門エージェント群、段階的なガバナンスパイプラインがここに含まれる。リポジトリが提供するバリアント(variant)は次のとおりである。</p>
 
   <div class="variant-list">
@@ -141,7 +143,9 @@
     <div class="variant-row"><span class="variant-name">co-security</span><span>レッドチーム/ペネトレーションテスト向け。Red Team Lead・Pentester・Threat Modelerなどによる6段階のパイプライン。</span></div>
     <div class="variant-row"><span class="variant-name">co-consult</span><span>戦略コンサルティング向け。PM(Engagement Leader)が指揮する7段階(Phase 0〜6)のワークフロー。Strategy Analyst・Change Management Partner・Industry Expert・SMEなど10名の専門エージェントで構成される。市場分析 → 組織診断 → 相互検証(Phase 1.5) → 提案承認ゲート(Phase 2) → 実務ソリューション設計 → 納品 → PR/引き渡しまで、コンサルティングプロジェクトの全工程を扱う。</span></div>
     <div class="variant-row"><span class="variant-name">co-deck <span class="badge" >beta</span></span><span>講義・プレゼン資料制作向け。PMが指揮する11段階(Stage 0〜11)のパイプライン。Research → Source Verifier(信頼性検証) → Storyline → Design → Image Curation + Diagram Generation(並列) → HTML Build → Layout Measure → PDF Exportまで、リサーチから印刷用PDF出力までの全工程を自動化する。5種のテーマ(outline、pitch、pitch-enhanced、vertical、zen)と5種のスタイル(premium-dark、classic、minimal、visual-heavy、academic)をサポートする。</span></div>
-    <div class="variant-row"><span class="variant-name">co-game <span class="badge" >beta</span></span><span>HTML5 Canvasゲーム開発向け。</span></div>
+    <div class="variant-row"><span class="variant-name">co-game</span><span>HTML5 Canvasゲーム開発向け。</span></div>
+    <div class="variant-row"><span class="variant-name">co-export <span class="badge" >beta</span></span><span>輸出入貿易コンサルティング向け。PMと8名の専門エージェント — HS Classification Specialist、FTA Origin Analyst、Customs Duty Drawback Specialist、Export Control Compliance Specialist、Trade Documentation Specialist、Logistics Coordinator、Foreign Regulatory Intelligence Analyst、Market Entry Strategist。</span></div>
+    <div class="variant-row"><span class="variant-name">co-news <span class="badge" >beta</span></span><span>上場企業を対象とする韓国の経済・金融ジャーナリズム向け。PM(編集長)と6名の専門エージェント — Financial Analyst、Legal Researcher、Fact-Checker、Reporter、Style Editor、Visual Editor。DARTの財務開示情報と韓国商法のリサーチを統合し、ファクトチェック済みの記事を作成する。</span></div>
   </div>
 
   <p>各バリアント(variant)はgitタグ<code>template-vX.Y.Z</code>でバージョン管理され、<code>bun scripts/validate-templates.ts</code>がエージェントfrontmatterの完全性、必須セクション、AGENTS.mdロスターとの整合性、<code>.claude/</code>・<code>.gemini/</code>間のプラットフォームパリティなど、構造的な規定遵守を検査する。</p>

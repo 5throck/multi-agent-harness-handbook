@@ -28,7 +28,7 @@
   <a href="#s1">Qué es el repositorio</a>
   <a href="#s1b">La arquitectura general de un vistazo</a>
   <a href="#s2">Los cuatro archivos principales</a>
-  <a href="#s3">Plantillas y las 7 variantes</a>
+  <a href="#s3">Plantillas y las 9 variantes</a>
   <a href="#s4">Lista de verificación de inicio de sesión y andamiaje</a>
   <div class="nav-section">Otros capítulos</div>
   <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Barreras de seguridad y el modelo de permisos</a>
@@ -48,7 +48,7 @@
       <li>Qué es ai-workspace-standards y por qué debe clonarse como la "raíz del espacio de trabajo"</li>
       <li>La estructura general de directorios del repositorio y el orden real en que una sesión lee y ejecuta archivos (el flujo de ejecución)</li>
       <li>Los roles de los cuatro archivos principales: CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md</li>
-      <li>Para qué dominio está diseñada cada una de las 7 variantes bajo templates/</li>
+      <li>Para qué dominio está diseñada cada una de las 9 variantes bajo templates/</li>
       <li>Una imagen conceptual de la lista de verificación de inicio de sesión y el flujo de andamiaje de new-project.ts</li>
     </ul>
   </div>
@@ -85,7 +85,9 @@
 │   ├── co-security/         ← §3: variante L2 oficial (red team, 6 etapas)
 │   ├── co-consult/          ← §3: variante L2 oficial (consultoría, 7 etapas)
 │   ├── co-deck   [beta]     ← §3: variante L2 oficial (conferencias/presentaciones, 11 etapas)
-│   └── co-game   [beta]     ← §3: variante L2 oficial (desarrollo de juegos)
+│   ├── co-game              ← §3: variante L2 oficial (desarrollo de juegos)
+│   ├── co-export [beta]     ← §3: variante L2 oficial (consultoría de comercio exterior)
+│   └── co-news   [beta]     ← §3: variante L2 oficial (periodismo financiero)
 ├── Projects/                 (L3 — directorios de trabajo de proyecto activos creados vía new-project.ts)
 │   └── &lt;mi-proyecto&gt;/
 │       ├── docs/context.md  ← §4: SSOT propio de este proyecto (el esqueleto vacío de la variante, rellenado)
@@ -130,7 +132,7 @@
   <p>Tracemos esta relación usando una regla concreta como ejemplo. Supongamos que hay una regla que dice "los títulos y cuerpos de los PR deben estar escritos en inglés." Esta regla se escribe exactamente una vez, en <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> define <em>cómo</em> hacer cumplir esta regla en Claude Code — por ejemplo, especificando que el filtro de idioma del comando <code>/sync</code> (language-guard.ts) verifique automáticamente esta regla antes de cada commit. <code>GEMINI.md</code> define cómo se hace cumplir la misma regla en el pipeline del lado de Antigravity. Y quién realiza realmente esta verificación — qué agente es responsable de este filtro — se registra en el registro de <code>AGENTS.md</code>. Una sola regla aparece en los cuatro archivos, cada uno desde un ángulo diferente. Esto no es duplicación; son tres respuestas diferentes a las tres preguntas de "qué, cómo y quién."</p>
   <p>Debajo de los cuatro archivos principales se encuentran carpetas que contienen activos ejecutables. Los comandos y habilidades se dividen en tres ubicaciones: <code>.claude/</code> es solo para Claude Code/App, <code>.gemini/</code> es solo para Antigravity CLI/Escritorio, y <code>.agents/</code> contiene comandos y habilidades <strong>neutrales a la herramienta (neutrales al motor)</strong> no vinculados a una sola herramienta. Por ejemplo, comandos de barra como <code>/sync</code>/<code>/meeting</code> o habilidades como <code>create-variant</code>/<code>audit-workspace</code> existen bajo el mismo nombre en las tres carpetas, pero cada implementación difiere ligeramente para coincidir con las convenciones de herramienta de su propia plataforma (sintaxis de la herramienta <code>Agent</code> de Claude Code, enfoque de subagente de Antigravity, etc.). Las herramientas externas que admiten el estándar AGENTS.md (Codex, Cursor, etc.) harán referencia a la carpeta <code>.agents/</code> cuando abran este repositorio.</p>
 
-  <h2 id="s3">Plantillas y las 7 variantes</h2>
+  <h2 id="s3">Plantillas y las 9 variantes</h2>
   <p>El directorio <code>templates/</code> es una colección de "variantes" de plantillas de proyecto con control de versiones. Cada variante contiene una configuración completa de equipo multiagente para un dominio específico, incluyendo un PM, agentes especialistas y un pipeline de gobernanza por etapas. Las variantes que proporciona el repositorio son las siguientes.</p>
 
   <div class="variant-list">
@@ -140,7 +142,9 @@
     <div class="variant-row"><span class="variant-name">co-security</span><span>Para red team/pruebas de penetración. Un pipeline de 6 etapas con Líder de red team, Pentester, Modelador de amenazas y otros.</span></div>
     <div class="variant-row"><span class="variant-name">co-consult</span><span>Para consultoría estratégica. Un flujo de trabajo de 7 etapas (Fase 0–6) liderado por un PM (Líder de compromiso), compuesto por 10 agentes especialistas incluyendo Analista de estrategia, Socio de gestión del cambio, Experto en la industria y SME. Cubre todo el ciclo de vida del proyecto de consultoría — análisis de mercado → diagnóstico organizacional → validación cruzada (Fase 1.5) → filtro de aprobación de propuesta (Fase 2) → diseño de solución práctica → entrega → PR/entrega.</span></div>
     <div class="variant-row"><span class="variant-name">co-deck <span class="badge" >beta</span></span><span>Para producir materiales de conferencia y presentación. Un pipeline de 11 etapas (Etapa 0–11) liderado por un PM. Automatiza todo el proceso desde la investigación hasta un PDF listo para imprimir: Investigación → Verificador de fuentes (verificación de credibilidad) → Línea argumental → Diseño → Curación de imágenes + Generación de diagramas (en paralelo) → Construcción HTML → Medición de diseño → Exportación a PDF. Admite 5 temas (outline, pitch, pitch-enhanced, vertical, zen) y 5 estilos (premium-dark, classic, minimal, visual-heavy, academic).</span></div>
-    <div class="variant-row"><span class="variant-name">co-game <span class="badge" >beta</span></span><span>Para desarrollo de juegos HTML5 Canvas.</span></div>
+    <div class="variant-row"><span class="variant-name">co-game</span><span>Para desarrollo de juegos HTML5 Canvas.</span></div>
+    <div class="variant-row"><span class="variant-name">co-export <span class="badge" >beta</span></span><span>Para consultoría de comercio de importación/exportación. PM más 8 especialistas — HS Classification Specialist, FTA Origin Analyst, Customs Duty Drawback Specialist, Export Control Compliance Specialist, Trade Documentation Specialist, Logistics Coordinator, Foreign Regulatory Intelligence Analyst y Market Entry Strategist.</span></div>
+    <div class="variant-row"><span class="variant-name">co-news <span class="badge" >beta</span></span><span>Para periodismo de negocios/finanzas coreano sobre empresas cotizadas. PM (Editor Jefe) más 6 especialistas — Financial Analyst, Legal Researcher, Fact-Checker, Reporter, Style Editor y Visual Editor. Sintetiza divulgaciones financieras de DART e investigación de derecho mercantil coreano en reportajes verificados.</span></div>
   </div>
 
   <p>Cada variante se versiona con la etiqueta git <code>template-vX.Y.Z</code>, y <code>bun scripts/validate-templates.ts</code> verifica el cumplimiento estructural — la completitud del frontmatter de los agentes, las secciones requeridas, la coherencia con el registro de AGENTS.md y la paridad de plataformas entre <code>.claude/</code> y <code>.gemini/</code>.</p>

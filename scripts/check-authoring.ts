@@ -242,6 +242,68 @@ function checkLanguagePairs(htmlFiles: string[], baseDir: string): AuthoringIssu
   return issues;
 }
 
+/** Check 9b: §21-6 — Footer structure (consistent per language, has license + repo link) */
+function checkFooterStructure(htmlFiles: string[], baseDir: string): AuthoringIssue[] {
+  const issues: AuthoringIssue[] = [];
+  const footerByLang = new Map<string, Map<string, string[]>>(); // lang -> footerText -> files[]
+
+  for (const f of htmlFiles) {
+    const rel = relative(baseDir, f).replace(/\\/g, "/");
+    const html = readHtml(f);
+    const langMatch = html.match(/<html\s+lang="([a-z]{2})"/);
+    const lang = langMatch ? langMatch[1] : "unknown";
+    const footerMatch = html.match(/<footer>([\s\S]*?)<\/footer>/);
+
+    if (!footerMatch) {
+      issues.push({
+        file: rel, rule: "footer-missing", section: "§21-6",
+        detail: "No <footer> found",
+        severity: "error",
+      });
+      continue;
+    }
+
+    const footerText = footerMatch[1].trim();
+    if (!/creativecommons\.org\/licenses\/by-nc-sa/.test(footerText)) {
+      issues.push({
+        file: rel, rule: "footer-license", section: "§21-6",
+        detail: "Footer is missing the CC BY-NC-SA license line",
+        severity: "error",
+      });
+    }
+    if (!/github\.com\/[\w-]+\/ai-workspace-standards/.test(footerText)) {
+      issues.push({
+        file: rel, rule: "footer-repo-link", section: "§21-6",
+        detail: "Footer is missing the ai-workspace-standards repo link",
+        severity: "warn",
+      });
+    }
+
+    if (!footerByLang.has(lang)) footerByLang.set(lang, new Map());
+    const byText = footerByLang.get(lang)!;
+    if (!byText.has(footerText)) byText.set(footerText, []);
+    byText.get(footerText)!.push(rel);
+  }
+
+  for (const [lang, byText] of footerByLang) {
+    if (byText.size <= 1) continue;
+    // Majority variant is treated as canonical; everything else is flagged.
+    const sorted = [...byText.entries()].sort((a, b) => b[1].length - a[1].length);
+    const [, majorityFiles] = sorted[0];
+    for (const [text, files] of sorted.slice(1)) {
+      for (const file of files) {
+        issues.push({
+          file, rule: "footer-inconsistent", section: "§21-6",
+          detail: `Footer text differs from the other ${majorityFiles.length} "${lang}" page(s) — every page in a language must share the exact same footer (only baseline date/tool list should change together, in sync)`,
+          severity: "error",
+        });
+      }
+    }
+  }
+
+  return issues;
+}
+
 /** Check 10: §24 — Instructor Guide completeness */
 function checkInstructorGuide(html: string, file: string): AuthoringIssue[] {
   const issues: AuthoringIssue[] = [];
@@ -305,6 +367,7 @@ for (const file of htmlFiles) {
 
 // Cross-file checks
 allIssues.push(...checkLanguagePairs(htmlFiles, baseDir));
+allIssues.push(...checkFooterStructure(htmlFiles, baseDir));
 
 // Report
 const errors = allIssues.filter((i) => i.severity === "error");

@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="ツール比較 — Claude Code / Claude App / Antigravity CLI / Antigravity - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="ツール比較 — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ツール比較 — Claude Code / Claude App / Antigravity CLI / Antigravity</title>
+  <title>ツール比較 — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -21,7 +21,7 @@
   <div class="nav-title">共通参考 · ツール比較</div>
   <a href="#tree">4つのツールを一覧で把握する</a>
   <div class="nav-section">プラットフォーム特性</div>
-  <a href="#section-1">1. Claude App (Desktop) vs Claude Code (CLI)</a>
+  <a href="#section-1">1. Claude Desktop App vs Claude Code (CLI)</a>
   <a href="#section-2">2. Antigravity (Desktop) vs Antigravity CLI (agy)</a>
   <a href="#section-3">3. マルチエージェント対応比較表</a>
   <a href="#section-4">4. 本ハンドブックでどのツールを選ぶべきか</a>
@@ -36,7 +36,7 @@
 <main>
  <article class="reading">
   <div class="chapter-eyebrow">共通参考</div>
-  <h1>ツール比較 — Claude Code / Claude App / Antigravity CLI / Antigravity</h1>
+  <h1>ツール比較 — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity</h1>
   <p class="subtitle">同じ「マルチエージェントチーム」であっても、それを構築するツールが異なれば動作も制約も変わる&nbsp;|&nbsp;公式ドキュメント: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a>, <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI</a>, <a href="https://antigravity.google/docs/home" target="_blank">Antigravity Agent Manager</a></p>
 
   <div class="version-box">
@@ -53,7 +53,7 @@
   <div class="tree-box"><div style="position:relative">
   <pre>
 Anthropic family
-├── <span class="cmd">Claude App (Desktop)</span> ★ デフォルト     <span class="desc">GUIベース。サブエージェントは動作するが、フック/tmux並列実行は制限あり</span>
+├── <span class="cmd">Claude Desktop App</span> ★ デフォルト     <span class="desc">GUIベース。サブエージェントは動作するが、フック/tmux並列実行は制限あり</span>
 └── <span class="cmd">Claude Code (CLI)</span>               <span class="desc">ターミナルベース。フック、Agent Teams、サブエージェントを完全サポート</span>
 
 Google family
@@ -65,19 +65,19 @@ Google family
 
   <hr>
 
-  <h2 id="section-1">1. Claude App (Desktop) vs Claude Code (CLI)</h2>
-  <p>本ハンドブックでは<strong>Claude App (Desktop)</strong>をデフォルトの実習ツールとして扱います。GUIでサブエージェントを作成・呼び出す流れは同じなので、Claude Code (CLI)を使っても以下の内容をそのまま追体験できます。両ツールは同じClaudeエンジン上で動作しますが、実行環境が異なるため、マルチエージェントハーネスを構成する一部のメカニズムはCLIでのみ機能します。最も大きな違いは<strong>自動化フック</strong>と<strong>Agent Teamsの実行モード</strong>にあります。</p>
+  <h2 id="section-1">1. Claude Desktop App vs Claude Code (CLI)</h2>
+  <p>本ハンドブックでは<strong>Claude Desktop App</strong>をデフォルトの実習ツールとして扱います。GUIでサブエージェントを作成・呼び出す流れは同じなので、Claude Code (CLI)を使っても以下の内容をそのまま追体験できます。両ツールは同じClaudeエンジン上で動作しますが、実行環境が異なるため、マルチエージェントハーネスを構成する一部のメカニズムはCLIでのみ機能します。最も大きな違いは<strong>自動化フック</strong>と<strong>Agent Teamsの実行モード</strong>にあります。</p>
 
-  <h3>Claude App（またはClaude Code）— <code>.claude/agents/*.md</code> サブエージェント</h3>
-  <p>Claude Appは<code>.claude/agents/*.md</code>ファイルでカスタムサブエージェントを定義し、<code>Agent</code>/<code>Task</code>ツールで呼び出します。これはClaude Codeと全く同じです。ただし、<code>.claude/settings.json</code>で定義した<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>フックはClaude Appでは発火しません。これらはCLIセッション内でのファイル保存やタスク完了などのイベントでのみ自動発火します。Claude Appを使用するチームは、セッション終了後にフックが実行するはずだった処理（監査スクリプトの実行など）を手動で行う必要があります。</p>
-  <p>この違いが引き起こす具体的な事故を考えてみましょう。チームがCLIに<code>PostToolUse</code>フックを設定し、「ファイルが保存されるたびに<code>bun scripts/audit.ts</code>が自動実行され、シークレット漏洩やルール違反を検知する」ようにしたとします。同じメンバーがClaude App (Desktop)で全く同じ編集を行った場合、フックは一切発火しません。画面上ではCLIと全く同じ「ファイルが保存されました」と表示され、フックが実行されなかった兆候は見えません。その状態がコミットまで持ち込まれると、フックが検知するはずだった問題が静かにすり抜けてしまいます。本当の危険は「監査を実行し忘れた」ことではなく、「監査が実行されたと思い込んだ」ことなのです。</p>
+  <h3>Claude Desktop App（またはClaude Code）— <code>.claude/agents/*.md</code> サブエージェント</h3>
+  <p>Claude Desktop Appは<code>.claude/agents/*.md</code>ファイルでカスタムサブエージェントを定義し、<code>Agent</code>/<code>Task</code>ツールで呼び出します。これはClaude Codeと全く同じです。ただし、<code>.claude/settings.json</code>で定義した<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>フックはClaude Desktop Appでは発火しません。これらはCLIセッション内でのファイル保存やタスク完了などのイベントでのみ自動発火します。Claude Desktop Appを使用するチームは、セッション終了後にフックが実行するはずだった処理（監査スクリプトの実行など）を手動で行う必要があります。</p>
+  <p>この違いが引き起こす具体的な事故を考えてみましょう。チームがCLIに<code>PostToolUse</code>フックを設定し、「ファイルが保存されるたびに<code>bun scripts/audit.ts</code>が自動実行され、シークレット漏洩やルール違反を検知する」ようにしたとします。同じメンバーがClaude Desktop Appで全く同じ編集を行った場合、フックは一切発火しません。画面上ではCLIと全く同じ「ファイルが保存されました」と表示され、フックが実行されなかった兆候は見えません。その状態がコミットまで持ち込まれると、フックが検知するはずだった問題が静かにすり抜けてしまいます。本当の危険は「監査を実行し忘れた」ことではなく、「監査が実行されたと思い込んだ」ことなのです。</p>
 
-  <h3><code>teammateMode</code> — Claude Appは<code>in-process</code>のみ対応、Claude Codeは<code>tmux</code>にも対応</h3>
-  <p>Agent Teamsは実験的機能で、複数のClaudeインスタンスを並列起動します。Claude Appは<code>in-process</code>モードしか使用できません。これは同じプロセス内で並列化するもので、一部のキーボードナビゲーション（Shift+Downなど）が制限されます。ターミナル分割ペインを使用する<code>tmux</code>モードは、Claude Code (CLI)でのみ追加サポートされています。</p>
+  <h3><code>teammateMode</code> — Claude Desktop Appは<code>in-process</code>のみ対応、Claude Codeは<code>tmux</code>にも対応</h3>
+  <p>Agent Teamsは実験的機能で、複数のClaudeインスタンスを並列起動します。Claude Desktop Appは<code>in-process</code>モードしか使用できません。これは同じプロセス内で並列化するもので、一部のキーボードナビゲーション（Shift+Downなど）が制限されます。ターミナル分割ペインを使用する<code>tmux</code>モードは、Claude Code (CLI)でのみ追加サポートされています。</p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>機能</th><th>Claude App (Desktop)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>機能</th><th>Claude Desktop App</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td><code>Agent</code>/<code>Task</code>ツールによるサブエージェントの呼び出し</td>
@@ -164,7 +164,7 @@ Google family
   <h2 id="section-3">3. マルチエージェント対応比較表</h2>
   <div class="table-compare">
   <table>
-    <thead><tr><th>項目</th><th>Claude App</th><th>Antigravity (Desktop)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th></tr></thead>
+    <thead><tr><th>項目</th><th>Claude Desktop App</th><th>Antigravity (Desktop)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th></tr></thead>
     <tbody>
       <tr>
         <td>実行形態</td>
@@ -212,14 +212,14 @@ Google family
         <td>実行中のサブエージェントへの追加メッセージ送信</td>
         <td>単一<code>Agent</code>呼び出し: 不可（完了を待つ必要あり）/ Agent Teams: 可能（<code>SendMessage</code>）</td>
         <td>可能。受信トレイで承認/フィードバックメッセージをやり取りし、実行中のエージェントに介入できる</td>
-        <td>Claude Appと同じ。単一<code>Agent</code>呼び出しは不可。Agent Teamsは<code>SendMessage</code>で可能</td>
+        <td>Claude Desktop Appと同じ。単一<code>Agent</code>呼び出しは不可。Agent Teamsは<code>SendMessage</code>で可能</td>
         <td><code>/agent</code>で委譲したバックグラウンドタスクの状態は確認（<code>/agents</code>）できるが、実行中に指示を変更する能力は限定的</td>
       </tr>
       <tr>
         <td>サブエージェント間の直接通信</td>
         <td>単一<code>Agent</code>呼び出し: 不可（メインセッション経由）/ Agent Teams: 可能（チームメイト同士が<code>SendMessage</code>で通信）</td>
         <td>不可。ワークスペース（エージェント）は意図的に相互に分離されている（§2の「認知的オーバーラップ」警告参照）。通信は常に人間を経由</td>
-        <td>Claude Appと同じ</td>
+        <td>Claude Desktop Appと同じ</td>
         <td>不可。動的に生成されたサブエージェントの結果はオーケストレータを通じてのみ集約。サブエージェント同士は直接通信しない</td>
       </tr>
     </tbody>
@@ -235,11 +235,11 @@ Google family
   <hr>
 
   <h2 id="section-4">4. 本ハンドブックでどのツールを選ぶべきか</h2>
-  <p>本ハンドブックは<strong>Claude App</strong>と<strong>Antigravity (Desktop)</strong>をデフォルトの実習ツールとして案内します。GUIから始める方が導入のハードルが低いためです。第2章でもまずこれら2つのDesktopツールを示し、直後にClaude Code (CLI)・Antigravity CLI (<code>agy</code>)の手順を並べて紹介します。1つのツールだけを選んで追うことも、4つすべてを比較しながら練習することもできます。以下の基準で選びやすくなります。</p>
+  <p>本ハンドブックは<strong>Claude Desktop App</strong>と<strong>Antigravity (Desktop)</strong>をデフォルトの実習ツールとして案内します。GUIから始める方が導入のハードルが低いためです。第2章でもまずこれら2つのDesktopツールを示し、直後にClaude Code (CLI)・Antigravity CLI (<code>agy</code>)の手順を並べて紹介します。1つのツールだけを選んで追うことも、4つすべてを比較しながら練習することもできます。以下の基準で選びやすくなります。</p>
   <ol style="margin:0 0 16px 20px;line-height:2;">
-    <li><strong>まずはGUIで感触をつかみたい場合。</strong>Claude AppまたはAntigravity (Desktop)から始めてください。これが本ハンドブックのデフォルトレベルです。</li>
+    <li><strong>まずはGUIで感触をつかみたい場合。</strong>Claude Desktop AppまたはAntigravity (Desktop)から始めてください。これが本ハンドブックのデフォルトレベルです。</li>
     <li><strong>複数の異なるプロジェクトを同時に管理したい場合。</strong>Antigravity (Desktop)のAgent Manager（ワークスペースごとの分離）はまさにこのシナリオのために設計されています。</li>
-    <li><strong>フックベースの自動化（監査/QAゲート）が必要な場合。</strong>Claude Code (CLI)に移行してください。Claude AppとAntigravity系には対応する自動フックがありません。</li>
+    <li><strong>フックベースの自動化（監査/QAゲート）が必要な場合。</strong>Claude Code (CLI)に移行してください。Claude Desktop AppとAntigravity系には対応する自動フックがありません。</li>
     <li><strong>サブエージェントを一つ一つ定義せず、オーケストレータに自律的に分割させたい場合。</strong>Antigravity CLI (<code>agy</code>)は目標から動的にサブエージェントを生成します。ただし、きめ細かな制御はやや限定的です。</li>
   </ol>
 
@@ -293,7 +293,7 @@ Google family
 
         <!-- No branch boxes -->
         <rect x="382" y="62" width="110" height="36" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
-        <text x="437" y="80" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Claude App</text>
+        <text x="437" y="80" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Claude Desktop App</text>
         <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="var(--accent)">Pro · GUI標準</text>
 
         <rect x="382" y="104" width="110" height="36" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
@@ -361,7 +361,7 @@ Google family
       <tr>
         <td><code>CLAUDE.md</code></td>
         <td>Claude Code/App固有の詳細動作（フック、スラッシュコマンド、エージェントディスパッチルール）</td>
-        <td>Claude Code、Claude App</td>
+        <td>Claude Code、Claude Desktop App</td>
       </tr>
       <tr>
         <td><code>GEMINI.md</code></td>

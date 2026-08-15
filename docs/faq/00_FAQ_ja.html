@@ -43,8 +43,8 @@
   <p class="faq-answer">writerとreviewerを1つのメッセージで同時に(並列で)呼び出した可能性が高いです。writerがファイルを作成する前にreviewerがレビューを試みたため失敗しました。依存関係のあるタスクは「2つのステップを順番に進めて」のように、明示的に順次実行を指示する必要があります。</p>
   <span class="see">詳細: <a href="../practice/04_Practice_Examples_A_ja.html#scenario-2">4章§2-A D-1</a></span>
 
-  <div class="q">Claude Appでファイルを保存した後、監査スクリプトが自動的に実行されません。</div>
-  <p class="faq-answer">これは正常な動作です。<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>のようなフックはClaude App(Desktop)では発火せず、Claude Code(CLI)セッションでのみ自動実行されます。Desktop Appを使用するチームは、フックが行うはずだった処理をセッション終了後に手動で実行する必要があります。これを知らずにいると、「監査が実行されたと思っていたが実際は実行されていなかった」という事故につながる可能性があります。</p>
+  <div class="q">Claude Desktop Appでファイルを保存した後、監査スクリプトが自動的に実行されません。</div>
+  <p class="faq-answer">これは正常な動作です。<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>のようなフックはClaude Desktop Appでは発火せず、Claude Code(CLI)セッションでのみ自動実行されます。Desktop Appを使用するチームは、フックが行うはずだった処理をセッション終了後に手動で実行する必要があります。これを知らずにいると、「監査が実行されたと思っていたが実際は実行されていなかった」という事故につながる可能性があります。</p>
   <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-1">共通リファレンス§1</a>、<a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">3章§監査ログと観測性</a></span>
 
   <div class="q">reviewerにレビューだけを依頼したのに、ファイルを修正してしまいました。</div>
@@ -69,7 +69,7 @@
   <p class="faq-answer">2つのエージェントを同じWorkspace(同じフォルダ)に割り当てた可能性が高いです。同じコードベースを共有すると、一方のエージェントがもう一方のエージェントの作業コンテキストを自分のものと誤認する「認知的重複(cognitive overlap)」が発生することがあります。Workspaceまたはgit worktree単位で必ず分離してください。</p>
   <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-2">共通リファレンス§2</a>、<a href="../guardrails/03_Guardrails_Chapter_ja.html#s5">3章§隔離</a></span>
 
-  <div class="q">Claude AppでAgent Teamsを有効にしましたが、<code>tmux</code>オプションが表示されません。</div>
+  <div class="q">Claude Desktop AppでAgent Teamsを有効にしましたが、<code>tmux</code>オプションが表示されません。</div>
   <p class="faq-answer">これは正常な動作です。Desktop Appは<code>teammateMode: in-process</code>のみをサポートしており、tmux分割ウィンドウモードはClaude Code(CLI)でのみ追加でサポートされています。</p>
   <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-1">共通リファレンス§1</a></span>
 

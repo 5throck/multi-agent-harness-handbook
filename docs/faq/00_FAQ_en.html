@@ -43,8 +43,8 @@
   <p class="faq-answer">You most likely invoked writer and reviewer at the same time (in parallel) within a single message. The reviewer attempted its review before the writer had even created the file, causing the failure. For tasks with dependencies, explicitly request sequential execution, e.g. "run these two steps in order."</p>
   <span class="see">Details: <a href="../practice/04_Practice_Examples_A_en.html#scenario-2">Chapter 4 §2-A D-1</a></span>
 
-  <div class="q">After saving a file in the Claude App, the audit script doesn't run automatically.</div>
-  <p class="faq-answer">This is expected. Hooks such as <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> do not fire in the Claude App (Desktop) — they only run automatically in Claude Code (CLI) sessions. Teams using the Desktop App must run whatever the hook would have done manually after the session ends. Missing this can lead to incidents where you assume "the audit ran" when it actually didn't.</p>
+  <div class="q">After saving a file in the Claude Desktop App, the audit script doesn't run automatically.</div>
+  <p class="faq-answer">This is expected. Hooks such as <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> do not fire in the Claude Desktop App — they only run automatically in Claude Code (CLI) sessions. Teams using the Desktop App must run whatever the hook would have done manually after the session ends. Missing this can lead to incidents where you assume "the audit ran" when it actually didn't.</p>
   <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-1">Common Reference §1</a>, <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logging and Observability</a></span>
 
   <div class="q">I asked the reviewer only to review, but it modified the file anyway.</div>
@@ -69,7 +69,7 @@
   <p class="faq-answer">You most likely assigned both agents to the same workspace (the same folder). Sharing a codebase can cause "cognitive overlap," where one agent mistakes another agent's working context for its own. Always separate agents by workspace or git worktree.</p>
   <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-2">Common Reference §2</a>, <a href="../guardrails/03_Guardrails_Chapter_en.html#s5">Chapter 3 §Isolation</a></span>
 
-  <div class="q">I turned on Agent Teams in the Claude App, but I don't see a <code>tmux</code> option.</div>
+  <div class="q">I turned on Agent Teams in the Claude Desktop App, but I don't see a <code>tmux</code> option.</div>
   <p class="faq-answer">This is expected. The Desktop App only supports <code>teammateMode: in-process</code>; tmux split-pane mode is only additionally supported in Claude Code (CLI).</p>
   <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-1">Common Reference §1</a></span>
 

@@ -43,8 +43,8 @@
   <p class="faq-answer">Lo más probable es que invocó al redactor y al revisor al mismo tiempo (en paralelo) dentro de un solo mensaje. El revisor intentó su revisión antes de que el redactor hubiera creado el archivo, causando el fallo. Para tareas con dependencias, solicite explícitamente la ejecución secuencial, por ejemplo "ejecuta estos dos pasos en orden."</p>
   <span class="see">Detalles: <a href="../practice/04_Practice_Examples_A_es.html#scenario-2">Capítulo 4 §2-A D-1</a></span>
 
-  <div class="q">Después de guardar un archivo en Claude App, el script de auditoría no se ejecuta automáticamente.</div>
-  <p class="faq-answer">Esto es esperado. Hooks como <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> no se activan en Claude App (Escritorio) — solo se ejecutan automáticamente en sesiones de Claude Code (CLI). Los equipos que usan la Aplicación de Escritorio deben ejecutar manualmente lo que el hook habría hecho después de que termine la sesión. Pasar esto por alto puede llevar a incidentes donde se asume "la auditoría se ejecutó" cuando en realidad no lo hizo.</p>
+  <div class="q">Después de guardar un archivo en Claude Desktop App, el script de auditoría no se ejecuta automáticamente.</div>
+  <p class="faq-answer">Esto es esperado. Hooks como <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> no se activan en Claude Desktop App (Escritorio) — solo se ejecutan automáticamente en sesiones de Claude Code (CLI). Los equipos que usan la Aplicación de Escritorio deben ejecutar manualmente lo que el hook habría hecho después de que termine la sesión. Pasar esto por alto puede llevar a incidentes donde se asume "la auditoría se ejecutó" cuando en realidad no lo hizo.</p>
   <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-1">Referencia Común §1</a>, <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registro de Auditoría y Observabilidad</a></span>
 
   <div class="q">Le pedí al revisor que solo revisara, pero modificó el archivo de todos modos.</div>
@@ -69,7 +69,7 @@
   <p class="faq-answer">Lo más probable es que asignó ambos agentes al mismo espacio de trabajo (la misma carpeta). Compartir un código base puede causar "superposición cognitiva," donde un agente confunde el contexto de trabajo de otro agente con el suyo. Siempre separe los agentes por espacio de trabajo o por git worktree.</p>
   <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-2">Referencia Común §2</a>, <a href="../guardrails/03_Guardrails_Chapter_es.html#s5">Capítulo 3 §Aislamiento</a></span>
 
-  <div class="q">Activé Agent Teams en Claude App, pero no veo la opción <code>tmux</code>.</div>
+  <div class="q">Activé Agent Teams en Claude Desktop App, pero no veo la opción <code>tmux</code>.</div>
   <p class="faq-answer">Esto es esperado. La Aplicación de Escritorio solo soporta <code>teammateMode: in-process</code>; el modo panel dividido tmux solo es adicionalmente soportado en Claude Code (CLI).</p>
   <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-1">Referencia Común §1</a></span>
 

@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">Chapter 4 §1</div>
   <h1>Chapter 4 §1 · Using Harness-Based Multi-Agent Teams</h1>
-  <p class="subtitle">A side-by-side reference for defining, invoking, and scaling subagents into parallel/automated units across four tools — Claude Code / Claude App / Antigravity CLI / Antigravity (Desktop) &nbsp;|&nbsp; Official docs: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a></p>
+  <p class="subtitle">A side-by-side reference for defining, invoking, and scaling subagents into parallel/automated units across four tools — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity (Desktop) &nbsp;|&nbsp; Official docs: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">Target Version</span><span class="vvalue">Claude Code 2026-07 release / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
@@ -66,18 +66,18 @@
   <pre>
 Using Harness-Based Multi-Agent Teams (based on the Desktop app, with CLI noted as an equivalent alternative)
 ├── Defining Subagents
-│   ├── Claude App / Claude Code    .claude/agents/*.md (YAML frontmatter, predefined — same for both)
+│   ├── Claude Desktop App / Claude Code    .claude/agents/*.md (YAML frontmatter, predefined — same for both)
 │   └── Antigravity(Desktop) / CLI  No definition file — the orchestrator dynamically creates subagents based on the goal
 ├── Invoking/Delegating Subagents
-│   ├── Claude App / Claude Code    Agent(Task) tool — description / prompt / subagent_type
+│   ├── Claude Desktop App / Claude Code    Agent(Task) tool — description / prompt / subagent_type
 │   └── Antigravity(Desktop)/CLI    Agent Manager UI (Desktop) · /goal, /agent, /agents panel (CLI)
 ├── Parallel Execution
-│   ├── Claude App                  Agent Teams (in-process only)
+│   ├── Claude Desktop App                  Agent Teams (in-process only)
 │   ├── Claude Code                 Agent Teams (in-process/tmux) + multiple Agent calls in one message
 │   ├── Antigravity Desktop         Agent Manager — per-workspace agents (Local/New Worktree Mode)
 │   └── Antigravity CLI             Parallel subagents within a session + parallel across sessions (multiple terminals)
 └── Automation/Hooks
-    ├── Claude App                  Hooks do not fire — manual execution required
+    ├── Claude Desktop App                  Hooks do not fire — manual execution required
     ├── Claude Code                 PostToolUse/TeammateIdle/TaskCompleted hooks fire automatically
     ├── Antigravity Desktop         Not applicable — GUI-centric
     └── Antigravity CLI             agy -p "prompt" (for non-interactive CI), agy inspect (check configuration)
@@ -134,7 +134,7 @@ Using Harness-Based Multi-Agent Teams (based on the Desktop app, with CLI noted 
   <!-- ── Section 1 ── -->
   <h2 id="section-1">1. Defining Subagents — Predefined vs. Dynamic Creation</h2>
 
-  <p>The Anthropic family (Claude App/Claude Code) predefines each subagent as a single markdown file under the project folder. The Google family (Antigravity Desktop/CLI) has no separate definition file — the orchestrator creates subagents on the fly based on the given goal. Below, we first cover Claude App and Antigravity(Desktop) as the baseline, then introduce each one's CLI counterpart.</p>
+  <p>The Anthropic family (Claude Desktop App/Claude Code) predefines each subagent as a single markdown file under the project folder. The Google family (Antigravity Desktop/CLI) has no separate definition file — the orchestrator creates subagents on the fly based on the given goal. Below, we first cover Claude Desktop App and Antigravity(Desktop) as the baseline, then introduce each one's CLI counterpart.</p>
 
   <p >
     The concrete definition/invocation method for the Claude family is covered in <a href="04_Practice_Manual_A_en.html">§1-A Claude-Centered</a>,
@@ -143,7 +143,7 @@ Using Harness-Based Multi-Agent Teams (based on the Desktop app, with CLI noted 
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Frontmatter Field</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
+    <thead><tr><th>Frontmatter Field</th><th>Claude Desktop App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td><code>name</code></td>
@@ -166,14 +166,14 @@ Using Harness-Based Multi-Agent Teams (based on the Desktop app, with CLI noted 
   </table>
   </div>
 
-  <div class="warning-box">Antigravity (Desktop/CLI) has no concept of a "subagent definition file" at all — forcing a beginner exercise that mirrors Claude App/Code's <code>reviewer.md</code> example onto Antigravity would misrepresent the facts. The "introductory exercise" for Antigravity isn't creating a file — it's giving it a goal and observing how the orchestrator breaks down the work on its own.</div>
+  <div class="warning-box">Antigravity (Desktop/CLI) has no concept of a "subagent definition file" at all — forcing a beginner exercise that mirrors Claude Desktop App/Code's <code>reviewer.md</code> example onto Antigravity would misrepresent the facts. The "introductory exercise" for Antigravity isn't creating a file — it's giving it a goal and observing how the orchestrator breaks down the work on its own.</div>
 
   <hr>
 
   <!-- ── Section 2 ── -->
   <h2 id="section-2">2. Invoking/Delegating Subagents</h2>
 
-  <p>The Anthropic family (Claude App/Claude Code) spawns a subagent in a separate context using the <code>Agent</code>/<code>Task</code> tool. The Google family (Antigravity Desktop/CLI) delegates a goal to an agent via the Agent Manager UI or slash commands.</p>
+  <p>The Anthropic family (Claude Desktop App/Claude Code) spawns a subagent in a separate context using the <code>Agent</code>/<code>Task</code> tool. The Google family (Antigravity Desktop/CLI) delegates a goal to an agent via the Agent Manager UI or slash commands.</p>
 
   <p >
     The concrete invocation method for the Claude family is covered in <a href="04_Practice_Manual_A_en.html#section-2">§1-A Section 2</a>,
@@ -196,7 +196,7 @@ Using Harness-Based Multi-Agent Teams (based on the Desktop app, with CLI noted 
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Item</th><th>Antigravity (Desktop)</th><th>Claude App (Desktop)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>Item</th><th>Antigravity (Desktop)</th><th>Claude Desktop App</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td>Parallel Execution Unit</td>
@@ -214,7 +214,7 @@ Using Harness-Based Multi-Agent Teams (based on the Desktop app, with CLI noted 
   <!-- ── Section 4 ── -->
   <h2 id="section-4">4. Automation/Hooks — What Fires Automatically</h2>
 
-  <p>Claude Code (CLI) automatically fires event hooks (PostToolUse/TeammateIdle/TaskCompleted), but Claude App and Antigravity Desktop do not fire hooks automatically. The Antigravity command-line interface (CLI) provides non-interactive execution via <code>agy -p</code> and configuration inspection via <code>agy inspect</code>.</p>
+  <p>Claude Code (CLI) automatically fires event hooks (PostToolUse/TeammateIdle/TaskCompleted), but Claude Desktop App and Antigravity Desktop do not fire hooks automatically. The Antigravity command-line interface (CLI) provides non-interactive execution via <code>agy -p</code> and configuration inspection via <code>agy inspect</code>.</p>
 
   <p >
     Details on automation/hooks for the Claude family are covered in <a href="04_Practice_Manual_A_en.html#section-4">§1-A Section 4</a>,

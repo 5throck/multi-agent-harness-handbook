@@ -128,7 +128,7 @@
   <p>この3つの質問への答えが、そのままサブエージェントのfrontmatterの<code>tools</code>フィールドと、オーケストレーターに指示する際に入れる「ここまでで止まる」という文言になる。</p>
 
   <h2 id="s4">ステップ3 — サブエージェント定義とワークフロー実装</h2>
-  <p>第4章§2の演習で行ったのと同じ方法で、Claude App(またはCode)にチャットで直接サブエージェントを作ってほしいと依頼する。以下は埋め込む空のテンプレートである。角括弧の部分を自分の答えに置き換えてチャット欄に貼り付ける。</p>
+  <p>第4章§2の演習で行ったのと同じ方法で、Claude Desktop App(またはCode)にチャットで直接サブエージェントを作ってほしいと依頼する。以下は埋め込む空のテンプレートである。角括弧の部分を自分の答えに置き換えてチャット欄に貼り付ける。</p>
   <div class="note">Antigravity CLI(<code>agy</code>)ユーザーも同じ4ステップの構造で演習できる。ただしサブエージェント定義は<code>.claude/agents/</code>ではなく<code>AGENTS.md</code>に記述し、Claudeのagentツールの代わりに<code>/goal</code>コマンドで役割ごとの作業を割り当てればよい。</div>
   <div style="position:relative">
     <pre class="code-block">[役割名]という名前のサブエージェントを.claude/agents/[役割名].mdに作って。

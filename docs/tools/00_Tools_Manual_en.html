@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Tool comparison — Claude Code / Claude App / Antigravity CLI / Antigravity - material for the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="description" content="Tool comparison — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity - material for the Multi-Agent Team Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tool Comparison — Claude Code / Claude App / Antigravity CLI / Antigravity</title>
+  <title>Tool Comparison — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -21,7 +21,7 @@
   <div class="nav-title">Common Reference · Tool Comparison</div>
   <a href="#tree">The Four Tools at a Glance</a>
   <div class="nav-section">Platform Characteristics</div>
-  <a href="#section-1">1. Claude App (Desktop) vs Claude Code (CLI)</a>
+  <a href="#section-1">1. Claude Desktop App vs Claude Code (CLI)</a>
   <a href="#section-2">2. Antigravity (Desktop) vs Antigravity CLI (agy)</a>
   <a href="#section-3">3. Multi-Agent Support Comparison Table</a>
   <a href="#section-4">4. Which Tool to Choose for This Handbook</a>
@@ -36,7 +36,7 @@
 <main>
  <article class="reading">
   <div class="chapter-eyebrow">Common Reference</div>
-  <h1>Tool Comparison — Claude Code / Claude App / Antigravity CLI / Antigravity</h1>
+  <h1>Tool Comparison — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity</h1>
   <p class="subtitle">Even the same "multi-agent team" runs differently and hits different constraints depending on which tool builds it &nbsp;|&nbsp; Official docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a>, <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI</a>, <a href="https://antigravity.google/docs/home" target="_blank">Antigravity Agent Manager</a></p>
 
   <div class="version-box">
@@ -53,7 +53,7 @@
   <div class="tree-box"><div style="position:relative">
   <pre>
 Anthropic family
-├── <span class="cmd">Claude App (Desktop)</span> ★ Default     <span class="desc">GUI-based; subagents work but hooks/tmux parallelism are limited</span>
+├── <span class="cmd">Claude Desktop App</span> ★ Default     <span class="desc">GUI-based; subagents work but hooks/tmux parallelism are limited</span>
 └── <span class="cmd">Claude Code (CLI)</span>               <span class="desc">Terminal-based; full support for hooks, Agent Teams, subagents</span>
 
 Google family
@@ -65,19 +65,19 @@ Google family
 
   <hr>
 
-  <h2 id="section-1">1. Claude App (Desktop) vs Claude Code (CLI)</h2>
-  <p>This handbook treats <strong>Claude App (Desktop)</strong> as its default hands-on tool. Because the flow of creating and invoking subagents through the GUI is the same, you can follow the content below just as easily using Claude Code (CLI). Both tools run on the same Claude engine, but since their execution environments differ, some of the mechanisms that make up a multi-agent harness only work in the CLI. The biggest differences are in <strong>automation hooks</strong> and <strong>Agent Teams execution modes</strong>.</p>
+  <h2 id="section-1">1. Claude Desktop App vs Claude Code (CLI)</h2>
+  <p>This handbook treats <strong>Claude Desktop App</strong> as its default hands-on tool. Because the flow of creating and invoking subagents through the GUI is the same, you can follow the content below just as easily using Claude Code (CLI). Both tools run on the same Claude engine, but since their execution environments differ, some of the mechanisms that make up a multi-agent harness only work in the CLI. The biggest differences are in <strong>automation hooks</strong> and <strong>Agent Teams execution modes</strong>.</p>
 
-  <h3>Claude App (or Claude Code) — <code>.claude/agents/*.md</code> Subagents</h3>
-  <p>Claude App defines custom subagents via <code>.claude/agents/*.md</code> files and invokes them with the <code>Agent</code>/<code>Task</code> tool, exactly as Claude Code does. However, the <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> hooks defined in <code>.claude/settings.json</code> do not fire in Claude App. They only auto-fire on events like file saves or task completion within a CLI session. Teams using Claude App must manually run whatever the hook would have done (e.g., running an audit script) after the session ends.</p>
-  <p>Let's look at a concrete accident this difference can cause. Suppose a team has set up a <code>PostToolUse</code> hook in the CLI so that "every time a file is saved, <code>bun scripts/audit.ts</code> runs automatically to catch secret leaks or rule violations." When the same team member makes the identical edit in Claude App (Desktop), the hook never fires at all — yet on screen it looks exactly like the CLI: "the file was saved," with no visible sign the hook didn't run. If that state carries through to a commit, an issue the hook was supposed to catch quietly slips through. The real danger isn't "we forgot to run the audit" — it's "we thought the audit ran, but it didn't."</p>
+  <h3>Claude Desktop App (or Claude Code) — <code>.claude/agents/*.md</code> Subagents</h3>
+  <p>Claude Desktop App defines custom subagents via <code>.claude/agents/*.md</code> files and invokes them with the <code>Agent</code>/<code>Task</code> tool, exactly as Claude Code does. However, the <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> hooks defined in <code>.claude/settings.json</code> do not fire in Claude Desktop App. They only auto-fire on events like file saves or task completion within a CLI session. Teams using Claude Desktop App must manually run whatever the hook would have done (e.g., running an audit script) after the session ends.</p>
+  <p>Let's look at a concrete accident this difference can cause. Suppose a team has set up a <code>PostToolUse</code> hook in the CLI so that "every time a file is saved, <code>bun scripts/audit.ts</code> runs automatically to catch secret leaks or rule violations." When the same team member makes the identical edit in Claude Desktop App, the hook never fires at all — yet on screen it looks exactly like the CLI: "the file was saved," with no visible sign the hook didn't run. If that state carries through to a commit, an issue the hook was supposed to catch quietly slips through. The real danger isn't "we forgot to run the audit" — it's "we thought the audit ran, but it didn't."</p>
 
-  <h3><code>teammateMode</code> — Claude App Supports Only <code>in-process</code>, Claude Code Also Supports <code>tmux</code></h3>
-  <p>Agent Teams, an experimental feature, launches multiple Claude instances in parallel. Claude App can only use the <code>in-process</code> mode, which parallelizes within the same process, and some keyboard navigation (e.g., Shift+Down) is restricted. The <code>tmux</code> mode, which uses a terminal split-pane, is additionally supported only in Claude Code (CLI).</p>
+  <h3><code>teammateMode</code> — Claude Desktop App Supports Only <code>in-process</code>, Claude Code Also Supports <code>tmux</code></h3>
+  <p>Agent Teams, an experimental feature, launches multiple Claude instances in parallel. Claude Desktop App can only use the <code>in-process</code> mode, which parallelizes within the same process, and some keyboard navigation (e.g., Shift+Down) is restricted. The <code>tmux</code> mode, which uses a terminal split-pane, is additionally supported only in Claude Code (CLI).</p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Feature</th><th>Claude App (Desktop)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>Feature</th><th>Claude Desktop App</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td>Invoking subagents via <code>Agent</code>/<code>Task</code> tool</td>
@@ -164,7 +164,7 @@ Google family
   <h2 id="section-3">3. Multi-Agent Support Comparison Table</h2>
   <div class="table-compare">
   <table>
-    <thead><tr><th>Item</th><th>Claude App</th><th>Antigravity (Desktop)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th></tr></thead>
+    <thead><tr><th>Item</th><th>Claude Desktop App</th><th>Antigravity (Desktop)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th></tr></thead>
     <tbody>
       <tr>
         <td>Execution form</td>
@@ -212,14 +212,14 @@ Google family
         <td>Sending additional messages to a running subagent</td>
         <td>Single <code>Agent</code> call: not possible (must wait for completion) / Agent Teams: possible (<code>SendMessage</code>)</td>
         <td>Possible. You can exchange approval/feedback messages in the Inbox and intervene in an in-progress agent</td>
-        <td>Same as Claude App. Not possible for a single <code>Agent</code> call; possible for Agent Teams via <code>SendMessage</code></td>
+        <td>Same as Claude Desktop App. Not possible for a single <code>Agent</code> call; possible for Agent Teams via <code>SendMessage</code></td>
         <td>You can check status (<code>/agents</code>) for a background task delegated via <code>/agent</code>, but there's limited ability to step in and change instructions mid-execution</td>
       </tr>
       <tr>
         <td>Direct communication between subagents</td>
         <td>Single <code>Agent</code> call: not possible (must go through the main session) / Agent Teams: possible (teammates use <code>SendMessage</code> with each other)</td>
         <td>Not possible. Workspaces (agents) are deliberately isolated from each other (see the "cognitive overlap" warning in §2); communication always goes through a human</td>
-        <td>Same as Claude App</td>
+        <td>Same as Claude Desktop App</td>
         <td>Not possible. Results from dynamically created subagents are aggregated only through the orchestrator; subagents don't communicate directly with each other</td>
       </tr>
     </tbody>
@@ -235,11 +235,11 @@ Google family
   <hr>
 
   <h2 id="section-4">4. Which Tool to Choose for This Handbook</h2>
-  <p>This handbook guides you using <strong>Claude App</strong> and <strong>Antigravity (Desktop)</strong> as its default hands-on tools, because starting with a GUI has a lower barrier to entry. Chapter 2 likewise shows these two Desktop tools first, then immediately follows with the Claude Code (CLI)·Antigravity CLI (<code>agy</code>) procedures side by side. You can pick just one tool and follow along, or compare and practice with all four together. The following criteria make the choice easier.</p>
+  <p>This handbook guides you using <strong>Claude Desktop App</strong> and <strong>Antigravity (Desktop)</strong> as its default hands-on tools, because starting with a GUI has a lower barrier to entry. Chapter 2 likewise shows these two Desktop tools first, then immediately follows with the Claude Code (CLI)·Antigravity CLI (<code>agy</code>) procedures side by side. You can pick just one tool and follow along, or compare and practice with all four together. The following criteria make the choice easier.</p>
   <ol style="margin:0 0 16px 20px;line-height:2;">
-    <li><strong>If you just want to get a feel for it via GUI first.</strong> Start with Claude App or Antigravity (Desktop). This is the handbook's default path.</li>
+    <li><strong>If you just want to get a feel for it via GUI first.</strong> Start with Claude Desktop App or Antigravity (Desktop). This is the handbook's default path.</li>
     <li><strong>If you want to supervise several different projects at once.</strong> Antigravity (Desktop)'s Agent Manager (isolation per workspace) is designed exactly for this scenario.</li>
-    <li><strong>If you need hook-based automation (audit/QA gates).</strong> Move to Claude Code (CLI). Claude App and the Antigravity family have no corresponding automatic hooks.</li>
+    <li><strong>If you need hook-based automation (audit/QA gates).</strong> Move to Claude Code (CLI). Claude Desktop App and the Antigravity family have no corresponding automatic hooks.</li>
     <li><strong>If you want an orchestrator to split things up on its own without defining subagents one by one.</strong> Antigravity CLI (<code>agy</code>) dynamically creates subagents just from a goal. In exchange, fine-grained control is relatively limited.</li>
   </ol>
 
@@ -293,7 +293,7 @@ Google family
 
         <!-- No branch boxes -->
         <rect x="382" y="62" width="110" height="36" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
-        <text x="437" y="80" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Claude App</text>
+        <text x="437" y="80" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700">Claude Desktop App</text>
         <text x="437" y="92" text-anchor="middle" font-size="8.5" fill="var(--accent)">Pro · GUI default</text>
 
         <rect x="382" y="104" width="110" height="36" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
@@ -361,7 +361,7 @@ Google family
       <tr>
         <td><code>CLAUDE.md</code></td>
         <td>Claude Code/App-specific detailed behavior (hooks, slash commands, agent-dispatch rules)</td>
-        <td>Claude Code, Claude App</td>
+        <td>Claude Code, Claude Desktop App</td>
       </tr>
       <tr>
         <td><code>GEMINI.md</code></td>

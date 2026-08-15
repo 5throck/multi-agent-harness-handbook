@@ -221,7 +221,7 @@
 
   <h2 id="s6">Audit Logs and Observability</h2>
   <p>If guardrails are prevention, audit logs are after-the-fact tracing. No guardrail is perfect, so when an incident occurs, you absolutely need a minimal record that lets you retrace "when, which agent, with which tool, did what." If <code>memory/MEMORY.md</code> covered in Chapter 5 serves to record context across sessions, an audit script like <code>audit.ts</code>, run via a <code>PostToolUse</code> hook in CI, is an observability device that mechanically checks every time whether "a change violated the rules."</p>
-  <div class="warn">In the Claude App (Desktop), covered in Chapter 4, hooks like this do not fire. For teams working mainly in the Desktop app, a situation can actually arise where "we thought the audit log was running, but in fact none of it was running at all." When designing guardrails, you must always verify "does this policy actually fire on the tool I'm using?"</div>
+  <div class="warn">In the Claude Desktop App, covered in Chapter 4, hooks like this do not fire. For teams working mainly in the Desktop app, a situation can actually arise where "we thought the audit log was running, but in fact none of it was running at all." When designing guardrails, you must always verify "does this policy actually fire on the tool I'm using?"</div>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div>Audit Log Structure and Audit Flow</div>

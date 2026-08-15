@@ -3,7 +3,7 @@
 言語: [English](README.md) | [한국어](README_ko.md) | [日本語](README_ja.md) | [Español](README_es.md)
 
 **マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック**は、AIワークスペース（AI Workspace）の構築と運用を学ぶための総合実践教育プログラムです。
-ハーネスエンジニアリングの基本概念をはじめ、Claude Code、Claude App、Antigravity CLI、Antigravity Desktopなどの最新AIツールを用いた実践、ワークフローデザインパターン、企業における運用戦略の比較、そして `ai-workspace-standards` を活用した独自エージェントバリアントの構築実習までを体系的に網羅しています。
+ハーネスエンジニアリングの基本概念をはじめ、Claude Code、Claude Desktop App、Antigravity CLI、Antigravity Desktopなどの最新AIツールを用いた実践、ワークフローデザインパターン、企業における運用戦略の比較、そして `ai-workspace-standards` を活用した独自エージェントバリアントの構築実習までを体系的に網羅しています。
 
 ## 🌐 オンライン教育プログラム（ハンドブック）
 👉 **[ハンドブック公式サイトを見る](https://5throck.github.io/multi-agent-harness-handbook/)**
@@ -22,7 +22,7 @@
 - **第11章 · 新規バリアントの作成 (Phase A)** — カスタムハーネスの設計
 - **第12章 · 新規バリアントの昇格 (Phase B)** — プロダクション適用と検証
 - **第13章 · キャップストーン** — 独自ワークフローの設計と構築
-- **共通参考 · ツール比較** — Claude Code / Claude App / Antigravity CLI / Antigravity
+- **共通参考 · ツール比較** — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
 
 ## 🎯 対象バージョン
 - Claude Code 2026-07

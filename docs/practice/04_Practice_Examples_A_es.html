@@ -88,11 +88,11 @@
  <article class="reading">
   <div class="chapter-eyebrow">Capítulo 4 §2-A</div>
   <h1>Capítulo 4 §2-A · Práctica de equipos multiagente (Centrada en Claude)</h1>
-  <p class="subtitle">Una guía práctica que comienza desde una carpeta de práctica vacía y avanza a través de escenarios centrados en Claude App/Claude Code — guiada principalmente por la aplicación de escritorio, con equivalentes de CLI introducidos junto a ella &nbsp;|&nbsp; <a href="04_Practice_Manual_es.html">← Volver al documento de referencia del Cap.4 §1</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_es.html">Cap.4 §2-B Centrada en Antigravity →</a></p>
+  <p class="subtitle">Una guía práctica que comienza desde una carpeta de práctica vacía y avanza a través de escenarios centrados en Claude Desktop App/Claude Code — guiada principalmente por la aplicación de escritorio, con equivalentes de CLI introducidos junto a ella &nbsp;|&nbsp; <a href="04_Practice_Manual_es.html">← Volver al documento de referencia del Cap.4 §1</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_es.html">Cap.4 §2-B Centrada en Antigravity →</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">Versión/ámbito objetivo</span><span class="vvalue">Claude Code/App versión 2026-07 — esta guía se centra en Claude; para el equivalente de Antigravity consulte el Cap.4 §2-B</span></div>
-    <div class="version-row"><span class="vlabel">Propósito de este archivo</span><span class="vvalue">Proporciona cinco ejercicios prácticos para realizar en Claude App/Code: definición e invocación de subagentes, canalizaciones secuenciales, composición dinámica de equipo y combinaciones de flujo de trabajo, ejecución en paralelo y comparación de niveles de modelos</span></div>
+    <div class="version-row"><span class="vlabel">Propósito de este archivo</span><span class="vvalue">Proporciona cinco ejercicios prácticos para realizar en Claude Desktop App/Code: definición e invocación de subagentes, canalizaciones secuenciales, composición dinámica de equipo y combinaciones de flujo de trabajo, ejecución en paralelo y comparación de niveles de modelos</span></div>
     <div class="version-row"><span class="vlabel">Documentos de referencia</span><span class="vvalue"><a href="04_Practice_Manual_es.html">Cap.4 §1 Común</a> · <a href="04_Practice_Manual_A_es.html">Cap.4 §1-A Detalles de Claude</a> · <a href="04_Practice_Manual_B_es.html">Cap.4 §1-B Detalles de Antigravity</a> — enlazados desde cada escenario</span></div>
     <div class="version-row"><span class="vlabel">Escrito el</span><span class="vvalue">14 de julio de 2026</span></div>
   </div>
@@ -103,7 +103,7 @@
 
   <!-- ══════════════════════════════ Pre-Practice Setup ══════════════════════════════ -->
   <h2 id="setup">Configuración: instalación de los programas necesarios</h2>
-  <p>Los ejercicios a continuación se centran en Claude App (Escritorio) y Claude Code (CLI). Si su entorno local aún no tiene estas herramientas, la automatización de configuración del entorno incluida con este manual — la <a href="../setup/SETUP_ko.html">guía de configuración</a> — instalará automáticamente exactamente lo que necesitan los ejercicios de este capítulo. Simplemente siga las instrucciones para descargar y ejecutar el script localmente.</p>
+  <p>Los ejercicios a continuación se centran en Claude Desktop App (Escritorio) y Claude Code (CLI). Si su entorno local aún no tiene estas herramientas, la automatización de configuración del entorno incluida con este manual — la <a href="../setup/SETUP_ko.html">guía de configuración</a> — instalará automáticamente exactamente lo que necesitan los ejercicios de este capítulo. Simplemente siga las instrucciones para descargar y ejecutar el script localmente.</p>
 
   <div class="platform-block" >
     <div class="platform-block-title">📦 Antes de instalar — Cosas que verificar</div>
@@ -168,7 +168,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
 
-  <p>Entre las herramientas que este proyecto instala, las directamente relevantes para los ejercicios de cuatro herramientas de este capítulo son: Claude App (Escritorio), <code>claude</code> (CLI de Claude Code), Antigravity (Escritorio), <code>agy</code> (CLI de Antigravity), <code>bun</code> (necesario para ejecutar subagentes basados en <code>.claude/agents/*.md</code>), y <code>gh</code> (GitHub CLI), que también se utiliza en capítulos posteriores.</p>
+  <p>Entre las herramientas que este proyecto instala, las directamente relevantes para los ejercicios de cuatro herramientas de este capítulo son: Claude Desktop App (Escritorio), <code>claude</code> (CLI de Claude Code), Antigravity (Escritorio), <code>agy</code> (CLI de Antigravity), <code>bun</code> (necesario para ejecutar subagentes basados en <code>.claude/agents/*.md</code>), y <code>gh</code> (GitHub CLI), que también se utiliza en capítulos posteriores.</p>
 
   <div class="tip-box">
     El CLI de Antigravity (<code>agy</code>) es un solo binario compilado que no requiere instalación de runtime separada — simplemente descomprímalo y colóquelo en el PATH, y estará listo para ejecutarse. Orientaciones anteriores que aún circulan, como "instalar Gemini CLI globalmente a través de npm", ya no son válidas. Consulte <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">antigravity.google/docs/cli/getting-started</a> para las instrucciones de instalación actuales.
@@ -182,7 +182,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <div class="level-header" id="beginner">
     <span class="badge badge-g">● Principiante</span>
     <span class="level-title level-title-g">Primeros pasos</span>
-    <span class="level-desc">El primer paso: crear un subagente personalizado y observar cómo se invoca desde Claude App</span>
+    <span class="level-desc">El primer paso: crear un subagente personalizado y observar cómo se invoca desde Claude Desktop App</span>
   </div>
 
   <div class="scenario-card" id="scenario-1">
@@ -194,7 +194,7 @@ cd ./setup && bash setup-linux.sh</pre>
     <div class="card-body">
 
       <div class="situation">
-        Un desarrollador que prueba el arnés por primera vez crea una carpeta de práctica nueva y vacía llamada <code>harness-lab/</code>, primero escribe un rol <code>reviewer</code> como una especificación <code>AGENTS.md</code> neutral a la herramienta, y luego lo "implementa" como un subagente predefinido en Claude App (Escritorio) y lo invoca. Dado que esta carpeta está dedicada a la práctica, no se mezclará con otros archivos del proyecto.
+        Un desarrollador que prueba el arnés por primera vez crea una carpeta de práctica nueva y vacía llamada <code>harness-lab/</code>, primero escribe un rol <code>reviewer</code> como una especificación <code>AGENTS.md</code> neutral a la herramienta, y luego lo "implementa" como un subagente predefinido en Claude Desktop App (Escritorio) y lo invoca. Dado que esta carpeta está dedicada a la práctica, no se mezclará con otros archivos del proyecto.
       </div>
 
       <div class="cmd-list">
@@ -251,13 +251,13 @@ Permissions: Read-only — does not modify the file directly.
       </ol>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Escritorio)</span> — Implementación de la especificación AGENTS.md como subagente predefinido</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> — Implementación de la especificación AGENTS.md como subagente predefinido</div>
         <p class="text-dim" style="margin-bottom:10px;">No cree el archivo de antemano en una terminal o editor separado. Simplemente siga los tres pasos a continuación — cada cuadro de código gris está pensado para copiarse tal cual con el botón "Copiar" y pegarse.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
-              <strong>① Abrir el proyecto en Claude App</strong>
-              <p>Inicie Claude App (Escritorio) y abra la carpeta <code>harness-lab/</code> que acaba de crear como un proyecto.</p>
+              <strong>① Abrir el proyecto en Claude Desktop App</strong>
+              <p>Inicie Claude Desktop App (Escritorio) y abra la carpeta <code>harness-lab/</code> que acaba de crear como un proyecto.</p>
             </div>
           </li>
           <li>
@@ -268,7 +268,7 @@ Permissions: Read-only — does not modify the file directly.
                 <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
               </div>
               <div class="flow-box">
-                Claude App lee la especificación "rol/entrada/salida/permisos" en AGENTS.md y crea directamente <code>.claude/agents/reviewer.md</code> usando la herramienta Write, transfiriendo el contenido al frontmatter YAML (<code>description</code>, <code>tools</code>) y al prompt del sistema — la especificación permanece igual, solo se ha adaptado el formato a la herramienta. Una vez que termine la creación, compare el contenido del archivo mostrado en el chat con AGENTS.md.
+                Claude Desktop App lee la especificación "rol/entrada/salida/permisos" en AGENTS.md y crea directamente <code>.claude/agents/reviewer.md</code> usando la herramienta Write, transfiriendo el contenido al frontmatter YAML (<code>description</code>, <code>tools</code>) y al prompt del sistema — la especificación permanece igual, solo se ha adaptado el formato a la herramienta. Una vez que termine la creación, compare el contenido del archivo mostrado en el chat con AGENTS.md.
               </div>
             </div>
           </li>
@@ -280,7 +280,7 @@ Permissions: Read-only — does not modify the file directly.
                 <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
               </div>
               <div class="flow-box">
-                Claude App llama a la herramienta <code>Agent</code> (Task) con <code>description="Revisar notes.txt"</code> y <code>subagent_type="reviewer"</code>. La pantalla muestra, en orden, el subagente siendo iniciado y, una vez terminado su trabajo, un resultado resumido devuelto a la sesión principal.
+                Claude Desktop App llama a la herramienta <code>Agent</code> (Task) con <code>description="Revisar notes.txt"</code> y <code>subagent_type="reviewer"</code>. La pantalla muestra, en orden, el subagente siendo iniciado y, una vez terminado su trabajo, un resultado resumido devuelto a la sesión principal.
               </div>
             </div>
           </li>
@@ -315,7 +315,7 @@ Permissions: Read-only — does not modify the file directly.
     <div class="card-body">
 
       <div class="situation">
-        Un practicante que ha terminado G-1 escribe un segundo rol, <code>writer</code>, en la misma carpeta <code>harness-lab/</code>, siguiendo el mismo enfoque que G-1: primero especificarlo en <code>AGENTS.md</code>, y luego implementarlo como un subagente predefinido en Claude App. Luego hace que dirija una canalización en la que escritor redacta primero y revisor critica el resultado, en orden estricto.
+        Un practicante que ha terminado G-1 escribe un segundo rol, <code>writer</code>, en la misma carpeta <code>harness-lab/</code>, siguiendo el mismo enfoque que G-1: primero especificarlo en <code>AGENTS.md</code>, y luego implementarlo como un subagente predefinido en Claude Desktop App. Luego hace que dirija una canalización en la que escritor redacta primero y revisor critica el resultado, en orden estricto.
       </div>
 
       <div class="note">
@@ -401,7 +401,7 @@ handoff_to: reviewer (review follows once the draft is done)
       </ol>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Escritorio)</span> — La sesión principal despacha llamadas de agente secuencialmente</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> — La sesión principal despacha llamadas de agente secuencialmente</div>
         <p class="text-dim" style="margin-bottom:10px;">Al igual que en G-1, no prepare ningún archivo de antemano. Continúe en el mismo chat de <code>harness-lab/</code> que abrió para G-1.</p>
         <ol class="step-list">
           <li>
@@ -412,7 +412,7 @@ handoff_to: reviewer (review follows once the draft is done)
                 <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
               </div>
               <div class="flow-box">
-                Claude App lee la especificación de writer en AGENTS.md y crea directamente <code>.claude/agents/writer.md</code> usando la herramienta Write. Se sitúa junto al <code>reviewer.md</code> ya creado en G-1, dentro de la misma carpeta <code>.claude/agents/</code> — la entrada <code>handoff_to: reviewer</code> en AGENTS.md se materializa en el siguiente paso.
+                Claude Desktop App lee la especificación de writer en AGENTS.md y crea directamente <code>.claude/agents/writer.md</code> usando la herramienta Write. Se sitúa junto al <code>reviewer.md</code> ya creado en G-1, dentro de la misma carpeta <code>.claude/agents/</code> — la entrada <code>handoff_to: reviewer</code> en AGENTS.md se materializa en el siguiente paso.
               </div>
             </div>
           </li>
@@ -529,7 +529,7 @@ handoff_to: reviewer (review follows once the draft is done)
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Escritorio)</span> — Mismo equipo, tres solicitudes diferentes</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> — Mismo equipo, tres solicitudes diferentes</div>
         <p class="text-dim" style="margin-bottom:10px;">Continúe en el mismo chat donde terminó D-1. Preste mucha atención cada vez a qué subagente se llama, cuántas veces, según lo que se muestra en pantalla.</p>
         <ol class="step-list">
           <li>
@@ -601,7 +601,7 @@ handoff_to: reviewer (review follows once the draft is done)
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Escritorio)</span> — Equipos de agentes, teammateMode: in-process</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> — Equipos de agentes, teammateMode: in-process</div>
         <p class="text-dim" style="margin-bottom:10px;">Active la función experimental de equipos de agentes en la misma carpeta <code>harness-lab/</code>. En la aplicación de escritorio, <code>teammateMode</code> debe ser <code>in-process</code> (<code>tmux</code> no es compatible).</p>
         <ol class="step-list">
           <li>
@@ -638,8 +638,8 @@ EOF</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>② Reiniciar Claude App</strong>
-              <p>Cierre completamente y vuelva a abrir Claude App para que la configuración surta efecto.</p>
+              <strong>② Reiniciar Claude Desktop App</strong>
+              <p>Cierre completamente y vuelva a abrir Claude Desktop App para que la configuración surta efecto.</p>
             </div>
           </li>
           <li>
@@ -659,7 +659,7 @@ EOF</pre>
           Para evitar que las listas de tareas se enreden, es más seguro asignar archivos o directorios completamente separados a los compañeros de equipo que inicie en paralelo desde el principio.
         </div>
         <div class="warning-box">
-          <strong>Un error común</strong> — Si no puede encontrar la función de equipos de agentes o los compañeros nunca se inician, generalmente se debe a una de dos cosas: ① si <code>.claude/settings.json</code> se guardó en relación con la carpeta <code>harness-lab/</code> (guardarlo en otro lugar significa que no se reconocerá), o ② si Claude App se reinició completamente en el paso ②. Un error de sintaxis JSON (como una coma faltante) que hace que el archivo de configuración se ignore silenciosamente también es común, así que ábralo en un editor y verifique la sintaxis.
+          <strong>Un error común</strong> — Si no puede encontrar la función de equipos de agentes o los compañeros nunca se inician, generalmente se debe a una de dos cosas: ① si <code>.claude/settings.json</code> se guardó en relación con la carpeta <code>harness-lab/</code> (guardarlo en otro lugar significa que no se reconocerá), o ② si Claude Desktop App se reinició completamente en el paso ②. Un error de sintaxis JSON (como una coma faltante) que hace que el archivo de configuración se ignore silenciosamente también es común, así que ábralo en un editor y verifique la sintaxis.
         </div>
 
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
@@ -780,7 +780,7 @@ EOF</pre>
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Escritorio)</span> — Mismo archivo, solicitudes de revisión con tres modelos diferentes</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> — Mismo archivo, solicitudes de revisión con tres modelos diferentes</div>
         <p class="text-dim" style="margin-bottom:10px;">Prepare un texto un poco más complejo que el <code>notes.txt</code> de G-1 que contenga un defecto lógico. Pegue el texto a continuación en el cuadro de chat tal cual.</p>
         <ol class="step-list">
           <li>
@@ -795,7 +795,7 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>② Revisar con el nivel haiku</strong>
-              <p>Pegue el texto a continuación en el cuadro de chat tal cual. Claude App cambia el campo <code>model</code> en <code>reviewer.md</code> a <code>haiku</code>, y luego realiza la revisión.</p>
+              <p>Pegue el texto a continuación en el cuadro de chat tal cual. Claude Desktop App cambia el campo <code>model</code> en <code>reviewer.md</code> a <code>haiku</code>, y luego realiza la revisión.</p>
               <div style="position:relative">
                 <pre class="code-block">Cambia el campo model en .claude/agents/reviewer.md a haiku. Luego usa el subagente reviewer para revisar argument.txt.</pre>
                 <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
@@ -827,7 +827,7 @@ EOF</pre>
           Para una simple verificación de erratas, los resultados de los tres modelos apenas difieren, pero para una tarea como esta — donde necesita identificar un defecto en la estructura de un argumento — cuanto más bajo el nivel, más pronunciada es la tendencia a perder el razonamiento circular como tal y en su lugar marcar solo problemas superficiales de redacción. Por el contrario, haiku responde más rápido de los tres. Experimentar de primera mano el equilibrio entre velocidad y profundidad hace que quede mucho más claro por qué existe en primer lugar el principio explicado en el Capítulo 5: "cuanto más pesado el juicio que requiere un rol, más alto el nivel; cuanto más rutinaria la tarea, más bajo el nivel."
         </div>
         <div class="tip-box">
-          Simplemente pida a Claude App que "cambie el campo model" cada vez — no hay necesidad de abrir el archivo de definición usted mismo; Claude App lo edita y realiza la revisión por su cuenta.
+          Simplemente pida a Claude Desktop App que "cambie el campo model" cada vez — no hay necesidad de abrir el archivo de definición usted mismo; Claude Desktop App lo edita y realiza la revisión por su cuenta.
         </div>
         <div class="warning-box">
           <strong>Un error común</strong> — Si el campo <code>model</code> contiene un valor que no existe (un error tipográfico, mayúsculas incorrectas, etc.), la llamada puede fallar o regresar silenciosamente a un modelo predeterminado. Después de terminar ②③④, abra <code>.claude/agents/reviewer.md</code> directamente y confirme que el valor <code>model:</code> coincide exactamente con el <code>haiku</code>/<code>sonnet</code>/<code>opus</code> previsto.

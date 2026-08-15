@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">第4章 §1</div>
   <h1>第4章 §1 · ハーネスベースのマルチエージェントチーム活用</h1>
-  <p class="subtitle">Claude Code / Claude App / Antigravity CLI / Antigravity(Desktop)の4つのツールでサブエージェントを定義し、呼び出し、並列・自動化の単位に拡張する方法を並べて整理したリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a></p>
+  <p class="subtitle">Claude Code / Claude Desktop App / Antigravity CLI / Antigravity(Desktop)の4つのツールでサブエージェントを定義し、呼び出し、並列・自動化の単位に拡張する方法を並べて整理したリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">対象バージョン</span><span class="vvalue">Claude Code 2026-07リリース / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
@@ -66,18 +66,18 @@
   <pre>
 ハーネスベースのマルチエージェントチーム活用 (Desktopアプリを基準に、CLIは同一概念の代替として併記)
 ├── サブエージェントの定義
-│   ├── Claude App / Claude Code    .claude/agents/*.md (YAML frontmatter、事前定義 — 両方とも同一)
+│   ├── Claude Desktop App / Claude Code    .claude/agents/*.md (YAML frontmatter、事前定義 — 両方とも同一)
 │   └── Antigravity(Desktop) / CLI  事前定義ファイルなし — オーケストレーターが目標を見て動的に生成
 ├── サブエージェントの呼び出し/委任
-│   ├── Claude App / Claude Code    Agent(Task)ツール — description / prompt / subagent_type
+│   ├── Claude Desktop App / Claude Code    Agent(Task)ツール — description / prompt / subagent_type
 │   └── Antigravity(Desktop)/CLI    Agent Manager UI(Desktop) · /goal, /agent, /agentsパネル(CLI)
 ├── 並列実行
-│   ├── Claude App                  Agent Teams(in-processのみ)
+│   ├── Claude Desktop App                  Agent Teams(in-processのみ)
 │   ├── Claude Code                 Agent Teams(in-process/tmux) + 1メッセージで複数Agent呼び出し
 │   ├── Antigravity Desktop         Agent Manager — Workspaceごとのエージェント(Local/New Worktree Mode)
 │   └── Antigravity CLI             セッション内部並列サブエージェント + セッション間(複数ターミナル)並列
 └── 自動化/フック
-    ├── Claude App                  フック未発火 — 手動実行が必要
+    ├── Claude Desktop App                  フック未発火 — 手動実行が必要
     ├── Claude Code                 PostToolUse/TeammateIdle/TaskCompletedフックが自動発火
     ├── Antigravity Desktop         該当なし — GUI中心
     └── Antigravity CLI             agy -p "プロンプト"(非対話型CI用)、agy inspect(設定確認)
@@ -134,7 +134,7 @@
   <!-- ── セクション1 ── -->
   <h2 id="section-1">1. サブエージェントの定義 — 事前定義 vs 動的生成</h2>
 
-  <p>Anthropic系(Claude App/Claude Code)は、プロジェクトフォルダ配下にマークダウンファイル1つでサブエージェントを1つ事前定義しておく。Google系(Antigravity Desktop/CLI)には別途の定義ファイルがない — オーケストレーターが与えられた目標を見て、その都度サブエージェントを作成する。以下ではClaude AppとAntigravity(Desktop)を基準にまず説明し、それぞれのCLI対応を続けて紹介する。</p>
+  <p>Anthropic系(Claude Desktop App/Claude Code)は、プロジェクトフォルダ配下にマークダウンファイル1つでサブエージェントを1つ事前定義しておく。Google系(Antigravity Desktop/CLI)には別途の定義ファイルがない — オーケストレーターが与えられた目標を見て、その都度サブエージェントを作成する。以下ではClaude Desktop AppとAntigravity(Desktop)を基準にまず説明し、それぞれのCLI対応を続けて紹介する。</p>
 
   <p >
     Claude系の具体的な定義・呼び出し方法は<a href="04_Practice_Manual_A_ja.html">§1-A Claude中心</a>で、
@@ -143,7 +143,7 @@
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>frontmatterフィールド</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
+    <thead><tr><th>frontmatterフィールド</th><th>Claude Desktop App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td><code>name</code></td>
@@ -166,14 +166,14 @@
   </table>
   </div>
 
-  <div class="warning-box">Antigravity(Desktop/CLI)には「サブエージェント定義ファイル」という概念自体が存在しない — 初級実習でAntigravity側にClaude App/Codeの<code>reviewer.md</code>と全く同じ例を無理に作ると事実と乖離する。Antigravityの「入門実習」はファイルを作ることではなく、目標を与えてオーケストレーターが自ら作業を分割していく過程を観察することである。</div>
+  <div class="warning-box">Antigravity(Desktop/CLI)には「サブエージェント定義ファイル」という概念自体が存在しない — 初級実習でAntigravity側にClaude Desktop App/Codeの<code>reviewer.md</code>と全く同じ例を無理に作ると事実と乖離する。Antigravityの「入門実習」はファイルを作ることではなく、目標を与えてオーケストレーターが自ら作業を分割していく過程を観察することである。</div>
 
   <hr>
 
   <!-- ── セクション2 ── -->
   <h2 id="section-2">2. サブエージェントの呼び出し/委任</h2>
 
-  <p>Anthropic系(Claude App/Claude Code)は<code>Agent</code>/<code>Task</code>ツールで別コンテキストのサブエージェントをスポーンする。Google系(Antigravity Desktop/CLI)はAgent Manager UIまたはスラッシュコマンドでエージェントに目標を委任する。</p>
+  <p>Anthropic系(Claude Desktop App/Claude Code)は<code>Agent</code>/<code>Task</code>ツールで別コンテキストのサブエージェントをスポーンする。Google系(Antigravity Desktop/CLI)はAgent Manager UIまたはスラッシュコマンドでエージェントに目標を委任する。</p>
 
   <p >
     Claude系の具体的な呼び出し方法は<a href="04_Practice_Manual_A_ja.html#section-2">§1-A セクション2</a>で、
@@ -196,7 +196,7 @@
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>項目</th><th>Antigravity (Desktop)</th><th>Claude App (Desktop)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>項目</th><th>Antigravity (Desktop)</th><th>Claude Desktop App</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td>並列実行単位</td>
@@ -214,7 +214,7 @@
   <!-- ── セクション4 ── -->
   <h2 id="section-4">4. 自動化/フック — 何が自動的に発火するか</h2>
 
-  <p>Claude Code(CLI)はイベントフック(PostToolUse/TeammateIdle/TaskCompleted)を自動発火するが、Claude AppとAntigravityデスクトップ(Desktop)はフックを自動発火しない。Antigravity コマンドラインインターフェース(CLI)は<code>agy -p</code>で非対話型実行、<code>agy inspect</code>で設定点検を提供する。</p>
+  <p>Claude Code(CLI)はイベントフック(PostToolUse/TeammateIdle/TaskCompleted)を自動発火するが、Claude Desktop AppとAntigravityデスクトップ(Desktop)はフックを自動発火しない。Antigravity コマンドラインインターフェース(CLI)は<code>agy -p</code>で非対話型実行、<code>agy inspect</code>で設定点検を提供する。</p>
 
   <p >
     Claude系の自動化/フックの詳細は<a href="04_Practice_Manual_A_ja.html#section-4">§1-A セクション4</a>で、

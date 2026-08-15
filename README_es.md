@@ -3,7 +3,7 @@
 Idioma: [English](README.md) | [한국어](README_ko.md) | [日本語](README_ja.md) | [Español](README_es.md)
 
 El **Manual de Ingeniería de Harness para Equipos Multi-Agente** es un programa educativo integral sobre entornos AI Workspace (Espacios de trabajo IA).
-Cubre desde los conceptos fundamentales de la ingeniería de harness, práctica con herramientas avanzadas de IA como Claude Code, Claude App, Antigravity CLI y Antigravity Desktop, patrones de diseño de flujo de trabajo, comparación de estrategias operativas empresariales, hasta ejercicios prácticos para construir sus propias variantes de agentes con `ai-workspace-standards`.
+Cubre desde los conceptos fundamentales de la ingeniería de harness, práctica con herramientas avanzadas de IA como Claude Code, Claude Desktop App, Antigravity CLI y Antigravity Desktop, patrones de diseño de flujo de trabajo, comparación de estrategias operativas empresariales, hasta ejercicios prácticos para construir sus propias variantes de agentes con `ai-workspace-standards`.
 
 ## 🌐 Lea el Manual en Vivo (Programa Educativo)
 👉 **[Ver el Sitio Web del Manual](https://5throck.github.io/multi-agent-harness-handbook/)**
@@ -22,7 +22,7 @@ Cubre desde los conceptos fundamentales de la ingeniería de harness, práctica 
 - **Cap. 11 · Creación de una Nueva Variante (Fase A)** — Diseño de harness personalizado
 - **Cap. 12 · Promoción de una Nueva Variante (Fase B)** — Despliegue en producción y validación
 - **Cap. 13 · Proyecto Capstone** — Diseñando su propio flujo de trabajo
-- **Referencia Común** — Comparativa de herramientas: Claude Code / Claude App / Antigravity CLI / Antigravity
+- **Referencia Común** — Comparativa de herramientas: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
 
 ## 🎯 Versiones Objetivo
 - Claude Code 2026-07

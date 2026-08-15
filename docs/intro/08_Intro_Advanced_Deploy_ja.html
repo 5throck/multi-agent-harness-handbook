@@ -64,7 +64,7 @@
   │  L0→L1: propagate-to-templates.ts（dev-syncのたびに自動・継続）
   ▼
 L1 — templates/common/（共通テンプレートのスナップショット）
-  │  L1→L2: create-l2-scaffold.ts（variant作成時点、一度だけ）
+  │  L1→L2: create-l3-scaffold.ts（variant作成時点、一度だけ）
   ▼
 L2 — templates/co-&lt;name&gt;/
   │  L2→L3: new-project.ts（プロジェクト作成時点、一度だけ）
@@ -72,7 +72,7 @@ L2 — templates/co-&lt;name&gt;/
 L3 — Projects/&lt;name&gt;/（稼働中のプロジェクト作業ディレクトリ）
      └─ L2をベースに生成、開発者がエージェントを日常的に実行する場所
      └─ フォーク後は独立して進化、自動逆同期なし
-     └─ L2を公式テンプレートへ昇格するには明示的にl2-to-variant-pipeline.tsを実行</pre>
+     └─ L2を公式テンプレートへ昇格するには明示的にl3-to-variant-pipeline.tsを実行</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
   </div>
@@ -120,7 +120,7 @@ L3 — Projects/&lt;name&gt;/（稼働中のプロジェクト作業ディレク
   </div>
 
   <h3>L1 → L2が「フォーク」で終わる理由</h3>
-  <p>初期にはL1が変わるたびに、すでに作られたすべてのL2バリアント（variant）へ自動的に反映する方式を試みたが、3つの問題が繰り返し起きた。バリアント（variant）が意図的に異なる形へ修正しておいた部分を、L1の変更が静かに上書きしてしまうこと、新しいバリアント（variant）を追加するたびに伝播スクリプトにハードコードされたvariant一覧をいちいち手直ししなければならないこと、そして「意図した違い」と「同期を逃したことで生じた違い」を区別する方法がなかったことである。そのため現在は<strong>フォークモデル（Fork Model）</strong>を採用している。L1はバリアント（variant）を作るスキャフォールディングの時点で一度だけ内容を渡し、それ以降L2は完全に独立して進化する。L2の変更を公式テンプレートに反映するには、自動ではなく<code>l2-to-variant-pipeline.ts</code>を人が明示的に実行する必要がある（第11章でこの昇格手順を直接扱う）。一方、<code>propagate-to-templates.ts --check-drift</code>がL1と各L2の差分を定期的に報告することはあるが、この報告は読み取り専用であり、決して自動的に値を上書きすることはない。逆方向 — すでに作られたL3プロジェクトにL1の最新の変更を実際に反映する手順は、<a href="10_ProjectUpgrade_Chapter_ja.html">第10章 · L3プロジェクトのアップグレード</a>で扱う。</p>
+  <p>初期にはL1が変わるたびに、すでに作られたすべてのL2バリアント（variant）へ自動的に反映する方式を試みたが、3つの問題が繰り返し起きた。バリアント（variant）が意図的に異なる形へ修正しておいた部分を、L1の変更が静かに上書きしてしまうこと、新しいバリアント（variant）を追加するたびに伝播スクリプトにハードコードされたvariant一覧をいちいち手直ししなければならないこと、そして「意図した違い」と「同期を逃したことで生じた違い」を区別する方法がなかったことである。そのため現在は<strong>フォークモデル（Fork Model）</strong>を採用している。L1はバリアント（variant）を作るスキャフォールディングの時点で一度だけ内容を渡し、それ以降L2は完全に独立して進化する。L2の変更を公式テンプレートに反映するには、自動ではなく<code>l3-to-variant-pipeline.ts</code>を人が明示的に実行する必要がある（第11章でこの昇格手順を直接扱う）。一方、<code>propagate-to-templates.ts --check-drift</code>がL1と各L2の差分を定期的に報告することはあるが、この報告は読み取り専用であり、決して自動的に値を上書きすることはない。逆方向 — すでに作られたL3プロジェクトにL1の最新の変更を実際に反映する手順は、<a href="10_ProjectUpgrade_Chapter_ja.html">第10章 · L3プロジェクトのアップグレード</a>で扱う。</p>
 
   <h3>ファイル単位のSSOT — 何がどこからどこへ流れるか</h3>
   <div class="table-compare">

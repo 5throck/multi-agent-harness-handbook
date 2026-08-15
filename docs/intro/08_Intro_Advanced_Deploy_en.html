@@ -64,7 +64,7 @@
   │  L0→L1: propagate-to-templates.ts (automatic and ongoing, on every dev-sync)
   ▼
 L1 — templates/common/ (common template snapshot)
-  │  L1→L2: create-l2-scaffold.ts (once, at variant creation time)
+  │  L1→L2: create-l3-scaffold.ts (once, at variant creation time)
   ▼
 L2 — templates/co-&lt;name&gt;/
   │  L2→L3: new-project.ts (once, at project creation time)
@@ -72,7 +72,7 @@ L2 — templates/co-&lt;name&gt;/
 L3 — Projects/&lt;name&gt;/ (live project working directory)
      └─ Created from L2; where developers run agents for day-to-day work
      └─ Evolves independently after forking, no automatic back-sync
-     └─ Run l2-to-variant-pipeline.ts explicitly to promote an L2 to an official template</pre>
+     └─ Run l3-to-variant-pipeline.ts explicitly to promote an L2 to an official template</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
   </div>
@@ -120,7 +120,7 @@ L3 — Projects/&lt;name&gt;/ (live project working directory)
   </div>
 
   <h3>Why L1 → L2 Ends in a "Fork"</h3>
-  <p>Early on, an approach was tried where every L1 change was automatically propagated to all existing L2 variants, but three problems kept recurring. Changes in L1 silently overwrote parts a variant had deliberately customized differently; every time a new variant was added, the hardcoded variant list in the propagation script had to be manually updated; and there was no way to distinguish "an intentional difference" from "a difference caused by a missed sync." So the <strong>Fork Model</strong> is used instead. L1 delivers its content exactly once, at the moment of scaffolding a variant, and from then on L2 evolves completely independently. Reflecting an L2 change back into the official template requires a human to explicitly run <code>l2-to-variant-pipeline.ts</code> rather than any automatic process (Chapter 11 covers this promotion procedure directly). Meanwhile, <code>propagate-to-templates.ts --check-drift</code> periodically reports the differences between L1 and each L2, but this report is read-only and never automatically overwrites values. The reverse direction — the procedure for actually applying L1's latest changes to an already-created L3 project — is covered in <a href="10_ProjectUpgrade_Chapter_en.html">Chapter 10 · Upgrading an L3 Project</a>.</p>
+  <p>Early on, an approach was tried where every L1 change was automatically propagated to all existing L2 variants, but three problems kept recurring. Changes in L1 silently overwrote parts a variant had deliberately customized differently; every time a new variant was added, the hardcoded variant list in the propagation script had to be manually updated; and there was no way to distinguish "an intentional difference" from "a difference caused by a missed sync." So the <strong>Fork Model</strong> is used instead. L1 delivers its content exactly once, at the moment of scaffolding a variant, and from then on L2 evolves completely independently. Reflecting an L2 change back into the official template requires a human to explicitly run <code>l3-to-variant-pipeline.ts</code> rather than any automatic process (Chapter 11 covers this promotion procedure directly). Meanwhile, <code>propagate-to-templates.ts --check-drift</code> periodically reports the differences between L1 and each L2, but this report is read-only and never automatically overwrites values. The reverse direction — the procedure for actually applying L1's latest changes to an already-created L3 project — is covered in <a href="10_ProjectUpgrade_Chapter_en.html">Chapter 10 · Upgrading an L3 Project</a>.</p>
 
   <h3>Per-File SSOT — What Flows Where, From Where</h3>
   <div class="table-compare">

@@ -173,7 +173,7 @@
 
   <h2 id="s2-skill-lifecycle">Skill Lifecycle</h2>
 
-  <p>A skill is a reusable unit of behavior that an agent can invoke during a session. It is defined by a <code>SKILL.md</code> file and placed either in a plugin or in the workspace's <code>.zcode/skills/</code>. A skill's lifecycle consists of the following five stages.</p>
+  <p>A skill is a reusable unit of behavior that an agent can invoke during a session. It is defined by a <code>SKILL.md</code> file and placed either in a plugin or in the workspace's <code>.claude/skills/</code>. A skill's lifecycle consists of the following five stages.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -241,7 +241,7 @@
   <p>Deploy a verified skill into an environment where agents can actually invoke it. Concretely, deployment means the following.</p>
   <ul>
     <li>Changing <code>status</code> to <code>active</code> so it's included among the agent's auto-selection candidates</li>
-    <li>Registering it in the workspace's <code>.zcode/skills/</code> or a plugin registry as needed</li>
+    <li>Registering it in the workspace's <code>.claude/skills/</code> or a plugin registry as needed</li>
     <li>Declaring the dependency in the frontmatter of any agent that uses this skill</li>
   </ul>
   <p>After deployment, perform a manual review to confirm that the skill triggers and executes correctly during an agent session.</p>

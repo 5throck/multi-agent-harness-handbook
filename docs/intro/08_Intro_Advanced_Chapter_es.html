@@ -173,7 +173,7 @@
 
   <h2 id="s2-skill-lifecycle">Ciclo de Vida de la Habilidad</h2>
 
-  <p>Una habilidad es una unidad reutilizable de comportamiento que un agente puede invocar durante una sesión. Se define mediante un archivo <code>SKILL.md</code> y se coloca en un plugin o en el directorio <code>.zcode/skills/</code> del espacio de trabajo. El ciclo de vida de una habilidad consta de las siguientes cinco etapas.</p>
+  <p>Una habilidad es una unidad reutilizable de comportamiento que un agente puede invocar durante una sesión. Se define mediante un archivo <code>SKILL.md</code> y se coloca en un plugin o en el directorio <code>.claude/skills/</code> del espacio de trabajo. El ciclo de vida de una habilidad consta de las siguientes cinco etapas.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -241,7 +241,7 @@
   <p>Despliegue una habilidad verificada en un entorno donde los agentes puedan realmente invocarla. Concretamente, el despliegue significa lo siguiente.</p>
   <ul>
     <li>Cambiar <code>status</code> a <code>active</code> para que se incluya entre los candidatos de autoselección del agente</li>
-    <li>Registrarla en el directorio <code>.zcode/skills/</code> del espacio de trabajo o en un registro de plugin según sea necesario</li>
+    <li>Registrarla en el directorio <code>.claude/skills/</code> del espacio de trabajo o en un registro de plugin según sea necesario</li>
     <li>Declarar la dependencia en el frontmatter de cualquier agente que use esta habilidad</li>
   </ul>
   <p>Después del despliegue, realice una revisión manual para confirmar que la habilidad se dispara y ejecuta correctamente durante una sesión de agente.</p>

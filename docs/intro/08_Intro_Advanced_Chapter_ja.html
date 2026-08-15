@@ -173,7 +173,7 @@
 
   <h2 id="s2-skill-lifecycle">スキルのライフサイクル</h2>
 
-  <p>スキルは、エージェントがセッション中に呼び出せる再利用可能な動作単位です。<code>SKILL.md</code> ファイルとして定義され、プラグインやワークスペースの <code>.zcode/skills/</code> に配置されます。スキルのライフサイクルは次の5段階で構成されます。</p>
+  <p>スキルは、エージェントがセッション中に呼び出せる再利用可能な動作単位です。<code>SKILL.md</code> ファイルとして定義され、プラグインやワークスペースの <code>.claude/skills/</code> に配置されます。スキルのライフサイクルは次の5段階で構成されます。</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -241,7 +241,7 @@
   <p>検証済みのスキルを、エージェントが実際に呼び出せる環境に配備します。配備とは、具体的には次のことを意味します。</p>
   <ul>
     <li><code>status</code> を <code>active</code> に変更し、エージェントの自動選択対象に含める</li>
-    <li>必要に応じてワークスペースの <code>.zcode/skills/</code> やプラグインレジストリに登録する</li>
+    <li>必要に応じてワークスペースの <code>.claude/skills/</code> やプラグインレジストリに登録する</li>
     <li>当該スキルを使用するエージェントのフロントマターに依存関係を明示する</li>
   </ul>
   <p>配備後は、エージェントのセッション内でスキルが正常にトリガーされ実行されるかを確認する手動レビューを実施します。</p>

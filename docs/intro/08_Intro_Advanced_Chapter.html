@@ -173,7 +173,7 @@
 
   <h2 id="s2-skill-lifecycle">스킬 생애주기</h2>
 
-  <p>스킬은 에이전트가 세션에서 호출할 수 있는 재사용 가능한 동작 단위다. <code>SKILL.md</code> 파일로 정의되며, 플러그인이나 워크스페이스의 <code>.zcode/skills/</code>에 배치된다. 스킬의 생애주기는 다음 다섯 단계로 구성된다.</p>
+  <p>스킬은 에이전트가 세션에서 호출할 수 있는 재사용 가능한 동작 단위다. <code>SKILL.md</code> 파일로 정의되며, 플러그인이나 워크스페이스의 <code>.claude/skills/</code>에 배치된다. 스킬의 생애주기는 다음 다섯 단계로 구성된다.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -241,7 +241,7 @@
   <p>검증된 스킬을 에이전트가 실제로 호출할 수 있는 환경에 배포한다. 배포란 구체적으로 다음을 의미한다.</p>
   <ul>
     <li><code>status</code>를 <code>active</code>로 변경하여 에이전트의 자동 선택 대상에 포함</li>
-    <li>필요한 경우 워크스페이스의 <code>.zcode/skills/</code> 또는 플러그인 레지스트리에 등록</li>
+    <li>필요한 경우 워크스페이스의 <code>.claude/skills/</code> 또는 플러그인 레지스트리에 등록</li>
     <li>해당 스킬을 사용하는 에이전트의 프론트매터에 의존성을 명시</li>
   </ul>
   <p>배포 후에는 에이전트 세션에서 스킬이 정상적으로 트리거되고 실행되는지 확인하는 수동 검토를 수행한다.</p>

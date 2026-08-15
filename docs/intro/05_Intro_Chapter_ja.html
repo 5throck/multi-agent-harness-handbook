@@ -152,7 +152,16 @@
 
   <h2 id="s4">セッション開始チェックリストとスキャフォールディング</h2>
   <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>を読む。続いてAGENTS.mdで利用可能なエージェントを確認し、<code>memory/MEMORY.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
-  <p>新規プロジェクトを作成する流れは概念的には単純である。<code>bun scripts/new-project.ts</code>スクリプトにプロジェクト名と希望するバリアント(variant)を指定して実行すると、そのバリアント(variant)の構成全体が複製され、完全に独立したgitリポジトリになる。このリポジトリはワークスペースルートとは分離されているが、生まれた時点からCONSTITUTION.mdの共有標準を継承した状態で始まる。チームはその中で、プロジェクト固有の<code>docs/context.md</code>とプロジェクトレベルのCLAUDE.md/GEMINI.mdオーバーライドを埋めながらチームを発展させていく。このコマンドの正確な構文とオプションは第6章§1で実際に実習する。</p>
+  <p>新規プロジェクトを作成する流れは概念的には単純である。<code>bun scripts/new-project.ts</code>スクリプトにプロジェクト名と希望するバリアント(variant)を指定して実行すると、そのバリアント(variant)の構成全体が複製され、完全に独立したgitリポジトリになる。このリポジトリはワークスペースルートとは分離されているが、生まれた時点からCONSTITUTION.mdの共有標準を継承した状態で始まる。チームはその中で、プロジェクト固有の<code>docs/context.md</code>とプロジェクトレベルのCLAUDE.md/GEMINI.mdオーバーライドを埋めながらチームを発展させていく。</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <p>このコマンドの完全な構文と全オプション(<code>--platform</code>、<code>--version</code>)は<a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-2">第6章§1・プロジェクトスキャフォールディングコマンド</a>で実際に実習する。</p>
 
   <div class="note">
     <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">

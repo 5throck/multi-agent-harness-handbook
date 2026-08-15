@@ -152,7 +152,16 @@
 
   <h2 id="s4">세션 시작 체크리스트와 스캐폴딩</h2>
   <p>CONSTITUTION.md는 모든 세션이 시작할 때 따라야 할 순서를 정의한다. 먼저 <code>git config core.hooksPath .githooks</code>로 git 훅 경로를 설정하고, CONSTITUTION.md 자체를 읽은 뒤, 작업 중인 프로젝트의 <code>docs/context.md</code>를 읽는다. 이어서 AGENTS.md로 사용 가능한 에이전트를 확인하고, <code>memory/MEMORY.md</code>에 이전 세션의 맥락이 남아 있는지 점검한 다음, docs/context.md가 지정한 스킬들을 로드한다.</p>
-  <p>새 프로젝트를 만드는 흐름은 개념적으로 단순하다. <code>bun scripts/new-project.ts</code> 스크립트에 프로젝트 이름과 원하는 베리언트(variant)를 지정해 실행하면, 그 베리언트(variant)의 전체 구성이 복제되어 완전히 독립된 git 저장소가 된다. 이 저장소는 워크스페이스 루트와 분리되어 있지만, 태어날 때부터 CONSTITUTION.md의 공유 표준을 상속한 상태로 시작한다. 팀은 그 안에서 프로젝트 고유의 <code>docs/context.md</code>와 프로젝트 레벨 CLAUDE.md/GEMINI.md 오버라이드를 채워나가며 팀을 발전시킨다. 이 명령의 정확한 문법과 옵션은 6장 §1에서 직접 실습한다.</p>
+  <p>새 프로젝트를 만드는 흐름은 개념적으로 단순하다. <code>bun scripts/new-project.ts</code> 스크립트에 프로젝트 이름과 원하는 베리언트(variant)를 지정해 실행하면, 그 베리언트(variant)의 전체 구성이 복제되어 완전히 독립된 git 저장소가 된다. 이 저장소는 워크스페이스 루트와 분리되어 있지만, 태어날 때부터 CONSTITUTION.md의 공유 표준을 상속한 상태로 시작한다. 팀은 그 안에서 프로젝트 고유의 <code>docs/context.md</code>와 프로젝트 레벨 CLAUDE.md/GEMINI.md 오버라이드를 채워나가며 팀을 발전시킨다.</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <p>이 명령의 전체 문법과 모든 옵션(<code>--platform</code>, <code>--version</code>)은 <a href="../variant-practice/06_VariantPractice_Manual.html#section-2">6장 §1 · 프로젝트 스캐폴딩 명령</a>에서 직접 실습한다.</p>
 
   <div class="note">
     <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">

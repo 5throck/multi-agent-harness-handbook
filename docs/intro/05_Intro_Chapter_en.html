@@ -152,7 +152,16 @@
 
   <h2 id="s4">Session-start checklist and scaffolding</h2>
   <p>CONSTITUTION.md defines the order every session must follow at startup. First, set the git hooks path with <code>git config core.hooksPath .githooks</code>, then read CONSTITUTION.md itself, then read the <code>docs/context.md</code> of the project you're working on. Next, check AGENTS.md for the available agents, check whether context from a previous session remains in <code>memory/MEMORY.md</code>, and finally load whatever skills docs/context.md specifies.</p>
-  <p>The flow for creating a new project is conceptually simple. Run the <code>bun scripts/new-project.ts</code> script with a project name and the desired variant, and the entire configuration of that variant is cloned into a fully independent git repository. This repository is separate from the workspace root, but it starts out having already inherited CONSTITUTION.md's shared standards from birth. The team then evolves the team by filling in the project's own <code>docs/context.md</code> and any project-level CLAUDE.md/GEMINI.md overrides. The exact syntax and options for this command are practiced hands-on in Chapter 6 §1.</p>
+  <p>The flow for creating a new project is conceptually simple. Run the <code>bun scripts/new-project.ts</code> script with a project name and the desired variant, and the entire configuration of that variant is cloned into a fully independent git repository. This repository is separate from the workspace root, but it starts out having already inherited CONSTITUTION.md's shared standards from birth. The team then evolves the team by filling in the project's own <code>docs/context.md</code> and any project-level CLAUDE.md/GEMINI.md overrides.</p>
+
+  <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
+    <div style="position:relative">
+  <pre class="pre-plain">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+  </div>
+
+  <p>The full syntax and every option (<code>--platform</code>, <code>--version</code>) are practiced hands-on in <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-2">Chapter 6 §1 · Project Scaffolding Commands</a>.</p>
 
   <div class="note">
     <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">

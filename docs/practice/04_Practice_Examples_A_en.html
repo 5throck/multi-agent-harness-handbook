@@ -88,11 +88,11 @@
  <article class="reading">
   <div class="chapter-eyebrow">Chapter 4 §2-A</div>
   <h1>Chapter 4 §2-A · Multi-Agent Team Practice (Claude-Centered)</h1>
-  <p class="subtitle">A hands-on guide that starts from an empty practice folder and walks through scenarios centered on Claude App/Claude Code — guided primarily through the Desktop app, with CLI equivalents introduced alongside &nbsp;|&nbsp; <a href="04_Practice_Manual_en.html">← Back to the Ch.4 §1 Reference Document</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_en.html">Ch.4 §2-B Antigravity-Centered →</a></p>
+  <p class="subtitle">A hands-on guide that starts from an empty practice folder and walks through scenarios centered on Claude Desktop App/Claude Code — guided primarily through the Desktop app, with CLI equivalents introduced alongside &nbsp;|&nbsp; <a href="04_Practice_Manual_en.html">← Back to the Ch.4 §1 Reference Document</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_en.html">Ch.4 §2-B Antigravity-Centered →</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">Target Version/Scope</span><span class="vvalue">Claude Code/App 2026-07 release — this guide focuses on Claude; for the Antigravity equivalent see Ch.4 §2-B</span></div>
-    <div class="version-row"><span class="vlabel">Purpose of This File</span><span class="vvalue">Provides five hands-on exercises to walk through in Claude App/Code: defining and calling subagents, sequential pipelines, dynamic team composition and workflow combinations, parallel execution, and model tier comparison</span></div>
+    <div class="version-row"><span class="vlabel">Purpose of This File</span><span class="vvalue">Provides five hands-on exercises to walk through in Claude Desktop App/Code: defining and calling subagents, sequential pipelines, dynamic team composition and workflow combinations, parallel execution, and model tier comparison</span></div>
     <div class="version-row"><span class="vlabel">Reference Documents</span><span class="vvalue"><a href="04_Practice_Manual_en.html">Ch.4 §1 Common</a> · <a href="04_Practice_Manual_A_en.html">Ch.4 §1-A Claude Details</a> · <a href="04_Practice_Manual_B_en.html">Ch.4 §1-B Antigravity Details</a> — linked from each scenario</span></div>
     <div class="version-row"><span class="vlabel">Written On</span><span class="vvalue">July 14, 2026</span></div>
   </div>
@@ -103,7 +103,7 @@
 
   <!-- ══════════════════════════════ Pre-Practice Setup ══════════════════════════════ -->
   <h2 id="setup">Setup: Installing the Required Programs</h2>
-  <p>The exercises below focus on Claude App (Desktop) and Claude Code (CLI). If your local environment doesn't have these tools yet, the environment setup automation included with this handbook — the <a href="../setup/SETUP_ko.html">setup guide</a> — will automatically install exactly what this chapter's exercises need. Just follow the instructions to download and run the script locally.</p>
+  <p>The exercises below focus on Claude Desktop App and Claude Code (CLI). If your local environment doesn't have these tools yet, the environment setup automation included with this handbook — the <a href="../setup/SETUP_ko.html">setup guide</a> — will automatically install exactly what this chapter's exercises need. Just follow the instructions to download and run the script locally.</p>
 
   <div class="platform-block" >
     <div class="platform-block-title">📦 Before You Install — Things to Check</div>
@@ -168,7 +168,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
 
-  <p>Among the tools this project installs, the ones directly relevant to this chapter's four-tool exercises are: Claude App (Desktop), <code>claude</code> (Claude Code CLI), Antigravity (Desktop), <code>agy</code> (Antigravity CLI), <code>bun</code> (needed to run subagents based on <code>.claude/agents/*.md</code>), and <code>gh</code> (GitHub CLI), which is used in later chapters as well.</p>
+  <p>Among the tools this project installs, the ones directly relevant to this chapter's four-tool exercises are: Claude Desktop App, <code>claude</code> (Claude Code CLI), Antigravity (Desktop), <code>agy</code> (Antigravity CLI), <code>bun</code> (needed to run subagents based on <code>.claude/agents/*.md</code>), and <code>gh</code> (GitHub CLI), which is used in later chapters as well.</p>
 
   <div class="tip-box">
     The Antigravity CLI (<code>agy</code>) is a single compiled binary that requires no separate runtime installation — just unzip it and put it on PATH, and it's ready to run. Older guidance floating around, such as "install the Gemini CLI globally via npm," is no longer valid. Check <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">antigravity.google/docs/cli/getting-started</a> for the current installation instructions.
@@ -182,7 +182,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <div class="level-header" id="beginner">
     <span class="badge badge-g">● Beginner</span>
     <span class="level-title level-title-g">Getting Started</span>
-    <span class="level-desc">The first step: create a custom subagent and observe it being called from Claude App</span>
+    <span class="level-desc">The first step: create a custom subagent and observe it being called from Claude Desktop App</span>
   </div>
 
   <div class="scenario-card" id="scenario-1">
@@ -194,7 +194,7 @@ cd ./setup && bash setup-linux.sh</pre>
     <div class="card-body">
 
       <div class="situation">
-        A developer trying the harness for the first time creates a fresh, empty practice folder called <code>harness-lab/</code>, first writes a <code>reviewer</code> role as a tool-neutral <code>AGENTS.md</code> specification, then "implements" it as a predefined subagent in Claude App (Desktop) and calls it. Since this folder is dedicated to practice, it won't get mixed up with other project files.
+        A developer trying the harness for the first time creates a fresh, empty practice folder called <code>harness-lab/</code>, first writes a <code>reviewer</code> role as a tool-neutral <code>AGENTS.md</code> specification, then "implements" it as a predefined subagent in Claude Desktop App and calls it. Since this folder is dedicated to practice, it won't get mixed up with other project files.
       </div>
 
       <div class="cmd-list">
@@ -251,13 +251,13 @@ Permissions: Read-only — does not modify the file directly.
       </ol>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Implementing the AGENTS.md Spec as a Predefined Subagent</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — Implementing the AGENTS.md Spec as a Predefined Subagent</div>
         <p class="text-dim" style="margin-bottom:10px;">Don't create the file ahead of time in a terminal or separate editor. Just follow the three steps below — every gray code box is meant to be copied as-is with the "Copy" button and pasted in.</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
-              <strong>① Open the Project in Claude App</strong>
-              <p>Launch Claude App (Desktop) and open the <code>harness-lab/</code> folder you just created as a project.</p>
+              <strong>① Open the Project in Claude Desktop App</strong>
+              <p>Launch Claude Desktop App and open the <code>harness-lab/</code> folder you just created as a project.</p>
             </div>
           </li>
           <li>
@@ -268,7 +268,7 @@ Permissions: Read-only — does not modify the file directly.
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
               </div>
               <div class="flow-box">
-                Claude App reads the "role/input/output/permissions" spec in AGENTS.md and directly creates <code>.claude/agents/reviewer.md</code> using the Write tool, transferring the content into the YAML frontmatter (<code>description</code>, <code>tools</code>) and system prompt — the spec stays the same, only the format has been adapted to the tool. Once creation finishes, compare the file contents shown in the chat against AGENTS.md.
+                Claude Desktop App reads the "role/input/output/permissions" spec in AGENTS.md and directly creates <code>.claude/agents/reviewer.md</code> using the Write tool, transferring the content into the YAML frontmatter (<code>description</code>, <code>tools</code>) and system prompt — the spec stays the same, only the format has been adapted to the tool. Once creation finishes, compare the file contents shown in the chat against AGENTS.md.
               </div>
             </div>
           </li>
@@ -280,7 +280,7 @@ Permissions: Read-only — does not modify the file directly.
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
               </div>
               <div class="flow-box">
-                Claude App calls the <code>Agent</code> (Task) tool with <code>description="Review notes.txt"</code> and <code>subagent_type="reviewer"</code>. The screen shows, in order, the subagent being spawned and, once its work is done, a summary result returned to the main session.
+                Claude Desktop App calls the <code>Agent</code> (Task) tool with <code>description="Review notes.txt"</code> and <code>subagent_type="reviewer"</code>. The screen shows, in order, the subagent being spawned and, once its work is done, a summary result returned to the main session.
               </div>
             </div>
           </li>
@@ -315,7 +315,7 @@ Permissions: Read-only — does not modify the file directly.
     <div class="card-body">
 
       <div class="situation">
-        A practitioner who has finished G-1 writes a second role, <code>writer</code>, in the same <code>harness-lab/</code> folder, following the same approach as G-1 by first specifying it in <code>AGENTS.md</code>, then implementing it as a predefined subagent in Claude App. They then have it direct a pipeline in which writer drafts first and reviewer critiques the result, in strict order.
+        A practitioner who has finished G-1 writes a second role, <code>writer</code>, in the same <code>harness-lab/</code> folder, following the same approach as G-1 by first specifying it in <code>AGENTS.md</code>, then implementing it as a predefined subagent in Claude Desktop App. They then have it direct a pipeline in which writer drafts first and reviewer critiques the result, in strict order.
       </div>
 
       <div class="note">
@@ -401,7 +401,7 @@ handoff_to: reviewer (review follows once the draft is done)
       </ol>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — The Main Session Dispatches Agent Calls Sequentially</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — The Main Session Dispatches Agent Calls Sequentially</div>
         <p class="text-dim" style="margin-bottom:10px;">As in G-1, don't prepare any files in advance. Continue in the same <code>harness-lab/</code> chat you opened for G-1.</p>
         <ol class="step-list">
           <li>
@@ -412,7 +412,7 @@ handoff_to: reviewer (review follows once the draft is done)
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
               </div>
               <div class="flow-box">
-                Claude App reads the writer spec in AGENTS.md and directly creates <code>.claude/agents/writer.md</code> using the Write tool. It sits alongside the <code>reviewer.md</code> already created in G-1, inside the same <code>.claude/agents/</code> folder — the <code>handoff_to: reviewer</code> entry in AGENTS.md actually plays out in the next step.
+                Claude Desktop App reads the writer spec in AGENTS.md and directly creates <code>.claude/agents/writer.md</code> using the Write tool. It sits alongside the <code>reviewer.md</code> already created in G-1, inside the same <code>.claude/agents/</code> folder — the <code>handoff_to: reviewer</code> entry in AGENTS.md actually plays out in the next step.
               </div>
             </div>
           </li>
@@ -542,7 +542,7 @@ handoff_to: reviewer (review follows once the draft is done)
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Same Team, Three Different Requests</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — Same Team, Three Different Requests</div>
         <p class="text-dim" style="margin-bottom:10px;">Continue in the same chat where you finished D-1. Pay close attention each time to which subagent gets called, how many times, as shown on screen.</p>
         <ol class="step-list">
           <li>
@@ -614,7 +614,7 @@ handoff_to: reviewer (review follows once the draft is done)
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams, teammateMode: in-process</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — Agent Teams, teammateMode: in-process</div>
         <p class="text-dim" style="margin-bottom:10px;">Enable the experimental Agent Teams feature in the same <code>harness-lab/</code> folder. In the Desktop App, <code>teammateMode</code> must be <code>in-process</code> (<code>tmux</code> is not supported).</p>
         <ol class="step-list">
           <li>
@@ -651,8 +651,8 @@ EOF</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>② Restart Claude App</strong>
-              <p>Fully quit and reopen Claude App for the settings to take effect.</p>
+              <strong>② Restart Claude Desktop App</strong>
+              <p>Fully quit and reopen Claude Desktop App for the settings to take effect.</p>
             </div>
           </li>
           <li>
@@ -672,7 +672,7 @@ EOF</pre>
           To keep task lists from getting tangled, it's safer to assign completely separate files or directories to teammates you spawn in parallel from the start.
         </div>
         <div class="warning-box">
-          <strong>A Common Failure</strong> — If you can't find the Agent Teams feature or teammates never spawn, it's usually one of two things: ① whether <code>.claude/settings.json</code> was saved relative to the <code>harness-lab/</code> folder (saving it elsewhere means it won't be recognized), or ② whether Claude App was fully restarted in step ②. A JSON syntax error (like a missing comma) causing the settings file to be silently ignored is also common, so open it in an editor and double-check the syntax.
+          <strong>A Common Failure</strong> — If you can't find the Agent Teams feature or teammates never spawn, it's usually one of two things: ① whether <code>.claude/settings.json</code> was saved relative to the <code>harness-lab/</code> folder (saving it elsewhere means it won't be recognized), or ② whether Claude Desktop App was fully restarted in step ②. A JSON syntax error (like a missing comma) causing the settings file to be silently ignored is also common, so open it in an editor and double-check the syntax.
         </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
@@ -832,7 +832,7 @@ EOF</pre>
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Same File, Review Requests with Three Different Models</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — Same File, Review Requests with Three Different Models</div>
         <p class="text-dim" style="margin-bottom:10px;">Prepare a piece of writing that's a bit more complex than G-1's <code>notes.txt</code> and contains a logical flaw. Paste the text below into the chat box as-is.</p>
         <ol class="step-list">
           <li>
@@ -847,7 +847,7 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>② Review with the haiku Tier</strong>
-              <p>Paste the text below into the chat box as-is. Claude App changes the <code>model</code> field in <code>reviewer.md</code> to <code>haiku</code>, then performs the review.</p>
+              <p>Paste the text below into the chat box as-is. Claude Desktop App changes the <code>model</code> field in <code>reviewer.md</code> to <code>haiku</code>, then performs the review.</p>
               <div style="position:relative">
                 <pre class="code-block">Change the model field in .claude/agents/reviewer.md to haiku. Then use the reviewer subagent to review argument.txt.</pre>
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
@@ -879,7 +879,7 @@ EOF</pre>
           For a simple typo check, the results from the three models barely differ, but for a task like this one — where you need to identify a flaw in the structure of an argument — the lower the tier, the more pronounced the tendency to miss the circular reasoning as circular reasoning and instead flag only surface-level phrasing. Conversely, haiku responds fastest of the three. Experiencing the speed-versus-depth trade-off firsthand makes it much clearer why the principle explained in Chapter 5 — "the heavier the judgment a role requires, the higher the tier; the more routine the task, the lower the tier" — exists in the first place.
         </div>
         <div class="tip-box">
-          Just ask Claude App to "change the model field" each time — there's no need to open the definition file yourself; Claude App edits it and performs the review on its own.
+          Just ask Claude Desktop App to "change the model field" each time — there's no need to open the definition file yourself; Claude Desktop App edits it and performs the review on its own.
         </div>
         <div class="warning-box">
           <strong>A Common Failure</strong> — If the <code>model</code> field contains a value that doesn't exist (a typo, wrong capitalization, etc.), the call may fail or silently fall back to a default model. After finishing ②③④, open <code>.claude/agents/reviewer.md</code> directly and confirm the <code>model:</code> value exactly matches the intended <code>haiku</code>/<code>sonnet</code>/<code>opus</code>.

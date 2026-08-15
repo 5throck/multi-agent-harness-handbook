@@ -71,12 +71,12 @@
 
 <header>
   <h1>マルチエージェントチーム・ハーネスエンジニアリング・ワークショップ</h1>
-  <p class="subtitle">プロンプトエンジニアリングからハーネスエンジニアリングへ。Claude Code・Claude App・Antigravity・Antigravity CLIの4つのツールを横断しながら、マルチエージェントチームを自ら設計・運用する2日間の実践ワークショップです。</p>
+  <p class="subtitle">プロンプトエンジニアリングからハーネスエンジニアリングへ。Claude Code・Claude Desktop App・Antigravity・Antigravity CLIの4つのツールを横断しながら、マルチエージェントチームを自ら設計・運用する2日間の実践ワークショップです。</p>
 </header>
 
 <!-- ── 一行要約 ── -->
 <div class="hero">
-  <p><strong>本ワークショップとは?</strong> 「プロンプトエンジニアリングだけでは不十分である」という問題意識から出発し、AIエージェントに<strong>狭い役割を与え</strong>、<strong>オーケストレーターが調整する</strong>マルチエージェントチームの設計方法論を学び、Claude Code・Claude App・Antigravity・Antigravity CLIの4つのツールで実際にサブエージェントを作成し、パイプラインを構築する<strong>2日間にわたる実践ワークショップ</strong>です。</p>
+  <p><strong>本ワークショップとは?</strong> 「プロンプトエンジニアリングだけでは不十分である」という問題意識から出発し、AIエージェントに<strong>狭い役割を与え</strong>、<strong>オーケストレーターが調整する</strong>マルチエージェントチームの設計方法論を学び、Claude Code・Claude Desktop App・Antigravity・Antigravity CLIの4つのツールで実際にサブエージェントを作成し、パイプラインを構築する<strong>2日間にわたる実践ワークショップ</strong>です。</p>
   <p><strong>1日目</strong>は一般ユーザーを対象に、マルチエージェントの概念と実務ツールの実習、既存variantの活用に重点を置きます。<strong>2日目</strong>はITプロフェッショナルを対象に、アーキテクチャの深掘り、ツール比較、企業運用戦略、新規variantの作成からキャップストーンプロジェクトまでを扱います。</p>
 </div>
 
@@ -98,7 +98,7 @@
   </div>
   <div class="obj-card">
     <div class="obj-num">LO-4</div>
-    <strong>実行</strong>Claude Code・Claude App・Antigravity・Antigravity CLIの4つのツールでサブエージェントを定義・呼び出し、順次パイプラインと並列実行を直接実装できます。
+    <strong>実行</strong>Claude Code・Claude Desktop App・Antigravity・Antigravity CLIの4つのツールでサブエージェントを定義・呼び出し、順次パイプラインと並列実行を直接実装できます。
   </div>
   <div class="obj-card">
     <div class="obj-num">LO-5</div>
@@ -154,7 +154,7 @@
 
 <h3>システム要件</h3>
 <div class="chk">☐ 最低5GBの空きディスク容量、管理者/sudo権限</div>
-<div class="chk">☐ Claude App(Desktop)、Claude Code(CLI)、Antigravity(Desktop)、Antigravity CLI(<code>agy</code>)のインストール完了</div>
+<div class="chk">☐ Claude Desktop App、Claude Code(CLI)、Antigravity(Desktop)、Antigravity CLI(<code>agy</code>)のインストール完了</div>
 <div class="chk">☐ <code>bun --version</code>、<code>git --version</code>が正常に出力されることを確認</div>
 <div class="chk">☐ ワークスペースのルート位置に<code>git clone https://github.com/5throck/ai-workspace-standards.git</code>を事前にクローン</div>
 
@@ -177,7 +177,7 @@
 </div>
 <div class="highlight">
   <div class="hl-title">実習環境</div>
-  <p>4つのツール(Claude App、Claude Code、Antigravity Desktop、Antigravity CLI)をすべてインストールした上で、参加者を4つのグループに分け、それぞれ異なるツールで同じシナリオを進めます。最後に結果を比較することで、「ツール比較」の章の内容を直接体感できます。</p>
+  <p>4つのツール(Claude Desktop App、Claude Code、Antigravity Desktop、Antigravity CLI)をすべてインストールした上で、参加者を4つのグループに分け、それぞれ異なるツールで同じシナリオを進めます。最後に結果を比較することで、「ツール比較」の章の内容を直接体感できます。</p>
 </div>
 
 <!-- ────────────────── 5. 講義日程 ────────────────── -->
@@ -324,7 +324,7 @@
   <div class="schedule-time">25分</div>
   <div class="schedule-body">
     <h4>共通参考 · ツール比較(技術的)</h4>
-    <p>4つのツールの構造を一目で把握、Claude App vs Code(サブエージェント定義、teammateMode)、Antigravity vs agy(Agent Manager、/goal・/agent・/agents)、マルチエージェント対応範囲の比較表、実習ツール選択ガイド、AGENTS.mdの統合</p>
+    <p>4つのツールの構造を一目で把握、Claude Desktop App vs Code(サブエージェント定義、teammateMode)、Antigravity vs agy(Agent Manager、/goal・/agent・/agents)、マルチエージェント対応範囲の比較表、実習ツール選択ガイド、AGENTS.mdの統合</p>
     <p><span class="tag tag-lecture">講義</span></p>
   </div>
 </div>
@@ -407,7 +407,7 @@
             <tr><td>設計深掘り</td><td>L0→L1→L2→L3階層構造、ファイル別SSOTの流れ、エージェント・スキル・スクリプトのライフサイクル管理</td><td>第8章 §1、§2</td><td>2日目</td></tr>
                 <tr><td>アップグレード</td><td>既存プロジェクトをL2 variant構造に転換、ファイル処理5分類、スナップショット・ロールバック</td><td>第10章</td><td>2日目</td></tr>
         <tr><td>ワークフロー</td><td>ワークフロー構成要素、5つのドメイン別パターン事例、パターン選択ガイド</td><td>第9章</td><td>2日目</td></tr>
-    <tr><td>ツール</td><td>Claude Code、Claude App、Antigravity、Antigravity CLIの比較分析</td><td>共通参考</td><td>2日目</td></tr>
+    <tr><td>ツール</td><td>Claude Code、Claude Desktop App、Antigravity、Antigravity CLIの比較分析</td><td>共通参考</td><td>2日目</td></tr>
     <tr><td>運用</td><td>サービスチケットモデル vs variantモデル、カンバンベースの運用</td><td>第7章</td><td>2日目</td></tr>
         <tr><td>創出</td><td>新規variant作成(co-marketingプロトタイプ)、昇格パイプライン</td><td>第11章、第12章</td><td>2日目</td></tr>
     <tr><td>統合</td><td>キャップストーン: 自身の業務にマルチエージェントチームを適用する</td><td>第13章</td><td>2日目</td></tr>
@@ -419,7 +419,7 @@
 <h2 id="takeaways"><span class="icon">✅</span>修了後に得られるもの</h2>
 <ul class="takeaway-list">
   <li><strong>マルチエージェントチーム設計力。</strong>単一エージェントからチーム構造への転換設計方法論を体得し、実務にすぐに適用できます。</li>
-  <li><strong>4つのツールでの実践経験。</strong>Claude Code・Claude App・Antigravity・Antigravityコマンドラインインターフェース(CLI)で同じシナリオを自ら実行し、各ツールの長所・短所を体感します。</li>
+  <li><strong>4つのツールでの実践経験。</strong>Claude Code・Claude Desktop App・Antigravity・Antigravityコマンドラインインターフェース(CLI)で同じシナリオを自ら実行し、各ツールの長所・短所を体感します。</li>
   <li><strong>ガードレール設計チェックリスト。</strong>危険作業の分類、最小権限、承認ゲートを含む実務用ガードレール設計テンプレートを持ち帰れます。</li>
   <li><strong>variantプロトタイプ。</strong>ai-workspace-standardsをベースにco-marketingプロトタイプを自ら作成し、組織内でのvariant導入の具体的な出発点を確保します。</li>
   <li><strong>運用モデルの判断基準。</strong>サービスチケットモデルとvariantモデルの長所・短所を比較し、自組織に適した運用戦略を立てられるようになります。</li>

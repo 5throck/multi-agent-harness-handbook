@@ -56,10 +56,10 @@
  <article class="reading">
   <div class="chapter-eyebrow">Cap. 4 §1-A</div>
   <h1>Uso detallado de subagentes (Enfoque en Claude)</h1>
-  <p class="subtitle">Un documento detallado, limitado a la familia Claude, que cubre cómo definir, invocar y escalar subagentes en unidades paralelas y automatizadas en Claude Code / Claude App &nbsp;|&nbsp; Consulte la <a href="04_Practice_Manual_es.html">referencia del Cap. 4 §1</a> para conceptos comunes, y <a href="04_Practice_Manual_B_es.html">Cap. 4 §1-B Enfoque en Antigravity</a> para la familia Antigravity.</p>
+  <p class="subtitle">Un documento detallado, limitado a la familia Claude, que cubre cómo definir, invocar y escalar subagentes en unidades paralelas y automatizadas en Claude Code / Claude Desktop App &nbsp;|&nbsp; Consulte la <a href="04_Practice_Manual_es.html">referencia del Cap. 4 §1</a> para conceptos comunes, y <a href="04_Practice_Manual_B_es.html">Cap. 4 §1-B Enfoque en Antigravity</a> para la familia Antigravity.</p>
 
   <div class="version-box">
-    <div class="version-row"><span class="vlabel">Versión objetivo</span><span class="vvalue">Claude Code / Claude App versión 2026-07 — consulte <a href="04_Practice_Manual_B_es.html">§1-B</a> para el equivalente de Antigravity</span></div>
+    <div class="version-row"><span class="vlabel">Versión objetivo</span><span class="vvalue">Claude Code / Claude Desktop App versión 2026-07 — consulte <a href="04_Practice_Manual_B_es.html">§1-B</a> para el equivalente de Antigravity</span></div>
     <div class="version-row"><span class="vlabel">URL del documento de referencia</span><span class="vvalue"><a href="https://code.claude.com/docs/en/sub-agents" target="_blank">code.claude.com/docs/en/sub-agents</a></span></div>
     <div class="version-row"><span class="vlabel">Fecha de recopilación del documento</span><span class="vvalue">2026-07-14</span></div>
     <div class="version-row"><span class="vlabel">Cómo verificar la versión</span><span class="vvalue">Claude Code/App: <code>claude --version</code></span></div>
@@ -70,11 +70,11 @@
   <!-- ── Section 1 ── -->
   <h2 id="section-1">1. Definición de subagentes</h2>
 
-  <p>Claude App y Claude Code predefinen un único subagente utilizando un archivo Markdown colocado en la carpeta del proyecto. <strong>Claude App y Claude Code comparten los mismos archivos</strong> — ambos reconocen <code>.claude/agents/*.md</code> exactamente de la misma manera.</p>
+  <p>Claude Desktop App y Claude Code predefinen un único subagente utilizando un archivo Markdown colocado en la carpeta del proyecto. <strong>Claude Desktop App y Claude Code comparten los mismos archivos</strong> — ambos reconocen <code>.claude/agents/*.md</code> exactamente de la misma manera.</p>
 
   <div class="platform-block claudeapp">
-    <h3><span class="badge badge-claudeapp">Claude App (Escritorio)</span> .claude/agents/*.md</h3>
-    <p>Colocar un archivo Markdown en la carpeta <code>.claude/agents/</code> de la raíz del proyecto se reconoce automáticamente como un subagente personalizado en Claude App. El <code>name</code> se convierte en el identificador referenciado posteriormente como <code>subagent_type</code>. <strong>El mismo archivo funciona exactamente igual en Claude Code (CLI)</strong> — ambos comparten el mismo formato de definición de subagente.</p>
+    <h3><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> .claude/agents/*.md</h3>
+    <p>Colocar un archivo Markdown en la carpeta <code>.claude/agents/</code> de la raíz del proyecto se reconoce automáticamente como un subagente personalizado en Claude Desktop App. El <code>name</code> se convierte en el identificador referenciado posteriormente como <code>subagent_type</code>. <strong>El mismo archivo funciona exactamente igual en Claude Code (CLI)</strong> — ambos comparten el mismo formato de definición de subagente.</p>
     <div style="position:relative">
   <pre class="code-block">---
 name: reviewer
@@ -91,13 +91,13 @@ y presenta una lista de mejoras.</pre>
   </div>
 
   <div class="platform-block claude">
-    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Mismo .claude/agents/*.md que Claude App</h3>
-    <p>Reconoce exactamente los mismos archivos <code>.claude/agents/*.md</code> escritos para Claude App, tal cual. No hay diferencia en cómo se definen los subagentes entre la aplicación de escritorio y el CLI.</p>
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Mismo .claude/agents/*.md que Claude Desktop App</h3>
+    <p>Reconoce exactamente los mismos archivos <code>.claude/agents/*.md</code> escritos para Claude Desktop App, tal cual. No hay diferencia en cómo se definen los subagentes entre la aplicación de escritorio y el CLI.</p>
   </div>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Campo del frontmatter</th><th>Claude App / Claude Code (.claude/agents)</th></tr></thead>
+    <thead><tr><th>Campo del frontmatter</th><th>Claude Desktop App / Claude Code (.claude/agents)</th></tr></thead>
     <tbody>
       <tr>
         <td><code>name</code></td>
@@ -124,11 +124,11 @@ y presenta una lista de mejoras.</pre>
   <!-- ── Section 2 ── -->
   <h2 id="section-2">2. Invocación/delegación a subagentes</h2>
 
-  <p>Tanto Claude App como Claude Code invocan la herramienta <code>Agent</code> (también denominada herramienta <code>Task</code> en la documentación) para iniciar un subagente con su propio contexto separado.</p>
+  <p>Tanto Claude Desktop App como Claude Code invocan la herramienta <code>Agent</code> (también denominada herramienta <code>Task</code> en la documentación) para iniciar un subagente con su propio contexto separado.</p>
 
   <div class="platform-block claudeapp">
-    <h3><span class="badge badge-claudeapp">Claude App (Escritorio)</span> Herramienta Agent(Task)</h3>
-    <p>En Claude App también, la sesión principal invoca la herramienta <code>Agent</code> (también denominada <code>Task</code> en la documentación) para iniciar un subagente con su propio contexto separado. Dado que el subagente no puede ver el historial de conversación de la sesión principal, el <code>prompt</code> debe contener de forma autosuficiente toda la información necesaria. <strong>Claude Code (CLI) utiliza exactamente la misma herramienta <code>Agent</code>/<code>Task</code></strong> — cuando realiza una solicitud en lenguaje natural en la ventana de chat, se invoca internamente de forma similar a la que se muestra a continuación.</p>
+    <h3><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> Herramienta Agent(Task)</h3>
+    <p>En Claude Desktop App también, la sesión principal invoca la herramienta <code>Agent</code> (también denominada <code>Task</code> en la documentación) para iniciar un subagente con su propio contexto separado. Dado que el subagente no puede ver el historial de conversación de la sesión principal, el <code>prompt</code> debe contener de forma autosuficiente toda la información necesaria. <strong>Claude Code (CLI) utiliza exactamente la misma herramienta <code>Agent</code>/<code>Task</code></strong> — cuando realiza una solicitud en lenguaje natural en la ventana de chat, se invoca internamente de forma similar a la que se muestra a continuación.</p>
     <div style="position:relative">
   <pre class="code-block">Agent(
   description   = "Revisar módulo de autenticación",
@@ -141,8 +141,8 @@ y presenta una lista de mejoras.</pre>
   </div>
 
   <div class="platform-block claude">
-    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Misma herramienta Agent(Task) que Claude App</h3>
-    <p>Es exactamente el mismo método de invocación de la herramienta <code>Agent</code>/<code>Task</code> que Claude App. Realizar una solicitud en lenguaje natural en la terminal inicia un subagente de la misma manera.</p>
+    <h3><span class="badge badge-claude">Claude Code (CLI)</span> — Misma herramienta Agent(Task) que Claude Desktop App</h3>
+    <p>Es exactamente el mismo método de invocación de la herramienta <code>Agent</code>/<code>Task</code> que Claude Desktop App. Realizar una solicitud en lenguaje natural en la terminal inicia un subagente de la misma manera.</p>
   </div>
 
   <hr>
@@ -153,8 +153,8 @@ y presenta una lista de mejoras.</pre>
   <p>La familia Claude admite ejecución en paralelo de dos maneras.</p>
 
   <div class="platform-block claudeapp">
-    <h3><span class="badge badge-claudeapp">Claude App (Escritorio)</span> Equipos de agentes — en proceso</h3>
-    <p>Activar la función experimental de equipos de agentes en Claude App permite que múltiples compañeros de equipo trabajen en paralelo. Sin embargo, la aplicación de escritorio solo admite <code>teammateMode: in-process</code>, y algunas navegaciones por teclado (como Shift+Abajo) están restringidas. <strong>Claude Code (CLI) también admite el mismo modo <code>in-process</code></strong>, y adicionalmente el CLI permite elegir el modo <code>tmux</code>, que utiliza paneles divididos de tmux.</p>
+    <h3><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> Equipos de agentes — en proceso</h3>
+    <p>Activar la función experimental de equipos de agentes en Claude Desktop App permite que múltiples compañeros de equipo trabajen en paralelo. Sin embargo, la aplicación de escritorio solo admite <code>teammateMode: in-process</code>, y algunas navegaciones por teclado (como Shift+Abajo) están restringidas. <strong>Claude Code (CLI) también admite el mismo modo <code>in-process</code></strong>, y adicionalmente el CLI permite elegir el modo <code>tmux</code>, que utiliza paneles divididos de tmux.</p>
   </div>
 
   <div class="warning-box">Ejecutar múltiples agentes simultáneamente en el mismo directorio o espacio de trabajo puede causar "superposición cognitiva" — un problema donde un agente confunde (alucina) los resultados de otro agente que trabaja en la misma carpeta como su propio contexto de trabajo. Separar agentes por directorio de trabajo o worktree es la práctica recomendada.</div>
@@ -173,7 +173,7 @@ Agent(description="Verificar cobertura de pruebas",
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Elemento</th><th>Claude App (Escritorio)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>Elemento</th><th>Claude Desktop App (Escritorio)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td>Unidad de ejecución en paralelo</td>
@@ -192,8 +192,8 @@ Agent(description="Verificar cobertura de pruebas",
   <p>En la familia Claude, la diferencia en automatización y ganchos radica entre App y Code.</p>
 
   <div class="platform-block claudeapp">
-    <h3><span class="badge badge-claudeapp">Claude App (Escritorio)</span> — Los ganchos no se activan</h3>
-    <p>Incluso si define ganchos <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> en <code>.claude/settings.json</code>, no se activan automáticamente en Claude App. Lo que el gancho habría hecho (por ejemplo, ejecutar un script de auditoría) debe ejecutarse manualmente después de que termine la sesión. <strong>En Claude Code (CLI), los ganchos del mismo archivo de configuración se activan automáticamente en respuesta a eventos</strong> — los equipos que necesiten una puerta de automatización deberían elegir razonablemente la interfaz de línea de comandos (CLI) en este punto.</p>
+    <h3><span class="badge badge-claudeapp">Claude Desktop App (Escritorio)</span> — Los ganchos no se activan</h3>
+    <p>Incluso si define ganchos <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> en <code>.claude/settings.json</code>, no se activan automáticamente en Claude Desktop App. Lo que el gancho habría hecho (por ejemplo, ejecutar un script de auditoría) debe ejecutarse manualmente después de que termine la sesión. <strong>En Claude Code (CLI), los ganchos del mismo archivo de configuración se activan automáticamente en respuesta a eventos</strong> — los equipos que necesiten una puerta de automatización deberían elegir razonablemente la interfaz de línea de comandos (CLI) en este punto.</p>
   </div>
 
   <div class="platform-block claude">

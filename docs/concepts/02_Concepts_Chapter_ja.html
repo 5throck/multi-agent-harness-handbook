@@ -384,7 +384,7 @@
 
   <h3>サブエージェントを使うべき場面</h3>
   <p>すべてのタスクをサブエージェントに分割する必要はありません。適しているのは、境界が明確な（入力と出力がはっきりしている）タスクで、かつ反復的または並列化可能なもの — コードレビュー、テストの実行、ドキュメントレビューなどです。逆に、メインセッションと継続的にコンテキストを交換し続ける探索的な作業は、サブエージェントに切り出すとハンドオフのオーバーヘッドがかえって大きくなります。</p>
-  <div class="note">サブエージェントは、スペシャリストの「役割」という概念を実際のツールで実行可能にする「実装」です。第4章では、Claude App/Antigravity Desktopを中心に、この定義方法と呼び出し方法を実際に手作りします。</div>
+  <div class="note">サブエージェントは、スペシャリストの「役割」という概念を実際のツールで実行可能にする「実装」です。第4章では、Claude Desktop App/Antigravity Desktopを中心に、この定義方法と呼び出し方法を実際に手作りします。</div>
 
   <h2 id="s4">オーケストレーションパターン</h2>
   <p>Anthropicが2024年12月の「Building Effective Agents」で示した5つのワークフローパターンが、実務で最も広く使われています：プロンプトチェーン（パイプライン）、ルーティング、並列化（セクショニング/投票）、オーケストレーター・ワーカー、評価者・最適化（検証後適用）。5つのパターンは排他的な選択肢ではなく、「タスク間に依存があるか」「サブタスクを事前に予測できるか」「検証が必要か」という判断基準に基づいて選択・組み合わせるツールボックスです。</p>
@@ -628,7 +628,7 @@
   <p>これまで解説したオーケストレーター、スペシャリスト、ハンドオフは、特定のツールに結びついた概念ではありません。問題は、各ツールがこのハーネスを異なる方法で設定していたことです。Claude Codeは<code>CLAUDE.md</code>を読み、Cursorは<code>.cursorrules</code>を読み、GitHub Copilotは<code>.github/copilot-instructions.md</code>を読みます — 複数のツールを併用するチームは、同じ内容を各ファイルに重複して維持する必要がありました。</p>
   <p>同じ内容（例：「常に<code>npm test</code>でテストを実行し、<code>src/legacy/</code>フォルダは変更しない」）をチームが使うツールごとに（CLAUDE.md、.cursorrules、copilot-instructions.md...）コピーすると、ルール変更のたびにすべてのファイルを見つけて編集する必要があり、一つでも見落とせばそのツールを使う人は別のルールの下で作業することになります。これは、同じ契約を複数の言語に別々に翻訳して保持し、一部だけが修正されたときに版が食い違うのと同じ問題です。</p>
   <p><strong>AGENTS.md</strong>は、この問題を解決するために2025年8月にOpenAI主導でGoogle、Cursor、Factoryなどの参加を得て作成されたオープン規格で、2025年12月にはLinux Foundation傘下のAgentic AI Foundationに寄贈されました。リポジトリのルートに単一のAGENTS.mdを配置するだけで、Codex、Claude Code（インポート経由）、GitHub Copilot、Cursor、Google Jules、Antigravityファミリーなど30以上のツールがセッション開始時にこれを読み取り、ビルド/テストコマンド、コードスタイル、アクセス禁止領域などの共通ルールを共有できます。</p>
-  <p>本ハンドブックが「4つのツールすべてをサポートする」と強調し続けている理由も、まさに同じ問題意識に由来します。チームがClaude Appを使ってもAntigravity Desktopを使っても、共通ルールをリポジトリルート（AGENTS.md）に置き、ツール固有の詳細設定（<code>CLAUDE.md</code>、<code>GEMINI.md</code>など）と分離しておけば、ツールを切り替えたり混用したりしてもハーネス自体は安定します。第5章で検討するai-workspace-standardsリポジトリは、この原理の実際の実装です。ルートの<code>AGENTS.md</code>ファイルがワークスペース内のすべてのエージェントの単一の信頼できる情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>や<code>.gemini/</code>と並んで、エンジンに依存しないコマンドとスキルを保持します。</p>
+  <p>本ハンドブックが「4つのツールすべてをサポートする」と強調し続けている理由も、まさに同じ問題意識に由来します。チームがClaude Desktop Appを使ってもAntigravity Desktopを使っても、共通ルールをリポジトリルート（AGENTS.md）に置き、ツール固有の詳細設定（<code>CLAUDE.md</code>、<code>GEMINI.md</code>など）と分離しておけば、ツールを切り替えたり混用したりしてもハーネス自体は安定します。第5章で検討するai-workspace-standardsリポジトリは、この原理の実際の実装です。ルートの<code>AGENTS.md</code>ファイルがワークスペース内のすべてのエージェントの単一の信頼できる情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>や<code>.gemini/</code>と並んで、エンジンに依存しないコマンドとスキルを保持します。</p>
   <div class="diagram-frame">
     <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
@@ -680,7 +680,7 @@
 
   <div class="note">AGENTS.mdはツールに依存しない形で「何を守るべきか」を定義し、CLAUDE.md/GEMINI.mdなどのツール固有ファイルは「この特定のツールでそれをどう実行するか」だけを追加的に定義します。重複を減らす階層的分離です。</div>
 
-  <p>次の章に進む前に、このチームに実際のツールを渡す際に必要な安全装置について解説します。第3章では、サブエージェントに対して何を許可し何をブロックすべきか、そして人間がどこで必ず確認しなければならないかを解説します。その後、第4章ではClaude App/Antigravity Desktopを中心に（Claude Code/Antigravity CLIの手順も併記して）、オーケストレーター、スペシャリスト、ハンドオフがツールごとにどう現れるかをハンズオンで構築します。</p>
+  <p>次の章に進む前に、このチームに実際のツールを渡す際に必要な安全装置について解説します。第3章では、サブエージェントに対して何を許可し何をブロックすべきか、そして人間がどこで必ず確認しなければならないかを解説します。その後、第4章ではClaude Desktop App/Antigravity Desktopを中心に（Claude Code/Antigravity CLIの手順も併記して）、オーケストレーター、スペシャリスト、ハンドオフがツールごとにどう現れるかをハンズオンで構築します。</p>
 
   <div class="chapter-nav">
     <a href="../intro/01_Why_AI_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">1章 · 導入</div></a>

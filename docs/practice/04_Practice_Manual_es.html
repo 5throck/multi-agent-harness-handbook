@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">Capítulo 4 §1</div>
   <h1>Capítulo 4 §1 · Uso de equipos multiagente basados en arnés</h1>
-  <p class="subtitle">Una referencia comparativa para definir, invocar y escalar subagentes en unidades paralelas/automatizadas a través de cuatro herramientas — Claude Code / Claude App / Antigravity CLI / Antigravity (Escritorio) &nbsp;|&nbsp; Documentación oficial: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagentes</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Primeros pasos</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Uso</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Administrador de agentes</a></p>
+  <p class="subtitle">Una referencia comparativa para definir, invocar y escalar subagentes en unidades paralelas/automatizadas a través de cuatro herramientas — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity (Escritorio) &nbsp;|&nbsp; Documentación oficial: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagentes</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Primeros pasos</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Uso</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Administrador de agentes</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">Versión objetivo</span><span class="vvalue">Claude Code versión 2026-07 / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
@@ -66,18 +66,18 @@
   <pre>
 Uso de equipos multiagente basados en arnés (basado en la aplicación de escritorio, con CLI como alternativa equivalente)
 ├── Definición de subagentes
-│   ├── Claude App / Claude Code    .claude/agents/*.md (frontmatter YAML, predefinidos — igual para ambos)
+│   ├── Claude Desktop App / Claude Code    .claude/agents/*.md (frontmatter YAML, predefinidos — igual para ambos)
 │   └── Antigravity(Escritorio) / CLI  Sin archivo de definición — el orquestador crea subagentes dinámicamente según el objetivo
 ├── Invocación/delegación de subagentes
-│   ├── Claude App / Claude Code    Herramienta Agent(Task) — description / prompt / subagent_type
+│   ├── Claude Desktop App / Claude Code    Herramienta Agent(Task) — description / prompt / subagent_type
 │   └── Antigravity(Escritorio)/CLI    Interfaz del Administrador de agentes (Escritorio) · /goal, /agent, panel /agents (CLI)
 ├── Ejecución en paralelo
-│   ├── Claude App                  Equipos de agentes (solo en proceso)
+│   ├── Claude Desktop App                  Equipos de agentes (solo en proceso)
 │   ├── Claude Code                 Equipos de agentes (en proceso/tmux) + múltiples llamadas Agent en un mensaje
 │   ├── Antigravity Escritorio       Administrador de agentes — agentes por espacio de trabajo (Modo Local/Nuevo Worktree)
 │   └── Antigravity CLI             Subagentes en paralelo dentro de una sesión + en paralelo entre sesiones (múltiples terminales)
 └── Automatización/ganchos
-    ├── Claude App                  Los ganchos no se activan — se requiere ejecución manual
+    ├── Claude Desktop App                  Los ganchos no se activan — se requiere ejecución manual
     ├── Claude Code                 Ganchos PostToolUse/TeammateIdle/TaskCompleted se activan automáticamente
     ├── Antigravity Escritorio       No aplicable — centrado en la GUI
     └── Antigravity CLI             agy -p "prompt" (para CI no interactivo), agy inspect (verificar configuración)
@@ -134,7 +134,7 @@ Uso de equipos multiagente basados en arnés (basado en la aplicación de escrit
   <!-- ── Section 1 ── -->
   <h2 id="section-1">1. Definición de subagentes — Predefinidos vs. creación dinámica</h2>
 
-  <p>La familia Anthropic (Claude App/Claude Code) predefine cada subagente como un único archivo markdown en la carpeta del proyecto. La familia Google (Antigravity Escritorio/CLI) no tiene un archivo de definición separado — el orquestador crea subagentes al vuelo según el objetivo dado. A continuación, cubriremos primero Claude App y Antigravity(Escritorio) como base, y luego presentaremos el equivalente de CLI de cada uno.</p>
+  <p>La familia Anthropic (Claude Desktop App/Claude Code) predefine cada subagente como un único archivo markdown en la carpeta del proyecto. La familia Google (Antigravity Escritorio/CLI) no tiene un archivo de definición separado — el orquestador crea subagentes al vuelo según el objetivo dado. A continuación, cubriremos primero Claude Desktop App y Antigravity(Escritorio) como base, y luego presentaremos el equivalente de CLI de cada uno.</p>
 
   <p >
     El método concreto de definición/invocación para la familia Claude se cubre en <a href="04_Practice_Manual_A_es.html">§1-A Centrado en Claude</a>,
@@ -143,7 +143,7 @@ Uso de equipos multiagente basados en arnés (basado en la aplicación de escrit
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Campo del frontmatter</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Escritorio/CLI)</th></tr></thead>
+    <thead><tr><th>Campo del frontmatter</th><th>Claude Desktop App / Claude Code (.claude/agents)</th><th>Antigravity (Escritorio/CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td><code>name</code></td>
@@ -166,14 +166,14 @@ Uso de equipos multiagente basados en arnés (basado en la aplicación de escrit
   </table>
   </div>
 
-  <div class="warning-box">Antigravity (Escritorio/CLI) no tiene en absoluto el concepto de "archivo de definición de subagente" — forzar un ejercicio introductorio que replique el ejemplo <code>reviewer.md</code> de Claude App/Code en Antigravity sería una tergiversación de los hechos. El "ejercicio introductorio" para Antigravity no consiste en crear un archivo, sino en darle un objetivo y observar cómo el orquestador descompone el trabajo por sí solo.</div>
+  <div class="warning-box">Antigravity (Escritorio/CLI) no tiene en absoluto el concepto de "archivo de definición de subagente" — forzar un ejercicio introductorio que replique el ejemplo <code>reviewer.md</code> de Claude Desktop App/Code en Antigravity sería una tergiversación de los hechos. El "ejercicio introductorio" para Antigravity no consiste en crear un archivo, sino en darle un objetivo y observar cómo el orquestador descompone el trabajo por sí solo.</div>
 
   <hr>
 
   <!-- ── Section 2 ── -->
   <h2 id="section-2">2. Invocación/delegación de subagentes</h2>
 
-  <p>La familia Anthropic (Claude App/Claude Code) inicia un subagente en un contexto separado utilizando la herramienta <code>Agent</code>/<code>Task</code>. La familia Google (Antigravity Escritorio/CLI) delega un objetivo a un agente a través de la interfaz del Administrador de agentes o comandos de barra diagonal.</p>
+  <p>La familia Anthropic (Claude Desktop App/Claude Code) inicia un subagente en un contexto separado utilizando la herramienta <code>Agent</code>/<code>Task</code>. La familia Google (Antigravity Escritorio/CLI) delega un objetivo a un agente a través de la interfaz del Administrador de agentes o comandos de barra diagonal.</p>
 
   <p >
     El método concreto de invocación para la familia Claude se cubre en <a href="04_Practice_Manual_A_es.html#section-2">§1-A Sección 2</a>,
@@ -196,7 +196,7 @@ Uso de equipos multiagente basados en arnés (basado en la aplicación de escrit
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Elemento</th><th>Antigravity (Escritorio)</th><th>Claude App (Escritorio)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>Elemento</th><th>Antigravity (Escritorio)</th><th>Claude Desktop App (Escritorio)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td>Unidad de ejecución en paralelo</td>
@@ -214,7 +214,7 @@ Uso de equipos multiagente basados en arnés (basado en la aplicación de escrit
   <!-- ── Section 4 ── -->
   <h2 id="section-4">4. Automatización/ganchos — Lo que se ejecuta automáticamente</h2>
 
-  <p>Claude Code (CLI) activa automáticamente ganchos de eventos (PostToolUse/TeammateIdle/TaskCompleted), pero Claude App y Antigravity Escritorio no activan ganchos automáticamente. La interfaz de línea de comandos (CLI) de Antigravity proporciona ejecución no interactiva a través de <code>agy -p</code> e inspección de configuración a través de <code>agy inspect</code>.</p>
+  <p>Claude Code (CLI) activa automáticamente ganchos de eventos (PostToolUse/TeammateIdle/TaskCompleted), pero Claude Desktop App y Antigravity Escritorio no activan ganchos automáticamente. La interfaz de línea de comandos (CLI) de Antigravity proporciona ejecución no interactiva a través de <code>agy -p</code> e inspección de configuración a través de <code>agy inspect</code>.</p>
 
   <p >
     Los detalles sobre automatización/ganchos para la familia Claude se cubren en <a href="04_Practice_Manual_A_es.html#section-4">§1-A Sección 4</a>,

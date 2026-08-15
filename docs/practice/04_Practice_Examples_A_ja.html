@@ -88,11 +88,11 @@
  <article class="reading">
   <div class="chapter-eyebrow">4章 §2-A</div>
   <h1>4章 §2-A・マルチエージェントチーム実習 (Claude中心)</h1>
-  <p class="subtitle">空の実習フォルダから始めてClaude App/Claude Codeを中心にシナリオを体験する実習ガイド — Desktopアプリを基準に案内し、CLI対応を続けて紹介する &nbsp;|&nbsp; <a href="04_Practice_Manual_ja.html">← 4章 §1 リファレンス文書に戻る</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_ja.html">4章 §2-B Antigravity中心 →</a></p>
+  <p class="subtitle">空の実習フォルダから始めてClaude Desktop App/Claude Codeを中心にシナリオを体験する実習ガイド — Desktopアプリを基準に案内し、CLI対応を続けて紹介する &nbsp;|&nbsp; <a href="04_Practice_Manual_ja.html">← 4章 §1 リファレンス文書に戻る</a> &nbsp;|&nbsp; <a href="04_Practice_Examples_B_ja.html">4章 §2-B Antigravity中心 →</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">対象バージョン/範囲</span><span class="vvalue">Claude Code/App 2026-07リリース — Claudeを中心に案内し、Antigravity対応は4章 §2-Bを参照</span></div>
-    <div class="version-row"><span class="vlabel">このファイルの目的</span><span class="vvalue">サブエージェント定義・呼び出し、順次パイプライン、動的チーム構成・ワークフロー組み合わせ、並列実行、モデルティア比較をClaude App/Codeで手を動かして体験する5段階の実習を提供</span></div>
+    <div class="version-row"><span class="vlabel">このファイルの目的</span><span class="vvalue">サブエージェント定義・呼び出し、順次パイプライン、動的チーム構成・ワークフロー組み合わせ、並列実行、モデルティア比較をClaude Desktop App/Codeで手を動かして体験する5段階の実習を提供</span></div>
     <div class="version-row"><span class="vlabel">リファレンス文書</span><span class="vvalue"><a href="04_Practice_Manual_ja.html">4章 §1 共通</a> · <a href="04_Practice_Manual_A_ja.html">4章 §1-A Claude詳細</a> · <a href="04_Practice_Manual_B_ja.html">4章 §1-B Antigravity詳細</a> — 各シナリオでリンクで接続されます</span></div>
     <div class="version-row"><span class="vlabel">作成日</span><span class="vvalue">2026年7月14日</span></div>
   </div>
@@ -103,7 +103,7 @@
 
   <!-- ══════════════════════════════ 実習前準備 ══════════════════════════════ -->
   <h2 id="setup">準備: 必要なプログラムのインストール</h2>
-  <p>以下の実習はClaude App(Desktop)とClaude Code(CLI)を中心に進められます。ローカル環境にこれらのツールがまだない場合は、このハンドブックに同梱されている環境設定自動化ツールである<a href="../setup/SETUP_ja.html">セットアップガイド</a>が、この章の実習に正確に必要な構成を自動的にインストールします。案内に従ってスクリプトをダウンロードし、ローカルで実行すればよいです。</p>
+  <p>以下の実習はClaude Desktop AppとClaude Code(CLI)を中心に進められます。ローカル環境にこれらのツールがまだない場合は、このハンドブックに同梱されている環境設定自動化ツールである<a href="../setup/SETUP_ja.html">セットアップガイド</a>が、この章の実習に正確に必要な構成を自動的にインストールします。案内に従ってスクリプトをダウンロードし、ローカルで実行すればよいです。</p>
 
   <div class="platform-block" >
     <div class="platform-block-title">📦 インストール前の確認事項</div>
@@ -168,7 +168,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 
-  <p>このプロジェクトがインストールするツールのうち、この章の4ツール実習と直接関連するものは以下の通りです。Claude App(Desktop)、<code>claude</code>(Claude Code CLI)、Antigravity(Desktop)、<code>agy</code>(Antigravity CLI)、および<code>.claude/agents/*.md</code>ベースのサブエージェント実行に必要な<code>bun</code>、以降の章で使用される<code>gh</code>(GitHub CLI)まで一緒にインストールされます。</p>
+  <p>このプロジェクトがインストールするツールのうち、この章の4ツール実習と直接関連するものは以下の通りです。Claude Desktop App、<code>claude</code>(Claude Code CLI)、Antigravity(Desktop)、<code>agy</code>(Antigravity CLI)、および<code>.claude/agents/*.md</code>ベースのサブエージェント実行に必要な<code>bun</code>、以降の章で使用される<code>gh</code>(GitHub CLI)まで一緒にインストールされます。</p>
 
   <div class="tip-box">
     Antigravity CLI(<code>agy</code>)は別途ランタイムインストールが必要ない単一コンパイルバイナリです — 解凍後にPATHに入れるだけで即座に実行できます。古い資料に残っている「Geminiコマンドラインインターフェース(CLI)をnpmでグローバルインストール」のような案内はもはや有効ではありません。最新のインストール方法は<a href="https://antigravity.google/docs/cli/getting-started" target="_blank">antigravity.google/docs/cli/getting-started</a>で確認してください。
@@ -182,7 +182,7 @@ cd ./setup && bash setup-linux.sh</pre>
   <div class="level-header" id="beginner">
     <span class="badge badge-g">● 初級</span>
     <span class="level-title level-title-g">Getting Started</span>
-    <span class="level-desc">カスタムサブエージェントを一つ作成し、Claude Appで呼び出しを観察する最初のステップ</span>
+    <span class="level-desc">カスタムサブエージェントを一つ作成し、Claude Desktop Appで呼び出しを観察する最初のステップ</span>
   </div>
 
   <div class="scenario-card" id="scenario-1">
@@ -194,7 +194,7 @@ cd ./setup && bash setup-linux.sh</pre>
     <div class="card-body">
 
       <div class="situation">
-        ハーネスを初めて使用する開発者が実習専用の空フォルダ<code>harness-lab/</code>を新規作成し、<code>reviewer</code>役割をツール中立的な<code>AGENTS.md</code>仕様として先に記述した後、Claude App(Desktop)で事前定義サブエージェントとして「実装」して呼び出してみます。このフォルダは実習専用のため、他のプロジェクトファイルと混ざりません。
+        ハーネスを初めて使用する開発者が実習専用の空フォルダ<code>harness-lab/</code>を新規作成し、<code>reviewer</code>役割をツール中立的な<code>AGENTS.md</code>仕様として先に記述した後、Claude Desktop Appで事前定義サブエージェントとして「実装」して呼び出してみます。このフォルダは実習専用のため、他のプロジェクトファイルと混ざりません。
       </div>
 
       <div class="cmd-list">
@@ -251,13 +251,13 @@ Permissions: Read-only — does not directly modify files.
       </ol>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — AGENTS.md仕様を事前定義サブエージェントとして実装</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — AGENTS.md仕様を事前定義サブエージェントとして実装</div>
         <p class="text-dim" style="margin-bottom:10px;">ターミナルや別のエディタで事前にファイルを作成しません。以下の3ステップをそのまま実行します — 灰色のコードボックスはすべて「コピー」ボタンでそのままコピーして貼り付ければよい内容です。</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
-              <strong>① Claude Appでプロジェクトを開く</strong>
-              <p>Claude App(Desktop)を実行し、さっき作成した<code>harness-lab/</code>フォルダをプロジェクトとして開きます。</p>
+              <strong>① Claude Desktop Appでプロジェクトを開く</strong>
+              <p>Claude Desktop Appを実行し、さっき作成した<code>harness-lab/</code>フォルダをプロジェクトとして開きます。</p>
             </div>
           </li>
           <li>
@@ -268,7 +268,7 @@ Permissions: Read-only — does not directly modify files.
                 <button class="copy-btn" onclick="copyCode(this)">コピー</button>
               </div>
               <div class="flow-box">
-                Claude AppはAGENTS.mdの「役割/入力/出力/権限」仕様を読み取り、その内容を<code>.claude/agents/reviewer.md</code>のYAML frontmatter(<code>description</code>、<code>tools</code>)とシステムプロンプトに移してWriteツールで直接生成します。仕様はそのままで、表現形式だけがツールに合わせて変わったのです — 生成が終わったら、チャットに表示されたファイル内容をAGENTS.mdと比較してみてください。
+                Claude Desktop AppはAGENTS.mdの「役割/入力/出力/権限」仕様を読み取り、その内容を<code>.claude/agents/reviewer.md</code>のYAML frontmatter(<code>description</code>、<code>tools</code>)とシステムプロンプトに移してWriteツールで直接生成します。仕様はそのままで、表現形式だけがツールに合わせて変わったのです — 生成が終わったら、チャットに表示されたファイル内容をAGENTS.mdと比較してみてください。
               </div>
             </div>
           </li>
@@ -280,7 +280,7 @@ Permissions: Read-only — does not directly modify files.
                 <button class="copy-btn" onclick="copyCode(this)">コピー</button>
               </div>
               <div class="flow-box">
-                Claude Appは<code>Agent</code>(Task)ツールを<code>description="notes.txtのレビュー"</code>、<code>subagent_type="reviewer"</code>で呼び出します。画面にはサブエージェントがスポーンされる過程と、作業を終えた後にメインセッションに戻る要約結果が順番に表示されます。
+                Claude Desktop Appは<code>Agent</code>(Task)ツールを<code>description="notes.txtのレビュー"</code>、<code>subagent_type="reviewer"</code>で呼び出します。画面にはサブエージェントがスポーンされる過程と、作業を終えた後にメインセッションに戻る要約結果が順番に表示されます。
               </div>
             </div>
           </li>
@@ -315,7 +315,7 @@ Permissions: Read-only — does not directly modify files.
     <div class="card-body">
 
       <div class="situation">
-        G-1を終えた実務者が同じ<code>harness-lab/</code>フォルダで、二つ目の役割<code>writer</code>もG-1と同じ方式で<code>AGENTS.md</code>に先に仕様を記述した後、Claude Appに事前定義サブエージェントとして実装します。writerが先に草稿を書き、reviewerがその結果を批評するパイプラインを順序を守って指揮させます。
+        G-1を終えた実務者が同じ<code>harness-lab/</code>フォルダで、二つ目の役割<code>writer</code>もG-1と同じ方式で<code>AGENTS.md</code>に先に仕様を記述した後、Claude Desktop Appに事前定義サブエージェントとして実装します。writerが先に草稿を書き、reviewerがその結果を批評するパイプラインを順序を守って指揮させます。
       </div>
 
       <div class="note">
@@ -401,7 +401,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
       </ol>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — メインセッションがAgent呼び出しを順次ディスパッチ</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — メインセッションがAgent呼び出しを順次ディスパッチ</div>
         <p class="text-dim" style="margin-bottom:10px;">G-1と同様にファイルを事前に準備しません。G-1で開いておいた同じ<code>harness-lab/</code>チャットで続けて進めます。</p>
         <ol class="step-list">
           <li>
@@ -412,7 +412,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
                 <button class="copy-btn" onclick="copyCode(this)">コピー</button>
               </div>
               <div class="flow-box">
-                Claude AppはAGENTS.mdのwriter仕様を読み取り、Writeツールで<code>.claude/agents/writer.md</code>を直接生成します。G-1で既に作成しておいた<code>reviewer.md</code>と同じ<code>.claude/agents/</code>フォルダ内に並んで配置されます — AGENTS.mdの<code>handoff_to: reviewer</code>が次のステップで実際に繋がります。
+                Claude Desktop AppはAGENTS.mdのwriter仕様を読み取り、Writeツールで<code>.claude/agents/writer.md</code>を直接生成します。G-1で既に作成しておいた<code>reviewer.md</code>と同じ<code>.claude/agents/</code>フォルダ内に並んで配置されます — AGENTS.mdの<code>handoff_to: reviewer</code>が次のステップで実際に繋がります。
               </div>
             </div>
           </li>
@@ -542,7 +542,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 同じチーム、異なるリクエスト三回</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — 同じチーム、異なるリクエスト三回</div>
         <p class="text-dim" style="margin-bottom:10px;">D-1を終えた同じチャットで続けて進めます。毎回どのサブエージェントが何回呼び出されるか、画面に表示される過程に注目します。</p>
         <ol class="step-list">
           <li>
@@ -614,7 +614,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — Agent Teams、teammateMode: in-process</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — Agent Teams、teammateMode: in-process</div>
         <p class="text-dim" style="margin-bottom:10px;">同じ<code>harness-lab/</code>フォルダで実験的機能であるAgent Teamsを有効化します。Desktop Appでは<code>teammateMode</code>は必ず<code>in-process</code>でなければなりません（<code>tmux</code>はサポートされていません）。</p>
         <ol class="step-list">
           <li>
@@ -651,8 +651,8 @@ EOF</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>② Claude Appの再起動</strong>
-              <p>設定を適用するには、Claude Appを完全に終了してから再度開きます。</p>
+              <strong>② Claude Desktop Appの再起動</strong>
+              <p>設定を適用するには、Claude Desktop Appを完全に終了してから再度開きます。</p>
             </div>
           </li>
           <li>
@@ -672,7 +672,7 @@ EOF</pre>
           作業リストが互いに絡み合わないよう、並列でスポーンするチームメイトには最初から完全に分離されたファイルやディレクトリを割り当てるのが安全です。
         </div>
         <div class="warning-box">
-          <strong>よくある失敗</strong> — 「Agent Teams機能が見つからない」またはチームメイトがスポーンされない場合は、大抵①<code>.claude/settings.json</code>が<code>harness-lab/</code>フォルダ基準で保存されたか（別のフォルダに保存すると認識されません）、②②でClaude Appを完全に再起動したかの二点を見落としている場合です。JSON構文エラー（カンマの欠落など）で設定ファイル自体が無視される場合も多いため、エディタで開いて構文を再度確認してください。
+          <strong>よくある失敗</strong> — 「Agent Teams機能が見つからない」またはチームメイトがスポーンされない場合は、大抵①<code>.claude/settings.json</code>が<code>harness-lab/</code>フォルダ基準で保存されたか（別のフォルダに保存すると認識されません）、②②でClaude Desktop Appを完全に再起動したかの二点を見落としている場合です。JSON構文エラー（カンマの欠落など）で設定ファイル自体が無視される場合も多いため、エディタで開いて構文を再度確認してください。
         </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
@@ -832,7 +832,7 @@ EOF</pre>
       </div>
 
       <div class="platform-block claudeapp">
-        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude App (Desktop)</span> — 同じファイル、三つのモデルでレビューリクエスト</div>
+        <div class="platform-block-title"><span class="badge badge-claudeapp">Claude Desktop App</span> — 同じファイル、三つのモデルでレビューリクエスト</div>
         <p class="text-dim" style="margin-bottom:10px;">G-1の<code>notes.txt</code>より少し複雑で、論理的欠陥がある文章を用意します。チャットウィンドウに以下の文をそのまま貼り付けます。</p>
         <ol class="step-list">
           <li>
@@ -847,7 +847,7 @@ EOF</pre>
           <li>
             <div class="step-content">
               <strong>② haikuティアでレビュー</strong>
-              <p>チャットウィンドウに以下の文をそのまま貼り付けます。Claude Appは<code>reviewer.md</code>の<code>model</code>フィールドを<code>haiku</code>に変更した後、レビューを実行します。</p>
+              <p>チャットウィンドウに以下の文をそのまま貼り付けます。Claude Desktop Appは<code>reviewer.md</code>の<code>model</code>フィールドを<code>haiku</code>に変更した後、レビューを実行します。</p>
               <div style="position:relative">
                 <pre class="code-block">.claude/agents/reviewer.mdのmodelフィールドをhaikuに変更してください。そしてargument.txtをreviewerサブエージェントでレビューしてください。</pre>
                 <button class="copy-btn" onclick="copyCode(this)">コピー</button>
@@ -879,7 +879,7 @@ EOF</pre>
           簡単な誤字チェックであれば三つのモデルの結果差はほとんどありませんが、今回のように「論証構造の欠陥を指摘しなければならない」作業では、ティアが低いほど循環論法を循環論法として正確に指摘できず、表面的な文章のみを指摘する傾向が顕著になります。逆にhaikuは三つの中で最も速く応答します — 5章で説明する「判断が重い役割ほど高いティア、定型化された作業ほど低いティア」という原則がなぜ存在するのか、速度と深さのトレードオフを直接体験するとずっと明確になります。
         </div>
         <div class="tip-box">
-          毎回Claude Appに「modelフィールドを変更してください」とリクエストすればよいです — 定義ファイルを直接開く必要はなく、Claude Appが自動的に修正してからレビューを実行します。
+          毎回Claude Desktop Appに「modelフィールドを変更してください」とリクエストすればよいです — 定義ファイルを直接開く必要はなく、Claude Desktop Appが自動的に修正してからレビューを実行します。
         </div>
         <div class="warning-box">
           <strong>よくある失敗</strong> — modelフィールドに存在しない値（誤字、大文字など）が入ると、呼び出しが失敗したりデフォルトモデルに静かに置き換えられる可能性があります。②③④を終えた後、<code>.claude/agents/reviewer.md</code>を直接開いて<code>model:</code>値が<code>haiku</code>/<code>sonnet</code>/<code>opus</code>のうち意図した値と正確に一致しているか確認してください。

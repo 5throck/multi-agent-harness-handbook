@@ -44,7 +44,7 @@
   <div class="chk">☐ Antigravity利用のためのGoogleアカウント</div>
   <div class="chk">☐ <code>gh auth login</code>が可能なGitHubアカウント。アカウントがない参加者には<a href="../practice/04_Practice_Examples_A.html#setup">第4章§2-A実習準備節</a>の登録案内に事前に従うよう告知</div>
   <div class="chk">☐ 最低5GBの空きディスク容量、管理者/sudo権限</div>
-  <div class="chk">☐ Claude App(Desktop)、Claude Code(CLI)、Antigravity(Desktop)、Antigravity CLI(<code>agy</code>)のインストール完了。<a href="../practice/04_Practice_Examples_A.html#setup">第4章§2-A実習準備節</a>のOS別スクリプトで検証</div>
+  <div class="chk">☐ Claude Desktop App、Claude Code(CLI)、Antigravity(Desktop)、Antigravity CLI(<code>agy</code>)のインストール完了。<a href="../practice/04_Practice_Examples_A.html#setup">第4章§2-A実習準備節</a>のOS別スクリプトで検証</div>
   <div class="chk">☐ <code>bun --version</code>、<code>git --version</code>が正常に出力されることを確認</div>
   <div class="chk">☐ (第6章・第11章実習用) <code>git clone https://github.com/5throck/ai-workspace-standards.git</code>をワークスペースルート位置(Windows <code>C:\git</code>、macOS/Linux <code>~/git</code>)に事前にクローン</div>
   <div class="warn">第11章の新規variant昇格実習のP-1シナリオは、実際のgit履歴とファイル構造に影響を与える昇格パイプラインを実行する。参加者全員に各自の環境で実行させるのではなく、下記「章別講師ノート」の案内に従ってください。</div>
@@ -62,7 +62,7 @@
 	      <tr><td>第2章</td><td>Prompt→Context→Harnessの流れ、ハーネスエンジニアリングの定義、単一エージェントの限界、マルチエージェントチームの構成要素(オーケストレーター・スペシャリスト・ハンドオフ契約)、サブエージェント(事前定義 vs 動的生成)、オーケストレーションパターン5種と再試行・ロールバック・エスカレーション、動的チーム構成とワークフローの組み合わせ、AGENTS.md標準</td><td>講義+確認質問</td><td>45分</td></tr>
 		      <tr><td>第3章</td><td>ガードレールの必要性、危険作業の3段階分類(読み取り/書き込み/破壊的)、最小権限の原則(toolsフィールド)、人による承認ゲート、隔離(worktree・sandbox)、監査ログと可観測性</td><td>講義</td><td>20分</td></tr>
 		      <tr><td>ウォームアップ実習</td><td>テトリス(バイブコーディング、ハーネスなし10分)+パックマン(単一プロンプト失敗体験後、企画→開発→QAの3段階マルチエージェント25分)+気づきの整理(5分)</td><td>実習(参加者自身)</td><td>40分</td></tr>
-		      <tr><td>第4章§1+第4章§2</td><td>4つのツール(Claude App/Code、Antigravity Desktop/CLI)でのサブエージェント定義・呼び出し・逐次パイプライン・動的チーム構成・並列実行・モデルティア比較実習(G-1/D-1/D-2/P-1/P-2)</td><td>実習(参加者自身)</td><td>80分</td></tr>
+		      <tr><td>第4章§1+第4章§2</td><td>4つのツール(Claude Desktop App/Code、Antigravity Desktop/CLI)でのサブエージェント定義・呼び出し・逐次パイプライン・動的チーム構成・並列実行・モデルティア比較実習(G-1/D-1/D-2/P-1/P-2)</td><td>実習(参加者自身)</td><td>80分</td></tr>
       <tr><td>第5章(軽め)</td><td>ai-workspace-standardsリポジトリ概要、コアファイル4種(AGENTS.md・CONSTITUTION.md・CLAUDE.md・GEMINI.md)、variantとは何か、スキャフォールディングによるプロジェクト作成の基本</td><td>講義</td><td>20分</td></tr>
       <tr><td>第6章(①既存活用G-1)</td><td>co-consultでPhysical AI市場調査プロジェクトをスキャフォールディング・稼働 — 4段階設計フレームワークの適用、7段階コンサルティングワークフローの稼働、成果物レビュー・ハンドオフの追跡</td><td>実習(参加者自身)</td><td>40分</td></tr>
 	      <tr><td>第6章(②既存活用G-2)</td><td>co-deckで韓食世界化発表資料をスキャフォールディング・稼働 — 発表テーマフレームの設定、11段階パイプラインの稼働、成果物のレビュー・改善、TTS・自動スライド設定</td><td>実習(参加者自身)</td><td>40分</td></tr>
@@ -83,7 +83,7 @@
       <tr><td>第8章§2</td><td>エージェント・スキル・スクリプトのライフサイクル管理</td><td>講義</td><td>15分</td></tr>
       <tr><td>第10章</td><td>第10章・L3プロジェクトアップグレードの使い方、ファイル処理5分類、スナップショット・ロールバック、昇格との方向性の違い</td><td>講義</td><td>15分</td></tr>
       <tr><td>第9章</td><td>ワークフローデザインパターン — 構成要素、ドメイン別事例、選択ガイド</td><td>講義</td><td>15分</td></tr>
-      <tr><td>共通参考</td><td>4つのツール構造の一覧、Claude App vs Code(サブエージェント定義、teammateMode)、Antigravity vs agy(Agent Manager、/goal・/agent・/agents)、マルチエージェント対応範囲比較表、実習ツール選択ガイド、AGENTS.md統合構造</td><td>講義</td><td>25分</td></tr>
+      <tr><td>共通参考</td><td>4つのツール構造の一覧、Claude Desktop App vs Code(サブエージェント定義、teammateMode)、Antigravity vs agy(Agent Manager、/goal・/agent・/agents)、マルチエージェント対応範囲比較表、実習ツール選択ガイド、AGENTS.md統合構造</td><td>講義</td><td>25分</td></tr>
       <tr><td>第7章</td><td>サービスチケットモデル、開発ツール+variantモデル、カンバンベース運用の必要性、両モデルの長短所比較</td><td>講義+ディスカッション</td><td>30分</td></tr>
 	      <tr><td>第11章(①新規作成D-1)</td><td>co-marketing Phase Aプロトタイプの作成 — create-l2-scaffold、ドメインエージェント定義(researcher・writer)、AGENTS.mdロスターの更新、agent:verify</td><td>実習(参加者自身)</td><td>40分</td></tr>
 	      <tr><td>第11章(②講義)</td><td>最初から作る(Phase A→B) vs 既存プロジェクトの昇格、2つの経路の違いと選択基準</td><td>講義</td><td>20分</td></tr>
@@ -118,7 +118,7 @@
   <p><strong>気づき(5分)</strong>: テトリス(~200行)とパックマン(~1,000〜1,500行)のコード量の違いを見せながら、第2章§2の単一エージェントの限界(コンテキスト過負荷)を直接体験したことを想起させる。「このウォームアップで感じたことを、続く第4章実習でツール別サブエージェントとしてさらに深く体験します」と第4章へつなぐ。</p>
 
   <h3>第4章§1/第4章§2: 実習</h3>
-  <p>参加者を4グループ(Claude App/Claude Code/Antigravity Desktop/Antigravity CLI)に分け、それぞれ異なるツールで同じシナリオを進めさせると、最後に結果を比較する際に共通参考の「ツール比較」内容がはるかによく伝わります。</p>
+  <p>参加者を4グループ(Claude Desktop App/Claude Code/Antigravity Desktop/Antigravity CLI)に分け、それぞれ異なるツールで同じシナリオを進めさせると、最後に結果を比較する際に共通参考の「ツール比較」内容がはるかによく伝わります。</p>
   <span class="badge badge-do">参加者アクティビティ</span> G-1、D-1、D-2(動的チーム構成の観察)は全員実習。P-1(並列実行)・P-2(モデルティア比較)は時間が足りなければ講師の画面デモで代替可能。Agent Teams設定(`.claude/settings.json`)や<code>model</code>フィールドの入れ替えは、グループごとに1人だけ試しても概念は伝わる。
 
   <h3>第5章(軽め): ai-workspace-standardsの紹介</h3>
@@ -207,7 +207,7 @@
     <div class="quiz-title">第4章§1/第4章§2確認質問</div>
     <ol>
       <li>writerとreviewerを並列で呼び出すと、なぜ失敗する可能性がありますか?</li>
-      <li>Claude Appでフックが発火しないという事実を知らなかった場合、どのような事故が起こり得ますか?</li>
+      <li>Claude Desktop Appでフックが発火しないという事実を知らなかった場合、どのような事故が起こり得ますか?</li>
       <li>D-2で同じサブエージェントチームなのに、リクエストによって投入構成が変わったのはなぜですか?</li>
     </ol>
   </div>

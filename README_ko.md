@@ -3,7 +3,7 @@
 언어: [English](README.md) | [한국어](README_ko.md) | [日本語](README_ja.md) | [Español](README_es.md)
 
 **멀티 에이전트팀 하네스 엔지니어링 핸드북**은 AI 워크스페이스(AI Workspace) 구축과 운용을 위한 종합 교육 프로그램입니다. 
-하네스 엔지니어링 기본 개념부터 시작하여 Claude Code, Claude App, Antigravity CLI, Antigravity Desktop 등 최신 AI 에이전트 도구 실습, 워크플로우 디자인 패턴, 기업 내 엔터프라이즈 운영 전략 비교, 그리고 `ai-workspace-standards`를 기반으로 커스텀 에이전트 variant를 직접 구축해 보는 실습 과정까지 폭넓게 다룹니다.
+하네스 엔지니어링 기본 개념부터 시작하여 Claude Code, Claude Desktop App, Antigravity CLI, Antigravity Desktop 등 최신 AI 에이전트 도구 실습, 워크플로우 디자인 패턴, 기업 내 엔터프라이즈 운영 전략 비교, 그리고 `ai-workspace-standards`를 기반으로 커스텀 에이전트 variant를 직접 구축해 보는 실습 과정까지 폭넓게 다룹니다.
 
 ## 🌐 교육 프로그램 바로가기 (웹사이트)
 👉 **[핸드북 교육 사이트 보기](https://5throck.github.io/multi-agent-harness-handbook/)**
@@ -22,7 +22,7 @@
 - **11장 · 신규 variant 생성 (Phase A)** — 커스텀 하네스 설계
 - **12장 · 신규 variant 승격 (Phase B)** — 프로덕션 배포 및 검증
 - **13장 · 캡스톤** — 나만의 워크플로우 설계하기
-- **공통 참고** — 도구 비교 (Claude Code / Claude App / Antigravity CLI / Antigravity)
+- **공통 참고** — 도구 비교 (Claude Code / Claude Desktop App / Antigravity CLI / Antigravity)
 
 ## 🎯 대상 버전
 - Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-07-08)

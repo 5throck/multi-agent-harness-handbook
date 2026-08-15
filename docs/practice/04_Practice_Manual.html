@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">4장 §1</div>
   <h1>4장 §1 · 하네스 기반 멀티 에이전트 팀 활용</h1>
-  <p class="subtitle">Claude Code / Claude App / Antigravity CLI / Antigravity(Desktop) 네 도구에서 서브에이전트를 정의하고, 호출하고, 병렬·자동화 단위로 확장하는 방법을 나란히 정리한 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a></p>
+  <p class="subtitle">Claude Code / Claude Desktop App / Antigravity CLI / Antigravity(Desktop) 네 도구에서 서브에이전트를 정의하고, 호출하고, 병렬·자동화 단위로 확장하는 방법을 나란히 정리한 레퍼런스 &nbsp;|&nbsp; 공식 문서: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 버전</span><span class="vvalue">Claude Code 2026-07 릴리스 / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
@@ -66,18 +66,18 @@
   <pre>
 하네스 기반 멀티 에이전트 팀 활용 (Desktop 앱을 기준으로, CLI는 동일 개념의 대안으로 병기)
 ├── 서브에이전트 정의하기
-│   ├── Claude App / Claude Code    .claude/agents/*.md (YAML frontmatter, 사전 정의 — 둘 다 동일)
+│   ├── Claude Desktop App / Claude Code    .claude/agents/*.md (YAML frontmatter, 사전 정의 — 둘 다 동일)
 │   └── Antigravity(Desktop) / CLI  사전 정의 파일 없음 — 오케스트레이터가 목표를 보고 동적 생성
 ├── 서브에이전트 호출/위임하기
-│   ├── Claude App / Claude Code    Agent(Task) 툴 — description / prompt / subagent_type
+│   ├── Claude Desktop App / Claude Code    Agent(Task) 툴 — description / prompt / subagent_type
 │   └── Antigravity(Desktop)/CLI    Agent Manager UI(Desktop) · /goal, /agent, /agents 패널(CLI)
 ├── 병렬 실행
-│   ├── Claude App                  Agent Teams(in-process만)
+│   ├── Claude Desktop App                  Agent Teams(in-process만)
 │   ├── Claude Code                 Agent Teams(in-process/tmux) + 한 메시지에 여러 Agent 호출
 │   ├── Antigravity Desktop         Agent Manager — Workspace별 에이전트 (Local/New Worktree Mode)
 │   └── Antigravity CLI             세션 내부 병렬 서브에이전트 + 세션 간(터미널 여러 개) 병렬
 └── 자동화/훅
-    ├── Claude App                  훅 미발화 — 수동 실행 필요
+    ├── Claude Desktop App                  훅 미발화 — 수동 실행 필요
     ├── Claude Code                 PostToolUse/TeammateIdle/TaskCompleted 훅 자동 발화
     ├── Antigravity Desktop         해당 없음 — GUI 중심
     └── Antigravity CLI             agy -p "프롬프트"(비대화형 CI용), agy inspect(설정 확인)
@@ -134,7 +134,7 @@
   <!-- ── 섹션 1 ── -->
   <h2 id="section-1">1. 서브에이전트 정의하기 — 사전 정의 vs 동적 생성</h2>
 
-  <p>Anthropic 계열(Claude App/Claude Code)은 프로젝트 폴더 아래에 마크다운 파일 하나로 서브에이전트 하나를 미리 정의해 둔다. Google 계열(Antigravity Desktop/CLI)은 별도의 정의 파일이 없다 — 오케스트레이터가 주어진 목표를 보고 그때그때 서브에이전트를 만든다. 아래에서는 Claude App과 Antigravity(Desktop)를 기준으로 먼저 설명하고, 각각의 CLI 대응을 이어서 소개한다.</p>
+  <p>Anthropic 계열(Claude Desktop App/Claude Code)은 프로젝트 폴더 아래에 마크다운 파일 하나로 서브에이전트 하나를 미리 정의해 둔다. Google 계열(Antigravity Desktop/CLI)은 별도의 정의 파일이 없다 — 오케스트레이터가 주어진 목표를 보고 그때그때 서브에이전트를 만든다. 아래에서는 Claude Desktop App과 Antigravity(Desktop)를 기준으로 먼저 설명하고, 각각의 CLI 대응을 이어서 소개한다.</p>
 
   <p >
     Claude 계열의 구체적인 정의·호출 방식은 <a href="04_Practice_Manual_A.html">§1-A Claude 중심</a>에서,
@@ -143,7 +143,7 @@
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>frontmatter 필드</th><th>Claude App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
+    <thead><tr><th>frontmatter 필드</th><th>Claude Desktop App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td><code>name</code></td>
@@ -166,14 +166,14 @@
   </table>
   </div>
 
-  <div class="warning-box">Antigravity(Desktop/CLI)에는 "서브에이전트 정의 파일"이라는 개념 자체가 없다 — 초급 실습에서 Antigravity 쪽에 Claude App/Code의 <code>reviewer.md</code>와 똑같은 예제를 억지로 만들면 사실과 어긋난다. Antigravity의 "입문 실습"은 파일을 만드는 것이 아니라 목표를 주고 오케스트레이터가 알아서 작업을 쪼개는 과정을 관찰하는 것이다.</div>
+  <div class="warning-box">Antigravity(Desktop/CLI)에는 "서브에이전트 정의 파일"이라는 개념 자체가 없다 — 초급 실습에서 Antigravity 쪽에 Claude Desktop App/Code의 <code>reviewer.md</code>와 똑같은 예제를 억지로 만들면 사실과 어긋난다. Antigravity의 "입문 실습"은 파일을 만드는 것이 아니라 목표를 주고 오케스트레이터가 알아서 작업을 쪼개는 과정을 관찰하는 것이다.</div>
 
   <hr>
 
   <!-- ── 섹션 2 ── -->
   <h2 id="section-2">2. 서브에이전트 호출/위임하기</h2>
 
-  <p>Anthropic 계열(Claude App/Claude Code)은 <code>Agent</code>/<code>Task</code> 툴로 별도 컨텍스트의 서브에이전트를 스폰한다. Google 계열(Antigravity Desktop/CLI)은 Agent Manager UI 또는 슬래시 커맨드로 에이전트에게 목표를 위임한다.</p>
+  <p>Anthropic 계열(Claude Desktop App/Claude Code)은 <code>Agent</code>/<code>Task</code> 툴로 별도 컨텍스트의 서브에이전트를 스폰한다. Google 계열(Antigravity Desktop/CLI)은 Agent Manager UI 또는 슬래시 커맨드로 에이전트에게 목표를 위임한다.</p>
 
   <p >
     Claude 계열의 구체적인 호출 방식은 <a href="04_Practice_Manual_A.html#section-2">§1-A 섹션 2</a>에서,
@@ -196,7 +196,7 @@
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>항목</th><th>Antigravity (Desktop)</th><th>Claude App (Desktop)</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>항목</th><th>Antigravity (Desktop)</th><th>Claude Desktop App</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td>병렬 실행 단위</td>
@@ -214,7 +214,7 @@
   <!-- ── 섹션 4 ── -->
   <h2 id="section-4">4. 자동화/훅 — 무엇이 자동으로 발화하는가</h2>
 
-  <p>Claude Code(CLI)는 이벤트 훅(PostToolUse/TeammateIdle/TaskCompleted)을 자동 발화하지만, Claude App과 Antigravity 데스크톱(Desktop)은 훅을 자동 발화하지 않는다. Antigravity 명령줄 인터페이스(CLI)는 <code>agy -p</code>로 비대화형 실행, <code>agy inspect</code>로 설정 점검을 제공한다.</p>
+  <p>Claude Code(CLI)는 이벤트 훅(PostToolUse/TeammateIdle/TaskCompleted)을 자동 발화하지만, Claude Desktop App과 Antigravity 데스크톱(Desktop)은 훅을 자동 발화하지 않는다. Antigravity 명령줄 인터페이스(CLI)는 <code>agy -p</code>로 비대화형 실행, <code>agy inspect</code>로 설정 점검을 제공한다.</p>
 
   <p >
     Claude 계열의 자동화/훅 세부는 <a href="04_Practice_Manual_A.html#section-4">§1-A 섹션 4</a>에서,

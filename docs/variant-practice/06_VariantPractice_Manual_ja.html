@@ -66,17 +66,19 @@ ai-workspace-standards/                (ワークスペースルートとして�
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div></div>
 
-  <h3>Variant全7種類の一覧</h3>
+  <h3>Variant全9種類の一覧</h3>
   <table>
     <thead><tr><th>Variant</th><th>目的</th></tr></thead>
     <tbody>
-      <tr><td><code>co-work</code></td><td>一般協業/ドキュメント — 共通業務ワークフロー6段階</td></tr>
-      <tr><td><code>co-consult</code></td><td>コンサルティング/分析 — 顧客課題の診断と提案書作成</td></tr>
-      <tr><td><code>co-deck</code></td><td>プレゼンテーション — スライド構成と草案生成</td></tr>
-      <tr><td><code>co-marketing</code></td><td>マーケティング — コンテンツ企画・生成・レビューのパイプライン</td></tr>
+      <tr><td><code>co-work</code></td><td>一般協業/ドキュメント — 共通の非同期ワークフロー</td></tr>
+      <tr><td><code>co-consult</code></td><td>戦略コンサルティング — 顧客課題の診断と提案書作成</td></tr>
+      <tr><td><code>co-deck</code> <span class="badge">beta</span></td><td>プレゼンテーション — リサーチから印刷用PDFまでの11段階パイプライン</td></tr>
       <tr><td><code>co-develop</code></td><td>ソフトウェア開発 — 6段階開発パイプライン</td></tr>
-      <tr><td><code>co-research</code></td><td>研究 — 文献調査および要約ワークフロー</td></tr>
-      <tr><td><code>co-review</code></td><td>コード/ドキュメントレビュー — PRレビューと品質検証</td></tr>
+      <tr><td><code>co-design</code></td><td>UI/UXデザイン — 反復的なデザインワークフロー</td></tr>
+      <tr><td><code>co-security</code></td><td>セキュリティレビュー — レッドチーム/侵入テストワークフロー</td></tr>
+      <tr><td><code>co-game</code></td><td>ゲーム開発 — Vanilla TypeScriptによるHTML5 Canvasゲーム</td></tr>
+      <tr><td><code>co-export</code> <span class="badge">beta</span></td><td>輸出入貿易コンサルティング</td></tr>
+      <tr><td><code>co-news</code> <span class="badge">beta</span></td><td>上場企業を対象とする韓国の経済・金融ジャーナリズム</td></tr>
     </tbody>
   </table>
 
@@ -86,7 +88,7 @@ ai-workspace-standards/                (ワークスペースルートとして�
     <li><strong><code>CONSTITUTION.md</code></strong> — 最初に読むべきファイル。ワークスペース全体の共有標準(ガバナンス、PRワークフロー、マルチエージェント原則)が定義されている。</li>
     <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — 使用しているAIコーディングツールに対応するファイルを確認する。プラットフォームごとの動作方式(フック、スラッシュコマンド、エージェントディスパッチルール)が定義されている。</li>
     <li><strong><code>AGENTS.md</code></strong> — このワークスペースで呼び出し可能なエージェントロスター。「誰がどの役割を担うか」を一目で確認できる。</li>
-    <li><strong><code>templates/</code></strong> — 利用可能なvariant全7種類がこのディレクトリの下にある。各variantフォルダを開き、エージェント構成とガバナンスパイプラインを確認する。</li>
+    <li><strong><code>templates/</code></strong> — 利用可能なvariant全9種類がこのディレクトリの下にある。各variantフォルダを開き、エージェント構成とガバナンスパイプラインを確認する。</li>
     <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code>がここにある。このスクリプトがvariant(バリアント)を実際のプロジェクトとして複製する中核コマンドである。</li>
   </ol>
   <div class="note">この見取り図は、第4章の実習でエージェントに実際に触れる前に、「このリポジトリに何が入っているのか」の感覚をつかむための短い案内である。実習の際はまずこの5箇所だけを開いてみて、残りの構成は必要になったときに随時戻って確認する進め方でよい。</div>

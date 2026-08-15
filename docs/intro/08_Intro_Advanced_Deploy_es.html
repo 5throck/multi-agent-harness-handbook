@@ -64,7 +64,7 @@
   │  L0→L1: propagate-to-templates.ts (automático y continuo, en cada dev-sync)
   ▼
 L1 — templates/common/ (instantánea de plantilla común)
-  │  L1→L2: create-l2-scaffold.ts (una vez, en el momento de creación de la variante)
+  │  L1→L2: create-l3-scaffold.ts (una vez, en el momento de creación de la variante)
   ▼
 L2 — templates/co-&lt;nombre&gt;/
   │  L2→L3: new-project.ts (una vez, en el momento de creación del proyecto)
@@ -72,7 +72,7 @@ L2 — templates/co-&lt;nombre&gt;/
 L3 — Projects/&lt;nombre&gt;/ (directorio de trabajo del proyecto activo)
      └─ Creado a partir de L2; donde los desarrolladores ejecutan agentes diariamente
      └─ Evoluciona independientemente después de la bifurcación, sin retro-sincronización automática
-     └─ Ejecute l2-to-variant-pipeline.ts explícitamente para promover un L2 a plantilla oficial</pre>
+     └─ Ejecute l3-to-variant-pipeline.ts explícitamente para promover un L2 a plantilla oficial</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
   </div>
@@ -120,7 +120,7 @@ L3 — Projects/&lt;nombre&gt;/ (directorio de trabajo del proyecto activo)
   </div>
 
   <h3>Por Qué L1 → L2 Termina en una "Bifurcación"</h3>
-  <p>Al principio, se probó un enfoque donde cada cambio en L1 se propagaba automáticamente a todas las variantes L2 existentes, pero tres problemas seguían reapareciendo. Los cambios en L1 sobreescribían silenciosamente partes que una variante había personalizado deliberadamente de manera diferente; cada vez que se añadía una nueva variante, la lista codificada de variantes en el script de propagación tenía que actualizarse manualmente; y no había forma de distinguir "una diferencia intencional" de "una diferencia causada por una sincronización omitida." Por lo tanto, se utiliza el <strong>Modelo de Bifurcación</strong>. L1 entrega su contenido exactamente una vez, en el momento de generar la variante, y desde entonces L2 evoluciona completamente de forma independiente. Reflejar un cambio de L2 de vuelta en la plantilla oficial requiere que una persona ejecute explícitamente <code>l2-to-variant-pipeline.ts</code> en lugar de cualquier proceso automático (el Capítulo 11 cubre este procedimiento de promoción directamente). Mientras tanto, <code>propagate-to-templates.ts --check-drift</code> reporta periódicamente las diferencias entre L1 y cada L2, pero este reporte es de solo lectura y nunca sobreescribe automáticamente valores. La dirección inversa — el procedimiento para aplicar realmente los últimos cambios de L1 a un proyecto L3 ya creado — se cubre en el <a href="10_ProjectUpgrade_Chapter_es.html">Capítulo 10 · Actualización de un Proyecto L3</a>.</p>
+  <p>Al principio, se probó un enfoque donde cada cambio en L1 se propagaba automáticamente a todas las variantes L2 existentes, pero tres problemas seguían reapareciendo. Los cambios en L1 sobreescribían silenciosamente partes que una variante había personalizado deliberadamente de manera diferente; cada vez que se añadía una nueva variante, la lista codificada de variantes en el script de propagación tenía que actualizarse manualmente; y no había forma de distinguir "una diferencia intencional" de "una diferencia causada por una sincronización omitida." Por lo tanto, se utiliza el <strong>Modelo de Bifurcación</strong>. L1 entrega su contenido exactamente una vez, en el momento de generar la variante, y desde entonces L2 evoluciona completamente de forma independiente. Reflejar un cambio de L2 de vuelta en la plantilla oficial requiere que una persona ejecute explícitamente <code>l3-to-variant-pipeline.ts</code> en lugar de cualquier proceso automático (el Capítulo 11 cubre este procedimiento de promoción directamente). Mientras tanto, <code>propagate-to-templates.ts --check-drift</code> reporta periódicamente las diferencias entre L1 y cada L2, pero este reporte es de solo lectura y nunca sobreescribe automáticamente valores. La dirección inversa — el procedimiento para aplicar realmente los últimos cambios de L1 a un proyecto L3 ya creado — se cubre en el <a href="10_ProjectUpgrade_Chapter_es.html">Capítulo 10 · Actualización de un Proyecto L3</a>.</p>
 
   <h3>SSOT por Archivo — Qué Fluye Hacia Dónde, Desde Dónde</h3>
   <div class="table-compare">

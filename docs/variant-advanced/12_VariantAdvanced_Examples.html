@@ -333,7 +333,7 @@
     <div class="card-body">
 
       <div class="situation">
-        D-1까지 마쳐 승격 준비가 끝났다고 판단한 숙련자가, 실제로 <code>l2-to-variant-pipeline.ts</code>를 실행해 co-marketing을 정식 <code>templates/co-marketing/</code>로 전환하려 한다. 이 단계부터는 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다.
+        D-1까지 마쳐 승격 준비가 끝났다고 판단한 숙련자가, 실제로 <code>l3-to-variant-pipeline.ts</code>를 실행해 co-marketing을 정식 <code>templates/co-marketing/</code>로 전환하려 한다. 이 단계부터는 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다.
       </div>
 
       <div class="note">
@@ -361,9 +361,9 @@
           <text x="548" y="41" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">승격 체크리스트 작성</text>
           <!-- Arrow down from 체크리스트 -->
           <line x1="548" y1="54" x2="548" y2="76" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrow2)"/>
-          <!-- Bottom row: l2-to-variant-pipeline.ts -->
+          <!-- Bottom row: l3-to-variant-pipeline.ts -->
           <rect x="308" y="80" width="180" height="36" rx="8" fill="var(--accent-green)"/>
-          <text x="398" y="103" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">l2-to-variant-pipeline.ts</text>
+          <text x="398" y="103" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">l3-to-variant-pipeline.ts</text>
           <!-- Arrow -->
           <line x1="488" y1="98" x2="516" y2="98" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrow2)"/>
           <!-- Final variant -->
@@ -380,7 +380,7 @@
       <div class="cmd-list">
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
-          <a class="cmd-chip" href="11_VariantAdvanced_Chapter.html#s3">l2-to-variant-pipeline.ts</a>
+          <a class="cmd-chip" href="11_VariantAdvanced_Chapter.html#s3">l3-to-variant-pipeline.ts</a>
           <a class="cmd-chip" href="../variant-practice/06_VariantPractice_Manual.html#section-2">validate-templates.ts</a>
         </div>
       </div>
@@ -392,7 +392,7 @@
             <strong>승격 파이프라인 실행</strong>
             <p><code>--source</code>는 Phase A 프로토타입 경로, <code>--variant</code>는 최종 variant 이름, <code>--variantType</code>은 도메인 유형이다.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/l2-to-variant-pipeline.ts --source Projects/co-marketing --variant co-marketing --variantType marketing</pre>
+              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-marketing --variant co-marketing --variantType marketing</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>

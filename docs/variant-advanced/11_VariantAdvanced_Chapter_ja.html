@@ -48,7 +48,7 @@
     <ul>
       <li>「最初から作る」と「既存プロジェクトを昇格させる」という二つの経路の根本的な違い</li>
       <li>Phase A（create-variant）→ Phase B（promote-variant）へとつながる、最初から作る経路の概念</li>
-      <li>すでに存在するプロジェクトを<code>promote-variant</code>スキルと<code>l2-to-variant-pipeline.ts</code>で昇格させる経路の概念</li>
+      <li>すでに存在するプロジェクトを<code>promote-variant</code>スキルと<code>l3-to-variant-pipeline.ts</code>で昇格させる経路の概念</li>
       <li>二つの経路のうちどちらが自組織の状況に合うかを判断する基準</li>
     </ul>
   </div>
@@ -61,7 +61,7 @@
     <span class="by">— 二つの経路を分ける根本的な順序の違い</span></div>
 
   <h2 id="s2">最初から作る経路</h2>
-  <p>グリーンフィールドの状態から始まるこの経路は、二つの段階に分かれる。まず<code>create-variant</code>スキルと<code>bun scripts/create-l2-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code>により、<code>Projects/&lt;variant-name&gt;/</code>配下に独立した「Phase Aプロトタイプ」を作る。この段階は、ワークスペースのドキュメントで「L1-L2 Fork Model」と呼ばれる構造の一部であり、まだ正式な<code>templates/</code>に属していないため、自由に実験し方向を変えることができる。第11章の実習（D-1）で作るco-marketingプロトタイプは、まさにこのPhase A段階に該当する。この実習は<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章§2の実習（D-1）</a>を参照する。</p>
+  <p>グリーンフィールドの状態から始まるこの経路は、二つの段階に分かれる。まず<code>create-variant</code>スキルと<code>bun scripts/create-l3-scaffold.ts &lt;variant-name&gt; --domain &lt;type&gt;</code>により、<code>Projects/&lt;variant-name&gt;/</code>配下に独立した「Phase Aプロトタイプ」を作る。この段階は、ワークスペースのドキュメントで「L1-L2 Fork Model」と呼ばれる構造の一部であり、まだ正式な<code>templates/</code>に属していないため、自由に実験し方向を変えることができる。第11章の実習（D-1）で作るco-marketingプロトタイプは、まさにこのPhase A段階に該当する。この実習は<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章§2の実習（D-1）</a>を参照する。</p>
   <p>プロトタイプが十分に成熟すると、<code>promote-variant</code>スキルを通じて「Phase B昇格」を経て、正式な<code>templates/co-&lt;name&gt;/</code>となる。つまり、最初から作る経路も結局は昇格の段階を通過する。ただし、そのプロトタイプ自体が最初からテンプレートになることを前提に設計されている点が、次節の経路と区別される点である。</p>
 
   <div class="note">
@@ -69,9 +69,9 @@
       <defs>
         <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
       </defs>
-      <!-- Left: create-l2-scaffold.ts -->
+      <!-- Left: create-l3-scaffold.ts -->
       <rect x="16" y="28" width="160" height="36" rx="8" fill="var(--accent)"/>
-      <text x="96" y="51" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">create-l2-scaffold.ts</text>
+      <text x="96" y="51" font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">create-l3-scaffold.ts</text>
       <!-- Arrow left → right -->
       <line x1="176" y1="46" x2="218" y2="46" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrow1)"/>
       <!-- Right: folder box -->
@@ -94,7 +94,7 @@
 
   <h2 id="s3">既存プロジェクトを昇格させる経路</h2>
   <p>二つ目の経路は出発点そのものが異なる。あるチームが特定のドメインの課題を解決するためにプロジェクトを一つ作ったが、そのプロジェクトは他のテンプレートを原型にもしておらず、そもそも再利用を念頭に置いてもいなかった。ところが時間が経つにつれ、そのプロジェクトの構成があまりにうまく機能しているため、社内の他のチームがファイルを手作業でコピーして似たようなものを作り始める。このような「すでに実証されているが、テンプレートとして生まれたわけではない」プロジェクトを正式なバリアント(variant)へと転換することが、昇格の目的である。</p>
-  <p>この経路も結局は同じ<code>promote-variant</code>スキルと<code>bun scripts/l2-to-variant-pipeline.ts --source Projects/&lt;name&gt; --variant co-&lt;name&gt; --variantType &lt;type&gt;</code>パイプラインを使用するという点で、最初から作る経路のPhase Bとメカニズムは同じである。昇格前には<code>PROMOTION_CHECKLIST.md</code>の条件（<code>bun run agent:verify</code>、<code>bun scripts/validate-skills.ts</code>、<code>bun scripts/audit.ts</code>の合格可否など）をすべて満たさなければならないというゲートがある。パイプライン実行後は、<code>variant.json</code>の<code>inherits_common</code>バージョンの確認、共通ファイルと重複する部分を取り除く「reconcile」段階、そして<code>.claude/</code>と<code>.gemini/</code>間のプラットフォームパリティ検証が続く。このパイプラインが自動で処理できないドメイン固有のディレクトリ（例: workflows/、regulations/など）は、<code>_ORIGIN.md</code>が指定した通りに手動で移す必要がある。</p>
+  <p>この経路も結局は同じ<code>promote-variant</code>スキルと<code>bun scripts/l3-to-variant-pipeline.ts --source Projects/&lt;name&gt; --variant co-&lt;name&gt; --variantType &lt;type&gt;</code>パイプラインを使用するという点で、最初から作る経路のPhase Bとメカニズムは同じである。昇格前には<code>PROMOTION_CHECKLIST.md</code>の条件（<code>bun run agent:verify</code>、<code>bun scripts/validate-skills.ts</code>、<code>bun scripts/audit.ts</code>の合格可否など）をすべて満たさなければならないというゲートがある。パイプライン実行後は、<code>variant.json</code>の<code>inherits_common</code>バージョンの確認、共通ファイルと重複する部分を取り除く「reconcile」段階、そして<code>.claude/</code>と<code>.gemini/</code>間のプラットフォームパリティ検証が続く。このパイプラインが自動で処理できないドメイン固有のディレクトリ（例: workflows/、regulations/など）は、<code>_ORIGIN.md</code>が指定した通りに手動で移す必要がある。</p>
   <div class="note">機械的な手続きは両経路とも同じだが、「何を検証するか」は異なる。昇格経路では、すでに実戦で使われていたという事実そのものが品質の根拠となり、パイプラインはそれを再利用可能な形に整理する役割を担う。</div>
   <p>「reconcile」と「<code>_ORIGIN.md</code>による手動移管」が実際に何をするのか、具体例で見てみよう。財務チームが作った<code>Projects/budget-review/</code>を昇格させるとすると、このプロジェクトには二種類のファイルが混在している。①PM定義やセッションチェックリストのように<code>templates/common/</code>にすでに存在する共通ファイルをそのままコピーしてきたもの、②<code>regulations/</code>フォルダ内の社内会計規程文書のように、このプロジェクト固有の資産。reconcile段階は①に該当するファイルを「コピー」から「共通ファイルを継承する参照」へと戻し、後で<code>templates/common/</code>が更新された際にこのvariantも一緒に最新化されるようにする。一方②はパイプラインがその存在自体を知る手立てがないため、元のプロジェクトに残された<code>_ORIGIN.md</code>の「Manual Phase B Steps」リストに「regulations/フォルダを新規バリアント(variant)へ手動でコピーすること」のように明記しておき、昇格担当者がチェックリストを見ながら一つずつ手作業で移す。</p>
 

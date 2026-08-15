@@ -41,35 +41,35 @@
  <article class="reading">
   <div class="chapter-eyebrow">8장 §1</div>
   <h1>배포와 SSOT</h1>
-  <p class="lead">이 절에서는 ai-workspace-standards의 L0→L1→L2 3-tier 계층 구조, 포크 모델의 설계 이유, 그리고 파일별 SSOT(Single Source of Truth) 흐름을 다룬다. 원본은 항상 위에서 아래로만 흐르며, 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다.</p>
+  <p class="lead">이 절에서는 ai-workspace-standards의 L0→L1→L2→L3 4-tier 계층 구조, 포크 모델의 설계 이유, 그리고 파일별 SSOT(Single Source of Truth) 흐름을 다룬다. 원본은 항상 위에서 아래로만 흐르며, 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다.</p>
 
   <div class="keypoints">
     <div class="kp-title">이 절에서 다루는 것</div>
     <ul>
-      <li>L0→L1→L2 3-tier 원리</li>
+      <li>L0→L1→L2→L3 4-tier 원리</li>
       <li>포크 모델과 자동 동기화 불가의 이유</li>
       <li>파일별 SSOT 흐름</li>
     </ul>
   </div>
 
   <h2 id="s1">L0 → L1 → L2 → L3 계층 구조 (4-tier)</h2>
-  <p>지금까지 나온 CONSTITUTION.md·templates/·variant·new-project.ts는 모두 하나의 큰 원칙 위에서 움직인다. 저장소는 <strong>L0(워크스페이스 루트) → L1(공통 템플릿) → L2(variant/프로젝트 템플릿) → L3(실제 프로젝트 인스턴스)</strong>라는 4단 계층(4-tier)으로 설계돼 있고, 신뢰할 수 있는 원본(Single Source of Truth)은 항상 위에서 아래로만 흐른다. 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다. 앞 절에서 다룬 보일러플레이트가 바로 이 4-tier 중 L1에 해당한다. 이 보일러플레이트는 L0에서 발행되고, L2가 태어날 때 딱 한 번 전달되는 스냅샷이다.</p>
+  <p>지금까지 나온 CONSTITUTION.md·templates/·variant·new-project.ts는 모두 하나의 큰 원칙 위에서 움직인다. 저장소는 <strong>L0(워크스페이스 루트) → L1(공통 템플릿) → L2(variant 템플릿) → L3(라이브 프로젝트 작업 디렉토리)</strong>라는 4단 계층(4-tier)으로 설계돼 있고, 신뢰할 수 있는 원본(Single Source of Truth)은 항상 위에서 아래로만 흐른다. 반대 방향으로 거슬러 올라가는 자동 동기화는 존재하지 않는다. 앞 절에서 다룬 보일러플레이트가 바로 이 4-tier 중 L1에 해당한다. 이 보일러플레이트는 L0에서 발행되고, L2 variant가 태어날 때 딱 한 번 전달되는 스냅샷이다.</p>
 
   <h3>네 계층이 각각 담당하는 것</h3>
-  <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 베리언트(variant)를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 두 가지 형태로 나뉜다. 하나는 공식 템플릿으로 굳어진 <code>templates/co-&lt;name&gt;/</code>이고, 다른 하나는 <code>new-project.ts</code>로 만들어진 살아있는 프로젝트 템플릿 <code>Projects/&lt;name&gt;/</code>다. 두 경우 모두 variant별로 갈라져 나온(fork) 뒤에는 독립적으로 진화한다. <strong>L3</strong>는 L2 템플릿을 실제 개발 환경으로 클론/배포하여 만들어진 <strong>라이브 프로젝트 작업 디렉토리</strong>(예: <code>C:\projects\my-app\</code>)다. 개발자가 에이전트(Claude Code, Gemini CLI 등)를 실행하며 일상적인 코딩 작업을 수행하는 곳이 바로 이 L3이다. L2에서 파생되지만, L3 인스턴스는 프로젝트별로 독립적으로 진화하며 로컬 오버라이드를 가질 수 있다.</p>
+  <p><strong>L0(워크스페이스 루트)</strong>는 <code>agents/pm.md</code>·<code>CLAUDE.md</code>·<code>GEMINI.md</code>·<code>scripts/*.ts</code> 같은 파일들의 유일한 원본이다. 오직 여기서만 편집한다. <strong>L1(<code>templates/common/</code>)</strong>은 L0에서 발행된 공통 인프라의 스냅샷으로, 새 L2 베리언트(variant)를 만들 때 출발점이 되는 베이스라인 역할만 한다. <strong>L2</strong>는 공식 variant 템플릿인 <code>templates/co-&lt;name&gt;/</code>다 — L1에서 갈라져 나온(fork) 뒤에는 독립적으로 진화한다. <strong>L3</strong>는 <code>new-project.ts</code>로 L2 variant에서 스캐폴딩된 <strong>라이브 프로젝트 작업 디렉토리</strong>인 <code>Projects/&lt;name&gt;/</code>다 — 개발자가 에이전트(Claude Code, Gemini CLI 등)를 실행하며 일상적인 코딩 작업을 수행하는 곳이며, 외부로 클론되는 것이 아니라 동일한 워크스페이스 저장소 안에 그대로 존재한다. L2에서 파생되지만, L3 프로젝트는 프로젝트별로 독립적으로 진화하며 로컬 오버라이드를 가질 수 있다.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
   <pre class="pre-plain">L0 — 워크스페이스 루트 (C:\git\, 유일한 원본)
-  │  L0→L1: publish-to-template.ts (dev-sync 때마다 자동·지속)
+  │  L0→L1: propagate-to-templates.ts (dev-sync 때마다 자동·지속)
   ▼
 L1 — templates/common/ (공통 템플릿 스냅샷)
   │  L1→L2: create-l2-scaffold.ts (variant 생성 시점, 딱 1회)
   ▼
-L2 — templates/co-&lt;name&gt;/ 또는 Projects/co-&lt;name&gt;/
-  │  L2→L3: new-project.ts 또는 수동 복제 (프로젝트 시작 시점, 1회)
+L2 — templates/co-&lt;name&gt;/
+  │  L2→L3: new-project.ts (프로젝트 시작 시점, 1회)
   ▼
-L3 — 실제 프로젝트 작업 디렉토리 (예: C:\projects\my-app\)
+L3 — Projects/&lt;name&gt;/ (라이브 프로젝트 작업 디렉토리)
      └─ L2 기반 생성, 개발자가 에이전트를 실행하며 일상 작업 수행
      └─ 포크 이후 독립적으로 진화, 자동 역동기화 없음
      └─ L2에서 공식 템플릿으로 승격하려면 명시적으로 l2-to-variant-pipeline.ts 실행</pre>
@@ -106,7 +106,7 @@ L3 — 실제 프로젝트 작업 디렉토리 (예: C:\projects\my-app\)
         <text x="500" y="46" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">포크 이후 독립 진화</text>
 
         <rect x="405" y="80" width="190" height="50" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
-        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="var(--badge-green-fg)" font-weight="700">L2 — Projects/my-app</text>
+        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="var(--badge-green-fg)" font-weight="700">L2 — co-work</text>
         <text x="500" y="116" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">포크 이후 독립 진화</text>
 
         <rect x="405" y="150" width="190" height="50" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
@@ -120,7 +120,7 @@ L3 — 실제 프로젝트 작업 디렉토리 (예: C:\projects\my-app\)
   </div>
 
   <h3>L1 → L2가 "포크"로 끝나는 이유</h3>
-  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 베리언트(variant)에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. 베리언트(variant)가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 신규 베리언트(variant)를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 베리언트(variant)를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(11장에서 이 승격 절차를 직접 다룬다). 대신 <code>publish-to-template.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다. 반대 방향 — 이미 만든 L2 프로젝트에 L1의 최신 변경을 실제로 반영하는 절차는 <a href="10_ProjectUpgrade_Chapter.html">10장 · L2 프로젝트 업그레이드</a>에서 다룬다.</p>
+  <p>초기에는 L1이 바뀔 때마다 이미 만들어진 모든 L2 베리언트(variant)에 자동으로 반영하는 방식을 시도했지만, 세 가지 문제가 반복됐다. 베리언트(variant)가 의도적으로 다르게 고쳐 둔 부분을 L1의 변경이 조용히 덮어써 버렸고, 신규 베리언트(variant)를 추가할 때마다 전파 스크립트에 하드코딩된 variant 목록을 일일이 손봐야 했으며, "의도한 차이"와 "동기화를 놓쳐서 생긴 차이"를 구분할 방법이 없었다. 그래서 지금은 <strong>포크 모델(Fork Model)</strong>을 쓴다. L1은 베리언트(variant)를 만드는 스캐폴딩 시점에 딱 한 번만 내용을 전달하고, 그 이후 L2는 완전히 독립적으로 진화한다. L2의 변경을 공식 템플릿에 반영하려면 자동이 아니라 <code>l2-to-variant-pipeline.ts</code>를 사람이 명시적으로 실행해야 한다(11장에서 이 승격 절차를 직접 다룬다). 대신 <code>propagate-to-templates.ts --check-drift</code>가 L1과 각 L2의 차이를 주기적으로 보고는 하지만, 이 보고는 읽기 전용이며 절대 자동으로 값을 덮어쓰지 않는다. 반대 방향 — 이미 만든 L3 프로젝트에 L1의 최신 변경을 실제로 반영하는 절차는 <a href="10_ProjectUpgrade_Chapter.html">10장 · L3 프로젝트 업그레이드</a>에서 다룬다.</p>
 
   <h3>파일별 SSOT — 무엇이 어디서 어디로 흐르는가</h3>
   <div class="table-compare">
@@ -141,7 +141,7 @@ L3 — 실제 프로젝트 작업 디렉토리 (예: C:\projects\my-app\)
 
   <p><code>agents/pm.md</code>는 L0→L1 관계를 가장 잘 보여주는 사례다. L0의 <code>agents/pm.md</code>가 완전한 원본이고, L1의 <code>templates/common/agents/pm.md</code>는 <code>extends: ../../../agents/pm.md</code> 프론트매터로 L0를 참조하되 워크스페이스 전용 섹션(예: Auto-Mode, 라이프사이클 상태 필드)은 제거한 "순수 확장" 파일이다. L2의 <code>templates/co-*/agents/pm.md</code>는 L1을 이어받되 내용을 그대로 복사하지 않고, variant 고유의 오버라이드로부터 필요한 내용을 처음부터 다시 생성한다("Layout Reconstruction"). 그래서 L0의 <code>agents/pm.md</code>가 300줄이 넘어도 L2의 pm.md는 50~100줄 남짓으로 유지된다.</p>
 
-  <div class="note">L0→L1→L2를 한 문장으로: <strong>원본은 위에서만 고친다. 아래 계층은 원본의 스냅샷이거나, 스캐폴딩 시점의 복사본이다. 흐름은 언제나 위에서 아래로만 간다.</strong> 이 원칙을 어기는 대표적인 실수가 "새 프로젝트(L2)에서 에이전트 파일을 고쳐 놓고 워크스페이스 루트(L0)에는 반영하지 않는 것"이다 — L2에서 L0로 거슬러 올라가는 역방향 흐름은 애초에 존재하지 않으므로, 그 수정은 그 프로젝트 안에서만 유효하고 다른 곳에는 영영 반영되지 않는다.</div>
+  <div class="note">L0→L1→L2→L3를 한 문장으로: <strong>원본은 위에서만 고친다. 아래 계층은 원본의 스냅샷이거나, 스캐폴딩 시점의 복사본이다. 흐름은 언제나 위에서 아래로만 간다.</strong> 이 원칙을 어기는 대표적인 실수가 "새 프로젝트(L3)에서 에이전트 파일을 고쳐 놓고 워크스페이스 루트(L0)에는 반영하지 않는 것"이다 — L3에서 L0로 거슬러 올라가는 역방향 흐름은 애초에 존재하지 않으므로, 그 수정은 그 프로젝트 안에서만 유효하고 다른 곳에는 영영 반영되지 않는다.</div>
 
   <h3>보일러플레이트 전략 — 무엇을 잠그고, 무엇을 열어 둘 것인가</h3>
   <p>5장에서 보일러플레이트를 "매 프로젝트마다 다시 쓸 필요가 없도록 미리 갖춰 둔 출발점"이라고 정의했다. 아키텍처 관점에서 이 정의는 곧바로 실무적인 질문으로 이어진다 — <strong>L1이 L2에 넘겨주는 것 중 어디까지를 프로젝트가 자유롭게 고칠 수 있게 둘 것인가</strong>다. 이 저장소는 이 질문에 파일 단위로 다른 답을 준다. §5에서 다루는 <code>upgrade-project.ts</code>의 5분류(LOCKED·MERGE·PRESERVE·SYNC_IF_NEWER·PRUNE)가 사실상 이 전략을 코드로 못박아 둔 것이다.</p>
@@ -156,7 +156,7 @@ L3 — 실제 프로젝트 작업 디렉토리 (예: C:\projects\my-app\)
   <p>5장에서 <code>tier: high/medium/low</code>가 개별 에이전트 역할에 어떻게 배정되는지 봤다. 여기서는 그 배정을 <strong>변경하고 유지하는 흐름</strong>을 아키텍처 관점에서 짚는다. tier 값은 <code>agents/*.md</code>의 frontmatter에 있고, 이 파일은 위 SSOT 표에서 본 것처럼 L0가 원본이며 §5의 <code>upgrade-project.ts</code>가 <strong>SYNC_IF_NEWER</strong>로 관리한다 — 즉 tier 전략 자체도 L0→L1→L2 원칙을 그대로 따른다.</p>
   <ul>
     <li><strong>기본 배정은 L0에서 한 번 정한다.</strong> PM·Architect류는 high, code-writer·docs-writer류는 medium, automation-engineer류는 low라는 원칙을 워크스페이스 루트의 <code>agents/*.md</code>에서 확정하면, 모든 베리언트(variant)의 L1 템플릿이 이를 상속한다.</li>
-    <li><strong>티어 기준이 바뀌면 버전을 올린다.</strong> "이 역할은 이제 medium이 아니라 high여야 한다" 같은 조직 차원의 재판단은 L0의 <code>agents/*.md</code>를 고치고 <code>@version</code>(또는 frontmatter <code>version:</code>)을 올리는 형태로 이루어진다. 이미 만들어진 L2 프로젝트에는 자동으로 반영되지 않고, 각 프로젝트가 <code>upgrade-project.ts</code>를 실행해야 새 티어를 받는다(10장) — 티어 변경도 예외 없이 포크 모델을 따른다.</li>
+    <li><strong>티어 기준이 바뀌면 버전을 올린다.</strong> "이 역할은 이제 medium이 아니라 high여야 한다" 같은 조직 차원의 재판단은 L0의 <code>agents/*.md</code>를 고치고 <code>@version</code>(또는 frontmatter <code>version:</code>)을 올리는 형태로 이루어진다. 이미 만들어진 L3 프로젝트에는 자동으로 반영되지 않고, 각 프로젝트가 <code>upgrade-project.ts</code>를 실행해야 새 티어를 받는다(10장) — 티어 변경도 예외 없이 포크 모델을 따른다.</li>
     <li><strong>프로젝트별 예외는 L2에서만 남긴다.</strong> 특정 베리언트(variant)의 특정 역할만 다른 티어가 필요하다면(예: 유난히 복잡한 도메인 로직을 다루는 code-writer를 medium 대신 high로), 그 프로젝트의 <code>agents/*.md</code>를 로컬에서 직접 수정한다. 다만 이 파일은 SYNC_IF_NEWER 대상이므로, 다음 업그레이드 때 L1 쪽 버전이 더 높으면 <code>⚠️ CONFLICT</code> 경고와 함께 덮어써질 수 있다는 점을 감안해야 한다(§5의 안전장치 참고).</li>
   </ul>
   <div class="note">보일러플레이트 전략과 티어 전략은 결국 같은 질문의 두 가지 답이다 — <strong>"조직 전체가 동일해야 하는 것은 L0/L1에서 강제하고, 프로젝트마다 달라도 되는 것은 L2에 위임한다."</strong> 두 전략 모두 그 경계를 파일 단위(LOCKED/MERGE/PRESERVE)와 필드 단위(tier)로 명시적으로 그어 둔다는 공통점이 있다.</div>

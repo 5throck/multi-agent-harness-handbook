@@ -100,7 +100,7 @@
     <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#memory">Capítulo 8 §5 Hoja de Ruta Avanzada</a></span></p>
 
   <div class="q">Si se actualiza una plantilla de variante, ¿se propaga automáticamente a los proyectos existentes?</div>
-  <p class="faq-answer">No. ai-workspace-standards utiliza un <strong>Modelo de Bifurcación</strong>. Los cambios a L1 (la plantilla común) no se propagan automáticamente a los proyectos L2 ya con scaffolding ni a las instancias de proyecto en vivo L3. Esto es por diseño para preservar la divergencia intencional, pero crea la carga operativa de aplicar manualmente parches de seguridad o correcciones de errores. Un modelo de adhesión basado en consentimiento y un pipeline de despliegue asíncrono están en discusión como mejoras futuras.
+  <p class="faq-answer">No. ai-workspace-standards utiliza un <strong>Modelo de Bifurcación</strong>. Los cambios a L1 (la plantilla común) no se propagan automáticamente a las variantes L2 (<code>templates/co-*/</code>) ya con scaffolding ni a los proyectos L3 (<code>Projects/*/</code>, generados a partir de una variante L2). Esto es por diseño para preservar la divergencia intencional, pero crea la carga operativa de aplicar manualmente parches de seguridad o correcciones de errores. Un modelo de adhesión basado en consentimiento y un pipeline de despliegue asíncrono están en discusión como mejoras futuras.
     <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#variant-deploy">Capítulo 8 §5 Hoja de Ruta Avanzada</a></span></p>
 
   <div class="q">Crear una nueva variante falla la validación de <code>agent:verify</code> o <code>validate-templates</code>.</div>

@@ -110,7 +110,7 @@
       <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s4">Chapter 5 §4</a></span></dd>
 
     <dt>L0 / L1 / L2 / L3</dt>
-    <dd>The four-tier hierarchy running from the workspace root (L0, the sole original) → the common template snapshot (L1, <code>templates/common/</code>) → the variant/project template (L2, <code>templates/co-*/</code> or <code>Projects/*/</code>) → the live project instance (L3, a working directory cloned/deployed from an L2 variant). The flow always moves top-down: L1→L2 is a "fork" that happens exactly once at scaffolding time, and L2→L3 is a one-time clone at project creation time.
+    <dd>The four-tier hierarchy running from the workspace root (L0, the sole original) → the common template snapshot (L1, <code>templates/common/</code>) → the variant template (L2, <code>templates/co-*/</code>) → the live project working directory (L3, <code>Projects/*/</code>, scaffolded from an L2 variant via <code>new-project.ts</code> — still inside the same workspace repository, not an external clone). The flow always moves top-down: L1→L2 is a "fork" that happens exactly once when a variant is scaffolded, and L2→L3 is a one-time scaffold at project-creation time.
       <span class="see">Details: <a href="../intro/08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and the SSOT</a></span></dd>
 
     <dt>Fork Model <span class="en">Fork Model</span></dt>

@@ -100,7 +100,7 @@
     <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#memory">Chapter 8 §5 Advanced Roadmap</a></span></p>
 
   <div class="q">If a variant template is updated, does it automatically propagate to existing projects?</div>
-  <p class="faq-answer">No. ai-workspace-standards uses a <strong>Fork Model</strong>. Changes to L1 (the common template) do not automatically propagate to already-scaffolded L2 projects or L3 (live project instances). This is by design to preserve intentional divergence, but it creates the operational burden of manually applying security patches or bug fixes. A consent-based opt-in model and an asynchronous deployment pipeline are being discussed as future enhancements.
+  <p class="faq-answer">No. ai-workspace-standards uses a <strong>Fork Model</strong>. Changes to L1 (the common template) do not automatically propagate to already-scaffolded L2 variants (<code>templates/co-*/</code>) or L3 projects (<code>Projects/*/</code>, scaffolded from an L2 variant). This is by design to preserve intentional divergence, but it creates the operational burden of manually applying security patches or bug fixes. A consent-based opt-in model and an asynchronous deployment pipeline are being discussed as future enhancements.
     <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#variant-deploy">Chapter 8 §5 Advanced Roadmap</a></span></p>
 
   <div class="q">Creating a new variant fails <code>agent:verify</code> validation or <code>validate-templates</code>.</div>

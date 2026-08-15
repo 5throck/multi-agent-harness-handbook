@@ -7,9 +7,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Chapter 10 - L2 Project Upgrade - part of the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="description" content="Chapter 10 - L3 Project Upgrade - part of the Multi-Agent Team Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chapter 10 - L2 Project Upgrade</title>
+  <title>Chapter 10 - L3 Project Upgrade</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Chapter 10 - L2 Project Upgrade</div>
+  <div class="nav-title">Chapter 10 - L3 Project Upgrade</div>
   <a href="#why">Why it's needed — the flip side of the fork model</a>
   <a href="#usage">How to use upgrade-project.ts</a>
   <a href="#categories">The 5 file-handling categories</a>
@@ -33,8 +33,8 @@
 <main>
  <article class="reading">
   <div class="chapter-eyebrow">Chapter 10</div>
-  <h1>L2 Project Upgrade</h1>
-  <p class="lead">Once you've created an L2 project, what happens when the upstream standards (L0/L1) change? The answer is: "nothing happens at all." Because of the fork model discussed in Chapter 8 §1, actually bringing new upstream changes into an already-created project requires a human to explicitly run <code>upgrade-project.ts</code>. This chapter covers that procedure.</p>
+  <h1>L3 Project Upgrade</h1>
+  <p class="lead">Once you've created an L3 project, what happens when the upstream standards (L0/L1) change? The answer is: "nothing happens at all." Because of the fork model discussed in Chapter 8 §1, actually bringing new upstream changes into an already-created L3 project requires a human to explicitly run <code>upgrade-project.ts</code>. This chapter covers that procedure.</p>
   <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.6.0) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and SSOT</a></p>
 
   <div class="keypoints">
@@ -49,8 +49,8 @@
   </div>
 
   <h2 id="why">Why it's needed — the flip side of the fork model</h2>
-  <p>As established in <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1</a>, L1 delivers its content to a project exactly once — at the moment <code>new-project.ts</code> scaffolds it. From that point on, L2 evolves completely independently, and no matter how much L1 changes afterward, nothing is automatically reflected in an L2 project that already exists.</p>
-  <p>The problem is that, over time, hook scripts get fixed on the L1 side, new skills get added, and security settings get hardened. When you want to bring those changes into an individual L2 project, manually comparing files one by one isn't realistic. <code>upgrade-project.ts</code> automates this reflection process while still honoring the core principle of the fork model — "never blindly overwrite parts that L2 has deliberately changed."</p>
+  <p>As established in <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1</a>, L1 delivers its content to a project exactly once — at the moment <code>new-project.ts</code> scaffolds it. From that point on, L3 evolves completely independently, and no matter how much L1 changes afterward, nothing is automatically reflected in an L3 project that already exists.</p>
+  <p>The problem is that, over time, hook scripts get fixed on the L1 side, new skills get added, and security settings get hardened. When you want to bring those changes into an individual L3 project, manually comparing files one by one isn't realistic. <code>upgrade-project.ts</code> automates this reflection process while still honoring the core principle of the fork model — "never blindly overwrite parts that L3 has deliberately changed."</p>
 
   <h2 id="usage">How to use upgrade-project.ts</h2>
   <p>Start by running <code>--dry-run</code> to preview what will change. It doesn't touch any files — it just prints the plan to the console.</p>
@@ -95,8 +95,8 @@
   <h2 id="vs-promotion">How this differs from promotion</h2>
   <p>The "promotion" covered in Chapter 11 and this chapter's "upgrade" sound similar, but they run in exactly opposite directions.</p>
   <ul>
-    <li><strong>Promotion</strong> (<code>l2-to-variant-pipeline.ts</code>, Chapter 11) — <strong>L2 → L1</strong>. Elevates changes from a project you created into the official template, turning them into a variant others can use.</li>
-    <li><strong>Upgrade</strong> (<code>upgrade-project.ts</code>, this chapter) — <strong>L1 → L2</strong>. Pulls the latest changes from the official template into a project you've already created.</li>
+    <li><strong>Promotion</strong> (<code>l2-to-variant-pipeline.ts</code>, Chapter 11) — <strong>L3 → L2</strong>. Elevates changes from a project you created into the official variant template, turning them into a variant others can use.</li>
+    <li><strong>Upgrade</strong> (<code>upgrade-project.ts</code>, this chapter) — <strong>L1 → L3</strong>. Pulls the latest changes from the official template into a project you've already created.</li>
   </ul>
   <p>The two scripts simply move files in opposite directions — neither replaces the other. If you want to contribute back to the template, use promotion; if you want to keep an existing project up to date, use upgrade.</p>
 

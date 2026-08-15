@@ -7,9 +7,9 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="10장 · L2 프로젝트 업그레이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="10장 · L3 프로젝트 업그레이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>10장 · L2 프로젝트 업그레이드</title>
+  <title>10장 · L3 프로젝트 업그레이드</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index.html" class="nav-home">← 핸드북 홈</a>
-  <div class="nav-title">10장 · L2 프로젝트 업그레이드</div>
+  <div class="nav-title">10장 · L3 프로젝트 업그레이드</div>
   <a href="#why">왜 필요한가 — 포크 모델의 이면</a>
   <a href="#usage">upgrade-project.ts 사용법</a>
   <a href="#categories">파일 처리 5분류</a>
@@ -33,8 +33,8 @@
 <main>
  <article class="reading">
   <div class="chapter-eyebrow">10장</div>
-  <h1>L2 프로젝트 업그레이드</h1>
-  <p class="lead">L2 프로젝트를 만든 뒤 상위 표준(L0/L1)이 바뀌면 무슨 일이 일어날까 — 정답은 "아무 일도 안 일어난다"이다. 8장 §1에서 다룬 포크 모델 때문에, 이미 태어난 프로젝트에 새 변경을 실제로 반영하려면 <code>upgrade-project.ts</code>를 사람이 명시적으로 실행해야 한다. 이 장은 그 절차를 다룬다.</p>
+  <h1>L3 프로젝트 업그레이드</h1>
+  <p class="lead">L3 프로젝트를 만든 뒤 상위 표준(L0/L1)이 바뀌면 무슨 일이 일어날까 — 정답은 "아무 일도 안 일어난다"이다. 8장 §1에서 다룬 포크 모델 때문에, 이미 태어난 L3 프로젝트에 새 변경을 실제로 반영하려면 <code>upgrade-project.ts</code>를 사람이 명시적으로 실행해야 한다. 이 장은 그 절차를 다룬다.</p>
   <p class="source-line">소스: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.6.0 기준) · 관련: <a href="08_Intro_Advanced_Deploy.html#s1">8장 §1 배포와 SSOT</a></p>
 
   <div class="keypoints">
@@ -49,8 +49,8 @@
   </div>
 
   <h2 id="why">왜 필요한가 — 포크 모델의 이면</h2>
-  <p><a href="08_Intro_Advanced_Deploy.html#s1">8장 §1</a>에서 확인했듯, L1은 <code>new-project.ts</code>로 프로젝트를 스캐폴딩하는 시점에 딱 한 번만 내용을 전달한다. 그 이후 L2는 완전히 독립적으로 진화하며, L1이 아무리 바뀌어도 이미 만들어진 L2에는 아무것도 자동으로 반영되지 않는다.</p>
-  <p>문제는 시간이 지날수록 L1 쪽에서 훅 스크립트가 고쳐지고, 새 스킬이 추가되고, 보안 설정이 강화된다는 점이다. 이런 변경을 개별 L2 프로젝트에 반영하고 싶을 때 파일을 하나하나 손으로 대조하는 건 현실적이지 않다. <code>upgrade-project.ts</code>는 이 반영 작업을 자동화하되, 포크 모델의 핵심 원칙 — "L2가 의도적으로 다르게 고친 부분은 함부로 덮어쓰지 않는다" — 은 그대로 지킨다.</p>
+  <p><a href="08_Intro_Advanced_Deploy.html#s1">8장 §1</a>에서 확인했듯, L1은 <code>new-project.ts</code>로 프로젝트를 스캐폴딩하는 시점에 딱 한 번만 내용을 전달한다. 그 이후 L3는 완전히 독립적으로 진화하며, L1이 아무리 바뀌어도 이미 만들어진 L3에는 아무것도 자동으로 반영되지 않는다.</p>
+  <p>문제는 시간이 지날수록 L1 쪽에서 훅 스크립트가 고쳐지고, 새 스킬이 추가되고, 보안 설정이 강화된다는 점이다. 이런 변경을 개별 L3 프로젝트에 반영하고 싶을 때 파일을 하나하나 손으로 대조하는 건 현실적이지 않다. <code>upgrade-project.ts</code>는 이 반영 작업을 자동화하되, 포크 모델의 핵심 원칙 — "L3가 의도적으로 다르게 고친 부분은 함부로 덮어쓰지 않는다" — 은 그대로 지킨다.</p>
 
   <h2 id="usage">upgrade-project.ts 사용법</h2>
   <p>가장 먼저 <code>--dry-run</code>으로 무엇이 바뀔지 미리 확인한다. 실제로 파일을 건드리지 않고 콘솔에 계획만 출력한다.</p>
@@ -95,8 +95,8 @@
   <h2 id="vs-promotion">승격과의 방향 차이</h2>
   <p>11장에서 다루는 "승격"과 이번 장의 "업그레이드"는 이름이 비슷해 보이지만 방향이 정반대다.</p>
   <ul>
-    <li><strong>승격</strong>(<code>l2-to-variant-pipeline.ts</code>, 11장) — <strong>L2 → L1</strong>. 내가 만든 프로젝트의 변경을 공식 템플릿으로 끌어올려, 다른 사람도 쓸 수 있는 베리언트(variant)로 만드는 작업.</li>
-    <li><strong>업그레이드</strong>(<code>upgrade-project.ts</code>, 이 장) — <strong>L1 → L2</strong>. 공식 템플릿의 최신 변경을 이미 만들어진 내 프로젝트에 끌어오는 작업.</li>
+    <li><strong>승격</strong>(<code>l2-to-variant-pipeline.ts</code>, 11장) — <strong>L3 → L2</strong>. 내가 만든 프로젝트의 변경을 공식 variant 템플릿으로 끌어올려, 다른 사람도 쓸 수 있는 베리언트(variant)로 만드는 작업.</li>
+    <li><strong>업그레이드</strong>(<code>upgrade-project.ts</code>, 이 장) — <strong>L1 → L3</strong>. 공식 템플릿의 최신 변경을 이미 만들어진 내 프로젝트에 끌어오는 작업.</li>
   </ul>
   <p>두 스크립트는 서로 반대 방향으로 파일을 흘려보낼 뿐, 어느 한쪽이 다른 쪽을 대체하지 않는다. 템플릿에 기여하고 싶다면 승격을, 이미 만든 프로젝트를 최신 상태로 유지하고 싶다면 업그레이드를 쓴다.</p>
 

@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第10章・L2プロジェクトのアップグレード - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブックの資料です。">
+  <meta name="description" content="第10章・L3プロジェクトのアップグレード - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブックの資料です。">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>第10章・L2プロジェクトのアップグレード</title>
+  <title>第10章・L3プロジェクトのアップグレード</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -13,7 +13,7 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">第10章・L2プロジェクトのアップグレード</div>
+  <div class="nav-title">第10章・L3プロジェクトのアップグレード</div>
   <a href="#why">なぜ必要か — フォークモデルの裏側</a>
   <a href="#usage">upgrade-project.ts の使い方</a>
   <a href="#categories">ファイル処理の5分類</a>
@@ -28,8 +28,8 @@
 <main>
  <article class="reading">
   <div class="chapter-eyebrow">第10章</div>
-  <h1>L2プロジェクトのアップグレード</h1>
-  <p class="lead">L2プロジェクトを作成した後に上位標準(L0/L1)が変更されると何が起きるのか — 答えは「何も起きない」である。第8章 §1で扱ったフォークモデルのため、すでに生まれたプロジェクトに新しい変更を実際に反映するには、人が明示的に<code>upgrade-project.ts</code>を実行する必要がある。本章ではその手順を扱う。</p>
+  <h1>L3プロジェクトのアップグレード</h1>
+  <p class="lead">L3プロジェクトを作成した後に上位標準(L0/L1)が変更されると何が起きるのか — 答えは「何も起きない」である。第8章 §1で扱ったフォークモデルのため、すでに生まれたL3プロジェクトに新しい変更を実際に反映するには、人が明示的に<code>upgrade-project.ts</code>を実行する必要がある。本章ではその手順を扱う。</p>
   <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.6.0時点) ・関連: <a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></p>
 
   <div class="keypoints">
@@ -44,8 +44,8 @@
   </div>
 
   <h2 id="why">なぜ必要か — フォークモデルの裏側</h2>
-  <p><a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1</a>で確認したように、L1は<code>new-project.ts</code>でプロジェクトをスキャフォールディングする時点で一度だけ内容を渡す。それ以降L2は完全に独立して進化し、L1がどれだけ変わろうと、すでに作成されたL2には何も自動的に反映されない。</p>
-  <p>問題は、時間が経つにつれてL1側のフックスクリプトが修正され、新しいスキルが追加され、セキュリティ設定が強化されていくことである。こうした変更を個々のL2プロジェクトに反映したいとき、ファイルを一つひとつ手作業で照合するのは現実的ではない。<code>upgrade-project.ts</code>はこの反映作業を自動化しつつ、フォークモデルの核心原則 — 「L2が意図的に変更した部分をむやみに上書きしない」— はそのまま守る。</p>
+  <p><a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1</a>で確認したように、L1は<code>new-project.ts</code>でプロジェクトをスキャフォールディングする時点で一度だけ内容を渡す。それ以降L3は完全に独立して進化し、L1がどれだけ変わろうと、すでに作成されたL3には何も自動的に反映されない。</p>
+  <p>問題は、時間が経つにつれてL1側のフックスクリプトが修正され、新しいスキルが追加され、セキュリティ設定が強化されていくことである。こうした変更を個々のL3プロジェクトに反映したいとき、ファイルを一つひとつ手作業で照合するのは現実的ではない。<code>upgrade-project.ts</code>はこの反映作業を自動化しつつ、フォークモデルの核心原則 — 「L3が意図的に変更した部分をむやみに上書きしない」— はそのまま守る。</p>
 
   <h2 id="usage">upgrade-project.ts の使い方</h2>
   <p>まず<code>--dry-run</code>で何が変わるかを事前に確認する。実際にファイルを操作せず、コンソールに計画のみを出力する。</p>
@@ -90,8 +90,8 @@
   <h2 id="vs-promotion">昇格との方向の違い</h2>
   <p>第11章で扱う「昇格」と本章の「アップグレード」は名前こそ似ているが、方向は正反対である。</p>
   <ul>
-    <li><strong>昇格</strong>(<code>l2-to-variant-pipeline.ts</code>、第11章) — <strong>L2 → L1</strong>。自分が作成したプロジェクトの変更を公式テンプレートへ引き上げ、他の人も使えるバリアント(variant)にする作業。</li>
-    <li><strong>アップグレード</strong>(<code>upgrade-project.ts</code>、本章) — <strong>L1 → L2</strong>。公式テンプレートの最新の変更を、すでに作成した自分のプロジェクトに取り込む作業。</li>
+    <li><strong>昇格</strong>(<code>l2-to-variant-pipeline.ts</code>、第11章) — <strong>L3 → L2</strong>。自分が作成したプロジェクトの変更を公式variantテンプレートへ引き上げ、他の人も使えるバリアント(variant)にする作業。</li>
+    <li><strong>アップグレード</strong>(<code>upgrade-project.ts</code>、本章) — <strong>L1 → L3</strong>。公式テンプレートの最新の変更を、すでに作成した自分のプロジェクトに取り込む作業。</li>
   </ul>
   <p>両スクリプトは互いに逆方向へファイルを流すだけで、どちらか一方が他方を代替するものではない。テンプレートに貢献したいなら昇格を、すでに作成したプロジェクトを最新の状態に保ちたいならアップグレードを使う。</p>
 

@@ -76,7 +76,7 @@
 ├── .claude/                 ← §2: Claude専用のコマンド・スキル (/sync、create-variantなど)
 ├── .gemini/                 ← §2: Antigravity専用のコマンド・スキル (同名で実装が異なる)
 ├── .agents/                 ← §2: ツール非依存のコマンド・スキル (AGENTS.md標準対応ツール向け)
-├── scripts/                 ← §4·§5: new-project.ts、publish-to-template.tsなどの運用スクリプト
+├── scripts/                 ← §4·§5: new-project.ts、propagate-to-templates.tsなどの運用スクリプト
 ├── templates/                (L1 + 公式L2)
 │   ├── common/              ← §5: L1 — L0のスナップショット、variant作成時の出発点
 │   │   └── agents/pm.md     ← extends: ../../../agents/pm.md (L0参照 + ワークスペース専用セクションを除去)
@@ -87,7 +87,7 @@
 │   ├── co-consult/          ← §3: L2公式variant (コンサルティング、7段階)
 │   ├── co-deck/   [beta]    ← §3: L2公式variant (講義/プレゼン、11段階)
 │   └── co-game/   [beta]    ← §3: L2公式variant (ゲーム開発)
-├── Projects/                 (稼働中のL2 — new-project.tsでスキャフォールディングされた実プロジェクト)
+├── Projects/                 (L3 — new-project.tsでスキャフォールディングされた稼働中のプロジェクト作業ディレクトリ)
 │   └── &lt;my-project&gt;/
 │       ├── docs/context.md  ← §4: このプロジェクト専用のSSOT (variantの空の骨格を埋めたもの)
 │       ├── agents/          ← variantから継承し、このプロジェクト専用として進化を続ける
@@ -98,16 +98,16 @@
 </div>
   </div>
 
-  <p>このツリーで注目すべきは、4つの層が実際のディレクトリ構造としてそのまま現れている点である。ルート直下(CONSTITUTION.md・CLAUDE.md・GEMINI.md・AGENTS.md・<code>agents/</code>・<code>scripts/</code>)がL0であり、<code>templates/common/</code>がL1、<code>templates/co-*/</code>と<code>Projects/*/</code>がL2である。L2をベースにして開発者が日常的に作業する実際のプロジェクトディレクトリ(例: <code>C:\projects\my-app\</code>)がL3インスタンスに該当する。つまり「L0→L1→L2→L3」は抽象的な概念図ではなく、クローンしたフォルダで<code>ls</code>を一度打つだけで見える物理的な配置なのである。</p>
+  <p>このツリーで注目すべきは、4つの層が実際のディレクトリ構造としてそのまま現れている点である。ルート直下(CONSTITUTION.md・CLAUDE.md・GEMINI.md・AGENTS.md・<code>agents/</code>・<code>scripts/</code>)がL0であり、<code>templates/common/</code>がL1、<code>templates/co-*/</code>がL2、開発者が日常的に作業する実際のプロジェクト作業ディレクトリである<code>Projects/*/</code>がL3である。つまり「L0→L1→L2→L3」は抽象的な概念図ではなく、クローンしたフォルダで<code>ls</code>を一度打つだけで見える物理的な配置なのである。</p>
 
   <p>この構造の上で実際に作業が進行する順序(ランタイムフロー)は次のとおりである。</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
     <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md → AGENTS.md → memory/MEMORY.mdの順に読み込む(§4で扱う)。</li>
     <li><strong>ツール別の実行規則を適用。</strong> Claude Code/AppであればCLAUDE.mdと<code>.claude/</code>が、Antigravity系であればGEMINI.mdと<code>.gemini/</code>が詳細な実行方式を定める。</li>
-    <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。このようにして作られたプロジェクトを実際の開発環境(例: <code>C:\projects\</code>)に持ち込んで作業すると、それがL3インスタンスになる。</li>
-    <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/publish-to-template.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2やL3には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
+    <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製し、L3のプロジェクト作業ディレクトリを作成する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。</li>
+    <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/propagate-to-templates.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2やL3には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
   </ol>
-  <div class="note">一言で言えば: <strong>L0は「ルート直下」、L1は「templates/common/」、L2は「templates/co-*/とProjects/*/」、L3は「実際のプロジェクト作業ディレクトリ」</strong> — この4つの座標さえ覚えておけば、以降の節のすべての説明を実際のフォルダ位置に対応させながら追うことができる。</div>
+  <div class="note">一言で言えば: <strong>L0は「ルート直下」、L1は「templates/common/」、L2は「templates/co-*/」、L3は「Projects/*/、実際のプロジェクト作業ディレクトリ」</strong> — この4つの座標さえ覚えておけば、以降の節のすべての説明を実際のフォルダ位置に対応させながら追うことができる。</div>
 
   <h2 id="s2">4つの中核ファイル</h2>
   <p>ワークスペースルートには、すべてのプロジェクトが共通して参照する4つの中核ファイルがある。</p>
@@ -145,10 +145,10 @@
   </div>
 
   <p>各バリアント(variant)はgitタグ<code>template-vX.Y.Z</code>でバージョン管理され、<code>bun scripts/validate-templates.ts</code>がエージェントfrontmatterの完全性、必須セクション、AGENTS.mdロスターとの整合性、<code>.claude/</code>・<code>.gemini/</code>間のプラットフォームパリティなど、構造的な規定遵守を検査する。</p>
-  <p><code>templates/</code>という名前が示すとおり、このリポジトリが配布するものは結局のところ<strong>ボイラープレート(boilerplate)</strong>である。プロジェクトごとに毎回一から書き直す必要があったPMの役割定義、ガバナンスパイプライン、プラットフォーム別のコマンド・スキル配線をあらかじめ備えた出発点である。ただし「コピーして各自で勝手に直す」ありふれたボイラープレートとは異なり、このリポジトリはその出発点が<em>どこから来て、どのように更新されるか</em>まで階層構造として明示する。それが次節のL0 → L1 → L2である。</p>
+  <p><code>templates/</code>という名前が示すとおり、このリポジトリが配布するものは結局のところ<strong>ボイラープレート(boilerplate)</strong>である。プロジェクトごとに毎回一から書き直す必要があったPMの役割定義、ガバナンスパイプライン、プラットフォーム別のコマンド・スキル配線をあらかじめ備えた出発点である。ただし「コピーして各自で勝手に直す」ありふれたボイラープレートとは異なり、このリポジトリはその出発点が<em>どこから来て、どのように更新されるか</em>まで階層構造として明示する。それが次節のL0 → L1 → L2 → L3である。</p>
   <p>このボイラープレートがあらかじめ備えているものの1つが<strong>エージェントの役割別モデル割り当て</strong>である。variant内の各エージェント定義ファイル(<code>agents/*.md</code>)はfrontmatterに<code>tier</code>フィールドを持ち、この値はプラットフォーム別(<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>)に<code>high</code>/<code>medium</code>/<code>low</code>のいずれかを指定する。判断が重い役割(PM・Architect)にはhigh、実際の実装を担当する役割(code-writer・docs-writer)にはmedium、定型化された反復作業(automation-engineerなど)にはlowを割り当てる形だ。実際の<code>model</code>フィールドは通常<code>inherit</code>のまま残されるが、これは各プラットフォームが配布時点でこのtier値を自プラットフォームのモデルエイリアス(<code>opus</code>/<code>sonnet</code>/<code>haiku</code>)に変換して割り当てるためである。つまりボイラープレートを複製した瞬間、新しいプロジェクトは「誰がどのコストのモデルで働くか」まですでに決まった状態で始まる。</p>
   <p>このティアリングがないと実際にどのような問題が生じるか。すべてのエージェントを画一的に最高性能モデル(high)に割り当てると、automation-engineerのように定型化されたスクリプト実行のみを繰り返す役割にも毎回不必要に高コストな推論コストがかかり、チーム全体の運用コストが無意味に膨らむ。逆に、すべてを最低コストモデル(low)に統一すると、PMのように複数のエージェントの成果物を総合して判断すべき役割が浅い推論しかできず、誤った調整判断を下すことが頻発する。ティアリングは「この役割が実際にどれだけ深い推論を必要とするか」に合わせて、コストと品質のバランスを役割単位であらかじめ整えておく仕組みである。</p>
-  <div class="note">この<strong>モデルコストティア(high/medium/low)</strong>は、第8章で扱う<strong>L0 → L1 → L2の3層</strong>(ファイルがどこから来て、どのように流れるかについての階層)と、名前の「3段」という感覚が同じだけで、互いに異なる概念である。一方は「エージェントにどのモデルを割り当てるか」であり、もう一方は「ファイルの原本がどこにあるか」である。</div>
+  <div class="note">この<strong>モデルコストティア(high/medium/low)</strong>は、第8章で扱う<strong>L0 → L1 → L2 → L3の4層</strong>(ファイルがどこから来て、どのように流れるかについての階層)と、名前の「層」という感覚が同じだけで、互いに異なる概念である。一方は「エージェントにどのモデルを割り当てるか」であり、もう一方は「ファイルの原本がどこにあるか」である。</div>
 
   <h2 id="s4">セッション開始チェックリストとスキャフォールディング</h2>
   <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>を読む。続いてAGENTS.mdで利用可能なエージェントを確認し、<code>memory/MEMORY.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
@@ -184,8 +184,8 @@
     </svg>
   </div>
 
-  <p>ここでCONSTITUTION.mdとcontext.mdの関係を明確にしておく必要がある。両方とも「セッション開始チェックリスト」で読む文書だが、SSOTの階層が異なる。<code>CONSTITUTION.md</code>はL0(ワークスペースルート)にただ1つだけ存在し、<em>すべての</em>プロジェクトが共有するルールを定義する。ガバナンス、PRワークフロー、マルチエージェントの原則がここに含まれる。一方、<code>context.md</code>はL2(個別プロジェクト)ごとに別々に存在し、そのプロジェクト固有の目標・ドメイン知識・現在の進捗状況を格納する<strong>プロジェクト専用のSSOT</strong>である。CONSTITUTION.mdが上から強制されて埋められるファイルではなく、各プロジェクトチームが自ら書き進めていくファイルである点が異なる。だからチェックリストにも順序がある。CONSTITUTION.mdで「何を守るべきか(共通)」をまず確認した後、context.mdで「今このプロジェクトが何をしているか(個別)」を確認する。</p>
-  <p>ところで、<code>templates/&lt;variant&gt;/docs/context.md</code>のように、variantの中にも同じ名前のファイルがある。これはL2プロジェクトのcontext.mdと名前だけが同じで役割は異なる。variant内のcontext.mdはまだ埋められていない空の骨格(プレースホルダー)であり、<code>new-project.ts</code>が実行される瞬間、他のL1→L2ファイルと同様に一度だけ複製される。複製された後は、原本(バリアント(variant)のcontext.md)との連結が完全に切れ、そのプロジェクトチームが実際の内容で埋めていく独立した文書になる。そのため、以降にバリアント(variant)のcontext.mdの骨格が変わっても、すでにスキャフォールディングされたプロジェクトのcontext.mdには自動的には反映されない。</p>
+  <p>ここでCONSTITUTION.mdとcontext.mdの関係を明確にしておく必要がある。両方とも「セッション開始チェックリスト」で読む文書だが、SSOTの階層が異なる。<code>CONSTITUTION.md</code>はL0(ワークスペースルート)にただ1つだけ存在し、<em>すべての</em>プロジェクトが共有するルールを定義する。ガバナンス、PRワークフロー、マルチエージェントの原則がここに含まれる。一方、<code>context.md</code>はL3(個別プロジェクト)ごとに別々に存在し、そのプロジェクト固有の目標・ドメイン知識・現在の進捗状況を格納する<strong>プロジェクト専用のSSOT</strong>である。CONSTITUTION.mdが上から強制されて埋められるファイルではなく、各プロジェクトチームが自ら書き進めていくファイルである点が異なる。だからチェックリストにも順序がある。CONSTITUTION.mdで「何を守るべきか(共通)」をまず確認した後、context.mdで「今このプロジェクトが何をしているか(個別)」を確認する。</p>
+  <p>ところで、<code>templates/&lt;variant&gt;/docs/context.md</code>のように、variantの中にも同じ名前のファイルがある。これはL3プロジェクトのcontext.mdと名前だけが同じで役割は異なる。variant内のcontext.mdはまだ埋められていない空の骨格(プレースホルダー)であり、<code>new-project.ts</code>が実行される瞬間、他のL2→L3ファイルと同様に一度だけ複製される。複製された後は、原本(バリアント(variant)のcontext.md)との連結が完全に切れ、そのプロジェクトチームが実際の内容で埋めていく独立した文書になる。そのため、以降にバリアント(variant)のcontext.mdの骨格が変わっても、すでにスキャフォールディングされたプロジェクトのcontext.mdには自動的には反映されない。</p>
 
   <div class="note">ワークスペースルートのファイル(CONSTITUTION.md、CLAUDE.mdなど)と、スキャフォールディングされた個別プロジェクトのファイルは、それぞれ別のgitリポジトリに属する。両者を同じ作業の中で一緒に修正しないことが、このリポジトリの基本原則である。</div>
 

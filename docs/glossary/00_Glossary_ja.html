@@ -110,7 +110,7 @@
       <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s4">第5章 §4</a></span></dd>
 
     <dt>L0 / L1 / L2 / L3</dt>
-    <dd>ワークスペースルート(L0、唯一の原本)→共通テンプレートスナップショット(L1、<code>templates/common/</code>)→variant/プロジェクトテンプレート(L2、<code>templates/co-*/</code>または<code>Projects/*/</code>)→実際のプロジェクトインスタンス(L3、L2 variantをクローン/デプロイして作成された稼働中の作業ディレクトリ)へと続く4層構造。流れは常に上から下へのみ進み、L1→L2はスキャフォールディング時点で一度だけ行われる「フォーク」であり、L2→L3はプロジェクト作成時の一回限りのクローンである。
+    <dd>ワークスペースルート(L0、唯一の原本)→共通テンプレートスナップショット(L1、<code>templates/common/</code>)→variantテンプレート(L2、<code>templates/co-*/</code>)→稼働中のプロジェクト作業ディレクトリ(L3、<code>Projects/*/</code>、<code>new-project.ts</code>によってL2 variantからスキャフォールディングされる — 外部クローンではなく同じワークスペースリポジトリ内にある)へと続く4層構造。流れは常に上から下へのみ進み、L1→L2はvariant作成時点で一度だけ行われる「フォーク」であり、L2→L3はプロジェクト作成時の一回限りのスキャフォールディングである。
       <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></span></dd>
 
     <dt>フォークモデル <span class="en">Fork Model</span></dt>

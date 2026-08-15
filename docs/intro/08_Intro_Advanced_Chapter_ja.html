@@ -318,7 +318,7 @@
   <h3 id="s2-script-write">Write — スクリプトの作成</h3>
   <p>新しいスクリプトは <code>scripts/</code> ディレクトリに <code>.ts</code> ファイルとして作成します。作成時には次の点を遵守します。</p>
   <ul>
-    <li>ファイル名がスクリプトの目的を明確に示していること（例: <code>publish-to-template.ts</code>、<code>validate-skills.ts</code>）</li>
+    <li>ファイル名がスクリプトの目的を明確に示していること（例: <code>propagate-to-templates.ts</code>、<code>validate-skills.ts</code>）</li>
     <li>スクリプトの冒頭に目的、使用法、引数の説明をコメントとして記録する</li>
     <li>型定義を明確にし、外部依存を最小化する</li>
     <li>エラー処理を含め、失敗時に意味のあるメッセージを出力する</li>
@@ -362,7 +362,7 @@
   </ul>
 
   <div class="note">
-    スクリプトのライフサイクルにおいて、人が直接行う<strong>手動レビュー（manual review）</strong>は、Lint と Test の間、および Test と Register の間でそれぞれ一度ずつ推奨されます。自動化された検証がすべての問題を捉えられるわけではありません。特にスクリプトがワークスペースのファイル構造を変更する場合（例: <code>publish-to-template.ts</code>）、人が実際の結果を目視で確認する過程が不可欠です。
+    スクリプトのライフサイクルにおいて、人が直接行う<strong>手動レビュー（manual review）</strong>は、Lint と Test の間、および Test と Register の間でそれぞれ一度ずつ推奨されます。自動化された検証がすべての問題を捉えられるわけではありません。特にスクリプトがワークスペースのファイル構造を変更する場合（例: <code>propagate-to-templates.ts</code>）、人が実際の結果を目視で確認する過程が不可欠です。
   </div>
 
   <!-- ─── 3つのライフサイクルの関係 ─── -->

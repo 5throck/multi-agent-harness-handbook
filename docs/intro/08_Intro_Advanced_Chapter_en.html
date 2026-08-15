@@ -318,7 +318,7 @@
   <h3 id="s2-script-write">Write — Writing a Script</h3>
   <p>A new script is written as a <code>.ts</code> file in the <code>scripts/</code> directory. When writing, follow these guidelines.</p>
   <ul>
-    <li>The filename should clearly indicate the script's purpose (e.g. <code>publish-to-template.ts</code>, <code>validate-skills.ts</code>)</li>
+    <li>The filename should clearly indicate the script's purpose (e.g. <code>propagate-to-templates.ts</code>, <code>validate-skills.ts</code>)</li>
     <li>Record the purpose, usage, and argument descriptions as comments at the top of the script</li>
     <li>Define types clearly and minimize external dependencies</li>
     <li>Include error handling that produces a meaningful message on failure</li>
@@ -362,7 +362,7 @@
   </ul>
 
   <div class="note">
-    In the script lifecycle, human-performed <strong>manual review</strong> is recommended once between Lint and Test, and again between Test and Register. Automated checks cannot catch every problem. This is especially critical when a script modifies the workspace's file structure (e.g. <code>publish-to-template.ts</code>) — having a human visually confirm the actual outcome is essential.
+    In the script lifecycle, human-performed <strong>manual review</strong> is recommended once between Lint and Test, and again between Test and Register. Automated checks cannot catch every problem. This is especially critical when a script modifies the workspace's file structure (e.g. <code>propagate-to-templates.ts</code>) — having a human visually confirm the actual outcome is essential.
   </div>
 
   <!-- ─── Relationship Between the Three Lifecycles ─── -->

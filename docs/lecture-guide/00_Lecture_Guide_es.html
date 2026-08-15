@@ -79,9 +79,9 @@
     <thead><tr><th>Elemento</th><th>Contenido</th><th>Formato</th><th>Tiempo estimado</th></tr></thead>
     <tbody>
       <tr><td>Resumen del día 1</td><td>Resumen de conceptos clave, compartir resultados de los ejercicios con variantes existentes del capítulo 6</td><td>Discusión</td><td>10 min</td></tr>
-      <tr><td>Cap. 8 §1</td><td>Detalles de la estructura de capas L0→L1→L2, el modelo de bifurcación, flujo SSOT por archivo</td><td>Clase</td><td>15 min</td></tr>
+      <tr><td>Cap. 8 §1</td><td>Detalles de la estructura de capas L0→L1→L2→L3, el modelo de bifurcación, flujo SSOT por archivo</td><td>Clase</td><td>15 min</td></tr>
       <tr><td>Cap. 8 §2</td><td>Gestión del ciclo de vida de agentes, habilidades y scripts</td><td>Clase</td><td>15 min</td></tr>
-      <tr><td>Cap. 10</td><td>Cómo actualizar un proyecto L2, el esquema de manejo de archivos en 5 categorías, instantáneas y reversión, cómo difiere en dirección de la promoción</td><td>Clase</td><td>15 min</td></tr>
+      <tr><td>Cap. 10</td><td>Cómo actualizar un proyecto L3, el esquema de manejo de archivos en 5 categorías, instantáneas y reversión, cómo difiere en dirección de la promoción</td><td>Clase</td><td>15 min</td></tr>
       <tr><td>Cap. 9</td><td>Patrones de diseño de flujos de trabajo — componentes, ejemplos específicos por dominio, guía de selección</td><td>Clase</td><td>15 min</td></tr>
       <tr><td>Referencia común</td><td>Panorama de las estructuras de las cuatro herramientas, Claude App vs. Code (definiciones de subagentes, teammateMode), Antigravity vs. agy (Agent Manager, /goal, /agent, /agents), tabla comparativa de soporte multiagente, guía de selección de herramientas de práctica, la estructura integrada de AGENTS.md</td><td>Clase</td><td>25 min</td></tr>
       <tr><td>Cap. 7</td><td>El modelo de tickets de servicio, el modelo de herramienta de desarrollo + variante, la necesidad de operaciones basadas en kanban, comparación de ventajas y desventajas de los dos modelos</td><td>Clase + discusión</td><td>30 min</td></tr>
@@ -122,7 +122,7 @@
   <span class="badge badge-do">Actividad de los participantes</span> G-1, D-1 y D-2 (observación de composición dinámica de equipos) deben ser ejecutados por todos. P-1 (ejecución en paralelo) y P-2 (comparación de niveles de modelos) pueden reemplazarse con una demostración del instructor por pantalla si el tiempo es escaso. Incluso con solo una persona por grupo intentando la configuración de Agent Teams (`.claude/settings.json`) o cambiando el campo `model` es suficiente para transmitir el concepto.
 
   <h3>Capítulo 5 (toque ligero): Introducción a ai-workspace-standards</h3>
-  <p>En el día 1, cubra solo los conceptos mínimos necesarios para el ejercicio del capítulo 6. Es suficiente transmitir qué es el repositorio, los roles de los 4 archivos principales, qué es una variante y el flujo básico de creación de un proyecto mediante andamiaje. La estructura de capas L0→L1→L2 y la jerarquía de modelos se cubren en la profundización del día 2.</p>
+  <p>En el día 1, cubra solo los conceptos mínimos necesarios para el ejercicio del capítulo 6. Es suficiente transmitir qué es el repositorio, los roles de los 4 archivos principales, qué es una variante y el flujo básico de creación de un proyecto mediante andamiaje. La estructura de capas L0→L1→L2→L3 y la jerarquía de modelos se cubren en la profundización del día 2.</p>
 
   <h3>Referencia común: Comparación de herramientas (Día 2)</h3>
   <p>Ubicado en el día 2. Dado que los participantes experimentaron directamente las herramientas durante los ejercicios del capítulo 4 §1/§2 del día 1, revisitarlo en la forma de "¿por qué la herramienta que acaba de usar se comportó así?" es mucho más atractivo que una clase pura. Como la audiencia son profesionales de TI, los detalles técnicos como teammateMode (en proceso vs. tmux) y la estructura interna del Agent Manager pueden cubrirse en profundidad.</p>
@@ -132,9 +132,9 @@
   <span class="badge badge-do">Discusión</span> Tenga una discusión grupal de 5 minutos sobre "¿Qué modelo se ajustaría a nuestra organización?" seguida de presentaciones.
 
   <h3>Capítulo 8: La arquitectura de ai-workspace-standards (Día 2)</h3>
-  <p>El día 2 retoma donde dejó la introducción ligera del día 1, cubriendo en detalle la estructura de capas L0→L1→L2, la estructura interna de las 7 plantillas/variantes, la jerarquía de modelos, la lista de verificación al inicio de sesión e incluso la hoja de ruta de avance aún no implementada (§5). Las actualizaciones de proyectos L2 se cubren por separado en el capítulo 10. No es necesario que los participantes memoricen todo — es suficiente que quede claro el motivo de "por qué se necesita esta estructura de capas".</p>
+  <p>El día 2 retoma donde dejó la introducción ligera del día 1, cubriendo en detalle la estructura de capas L0→L1→L2→L3, la estructura interna de las 7 plantillas/variantes, la jerarquía de modelos, la lista de verificación al inicio de sesión e incluso la hoja de ruta de avance aún no implementada (§5). Las actualizaciones de proyectos L3 se cubren por separado en el capítulo 10. No es necesario que los participantes memoricen todo — es suficiente que quede claro el motivo de "por qué se necesita esta estructura de capas".</p>
 
-  <h3>Capítulo 10: Actualizaciones de proyectos L2 (Día 2)</h3>
+  <h3>Capítulo 10: Actualizaciones de proyectos L3 (Día 2)</h3>
   <p>Este es el capítulo de aplicación práctica del modelo de bifurcación aprendido en el capítulo 8 §1. Comience recordando a los participantes que "los cambios en la plantilla L1 no se reflejan automáticamente en su proyecto." La comprensión mejora si se muestra visualmente la estructura de marcadores de gestión del espacio de trabajo para la categoría MERGE entre las 5 clasificaciones (LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER). Enfatice el hábito de ejecutar <code>--dry-run</code> primero, y se recomienda que el instructor demuestre la ejecución real del script.</p>
   <span class="badge badge-do">Actividad de los participantes</span> Si el tiempo lo permite, hacer que los participantes ejecuten <code>--dry-run</code> contra su propio proyecto del ejercicio del capítulo 6 (G-1 o G-2) lo hace más tangible.
 

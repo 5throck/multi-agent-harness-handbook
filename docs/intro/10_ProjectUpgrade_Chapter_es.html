@@ -7,9 +7,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Capítulo 10 · Actualización de Proyecto L2 — parte del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="description" content="Capítulo 10 · Actualización de Proyecto L3 — parte del Manual de Ingeniería del Arnés Multiagente.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capítulo 10 · Actualización de Proyecto L2</title>
+  <title>Capítulo 10 · Actualización de Proyecto L3</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
-  <div class="nav-title">Capítulo 10 · Actualización de Proyecto L2</div>
+  <div class="nav-title">Capítulo 10 · Actualización de Proyecto L3</div>
   <a href="#why">Por qué es necesario — la otra cara del modelo de bifurcación</a>
   <a href="#usage">Cómo usar upgrade-project.ts</a>
   <a href="#categories">Las 5 categorías de manejo de archivos</a>
@@ -33,8 +33,8 @@
 <main>
  <article class="reading">
   <div class="chapter-eyebrow">Capítulo 10</div>
-  <h1>Actualización de Proyecto L2</h1>
-  <p class="lead">Una vez que has creado un proyecto L2, ¿qué ocurre cuando los estándares upstream (L0/L1) cambian? La respuesta es: "no ocurre absolutamente nada." Debido al modelo de bifurcación discutido en el Capítulo 8 §1, para incorporar realmente los cambios upstream nuevos a un proyecto ya creado, una persona debe ejecutar explícitamente <code>upgrade-project.ts</code>. Este capítulo cubre ese procedimiento.</p>
+  <h1>Actualización de Proyecto L3</h1>
+  <p class="lead">Una vez que has creado un proyecto L3, ¿qué ocurre cuando los estándares upstream (L0/L1) cambian? La respuesta es: "no ocurre absolutamente nada." Debido al modelo de bifurcación discutido en el Capítulo 8 §1, para incorporar realmente los cambios upstream nuevos a un proyecto L3 ya creado, una persona debe ejecutar explícitamente <code>upgrade-project.ts</code>. Este capítulo cubre ese procedimiento.</p>
   <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.6.0) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y SSOT</a></p>
 
   <div class="keypoints">
@@ -49,8 +49,8 @@
   </div>
 
   <h2 id="why">Por qué es necesario — la otra cara del modelo de bifurcación</h2>
-  <p>Como se estableció en el <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1</a>, L1 entrega su contenido a un proyecto exactamente una vez — en el momento en que <code>new-project.ts</code> lo estructura. A partir de ese momento, L2 evoluciona de forma completamente independiente, y sin importar cuánto cambie L1 después, nada se refleja automáticamente en un proyecto L2 que ya existe.</p>
-  <p>El problema es que, con el tiempo, los scripts de hooks se corrigen en el lado de L1, se añaden nuevas habilidades, y las configuraciones de seguridad se endurecen. Cuando deseas traer esos cambios a un proyecto L2 individual, comparar archivos manualmente uno por uno no es realista. <code>upgrade-project.ts</code> automatiza este proceso de reflexión mientras sigue respetando el principio fundamental del modelo de bifurcación — "nunca sobrescribir a ciegas las partes que L2 ha cambiado deliberadamente."</p>
+  <p>Como se estableció en el <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1</a>, L1 entrega su contenido a un proyecto exactamente una vez — en el momento en que <code>new-project.ts</code> lo estructura. A partir de ese momento, L3 evoluciona de forma completamente independiente, y sin importar cuánto cambie L1 después, nada se refleja automáticamente en un proyecto L3 que ya existe.</p>
+  <p>El problema es que, con el tiempo, los scripts de hooks se corrigen en el lado de L1, se añaden nuevas habilidades, y las configuraciones de seguridad se endurecen. Cuando deseas traer esos cambios a un proyecto L3 individual, comparar archivos manualmente uno por uno no es realista. <code>upgrade-project.ts</code> automatiza este proceso de reflexión mientras sigue respetando el principio fundamental del modelo de bifurcación — "nunca sobrescribir a ciegas las partes que L3 ha cambiado deliberadamente."</p>
 
   <h2 id="usage">Cómo usar upgrade-project.ts</h2>
   <p>Comienza ejecutando <code>--dry-run</code> para previsualizar lo que cambiará. No toca ningún archivo — solo imprime el plan en la consola.</p>
@@ -95,8 +95,8 @@
   <h2 id="vs-promotion">Cómo se diferencia de la promoción</h2>
   <p>La "promoción" cubierta en el Capítulo 11 y la "actualización" de este capítulo suenan similares, pero se ejecutan en direcciones exactamente opuestas.</p>
   <ul>
-    <li><strong>Promoción</strong> (<code>l2-to-variant-pipeline.ts</code>, Capítulo 11) — <strong>L2 → L1</strong>. Eleva los cambios de un proyecto que creaste a la plantilla oficial, convirtiéndolos en una variante que otros pueden usar.</li>
-    <li><strong>Actualización</strong> (<code>upgrade-project.ts</code>, este capítulo) — <strong>L1 → L2</strong>. Extrae los últimos cambios de la plantilla oficial a un proyecto que ya has creado.</li>
+    <li><strong>Promoción</strong> (<code>l2-to-variant-pipeline.ts</code>, Capítulo 11) — <strong>L3 → L2</strong>. Eleva los cambios de un proyecto que creaste a la plantilla oficial de variante, convirtiéndolos en una variante que otros pueden usar.</li>
+    <li><strong>Actualización</strong> (<code>upgrade-project.ts</code>, este capítulo) — <strong>L1 → L3</strong>. Extrae los últimos cambios de la plantilla oficial a un proyecto que ya has creado.</li>
   </ul>
   <p>Los dos scripts simplemente mueven archivos en direcciones opuestas — ninguno reemplaza al otro. Si deseas contribuir de vuelta a la plantilla, usa la promoción; si deseas mantener un proyecto existente actualizado, usa la actualización.</p>
 

@@ -41,35 +41,35 @@
  <article class="reading">
   <div class="chapter-eyebrow">Chapter 8 §1</div>
   <h1>Deployment and SSOT</h1>
-  <p class="lead">This section covers the L0→L1→L2 three-tier hierarchy of ai-workspace-standards, the design rationale behind the fork model, and the per-file SSOT (Single Source of Truth) flow. The source always flows top-down, and there is no automatic synchronization that flows back upward.</p>
+  <p class="lead">This section covers the L0→L1→L2→L3 four-tier hierarchy of ai-workspace-standards, the design rationale behind the fork model, and the per-file SSOT (Single Source of Truth) flow. The source always flows top-down, and there is no automatic synchronization that flows back upward.</p>
 
   <div class="keypoints">
     <div class="kp-title">What This Section Covers</div>
     <ul>
-      <li>The L0→L1→L2 three-tier principle</li>
+      <li>The L0→L1→L2→L3 four-tier principle</li>
       <li>The fork model and why automatic back-synchronization is not possible</li>
       <li>The per-file SSOT flow</li>
     </ul>
   </div>
 
   <h2 id="s1">The L0 → L1 → L2 → L3 Hierarchy (4-Tier)</h2>
-  <p>The CONSTITUTION.md, templates/, variants, and new-project.ts covered so far all operate on a single overarching principle. The repository is designed as a four-tier hierarchy — <strong>L0 (workspace root) → L1 (common templates) → L2 (variant/project template) → L3 (live project instance)</strong> — and the single source of truth always flows top-down. There is no automatic synchronization flowing back upward. The boilerplate discussed in the previous section corresponds to L1 in this four-tier model. This boilerplate is published from L0 and delivered as a one-time snapshot at the moment an L2 is born.</p>
+  <p>The CONSTITUTION.md, templates/, variants, and new-project.ts covered so far all operate on a single overarching principle. The repository is designed as a four-tier hierarchy — <strong>L0 (workspace root) → L1 (common templates) → L2 (variant template) → L3 (live project working directory)</strong> — and the single source of truth always flows top-down. There is no automatic synchronization flowing back upward. The boilerplate discussed in the previous section corresponds to L1 in this four-tier model. This boilerplate is published from L0 and delivered as a one-time snapshot at the moment an L2 variant is born.</p>
 
   <h3>What Each of the Four Tiers Is Responsible For</h3>
-  <p><strong>L0 (workspace root)</strong> is the single source of truth for files such as <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, and <code>scripts/*.ts</code>. Editing happens here, and only here. <strong>L1 (<code>templates/common/</code>)</strong> is a snapshot of the common infrastructure published from L0, serving purely as the baseline starting point when a new L2 variant is created. <strong>L2</strong> takes two forms. One is <code>templates/co-&lt;name&gt;/</code>, which has solidified into an official template; the other is <code>Projects/&lt;name&gt;/</code>, a project template created via <code>new-project.ts</code>. In both cases, once forked off per variant, each evolves independently. <strong>L3</strong> is the live project working directory — a clone/deployment of an L2 variant into an actual development environment (e.g., <code>C:\projects\my-app\</code>). This is where developers run AI agents (Claude Code, Gemini CLI, etc.) for their day-to-day coding work. An L3 instance is derived from L2 but evolves independently per project and may contain local overrides.</p>
+  <p><strong>L0 (workspace root)</strong> is the single source of truth for files such as <code>agents/pm.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, and <code>scripts/*.ts</code>. Editing happens here, and only here. <strong>L1 (<code>templates/common/</code>)</strong> is a snapshot of the common infrastructure published from L0, serving purely as the baseline starting point when a new L2 variant is created. <strong>L2</strong> is <code>templates/co-&lt;name&gt;/</code>, an official variant template — once forked off from L1, it evolves independently. <strong>L3</strong> is <code>Projects/&lt;name&gt;/</code>, the live project working directory scaffolded from an L2 variant via <code>new-project.ts</code> — this is where developers run AI agents (Claude Code, Gemini CLI, etc.) for their day-to-day coding work, still inside the same workspace repository, not an external clone. An L3 project is derived from L2 but evolves independently and may contain local overrides.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
   <pre class="pre-plain">L0 — Workspace root (C:\git\, single source of truth)
-  │  L0→L1: publish-to-template.ts (automatic and ongoing, on every dev-sync)
+  │  L0→L1: propagate-to-templates.ts (automatic and ongoing, on every dev-sync)
   ▼
 L1 — templates/common/ (common template snapshot)
   │  L1→L2: create-l2-scaffold.ts (once, at variant creation time)
   ▼
-L2 — templates/co-&lt;name&gt;/ or Projects/co-&lt;name&gt;/
-  │  L2→L3: new-project.ts or manual clone (once, at project creation time)
+L2 — templates/co-&lt;name&gt;/
+  │  L2→L3: new-project.ts (once, at project creation time)
   ▼
-L3 — Live project working directory (e.g., C:\projects\my-app\)
+L3 — Projects/&lt;name&gt;/ (live project working directory)
      └─ Created from L2; where developers run agents for day-to-day work
      └─ Evolves independently after forking, no automatic back-sync
      └─ Run l2-to-variant-pipeline.ts explicitly to promote an L2 to an official template</pre>
@@ -106,7 +106,7 @@ L3 — Live project working directory (e.g., C:\projects\my-app\)
         <text x="500" y="46" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">Evolves independently after fork</text>
 
         <rect x="405" y="80" width="190" height="50" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
-        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="var(--badge-green-fg)" font-weight="700">L2 — Projects/my-app</text>
+        <text x="500" y="100" text-anchor="middle" font-size="11.5" fill="var(--badge-green-fg)" font-weight="700">L2 — co-work</text>
         <text x="500" y="116" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">Evolves independently after fork</text>
 
         <rect x="405" y="150" width="190" height="50" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
@@ -120,7 +120,7 @@ L3 — Live project working directory (e.g., C:\projects\my-app\)
   </div>
 
   <h3>Why L1 → L2 Ends in a "Fork"</h3>
-  <p>Early on, an approach was tried where every L1 change was automatically propagated to all existing L2 variants, but three problems kept recurring. Changes in L1 silently overwrote parts a variant had deliberately customized differently; every time a new variant was added, the hardcoded variant list in the propagation script had to be manually updated; and there was no way to distinguish "an intentional difference" from "a difference caused by a missed sync." So the <strong>Fork Model</strong> is used instead. L1 delivers its content exactly once, at the moment of scaffolding a variant, and from then on L2 evolves completely independently. Reflecting an L2 change back into the official template requires a human to explicitly run <code>l2-to-variant-pipeline.ts</code> rather than any automatic process (Chapter 11 covers this promotion procedure directly). Meanwhile, <code>publish-to-template.ts --check-drift</code> periodically reports the differences between L1 and each L2, but this report is read-only and never automatically overwrites values. The reverse direction — the procedure for actually applying L1's latest changes to an already-created L2 project — is covered in <a href="10_ProjectUpgrade_Chapter_en.html">Chapter 10 · Upgrading an L2 Project</a>.</p>
+  <p>Early on, an approach was tried where every L1 change was automatically propagated to all existing L2 variants, but three problems kept recurring. Changes in L1 silently overwrote parts a variant had deliberately customized differently; every time a new variant was added, the hardcoded variant list in the propagation script had to be manually updated; and there was no way to distinguish "an intentional difference" from "a difference caused by a missed sync." So the <strong>Fork Model</strong> is used instead. L1 delivers its content exactly once, at the moment of scaffolding a variant, and from then on L2 evolves completely independently. Reflecting an L2 change back into the official template requires a human to explicitly run <code>l2-to-variant-pipeline.ts</code> rather than any automatic process (Chapter 11 covers this promotion procedure directly). Meanwhile, <code>propagate-to-templates.ts --check-drift</code> periodically reports the differences between L1 and each L2, but this report is read-only and never automatically overwrites values. The reverse direction — the procedure for actually applying L1's latest changes to an already-created L3 project — is covered in <a href="10_ProjectUpgrade_Chapter_en.html">Chapter 10 · Upgrading an L3 Project</a>.</p>
 
   <h3>Per-File SSOT — What Flows Where, From Where</h3>
   <div class="table-compare">
@@ -141,7 +141,7 @@ L3 — Live project working directory (e.g., C:\projects\my-app\)
 
   <p><code>agents/pm.md</code> is the case that best illustrates the L0→L1 relationship. L0's <code>agents/pm.md</code> is the complete source, while L1's <code>templates/common/agents/pm.md</code> is a "pure extension" file that references L0 via the <code>extends: ../../../agents/pm.md</code> frontmatter while stripping out workspace-only sections (e.g., Auto-Mode, lifecycle-state fields). L2's <code>templates/co-*/agents/pm.md</code> inherits from L1 but does not copy the content verbatim — instead it regenerates what it needs from scratch based on variant-specific overrides ("Layout Reconstruction"). That's why even when L0's <code>agents/pm.md</code> exceeds 300 lines, L2's pm.md stays around 50–100 lines.</p>
 
-  <div class="note">L0→L1→L2 in one sentence: <strong>the source is edited only at the top. The layers below are either snapshots of the source or copies taken at scaffolding time. The flow always moves top-down, never the reverse.</strong> A representative mistake that violates this principle is "editing an agent file in a new project (L2) without reflecting the change back into the workspace root (L0)" — since no reverse flow from L2 back to L0 exists in the first place, that edit is valid only within that project and is never reflected anywhere else.</div>
+  <div class="note">L0→L1→L2→L3 in one sentence: <strong>the source is edited only at the top. The layers below are either snapshots of the source or copies taken at scaffolding time. The flow always moves top-down, never the reverse.</strong> A representative mistake that violates this principle is "editing an agent file in a new project (L3) without reflecting the change back into the workspace root (L0)" — since no reverse flow from L3 back to L0 exists in the first place, that edit is valid only within that project and is never reflected anywhere else.</div>
 
   <h3>Boilerplate Strategy — What to Lock, and What to Leave Open</h3>
   <p>Chapter 5 defined boilerplate as "a pre-assembled starting point so you don't have to rewrite the same things for every project." From an architectural standpoint, this definition immediately raises a practical question — <strong>how much of what L1 hands down to L2 should projects be free to modify?</strong> This repository answers that question differently on a per-file basis. The five categories of <code>upgrade-project.ts</code> covered in §5 (LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER, PRUNE) are essentially this strategy nailed down in code.</p>
@@ -156,7 +156,7 @@ L3 — Live project working directory (e.g., C:\projects\my-app\)
   <p>Chapter 5 showed how <code>tier: high/medium/low</code> is assigned to individual agent roles. Here we examine, from an architectural standpoint, the flow of <strong>changing and maintaining</strong> that assignment. The tier value lives in the frontmatter of <code>agents/*.md</code>, and as seen in the SSOT table above, L0 is the source for this file, managed by <code>upgrade-project.ts</code> in §5 under <strong>SYNC_IF_NEWER</strong> — meaning the tier strategy itself follows the L0→L1→L2 principle exactly.</p>
   <ul>
     <li><strong>The default assignment is decided once, at L0.</strong> Once the principle that PM/Architect-type roles are high, code-writer/docs-writer-type roles are medium, and automation-engineer-type roles are low is finalized in the workspace root's <code>agents/*.md</code>, every variant's L1 template inherits it.</li>
-    <li><strong>When tier criteria change, the version is bumped.</strong> An organization-wide re-judgment such as "this role should now be high instead of medium" takes the form of editing L0's <code>agents/*.md</code> and bumping <code>@version</code> (or the frontmatter <code>version:</code>). This is not automatically reflected in already-created L2 projects; each project must run <code>upgrade-project.ts</code> (Chapter 10) to receive the new tier — tier changes follow the fork model without exception, too.</li>
+    <li><strong>When tier criteria change, the version is bumped.</strong> An organization-wide re-judgment such as "this role should now be high instead of medium" takes the form of editing L0's <code>agents/*.md</code> and bumping <code>@version</code> (or the frontmatter <code>version:</code>). This is not automatically reflected in already-created L3 projects; each project must run <code>upgrade-project.ts</code> (Chapter 10) to receive the new tier — tier changes follow the fork model without exception, too.</li>
     <li><strong>Project-specific exceptions are left only at L2.</strong> If a specific role in a specific variant needs a different tier (for example, giving a code-writer that handles unusually complex domain logic high instead of medium), that project's <code>agents/*.md</code> is edited directly, locally. However, since this file is subject to SYNC_IF_NEWER, keep in mind that if L1's version is higher at the next upgrade, it may be overwritten along with a <code>⚠️ CONFLICT</code> warning (see the safeguards in §5).</li>
   </ul>
   <div class="note">The boilerplate strategy and the tier strategy are, in the end, two answers to the same question — <strong>"enforce at L0/L1 whatever must be identical across the whole organization, and delegate to L2 whatever may differ per project."</strong> Both strategies share the common trait of drawing that boundary explicitly, one at the file level (LOCKED/MERGE/PRESERVE) and the other at the field level (tier).</div>

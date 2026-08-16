@@ -1,5 +1,6 @@
 {
   "name": "multi-agent-harness-handbook",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {

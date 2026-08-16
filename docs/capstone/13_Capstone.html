@@ -193,10 +193,18 @@ model은 [1장·5장에서 배운 기준으로 고른 티어]로 설정해줘.</
 </div>
 <script>
 function copyCode(btn) {
-  const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
-  navigator.clipboard.writeText(pre.textContent).then(() => {
+  const codes = btn.parentElement.querySelectorAll(':scope > code');
+  let text;
+  if (codes.length > 1) {
+    text = Array.from(codes).map(c => c.textContent).join('\n');
+  } else {
+    const pre = btn.previousElementSibling || btn.parentElement.querySelector('pre');
+    text = pre.textContent;
+  }
+  navigator.clipboard.writeText(text).then(() => {
     btn.textContent = '완료!';
-    setTimeout(() => { btn.textContent = '복사'; }, 1500);
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
   });
 }
 </script>

@@ -32,6 +32,11 @@ See the [Setup Guide](https://5throck.github.io/multi-agent-harness-handbook/set
 - **Ch. 12 · Promoting a New Variant (Phase B)** — Production rollout & validation
 - **Ch. 13 · Capstone Project** — Designing your own AI agent workflow
 - **Common Reference** — Tool comparison: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
+- **FAQ** — Common errors, fixes, and troubleshooting
+- **Glossary** — Key terms and definitions used throughout the handbook
+- **Warm-Up** — Practice exercise: From Tetris to Pac-Man
+- **Course Overview** — Learning objectives and curriculum structure
+- **Lecture Guide** — Day-by-day schedule, agenda, and facilitator notes
 
 ## 🎯 Target Versions
 - Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-08)

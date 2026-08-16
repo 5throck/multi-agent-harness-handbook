@@ -718,7 +718,10 @@ pre.code-block {
   font-weight: 700;
 }
 
-.step-content { line-height: 1.7; }
+.step-content { line-height: 1.7; flex: 1; min-width: 0; }
+.step-content .flow-box,
+.step-content .tip-box,
+.step-content .warning-box { overflow-wrap: break-word; }
 .step-label { font-weight: 600; color: var(--accent-dark); }
 
 /* ==========================================================================

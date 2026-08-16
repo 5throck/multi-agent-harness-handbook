@@ -54,6 +54,81 @@ function checkMissingAlt(html: string, file: string): A11yIssue[] {
 // 2. Heading hierarchy — no levels skipped
 // ---------------------------------------------------------------------------
 
+/**
+ * Layout containers where heading hierarchy resets are expected.
+ * Headings inside these containers start a new sub-hierarchy.
+ */
+const HIERARCHY_RESET_CONTAINERS = [
+  ".compare-col",
+  ".schedule-body",
+  ".schedule-block",
+  ".keypoints",
+  ".compare-grid",
+  ".faq-item",
+  ".tip-box",
+  ".warning-box",
+  ".scenario-card",
+  ".note",
+  ".note-box",
+];
+
+/**
+ * Check if position is inside one of the HIERARCHY_RESET_CONTAINERS.
+ * Uses a stack-based depth tracker to correctly handle nested divs.
+ */
+function isInsideResetContainer(html: string, pos: number): boolean {
+  const windowStart = Math.max(0, pos - 3000);
+  const segment = html.slice(windowStart, pos);
+
+  const divOpenRe = /<div(?:\s[^>]*)?>/gi;
+  const divCloseRe = /<\/div>/gi;
+  const classRe = /class\s*=\s*"([^"]*)"/;
+
+  // Collect all div open/close events with their positions
+  type DivEvent = { absPos: number; isOpen: boolean; classes: string };
+  const events: DivEvent[] = [];
+
+  let tm: RegExpExecArray | null;
+  while ((tm = divOpenRe.exec(segment)) !== null) {
+    const absPos = windowStart + tm.index;
+    if (absPos >= pos) break;
+    const classMatch = tm[0].match(classRe);
+    events.push({ absPos, isOpen: true, classes: classMatch ? classMatch[1] : "" });
+  }
+  while ((tm = divCloseRe.exec(segment)) !== null) {
+    const absPos = windowStart + tm.index;
+    if (absPos >= pos) break;
+    events.push({ absPos, isOpen: false, classes: "" });
+  }
+
+  // Sort by position and track nesting stack
+  events.sort((a, b) => a.absPos - b.absPos);
+  const stack: string[] = []; // stack of class strings for open divs
+
+  for (const ev of events) {
+    if (ev.isOpen) {
+      stack.push(ev.classes);
+    } else {
+      stack.pop();
+    }
+  }
+
+  // Check if any ancestor in the stack is a reset container.
+  // HIERARCHY_RESET_CONTAINERS uses CSS class selectors (e.g. ".compare-col"),
+  // but HTML class attributes don't have a leading dot.
+  const classList = cls => " " + cls + " "; // pad for word-boundary matching
+  for (const cls of stack) {
+    if (HIERARCHY_RESET_CONTAINERS.some((selector) => {
+      // Strip leading "." from selector for matching against class attribute
+      const className = selector.startsWith(".") ? selector.slice(1) : selector;
+      return classList(cls).includes(" " + className + " ");
+    })) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /** Extract heading tags in document order, verify no levels are skipped. */
 function checkHeadingHierarchy(html: string, file: string): A11yIssue[] {
   const issues: A11yIssue[] = [];
@@ -62,6 +137,13 @@ function checkHeadingHierarchy(html: string, file: string): A11yIssue[] {
   let m: RegExpExecArray | null;
   while ((m = headingRe.exec(html)) !== null) {
     const level = parseInt(m[1], 10);
+
+    // Reset hierarchy inside known layout containers
+    if (isInsideResetContainer(html, m.index!)) {
+      prevLevel = level;
+      continue;
+    }
+
     if (prevLevel > 0 && level - prevLevel > 1) {
       const skipped: string[] = [];
       for (let l = prevLevel + 1; l < level; l++) skipped.push(`h${l}`);

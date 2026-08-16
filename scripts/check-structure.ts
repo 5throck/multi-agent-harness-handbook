@@ -210,9 +210,12 @@ function checkFile(relPath: string, content: string, requiredScripts: string[]):
   if (preOpen !== preClose) {
     issues.push({ file: relPath, line: 0, detail: `pre balance ${preOpen}/${preClose}` });
   }
+  // Every <pre> code box must have a copy button. .prompt-box copy buttons are
+  // optional extras (AUTHORING_GUIDELINES §2), so the total may exceed the
+  // <pre> count — but it must never fall below it.
   const copyBtns = (content.match(/class="copy-btn"/g) || []).length;
-  if (preOpen !== copyBtns) {
-    issues.push({ file: relPath, line: 0, detail: `copy-btn count ${preOpen} pre vs ${copyBtns} btn` });
+  if (copyBtns < preOpen) {
+    issues.push({ file: relPath, line: 0, detail: `copy-btn count ${copyBtns} btn vs ${preOpen} pre — every <pre> needs a copy button` });
   }
 
   if (content.includes("<img")) {

@@ -8,6 +8,14 @@
 ## 🌐 オンライン教育プログラム（ハンドブック）
 👉 **[ハンドブック公式サイトを見る](https://5throck.github.io/multi-agent-harness-handbook/)**
 
+## 💻 ローカル環境セットアップ
+`docs/setup/upstream/` にあるワークショップのインストールスクリプトは直接コピーしたファイルではなく [git submodule](https://github.com/5throck/setup) です。クローン時にサブモジュールを含めて取得するか、通常クローン後に以下のコマンドで初期化してください。
+```bash
+git clone --recurse-submodules https://github.com/5throck/multi-agent-harness-handbook.git
+# 通常クローン済みの場合:
+git submodule update --init
+```
+
 ## 📚 カリキュラム / 目次
 - **第1章 · 導入** — なぜAIエージェントチームなのか＆現代のAIワークスペース
 - **第2章 · ハーネスエンジニアリング** — マルチエージェントチームの基本概念とオーケストレーション

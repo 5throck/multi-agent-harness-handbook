@@ -84,12 +84,30 @@
 
     var box = document.createElement('div');
     box.className = 'ip-search';
-    box.innerHTML =
-      '<div class="ip-row">' +
-        '<input type="search" placeholder="' + S.placeholder + '" aria-label="' + S.label + '">' +
-        '<button class="ip-clear" type="button" title="' + S.clear + '" aria-label="' + S.clear + '">×</button>' +
-      '</div>' +
-      '<div class="ip-count"></div>';
+
+    var row = document.createElement('div');
+    row.className = 'ip-row';
+
+    var input = document.createElement('input');
+    input.type = 'search';
+    input.placeholder = S.placeholder;
+    input.setAttribute('aria-label', S.label);
+
+    var clearBtn = document.createElement('button');
+    clearBtn.className = 'ip-clear';
+    clearBtn.type = 'button';
+    clearBtn.title = S.clear;
+    clearBtn.setAttribute('aria-label', S.clear);
+    clearBtn.textContent = '×';
+
+    row.appendChild(input);
+    row.appendChild(clearBtn);
+
+    var countDiv = document.createElement('div');
+    countDiv.className = 'ip-count';
+
+    box.appendChild(row);
+    box.appendChild(countDiv);
 
     var homeLink = nav.querySelector('a[href$="index.html"]');
     if (homeLink && homeLink.nextSibling) nav.insertBefore(box, homeLink.nextSibling);

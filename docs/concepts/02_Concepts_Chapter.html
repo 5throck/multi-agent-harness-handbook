@@ -121,7 +121,10 @@
 
   <h2 id="s0">Prompt → Context → Harness — 여기까지 오게 된 흐름</h2>
   <p>하네스 엔지니어링은 어느 날 갑자기 등장한 개념이 아니라, AI를 다루는 방식이 세 단계를 거치며 쌓아 올린 결과다. 각 단계는 이전 단계를 대체한 것이 아니라, "이전 단계만으로는 부족하다"는 걸 드러내며 그 위에 새로운 층을 얹었다.</p>
-  <p>세 단계를 요리에 비유하면 이해가 빠르다. 프롬프트 엔지니어링은 "주방장에게 어떤 말로 주문을 넣을 것인가"이고, 컨텍스트 엔지니어링은 "주방장 손에 어떤 재료와 레시피를 쥐여 줄 것인가"이며, 하네스 엔지니어링은 "이 주방이 매번 같은 맛을 내도록 검수 절차·도구·위생 규칙까지 갖춘 시스템을 만드는 것"이다. 아무리 말을 잘하고 재료가 좋아도, 주방 시스템 자<svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <p>세 단계를 요리에 비유하면 이해가 빠르다. 프롬프트 엔지니어링은 "주방장에게 어떤 말로 주문을 넣을 것인가"이고, 컨텍스트 엔지니어링은 "주방장 손에 어떤 재료와 레시피를 쥐여 줄 것인가"이며, 하네스 엔지니어링은 "이 주방이 매번 같은 맛을 내도록 검수 절차·도구·위생 규칙까지 갖춘 시스템을 만드는 것"이다. 아무리 말을 잘하고 재료가 좋아도, 주방 시스템 자체가 엉성하면 결과는 매번 들쭉날쭉하다.</p>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -165,8 +168,10 @@
   <div class="note">세 단계는 각각 <strong>행동(모델이 무엇을 하게 만들 것인가) → 이해(모델이 무엇을 알게 할 것인가) → 신뢰성(그 결과를 어떻게 반복 가능하고 검증 가능하게 만들 것인가)</strong>으로 초점이 옮겨간 것이다. 이 핸드북이 다루는 멀티 에이전트팀은 세 번째 단계, 하네스 엔지니어링의 산물이다.</div>
 
   <h2 id="architecture-diagram">하네스 아키텍처 전체도</h2>
-  <p>하네스 엔지니어링은 모델과 사용자 사이에 놓이는 5층 구조로 생각할 수 있다. 아래 다이어그램은 이 핸드<svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">v class="diagram-frame">
-  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <p>하네스 엔지니어링은 모델과 사용자 사이에 놓이는 5층 구조로 생각할 수 있다. 아래 다이어그램은 이 핸드북 전체를 관통하는 아키텍처를 한눈에 보여준다 — 각 장이 이 5층 중 어느 계층을 다루는지는 <a href="#s1">다음 절</a>에서 연결한다.</p>
+
+  <div class="diagram-frame">
+  <svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
         <path d="M0,0 L10,3 L0,6 Z" fill="var(--text-dim)"/>
@@ -255,9 +260,9 @@
   <div class="pullquote">좋은 프롬프트는 한 번 잘 대답하게 만들지만, 좋은 하네스는 매번 잘 대답하게 만든다.</div>
 
   <h2 id="s2">단일 에이전트의 한계</h2>
-  <p>하나의 에이전트에게 모든 역할을 맡기면 초기에는 편리하지만, 작업이 커질수록 세 가지 문제가 뚜렷해진다. 첫째, 컨텍스트 과부하다. 설계 검토, 코드 작성, 테스트, 문서화를 한 세션 안에서 순서대로 처리하다 보면 앞선 단계의 세부 사항이 뒤로 갈수록 희미해지고, 결과의 일관성이 떨어진다. 둘째, 역할 충돌이다. 코드를 작성한 에이전트가 자기 코드를 스스로 검토하면 놓치는 결함이 많아진다<svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"> 단일 에이전트는 순서대로 처리할 수밖에 없어 시간이 선형으로 늘어난다.</p>
+  <p>하나의 에이전트에게 모든 역할을 맡기면 초기에는 편리하지만, 작업이 커질수록 세 가지 문제가 뚜렷해진다. 첫째, 컨텍스트 과부하다. 설계 검토, 코드 작성, 테스트, 문서화를 한 세션 안에서 순서대로 처리하다 보면 앞선 단계의 세부 사항이 뒤로 갈수록 희미해지고, 결과의 일관성이 떨어진다. 둘째, 역할 충돌이다. 코드를 작성한 에이전트가 자기 코드를 스스로 검토하면 놓치는 결함이 많아진다. 작성자와 검토자가 같은 사람이면 생기는 것과 똑같은 문제다. 셋째, 병렬성의 부재다. 서로 독립적인 하위 작업(예: 여러 파일의 리팩터링, 여러 관점의 코드 리뷰)도 단일 에이전트는 순서대로 처리할 수밖에 없어 시간이 선형으로 늘어난다.</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- 작업 블록들 -->
         <rect x="20" y="16" width="120" height="30" rx="6" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.2"/>
@@ -286,13 +291,13 @@
   </div>
 
   <p>회사 조직에 비유하면 이해하기 쉽다. 신입사원 한 명에게 기획·개발·테스트·문서화를 전부 맡기면, 처음엔 소통 비용이 없어 빠른 듯 보이지만 작업량이 늘수록 그 사람의 머릿속(컨텍스트)이 뒤죽박죽되고, 자기가 짠 코드의 허점을 자기가 못 보고 지나치며(역할 충돌), 서로 관련 없는 일 세 가지를 동시에 처리할 수 없어(병렬성 부재) 병목이 된다. 실무에서 기획자·개발자·QA를 나누는 이유와 똑같은 이유로, AI 작업도 여러 에이전트로 나눈다.</p>
-  <p>멀티 에이전트팀<svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">존하지 않는 작업은 동시에 실행해 시간을 단축한다.</p>
+  <p>멀티 에이전트팀은 이 세 가지를 구조적으로 해결한다. 역할별로 컨텍스트를 분리해 각 에이전트가 자기 역할에 집중하게 하고, 작성자와 검증자를 분리해 독립적인 시각을 확보하며, 서로 의존하지 않는 작업은 동시에 실행해 시간을 단축한다.</p>
 
   <h2 id="s3">멀티 에이전트팀의 구성요소</h2>
   <p>멀티 에이전트팀은 크게 세 가지 요소로 이루어진다.</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-dark)"/>
@@ -381,10 +386,11 @@
   <p>모든 작업을 서브에이전트로 쪼갤 필요는 없다. 경계가 분명하고(무엇을 받아 무엇을 내놓는지 명확) 반복적이거나 병렬화가 가능한 작업. 코드 리뷰, 테스트 실행, 문서 검토 같은 것이 좋은 후보다. 반대로 메인 세션과 계속 맥락을 주고받아야 하는 탐색적 작업은 서브에이전트로 분리하면 오히려 핸드오프 비용만 늘어난다.</p>
   <div class="note">서브에이전트는 스페셜리스트라는 "역할" 개념을 실제 도구에서 실행 가능하게 만드는 "구현"이다. 4장에서는 이 정의 방식과 호출 방법을 Claude Desktop App/Antigravity 데스크톱(Desktop)을 중심으로 직접 손으로 만들어본다.</div>
 
-  <h2 id="s4">오케스트레이션 패턴</h2<svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">, 오케스트레이터-워커, 평가자-최적화(검증-후-적용)다. 다섯 패턴은 서로 대체 관계가 아니라, "작업 사이에 의존 관계가 있는가", "미리 하위 작업을 예측할 수 있는가", "검증이 필요한가"에 따라 골라 쓰거나 조합하는 도구 상자다.</p>
+  <h2 id="s4">오케스트레이션 패턴</h2>
+  <p>Anthropic이 2024년 12월 "Building Effective Agents"에서 정리한 다섯 가지 워크플로 패턴이 실무에서 가장 널리 쓰인다. 프롬프트 체이닝(파이프라인), 라우팅, 병렬화(팬아웃·투표), 오케스트레이터-워커, 평가자-최적화(검증-후-적용)다. 다섯 패턴은 서로 대체 관계가 아니라, "작업 사이에 의존 관계가 있는가", "미리 하위 작업을 예측할 수 있는가", "검증이 필요한가"에 따라 골라 쓰거나 조합하는 도구 상자다.</p>
 
   <div class="note">
-    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
       <defs>
         <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -478,12 +484,12 @@
     <li><strong>라우팅(Routing).</strong> 들어온 요청을 먼저 분류한 뒤, 그 성격에 맞는 전문 에이전트나 모델로 갈라 보낸다. 5장에서 다루는 모델 티어링이 대표적인 예다. 쉬운 질문은 저비용 모델(haiku)로, 어렵고 드문 질문은 고성능 모델(opus)로 보내 비용과 품질의 균형을 맞춘다. <br><span style="color:var(--text-dim);font-size:14px;">예: 고객 문의가 들어오면 먼저 "단순 FAQ인가, 복잡한 기술 문의인가"를 분류하는 에이전트가 판단하고, 전자는 정형화된 응답 에이전트로, 후자는 더 깊이 조사할 수 있는 에이전트로 넘긴다.</span></li>
     <li><strong>병렬화(Parallelization).</strong> 두 갈래로 나뉜다. <strong>섹셔닝(팬아웃)</strong>은 서로 독립적인 여러 하위 작업(예: 4가지 관점의 코드 리뷰)을 동시에 여러 에이전트에게 맡기고 결과를 한데 모은다. 소요 시간은 가장 느린 하나의 작업 시간에 수렴한다. <strong>투표(Voting)</strong>는 반대로 <em>같은</em> 작업을 여러 에이전트에게 독립적으로 반복시킨 뒤 다수결이나 합의로 하나의 답을 고른다. <br><span style="color:var(--text-dim);font-size:14px;">섹셔닝 예: "이 코드를 성능·보안·가독성·테스트 커버리지 네 관점에서 동시에 리뷰해줘." 투표 예: 같은 버그 원인 분석을 세 에이전트에게 각각 독립적으로 시킨 뒤, 두 곳 이상이 같은 원인을 지목하면 그 결론을 채택한다. 한 에이전트의 착각을 다수결로 걸러낸다.</span></li>
     <li><strong>오케스트레이터-워커(Orchestrator-Workers).</strong> §3에서 설명한 팀 구조 자체가 이 패턴이다. 중앙의 오케스트레이터가 작업을 어떻게 쪼갤지 미리 정해 두지 않고, 입력을 보고 그때그때 동적으로 결정해 워커(스페셜리스트)에게 위임하고 결과를 종합한다. 하위 작업을 미리 예측할 수 없는 복잡한 작업(여러 파일에 걸친 코드 변경, 여러 출처를 종합해야 하는 리서치)에 특히 적합하다. §4b에서 다루는 "동적 팀 구성"이 바로 이 패턴의 다른 이름이다.</li>
-    <li><strong>평가자-최적화 / 검증-후-적용(Evaluator-Optimizer).</strong> 한 에이전트가 초안을 만들면, 독립된 다른 에이전트(또는 여러 에이전트의 합의)가 그 초안을 반박·검증한 뒤에만 실제 반영한다. 그럴듯하지만 틀린 결과가 그대로 통과되는 것을 막는 장치다. <br><span style="color:var(--text-dim);font-size:14px;">예: 코드를 수정하기 전에 "이 수정이 정말 안전한가?"를 독립된 에이전트가 반박 관점에서 재검토하고, 문제가 없다고 판단될 때만 실제로 파일을 수정한다<svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"> 못하면 이 루프가 공회전할 수 있다는 한계도 있다.</span></li>
+    <li><strong>평가자-최적화 / 검증-후-적용(Evaluator-Optimizer).</strong> 한 에이전트가 초안을 만들면, 독립된 다른 에이전트(또는 여러 에이전트의 합의)가 그 초안을 반박·검증한 뒤에만 실제 반영한다. 그럴듯하지만 틀린 결과가 그대로 통과되는 것을 막는 장치다. <br><span style="color:var(--text-dim);font-size:14px;">예: 코드를 수정하기 전에 "이 수정이 정말 안전한가?"를 독립된 에이전트가 반박 관점에서 재검토하고, 문제가 없다고 판단될 때만 실제로 파일을 수정한다. 초안을 쓴 사람이 자기 글을 스스로 교정 보면 놓치는 오류를, 다른 사람이 검토하면 잡아내는 것과 같은 원리다. 다만 평가자 자신이 좋은 결과와 나쁜 결과를 구분하지 못하면 이 루프가 공회전할 수 있다는 한계도 있다.</span></li>
   </ul>
   <div class="note">다섯 패턴은 독립적으로 쓰이기보다 겹쳐 쓰인다. 라우팅이 프롬프트 체이닝의 첫 단계로 들어가거나, 오케스트레이터-워커가 워커 단위마다 평가자-최적화를 내부에 품거나, 병렬화가 다른 패턴 안에 끼어드는 식이다. §4b에서 이 조합을 실제 예로 다룬다.</div>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -552,12 +558,15 @@
     <li><strong>롤백(Rollback).</strong> 잘못된 결과가 이미 파일이나 저장소에 반영됐다면, 변경 이전 상태로 되돌린다. 3장에서 다룬 "쓰기 단계는 git으로 되돌릴 수 있는 범위"라는 원칙이 여기서 실제로 힘을 발휘한다. 커밋 단위로 작업이 쪼개져 있어야 롤백도 정확한 지점으로 되돌릴 수 있다.</li>
     <li><strong>에스컬레이션(Escalation).</strong> 재시도해도 반복 실패하거나, 애초에 오케스트레이터가 판단하기 애매한 상황이라면 사람에게 넘긴다. "3번 실패하면 자동 재시도를 멈추고 사람에게 보고한다" 같은 상한선을 미리 정해 두지 않으면, 실패한 작업을 계속 재시도하며 시간과 비용만 소모하는 상황이 생긴다.</li>
   </ul>
-  <div class="note">세 대응의 선택 기준은 결국 "이 실패가 일시적인가, 이미 되돌릴 수 없는 상태까지 갔는가, 판단 자체가 애매한가"다. 재시도는 첫 번째, 롤백은 두 번째, 에스컬레이션은 세 번째 상황에 대응한다. 위험 작업일수록 자동 재시도보다 에스컬레이션 쪽으로 기준을 낮춰 잡는 것이 안전하다(3장 <svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">드오프·오케스트레이션 패턴을 각각 따로 설명했지만, 하네스 엔지니어링이 실제로 강력한 이유는 이 요소들이 <strong>고정된 하나의 조합으로 굳어 있지 않다</strong>는 데 있다. 재래식 자동화 스크립트는 "A 다음 B, 항상 B 다음 C"처럼 순서와 참여자가 코드에 하드코딩돼 있지만, 하네스로 짜인 멀티 에이전트팀은 오케스트레이터가 매 요청마다 "이번엔 누가 필요하고 어떤 순서로 움직일지"를 그때그때 다시 판단한다.</p>
+  <div class="note">세 대응의 선택 기준은 결국 "이 실패가 일시적인가, 이미 되돌릴 수 없는 상태까지 갔는가, 판단 자체가 애매한가"다. 재시도는 첫 번째, 롤백은 두 번째, 에스컬레이션은 세 번째 상황에 대응한다. 위험 작업일수록 자동 재시도보다 에스컬레이션 쪽으로 기준을 낮춰 잡는 것이 안전하다(3장 §2의 위험 단계 분류를 함께 참고).</div>
+
+  <h2 id="s4b">동적 팀 구성과 다양한 워크플로우</h2>
+  <p>지금까지 오케스트레이터·스페셜리스트·핸드오프·오케스트레이션 패턴을 각각 따로 설명했지만, 하네스 엔지니어링이 실제로 강력한 이유는 이 요소들이 <strong>고정된 하나의 조합으로 굳어 있지 않다</strong>는 데 있다. 재래식 자동화 스크립트는 "A 다음 B, 항상 B 다음 C"처럼 순서와 참여자가 코드에 하드코딩돼 있지만, 하네스로 짜인 멀티 에이전트팀은 오케스트레이터가 매 요청마다 "이번엔 누가 필요하고 어떤 순서로 움직일지"를 그때그때 다시 판단한다.</p>
 
   <h3>팀 구성은 고정돼 있지 않다</h3>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Left: 정적 팀 -->
         <text x="155" y="18" text-anchor="middle" font-size="12" fill="var(--text-dim)" font-weight="700">정적 팀 (Static)</text>
@@ -619,9 +628,9 @@
   <p>지금까지 설명한 오케스트레이터·스페셜리스트·핸드오프는 특정 도구에 종속된 개념이 아니다. 문제는 그동안 도구마다 이 하네스를 설정하는 방식이 제각각이었다는 점이다. Claude Code는 <code>CLAUDE.md</code>를, Cursor는 <code>.cursorrules</code>를, GitHub Copilot은 <code>.github/copilot-instructions.md</code>를 읽는 식이어서, 여러 도구를 함께 쓰는 팀은 같은 내용을 파일마다 중복해서 유지해야 했다.</p>
   <p>같은 내용(예: "테스트는 항상 <code>npm test</code>로 실행하고, <code>src/legacy/</code> 폴더는 절대 수정하지 마라")을 팀원이 쓰는 도구 수만큼(CLAUDE.md, .cursorrules, copilot-instructions.md...) 복사해 두면, 규칙이 바뀔 때마다 파일을 전부 찾아 고쳐야 하고 하나라도 빠뜨리면 그 도구를 쓰는 사람만 다른 규칙으로 일하게 된다. 여러 나라 말로 같은 계약서를 따로따로 번역해 보관하다가, 한쪽만 조항을 고치는 바람에 버전이 어긋나는 것과 같은 문제다.</p>
   <p><strong>AGENTS.md</strong>는 이 문제를 풀기 위해 2025년 8월 OpenAI 주도로 Google·Cursor·Factory 등이 참여해 만든 개방형 표준이고, 2025년 12월 리눅스 재단 산하 Agentic AI Foundation에 기증됐다. 저장소 루트에 AGENTS.md 하나만 두면 Codex, Claude Code(가져오기 방식), GitHub Copilot, Cursor, Google Jules, Antigravity 계열을 포함해 30개가 넘는 도구가 세션 시작 시 이를 읽어 빌드·테스트 명령, 코드 스타일, 손대면 안 되는 영역 같은 공통 규칙을 공유한다.</p>
-  <p>이 핸드북이 계속 강조하는 "네 도구 모두 지원"이라는 원칙도 결국 같은 문제의식에서 나온다. 팀이 Claude Desktop App을 <svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"><code>GEMINI.md</code> 등)을 나눠 두면 도구를 바꾸거나 섞어 써도 하네스 자체는 흔들리지 않는다. 5장에서 살펴볼 ai-workspace-standards 저장소는 이 원칙을 실제로 구현한 사례다. 루트의 <code>AGENTS.md</code> 파일이 워크스페이스 전체 에이전트의 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적(engine-agnostic) 커맨드·스킬을 담는다.</p>
+  <p>이 핸드북이 계속 강조하는 "네 도구 모두 지원"이라는 원칙도 결국 같은 문제의식에서 나온다. 팀이 Claude Desktop App을 쓰든 Antigravity 데스크톱(Desktop)을 쓰든, 저장소 루트의 공유 규칙(AGENTS.md)과 도구별 세부 설정(<code>CLAUDE.md</code>, <code>GEMINI.md</code> 등)을 나눠 두면 도구를 바꾸거나 섞어 써도 하네스 자체는 흔들리지 않는다. 5장에서 살펴볼 ai-workspace-standards 저장소는 이 원칙을 실제로 구현한 사례다. 루트의 <code>AGENTS.md</code> 파일이 워크스페이스 전체 에이전트의 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적(engine-agnostic) 커맨드·스킬을 담는다.</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>

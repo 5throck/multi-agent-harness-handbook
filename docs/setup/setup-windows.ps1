@@ -1,6 +1,13 @@
 ﻿# Workshop Setup — Windows
 # Usage: .\setup-windows.ps1 [-WSL2] [-WezTerm] [-Docker] [-Force]
 # Run PowerShell as Administrator before executing.
+#
+# ⚠️ SECURITY NOTE: This script downloads and executes remote installers
+# (irm | iex / Invoke-Expression) for bun, NodeSource, and Antigravity CLI.
+# This is the standard official install path for these tools, but it carries
+# supply-chain risk: the downloaded script runs with your permissions before
+# you can review it. For production/enterprise environments, prefer checking
+# the installer's checksum/signature first, or installing via winget instead.
 param(
     [switch]$WSL2,
     [switch]$WezTerm,

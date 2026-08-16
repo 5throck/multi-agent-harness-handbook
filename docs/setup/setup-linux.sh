@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # Workshop Setup — Linux (Ubuntu/Debian)
 # Usage: bash setup-linux.sh [--wezterm] [--docker]
+#
+# ⚠️ SECURITY NOTE: This script downloads and executes remote installers
+# (curl | bash) for bun, NodeSource, and Antigravity CLI. This is the standard
+# official install path for these tools, but it carries supply-chain risk:
+# the downloaded script runs with your user permissions before you can review it.
+# For production/enterprise environments, prefer checking the installer's
+# checksum/signature first, or installing from your distro's package manager.
 set -uo pipefail
 
 # ── ANSI colors ───────────────────────────────────────────────────────────────

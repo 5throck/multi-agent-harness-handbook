@@ -143,7 +143,8 @@
   <p>La regla comprobada en la práctica es sencilla. Siempre detenerse justo antes de una operación perteneciente al nivel de "impacto destructivo/externo" de §2; la revisión posterior es suficiente para los niveles inferiores. Por ejemplo, el pipeline <code>/sync</code> avanza automáticamente a través de commit, push y creación de PR, pero está diseñado para requerir aprobación humana separada para realmente fusionar el PR o desplegar en producción. Trazar explícitamente la línea -- "hasta aquí confiamos en que proceda, y a partir de aquí un humano siempre debe revisar" -- es el núcleo del diseño de puertas.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <div>Di<svg role="img" aria-label="Guardrails approval flow diagram" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">tyle="width:100%;max-width:680px;display:block;margin:0 auto;">
+    <div>Diagrama de Flujo de Operación de Puerta de Aprobación</div>
+    <svg role="img" aria-label="Guardrails approval flow diagram" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
       <defs>
         <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
         <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
@@ -219,10 +220,12 @@
   <p>Ejecutar cada agente en un árbol de trabajo (un directorio de trabajo git aislado) o en un entorno sandbox separado significa que, incluso si un agente comete un error de juicio, su impacto no se filtra fuera de su propio espacio de trabajo. Al ejecutar múltiples agentes en paralelo, siempre debes decidir primero: "¿deben compartir el mismo espacio, o estar físicamente separados?"</p>
 
   <h2 id="s6">Registros de Auditoría y Observabilidad</h2>
-  <p>Si los guardarraíles son prevención, los registros de auditoría son rastreo posterior al hecho. Ningún guardarraíl es perfecto, por lo que cuando ocurre un incidente, necesitas absolutamente un registro mínimo que te permita rastrear "cuándo, qué agente, con qué herramienta, hizo qué." Si <code>memory/YYYY-MM-DD.md</code> cubierto en el Capítulo 5 sirve para registrar contexto entre sesiones, un script de auditoría como <code>audit.ts</code>, ejecutado mediante un hook <code>PostToolUse</code> en CI, es un dispositivo de observabilidad que verifica mecánicamente cada vez si "un cambio violó las reglas."</p>
+  <p>Si los guardarraíles son prevención, los registros de auditoría son rastreo posterior al hecho. Ningún guardarraíl es perfecto, por lo que cuando ocurre un incidente, necesitas absolutamente un registro mínimo que te permita rastrear "cuándo, qué agente, con qué herramienta, hizo qué." Si <code>memory/MEMORY.md</code> cubierto en el Capítulo 5 sirve para registrar contexto entre sesiones, un script de auditoría como <code>audit.ts</code>, ejecutado mediante un hook <code>PostToolUse</code> en CI, es un dispositivo de observabilidad que verifica mecánicamente cada vez si "un cambio violó las reglas."</p>
   <div class="warn">En la Claude Desktop App, cubierta en el Capítulo 4, los hooks como este no se activan. Para los equipos que trabajan principalmente en la aplicación de escritorio, puede surgir una situación donde "pensábamos que el registro de auditoría se estaba ejecutando, pero en realidad nada de eso se estaba ejecutando." Al diseñar guardarraíles, siempre debes verificar "¿esta política realmente se activa en la herramienta que estoy usando?"</div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radi<svg role="img" aria-label="Audit logging and isolation diagram" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">iewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <div>Estructura del Registro de Auditoría y Flujo de Auditoría</div>
+    <svg role="img" aria-label="Audit logging and isolation diagram" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
       <defs>
         <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
         <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>

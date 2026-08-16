@@ -175,7 +175,8 @@
 
   <p>Una habilidad es una unidad reutilizable de comportamiento que un agente puede invocar durante una sesión. Se define mediante un archivo <code>SKILL.md</code> y se coloca en un plugin o en el directorio <code>.claude/skills/</code> del espacio de trabajo. El ciclo de vida de una habilidad consta de las siguientes cinco etapas.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--bord<svg role="img" aria-label="Variant creation flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg role="img" aria-label="Variant creation flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
@@ -272,8 +273,8 @@
 
   <p>Los scripts se gestionan como archivos <code>.ts</code> bajo el directorio <code>scripts/</code>. Son código ejecutable que automatiza la infraestructura del espacio de trabajo — verificación de creación de agentes, publicación de plantillas, generación de proyectos y más. El ciclo de vida de un script consta de las siguientes cinco etapas.</p>
 
-  <div st<svg role="img" aria-label="Variant promotion flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">in:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg role="img" aria-label="Variant promotion flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/>
@@ -376,6 +377,8 @@
   </ul>
   <p>Para usar una analogía, el ciclo de vida es un "mapa de ruta del metro", y el estado es la pantalla en tiempo real que muestra "en qué estación está el tren actualmente." Hacia dónde se dirige el tren (la ruta) está fijo, pero dónde se encuentra actualmente (la estación) cambia momento a momento.</p>
   <div class="note">El estado a nivel de ejecución del flujo de trabajo — por ejemplo, el Pipeline de Fases definido por el PM en el <a href="../workflows/09_Workflows_Chapter_es.html">Capítulo 9</a> (Fase 0: solicitud recibida → Fase 1: diseño → … → Fase 6: sincronización completada) — es una dimensión diferente del estado del campo <code>status</code> de un componente individual. El primero es "en qué etapa está el trabajo", mientras que el segundo es "dónde está el componente mismo en su ciclo de vida."</div>
+
+  <p>Aunque los ciclos de vida de agentes, habilidades y scripts se definen cada uno independientemente, están estrechamente interconectados en un espacio de trabajo real.</p>
 
   <p>Aunque los ciclos de vida de agentes, habilidades y scripts se definen cada uno independientemente, están estrechamente interconectados en un espacio de trabajo real.</p>
 

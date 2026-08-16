@@ -49,7 +49,7 @@ export function checkSearchIndex(): SearchIndexError[] {
 
     // Allow locale-variant HTML files to exist without being in the DOCS array
     // (they are reached via the language switcher, not the search index).
-    if (/_en\.html$|_ja\.html$|_ko\.html$/.test(file)) continue;
+    if (/_en\.html$|_ja\.html$|_ko\.html$|_es\.html$/.test(file)) continue;
 
     if (!docsPaths.has(file)) {
       errors.push({

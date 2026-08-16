@@ -453,7 +453,9 @@ handoff_to: reviewer (proceeds to review after draft completion)
         2章 §4bで扱った「動的チーム構成」と「様々なワークフロー組み合わせ」を実際に目で確認するシナリオです。D-1で作成した<code>writer</code>・<code>reviewer</code>二つのサブエージェントはそのまま残し、リクエストの性質だけを変えながらオーケストレーターが実際に誰を、何回、どの順序で呼び出すか観察します — サブエージェント定義は一度も新しく作成しないことが核心です。
       </div>
 
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 2<svg role="img" aria-label="Practice example A configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">g" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >動的ルーティング分岐フロー図 — 同じチーム、異なるリクエスト</div>
+        <svg role="img" aria-label="Practice example A configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
           <defs>
             <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
@@ -673,7 +675,9 @@ EOF</pre>
           <strong>よくある失敗</strong> — 「Agent Teams機能が見つからない」またはチームメイトがスポーンされない場合は、大抵①<code>.claude/settings.json</code>が<code>harness-lab/</code>フォルダ基準で保存されたか（別のフォルダに保存すると認識されません）、②②でClaude Desktop Appを完全に再起動したかの二点を見落としている場合です。JSON構文エラー（カンマの欠落など）で設定ファイル自体が無視される場合も多いため、エディタで開いて構文を再度確認してください。
         </div>
 
-      <div style="background:var(--bg2);b<svg role="img" aria-label="Practice example A execution diagram" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">      <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >権限設定前後の比較 — 最小権限の原則</div>
+        <svg role="img" aria-label="Practice example A execution diagram" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <defs>
             <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
@@ -761,9 +765,12 @@ EOF</pre>
         <div class="cmd-list-title">使用要素</div>
         <div class="cmd-chips">
           <a class="cmd-chip" href="../intro/05_Intro_Chapter_ja.html#s3">モデルティア (5章)</a>
-  <svg role="img" aria-label="Practice example A result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">0px;margin:20px 0 28px;">
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
         <div >モデルティア比較チャート</div>
-        <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example A result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <!-- Table header -->
           <rect x="0" y="0" width="520" height="30" rx="6" fill="var(--bg3)"/>
           <text x="52" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">モデル</text>

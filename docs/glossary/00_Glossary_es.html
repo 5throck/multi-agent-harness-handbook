@@ -73,6 +73,10 @@
     <dd>El acto de usar <code>bun scripts/new-project.ts</code> para clonar la configuración completa de una plantilla de variante (agentes, habilidades, comandos, pipeline de gobernanza) en un repositorio git independiente. La idea es: "no se construye un proyecto desde cero — se comienza a partir de un esqueleto pre-diseñado."
       <span class="see">Detalles: <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-2">Capítulo 6 §2</a></span></dd>
 
+    <dt>Guardarraíles <span class="en">Guardrails</span></dt>
+    <dd>El conjunto de reglas, límites de permisos, clasificación de riesgo, aprobaciones humanas y mecanismos de registro que determinan qué puede y qué no puede hacer un subagente. Cuanta más autonomía se otorgue, mayor es el radio de explosión de un error — por eso el sistema de guardarraíles se diseña antes de la práctica.
+      <span class="see">Detalles: <a href="../guardrails/03_Guardrails_Chapter_es.html#s1">Capítulo 3 §1</a></span></dd>
+
     <dt>Hook <span class="en">Hook</span></dt>
     <dd>Un script que se ejecuta automáticamente antes o después de que un agente llame a una herramienta en particular. Ejemplo: un hook <code>PostToolUse</code> que ejecuta una verificación de auditoría automatizada después de una edición de archivo. En Claude Code (CLI), los hooks definidos bajo <code>.claude/hooks/</code> se activan como se espera, pero no se activan en Claude Desktop App (Escritorio) — por lo que es importante conocer estas diferencias de comportamiento por herramienta.
       <span class="see">Detalles: <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registros de Auditoría y Observabilidad</a></span></dd>

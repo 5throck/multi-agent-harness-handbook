@@ -103,11 +103,11 @@
 
   <!-- ══════════════════════════════ Pre-Practice Setup ══════════════════════════════ -->
   <h2 id="setup">Configuración: instalación de los programas necesarios</h2>
-  <p>Los ejercicios a continuación se centran en Claude Desktop App (Escritorio) y Claude Code (CLI). Si su entorno local aún no tiene estas herramientas, la automatización de configuración del entorno incluida con este manual — la <a href="../setup/SETUP_es.html">guía de configuración</a> — instalará automáticamente exactamente lo que necesitan los ejercicios de este capítulo. Simplemente siga las instrucciones para descargar y ejecutar el script localmente.</p>
+  <p>Los ejercicios a continuación se centran en Claude Desktop App (Escritorio) y Claude Code (CLI). Si su entorno local aún no tiene estas herramientas, la automatización de configuración del entorno incluida con este manual — la <a href="../setup/SETUP_ko.html">guía de configuración</a> — instalará automáticamente exactamente lo que necesitan los ejercicios de este capítulo. Simplemente siga las instrucciones para descargar y ejecutar el script localmente.</p>
 
   <div class="platform-block" >
     <div class="platform-block-title">📦 Antes de instalar — Cosas que verificar</div>
-    <p class="text-dim" style="margin-bottom:10px;">Antes de ejecutar el script, lea primero la <a href="../setup/SETUP_CHECKLIST_es.html">lista de verificación previa a la instalación</a>. Esta lista los siguientes requisitos previos.</p>
+    <p class="text-dim" style="margin-bottom:10px;">Antes de ejecutar el script, lea primero la <a href="../setup/SETUP_CHECKLIST_ko.html">lista de verificación previa a la instalación</a>. Esta lista los siguientes requisitos previos.</p>
     <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
       <li>Una suscripción activa a Claude Pro/Max <strong>y</strong> una cuenta de Google para acceso a Antigravity (debe ser un plan basado en suscripción/cuenta, no una clave API individual)</li>
       <li>Una cuenta de GitHub que pueda usar para ejecutar <code>gh auth login</code></li>
@@ -454,7 +454,8 @@ handoff_to: reviewer (review follows once the draft is done)
       </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <div >Diagrama de ramificación de enrutami<svg role="img" aria-label="Practice example A configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">g" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+        <div >Diagrama de ramificación de enrutamiento dinámico — Mismo equipo, diferentes solicitudes</div>
+        <svg role="img" aria-label="Practice example A configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
           <defs>
             <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
@@ -661,7 +662,9 @@ EOF</pre>
           <strong>Un error común</strong> — Si no puede encontrar la función de equipos de agentes o los compañeros nunca se inician, generalmente se debe a una de dos cosas: ① si <code>.claude/settings.json</code> se guardó en relación con la carpeta <code>harness-lab/</code> (guardarlo en otro lugar significa que no se reconocerá), o ② si Claude Desktop App se reinició completamente en el paso ②. Un error de sintaxis JSON (como una coma faltante) que hace que el archivo de configuración se ignore silenciosamente también es común, así que ábralo en un editor y verifique la sintaxis.
         </div>
 
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;marg<svg role="img" aria-label="Practice example A execution diagram" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">      <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+          <div >Antes/después de la configuración de permisos — El principio de privilegio mínimo</div>
+          <svg role="img" aria-label="Practice example A execution diagram" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
             <defs>
               <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             </defs>
@@ -734,8 +737,9 @@ EOF</pre>
         </div>
       </div>
 
-  <svg role="img" aria-label="Practice example A result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">     <div >Gráfico comparativo de niveles de modelos</div>
-        <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >Gráfico comparativo de niveles de modelos</div>
+        <svg role="img" aria-label="Practice example A result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <rect x="0" y="0" width="520" height="30" rx="6" fill="var(--bg3)"/>
           <text x="52" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Modelo</text>
           <text x="178" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Velocidad</text>

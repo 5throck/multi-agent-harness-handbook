@@ -121,7 +121,10 @@
 
   <h2 id="s0">プロンプト → コンテキスト → ハーネス — どうしてここに至ったのか</h2>
   <p>ハーネスエンジニアリングは突然現れたものではありません。AIへのアプローチにおいて3つの段階が積み重なった結果です。各段階は前の段階を置き換えるものではなく、「前の段階だけでは不十分」と判明した後に、その上に重ねられました。</p>
-  <p>料理の例えで3つの段階を理解するのが簡単です。プロンプトエンジニアリングは「料理人にどう注文の言葉を伝えるか」、コンテキストエンジニアリングは「料理人にどんな食材とレシピを渡すか」、ハーネスエンジニアリングは「厨房そのもの — 検査手順、道具、衛生ルール — が毎回同じ品質を生み出すシステムを構築する」です。注文の言葉がどれほど上手でも、食材がどれほど良くても、厨房システムその<svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <p>料理の例えで3つの段階を理解するのが簡単です。プロンプトエンジニアリングは「料理人にどう注文の言葉を伝えるか」、コンテキストエンジニアリングは「料理人にどんな食材とレシピを渡すか」、ハーネスエンジニアリングは「厨房そのもの — 検査手順、道具、衛生ルール — が毎回同じ品質を生み出すシステムを構築する」です。注文の言葉がどれほど上手でも、食材がどれほど良くても、厨房システムそのものが杜撰なら、結果は毎回不一致になります。</p>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -165,8 +168,10 @@
   <div class="note">3つの段階は焦点を<strong>振る舞い（モデルに何をさせるか） → 理解（モデルに何を知らせるか） → 信頼性（結果を反復可能で検証可能にするにはどうするか）</strong>へと移行します。本ハンドブックが扱うマルチエージェントチームは、第3段階 — ハーネスエンジニアリングの産物です。</div>
 
   <h2 id="architecture-diagram">ハーネスの全体アーキテクチャ図</h2>
-  <p>ハーネスエンジニアリングは、モデルとユーザーの間に位置する5層構造として捉えることができます。以下<svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">v class="diagram-frame">
-  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <p>ハーネスエンジニアリングは、モデルとユーザーの間に位置する5層構造として捉えることができます。以下の図は、本ハンドブック全体を貫くアーキテクチャを一望できるものです — <a href="#s1">次節</a>で、この5層の各層がどの章で扱われるかを対応付けます。</p>
+
+  <div class="diagram-frame">
+  <svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
         <path d="M0,0 L10,3 L0,6 Z" fill="var(--text-dim)"/>
@@ -255,9 +260,9 @@
   <div class="pullquote">良いプロンプトは一度だけ良い回答を引き出す。良いハーネスは毎回良い回答を引き出す。</div>
 
   <h2 id="s2">単一エージェントの限界</h2>
-  <p>すべての役割を単一エージェントに割り当てるのは最初は便利ですが、作業がスケールするにつれて3つの問題が顕在化します。第一に、コンテキストの過負荷：設計レビュー、コード執筆、テスト、ドキュメント作成をすべて1つのセッション内で順次処理すると、作業が進むにつれて初期のステップの詳細が薄れ、結果の一貫性が低下します。第二に、役割の衝突：自分のコードを自分でレビューするエージェントは、自分が<svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">ても、単一エージェントが順次処理する必要があるため、合計時間が線形に増大します。</p>
+  <p>すべての役割を単一エージェントに割り当てるのは最初は便利ですが、作業がスケールするにつれて3つの問題が顕在化します。第一に、コンテキストの過負荷：設計レビュー、コード執筆、テスト、ドキュメント作成をすべて1つのセッション内で順次処理すると、作業が進むにつれて初期のステップの詳細が薄れ、結果の一貫性が低下します。第二に、役割の衝突：自分のコードを自分でレビューするエージェントは、自分が書いた欠陥を見逃します — 著者とレビュアーが同じ人である場合と同じ問題です。第三に、並列性の欠如：独立したサブタスク（複数ファイルのリファクタリング、複数の視点からのレビューなど）であっても、単一エージェントが順次処理する必要があるため、合計時間が線形に増大します。</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Task blocks -->
         <rect x="20" y="16" width="120" height="30" rx="6" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.2"/>
@@ -286,13 +291,13 @@
   </div>
 
   <p>企業の組織の例えで理解するのが簡単です。ある新人に企画、開発、テスト、ドキュメントをすべて一度に担当させると、最初はコミュニケーションオーバーヘッドがなくて速く感じます — しかし業務量が増えると、その人の頭（コンテキスト）はカオスになり、自分のコードの欠陥を見落とし（役割の衝突）、3つの無関係なタスクを同時に処理できず（並列性の欠如）、ボトルネックになります。組織が企画者、開発者、QAを分割する理由は、まさにAIの作業も複数エージェントに分割する理由と同じです。</p>
-  <<svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">のないタスクを並行実行して合計時間を短縮します。</p>
+  <p>マルチエージェントチームは、この3つの問題を構造的に解決します：役割ごとにコンテキストを分離して各エージェントが自分の役割に集中し、著者と検証者を分離して独立した視点を確保し、相互依存のないタスクを並行実行して合計時間を短縮します。</p>
 
   <h2 id="s3">マルチエージェントチームの構成要素</h2>
   <p>マルチエージェントチームは3つの主要な要素で構成されます。</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-dark)"/>
@@ -381,10 +386,11 @@
   <p>すべてのタスクをサブエージェントに分割する必要はありません。適しているのは、境界が明確な（入力と出力がはっきりしている）タスクで、かつ反復的または並列化可能なもの — コードレビュー、テストの実行、ドキュメントレビューなどです。逆に、メインセッションと継続的にコンテキストを交換し続ける探索的な作業は、サブエージェントに切り出すとハンドオフのオーバーヘッドがかえって大きくなります。</p>
   <div class="note">サブエージェントは、スペシャリストの「役割」という概念を実際のツールで実行可能にする「実装」です。第4章では、Claude Desktop App/Antigravity Desktopを中心に、この定義方法と呼び出し方法を実際に手作りします。</div>
 
-  <h2 id="s4">オーケストレ<svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">化（セクショニング/投票）、オーケストレーター・ワーカー、評価者・最適化（検証後適用）。5つのパターンは排他的な選択肢ではなく、「タスク間に依存があるか」「サブタスクを事前に予測できるか」「検証が必要か」という判断基準に基づいて選択・組み合わせるツールボックスです。</p>
+  <h2 id="s4">オーケストレーションパターン</h2>
+  <p>Anthropicが2024年12月の「Building Effective Agents」で示した5つのワークフローパターンが、実務で最も広く使われています：プロンプトチェーン（パイプライン）、ルーティング、並列化（セクショニング/投票）、オーケストレーター・ワーカー、評価者・最適化（検証後適用）。5つのパターンは排他的な選択肢ではなく、「タスク間に依存があるか」「サブタスクを事前に予測できるか」「検証が必要か」という判断基準に基づいて選択・組み合わせるツールボックスです。</p>
 
   <div class="note">
-    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
       <defs>
         <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -478,12 +484,12 @@
     <li><strong>ルーティング。</strong>まず入力リクエストを分類し、その性質に適したスペシャリストエージェントまたはモデルにルーティングします。第5章のモデルティアリングはその典型例 — 簡単な質問は安価なモデル（haiku）に、困難で稀な質問は高性能なモデル（opus）に送り、コストと品質のバランスを取ります。<br><span style="color:var(--text-dim);font-size:14px;">例：顧客からの問い合わせが来たとき、分類エージェントがまず「これは単純なFAQか、複雑な技術的質問か」を判定し、前者を定型応答エージェントに、後者をより深い調査が可能なエージェントにルーティングします。</span></li>
     <li><strong>並列化。</strong>2つのブランチに分かれます。<strong>セクショニング（ファンアウト）</strong>は、複数の独立したサブタスク（例：4つの視点からのコードレビュー）を同時に複数のエージェントに渡し、結果を集約します — 合計時間は最も遅い単一タスクの時間に収束します。<strong>投票</strong>は、<em>同じ</em>タスクを複数のエージェントに独立して繰り返させ、過半数または合意で1つの回答を選びます。<br><span style="color:var(--text-dim);font-size:14px;">セクショニング例：「このコードをパフォーマンス、セキュリティ、可読性、テストカバレッジの4つの視点から同時にレビューして」。投票例：3つのエージェントに同じバグの根本原因を独立して分析させ、2つ以上が同じ原因を指摘したらその結論を採用する — 過半数投票で1つのエージェントの間違いをフィルタリングします。</span></li>
     <li><strong>オーケストレーター・ワーカー。</strong>§3で説明したチーム構造がまさにこのパターンです。作業の分割方法を事前に決めるのではなく、中央のオーケストレーターが入力に基づいて動的にその場で判断し、ワーカー（スペシャリスト）に委譲して結果を統合します。サブタスクを事前に予測できない複雑なタスク（多数のファイルにまたがるコード変更、複数の情報源を統合する必要のある調査）に特に適しています。§4bで解説する「動的チーム編成」はまさにこのパターンの別名です。</li>
-    <li><strong>評価者・最適化 / 検証後適用。</strong>1つのエージェントがドラフトを作成し、独立したエージェント（または複数エージェントの合意）がそのドラフトに異議を唱え検証した後、初めて実際に適用されます。もっともらしいが間違った結果が通り抜けるのを防ぐメカニズムです。<br><span style="color:var(--text-dim);font-size:14px;">例：コードを修正する前に、独立したエージェントが懐疑的な立場から「この変更は本当に安全か」を再検討し、問題ないと判断された場合にのみファイルを実際に修正す<svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">けることになります。</span></li>
+    <li><strong>評価者・最適化 / 検証後適用。</strong>1つのエージェントがドラフトを作成し、独立したエージェント（または複数エージェントの合意）がそのドラフトに異議を唱え検証した後、初めて実際に適用されます。もっともらしいが間違った結果が通り抜けるのを防ぐメカニズムです。<br><span style="color:var(--text-dim);font-size:14px;">例：コードを修正する前に、独立したエージェントが懐疑的な立場から「この変更は本当に安全か」を再検討し、問題ないと判断された場合にのみファイルを実際に修正する。著者が自分の文章を推敲する際に、別の人が見落とした誤りに気付くのと同じ原理です。ただし限界もあります — 評価者自体が良い結果と悪い結果を区別できなければ、このループは進捗なしに回り続けることになります。</span></li>
   </ul>
   <div class="note">5つのパターンは、単独で使われるよりも組み合わせて使われることが多いです — ルーティングがプロンプトチェーンの最初のステップに繋がったり、オーケストレーター・ワーカーが各ワーカーの作業単位内に評価者・最適化を埋め込んだり、並列化が別のパターンの途中に割り込んだりします。§4bでこの組み合わせの具体例を解説します。</div>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -552,12 +558,15 @@
     <li><strong>ロールバック。</strong>間違った結果がすでにファイルやリポジトリに適用されている場合、変更前の状態に戻します。第3章の「書き込みステップはgitで取り消せる範囲に留めるべき」という原則がここで真価を発揮します。コミットレベルで作業を分割しておかなければ、ロールバックは正確なポイントに着地できません。</li>
     <li><strong>エスカレーション。</strong>リトライが失敗し続ける場合や、オーケストレーターにとって判断が本質的に曖昧な場合は、人間に委ねます。「3回失敗したら自動リトライを停止し、人間に報告する」という事前定義の上限がなければ、失敗し続けるタスクを永遠にリトライして時間とコストを浪費することになります。</li>
   </ul>
-  <div class="note">3つの選択基準は、最終的に「この失敗は一時的なものか、すでに不可逆な状態に到達しているか、判断自体が曖昧か」に帰着します。リトライは最初に、ロールバックは2番目に、エスカレーションは3番目に対処します。タスクが危険なほど、自動リトライよりもエスカレーションの<svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">ター、スペシャリスト、ハンドオフ、オーケストレーションパターンを個別に解説しましたが、ハーネスエンジニアリングの真の力は、これらの要素が<strong>単一の固定された組み合わせにロックされていない</strong>ことです。従来の自動化スクリプトはコードの中に順序と参加者をハードコードします — 「常にAの次にB、常にBの次にC」 — しかしハーネス上に構築されたマルチエージェントチームは、オーケストレーターがリクエストごとに「今回は誰が必要で、どの順序で」と新たに判断します。</p>
+  <div class="note">3つの選択基準は、最終的に「この失敗は一時的なものか、すでに不可逆な状態に到達しているか、判断自体が曖昧か」に帰着します。リトライは最初に、ロールバックは2番目に、エスカレーションは3番目に対処します。タスクが危険なほど、自動リトライよりもエスカレーションの閾値を下げる方が安全です（第3章§2のリスクティア分類も参照）。</div>
+
+  <h2 id="s4b">動的チーム編成と多様なワークフロー</h2>
+  <p>これまでオーケストレーター、スペシャリスト、ハンドオフ、オーケストレーションパターンを個別に解説しましたが、ハーネスエンジニアリングの真の力は、これらの要素が<strong>単一の固定された組み合わせにロックされていない</strong>ことです。従来の自動化スクリプトはコードの中に順序と参加者をハードコードします — 「常にAの次にB、常にBの次にC」 — しかしハーネス上に構築されたマルチエージェントチームは、オーケストレーターがリクエストごとに「今回は誰が必要で、どの順序で」と新たに判断します。</p>
 
   <h3>チーム編成は固定ではない</h3>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Left: Static team -->
         <text x="155" y="18" text-anchor="middle" font-size="12" fill="var(--text-dim)" font-weight="700">静的チーム (Static)</text>
@@ -619,9 +628,9 @@
   <p>これまで解説したオーケストレーター、スペシャリスト、ハンドオフは、特定のツールに結びついた概念ではありません。問題は、各ツールがこのハーネスを異なる方法で設定していたことです。Claude Codeは<code>CLAUDE.md</code>を読み、Cursorは<code>.cursorrules</code>を読み、GitHub Copilotは<code>.github/copilot-instructions.md</code>を読みます — 複数のツールを併用するチームは、同じ内容を各ファイルに重複して維持する必要がありました。</p>
   <p>同じ内容（例：「常に<code>npm test</code>でテストを実行し、<code>src/legacy/</code>フォルダは変更しない」）をチームが使うツールごとに（CLAUDE.md、.cursorrules、copilot-instructions.md...）コピーすると、ルール変更のたびにすべてのファイルを見つけて編集する必要があり、一つでも見落とせばそのツールを使う人は別のルールの下で作業することになります。これは、同じ契約を複数の言語に別々に翻訳して保持し、一部だけが修正されたときに版が食い違うのと同じ問題です。</p>
   <p><strong>AGENTS.md</strong>は、この問題を解決するために2025年8月にOpenAI主導でGoogle、Cursor、Factoryなどの参加を得て作成されたオープン規格で、2025年12月にはLinux Foundation傘下のAgentic AI Foundationに寄贈されました。リポジトリのルートに単一のAGENTS.mdを配置するだけで、Codex、Claude Code（インポート経由）、GitHub Copilot、Cursor、Google Jules、Antigravityファミリーなど30以上のツールがセッション開始時にこれを読み取り、ビルド/テストコマンド、コードスタイル、アクセス禁止領域などの共通ルールを共有できます。</p>
-  <p>本ハンドブックが「4つのツールすべてをサポートする」と強調し続けている理由も、まさに同じ問題意識に由来します。チームがClau<svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">DE.md</code>、<code>GEMINI.md</code>など）と分離しておけば、ツールを切り替えたり混用したりしてもハーネス自体は安定します。第5章で検討するai-workspace-standardsリポジトリは、この原理の実際の実装です。ルートの<code>AGENTS.md</code>ファイルがワークスペース内のすべてのエージェントの単一の信頼できる情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>や<code>.gemini/</code>と並んで、エンジンに依存しないコマンドとスキルを保持します。</p>
+  <p>本ハンドブックが「4つのツールすべてをサポートする」と強調し続けている理由も、まさに同じ問題意識に由来します。チームがClaude Desktop Appを使ってもAntigravity Desktopを使っても、共通ルールをリポジトリルート（AGENTS.md）に置き、ツール固有の詳細設定（<code>CLAUDE.md</code>、<code>GEMINI.md</code>など）と分離しておけば、ツールを切り替えたり混用したりしてもハーネス自体は安定します。第5章で検討するai-workspace-standardsリポジトリは、この原理の実際の実装です。ルートの<code>AGENTS.md</code>ファイルがワークスペース内のすべてのエージェントの単一の信頼できる情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>や<code>.gemini/</code>と並んで、エンジンに依存しないコマンドとスキルを保持します。</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>

@@ -333,7 +333,11 @@
     <div class="card-body">
 
       <div class="situation">
-        Un profesional experimentado que ha completado D-1 y ha determinado que el prototipo está listo para la promoción ahora ejecuta <code>l3-to-variant-pipeline.ts</code> para convertir co-marketing en un <code>templates/co-marketing/</code> oficial. A partir de este punto, es una operación difícil de revertir que deja rastros en el historial rea<svg role="img" aria-label="Variant promotion step 2 diagram" viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">width:100%;max-width:640px;display:block;margin:0 auto;">
+        Un profesional experimentado que ha completado D-1 y ha determinado que el prototipo está listo para la promoción ahora ejecuta <code>l3-to-variant-pipeline.ts</code> para convertir co-marketing en un <code>templates/co-marketing/</code> oficial. A partir de este punto, es una operación difícil de revertir que deja rastros en el historial real de git.
+      </div>
+
+      <div class="note">
+        <svg role="img" aria-label="Variant promotion step 2 diagram" viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
@@ -417,7 +421,11 @@ diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-market
       </ol>
 
       <div class="flow-box">
-        El paso de conciliación del pipeline elimina la duplicación borrando archivos en <code>Projects/co-marketing/</code> que son idénticos a los archivos comunes (L0/common). Sin embargo, los directorios de habilidades se excluyen intencionalmente de este paso de conciliación, por lo que después de la promoción necesitas confirmar por separado que las habilidades siguen existien<svg role="img" aria-label="Variant promotion step 3 diagram" viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+        El paso de conciliación del pipeline elimina la duplicación borrando archivos en <code>Projects/co-marketing/</code> que son idénticos a los archivos comunes (L0/common). Sin embargo, los directorios de habilidades se excluyen intencionalmente de este paso de conciliación, por lo que después de la promoción necesitas confirmar por separado que las habilidades siguen existiendo en <code>.claude/skills/</code> y <code>.gemini/skills/</code>.
+      </div>
+
+      <div class="note">
+        <svg role="img" aria-label="Variant promotion step 3 diagram" viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
@@ -461,8 +469,11 @@ diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-market
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
         </div>
-        Estos elementos son un tipo de preocupación diferente al trabajo de "deduplicar archivos comunes" que maneja la conciliación — son activos específicos de la variante, por lo que el pipeline no los procesará por usted. Debe marcar cada casilla <svg role="img" aria-label="Variant promotion step 4 diagram" viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"> var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        Estos elementos son un tipo de preocupación diferente al trabajo de "deduplicar archivos comunes" que maneja la conciliación — son activos específicos de la variante, por lo que el pipeline no los procesará por usted. Debe marcar cada casilla y moverlos usted mismo.
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <svg role="img" aria-label="Variant promotion step 4 diagram" viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
           <defs>
             <marker id="doneArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/>

@@ -1,0 +1,18 @@
+# Auto-detect text files and normalize line endings to LF
+* text=auto
+
+# Explicit file type mappings
+*.html text
+*.js text eol=lf
+*.css text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.sh text eol=lf
+*.lock text eol=lf
+*.py text eol=lf
+.nojekyll text
+LICENSE text

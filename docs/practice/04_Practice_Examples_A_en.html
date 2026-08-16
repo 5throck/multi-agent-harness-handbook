@@ -133,7 +133,7 @@
   </div>
 
   <h3>Installing on Windows</h3>
-  <p>Since this handbook's path notation is Windows-based, Windows users should download <a href="../setup/upstream/setup-windows.ps1">setup-windows.ps1</a>, place it in a dedicated practice folder (e.g., <code>harness-lab/setup/</code>), run PowerShell <strong>as Administrator</strong>, and then run the command below.</p>
+  <p>Since this handbook's path notation is Windows-based, Windows users should clone the <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> repository with the command below, run PowerShell <strong>as Administrator</strong>, and then run the commands that follow.</p>
   <div class="tip-box">
     <strong>How to Open PowerShell as Administrator</strong><br>
     ① Open the Start menu and search for <code>PowerShell</code>.<br>
@@ -143,7 +143,8 @@
     If the title bar shows something like <code>Administrator: Windows PowerShell</code>, you've opened it correctly. Some steps, like winget installs, may error out or silently skip without administrator privileges.
   </div>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd ./setup
 .\setup-windows.ps1
 # Optional flags: -WSL2, -WezTerm, -Docker, -Force (reinstall tools even if already installed)</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
@@ -151,20 +152,22 @@
   <p>After the script finishes, you must fully close and reopen your terminal for the PATH changes to take effect.</p>
 
   <h3>Installing on macOS / Linux</h3>
-  <p>On macOS, download and use <a href="../setup/upstream/setup-mac.sh">setup-mac.sh</a>; on Linux, use <a href="../setup/upstream/setup-linux.sh">setup-linux.sh</a>. Both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
+  <p>Clone the <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> repository with the command below. On macOS, run setup-mac.sh; on Linux, run setup-linux.sh. Both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
   <div style="position:relative">
-  <pre class="code-block"># macOS
-cd ./setup && bash upstream/setup-mac.sh
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+
+# macOS
+cd ./setup && bash setup-mac.sh
 
 # Linux
-cd ./setup && bash upstream/setup-linux.sh</pre>
+cd ./setup && bash setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
 
   <h3>Verifying the Installation</h3>
-  <p>Regardless of your OS, running <a href="../setup/upstream/setup-common.ts">setup-common.ts</a> with <code>bun</code> prints a checklist table showing your installation status. If every item shows ✅, you're ready to proceed with the exercises below.</p>
+  <p>Regardless of your OS, running setup-common.ts with <code>bun</code> prints a checklist table showing your installation status. If every item shows ✅, you're ready to proceed with the exercises below.</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
 

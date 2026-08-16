@@ -133,7 +133,7 @@
   </div>
 
   <h3>Windowsでインストールする</h3>
-  <p>このハンドブックのパス表記はWindows基準ですので、Windowsユーザーは<a href="../setup/upstream/setup-windows.ps1">setup-windows.ps1</a>をダウンロードして実習専用フォルダ（例: <code>harness-lab/setup/</code>）に置き、PowerShellを<strong>管理者権限で</strong>実行した後、以下のコマンドを実行します。</p>
+  <p>このハンドブックのパス表記はWindows基準ですので、Windowsユーザーは以下のコマンドで<a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a>リポジトリをクローンし、PowerShellを<strong>管理者権限で</strong>実行した後、続くコマンドを実行します。</p>
   <div class="tip-box">
     <strong>PowerShellを管理者権限で開く方法</strong><br>
     ① スタートメニューを開いて<code>PowerShell</code>を検索します。<br>
@@ -143,7 +143,8 @@
     ウィンドウのタイトルバーに<code>管理者: Windows PowerShell</code>のように「管理者」が付いていれば正しく開いています。wingetインストールなど一部のステップは管理者権限なしで実行するとエラーになったり、静かにスキップされる可能性があります。
   </div>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd ./setup
 .\setup-windows.ps1
 # 選択オプション: -WSL2, -WezTerm, -Docker, -Force (既にインストールされているツールも再インストール)</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
@@ -151,20 +152,22 @@
   <p>スクリプトが終了したら、ターミナルを完全に閉じてから再度開くとPATH変更が適用されます。</p>
 
   <h3>macOS / Linuxでインストールする</h3>
-  <p>macOSは<a href="../setup/upstream/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/upstream/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用します。どちらも<code>--wezterm</code>、<code>--docker</code>選択フラグをサポートしています。</p>
+  <p>以下のコマンドで<a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a>リポジトリをクローンして使用します。macOSはsetup-mac.sh、Linuxはsetup-linux.shを実行し、どちらも<code>--wezterm</code>、<code>--docker</code>選択フラグをサポートしています。</p>
   <div style="position:relative">
-  <pre class="code-block"># macOS
-cd ./setup && bash upstream/setup-mac.sh
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+
+# macOS
+cd ./setup && bash setup-mac.sh
 
 # Linux
-cd ./setup && bash upstream/setup-linux.sh</pre>
+cd ./setup && bash setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 
   <h3>インストールの検証</h3>
-  <p>OSに関わらず、<a href="../setup/upstream/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態をチェックするチェックリスト表が出力されます。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになります。</p>
+  <p>OSに関わらず、setup-common.tsを<code>bun</code>で実行すると、インストール状態をチェックするチェックリスト表が出力されます。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになります。</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 

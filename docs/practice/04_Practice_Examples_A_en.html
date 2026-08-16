@@ -154,17 +154,17 @@
   <p>On macOS, download and use <a href="../setup/setup-mac.sh">setup-mac.sh</a>; on Linux, use <a href="../setup/setup-linux.sh">setup-linux.sh</a>. Both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
-cd ./setup && bash setup-mac.sh
+cd ./setup && bash upstream/setup-mac.sh
 
 # Linux
-cd ./setup && bash setup-linux.sh</pre>
+cd ./setup && bash upstream/setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
 
   <h3>Verifying the Installation</h3>
   <p>Regardless of your OS, running <a href="../setup/setup-common.ts">setup-common.ts</a> with <code>bun</code> prints a checklist table showing your installation status. If every item shows ✅, you're ready to proceed with the exercises below.</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
 

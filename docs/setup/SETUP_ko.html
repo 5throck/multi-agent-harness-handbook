@@ -65,7 +65,7 @@
    └─ Mark  (Markdown 뷰어)
 
 6. 최종 확인 ✅
-   └─ bun setup-common.ts</pre>
+   └─ bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
 </div></div>
 
@@ -83,25 +83,25 @@
 
   <h3>macOS</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-mac.sh
+    <pre class="code-block">bash upstream/setup-mac.sh
 # 선택: WezTerm (GPU 가속 터미널) 함께 설치
-bash setup-mac.sh --wezterm
+bash upstream/setup-mac.sh --wezterm
 # 선택: Docker Desktop 함께 설치
-bash setup-mac.sh --docker
+bash upstream/setup-mac.sh --docker
 # 둘 다:
-bash setup-mac.sh --wezterm --docker</pre>
+bash upstream/setup-mac.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">복사</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-linux.sh
+    <pre class="code-block">bash upstream/setup-linux.sh
 # 선택: WezTerm 함께 설치
-bash setup-linux.sh --wezterm
+bash upstream/setup-linux.sh --wezterm
 # 선택: Docker 함께 설치
-bash setup-linux.sh --docker
+bash upstream/setup-linux.sh --docker
 # 둘 다:
-bash setup-linux.sh --wezterm --docker</pre>
+bash upstream/setup-linux.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">복사</button>
   </div>
 
@@ -109,21 +109,21 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p><strong>PowerShell을 관리자 권한으로 실행</strong>한 뒤 아래 명령어를 입력하세요.</p>
   <div style="position:relative">
     <pre class="code-block"># 기본 실행 (Execution Policy는 스크립트가 자동으로 설정합니다)
-.\setup-windows.ps1
+.\upstream\setup-windows.ps1
 
 # 옵션:
-.\setup-windows.ps1 -WSL2             # WSL2 함께 설치 (재시작 필요)
-.\setup-windows.ps1 -WezTerm          # WezTerm 함께 설치
-.\setup-windows.ps1 -Docker           # Docker Desktop 함께 설치
-.\setup-windows.ps1 -Force            # 이미 설치된 도구도 모두 재설치
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # 선택 옵션 전부 설치</pre>
+.\upstream\setup-windows.ps1 -WSL2             # WSL2 함께 설치 (재시작 필요)
+.\upstream\setup-windows.ps1 -WezTerm          # WezTerm 함께 설치
+.\upstream\setup-windows.ps1 -Docker           # Docker Desktop 함께 설치
+.\upstream\setup-windows.ps1 -Force            # 이미 설치된 도구도 모두 재설치
+.\upstream\setup-windows.ps1 -WSL2 -WezTerm -Docker  # 선택 옵션 전부 설치</pre>
     <button class="copy-btn" onclick="copyCode(this)">복사</button>
   </div>
   <div class="note"><strong>실행 후</strong>: 터미널을 닫고 다시 열어 PATH 변경 사항을 반영하세요.</div>
 
   <h2 id="step3">Step 3 — 설치 확인</h2>
   <div style="position:relative">
-    <pre class="code-block">bun setup-common.ts</pre>
+    <pre class="code-block">bun upstream/setup-common.ts</pre>
     <button class="copy-btn" onclick="copyCode(this)">복사</button>
   </div>
   <p>설치된 도구의 검증 표를 출력한다. <strong>모든 항목이 ✅로 표시되면 준비 완료이다.</strong></p>
@@ -171,7 +171,7 @@ bash setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>WezTerm</strong></td><td>GPU 가속·멀티플렉서 내장·크로스플랫폼 — 파워유저 추천</td><td><code>winget install wez.wezterm</code></td></tr>
     </tbody>
   </table>
-  <p style="font-size:13px;color:var(--text-dim);">WezTerm 자동 설치: <code>.\setup-windows.ps1 -WezTerm</code></p>
+  <p style="font-size:13px;color:var(--text-dim);">WezTerm 자동 설치: <code>.\upstream\setup-windows.ps1 -WezTerm</code></p>
 
   <h2 id="trouble">문제 해결</h2>
 
@@ -201,7 +201,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>Windows 스크립트 실행 로그는 <code>%USERPROFILE%\workshop-setup-logs\</code>에 자동 저장됩니다.</p>
 
   <hr>
-  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun setup-common.ts</code>를 실행해서 모든 항목이 ✅로 표시되면 워크숍 준비 완료이다.</p>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun upstream/setup-common.ts</code>를 실행해서 모든 항목이 ✅로 표시되면 워크숍 준비 완료이다.</p>
    <footer>
     Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·

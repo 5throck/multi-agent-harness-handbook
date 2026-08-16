@@ -152,17 +152,17 @@
   <p>macOSは<a href="../setup/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用する。どちらも<code>--wezterm</code>、<code>--docker</code>の選択フラグをサポートする。</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
-cd ./setup && bash setup-mac.sh
+cd ./setup && bash upstream/setup-mac.sh
 
 # Linux
-cd ./setup && bash setup-linux.sh</pre>
+cd ./setup && bash upstream/setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 
   <h3>インストールの検証</h3>
   <p>OSにかかわらず、<a href="../setup/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態を点検するチェックリスト表が出力される。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになる。</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 

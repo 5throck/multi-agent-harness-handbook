@@ -152,17 +152,17 @@
   <p>macOS는 <a href="../setup/setup-mac.sh">setup-mac.sh</a>, Linux는 <a href="../setup/setup-linux.sh">setup-linux.sh</a>를 내려받아 사용한다. 둘 다 <code>--wezterm</code>, <code>--docker</code> 선택 플래그를 지원한다.</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
-cd ./setup && bash setup-mac.sh
+cd ./setup && bash upstream/setup-mac.sh
 
 # Linux
-cd ./setup && bash setup-linux.sh</pre>
+cd ./setup && bash upstream/setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
 </div>
 
   <h3>설치 검증하기</h3>
   <p>운영체제와 무관하게 <a href="../setup/setup-common.ts">setup-common.ts</a>를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
 </div>
 

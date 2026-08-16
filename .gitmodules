@@ -1,0 +1,3 @@
+[submodule "docs/setup/upstream"]
+	path = docs/setup/upstream
+	url = https://github.com/5throck/setup.git

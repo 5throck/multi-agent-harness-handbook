@@ -133,7 +133,7 @@
   </div>
 
   <h3>Instalación en Windows</h3>
-  <p>Dado que la notación de rutas de este manual está basada en Windows, los usuarios de Windows deben descargar <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>, colocarlo en una carpeta de práctica dedicada (por ejemplo, <code>harness-lab/setup/</code>), abrir PowerShell <strong>como administrador</strong>, y luego ejecutar el comando a continuación.</p>
+  <p>Dado que la notación de rutas de este manual está basada en Windows, los usuarios de Windows deben descargar <a href="../setup/upstream/setup-windows.ps1">setup-windows.ps1</a>, colocarlo en una carpeta de práctica dedicada (por ejemplo, <code>harness-lab/setup/</code>), abrir PowerShell <strong>como administrador</strong>, y luego ejecutar el comando a continuación.</p>
   <div class="tip-box">
     <strong>Cómo abrir PowerShell como administrador</strong><br>
     ① Abra el menú Inicio y busque <code>PowerShell</code>.<br>
@@ -151,7 +151,7 @@
   <p>Después de que el script termine, debe cerrar y volver a abrir completamente su terminal para que los cambios en PATH surtan efecto.</p>
 
   <h3>Instalación en macOS / Linux</h3>
-  <p>En macOS, descargue y use <a href="../setup/setup-mac.sh">setup-mac.sh</a>; en Linux, use <a href="../setup/setup-linux.sh">setup-linux.sh</a>. Ambos admiten los indicadores opcionales <code>--wezterm</code> y <code>--docker</code>.</p>
+  <p>En macOS, descargue y use <a href="../setup/upstream/setup-mac.sh">setup-mac.sh</a>; en Linux, use <a href="../setup/upstream/setup-linux.sh">setup-linux.sh</a>. Ambos admiten los indicadores opcionales <code>--wezterm</code> y <code>--docker</code>.</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
 cd ./setup && bash upstream/setup-mac.sh
@@ -162,7 +162,7 @@ cd ./setup && bash upstream/setup-linux.sh</pre>
 </div>
 
   <h3>Verificación de la instalación</h3>
-  <p>Independientemente de su sistema operativo, ejecutar <a href="../setup/setup-common.ts">setup-common.ts</a> con <code>bun</code> imprime una tabla de verificación que muestra el estado de su instalación. Si cada elemento muestra ✅, está listo para continuar con los ejercicios a continuación.</p>
+  <p>Independientemente de su sistema operativo, ejecutar <a href="../setup/upstream/setup-common.ts">setup-common.ts</a> con <code>bun</code> imprime una tabla de verificación que muestra el estado de su instalación. Si cada elemento muestra ✅, está listo para continuar con los ejercicios a continuación.</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>

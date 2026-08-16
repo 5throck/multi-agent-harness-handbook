@@ -131,7 +131,7 @@
   </div>
 
   <h3>Windowsでのインストール</h3>
-  <p>このハンドブックのパス表記はWindows基準のため、Windowsユーザーは<a href="../setup/setup-windows.ps1">setup-windows.ps1</a>をダウンロードし、実習専用フォルダ(例: <code>harness-lab/setup/</code>)に置いて、PowerShellを<strong>管理者権限で</strong>実行した後、下記のコマンドを実行する。</p>
+  <p>このハンドブックのパス表記はWindows基準のため、Windowsユーザーは<a href="../setup/upstream/setup-windows.ps1">setup-windows.ps1</a>をダウンロードし、実習専用フォルダ(例: <code>harness-lab/setup/</code>)に置いて、PowerShellを<strong>管理者権限で</strong>実行した後、下記のコマンドを実行する。</p>
   <div class="tip-box">
     <strong>PowerShellを管理者権限で開く方法</strong><br>
     ① スタートメニューを開き、<code>PowerShell</code>を検索する。<br>
@@ -149,7 +149,7 @@
   <p>スクリプトが終わったら、ターミナルを完全に閉じて再度開く必要がある。PATHの変更が反映されるためだ。</p>
 
   <h3>macOS / Linuxでのインストール</h3>
-  <p>macOSは<a href="../setup/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用する。どちらも<code>--wezterm</code>、<code>--docker</code>の選択フラグをサポートする。</p>
+  <p>macOSは<a href="../setup/upstream/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/upstream/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用する。どちらも<code>--wezterm</code>、<code>--docker</code>の選択フラグをサポートする。</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
 cd ./setup && bash upstream/setup-mac.sh
@@ -160,7 +160,7 @@ cd ./setup && bash upstream/setup-linux.sh</pre>
 </div>
 
   <h3>インストールの検証</h3>
-  <p>OSにかかわらず、<a href="../setup/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態を点検するチェックリスト表が出力される。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになる。</p>
+  <p>OSにかかわらず、<a href="../setup/upstream/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態を点検するチェックリスト表が出力される。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになる。</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>

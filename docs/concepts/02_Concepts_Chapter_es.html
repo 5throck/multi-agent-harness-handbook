@@ -63,7 +63,7 @@
   </ul>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Harness architecture overview diagram" viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -124,7 +124,7 @@
   <p>Una analogía culinaria hace que las tres etapas sean fáciles de entender. La ingeniería de prompts es "qué palabras le das al chef para el pedido", la ingeniería de contexto es "qué ingredientes y receta le entregas al chef", y la ingeniería de arnés es "construir un sistema donde la propia cocina -- procedimientos de inspección, herramientas, reglas de higiene -- produzca la misma calidad cada vez." No importa qué tan bien formules el pedido ni qué tan buenos sean los ingredientes, si el sistema de la cocina en sí es descuidado, los resultados serán inconsistentes cada vez.</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -171,7 +171,7 @@
   <p>La ingeniería de arnés se puede pensar como una estructura de cinco capas entre el modelo y el usuario. El diagrama de abajo muestra, de un vistazo, la arquitectura que recorre todo este manual -- <a href="#s1">la siguiente sección</a> conecta qué capítulo cubre cada una de estas cinco capas.</p>
 
   <div class="diagram-frame">
-  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
         <path d="M0,0 L10,3 L0,6 Z" fill="var(--text-dim)"/>
@@ -207,7 +207,7 @@
       <text x="114" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Procedimientos automatizados</text>
       <text x="216" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Bucle evaluar-mejorar</text>
       <text x="216" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Puertas de QA</text>
-      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">MEMORY.md · traspasos</text>
+      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">YYYY-MM-DD.md · traspasos</text>
       <text x="322" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Contratos, gestión de estado</text>
       <text x="428" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Menor privilegio, aprobación</text>
       <text x="428" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Aislamiento, registros de auditoría</text>
@@ -262,7 +262,7 @@
   <h2 id="s2">Límites de un Agente Único</h2>
   <p>Asignar cada rol a un solo agente es conveniente al principio, pero a medida que el trabajo escala, tres problemas se vuelven claros. Primero, la sobrecarga de contexto: cuando la revisión de diseño, la escritura de código, las pruebas y la documentación se manejan secuencialmente dentro de una sesión, los detalles de los pasos anteriores se desvanecen a medida que se avanza, y la consistencia de los resultados disminuye. Segundo, el conflicto de roles: un agente que revisa su propio código pasa por alto muchos defectos que él mismo escribió -- el mismo problema que se tiene cuando el autor y el revisor son la misma persona. Tercero, la falta de paralelismo: incluso subtareas independientes (por ejemplo, refactorizar varios archivos, revisar código desde múltiples perspectivas) deben procesarse secuencialmente por un solo agente, por lo que el tiempo total crece linealmente.</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Bloques de tareas -->
         <rect x="20" y="16" width="120" height="30" rx="6" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.2"/>
@@ -297,7 +297,7 @@
   <p>Un equipo multiagente está compuesto por tres elementos principales.</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-dark)"/>
@@ -390,7 +390,7 @@
   <p>Los cinco patrones de flujo de trabajo que Anthropic presentó en su documento de diciembre de 2024 "Building Effective Agents" son los más ampliamente utilizados en la práctica: encadenamiento de prompts (pipeline), enrutamiento, paralelización (seccionamiento/votación), orquestador-trabajadores y evaluador-optimizador (verificar-y-aplicar). Los cinco patrones no son alternativas mutuamente excluyentes -- son una caja de herramientas de la que elegir o combinar, basándose en "¿hay dependencia entre tareas", "¿se pueden predecir las subtareas con anticipación" y "¿es necesaria la verificación".</p>
 
   <div class="note">
-    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
       <defs>
         <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -489,7 +489,7 @@
   <div class="note">Los cinco patrones se combinan más a menudo en capas que se usan de forma aislada -- el enrutamiento puede alimentar el primer paso de un encadenamiento, orquestador-trabajadores puede incorporar un evaluador-optimizador dentro de la unidad de trabajo de cada trabajador, y la paralelización puede insertarse en medio de otro patrón. §4b cubre un ejemplo concreto de esta combinación.</div>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -566,7 +566,7 @@
   <h3>La Composición del Equipo No Es Fija</h3>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Izquierda: Equipo estático -->
         <text x="155" y="18" text-anchor="middle" font-size="12" fill="var(--text-dim)" font-weight="700">Equipo Estático</text>
@@ -630,7 +630,7 @@
   <p><strong>AGENTS.md</strong> es un estándar abierto creado en agosto de 2025, liderado por OpenAI con la participación de Google, Cursor, Factory y otros, para resolver este problema, y fue donado a la Agentic AI Foundation bajo la Linux Foundation en diciembre de 2025. Colocar un solo AGENTS.md en la raíz del repositorio permite que más de 30 herramientas -- incluyendo Codex, Claude Code (vía importación), GitHub Copilot, Cursor, Google Jules y la familia Antigravity -- lo lean al inicio de sesión y compartan reglas comunes como comandos de compilación/pruebas, estilo de código y áreas prohibidas.</p>
   <p>El énfasis continuo de este manual en "soporte para las cuatro herramientas" proviene en última instancia de la misma conciencia del problema. Ya sea que un equipo use Claude Desktop App o Antigravity Desktop, mantener reglas compartidas en la raíz del repositorio (AGENTS.md) separadas de la configuración detallada por herramienta (<code>CLAUDE.md</code>, <code>GEMINI.md</code>, etc.) significa que el arnés en sí se mantiene estable incluso cuando se cambian o mezclan herramientas. El repositorio de ai-workspace-standards, examinado en el Capítulo 5, es una implementación real de este principio. El archivo raíz <code>AGENTS.md</code> sirve como la fuente única de verdad (SSOT) para todos los agentes en el espacio de trabajo, y la carpeta <code>.agents/</code> se encuentra junto a <code>.claude/</code> y <code>.gemini/</code>, conteniendo comandos y habilidades agnósticos del motor.</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>

@@ -11,7 +11,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第8章 §2 · ライフサイクル管理 - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブックの資料です。">
+  <meta name="description" content="第8章 §2 · ライフサイクル管理 - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第8章 §2 · ライフサイクル管理</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -78,7 +78,7 @@
   <p>エージェントは <code>agents/</code> ディレクトリ配下に <code>.md</code> ファイルとして定義されます。エージェントは誕生してから運用され、最終的に廃止されるまで、次の5段階を経ます。</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Lifecycle governance overview diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-purple)"/>
@@ -176,7 +176,7 @@
   <p>スキルは、エージェントがセッション中に呼び出せる再利用可能な動作単位です。<code>SKILL.md</code> ファイルとして定義され、プラグインやワークスペースの <code>.claude/skills/</code> に配置されます。スキルのライフサイクルは次の5段階で構成されます。</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Variant creation flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
@@ -274,7 +274,7 @@
   <p>スクリプトは <code>scripts/</code> ディレクトリ配下に <code>.ts</code> ファイルとして管理されます。エージェント生成の検証、テンプレートの発行、プロジェクトのスキャフォールディングなど、ワークスペースのインフラを自動化する実行可能なコードです。スクリプトのライフサイクルは次の5段階で構成されます。</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Variant promotion flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/>

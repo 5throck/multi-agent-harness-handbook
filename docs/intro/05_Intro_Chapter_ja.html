@@ -95,7 +95,7 @@
 │       ├── agents/          ← variantから継承し、このプロジェクト専用として進化を続ける
 │       └── (独立したgitリポジトリ — ワークスペースルートとは別)
 └── memory/
-    └── MEMORY.md            ← §4: セッション間で引き継がれるコンテキスト記録</pre>
+    └── YYYY-MM-DD.md            ← §4: セッション間で引き継がれるコンテキスト記録</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
   </div>
@@ -104,7 +104,7 @@
 
   <p>この構造の上で実際に作業が進行する順序(ランタイムフロー)は次のとおりである。</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
-    <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md → AGENTS.md → memory/MEMORY.mdの順に読み込む(§4で扱う)。</li>
+    <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md → AGENTS.md → memory/YYYY-MM-DD.mdの順に読み込む(§4で扱う)。</li>
     <li><strong>ツール別の実行規則を適用。</strong> Claude Code/AppであればCLAUDE.mdと<code>.claude/</code>が、Antigravity系であればGEMINI.mdと<code>.gemini/</code>が詳細な実行方式を定める。</li>
     <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製し、L3のプロジェクト作業ディレクトリを作成する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。</li>
     <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/propagate-to-templates.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2やL3には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
@@ -155,7 +155,7 @@
   <div class="note">この<strong>モデルコストティア(high/medium/low)</strong>は、第8章で扱う<strong>L0 → L1 → L2 → L3の4層</strong>(ファイルがどこから来て、どのように流れるかについての階層)と、名前の「層」という感覚が同じだけで、互いに異なる概念である。一方は「エージェントにどのモデルを割り当てるか」であり、もう一方は「ファイルの原本がどこにあるか」である。</div>
 
   <h2 id="s4">セッション開始チェックリストとスキャフォールディング</h2>
-  <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>を読む。続いてAGENTS.mdで利用可能なエージェントを確認し、<code>memory/MEMORY.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
+  <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>を読む。続いてAGENTS.mdで利用可能なエージェントを確認し、<code>memory/YYYY-MM-DD.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
   <p>新規プロジェクトを作成する流れは概念的には単純である。<code>bun scripts/new-project.ts</code>スクリプトにプロジェクト名と希望するバリアント(variant)を指定して実行すると、そのバリアント(variant)の構成全体が複製され、完全に独立したgitリポジトリになる。このリポジトリはワークスペースルートとは分離されているが、生まれた時点からCONSTITUTION.mdの共有標準を継承した状態で始まる。チームはその中で、プロジェクト固有の<code>docs/context.md</code>とプロジェクトレベルのCLAUDE.md/GEMINI.mdオーバーライドを埋めながらチームを発展させていく。</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
@@ -168,7 +168,7 @@
   <p>このコマンドの完全な構文と全オプション(<code>--platform</code>、<code>--version</code>)は<a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-2">第6章§1・プロジェクトスキャフォールディングコマンド</a>で実際に実習する。</p>
 
   <div class="note">
-    <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Session startup file reading sequence diagram" viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
       <defs>
         <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
         <marker id="arrow2g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>

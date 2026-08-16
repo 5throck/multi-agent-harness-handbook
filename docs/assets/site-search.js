@@ -8,6 +8,7 @@
 (function () {
   'use strict';
   var DOCS = [
+    { path: 'intro/00_Prerequisite_Bridge.html', title: '수료자 가이드 · 입문 과정 수료자를 위한 스킵 맵', lang: 'ko' },
     { path: 'intro/01_Why_AI_Chapter.html', title: '1장 · AI 시대의 업무 혁신', lang: 'ko' },
     { path: 'concepts/02_Concepts_Chapter.html', title: '2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념', lang: 'ko' },
     { path: 'guardrails/03_Guardrails_Chapter.html', title: '3장 · 가드레일과 권한 모델', lang: 'ko' },

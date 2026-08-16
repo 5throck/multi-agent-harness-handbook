@@ -63,7 +63,7 @@
   </ul>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Harness architecture overview diagram" viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -124,7 +124,7 @@
   <p>A cooking analogy makes the three stages easy to grasp. Prompt engineering is "what words do you give the chef for the order," context engineering is "what ingredients and recipe do you hand the chef," and harness engineering is "building a system where the kitchen itself — inspection procedures, tools, hygiene rules — produces the same quality every time." No matter how well you phrase the order or how good the ingredients are, if the kitchen system itself is sloppy, the results will be inconsistent every time.</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -171,7 +171,7 @@
   <p>Harness engineering can be thought of as a five-layer structure sitting between the model and the user. The diagram below shows, at a glance, the architecture running through this entire handbook — <a href="#s1">the next section</a> connects which chapter covers which of these five layers.</p>
 
   <div class="diagram-frame">
-  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
         <path d="M0,0 L10,3 L0,6 Z" fill="var(--text-dim)"/>
@@ -207,7 +207,7 @@
       <text x="114" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Automated procedures</text>
       <text x="216" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Evaluate-improve loop</text>
       <text x="216" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">QA gates</text>
-      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">MEMORY.md · handoff</text>
+      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">YYYY-MM-DD.md · handoff</text>
       <text x="322" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Contracts, state mgmt</text>
       <text x="428" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Least privilege, approval</text>
       <text x="428" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Isolation, audit logs</text>
@@ -262,7 +262,7 @@
   <h2 id="s2">Limits of a Single Agent</h2>
   <p>Assigning every role to a single agent is convenient at first, but as work scales, three problems become clear. First, context overload: when design review, code writing, testing, and documentation are all handled in sequence within one session, the details of earlier steps fade as things go on, and the consistency of results drops. Second, role conflict: an agent that reviews its own code misses many flaws it wrote — the same problem you get when the author and the reviewer are the same person. Third, lack of parallelism: even independent sub-tasks (e.g., refactoring several files, reviewing code from multiple perspectives) must be processed sequentially by a single agent, so total time grows linearly.</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Task blocks -->
         <rect x="20" y="16" width="120" height="30" rx="6" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.2"/>
@@ -297,7 +297,7 @@
   <p>A multi-agent team is made up of three main elements.</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-dark)"/>
@@ -390,7 +390,7 @@
   <p>The five workflow patterns Anthropic laid out in its December 2024 "Building Effective Agents" are the most widely used in practice: prompt chaining (pipeline), routing, parallelization (sectioning/voting), orchestrator-workers, and evaluator-optimizer (verify-then-apply). The five patterns aren't mutually exclusive alternatives — they're a toolbox to pick from or combine, based on "is there a dependency between tasks," "can sub-tasks be predicted in advance," and "is verification needed."</p>
 
   <div class="note">
-    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
       <defs>
         <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -489,7 +489,7 @@
   <div class="note">The five patterns are more often layered together than used in isolation — routing might feed into the first step of a prompt chain, orchestrator-workers might embed an evaluator-optimizer within each worker's unit of work, and parallelization might slot into the middle of another pattern. §4b covers a concrete example of this combination.</div>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -566,7 +566,7 @@
   <h3>Team Composition Is Not Fixed</h3>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Left: Static team -->
         <text x="155" y="18" text-anchor="middle" font-size="12" fill="var(--text-dim)" font-weight="700">Static Team</text>
@@ -630,7 +630,7 @@
   <p><strong>AGENTS.md</strong> is an open standard created in August 2025, led by OpenAI with participation from Google, Cursor, Factory, and others, to solve this problem, and it was donated to the Agentic AI Foundation under the Linux Foundation in December 2025. Placing a single AGENTS.md at the repository root lets over 30 tools — including Codex, Claude Code (via import), GitHub Copilot, Cursor, Google Jules, and the Antigravity family — read it at session start and share common rules like build/test commands, code style, and off-limits areas.</p>
   <p>This handbook's ongoing emphasis on "support for all four tools" ultimately comes from the same problem awareness. Whether a team uses Claude Desktop App or Antigravity Desktop, keeping shared rules at the repository root (AGENTS.md) separate from per-tool detailed configuration (<code>CLAUDE.md</code>, <code>GEMINI.md</code>, etc.) means the harness itself stays stable even when tools are switched or mixed. The ai-workspace-standards repository, examined in Chapter 5, is a real-world implementation of this principle. The root <code>AGENTS.md</code> file serves as the single source of truth (SSOT) for all agents in the workspace, and the <code>.agents/</code> folder sits alongside <code>.claude/</code> and <code>.gemini/</code>, holding engine-agnostic commands and skills.</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>

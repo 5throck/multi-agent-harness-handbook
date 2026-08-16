@@ -10,7 +10,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第9章 · ワークフローデザインパターン - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="第9章 · ワークフローデザインパターン - マルチエージェントチーム・ハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第9章 · ワークフローデザインパターン</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -93,7 +93,7 @@
 
   <!-- §1 SVG: Pattern → Workflow relationship -->
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
-    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow design pattern overview diagram" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -194,7 +194,7 @@
       <strong>④ 修正提案（パイプライン）</strong>: フィードバックに基づいてコード修正提案を生成します。<br>
       <strong>⑤ 最終承認（検証してから適用）</strong>: 修正されたコードを再レビューします。合格すれば<span class="wf-gate">人間の承認ゲート</span>へ進み、却下されれば④にループバックします。
     </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="100" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① 変更分析</text>
         <line x1="105" y1="48" x2="125" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -225,7 +225,7 @@
       <strong>③ 集約とドラフト作成（パイプライン）</strong>: 3つの調査結果をドラフトレポートに統合し、可視化（チャート）を生成します。<br>
       <strong>④ クロス検証（検証してから適用）</strong>: 専門レビュアーがデータソース、論理的一貫性、欠落をチェックします。<span class="wf-gate">人間の承認ゲート</span>を経て、最終レポートが確定します。
     </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="110" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① PMオーケストレーション</text>
         <line x1="115" y1="48" x2="135" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -256,7 +256,7 @@
       <strong>⑤⑥⑦ ビルド・計測・エクスポート（パイプライン）</strong>: HTMLビルド → レイアウト計測 → PDFエクスポートの順次処理。<br>
       <strong>⑧⑨⑩⑩ 最終レビュー（検証してから適用）</strong>: 完成したPDFをクロスレビューし、<span class="wf-gate">人間の承認ゲート</span>へ進みます。
     </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="var(--text)">
         <rect x="5" y="30" width="60" height="32" rx="5" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="var(--accent)">① リサーチ</text>
         <line x1="65" y1="46" x2="80" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
@@ -292,7 +292,7 @@
       <strong>③ 優先度決定</strong>: 調査結果に基づいて優先度と担当者を推奨します。<br>
       <strong>④ エスカレーションまたは自動解決</strong>: 自動的に解決できる軽微な問題（例：設定エラー）は即座に修正し、複雑な問題は<span class="wf-gate">人間の承認ゲート</span>にエスカレーションします。
     </p>
-    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="28" width="80" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① 分類</text>
         <line x1="85" y1="46" x2="105" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -319,7 +319,7 @@
       <strong>③ 影響分析</strong>: 変更が他のファイル/機能にどのような影響を与えるかを分析し、PR本文に追加します。<br>
       <strong>④ 最終レビュー + 承認</strong>: PR全体を再レビューし、<span class="wf-gate">人間の承認ゲート</span>へ進みます。承認されるとマージ保留状態に移行します。
     </p>
-    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="28" width="100" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="var(--accent)">① 変更収集</text>
         <line x1="105" y1="46" x2="125" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -413,7 +413,7 @@
 
   <!-- Decision tree SVG -->
   <div class="decision-box">
-    <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/></marker>
         <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/></marker>

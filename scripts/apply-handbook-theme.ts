@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// scripts/co-deck/handbook/apply-handbook-theme.ts
+// scripts/apply-handbook-theme.ts
 // CSS theme applicator for handbooks.
 // Built-in themes define :root (light) + .dark (manual toggle via dark-mode-toggle.js).
 // No @media block — JS handles OS preference detection and applies .dark class on <html>.

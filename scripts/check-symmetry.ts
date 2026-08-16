@@ -1,4 +1,4 @@
-// scripts/co-deck/handbook/check-symmetry.ts
+// scripts/check-symmetry.ts
 // Check ②: If A's chapter-nav next → B, then B's chapter-nav prev → A.
 // Canonical source of the handbook toolkit (adapted from
 // Handbooks/multi-agent-harness-handbook/scripts/check-symmetry.ts).

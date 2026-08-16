@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="ワークショップ環境セットアップガイド · マルチエージェントチームハーネスエンジニアリングハンドブック - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="ワークショップ環境セットアップガイド · マルチエージェントチームハーネスエンジニアリングハンドブック - マルチエージェントチームハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ワークショップ環境セットアップガイド · マルチエージェントチームハーネスエンジニアリングハンドブック</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -65,7 +65,7 @@
    └─ Mark  (Markdownビューア)
 
 6. 最終確認 ✅
-   └─ bun setup-common.ts</pre>
+   └─ bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div></div>
 
@@ -83,25 +83,25 @@
 
   <h3>macOS</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-mac.sh
+    <pre class="code-block">bash upstream/setup-mac.sh
 # オプション: WezTerm (GPUアクセラレーションターミナル) も一緒にインストール
-bash setup-mac.sh --wezterm
+bash upstream/setup-mac.sh --wezterm
 # オプション: Docker Desktopも一緒にインストール
-bash setup-mac.sh --docker
+bash upstream/setup-mac.sh --docker
 # 両方:
-bash setup-mac.sh --wezterm --docker</pre>
+bash upstream/setup-mac.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">コピー</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-linux.sh
+    <pre class="code-block">bash upstream/setup-linux.sh
 # オプション: WezTermも一緒にインストール
-bash setup-linux.sh --wezterm
+bash upstream/setup-linux.sh --wezterm
 # オプション: Dockerも一緒にインストール
-bash setup-linux.sh --docker
+bash upstream/setup-linux.sh --docker
 # 両方:
-bash setup-linux.sh --wezterm --docker</pre>
+bash upstream/setup-linux.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">コピー</button>
   </div>
 
@@ -109,21 +109,21 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p><strong>PowerShellを管理者権限で実行</strong>し、以下のコマンドを入力してください。</p>
   <div style="position:relative">
     <pre class="code-block"># 基本実行 (Execution Policyはスクリプトが自動で設定します)
-.\setup-windows.ps1
+.\upstream\setup-windows.ps1
 
 # オプション:
-.\setup-windows.ps1 -WSL2             # WSL2も一緒にインストール (再起動が必要)
-.\setup-windows.ps1 -WezTerm          # WezTermも一緒にインストール
-.\setup-windows.ps1 -Docker           # Docker Desktopも一緒にインストール
-.\setup-windows.ps1 -Force            # 既にインストール済みのツールもすべて再インストール
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # オプションをすべてインストール</pre>
+.\upstream\setup-windows.ps1 -WSL2             # WSL2も一緒にインストール (再起動が必要)
+.\upstream\setup-windows.ps1 -WezTerm          # WezTermも一緒にインストール
+.\upstream\setup-windows.ps1 -Docker           # Docker Desktopも一緒にインストール
+.\upstream\setup-windows.ps1 -Force            # 既にインストール済みのツールもすべて再インストール
+.\upstream\setup-windows.ps1 -WSL2 -WezTerm -Docker  # オプションをすべてインストール</pre>
     <button class="copy-btn" onclick="copyCode(this)">コピー</button>
   </div>
   <div class="note"><strong>実行後</strong>: ターミナルを閉じて再度開き、PATHの変更を反映してください。</div>
 
   <h2 id="step3">Step 3 — インストール確認</h2>
   <div style="position:relative">
-    <pre class="code-block">bun setup-common.ts</pre>
+    <pre class="code-block">bun upstream/setup-common.ts</pre>
     <button class="copy-btn" onclick="copyCode(this)">コピー</button>
   </div>
   <p>インストール済みツールの検証表を出力します。<strong>すべての項目が✅と表示されれば準備完了です。</strong></p>
@@ -171,7 +171,7 @@ bash setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>WezTerm</strong></td><td>GPUアクセラレーション・マルチプレクサ内蔵・クロスプラットフォーム — パワーユーザー向け</td><td><code>winget install wez.wezterm</code></td></tr>
     </tbody>
   </table>
-  <p style="font-size:13px;color:var(--text-dim);">WezTermの自動インストール: <code>.\setup-windows.ps1 -WezTerm</code></p>
+  <p style="font-size:13px;color:var(--text-dim);">WezTermの自動インストール: <code>.\upstream\setup-windows.ps1 -WezTerm</code></p>
 
   <h2 id="trouble">トラブルシューティング</h2>
 
@@ -201,7 +201,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>Windowsスクリプトの実行ログは<code>%USERPROFILE%\workshop-setup-logs\</code>に自動的に保存されます。</p>
 
   <hr>
-  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun setup-common.ts</code>を実行し、すべての項目が✅と表示されればワークショップの準備完了です。</p>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;"><code>bun upstream/setup-common.ts</code>を実行し、すべての項目が✅と表示されればワークショップの準備完了です。</p>
    <footer>
     Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·

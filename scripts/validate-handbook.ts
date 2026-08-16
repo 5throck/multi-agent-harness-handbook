@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// scripts/co-deck/handbook/validate-handbook.ts
+// scripts/validate-handbook.ts
 // Unified handbook validator — the single entry point of the toolkit.
 // Aggregates every read-only check so a handbook can be validated with one
 // command, then deployed with the scripts that ship inside it (scaffold).
@@ -14,8 +14,8 @@
 //   doctor       (handbook-doctor.ts)  — opt-in: 12 static analysis checks
 //
 // Usage:
-//   bun run scripts/co-deck/handbook/validate-handbook.ts --docs-dir docs
-//   bun run scripts/co-deck/handbook/validate-handbook.ts --docs-dir docs --checks all
+//   bun run scripts/validate-handbook.ts --docs-dir docs
+//   bun run scripts/validate-handbook.ts --docs-dir docs --checks all
 // Exit code 1 if any check reports issues.
 
 import { spawnSync } from "node:child_process";

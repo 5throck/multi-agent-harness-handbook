@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念 - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念 - マルチエージェントチーム・ハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -63,7 +63,7 @@
   </ul>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Harness architecture overview diagram" viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -124,7 +124,7 @@
   <p>料理の例えで3つの段階を理解するのが簡単です。プロンプトエンジニアリングは「料理人にどう注文の言葉を伝えるか」、コンテキストエンジニアリングは「料理人にどんな食材とレシピを渡すか」、ハーネスエンジニアリングは「厨房そのもの — 検査手順、道具、衛生ルール — が毎回同じ品質を生み出すシステムを構築する」です。注文の言葉がどれほど上手でも、食材がどれほど良くても、厨房システムそのものが杜撰なら、結果は毎回不一致になります。</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -171,7 +171,7 @@
   <p>ハーネスエンジニアリングは、モデルとユーザーの間に位置する5層構造として捉えることができます。以下の図は、本ハンドブック全体を貫くアーキテクチャを一望できるものです — <a href="#s1">次節</a>で、この5層の各層がどの章で扱われるかを対応付けます。</p>
 
   <div class="diagram-frame">
-  <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
         <path d="M0,0 L10,3 L0,6 Z" fill="var(--text-dim)"/>
@@ -207,7 +207,7 @@
       <text x="114" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">自動実行手順</text>
       <text x="216" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">評価-改善ループ</text>
       <text x="216" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">QAゲート</text>
-      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">MEMORY.md・引継ぎ</text>
+      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">YYYY-MM-DD.md・引継ぎ</text>
       <text x="322" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">契約・状態管理</text>
       <text x="428" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">最小権限・承認</text>
       <text x="428" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">隔離・監査ログ</text>
@@ -262,7 +262,7 @@
   <h2 id="s2">単一エージェントの限界</h2>
   <p>すべての役割を単一エージェントに割り当てるのは最初は便利ですが、作業がスケールするにつれて3つの問題が顕在化します。第一に、コンテキストの過負荷：設計レビュー、コード執筆、テスト、ドキュメント作成をすべて1つのセッション内で順次処理すると、作業が進むにつれて初期のステップの詳細が薄れ、結果の一貫性が低下します。第二に、役割の衝突：自分のコードを自分でレビューするエージェントは、自分が書いた欠陥を見逃します — 著者とレビュアーが同じ人である場合と同じ問題です。第三に、並列性の欠如：独立したサブタスク（複数ファイルのリファクタリング、複数の視点からのレビューなど）であっても、単一エージェントが順次処理する必要があるため、合計時間が線形に増大します。</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Task blocks -->
         <rect x="20" y="16" width="120" height="30" rx="6" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.2"/>
@@ -297,7 +297,7 @@
   <p>マルチエージェントチームは3つの主要な要素で構成されます。</p>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-dark)"/>
@@ -390,7 +390,7 @@
   <p>Anthropicが2024年12月の「Building Effective Agents」で示した5つのワークフローパターンが、実務で最も広く使われています：プロンプトチェーン（パイプライン）、ルーティング、並列化（セクショニング/投票）、オーケストレーター・ワーカー、評価者・最適化（検証後適用）。5つのパターンは排他的な選択肢ではなく、「タスク間に依存があるか」「サブタスクを事前に予測できるか」「検証が必要か」という判断基準に基づいて選択・組み合わせるツールボックスです。</p>
 
   <div class="note">
-    <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
       <defs>
         <marker id="pat-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -489,7 +489,7 @@
   <div class="note">5つのパターンは、単独で使われるよりも組み合わせて使われることが多いです — ルーティングがプロンプトチェーンの最初のステップに繋がったり、オーケストレーター・ワーカーが各ワーカーの作業単位内に評価者・最適化を埋め込んだり、並列化が別のパターンの途中に割り込んだりします。§4bでこの組み合わせの具体例を解説します。</div>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -566,7 +566,7 @@
   <h3>チーム編成は固定ではない</h3>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
         <!-- Left: Static team -->
         <text x="155" y="18" text-anchor="middle" font-size="12" fill="var(--text-dim)" font-weight="700">静的チーム (Static)</text>
@@ -630,7 +630,7 @@
   <p><strong>AGENTS.md</strong>は、この問題を解決するために2025年8月にOpenAI主導でGoogle、Cursor、Factoryなどの参加を得て作成されたオープン規格で、2025年12月にはLinux Foundation傘下のAgentic AI Foundationに寄贈されました。リポジトリのルートに単一のAGENTS.mdを配置するだけで、Codex、Claude Code（インポート経由）、GitHub Copilot、Cursor、Google Jules、Antigravityファミリーなど30以上のツールがセッション開始時にこれを読み取り、ビルド/テストコマンド、コードスタイル、アクセス禁止領域などの共通ルールを共有できます。</p>
   <p>本ハンドブックが「4つのツールすべてをサポートする」と強調し続けている理由も、まさに同じ問題意識に由来します。チームがClaude Desktop Appを使ってもAntigravity Desktopを使っても、共通ルールをリポジトリルート（AGENTS.md）に置き、ツール固有の詳細設定（<code>CLAUDE.md</code>、<code>GEMINI.md</code>など）と分離しておけば、ツールを切り替えたり混用したりしてもハーネス自体は安定します。第5章で検討するai-workspace-standardsリポジトリは、この原理の実際の実装です。ルートの<code>AGENTS.md</code>ファイルがワークスペース内のすべてのエージェントの単一の信頼できる情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>や<code>.gemini/</code>と並んで、エンジンに依存しないコマンドとスキルを保持します。</p>
   <div class="diagram-frame">
-    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-agt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>

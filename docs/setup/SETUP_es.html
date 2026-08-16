@@ -65,7 +65,7 @@
    └─ Mark  (visor de Markdown)
 
 6. Verificación final ✅
-   └─ bun setup-common.ts</pre>
+   └─ bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div></div>
 
@@ -83,25 +83,25 @@
 
   <h3>macOS</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-mac.sh
+    <pre class="code-block">bash upstream/setup-mac.sh
 # Opcional: también instalar WezTerm (terminal con aceleración GPU)
-bash setup-mac.sh --wezterm
+bash upstream/setup-mac.sh --wezterm
 # Opcional: también instalar Docker Desktop
-bash setup-mac.sh --docker
+bash upstream/setup-mac.sh --docker
 # Ambos:
-bash setup-mac.sh --wezterm --docker</pre>
+bash upstream/setup-mac.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-linux.sh
+    <pre class="code-block">bash upstream/setup-linux.sh
 # Opcional: también instalar WezTerm
-bash setup-linux.sh --wezterm
+bash upstream/setup-linux.sh --wezterm
 # Opcional: también instalar Docker
-bash setup-linux.sh --docker
+bash upstream/setup-linux.sh --docker
 # Ambos:
-bash setup-linux.sh --wezterm --docker</pre>
+bash upstream/setup-linux.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
 
@@ -109,21 +109,21 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p><strong>Ejecute PowerShell como administrador</strong>, luego ingrese el comando a continuación.</p>
   <div style="position:relative">
     <pre class="code-block"># Ejecución predeterminada (el script configura la política de ejecución automáticamente)
-.\setup-windows.ps1
+.\upstream\setup-windows.ps1
 
 # Opciones:
-.\setup-windows.ps1 -WSL2             # También instalar WSL2 (requiere reinicio)
-.\setup-windows.ps1 -WezTerm          # También instalar WezTerm
-.\setup-windows.ps1 -Docker           # También instalar Docker Desktop
-.\setup-windows.ps1 -Force            # Reinstalar todas las herramientas, incluso las ya instaladas
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Instalar todos los complementos opcionales</pre>
+.\upstream\setup-windows.ps1 -WSL2             # También instalar WSL2 (requiere reinicio)
+.\upstream\setup-windows.ps1 -WezTerm          # También instalar WezTerm
+.\upstream\setup-windows.ps1 -Docker           # También instalar Docker Desktop
+.\upstream\setup-windows.ps1 -Force            # Reinstalar todas las herramientas, incluso las ya instaladas
+.\upstream\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Instalar todos los complementos opcionales</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
   <div class="note"><strong>Después de ejecutar</strong>: cierre y vuelva a abrir su terminal para aplicar los cambios en PATH.</div>
 
   <h2 id="step3">Paso 3 — Verificar la instalación</h2>
   <div style="position:relative">
-    <pre class="code-block">bun setup-common.ts</pre>
+    <pre class="code-block">bun upstream/setup-common.ts</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
   <p>Esto imprime una tabla de verificación de las herramientas instaladas. <strong>Está listo una vez que cada elemento muestre ✅.</strong></p>
@@ -171,7 +171,7 @@ bash setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>WezTerm</strong></td><td>Con aceleración GPU, multiplexor integrado, multiplataforma — recomendado para usuarios avanzados</td><td><code>winget install wez.wezterm</code></td></tr>
     </tbody>
   </table>
-  <p style="font-size:13px;color:var(--text-dim);">Instalación automática de WezTerm: <code>.\setup-windows.ps1 -WezTerm</code></p>
+  <p style="font-size:13px;color:var(--text-dim);">Instalación automática de WezTerm: <code>.\upstream\setup-windows.ps1 -WezTerm</code></p>
 
   <h2 id="trouble">Solución de problemas</h2>
 
@@ -201,7 +201,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>Los registros de ejecución del script de Windows se guardan automáticamente en <code>%USERPROFILE%\workshop-setup-logs\</code>.</p>
 
   <hr>
-  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Ejecute <code>bun setup-common.ts</code>, y una vez que cada elemento muestre ✅, el entorno del taller está listo.</p>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Ejecute <code>bun upstream/setup-common.ts</code>, y una vez que cada elemento muestre ✅, el entorno del taller está listo.</p>
    <footer>
     Basado en Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · Material educativo en español<br>
     Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·

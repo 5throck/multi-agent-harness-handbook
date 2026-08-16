@@ -11,7 +11,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="8장 §4 · 아키텍처 심화 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="8장 §4 · 아키텍처 심화 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>8장 §4 · 아키텍처 심화</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -63,7 +63,7 @@
 
   <h2 id="layout-reconstruction">Layout Reconstruction — L2가 L1을 그대로 복사하지 않는 이유</h2>
   <p>§1에서 짧게 언급한 <code>agents/pm.md</code> 사례를 좀 더 파고들어 보자. L0의 <code>agents/pm.md</code>는 워크스페이스 전체 거버넌스를 담아 300줄이 넘는다. 여기에는 Auto-Mode 동작, 라이프사이클 상태 필드처럼 <strong>워크스페이스 루트에서만 의미 있는 섹션</strong>이 섞여 있다. L1의 <code>templates/common/agents/pm.md</code>가 이걸 그대로 복사한다면, 베리언트(variant)를 새로 만들 때마다 프로젝트와 무관한 워크스페이스 전용 내용까지 함께 딸려온다.</p>
-  <p>그래서 L1은 복사 대신 <strong>필터링된 재구성</strong>을 한다 — L0 원본에서 variant 스캐폴딩에 실제로 필요한 섹션만 골라내고, 워크스페이스 전용 섹션은 제거한 뒤 <code>extends</code> 참조로 나머지를 연결한다. L2로 내려갈 때도 같은 원리가 반복된다. variant 고유의 오버라이드(예: co-marketing이라면 마케팅 도메인 특화 PM 규칙)를 L1 위에 얹어 <strong>처음부터 다시 생성</strong>하지, L1 파일을 diff-patch 방식으로 수정하지 않는다. 그 결과 L0의 pm.md가 300줄이 넘어도 L2의 pm.md는 50~100줄 남짓으로 유지된다 — "복사하고 남는 걸 지우는" 방식이 아니라 "필요한 것만 골라 새로 짓는" 방식이기 때문이다.</p>
+  <p>그래서 L1은 복사 대신 <strong>필터링된 재구성</strong>을 한다 — L0 원본에서 variant 스캐폴딩에 실제로 필요한 섹션만 골라내고, 워크스페이스 전용 섹션은 제거한 뒤 <code>extends</code> 참조로 나머지를 연결한다. L2로 내려갈 때도 같은 원리가 반복된다. variant 고유의 오버라이드(예: co-retail이라면 마케팅 도메인 특화 PM 규칙)를 L1 위에 얹어 <strong>처음부터 다시 생성</strong>하지, L1 파일을 diff-patch 방식으로 수정하지 않는다. 그 결과 L0의 pm.md가 300줄이 넘어도 L2의 pm.md는 50~100줄 남짓으로 유지된다 — "복사하고 남는 걸 지우는" 방식이 아니라 "필요한 것만 골라 새로 짓는" 방식이기 때문이다.</p>
   <p>이 설계가 중요한 이유는 실패 모드 때문이다. 만약 L1→L2가 단순 복사였다면, L0에서 워크스페이스 전용 섹션 하나를 추가할 때마다 <strong>모든 L3 프로젝트의 pm.md가 불필요하게 부풀어 오른다</strong>. Layout Reconstruction은 "L0가 아는 것"과 "L2가 알아야 하는 것" 사이에 항상 필터를 둠으로써 이 문제를 원천 차단한다.</p>
 
   <h2 id="extends">extends 프론트매터 — 상속이 해석되는 순서</h2>

@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第4章 §2-B・マルチエージェントチーム実習 — Antigravity中心シナリオ別学習ガイド - マルチエージェントチームハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="第4章 §2-B・マルチエージェントチーム実習 — Antigravity中心シナリオ別学習ガイド - マルチエージェントチームハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第4章 §2-B・マルチエージェントチーム実習 — Antigravity中心シナリオ別学習ガイド</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -152,17 +152,17 @@
   <p>macOSは<a href="../setup/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用する。どちらも<code>--wezterm</code>、<code>--docker</code>の選択フラグをサポートする。</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
-cd ./setup && bash setup-mac.sh
+cd ./setup && bash upstream/setup-mac.sh
 
 # Linux
-cd ./setup && bash setup-linux.sh</pre>
+cd ./setup && bash upstream/setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 
   <h3>インストールの検証</h3>
   <p>OSにかかわらず、<a href="../setup/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態を点検するチェックリスト表が出力される。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになる。</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 
@@ -315,7 +315,7 @@ EOF</pre>
       </div>
 
       <div class="note">
-        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example B workflow step indicator" viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>

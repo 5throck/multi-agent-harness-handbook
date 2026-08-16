@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="입문 과정 수료자를 위한 사전 준비 가이드 · 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>입문 과정 수료자 가이드 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
+  <div class="nav-title">수료자 가이드</div>
+  <a href="#how-to-use">이 가이드 사용법</a>
+  <a href="#skip-map">스킵 맵</a>
+  <a href="#day1">1일차: 입문 수료자가 건너뛸 수 있는 부분</a>
+  <a href="#day2">2일차: 바로 시작하기</a>
+  <a href="#quick-start">빠른 시작 체크리스트</a>
+  <div class="nav-section">다른 장</div>
+  <a href="01_Why_AI_Chapter.html">1장 · AI 시대의 업무 혁신</a>
+  <a href="../concepts/02_Concepts_Chapter.html">2장 · 하네스 엔지니어링 개념</a>
+  <a href="../glossary/00_Glossary.html">용어집</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">수료자 가이드</div>
+  <h1>입문 과정 수료자를 위한 안내</h1>
+  <p class="lead">이 워크숍(멀티 에이전트팀 하네스 엔지니어링 핸드북, 2일)은 "AI 에이전트 팀"을 처음 접하는 분들과, 이미 <a href="https://5throck.github.io/intro-to-ai-harness/">입문 과정(Claude Code와 멀티 에이전트 하네스 입문)</a>을 마친 분들이 함께 수강하도록 설계되었다. 입문 과정을 수료했다면 일부 챕터는 이미 익숙할 것이다. 이 가이드는 중복 학습 없이 워크숍 시간을 최대한 활용하도록 스킵 맵을 제공한다.</p>
+  <p class="source-line">참고: 입문 핸드북(intro-to-ai-harness)과 본 핸드북(멀티 에이전트팀 하네스 엔지니어링 핸드북)의 챕터 구조 매핑</p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 가이드에서 다루는 것</div>
+    <ul>
+      <li>입문 과정의 챕터를 본 워크숍의 챕터에 매핑하는 스킵 맵</li>
+      <li>1일차에서 건너뛰어도 되는 섹션과 반드시 들어야 하는 섹션의 구분</li>
+      <li>2일차(IT전문가) 세션을 바로 시작하기 위한 준비물</li>
+      <li>빠른 시작 체크리스트</li>
+    </ul>
+  </div>
+
+  <h2 id="how-to-use">이 가이드 사용법</h2>
+  <p>입문 과정을 수료한 수강생은 이틀 워크숍에서 같은 내용을 두 번 배우는 데 약 <strong>2~3시간</strong>을 쓰게 된다. 이 가이드의 스킵 맵을 참고하면, 익숙한 섹션은 가볍게 훑고 <strong>새로운 내용</strong>에 집중할 수 있다.</p>
+  <p>강사는 수강생에게 이 가이드를 사전에 배포하고, 1일차 시작 전에 각자의 배경(입문 수료 여부)을 확인하여 그룹 배정과 진행 속도를 조정한다.</p>
+
+  <h2 id="skip-map">스킵 맵: 입문 과정 → 본 워크숍</h2>
+  <div class="table-schedule">
+  <table>
+    <thead>
+      <tr><th>입문 과정 챕터</th><th>본 워크숍 챕터</th><th>수료자 권장 사항</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1장 · 왜 AI 에이전트 팀인가?</td>
+        <td>1장 · AI 시대의 업무 혁신</td>
+        <td><strong>훑기만.</strong> 통계·동기 부여 내용이므로 개요만 보고 넘어가도 된다.</td>
+      </tr>
+      <tr>
+        <td>4장 · 멀티 에이전트 하네스 개념</td>
+        <td>2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</td>
+        <td><strong>훑기만.</strong> 핵심 개념(에이전트·스킬·PM 오케스트레이션)은 이미 알고 있다. §2의 고급 개념(생애주기, 템플릿 상속)만 새로 본다.</td>
+      </tr>
+      <tr>
+        <td>5장 · ai-workspace-standards 살펴보기</td>
+        <td>5장 · ai-workspace-standards 소개</td>
+        <td><strong>훑기만.</strong> L0→L1→L2 계층 구조는 동일. 5장은 8장의 심화 아키텍처로 연결되는 다리 역할이므로 가볍게 복습한다.</td>
+      </tr>
+      <tr>
+        <td>6장 · co-consult 실습 / 7장 · co-deck 실습</td>
+        <td>6장 · 기존 variant 활용 실습</td>
+        <td><strong>실습은 새로 진행.</strong> 도구 조작은 익숙하지만, 6장은 "Claude + Antigravity 4그룹"으로 진행되어 다른 도구의 관점을 얻는 기회다. 실습 자체는 짧게 마치고 팀 비교 토론에 집중한다.</td>
+      </tr>
+      <tr>
+        <td>별첨 B · Claude Code CLI</td>
+        <td>공통 참고 · 도구 비교 (기술적)</td>
+        <td><strong>권장.</strong> CLI에 이미 익숙하다면 기술 비교표의 Antigravity/agy 부분이 새로운 내용이다.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">
+    <strong>참고:</strong> 입문 과정을 수료하지 않은 수강생은 이 스킵 맵을 무시하고 정상 순서대로 진행하면 된다. 이 가이드는 어디까지나 중복을 줄이기 위한 보조 자료이며, 워크숍의 필수 구성 요소가 아니다.
+  </div>
+
+  <h2 id="day1">1일차: 입문 수료자가 건너뛸 수 있는 부분</h2>
+  <p>1일차(일반 사용자)는 2장, 3장(가드레일), 5장(기존 variant 실습)으로 구성된다. 입문 수료자에게는:</p>
+  <ul>
+    <li><strong>2장 §1</strong>(하네스 개념 개요)는 훑고, <strong>§2 이후의 생애주기·템플릿 상속</strong>부터 집중한다.</li>
+    <li><strong>3장 가드레일</strong>은 입문 과정에서 다루지 않은 내용이므로(권한 모델, 위험 분류 3-Tier, 승인 게이트) <strong>전체를 듣는다</strong>.</li>
+    <li><strong>5장 기존 variant 실습</strong>은 4개 도구 그룹(Claude Desktop App / Claude Code / Antigravity Desktop / Antigravity CLI)으로 나뉘므로, 본인이 쓰지 않는 도구의 데모에서 새로운 인사이트를 얻는 데 집중한다.</li>
+    <li><strong>워밍업(Tetris→Pac-Man)</strong>은 10분이면 끝나므로 참여해도 부담이 없다. 다른 그룹의 사고방식을 관찰하는 기회로 삼는다.</li>
+  </ul>
+
+  <h2 id="day2">2일차: 바로 시작하기</h2>
+  <p>2일차(IT전문가)는 7장(기업 운영 전략), 8장(아키텍처 심화), 9장(워크플로우 패턴), 10장(L3 업그레이드), 11~12장(신규 variant 생성·승격), 13장(캡스톤)으로 구성된다. 이 내용은 입문 과정과 중복이 거의 없으므로, <strong>사전 준비만 갖추면 2일차부터 바로 참여</strong>해도 된다.</p>
+  <p>입문 과정을 수료했다면 8장의 L0→L1→L2 개념은 복습 수준이다. 8장 §3(AGENTS.md 심화)과 §4(고급 아키텍처), 10장(L3 업그레이드)이 새 내용의 핵심이다.</p>
+
+  <h2 id="quick-start">빠른 시작 체크리스트</h2>
+  <div class="chk">☐ 본 워크숍의 <a href="../setup/SETUP_ko.html">설치 가이드</a>와 <a href="../setup/SETUP_CHECKLIST_ko.html">사전 설치 체크리스트</a>를 완료했다.</div>
+  <div class="chk">☐ 입문 과정에서 만든 실습 산출물(에이전트·스킬·팀 제안서)을 가져오면 2일차 캡스톤에 바로 활용할 수 있다.</div>
+  <div class="chk">☐ 2일차(IT전문가)를 바로 시작하려면: Claude Code 또는 Antigravity CLI가 설치되어 있고 GitHub 계정이 준비되어 있는지 확인한다.</div>
+  <div class="chk">☐ 강사에게 입문 과정 수료 여부를 알려 그룹 배정에 반영하도록 한다.</div>
+
+  <div class="chapter-nav">
+    <a href="../index.html" class="prev"><div class="dir">← 홈</div><div class="ttl">핸드북 홈</div></a>
+    <a href="01_Why_AI_Chapter.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">1장 · 도입</div></a>
+  </div>
+   <footer>
+    Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 기준 · 한국어 교육 자료<br>
+    공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    본 핸드북의 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (저작자표시-비영리-동일조건변경허락 4.0 국제)</a> 라이선스에 따라 이용할 수 있습니다.
+  </footer>
+ </article>
+</main>
+</div>
+
+<script src="../assets/dark-mode-toggle.js" defer></script>
+<script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/lang-switcher.js" defer></script>
+</body>
+</html>

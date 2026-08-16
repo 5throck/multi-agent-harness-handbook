@@ -93,7 +93,7 @@
 
   <!-- §1 SVG: Pattern → Workflow relationship -->
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
-    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow design pattern overview diagram" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -194,7 +194,7 @@
       <strong>④ Fix Proposal (Pipeline)</strong>: Generates code fix proposals based on the feedback.<br>
       <strong>⑤ Final Approval (Verify-Then-Apply)</strong>: Re-reviews the modified code. If it passes, goes to the <span class="wf-gate">human approval gate</span>; if rejected, loops back to ④.
     </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="100" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① Change Analysis</text>
         <line x1="105" y1="48" x2="125" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -225,7 +225,7 @@
       <strong>③ Aggregation and Drafting (Pipeline)</strong>: Synthesizes the three research results into a draft report and generates visualizations (charts).<br>
       <strong>④ Cross-Verification (Verify-Then-Apply)</strong>: A specialist reviewer checks data sources, logical consistency, and omissions. After the <span class="wf-gate">human approval gate</span>, the final report is confirmed.
     </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="110" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① PM Orchestration</text>
         <line x1="115" y1="48" x2="135" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -256,7 +256,7 @@
       <strong>⑤⑥⑦ Build · Measure · Export (Pipeline)</strong>: Sequential processing from HTML build → layout measurement → PDF export.<br>
       <strong>⑧⑨⑩⑩ Final Review (Verify-Then-Apply)</strong>: Cross-reviews the completed PDF, then the <span class="wf-gate">human approval gate</span>.
     </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="var(--text)">
         <rect x="5" y="30" width="60" height="32" rx="5" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1"/><text x="35" y="50" text-anchor="middle" font-weight="700" fill="var(--accent)">① Research</text>
         <line x1="65" y1="46" x2="80" y2="46" stroke="var(--text-dim)" stroke-width="1" marker-end="url(#wfArrow)"/>
@@ -292,7 +292,7 @@
       <strong>③ Priority Determination</strong>: Recommends priority and an assignee based on the investigation results.<br>
       <strong>④ Escalation or Auto-Resolution</strong>: Minor issues that can be resolved automatically (e.g., configuration errors) are fixed immediately; complex issues are escalated to the <span class="wf-gate">human approval gate</span>.
     </p>
-    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="28" width="80" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="45" y="51" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① Classify</text>
         <line x1="85" y1="46" x2="105" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -319,7 +319,7 @@
       <strong>③ Impact Analysis</strong>: Analyzes how the change affects other files/features and adds the findings to the PR body.<br>
       <strong>④ Final Review + Approval</strong>: Re-reviews the entire PR, then the <span class="wf-gate">human approval gate</span>. Once approved, transitions to a merge-pending state.
     </p>
-    <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="28" width="100" height="36" rx="6" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.2"/><text x="55" y="51" text-anchor="middle" font-weight="700" fill="var(--accent)">① Collect Changes</text>
         <line x1="105" y1="46" x2="125" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -413,7 +413,7 @@
 
   <!-- Decision tree SVG -->
   <div class="decision-box">
-    <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow case diagram" viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="dtY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/></marker>
         <marker id="dtG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent-green)"/></marker>

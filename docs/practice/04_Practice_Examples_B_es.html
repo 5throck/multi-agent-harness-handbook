@@ -152,17 +152,17 @@
   <p>En macOS, descargue y use <a href="../setup/setup-mac.sh">setup-mac.sh</a>; en Linux, use <a href="../setup/setup-linux.sh">setup-linux.sh</a>. Ambos admiten los indicadores opcionales <code>--wezterm</code> y <code>--docker</code>.</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
-cd ./setup && bash setup-mac.sh
+cd ./setup && bash upstream/setup-mac.sh
 
 # Linux
-cd ./setup && bash setup-linux.sh</pre>
+cd ./setup && bash upstream/setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
 
   <h3>Verificación de la instalación</h3>
   <p>Independientemente del sistema operativo, ejecutar <a href="../setup/setup-common.ts">setup-common.ts</a> con <code>bun</code> imprime una tabla de verificación que muestra el estado de su instalación. Si cada elemento muestra ✅, está listo para continuar con la práctica a continuación.</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
 
@@ -315,7 +315,7 @@ Permissions: Read-only — does not modify the file directly.
       </div>
 
       <div class="note">
-        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example B workflow step indicator" viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>

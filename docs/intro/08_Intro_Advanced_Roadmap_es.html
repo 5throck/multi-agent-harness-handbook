@@ -49,7 +49,7 @@
     <div class="kp-title">Lo Que Cubre Esta Sección</div>
     <ul>
       <li>La necesidad de integración de servicios en entornos contenedorizados (Docker/Kubernetes)</li>
-      <li>Agregación a nivel de espacio de trabajo de archivos MEMORY.md independientes</li>
+      <li>Agregación a nivel de espacio de trabajo de archivos YYYY-MM-DD.md independientes</li>
       <li>Formas de propagar selectivamente parches de seguridad y correcciones de errores preservando los beneficios del modelo de bifurcación</li>
       <li>Los límites de la clasificación triple LOCKED/MERGE/PRESERVE como una taxonomía fija, y direcciones para personalización por organización</li>
       <li>Direcciones para ajustar niveles de modelo asignados estáticamente basándose en datos operativos reales de la organización</li>
@@ -61,7 +61,7 @@
   <p>El núcleo de este avance es que un proyecto generado debería poder ejecutarse en un entorno Docker o Kubernetes, **conectado a un servicio frontend como Open WebUI para que pueda ser soportado por usuario**. En esa forma, cada usuario invoca su equipo de agentes asignado a través de una interfaz de navegador, revisa los resultados y conserva el contexto entre sesiones.</p>
 
   <h2 id="memory">Agregación y Curación de Memoria</h2>
-  <p>Hoy en día, cada proyecto L3 mantiene su propio archivo <code>memory/MEMORY.md</code> independiente (cubierto en el Capítulo 5 §4). Este archivo registra el contexto entre sesiones para ese proyecto, pero a medida que crece el número de proyectos, los archivos de memoria se dispersan y <strong>se vuelve difícil ver las perspectivas a nivel del espacio de trabajo</strong>.</p>
+  <p>Hoy en día, cada proyecto L3 mantiene su propio archivo <code>memory/YYYY-MM-DD.md</code> independiente (cubierto en el Capítulo 5 §4). Este archivo registra el contexto entre sesiones para ese proyecto, pero a medida que crece el número de proyectos, los archivos de memoria se dispersan y <strong>se vuelve difícil ver las perspectivas a nivel del espacio de trabajo</strong>.</p>
   <p>El segundo eje de avance es la necesidad de una capacidad para **agregar y curar** archivos de memoria que de otro modo están dispersos en proyectos individuales. Por ejemplo, debería ser posible ejecutar análisis de tendencias a nivel del espacio de trabajo como "qué patrones de error encontraron los equipos de agentes en todos los proyectos con más frecuencia la semana pasada" o "qué combinaciones de roles se usaron con más frecuencia."</p>
 
   <h2 id="variant-deploy">Evolución del Despliegue de Variantes</h2>
@@ -69,7 +69,7 @@
   <p>Se están discutiendo dos direcciones de avance: (a) un **modelo de recepción basado en consentimiento** que permite que solo los parches de seguridad o correcciones de errores críticos se propaguen selectivamente a L2 mientras se preservan los beneficios del modelo de bifurcación, y (b) un **pipeline de despliegue asíncrono** en el que las variantes se gestionan en un registro central y <code>new-project.ts</code> extrae la última versión a través de la red.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace evolution roadmap diagram" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="roadmapArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>

@@ -66,10 +66,11 @@ ai-workspace-standards/                (clonado como la raíz del espacio de tra
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div></div>
 
-  <h3>Lista completa de las 9 variantes</h3>
+  <h3>Lista completa de las 10 variantes</h3>
   <table>
     <thead><tr><th>Variante</th><th>Propósito</th></tr></thead>
     <tbody>
+      <tr><td><code>co-abap</code></td><td>Desarrollo SAP ABAP — desarrollo de aplicaciones empresariales en ABAP</td></tr>
       <tr><td><code>co-work</code></td><td>Colaboración/documentación general — flujo de trabajo asíncrono común</td></tr>
       <tr><td><code>co-consult</code></td><td>Consultoría estratégica — diagnóstico de problemas del cliente y redacción de propuestas</td></tr>
       <tr><td><code>co-deck</code> <span class="badge">beta</span></td><td>Presentaciones — pipeline de 11 etapas desde la investigación hasta un PDF listo para imprimir</td></tr>
@@ -88,7 +89,7 @@ ai-workspace-standards/                (clonado como la raíz del espacio de tra
     <li><strong><code>CONSTITUTION.md</code></strong> — El archivo que debe leerse primero. Define los estándares compartidos para todo el espacio de trabajo (gobernanza, flujo de trabajo de PR, principios multiagente).</li>
     <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — Verifique el archivo que coincide con la herramienta de codificación con IA que usa. Cada uno define el comportamiento específico de la plataforma (ganchos, comandos de barra, reglas de despacho de agentes).</li>
     <li><strong><code>AGENTS.md</code></strong> — El registro de agentes invocables en este espacio de trabajo. Permite ver de un vistazo "quién hace qué."</li>
-    <li><strong><code>templates/</code></strong> — Todas las 9 variantes disponibles se encuentran bajo este directorio. Abra cada carpeta de variante para examinar su composición de agentes y su pipeline de gobernanza.</li>
+    <li><strong><code>templates/</code></strong> — Todas las 10 variantes disponibles se encuentran bajo este directorio. Abra cada carpeta de variante para examinar su composición de agentes y su pipeline de gobernanza.</li>
     <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code> se encuentra aquí. Este script es el comando principal que clona una variante en un proyecto real.</li>
   </ol>
   <div class="note">Este recorrido es una guía breve destinada a darle una idea de "qué contiene este repositorio" antes de trabajar de forma práctica con agentes en los ejercicios del Capítulo 4. Durante el ejercicio, abra primero estos 5 lugares, y vuelve para explorar el resto de la estructura según sea necesario.</div>
@@ -122,7 +123,7 @@ git --version</pre>
     <li><strong>Leer CONSTITUTION.md:</strong> confirmar los estándares compartidos del espacio de trabajo</li>
     <li><strong>Leer el docs/context.md del proyecto:</strong> confirmar la única fuente de verdad del proyecto</li>
     <li><strong>Leer AGENTS.md:</strong> confirmar el registro de agentes del proyecto</li>
-    <li><strong>Verificar memory/MEMORY.md:</strong> confirmar el contexto dejado por sesiones anteriores</li>
+    <li><strong>Verificar memory/YYYY-MM-DD.md:</strong> confirmar el contexto dejado por sesiones anteriores</li>
     <li><strong>Cargar las habilidad(es) especificadas por docs/context.md</strong></li>
   </ol>
 

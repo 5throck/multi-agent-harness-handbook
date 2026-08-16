@@ -61,9 +61,6 @@ __pycache__/
 # 세션별 로컬 계획 파일 — GitHub 동기화 대상 아님
 .zcode/plans/
 
-# GitHub Actions 워크플로우 — 새로 생기는 파일은 동기화 대상에서 제외(기존 추적 파일은 유지)
-.github/workflows/
-
 # macOS
 .DS_Store
 

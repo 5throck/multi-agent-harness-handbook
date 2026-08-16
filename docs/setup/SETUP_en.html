@@ -65,7 +65,7 @@
    └─ Mark  (Markdown viewer)
 
 6. Final verification ✅
-   └─ bun setup-common.ts</pre>
+   └─ bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div></div>
 
@@ -83,25 +83,25 @@
 
   <h3>macOS</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-mac.sh
+    <pre class="code-block">bash upstream/setup-mac.sh
 # Optional: also install WezTerm (GPU-accelerated terminal)
-bash setup-mac.sh --wezterm
+bash upstream/setup-mac.sh --wezterm
 # Optional: also install Docker Desktop
-bash setup-mac.sh --docker
+bash upstream/setup-mac.sh --docker
 # Both:
-bash setup-mac.sh --wezterm --docker</pre>
+bash upstream/setup-mac.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
   <div style="position:relative">
-    <pre class="code-block">bash setup-linux.sh
+    <pre class="code-block">bash upstream/setup-linux.sh
 # Optional: also install WezTerm
-bash setup-linux.sh --wezterm
+bash upstream/setup-linux.sh --wezterm
 # Optional: also install Docker
-bash setup-linux.sh --docker
+bash upstream/setup-linux.sh --docker
 # Both:
-bash setup-linux.sh --wezterm --docker</pre>
+bash upstream/setup-linux.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
 
@@ -109,21 +109,21 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p><strong>Run PowerShell as Administrator</strong>, then enter the command below.</p>
   <div style="position:relative">
     <pre class="code-block"># Default run (the script sets the Execution Policy automatically)
-.\setup-windows.ps1
+.\upstream\setup-windows.ps1
 
 # Options:
-.\setup-windows.ps1 -WSL2             # Also install WSL2 (restart required)
-.\setup-windows.ps1 -WezTerm          # Also install WezTerm
-.\setup-windows.ps1 -Docker           # Also install Docker Desktop
-.\setup-windows.ps1 -Force            # Reinstall all tools, even already-installed ones
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Install all optional extras</pre>
+.\upstream\setup-windows.ps1 -WSL2             # Also install WSL2 (restart required)
+.\upstream\setup-windows.ps1 -WezTerm          # Also install WezTerm
+.\upstream\setup-windows.ps1 -Docker           # Also install Docker Desktop
+.\upstream\setup-windows.ps1 -Force            # Reinstall all tools, even already-installed ones
+.\upstream\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Install all optional extras</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
   <div class="note"><strong>After running</strong>: close and reopen your terminal to apply PATH changes.</div>
 
   <h2 id="step3">Step 3 — Verify Installation</h2>
   <div style="position:relative">
-    <pre class="code-block">bun setup-common.ts</pre>
+    <pre class="code-block">bun upstream/setup-common.ts</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
   <p>This prints a verification table of installed tools. <strong>You're ready once every item shows ✅.</strong></p>
@@ -171,7 +171,7 @@ bash setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>WezTerm</strong></td><td>GPU-accelerated, built-in multiplexer, cross-platform — recommended for power users</td><td><code>winget install wez.wezterm</code></td></tr>
     </tbody>
   </table>
-  <p style="font-size:13px;color:var(--text-dim);">Automatic WezTerm install: <code>.\setup-windows.ps1 -WezTerm</code></p>
+  <p style="font-size:13px;color:var(--text-dim);">Automatic WezTerm install: <code>.\upstream\setup-windows.ps1 -WezTerm</code></p>
 
   <h2 id="trouble">Troubleshooting</h2>
 
@@ -201,7 +201,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>Windows script run logs are automatically saved to <code>%USERPROFILE%\workshop-setup-logs\</code>.</p>
 
   <hr>
-  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Run <code>bun setup-common.ts</code>, and once every item shows ✅, the workshop environment is ready.</p>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Run <code>bun upstream/setup-common.ts</code>, and once every item shows ✅, the workshop environment is ready.</p>
    <footer>
     Based on Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·

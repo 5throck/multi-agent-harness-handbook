@@ -26,7 +26,7 @@ Welcome to the **Multi-Agent Harness Engineering Handbook**, an AI Workspace edu
 - **Common Reference** — Tool comparison: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
 
 ## 🎯 Target Versions
-- Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-07-08)
+- Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-08)
 
 ## 📜 License
 - **Handbook content**: [CC BY-NC-SA 4.0](LICENSE) (Attribution-NonCommercial-ShareAlike 4.0 International)

@@ -1,4 +1,4 @@
-// scripts/co-deck/handbook/check-labels.ts
+// scripts/check-labels.ts
 // Check ③: chapter-nav link labels should match the target file's title or h1.
 // Canonical source of the handbook toolkit (adapted from
 // Handbooks/multi-agent-harness-handbook/scripts/check-labels.ts).

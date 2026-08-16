@@ -28,7 +28,7 @@
   <a href="#s1">Qué es el repositorio</a>
   <a href="#s1b">La arquitectura general de un vistazo</a>
   <a href="#s2">Los cuatro archivos principales</a>
-  <a href="#s3">Plantillas y las 9 variantes</a>
+  <a href="#s3">Plantillas y las 10 variantes</a>
   <a href="#s4">Lista de verificación de inicio de sesión y andamiaje</a>
   <div class="nav-section">Otros capítulos</div>
   <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Barreras de seguridad y el modelo de permisos</a>
@@ -48,7 +48,7 @@
       <li>Qué es ai-workspace-standards y por qué debe clonarse como la "raíz del espacio de trabajo"</li>
       <li>La estructura general de directorios del repositorio y el orden real en que una sesión lee y ejecuta archivos (el flujo de ejecución)</li>
       <li>Los roles de los cuatro archivos principales: CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md</li>
-      <li>Para qué dominio está diseñada cada una de las 9 variantes bajo templates/</li>
+      <li>Para qué dominio está diseñada cada una de las 10 variantes bajo templates/</li>
       <li>Una imagen conceptual de la lista de verificación de inicio de sesión y el flujo de andamiaje de new-project.ts</li>
     </ul>
   </div>
@@ -94,7 +94,7 @@
 │       ├── agents/          ← heredado de la variante, continúa evolucionando para este proyecto
 │       └── (un repositorio git independiente — separado de la raíz del espacio de trabajo)
 └── memory/
-    └── MEMORY.md            ← §4: contexto transportado entre sesiones</pre>
+    └── YYYY-MM-DD.md            ← §4: contexto transportado entre sesiones</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
   </div>
@@ -103,7 +103,7 @@
 
   <p>El orden real en que el trabajo procede sobre esta estructura (el flujo de ejecución) es el siguiente.</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
-    <li><strong>Inicio de sesión.</strong> El agente lee, en orden: CONSTITUTION.md → el docs/context.md del proyecto actual → AGENTS.md → memory/MEMORY.md (cubierto en §4).</li>
+    <li><strong>Inicio de sesión.</strong> El agente lee, en orden: CONSTITUTION.md → el docs/context.md del proyecto actual → AGENTS.md → memory/YYYY-MM-DD.md (cubierto en §4).</li>
     <li><strong>Se aplican las reglas de ejecución específicas de la herramienta.</strong> Para Claude Code/App, CLAUDE.md y <code>.claude/</code> gobiernan la ejecución detallada; para la familia Antigravity, lo hacen GEMINI.md y <code>.gemini/</code>.</li>
     <li><strong>Cuando se necesita un nuevo proyecto.</strong> <code>scripts/new-project.ts</code> clona toda la configuración de <code>templates/co-&lt;variante&gt;/</code> (L2) en <code>Projects/&lt;nombre&gt;/</code>, creando un directorio de trabajo de proyecto L3. En este punto, <code>templates/co-&lt;variante&gt;/</code> ya se había creado una generación antes al tomar una instantánea de <code>templates/common/</code> (L1).</li>
     <li><strong>Cuando L0 cambia durante la operación.</strong> <code>scripts/propagate-to-templates.ts</code>, como parte del pipeline <code>/sync</code>, publica automáticamente y de forma continua los cambios de L0 a L1 (<code>templates/common/</code>). Esto no se propaga automáticamente a las instancias L2 ni L3 que ya han nacido. Este es el principio de "bifurcación" cubierto en el Capítulo 8.</li>
@@ -132,7 +132,7 @@
   <p>Tracemos esta relación usando una regla concreta como ejemplo. Supongamos que hay una regla que dice "los títulos y cuerpos de los PR deben estar escritos en inglés." Esta regla se escribe exactamente una vez, en <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> define <em>cómo</em> hacer cumplir esta regla en Claude Code — por ejemplo, especificando que el filtro de idioma del comando <code>/sync</code> (language-guard.ts) verifique automáticamente esta regla antes de cada commit. <code>GEMINI.md</code> define cómo se hace cumplir la misma regla en el pipeline del lado de Antigravity. Y quién realiza realmente esta verificación — qué agente es responsable de este filtro — se registra en el registro de <code>AGENTS.md</code>. Una sola regla aparece en los cuatro archivos, cada uno desde un ángulo diferente. Esto no es duplicación; son tres respuestas diferentes a las tres preguntas de "qué, cómo y quién."</p>
   <p>Debajo de los cuatro archivos principales se encuentran carpetas que contienen activos ejecutables. Los comandos y habilidades se dividen en tres ubicaciones: <code>.claude/</code> es solo para Claude Code/App, <code>.gemini/</code> es solo para Antigravity CLI/Escritorio, y <code>.agents/</code> contiene comandos y habilidades <strong>neutrales a la herramienta (neutrales al motor)</strong> no vinculados a una sola herramienta. Por ejemplo, comandos de barra como <code>/sync</code>/<code>/meeting</code> o habilidades como <code>create-variant</code>/<code>audit-workspace</code> existen bajo el mismo nombre en las tres carpetas, pero cada implementación difiere ligeramente para coincidir con las convenciones de herramienta de su propia plataforma (sintaxis de la herramienta <code>Agent</code> de Claude Code, enfoque de subagente de Antigravity, etc.). Las herramientas externas que admiten el estándar AGENTS.md (Codex, Cursor, etc.) harán referencia a la carpeta <code>.agents/</code> cuando abran este repositorio.</p>
 
-  <h2 id="s3">Plantillas y las 9 variantes</h2>
+  <h2 id="s3">Plantillas y las 10 variantes</h2>
   <p>El directorio <code>templates/</code> es una colección de "variantes" de plantillas de proyecto con control de versiones. Cada variante contiene una configuración completa de equipo multiagente para un dominio específico, incluyendo un PM, agentes especialistas y un pipeline de gobernanza por etapas. Las variantes que proporciona el repositorio son las siguientes.</p>
 
   <div class="variant-list">
@@ -154,7 +154,7 @@
   <div class="note">Este <strong>nivel de costo de modelo (high/medium/low)</strong> comparte solo la sensación de "niveles" de su nombre con el <strong>L0 → L1 → L2 → L3 de 4 niveles</strong> (la jerarquización de de dónde provienen los archivos y cómo fluyen) cubierto en el Capítulo 8 — por lo demás son conceptos diferentes. Uno es "qué modelo asignar a un agente," y el otro es "dónde vive el original de un archivo."</div>
 
   <h2 id="s4">Lista de verificación de inicio de sesión y andamiaje</h2>
-  <p>CONSTITUTION.md define el orden que toda sesión debe seguir al inicio. Primero, establecer la ruta de los ganchos de git con <code>git config core.hooksPath .githooks</code>, luego leer el propio CONSTITUTION.md, luego leer el <code>docs/context.md</code> del proyecto en el que se está trabajando. A continuación, verificar AGENTS.md para los agentes disponibles, comprobar si queda contexto de una sesión anterior en <code>memory/MEMORY.md</code>, y finalmente cargar las habilidades que especifique docs/context.md.</p>
+  <p>CONSTITUTION.md define el orden que toda sesión debe seguir al inicio. Primero, establecer la ruta de los ganchos de git con <code>git config core.hooksPath .githooks</code>, luego leer el propio CONSTITUTION.md, luego leer el <code>docs/context.md</code> del proyecto en el que se está trabajando. A continuación, verificar AGENTS.md para los agentes disponibles, comprobar si queda contexto de una sesión anterior en <code>memory/YYYY-MM-DD.md</code>, y finalmente cargar las habilidades que especifique docs/context.md.</p>
   <p>El flujo para crear un nuevo proyecto es conceptualmente simple. Ejecute el script <code>bun scripts/new-project.ts</code> con un nombre de proyecto y la variante deseada, y toda la configuración de esa variante se clona en un repositorio git completamente independiente. Este repositorio está separado de la raíz del espacio de trabajo, pero desde su nacimiento ya ha heredado los estándares compartidos de CONSTITUTION.md. El equipo luego hace evolucionar el equipo rellenando el <code>docs/context.md</code> propio del proyecto y cualquier anulación de CLAUDE.md/GEMINI.md a nivel de proyecto.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
@@ -167,7 +167,7 @@
   <p>La sintaxis completa y todas las opciones (<code>--platform</code>, <code>--version</code>) se practican de forma práctica en <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-2">Capítulo 6 §1 · Comandos de andamiaje de proyecto</a>.</p>
 
   <div class="note">
-    <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Session startup file reading sequence diagram" viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
       <defs>
         <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
         <marker id="arrow2g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>

@@ -10,7 +10,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="8장 §5 · 고도화 로드맵 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="8장 §5 · 고도화 로드맵 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>8장 §5 · 고도화 로드맵</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -48,7 +48,7 @@
     <div class="kp-title">이 절에서 다루는 것</div>
     <ul>
       <li>컨테이너(Docker/Kubernetes) 환경에서의 서비스 연계 필요성</li>
-      <li>독립적인 MEMORY.md 파일들의 워크스페이스 수준 취합</li>
+      <li>독립적인 YYYY-MM-DD.md 파일들의 워크스페이스 수준 취합</li>
       <li>포크 모델의 장점을 유지하면서 보안 패치·버그 수정을 선택적으로 전파하는 방안</li>
       <li>LOCKED/MERGE/PRESERVE 3분류가 고정 분류표라는 한계와 조직별 커스터마이징 방향</li>
       <li>정적으로 배정된 모델 티어를 조직 운영 데이터에 맞춰 조정하는 방향</li>
@@ -60,7 +60,7 @@
   <p>고도화의 핵심은, 스캐폴딩된 프로젝트가 Docker 또는 Kubernetes 환경에서 **Open WebUI 같은 프론트엔드 서비스와 연계되어 개인 단위로 지원**될 수 있어야 한다는 점이다. 각 사용자가 자신에게 할당된 에이전트 팀을 브라우저 인터페이스를 통해 호출하고, 결과를 확인하고, 세션 간 컨텍스트를 유지할 수 있는 형태다.</p>
 
   <h2 id="memory">메모리 취합과 정리</h2>
-  <p>현재 각 L3 프로젝트는 독립적인 <code>memory/MEMORY.md</code> 파일을 유지한다(5장 §4에서 다룸). 이 파일은 해당 프로젝트의 세션 간 컨텍스트를 기록하지만, 프로젝트가 늘어날수록 메모리 파일도 산재되어 <strong>전체 워크스페이스 수준에서의 인사이트를 파악하기 어려워진다</strong>.</p>
+  <p>현재 각 L3 프로젝트는 독립적인 <code>memory/YYYY-MM-DD.md</code> 파일을 유지한다(5장 §4에서 다룸). 이 파일은 해당 프로젝트의 세션 간 컨텍스트를 기록하지만, 프로젝트가 늘어날수록 메모리 파일도 산재되어 <strong>전체 워크스페이스 수준에서의 인사이트를 파악하기 어려워진다</strong>.</p>
   <p>고도화의 두 번째 축은, 개별 프로젝트 단위로 흩어져 있는 메모리 파일들을 **취합해서 정리할 수 있는 기능**이 필요하다는 점이다. 예를 들어 "지난 주 모든 프로젝트에서 에이전트 팀이 어떤 패턴의 오류를 자주 겪었는가", "어떤 역할 조합이 가장 자주 쓰였는가" 같은 워크스페이스 수준의 트렌드 분석이 가능해져야 한다.</p>
 
   <h2 id="variant-deploy">variant 배포 방식의 진화</h2>
@@ -68,7 +68,7 @@
   <p>고도화 방향으로는 (a) 포크 모델의 장점을 유지하면서도 보안 패치나 중요 버그 수정만 선택적으로 L2에 전파할 수 있는 **동의 기반(consent-based) 수신 모델**, (b) 베리언트(variant)를 중앙 레지스트리에서 관리하고 <code>new-project.ts</code>가 네트워크를 통해 최신 버전을 끌어오는 **비동기 배포 파이프라인**이 거론된다.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace evolution roadmap diagram" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="roadmapArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>

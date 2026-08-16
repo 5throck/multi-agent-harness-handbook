@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第8章 §5・高度化ロードマップ - マルチエージェントハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="第8章 §5・高度化ロードマップ - マルチエージェントハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第8章 §5・高度化ロードマップ</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -40,7 +40,7 @@
     <div class="kp-title">本節で扱う内容</div>
     <ul>
       <li>コンテナ(Docker/Kubernetes)環境におけるサービス連携の必要性</li>
-      <li>独立したMEMORY.mdファイル群のワークスペースレベルでの集約</li>
+      <li>独立したYYYY-MM-DD.mdファイル群のワークスペースレベルでの集約</li>
       <li>フォークモデルの利点を維持しつつ、セキュリティパッチ・バグ修正を選択的に伝播させる方法</li>
       <li>LOCKED/MERGE/PRESERVEの3分類が固定分類表であることの限界と、組織別カスタマイズの方向性</li>
       <li>静的に割り当てられたモデルティアを、組織の運用データに合わせて調整する方向性</li>
@@ -52,7 +52,7 @@
   <p>高度化の核心は、スキャフォールディングされたプロジェクトがDockerまたはKubernetes環境で**Open WebUIのようなフロントエンドサービスと連携し、個人単位でサポートされる**必要があるという点である。各ユーザーが自分に割り当てられたエージェントチームをブラウザインターフェースを通じて呼び出し、結果を確認し、セッション間でコンテキストを維持できる形態である。</p>
 
   <h2 id="memory">メモリの集約と整理</h2>
-  <p>現在、各L3プロジェクトは独立した<code>memory/MEMORY.md</code>ファイルを維持している(第5章§4で扱った)。このファイルは当該プロジェクトのセッション間コンテキストを記録するが、プロジェクトが増えるほどメモリファイルも散在し、<strong>ワークスペース全体レベルでのインサイトの把握が難しくなる</strong>。</p>
+  <p>現在、各L3プロジェクトは独立した<code>memory/YYYY-MM-DD.md</code>ファイルを維持している(第5章§4で扱った)。このファイルは当該プロジェクトのセッション間コンテキストを記録するが、プロジェクトが増えるほどメモリファイルも散在し、<strong>ワークスペース全体レベルでのインサイトの把握が難しくなる</strong>。</p>
   <p>高度化の第2の軸は、個別プロジェクト単位に散らばっているメモリファイルを**集約して整理できる機能**が必要だという点である。例えば「先週すべてのプロジェクトでエージェントチームがどのようなパターンのエラーに頻繁に遭遇したか」「どの役割の組み合わせが最も頻繁に使われたか」といったワークスペースレベルのトレンド分析が可能になるべきである。</p>
 
   <h2 id="variant-deploy">variant配布方式の進化</h2>
@@ -60,7 +60,7 @@
   <p>高度化の方向としては、(a) フォークモデルの利点を維持しつつ、セキュリティパッチや重要なバグ修正のみを選択的にL2へ伝播できる**同意ベース(consent-based)の受信モデル**、(b) バリアント(variant)を中央レジストリで管理し、<code>new-project.ts</code>がネットワーク経由で最新バージョンを取得する**非同期配布パイプライン**が挙げられる。</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workspace evolution roadmap diagram" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="roadmapArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>

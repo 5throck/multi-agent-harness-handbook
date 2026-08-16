@@ -154,17 +154,17 @@
   <p>macOSは<a href="../setup/setup-mac.sh">setup-mac.sh</a>、Linuxは<a href="../setup/setup-linux.sh">setup-linux.sh</a>をダウンロードして使用します。どちらも<code>--wezterm</code>、<code>--docker</code>選択フラグをサポートしています。</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
-cd ./setup && bash setup-mac.sh
+cd ./setup && bash upstream/setup-mac.sh
 
 # Linux
-cd ./setup && bash setup-linux.sh</pre>
+cd ./setup && bash upstream/setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 
   <h3>インストールの検証</h3>
   <p>OSに関わらず、<a href="../setup/setup-common.ts">setup-common.ts</a>を<code>bun</code>で実行すると、インストール状態をチェックするチェックリスト表が出力されます。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになります。</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div>
 
@@ -319,7 +319,7 @@ Permissions: Read-only — does not directly modify files.
       </div>
 
       <div class="note">
-        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example A workflow step indicator" viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
@@ -455,7 +455,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
         <div >動的ルーティング分岐フロー図 — 同じチーム、異なるリクエスト</div>
-        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example A configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
           <defs>
             <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
@@ -677,7 +677,7 @@ EOF</pre>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
         <div >権限設定前後の比較 — 最小権限の原則</div>
-        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example A execution diagram" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <defs>
             <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
@@ -770,7 +770,7 @@ EOF</pre>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
         <div >モデルティア比較チャート</div>
-        <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example A result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <!-- Table header -->
           <rect x="0" y="0" width="520" height="30" rx="6" fill="var(--bg3)"/>
           <text x="52" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">モデル</text>

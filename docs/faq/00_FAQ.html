@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="FAQ · 자주 나는 오류와 해결법 · 멀티 에이전트팀 하네스 엔지니어링 핸드북 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="FAQ · 자주 나는 오류와 해결법 · 멀티 에이전트팀 하네스 엔지니어링 핸드북 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ · 자주 나는 오류와 해결법 · 멀티 에이전트팀 하네스 엔지니어링 핸드북</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -95,8 +95,8 @@
   <p class="faq-answer">현재 ai-workspace-standards는 로컬 AI 코딩 도구(Claude Code/App, Antigravity 등)와 직접 연동되는 방식으로만 동작한다. Docker 또는 Kubernetes 환경에서 Open WebUI 같은 프론트엔드 서비스와 연계하여 개인 단위로 에이전트 팀을 지원하는 형태는 <strong>고도화 방향</strong>으로 논의 중이며, 아직 구현되지 않았다.
     <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#container">8장 §5 고도화 로드맵</a></span></p>
 
-  <div class="q">여러 프로젝트의 memory/MEMORY.md를 한 곳에서 모아볼 수 있는가?</div>
-  <p class="faq-answer">현재는 개별 프로젝트마다 독립적인 <code>memory/MEMORY.md</code>를 유지하는 구조이며, 워크스페이스 수준에서 메모리를 취합·정리하는 기능은 <strong>고도화 방향</strong>으로 계획 중이다. 프로젝트가 늘어날수록 개별 메모리 파일에서 전체 트렌드를 파악하기 어려워지는 점을 개선할 예정이다.
+  <div class="q">여러 프로젝트의 memory/YYYY-MM-DD.md를 한 곳에서 모아볼 수 있는가?</div>
+  <p class="faq-answer">현재는 개별 프로젝트마다 독립적인 <code>memory/YYYY-MM-DD.md</code>를 유지하는 구조이며, 워크스페이스 수준에서 메모리를 취합·정리하는 기능은 <strong>고도화 방향</strong>으로 계획 중이다. 프로젝트가 늘어날수록 개별 메모리 파일에서 전체 트렌드를 파악하기 어려워지는 점을 개선할 예정이다.
     <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Roadmap.html#memory">8장 §5 고도화 로드맵</a></span></p>
 
   <div class="q">variant 템플릿이 업데이트되면 기존 프로젝트에도 자동으로 반영되는가?</div>
@@ -115,7 +115,7 @@
 
   <div class="q">멀티 에이전트팀을 가동하면 토큰 비용이 얼마나 드는가?</div>
   <p class="faq-answer">비용은 에이전트 수 × 각 에이전트의 모델 티어 × 실행 빈도에 따라 결정된다. 5장에서 설명한 모델 티어링(<code>tier: high/medium/low</code>)은 비용 통제의 핵심 장치다. 예를 들어 co-consult 베리언트(variant)의 10명 에이전트를 모두 high로 돌리면 한 세션에 수만 토큰이 소모되지만, 실제 구현 역할을 medium/low로 내리면 비용을 40~60% 줄일 수 있다. Claude Code의 <code>/cost</code> 명령으로 현재 세션의 누적 토큰을 실시간 확인할 수 있다.</p>
-  <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s3">5장 §templates와 variant 9종</a></span>
+  <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s3">5장 §templates와 variant 10종</a></span>
 
   <div class="q">에이전트 응답이 갑자기 느려지거나 타임아웃된다.</div>
   <p class="faq-answer">컨텍스트 윈도우가 가득 차면 모델 처리 속도가 급격히 느려진다. Claude Code는 <code>/compact</code> 명령으로 대화 길이를 압축할 수 있다. 또한 병렬로 에이전트 여러 개를 투입할 때 API 요청이 큐에 쌓여 지연되는 현상도 흔하다 — 이 경우 순차 실행으로 전환하거나 WIP 한계를 낮춰 동시 실행 수를 줄이면 된다.</p>
@@ -123,7 +123,7 @@
 
   <div class="q">다중 에이전트 루프나 긴 워크플로우를 실행하면 API 토큰 비용이 너무 많이 든다. 최적화 방법은?</div>
   <p class="faq-answer">첫째, 에이전트 역할별로 **모델 티어(Model Tier)**를 구분해 지정한다. 단순 파일 쓰기/테스트 실행은 medium/low 모델을, 전체 흐름 제어나 종합 설계는 high 모델을 배치하면 비용을 40% 이상 절감할 수 있다. 둘째, 프롬프트 캐싱(Prompt Caching)이 동작하도록 대화 맥락이 일정할 때는 시스템 프롬프트를 변경하지 않고 연속된 세션을 유지한다. 셋째, 오케스트레이터와 스페셜리스트의 대화가 무한 공회전하지 않도록 <code>Max Turns</code>와 같은 하드 한계값을 명확히 설정한다.</p>
-  <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s3">5장 §templates와 variant 9종</a></span>
+  <span class="see">자세히: <a href="../intro/05_Intro_Chapter.html#s3">5장 §templates와 variant 10종</a></span>
 
   <h2 id="platform">플랫폼별 문제</h2>
 

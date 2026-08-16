@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="入門コース修了者向けの事前準備ガイド · マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>入門コース修了者向けガイド · マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">修了者ガイド</div>
+  <a href="#how-to-use">このガイドの使い方</a>
+  <a href="#skip-map">スキップマップ</a>
+  <a href="#day1">1日目: 修了者が省略できる部分</a>
+  <a href="#day2">2日目: すぐに始める</a>
+  <a href="#quick-start">クイックスタートチェックリスト</a>
+  <div class="nav-section">他の章</div>
+  <a href="01_Why_AI_Chapter_ja.html">第1章 · AI時代の業務革新</a>
+  <a href="../concepts/02_Concepts_Chapter_ja.html">第2章 · ハーネスエンジニアリングの概念</a>
+  <a href="../glossary/00_Glossary_ja.html">用語集</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">修了者ガイド</div>
+  <h1>入門コース修了者のためのガイド</h1>
+  <p class="lead">本ワークショップ(マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック、2日間)は、「AIエージェントチーム」に初めて触れる方と、すでに<a href="https://5throck.github.io/intro-to-ai-harness/">入門コース(Claude Codeとマルチエージェントハーネス入門)</a>を修了した方が一緒に受講できるよう設計されています。入門コースを修了していれば、一部の章はすでに馴染みがあるはずです。本ガイドは、重複学習を避けてワークショップの時間を最大限に活用できるよう、スキップマップを提供します。</p>
+  <p class="source-line">参考: 入門ハンドブック(intro-to-ai-harness)と本ハンドブック(マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック)の章構成マッピング</p>
+
+  <div class="keypoints">
+    <div class="kp-title">このガイドで扱う内容</div>
+    <ul>
+      <li>入門コースの章を本ワークショップの章に対応付けるスキップマップ</li>
+      <li>1日目で省略してよいセクションと必ず受講すべきセクションの区分</li>
+      <li>2日目(ITプロフェッショナル)セッションにすぐ参加するための準備事項</li>
+      <li>クイックスタートチェックリスト</li>
+    </ul>
+  </div>
+
+  <h2 id="how-to-use">このガイドの使い方</h2>
+  <p>入門コース修了者は、2日間のワークショップで同じ内容を再び学ぶことに約<strong>2〜3時間</strong>を費やすことになりかねません。本ガイドのスキップマップを参照すれば、馴染みのあるセクションは軽く目を通し、<strong>新しい内容</strong>に集中できます。</p>
+  <p>ファシリテーターは受講者に本ガイドを事前に配布し、1日目開始前に各自の背景(入門コース修了の有無)を確認して、グループ分けと進行速度に反映します。</p>
+
+  <h2 id="skip-map">スキップマップ: 入門コース → 本ワークショップ</h2>
+  <div class="table-schedule">
+  <table>
+    <thead>
+      <tr><th>入門コースの章</th><th>本ワークショップの章</th><th>修了者への推奨</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>第1章 · なぜAIエージェントチームなのか?</td>
+        <td>第1章 · AI時代の業務革新</td>
+        <td><strong>目を通すだけで可。</strong> 統計・動機づけの内容が中心なので、概要を確認する程度で十分です。</td>
+      </tr>
+      <tr>
+        <td>第4章 · マルチエージェントハーネスの概念</td>
+        <td>第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念</td>
+        <td><strong>目を通すだけで可。</strong> 中核概念(エージェント・スキル・PMオーケストレーション)はすでに理解しています。§2以降の新しい内容(ライフサイクル、テンプレート継承)のみ確認してください。</td>
+      </tr>
+      <tr>
+        <td>第5章 · ai-workspace-standardsを見る</td>
+        <td>第5章 · ai-workspace-standards紹介</td>
+        <td><strong>目を通すだけで可。</strong> L0→L1→L2の階層構造は同じです。第5章は第8章の発展的アーキテクチャへの橋渡しなので、軽く復習する程度で結構です。</td>
+      </tr>
+      <tr>
+        <td>第6章 · co-consult実習 / 第7章 · co-deck実習</td>
+        <td>第6章 · 既存variant活用実習</td>
+        <td><strong>実習は改めて行う。</strong> ツール操作には慣れていますが、第6章は「Claude + Antigravity 4グループ」で進行するため、他ツールの視点を得る機会になります。実習自体は手早く終え、チーム比較のディスカッションに集中してください。</td>
+      </tr>
+      <tr>
+        <td>付録B · Claude Code CLI</td>
+        <td>共通参考 · ツール比較(技術的)</td>
+        <td><strong>推奨。</strong> CLIにすでに慣れている場合、技術比較表のAntigravity/agyの部分が新しい内容です。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">
+    <strong>注記:</strong> 入門コースを修了していない受講者は、このスキップマップを無視して通常の順序で進めてください。本ガイドはあくまで重複を減らすための補助資料であり、ワークショップの必須要素ではありません。
+  </div>
+
+  <h2 id="day1">1日目: 修了者が省略できる部分</h2>
+  <p>1日目(一般利用者向け)は第2章、第3章(ガードレール)、第5章(既存variant実習)で構成されます。入門コース修了者は:</p>
+  <ul>
+    <li><strong>第2章§1</strong>(ハーネス概念の概要)は目を通す程度にし、<strong>§2以降のライフサイクル・テンプレート継承</strong>から集中して受講してください。</li>
+    <li><strong>第3章ガードレール</strong>は入門コースで扱わなかった内容(権限モデル、3段階のリスク分類、承認ゲート)を含むため、<strong>全体を受講してください</strong>。</li>
+    <li><strong>第5章の既存variant実習</strong>は4つのツールグループ(Claude Desktop App / Claude Code / Antigravity Desktop / Antigravity CLI)に分かれるため、普段使わないツールのデモから新しい気づきを得ることに集中してください。</li>
+    <li><strong>ウォームアップ(テトリス→パックマン)</strong>は10分程度で終わるため、参加しても負担はありません。他グループの考え方を観察する機会として活用してください。</li>
+  </ul>
+
+  <h2 id="day2">2日目: すぐに始める</h2>
+  <p>2日目(ITプロフェッショナル向け)は第7章(企業運用戦略)、第8章(アーキテクチャ深掘り)、第9章(ワークフローパターン)、第10章(L3アップグレード)、第11〜12章(新規variant作成・昇格)、第13章(キャップストーン)で構成されます。この内容は入門コースとほとんど重複しないため、<strong>事前準備さえ整っていれば2日目から直接参加</strong>できます。</p>
+  <p>入門コースを修了していれば、第8章のL0→L1→L2の概念は復習レベルです。第8章§3(AGENTS.md詳細)と§4(発展的アーキテクチャ)、第10章(L3アップグレード)が新しい内容の中心です。</p>
+
+  <h2 id="quick-start">クイックスタートチェックリスト</h2>
+  <div class="chk">☐ 本ワークショップの<a href="../setup/SETUP_ja.html">セットアップガイド</a>と<a href="../setup/SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>を完了している。</div>
+  <div class="chk">☐ 入門コースで作成した実習成果物(エージェント・スキル・チーム提案書)を持参すると、2日目のキャップストーンですぐに活用できる。</div>
+  <div class="chk">☐ 2日目(ITプロフェッショナル)からすぐに参加するには: Claude CodeまたはAntigravity CLIがインストールされており、GitHubアカウントが準備できているか確認する。</div>
+  <div class="chk">☐ 入門コース修了の有無をファシリテーターに伝え、グループ分けに反映してもらう。</div>
+
+  <div class="chapter-nav">
+    <a href="../index_ja.html" class="prev"><div class="dir">← ホーム</div><div class="ttl">ハンドブックホーム</div></a>
+    <a href="01_Why_AI_Chapter_ja.html" class="next" style="margin-left:auto;"><div class="dir">次の章 →</div><div class="ttl">第1章 · 導入</div></a>
+  </div>
+   <footer>
+    Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+ </article>
+</main>
+</div>
+
+<script src="../assets/dark-mode-toggle.js" defer></script>
+<script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/lang-switcher.js" defer></script>
+</body>
+</html>

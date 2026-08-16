@@ -133,7 +133,7 @@
   </div>
 
   <h3>Installing on Windows</h3>
-  <p>Since this handbook's path notation is Windows-based, Windows users should download <a href="../setup/setup-windows.ps1">setup-windows.ps1</a>, place it in a dedicated practice folder (e.g., <code>harness-lab/setup/</code>), run PowerShell <strong>as Administrator</strong>, and then run the command below.</p>
+  <p>Since this handbook's path notation is Windows-based, Windows users should download <a href="../setup/upstream/setup-windows.ps1">setup-windows.ps1</a>, place it in a dedicated practice folder (e.g., <code>harness-lab/setup/</code>), run PowerShell <strong>as Administrator</strong>, and then run the command below.</p>
   <div class="tip-box">
     <strong>How to Open PowerShell as Administrator</strong><br>
     ① Open the Start menu and search for <code>PowerShell</code>.<br>
@@ -151,7 +151,7 @@
   <p>After the script finishes, you must fully close and reopen your terminal for the PATH changes to take effect.</p>
 
   <h3>Installing on macOS / Linux</h3>
-  <p>On macOS, download and use <a href="../setup/setup-mac.sh">setup-mac.sh</a>; on Linux, use <a href="../setup/setup-linux.sh">setup-linux.sh</a>. Both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
+  <p>On macOS, download and use <a href="../setup/upstream/setup-mac.sh">setup-mac.sh</a>; on Linux, use <a href="../setup/upstream/setup-linux.sh">setup-linux.sh</a>. Both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
   <div style="position:relative">
   <pre class="code-block"># macOS
 cd ./setup && bash upstream/setup-mac.sh
@@ -162,7 +162,7 @@ cd ./setup && bash upstream/setup-linux.sh</pre>
 </div>
 
   <h3>Verifying the Installation</h3>
-  <p>Regardless of your OS, running <a href="../setup/setup-common.ts">setup-common.ts</a> with <code>bun</code> prints a checklist table showing your installation status. If every item shows ✅, you're ready to proceed with the exercises below.</p>
+  <p>Regardless of your OS, running <a href="../setup/upstream/setup-common.ts">setup-common.ts</a> with <code>bun</code> prints a checklist table showing your installation status. If every item shows ✅, you're ready to proceed with the exercises below.</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>

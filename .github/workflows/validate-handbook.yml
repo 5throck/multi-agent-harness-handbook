@@ -64,3 +64,16 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.1
       - run: bun run check-lint
+
+  build-search-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.1
+      - run: bun run build-search-index
+      - name: Verify search-data.js is up to date
+        run: |
+          if ! git diff --exit-code docs/assets/search-data.js; then
+            echo "::error::search-data.js is out of sync with search-manifest.json. Run 'bun run build-search-index' and commit the result."
+            exit 1
+          fi

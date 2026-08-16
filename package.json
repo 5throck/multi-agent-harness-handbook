@@ -16,6 +16,7 @@
     "check-spell": "bun run scripts/check-spell.ts --docs-dir docs",
     "check-lint": "bun run scripts/check-lint.ts --docs-dir docs",
     "check-external-links": "bun run scripts/check-external-links.ts --docs-dir docs",
+    "build-search-index": "bun run scripts/build-search-index.ts --docs-dir docs",
     "deploy": "bun run scripts/deploy-handbook.ts --project . --output ."
   }
 }

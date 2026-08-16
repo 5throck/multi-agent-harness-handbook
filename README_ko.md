@@ -8,6 +8,14 @@
 ## 🌐 교육 프로그램 바로가기 (웹사이트)
 👉 **[핸드북 교육 사이트 보기](https://5throck.github.io/multi-agent-harness-handbook/)**
 
+## 💻 로컬 환경 설정
+`docs/setup/upstream/`의 워크숍 설치 스크립트는 직접 복사해 넣은 파일이 아니라 [git submodule](https://github.com/5throck/setup)입니다. clone할 때 서브모듈을 함께 받거나, 이미 clone했다면 아래 명령으로 초기화하세요.
+```bash
+git clone --recurse-submodules https://github.com/5throck/multi-agent-harness-handbook.git
+# 이미 일반 clone을 했다면:
+git submodule update --init
+```
+
 ## 📚 커리큘럼 구성
 - **1장 · 도입** — 왜 AI 에이전트 팀인가 & 현대적 AI 워크스페이스 패러다임
 - **2장 · 하네스 엔지니어링** — 멀티 에이전트팀 핵심 개념과 오케스트레이션

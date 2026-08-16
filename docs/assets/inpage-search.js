@@ -1,28 +1,84 @@
-/* 페이지 내 검색 — 모든 문서 공용. 의존성 없음. 수정 없이 그대로 사용.
-   - 사이드바(nav) 상단에 검색창 주입
-   - 본문(main)에서 일치 항목 하이라이트 + 개수 + Enter로 다음 이동(Shift+Enter 이전)
-   - 랜딩 검색에서 넘어온 ?q= 자동 적용
-   주의: 사이드바 nav 링크는 필터링하지 않는다(묶음 라벨이 통째로 사라지는 문제로 제거됨). 되살리지 말 것. */
+/* In-page search — shared across all documents. No dependencies.
+   - Injects a search box at the top of the sidebar (nav)
+   - Highlights matches in main content + count + Enter for next (Shift+Enter for previous)
+   - Auto-applies ?q= from landing search
+   Note: Sidebar nav links are NOT filtered (bundled labels disappeared entirely when enabled). Do not re-enable. */
 (function () {
   'use strict';
   function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  /* ── Internationalization ── */
+  function getSearchStrings() {
+    var lang = (document.documentElement.lang || 'ko').split('-')[0];
+    var strings = {
+      ko: {
+        placeholder: '이 페이지에서 검색...',
+        clear: '지우기',
+        label: '이 페이지에서 검색',
+        matchCount: '{n}개 일치 · Enter로 이동',
+        noMatch: '일치 없음'
+      },
+      en: {
+        placeholder: 'Search this page...',
+        clear: 'Clear',
+        label: 'Search this page',
+        matchCount: '{n} found · Enter to navigate',
+        noMatch: 'No matches'
+      },
+      ja: {
+        placeholder: 'このページを検索...',
+        clear: '消去',
+        label: 'このページを検索',
+        matchCount: '{n}件一致 · Enterで移動',
+        noMatch: '一致なし'
+      },
+      es: {
+        placeholder: 'Buscar en esta página...',
+        clear: 'Borrar',
+        label: 'Buscar en esta página',
+        matchCount: '{n} coincidencias · Enter para navegar',
+        noMatch: 'Sin coincidencias'
+      }
+    };
+    return strings[lang] || strings.ko;
+  }
+
+  /* ── CSS variable helper with fallback ── */
+  function cv(name, fallback) {
+    var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
 
   ready(function () {
     var nav = document.querySelector('nav');
     var main = document.querySelector('main');
     if (!nav || !main) return;
 
+    var S = getSearchStrings();
+
+    /* ── Theme-aware CSS colors ── */
+    var c = {
+      border:       cv('--color-border-default', '#d0d7de'),
+      bg:           cv('--color-canvas-default', '#fff'),
+      fg:           cv('--color-fg-default', '#1f2328'),
+      muted:        cv('--color-fg-muted', '#636c76'),
+      accent:       cv('--color-accent-fg', '#0969da'),
+      markBg:       cv('--color-attention-subtle', '#fff3a3'),
+      markActive:   cv('--color-attention-emphasis', '#ffd43b'),
+      markOutline:  cv('--color-danger-fg', '#f08c00')
+    };
+
     var style = document.createElement('style');
     style.textContent = [
-      '.ip-search{padding:10px 14px 12px;border-bottom:1px solid #d0d7de;margin-bottom:6px;}',
+      '.ip-search{padding:10px 14px 12px;border-bottom:1px solid ' + c.border + ';margin-bottom:6px;}',
       '.ip-search .ip-row{position:relative;display:flex;align-items:center;}',
-      '.ip-search input{width:100%;padding:7px 28px 7px 10px;font-size:13px;border:1px solid #d0d7de;border-radius:6px;background:#fff;color:#1f2328;outline:none;}',
-      '.ip-search input:focus{border-color:#0969da;box-shadow:0 0 0 2px rgba(9,105,218,.15);}',
-      '.ip-search .ip-clear{position:absolute;right:6px;border:none;background:none;color:#636c76;cursor:pointer;font-size:16px;line-height:1;display:none;padding:2px 4px;}',
-      '.ip-search .ip-count{margin-top:6px;font-size:11px;color:#636c76;min-height:13px;}',
-      'mark.ip-hit{background:#fff3a3;color:inherit;border-radius:2px;padding:0 1px;}',
-      'mark.ip-hit.ip-active{background:#ffd43b;outline:1px solid #f08c00;}'
+      '.ip-search input{width:100%;padding:7px 28px 7px 10px;font-size:13px;border:1px solid ' + c.border + ';border-radius:6px;background:' + c.bg + ';color:' + c.fg + ';outline:none;}',
+      '.ip-search input:focus{border-color:' + c.accent + ';box-shadow:0 0 0 2px rgba(9,105,218,.15);}',
+      '.ip-search .ip-clear{position:absolute;right:6px;border:none;background:none;color:' + c.muted + ';cursor:pointer;font-size:16px;line-height:1;display:none;padding:2px 4px;}',
+      '.ip-search .ip-count{margin-top:6px;font-size:11px;color:' + c.muted + ';min-height:13px;}',
+      'mark.ip-hit{background:' + c.markBg + ';color:inherit;border-radius:2px;padding:0 1px;}',
+      'mark.ip-hit.ip-active{background:' + c.markActive + ';outline:1px solid ' + c.markOutline + ';}'
     ].join('');
     document.head.appendChild(style);
 
@@ -30,8 +86,8 @@
     box.className = 'ip-search';
     box.innerHTML =
       '<div class="ip-row">' +
-        '<input type="search" placeholder="이 페이지에서 검색…" aria-label="이 페이지에서 검색">' +
-        '<button class="ip-clear" type="button" title="지우기" aria-label="지우기">×</button>' +
+        '<input type="search" placeholder="' + S.placeholder + '" aria-label="' + S.label + '">' +
+        '<button class="ip-clear" type="button" title="' + S.clear + '" aria-label="' + S.clear + '">×</button>' +
       '</div>' +
       '<div class="ip-count"></div>';
 
@@ -62,7 +118,7 @@
           if (!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
           var p = n.parentNode;
           if (p && (p.nodeName === 'SCRIPT' || p.nodeName === 'STYLE' || p.nodeName === 'MARK')) return NodeFilter.FILTER_REJECT;
-          // SVG 라벨 보호: <mark> 주입 시 SVG <text>가 깨지므로 SVG 네임스페이스 노드는 제외(§ 가이드 SVG 도식화 항목)
+          // SVG label protection: <mark> injection breaks SVG <text>, so SVG namespace nodes are excluded
           if (p && p.namespaceURI === 'http://www.w3.org/2000/svg') return NodeFilter.FILTER_REJECT;
           re.lastIndex = 0;
           return re.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
@@ -99,7 +155,7 @@
       clearBtn.style.display = q ? 'block' : 'none';
       highlight(q);
       if (!q){ countEl.textContent = ''; return; }
-      countEl.textContent = hits.length ? (hits.length + '개 일치 · Enter로 이동') : '일치 없음';
+      countEl.textContent = hits.length ? (S.matchCount.replace('{n}', hits.length)) : S.noMatch;
       if (hits.length && scrollFirst) setActive(0);
     }
 

@@ -1,0 +1,48 @@
+title = "gitleaks config"
+
+# Extended rules for API keys commonly referenced in educational content
+[[rules]]
+id = "anthropic-api-key"
+description = "Anthropic API Key"
+regex = '''sk-ant-[a-zA-Z0-9\-_]{20,}'''
+tags = ["key", "anthropic"]
+
+[[rules]]
+id = "openai-api-key"
+description = "OpenAI API Key"
+regex = '''sk-[a-zA-Z0-9]{20,}'''
+tags = ["key", "openai"]
+
+[[rules]]
+id = "github-pat"
+description = "GitHub Personal Access Token"
+regex = '''ghp_[a-zA-Z0-9]{36,}'''
+tags = ["key", "github"]
+
+[[rules]]
+id = "github-oauth"
+description = "GitHub OAuth Access Token"
+regex = '''gho_[a-zA-Z0-9]{36,}'''
+tags = ["key", "github"]
+
+[[rules]]
+id = "aws-access-key"
+description = "AWS Access Key ID"
+regex = '''AKIA[A-Z0-9]{16}'''
+tags = ["key", "aws"]
+
+[[rules]]
+id = "gcp-service-account"
+description = "GCP Service Account Private Key"
+regex = '''"private_key":\s*"-----BEGIN PRIVATE KEY-----'''
+tags = ["key", "gcp"]
+
+[allowlist]
+paths = [
+  '''docs/.*\.html''',
+  '''CHANGELOG\.md''',
+  '''README\.md''',
+  '''README_ko\.md''',
+  '''LICENSE''',
+  '''\.gitignore''',
+]

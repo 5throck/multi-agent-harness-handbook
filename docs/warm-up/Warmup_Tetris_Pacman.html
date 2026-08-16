@@ -8,7 +8,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="워밍업 실습 · 테트리스에서 팩맨까지 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="워밍업 실습 · 테트리스에서 팩맨까지 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>워밍업 실습 · 테트리스에서 팩맨까지</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -93,7 +93,7 @@
   <pre class="code-block">HTML Canvas로 팩맨 게임을 만들어줘</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
 </div>
-  <p>캐릭터 이동·유_ghost AI·충돌 감지·맵 설계가 동시에 하나의 프롬프트에 들어가면, 코드가 뒤엉켜 의도대로 작동하지 않는다. 이 "실패"가 이 워밍업의 핵심 체험이다.</p>
+  <p>캐릭터 이동·유령 AI·충돌 감지·맵 설계가 동시에 하나의 프롬프트에 들어가면, 코드가 뒤엉켜 의도대로 작동하지 않는다. 이 "실패"가 이 워밍업의 핵심 체험이다.</p>
 
   <div class="note">
     <strong>왜 실패할까?</strong> 하나의 에이전트에게 너무 많은 역할을 동시에 주면 <a href="../concepts/02_Concepts_Chapter.html">2장 §2</a>에서 다루는 <strong>컨텍스트 과부하</strong>가 발생한다. 각 기능은 개별적으로 구현 가능해도, 동시에 조율하면 충돌과 누락이 생긴다.
@@ -127,7 +127,7 @@
 
   <div class="step">
     <div class="step-label">Step 3 — QA 에이전트</div>
-    <p>완성된 코드에서 버그를 찾고 수정한다. 실제로 게임을 실행해 보며, 캐릭터가 벽을 통과하는지, 유_ghost AI가 정상 동작하는지, 점수가 올바르게 계산되는지 검증한다.</p>
+    <p>완성된 코드에서 버그를 찾고 수정한다. 실제로 게임을 실행해 보며, 캐릭터가 벽을 통과하는지, 유령 AI가 정상 동작하는지, 점수가 올바르게 계산되는지 검증한다.</p>
     <div style="position:relative">
   <pre class="code-block">이 팩맨 게임 코드의 버그를 찾아 수정해줘:
 [Step 2 결과를 여기에 붙여넣기]

@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// scripts/co-deck/handbook/check-authoring.ts
+// scripts/check-authoring.ts
 // AUTHORING_GUIDELINES compliance checker.
 // Validates handbook HTML against the 21-section authoring guidelines + dark mode + i18n.
 // Uses --examples-dir to validate examples/ as regression fixtures.

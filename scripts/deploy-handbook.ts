@@ -1,17 +1,17 @@
 #!/usr/bin/env bun
-// scripts/co-deck/handbook/deploy-handbook.ts
+// scripts/deploy-handbook.ts
 // Deploys a handbook to GitHub Pages — automates repo creation, visibility,
 // GitHub Actions workflow generation, Pages activation, and verification.
 //
 // Usage:
-//   bun run scripts/co-deck/handbook/deploy-handbook.ts \
+//   bun run scripts/deploy-handbook.ts \
 //     --project . --output handbook \
 //     --repo owner/handbook-name \
 //     --visibility public
 
 import { writeFileSync, existsSync, readFileSync, mkdirSync, cpSync, readdirSync } from "node:fs";
 import { join, resolve, basename } from "node:path";
-import { execSync } from "node:child_process";
+import { execSync, execFileSync } from "node:child_process";
 
 // --- CLI args ---
 const args = process.argv.slice(2);
@@ -52,6 +52,40 @@ function run(cmd: string, opts?: { cwd?: string; silent?: boolean }): string {
   } catch (e: unknown) {
     const err = e as { stderr?: string; message?: string };
     throw new Error(`Command failed: ${cmd}\n${err.stderr || err.message || e}`);
+  }
+}
+
+/**
+ * Shell-escape a value for safe interpolation into shell command strings.
+ * Wraps in single quotes and escapes any embedded single quotes.
+ */
+function shellEscape(value: string): string {
+  return "'" + value.replace(/'/g, "'\\''") + "'";
+}
+
+/**
+ * Execute a command using execFileSync with an argument array — no shell
+ * interpretation, so user-controlled values cannot cause injection.
+ */
+function runExec(
+  cmd: string,
+  args: string[],
+  opts?: { cwd?: string; silent?: boolean },
+): string {
+  const cwd = opts?.cwd ?? projectDir;
+  try {
+    const result = execFileSync(cmd, args, {
+      cwd,
+      encoding: "utf-8",
+      stdio: opts?.silent ? "pipe" : "inherit",
+      timeout: 60_000,
+    });
+    return (result || "").trim();
+  } catch (e: unknown) {
+    const err = e as { stderr?: string; message?: string; status?: number };
+    throw new Error(
+      `Command failed: ${cmd} ${args.join(" ")}\n${err.stderr || err.message || String(e)}`,
+    );
   }
 }
 
@@ -134,8 +168,21 @@ function patchReadmePagesUrl(readmePath: string, url: string, title: string): bo
 // --- Step 0: Validate inputs ---
 log("🔍", "Pre-flight checks...");
 
-if (!repoSlug || !repoSlug.includes("/")) {
-  fatal('--repo is required and must be "owner/name" format (e.g. 5throck/my-handbook)');
+// Validate repoSlug: must match GitHub's owner/repo naming rules
+const REPO_SLUG_RE = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
+if (!repoSlug || !REPO_SLUG_RE.test(repoSlug)) {
+  fatal('--repo is required and must be "owner/name" format with only alphanumeric characters, dots, hyphens, or underscores (e.g. 5throck/my-handbook)');
+}
+
+// Validate visibility: whitelist to prevent arbitrary flag injection
+if (visibility !== "public" && visibility !== "private") {
+  fatal('--visibility must be "public" or "private"');
+}
+
+// Validate outputDir: only safe filesystem characters (no shell metacharacters)
+const SAFE_DIR_RE = /^[a-zA-Z0-9_./-]+$/;
+if (!outputDir || !SAFE_DIR_RE.test(outputDir)) {
+  fatal('--output contains unsafe characters. Use only alphanumeric, dots, hyphens, underscores, slashes, or periods.');
 }
 
 if (!existsSync(docsDir)) {
@@ -155,7 +202,7 @@ if (!existsSync(nojekyllPath)) {
 
 // Validate gh CLI is available and authenticated
 try {
-  run("gh auth status", { silent: true });
+  runExec("gh", ["auth", "status"], { silent: true });
 } catch {
   fatal("gh CLI not authenticated — run `gh auth login` first");
 }
@@ -193,31 +240,31 @@ log("📦", `Ensuring GitHub repo: ${fullRepo} (${visibility})`);
 
 let repoExists = true;
 try {
-  run(`gh repo view ${fullRepo}`, { silent: true });
+  runExec("gh", ["repo", "view", fullRepo], { silent: true });
 } catch {
   repoExists = false;
 }
 
 if (repoExists) {
   // Check current visibility
-  const currentVis = run(`gh repo view ${fullRepo} --json isPrivate -q ".isPrivate"`, { silent: true });
+  const currentVis = runExec("gh", ["repo", "view", fullRepo, "--json", "isPrivate", "-q", ".isPrivate"], { silent: true });
   const isPrivate = currentVis === "true";
   const wantsPublic = visibility === "public";
 
   if (isPrivate && wantsPublic) {
     log("🔓", `Switching ${fullRepo} from private to public...`);
-    run(`gh repo edit ${fullRepo} --visibility public`);
+    runExec("gh", ["repo", "edit", fullRepo, "--visibility", "public"]);
     log("✅", "Repository is now public");
   } else if (!isPrivate && !wantsPublic) {
     log("🔒", `Switching ${fullRepo} from public to private...`);
-    run(`gh repo edit ${fullRepo} --visibility private`);
+    runExec("gh", ["repo", "edit", fullRepo, "--visibility", "private"]);
     log("✅", "Repository is now private");
   } else {
     log("✅", `Repository already ${visibility}`);
   }
 } else {
   log("🆕", `Creating repository: ${fullRepo} (${visibility})...`);
-  run(`gh repo create ${fullRepo} --${visibility} --source=. --push=false`);
+  runExec("gh", ["repo", "create", fullRepo, `--${visibility}`, "--source=.", "--push=false"]);
   log("✅", "Repository created");
 }
 
@@ -251,13 +298,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0a2b6e9657e3b9e46888349699cc4 # v5.0.0
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@5636014a3d170e597d9aa4b9929a265f96ff2c92 # v3.0.1
         with:
           path: ${outputDir}/docs
 
@@ -270,7 +317,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db901677b11abb34ba381b1b5ad937216f5e08 # v4.0.5
 `;
 
 const deployWorkflowPath = join(workflowsDir, "deploy-pages.yml");
@@ -282,7 +329,7 @@ log("🌐", "Configuring GitHub Pages...");
 
 try {
   // Check if Pages is already enabled
-  const pagesInfo = run(`gh api repos/${fullRepo}/pages -q ".source" 2>&1`, { silent: true });
+  const pagesInfo = runExec("gh", ["api", `repos/${fullRepo}/pages`, "-q", ".source"], { silent: true });
 
   if (pagesInfo && !pagesInfo.includes("404")) {
     log("ℹ️", "GitHub Pages is already configured");
@@ -292,13 +339,13 @@ try {
 } catch {
   // Enable Pages via Actions deployment source
   try {
-    run(`gh api repos/${fullRepo}/pages -X POST -f build_type=workflow -f source[branch]=main -f source[path]=/`, { silent: true });
+    runExec("gh", ["api", `repos/${fullRepo}/pages`, "-X", "POST", "-f", "build_type=workflow", "-f", "source[branch]=main", "-f", "source[path]=/"], { silent: true });
     log("✅", "GitHub Pages enabled (Actions deployment)");
   } catch (e: unknown) {
     const err = e as { message?: string };
     // If Pages was just enabled by the workflow, it may conflict — try just enabling via Actions
     try {
-      run(`gh api repos/${fullRepo}/pages -X POST -f build_type=workflow`, { silent: true });
+      runExec("gh", ["api", `repos/${fullRepo}/pages`, "-X", "POST", "-f", "build_type=workflow"], { silent: true });
       log("✅", "GitHub Pages enabled (Actions deployment)");
     } catch {
       log("⚠️", `Could not enable Pages via API. It may auto-enable on first push. Manual step: go to repo Settings → Pages → Source: GitHub Actions`);
@@ -317,7 +364,7 @@ try {
 }
 
 // Stage all handbook files
-run(`git add ${outputDir}/.github/workflows/deploy-pages.yml ${outputDir}/docs/.nojekyll`);
+run(`git add ${shellEscape(outputDir)}/.github/workflows/deploy-pages.yml ${shellEscape(outputDir)}/docs/.nojekyll`);
 log("✅", "Staged deploy workflow and .nojekyll");
 
 // Patch README files with GitHub Pages URL
@@ -326,7 +373,7 @@ for (const readmeFile of readmeFiles) {
   const readmePath = join(handbookDir, readmeFile);
   const patched = patchReadmePagesUrl(readmePath, pagesUrl, repoName);
   if (patched) {
-    run(`git add ${readmePath}`);
+    run(`git add ${shellEscape(readmePath)}`);
     log("📝", `Patched ${readmeFile} with GitHub Pages URL`);
   } else {
     log("ℹ️", `${readmeFile} already has correct GitHub Pages URL`);
@@ -334,8 +381,8 @@ for (const readmeFile of readmeFiles) {
 }
 
 // Check if there are changes to commit
-const readmeArgs = readmeFiles.map(f => `${outputDir}/${f}`).join(" ");
-const status = run(`git status --porcelain -- ${outputDir}/.github/workflows/deploy-pages.yml ${outputDir}/docs/.nojekyll ${readmeArgs}`, { silent: true });
+const readmeArgs = readmeFiles.map(f => shellEscape(`${outputDir}/${f}`)).join(" ");
+const status = run(`git status --porcelain -- ${shellEscape(outputDir)}/.github/workflows/deploy-pages.yml ${shellEscape(outputDir)}/docs/.nojekyll ${readmeArgs}`, { silent: true });
 if (status) {
   run(`git commit -m "ci(handbook): add GitHub Pages deploy workflow"`);
   log("✅", "Committed deploy workflow");
@@ -346,11 +393,11 @@ if (status) {
 // Add remote if not already present
 const remoteUrl = `https://github.com/${fullRepo}.git`;
 try {
-  run(`git remote get-url origin`, { silent: true });
+  run("git remote get-url origin", { silent: true });
   // Update origin URL if different
-  run(`git remote set-url origin ${remoteUrl}`);
+  run(`git remote set-url origin ${shellEscape(remoteUrl)}`);
 } catch {
-  run(`git remote add origin ${remoteUrl}`);
+  run(`git remote add origin ${shellEscape(remoteUrl)}`);
   log("✅", `Added remote origin → ${remoteUrl}`);
 }
 

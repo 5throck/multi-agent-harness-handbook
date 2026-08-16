@@ -10,7 +10,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="9장 · 워크플로우 디자인 패턴 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="9장 · 워크플로우 디자인 패턴 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>9장 · 워크플로우 디자인 패턴</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -93,7 +93,7 @@
 
   <!-- §1 SVG: 패턴 → 워크플로우 관계 -->
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
-    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow design pattern overview diagram" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -192,9 +192,7 @@
       <strong>② 다관점 검토(팬아웃)</strong>: 보안·성능·가독성 세 관점을 각각 전문 리뷰어 에이전트가 동시에 검토한다.<br>
       <strong>③ 의견 취합(취합)</strong>: 세 리뷰어의 피드백을 종합 에이전트가 하나의 피드백 보고서로 작성한다.<br>
       <strong>④ 수정 제안(파이프라인)</strong>: 피드백을 바탕으로 코드 수정 제안을 생성한다.<br>
-      <strong>⑤ 최종 승인(검증-후-적용)</strong>: 수정된 코드를 재검토. 통과하면 <span class="wf-gate">인간 승인 게이트</span>로, 거부되면 ④로 루프.
-    </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <strong>⑤ 최종 승인(검증-후-적용)</strong>: 수정된 코드를 재검토. 통과하면 <<svg role="img" aria-label="Diagram 2" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">lns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="100" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① 변경 분석</text>
         <line x1="105" y1="48" x2="125" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -223,8 +221,7 @@
       <strong>① 오케스트레이션(PM)</strong>: PM 에이전트가 조사 범위, 타겟 시장, 산출물 형식을 정의하고 워커에게 위임한다.<br>
       <strong>② 병렬 조사(팬아웃)</strong>: 시장 규모 분석, 경쟁사 분석, 기술 트렌드 조사를 세 에이전트가 동시에 수행한다.<br>
       <strong>③ 취합·초안(파이프라인)</strong>: 세 조사 결과를 종합해 보고서 초안을 작성하고, 시각화(차트)를 생성한다.<br>
-      <strong>④ 교차 검증(검증-후-적용)</strong>: 전문 검토자가 데이터 출처, 논리적 일관성, 누락 여부를 검토. <span class="wf-gate">인간 승인 게이트</span> 후 최종 보고서 확정.
-    </p>
+      <strong>④ 교차 검증(검증-후-적용)</strong>: 전문<svg role="img" aria-label="Diagram 3" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="110" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① PM 오케스트레이션</text>
@@ -253,8 +250,7 @@
       <strong>② 스토리라인</strong>: 전체 내용의 흐름과 슬라이드 구성을 기획한다.<br>
       <strong>③ 디자인</strong>: 시각적 레이아웃과 테마를 선택한다.<br>
       <strong>④ 이미지 큐레이션 + 다이어그램 생성(팬아웃)</strong>: 일러스트와 다이어그램을 <em>동시에</em> 생성하여 시간을 단축한다.<br>
-      <strong>⑤⑥⑦ 빌드·측정·내보내기(파이프라인)</strong>: HTML 빌드 → 레이아웃 검측 → PDF 출력까지 순차 처리.<br>
-      <strong>⑧⑨⑩⑩ 최종 검토(검증-후-적용)</strong>: 완성된 PDF를 교차 검토 후 <span class="wf-gate">인간 승인 게이트</span>.
+      <strong>⑤⑥⑦ 빌드·측정·내보내기(파이프라인)</strong>: HTML 빌드 → 레이아웃 검측 → P<svg role="img" aria-label="Diagram 4" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">f-gate">인간 승인 게이트</span>.
     </p>
     <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="var(--text)">
@@ -289,8 +285,7 @@
     <p class="wf-stages">
       <strong>① 분류(라우팅)</strong>: 들어온 이슈의 긴급도와 유형을 분석하여 경로를 결정한다. 버그면 수정 경로, 기능 요청이면 기획 경로, 보안이면 긴급 경로로 분기한다.<br>
       <strong>② 자동 조사(오케스트레이터-워커)</strong>: 분류된 이슈를 관련 로그 검색, 재현 시도, 영향 범위 파악 등 하위 작업으로 나누어 워커 에이전트들이 조사한다.<br>
-      <strong>③ 우선순위 결정</strong>: 조사 결과를 바탕으로 우선순위와 담당자를 추천한다.<br>
-      <strong>④ 에스컬레이션 또는 자동 해결</strong>: 자동으로 해결할 수 있는 사소한 이슈(예: 설정 오류)는 즉시 수정하고, 복잡한 이슈는 <span class="wf-gate">인간 승인 게이트</span>로 에스컬레이션한다.
+      <strong>③ 우선순위 결정</strong>: 조사 결과를 바탕으로 우선순위와 담당<svg role="img" aria-label="Diagram 5" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">, 복잡한 이슈는 <span class="wf-gate">인간 승인 게이트</span>로 에스컬레이션한다.
     </p>
     <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
@@ -315,9 +310,7 @@
     <p class="wf-patterns">핵심 패턴: <code>파이프라인</code> → <code>검증-후-적용</code>(루프) → <code>게이트</code></p>
     <p class="wf-stages">
       <strong>① 변경사항 수집</strong>: 커밋 히스토리와 diff를 수집해 PR 초안(제목·본문)을 작성한다.<br>
-      <strong>② 규칙 검증(검증-후-적용)</strong>: PR이 CONSTITUTION.md의 규칙(영어 제목, 특정 형식 등)을 준수하는지 자동 검사. 위반 항목이 있으면 ①로 돌아가 수정 요구.<br>
-      <strong>③ 영향 분석</strong>: 변경이 다른 파일·기능에 미치는 영향을 분석하여 PR 본문에 추가한다.<br>
-      <strong>④ 최종 검토 + 승인</strong>: 전체 PR을 재검토한 후 <span class="wf-gate">인간 승인 게이트</span>. 승인되면 병합 대기 상태로 전환.
+      <strong>② 규칙 검증(검증-후-적용)</strong>: PR이 CONSTITUTION.md의 규칙(영어 제목, 특정 형식 등)을 준수하는지 자동 검사. 위반 항목이 있으면 ①로 돌아가 수정 요구.<br<svg role="img" aria-label="Diagram 6" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">최종 검토 + 승인</strong>: 전체 PR을 재검토한 후 <span class="wf-gate">인간 승인 게이트</span>. 승인되면 병합 대기 상태로 전환.
     </p>
     <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
@@ -404,12 +397,7 @@
     <div class="variant-row"><span class="variant-name">Phase 6</span><span><strong>품질 보증</strong>(워크스페이스 자율) — Auditor가 <code>qa-gate.ts</code> 자동 실행. 최대 2회 반복 후 PM 에스컬레이션. <em>워크플로우: 검증-후-적용(루프)</em></span></div>
   </div>
 
-  <p>이 7단계 페이즈는 §3의 워크플로우 사례와 직접 대응된다. 예를 들어 "코드 리뷰" 사례의 전체 흐름은 Phase 1~2(분석) → Phase 4(검토 실행) → Phase 6(QA)의 축소판이다. 실무에서 새 워크플로우를 설계할 때 이 페이즈를 염두에 두면 "어디에 인간 게이트를 둘 것인가"와 "병렬 실행이 안전한 단계는 어디인가"를 더 체계적으로 결정할 수 있다.</p>
-
-
-  <h2 id="s4">워크플로우 선택 가이드</h2>
-
-  <p>새로운 업무에 멀티 에이전트 워크플로우를 도입하려면, 어떤 패턴으로 시작하고 어떻게 확장해 나갈지 결정해야 한다. 다음 의사결정 나무는 첫 단계를 고르는 데 도움이 된다.</p>
+  <p>이 7단계 페이즈는 §3의 워크플로우 사례와 직접 대응된다. 예를 들어 "코드 리뷰" 사례의 전체 흐름은 Phase 1~2(분석) → Phase 4(검토 실행) → Phase 6(QA)의 축소판이다. 실무에서 새 워크플로우를 설계할 때 이 페이즈를 염두에 두면 "어디에 인간 게이트를 둘 것인가"와 "병렬 실행이<svg role="img" aria-label="Diagram 7" viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">워크플로우를 도입하려면, 어떤 패턴으로 시작하고 어떻게 확장해 나갈지 결정해야 한다. 다음 의사결정 나무는 첫 단계를 고르는 데 도움이 된다.</p>
 
   <!-- 의사결정 나무 SVG -->
   <div class="decision-box">

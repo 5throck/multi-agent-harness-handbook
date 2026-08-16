@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第3章 · ガードレールと権限モデル - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="第3章 · ガードレールと権限モデル - マルチエージェントチーム・ハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第3章 · ガードレールと権限モデル</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -92,7 +92,7 @@
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div>最小権限の原則 — 3段階権限レベルの階層図</div>
-    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Three-tier risk classification diagram" viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
       <defs>
         <linearGradient id="pyramidRed" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#cf222e"/>
@@ -142,9 +142,7 @@
   <p>第2章では、オーケストレーターを「ユーザーとの確認が必要な地点(ゲート)で進行を止める役割」と定義した。ガードレール設計で最も重要な問いは、「そのゲートを正確にどこに置くか」である。頻繁に止まりすぎるとエージェントに仕事を任せる意味がなくなり、止まらなさすぎると破壊的作業まで静かに通り過ぎてしまう。</p>
   <p>実務で検証された基準は単純である。§2の「破壊的/外部影響」段階に当たる作業の直前では必ず止まり、それより下の段階は事後レビューで十分とする。例えば<code>/sync</code>パイプラインはコミット・プッシュ・PR作成までは自動で進めるが、PRを実際にマージしたりプロダクションにデプロイしたりする段階では別途人の承認を要求するよう設計されている。「どこまでは信頼して任せ、どこからは必ず人が見るか」という境界線を明示的に引いておくことが、ゲート設計の核心である。</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <div>承認ゲート動作フローチャート</div>
-    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;paddin<svg role="img" aria-label="Guardrails approval flow diagram" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">tyle="width:100%;max-width:680px;display:block;margin:0 auto;">
       <defs>
         <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
         <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
@@ -220,12 +218,10 @@
   <p>worktree(分離されたgit作業ディレクトリ)や別のsandbox環境で各エージェントを実行すれば、たとえ一つのエージェントが誤った判断をしても、その影響が自分の作業空間の外に漏れ出ることはない。複数のエージェントを並列で動かすときは、「同じ空間を共有させるか、物理的に分けるか」を常に先に決めておかなければならない。</p>
 
   <h2 id="s6">監査ログと可観測性</h2>
-  <p>ガードレールが事前予防だとすれば、監査ログは事後追跡である。完璧なガードレールは存在しないため、事故が起きたときに「いつ、どのエージェントが、どのツールで、何をしたか」を遡って確認できる最小限の記録が必ず必要となる。第5章で扱った<code>memory/MEMORY.md</code>がセッション間のコンテキストを記録する用途であれば、CI環境の<code>PostToolUse</code>フックとして実行される<code>audit.ts</code>のような監査スクリプトは、「規則に反する変更がなかったか」を毎回機械的に検査する可観測性の装置である。</p>
+  <p>ガードレールが事前予防だとすれば、監査ログは事後追跡である。完璧なガードレールは存在しないため、事故が起きたときに「いつ、どのエージェントが、どのツールで、何をしたか」を遡って確認できる最小限の記録が必ず必要となる。第5章で扱った<code>memory/YYYY-MM-DD.md</code>がセッション間のコンテキストを記録する用途であれば、CI環境の<code>PostToolUse</code>フックとして実行される<code>audit.ts</code>のような監査スクリプトは、「規則に反する変更がなかったか」を毎回機械的に検査する可観測性の装置である。</p>
   <div class="warn">第4章で扱うClaude Desktop Appでは、このようなフックは発火しない。Desktopアプリ中心で作業するチームの場合、監査ログが「動いていると思っていたら実は一つも動いていなかった」という状況が実際に起こりうる。ガードレールを設計する際は、必ず「このポリシーが自分の使うツールで実際に発動するか」まで確認しなければならない。</div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <div>監査ログの構造と監査フロー</div>
-    <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+  <div style="background:var(--bg2<svg role="img" aria-label="Audit logging and isolation diagram" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">iewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
       <defs>
         <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
         <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>

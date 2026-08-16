@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第6章 §1 · ai-workspace-standards のローカルインストールとプロジェクトスキャフォールディング - マルチエージェント・ハーネス・エンジニアリング・ハンドブックの資料です。">
+  <meta name="description" content="第6章 §1 · ai-workspace-standards のローカルインストールとプロジェクトスキャフォールディング - マルチエージェント・ハーネス・エンジニアリング・ハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第6章 §1 · ai-workspace-standards のローカルインストールとプロジェクトスキャフォールディング</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -66,10 +66,11 @@ ai-workspace-standards/                (ワークスペースルートとして�
   <button class="copy-btn" onclick="copyCode(this)">コピー</button>
 </div></div>
 
-  <h3>Variant全9種類の一覧</h3>
+  <h3>Variant全10種類の一覧</h3>
   <table>
     <thead><tr><th>Variant</th><th>目的</th></tr></thead>
     <tbody>
+      <tr><td><code>co-abap</code></td><td>SAP ABAP開発 — ABAPベースのエンタープライズアプリケーション開発</td></tr>
       <tr><td><code>co-work</code></td><td>一般協業/ドキュメント — 共通の非同期ワークフロー</td></tr>
       <tr><td><code>co-consult</code></td><td>戦略コンサルティング — 顧客課題の診断と提案書作成</td></tr>
       <tr><td><code>co-deck</code> <span class="badge">beta</span></td><td>プレゼンテーション — リサーチから印刷用PDFまでの11段階パイプライン</td></tr>
@@ -88,7 +89,7 @@ ai-workspace-standards/                (ワークスペースルートとして�
     <li><strong><code>CONSTITUTION.md</code></strong> — 最初に読むべきファイル。ワークスペース全体の共有標準(ガバナンス、PRワークフロー、マルチエージェント原則)が定義されている。</li>
     <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — 使用しているAIコーディングツールに対応するファイルを確認する。プラットフォームごとの動作方式(フック、スラッシュコマンド、エージェントディスパッチルール)が定義されている。</li>
     <li><strong><code>AGENTS.md</code></strong> — このワークスペースで呼び出し可能なエージェントロスター。「誰がどの役割を担うか」を一目で確認できる。</li>
-    <li><strong><code>templates/</code></strong> — 利用可能なvariant全9種類がこのディレクトリの下にある。各variantフォルダを開き、エージェント構成とガバナンスパイプラインを確認する。</li>
+    <li><strong><code>templates/</code></strong> — 利用可能なvariant全10種類がこのディレクトリの下にある。各variantフォルダを開き、エージェント構成とガバナンスパイプラインを確認する。</li>
     <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code>がここにある。このスクリプトがvariant(バリアント)を実際のプロジェクトとして複製する中核コマンドである。</li>
   </ol>
   <div class="note">この見取り図は、第4章の実習でエージェントに実際に触れる前に、「このリポジトリに何が入っているのか」の感覚をつかむための短い案内である。実習の際はまずこの5箇所だけを開いてみて、残りの構成は必要になったときに随時戻って確認する進め方でよい。</div>
@@ -122,7 +123,7 @@ git --version</pre>
     <li><strong>CONSTITUTION.mdを読む:</strong> ワークスペースの共有標準を確認する</li>
     <li><strong>プロジェクトのdocs/context.mdを読む:</strong> プロジェクト固有の単一情報源を確認する</li>
     <li><strong>AGENTS.mdを読む:</strong> 該当プロジェクトのエージェントロスターを確認する</li>
-    <li><strong>memory/MEMORY.mdを確認:</strong> 前回のセッションで残されたコンテキストを確認する</li>
+    <li><strong>memory/YYYY-MM-DD.mdを確認:</strong> 前回のセッションで残されたコンテキストを確認する</li>
     <li><strong>docs/context.mdが指定するskillをロードする</strong></li>
   </ol>
 

@@ -11,7 +11,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Chapter 5 · Introducing ai-workspace-standards - Multi-Agent Team Harness Engineering Handbook material.">
+  <meta name="description" content="Chapter 5 · Introducing ai-workspace-standards - Multi-Agent Team Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chapter 5 · Introducing ai-workspace-standards</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -95,7 +95,7 @@
 │       ├── agents/          ← inherited from the variant, continues to evolve for this project
 │       └── (an independent git repository — separate from the workspace root)
 └── memory/
-    └── MEMORY.md            ← §4: context carried across sessions</pre>
+    └── YYYY-MM-DD.md            ← §4: context carried across sessions</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
   </div>
@@ -104,7 +104,7 @@
 
   <p>The actual order in which work proceeds on top of this structure (the runtime flow) is as follows.</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
-    <li><strong>Session start.</strong> The agent reads, in order: CONSTITUTION.md → the current project's docs/context.md → AGENTS.md → memory/MEMORY.md (covered in §4).</li>
+    <li><strong>Session start.</strong> The agent reads, in order: CONSTITUTION.md → the current project's docs/context.md → AGENTS.md → memory/YYYY-MM-DD.md (covered in §4).</li>
     <li><strong>Tool-specific execution rules apply.</strong> For Claude Code/App, CLAUDE.md and <code>.claude/</code> govern the detailed execution; for the Antigravity family, GEMINI.md and <code>.gemini/</code> do.</li>
     <li><strong>When a new project is needed.</strong> <code>scripts/new-project.ts</code> clones the entire configuration of <code>templates/co-&lt;variant&gt;/</code> (L2) into <code>Projects/&lt;name&gt;/</code>, creating an L3 project working directory. At this point, <code>templates/co-&lt;variant&gt;/</code> itself had already been created a generation earlier by taking a snapshot from <code>templates/common/</code> (L1).</li>
     <li><strong>When L0 changes during operation.</strong> <code>scripts/propagate-to-templates.ts</code>, as part of the <code>/sync</code> pipeline, automatically and continuously publishes L0 changes to L1 (<code>templates/common/</code>). This is not automatically propagated to L2 or L3 instances that have already been born. This is the "fork" principle covered in Chapter 8.</li>
@@ -155,7 +155,7 @@
   <div class="note">This <strong>model cost tier (high/medium/low)</strong> shares only the "tiered" feel of its name with the <strong>L0 → L1 → L2 → L3 4-tier</strong> (the layering of where files come from and how they flow) covered in Chapter 8 — they are otherwise different concepts. One is "which model to assign to an agent," and the other is "where the original of a file lives."</div>
 
   <h2 id="s4">Session-start checklist and scaffolding</h2>
-  <p>CONSTITUTION.md defines the order every session must follow at startup. First, set the git hooks path with <code>git config core.hooksPath .githooks</code>, then read CONSTITUTION.md itself, then read the <code>docs/context.md</code> of the project you're working on. Next, check AGENTS.md for the available agents, check whether context from a previous session remains in <code>memory/MEMORY.md</code>, and finally load whatever skills docs/context.md specifies.</p>
+  <p>CONSTITUTION.md defines the order every session must follow at startup. First, set the git hooks path with <code>git config core.hooksPath .githooks</code>, then read CONSTITUTION.md itself, then read the <code>docs/context.md</code> of the project you're working on. Next, check AGENTS.md for the available agents, check whether context from a previous session remains in <code>memory/YYYY-MM-DD.md</code>, and finally load whatever skills docs/context.md specifies.</p>
   <p>The flow for creating a new project is conceptually simple. Run the <code>bun scripts/new-project.ts</code> script with a project name and the desired variant, and the entire configuration of that variant is cloned into a fully independent git repository. This repository is separate from the workspace root, but it starts out having already inherited CONSTITUTION.md's shared standards from birth. The team then evolves the team by filling in the project's own <code>docs/context.md</code> and any project-level CLAUDE.md/GEMINI.md overrides.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
@@ -168,7 +168,7 @@
   <p>The full syntax and every option (<code>--platform</code>, <code>--version</code>) are practiced hands-on in <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-2">Chapter 6 §1 · Project Scaffolding Commands</a>.</p>
 
   <div class="note">
-    <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Session startup file reading sequence diagram" viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
       <defs>
         <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
         <marker id="arrow2g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>

@@ -94,7 +94,7 @@
 │       ├── agents/          ← heredado de la variante, continúa evolucionando para este proyecto
 │       └── (un repositorio git independiente — separado de la raíz del espacio de trabajo)
 └── memory/
-    └── MEMORY.md            ← §4: contexto transportado entre sesiones</pre>
+    └── YYYY-MM-DD.md            ← §4: contexto transportado entre sesiones</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
   </div>
@@ -103,7 +103,7 @@
 
   <p>El orden real en que el trabajo procede sobre esta estructura (el flujo de ejecución) es el siguiente.</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
-    <li><strong>Inicio de sesión.</strong> El agente lee, en orden: CONSTITUTION.md → el docs/context.md del proyecto actual → AGENTS.md → memory/MEMORY.md (cubierto en §4).</li>
+    <li><strong>Inicio de sesión.</strong> El agente lee, en orden: CONSTITUTION.md → el docs/context.md del proyecto actual → AGENTS.md → memory/YYYY-MM-DD.md (cubierto en §4).</li>
     <li><strong>Se aplican las reglas de ejecución específicas de la herramienta.</strong> Para Claude Code/App, CLAUDE.md y <code>.claude/</code> gobiernan la ejecución detallada; para la familia Antigravity, lo hacen GEMINI.md y <code>.gemini/</code>.</li>
     <li><strong>Cuando se necesita un nuevo proyecto.</strong> <code>scripts/new-project.ts</code> clona toda la configuración de <code>templates/co-&lt;variante&gt;/</code> (L2) en <code>Projects/&lt;nombre&gt;/</code>, creando un directorio de trabajo de proyecto L3. En este punto, <code>templates/co-&lt;variante&gt;/</code> ya se había creado una generación antes al tomar una instantánea de <code>templates/common/</code> (L1).</li>
     <li><strong>Cuando L0 cambia durante la operación.</strong> <code>scripts/propagate-to-templates.ts</code>, como parte del pipeline <code>/sync</code>, publica automáticamente y de forma continua los cambios de L0 a L1 (<code>templates/common/</code>). Esto no se propaga automáticamente a las instancias L2 ni L3 que ya han nacido. Este es el principio de "bifurcación" cubierto en el Capítulo 8.</li>
@@ -154,7 +154,7 @@
   <div class="note">Este <strong>nivel de costo de modelo (high/medium/low)</strong> comparte solo la sensación de "niveles" de su nombre con el <strong>L0 → L1 → L2 → L3 de 4 niveles</strong> (la jerarquización de de dónde provienen los archivos y cómo fluyen) cubierto en el Capítulo 8 — por lo demás son conceptos diferentes. Uno es "qué modelo asignar a un agente," y el otro es "dónde vive el original de un archivo."</div>
 
   <h2 id="s4">Lista de verificación de inicio de sesión y andamiaje</h2>
-  <p>CONSTITUTION.md define el orden que toda sesión debe seguir al inicio. Primero, establecer la ruta de los ganchos de git con <code>git config core.hooksPath .githooks</code>, luego leer el propio CONSTITUTION.md, luego leer el <code>docs/context.md</code> del proyecto en el que se está trabajando. A continuación, verificar AGENTS.md para los agentes disponibles, comprobar si queda contexto de una sesión anterior en <code>memory/MEMORY.md</code>, y finalmente cargar las habilidades que especifique docs/context.md.</p>
+  <p>CONSTITUTION.md define el orden que toda sesión debe seguir al inicio. Primero, establecer la ruta de los ganchos de git con <code>git config core.hooksPath .githooks</code>, luego leer el propio CONSTITUTION.md, luego leer el <code>docs/context.md</code> del proyecto en el que se está trabajando. A continuación, verificar AGENTS.md para los agentes disponibles, comprobar si queda contexto de una sesión anterior en <code>memory/YYYY-MM-DD.md</code>, y finalmente cargar las habilidades que especifique docs/context.md.</p>
   <p>El flujo para crear un nuevo proyecto es conceptualmente simple. Ejecute el script <code>bun scripts/new-project.ts</code> con un nombre de proyecto y la variante deseada, y toda la configuración de esa variante se clona en un repositorio git completamente independiente. Este repositorio está separado de la raíz del espacio de trabajo, pero desde su nacimiento ya ha heredado los estándares compartidos de CONSTITUTION.md. El equipo luego hace evolucionar el equipo rellenando el <code>docs/context.md</code> propio del proyecto y cualquier anulación de CLAUDE.md/GEMINI.md a nivel de proyecto.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
@@ -167,7 +167,7 @@
   <p>La sintaxis completa y todas las opciones (<code>--platform</code>, <code>--version</code>) se practican de forma práctica en <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-2">Capítulo 6 §1 · Comandos de andamiaje de proyecto</a>.</p>
 
   <div class="note">
-    <svg viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Session startup file reading sequence diagram" viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
       <defs>
         <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
         <marker id="arrow2g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>

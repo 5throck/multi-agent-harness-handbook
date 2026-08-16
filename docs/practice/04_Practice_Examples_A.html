@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>4장 §2-A · Claude-Focused Multi-Agent Team Practice — Scenario-Based Learning Guide</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -319,7 +319,7 @@ EOF</pre>
       </div>
 
       <div class="note">
-        <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+        <svg role="img" aria-label="Practice example A workflow step indicator" viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="arrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
@@ -453,9 +453,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
         2장 §4b에서 다룬 "동적 팀 구성"과 "다양한 워크플로우 조합"을 직접 눈으로 확인하는 시나리오다. D-1에서 만든 <code>writer</code>·<code>reviewer</code> 두 서브에이전트는 그대로 두고, 요청의 성격만 바꿔가며 오케스트레이터가 실제로 누구를, 몇 번, 어떤 순서로 호출하는지 관찰한다 — 서브에이전트 정의는 한 번도 새로 만들지 않는다는 점이 핵심이다.
       </div>
 
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <div >동적 라우팅 분기 흐름도 — 같은 팀, 다른 요청</div>
-        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px<svg role="img" aria-label="Practice example A configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">g" style="width:100%;max-width:600px;display:block;margin:0 auto;">
           <defs>
             <marker id="drArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
             <marker id="drArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
@@ -675,9 +673,7 @@ EOF</pre>
           <strong>흔한 실패</strong> — "Agent Teams 기능을 찾을 수 없다"거나 팀메이트가 스폰되지 않는다면, 대개 ① <code>.claude/settings.json</code>이 <code>harness-lab/</code> 폴더 기준으로 저장됐는지(다른 폴더에 저장하면 인식되지 않는다), ② ②에서 Claude Desktop App을 완전히 재시작했는지 두 가지를 놓친 경우다. JSON 문법 오류(쉼표 누락 등)로 설정 파일 자체가 무시되는 경우도 흔하니, 편집기로 열어 문법을 다시 확인한다.
         </div>
 
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <div >권한 설정 전후 비교 — 최소 권한 원칙</div>
-        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+      <div style="background:var(--bg2);bord<svg role="img" aria-label="Practice example A execution diagram" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">      <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <defs>
             <marker id="paArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
@@ -765,10 +761,7 @@ EOF</pre>
         <div class="cmd-list-title">사용 요소</div>
         <div class="cmd-chips">
           <a class="cmd-chip" href="../intro/05_Intro_Chapter.html#s3">모델 티어 (5장)</a>
-        </div>
-      </div>
-
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+ <svg role="img" aria-label="Practice example A result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">20px;margin:20px 0 28px;">
         <div >모델 티어 비교 차트</div>
         <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
           <!-- Table header -->

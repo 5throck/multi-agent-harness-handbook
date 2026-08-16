@@ -63,7 +63,7 @@
   </ul>
 
   <div class="diagram-frame">
-    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Harness architecture overview diagram" viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow-ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -121,10 +121,7 @@
 
   <h2 id="s0">Prompt → Context → Harness — How We Got Here</h2>
   <p>Harness engineering didn't appear out of nowhere; it's the result of three stages built up in how we approach AI. Each stage didn't replace the previous one — it layered on top after revealing that the previous stage alone wasn't enough.</p>
-  <p>A cooking analogy makes the three stages easy to grasp. Prompt engineering is "what words do you give the chef for the order," context engineering is "what ingredients and recipe do you hand the chef," and harness engineering is "building a system where the kitchen itself — inspection procedures, tools, hygiene rules — produces the same quality every time." No matter how well you phrase the order or how good the ingredients are, if the kitchen system itself is sloppy, the results will be inconsistent every time.</p>
-
-  <div class="diagram-frame">
-    <svg viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <p>A cooking analogy makes the three stages easy to grasp. Prompt engineering is "what words do you give the chef for the order," context engineering is "what ingredients and recipe do you hand the chef," and harness engineering is "building a system where the kitchen itself — inspection procedures, tools, hygiene rules — produces the same quality every time." No matter how well you phrase the order or how good the ingredients are, if the kitchen system itself is sloppy, the results will be in<svg role="img" aria-label="Multi-agent team structure diagram" viewBox="0 0 680 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrow0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -168,9 +165,7 @@
   <div class="note">The three stages shift focus from <strong>behavior (what to make the model do) → understanding (what to make the model know) → reliability (how to make the result repeatable and verifiable)</strong>. The multi-agent teams this handbook covers are the product of the third stage: harness engineering.</div>
 
   <h2 id="architecture-diagram">Full Harness Architecture Diagram</h2>
-  <p>Harness engineering can be thought of as a five-layer structure sitting between the model and the user. The diagram below shows, at a glance, the architecture running through this entire handbook — <a href="#s1">the next section</a> connects which chapter covers which of these five layers.</p>
-
-  <div class="diagram-frame">
+  <p>Harness engineering can be thought of as a five-layer structure sitting between the model and the user. The diagram below shows, at a glance, the architecture running through this entire handbook — <a href="<svg role="img" aria-label="PM Gateway workflow diagram" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">v class="diagram-frame">
   <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <defs>
       <marker id="archArrow" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-reverse">
@@ -207,7 +202,7 @@
       <text x="114" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Automated procedures</text>
       <text x="216" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Evaluate-improve loop</text>
       <text x="216" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">QA gates</text>
-      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">MEMORY.md · handoff</text>
+      <text x="322" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">YYYY-MM-DD.md · handoff</text>
       <text x="322" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Contracts, state mgmt</text>
       <text x="428" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Least privilege, approval</text>
       <text x="428" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">Isolation, audit logs</text>
@@ -260,7 +255,7 @@
   <div class="pullquote">A good prompt makes it answer well once. A good harness makes it answer well every time.</div>
 
   <h2 id="s2">Limits of a Single Agent</h2>
-  <p>Assigning every role to a single agent is convenient at first, but as work scales, three problems become clear. First, context overload: when design review, code writing, testing, and documentation are all handled in sequence within one session, the details of earlier steps fade as things go on, and the consistency of results drops. Second, role conflict: an agent that reviews its own code misses many flaws it wrote — the same problem you get when the author and the reviewer are the same person. Third, lack of parallelism: even independent sub-tasks (e.g., refactoring several files, reviewing code from multiple perspectives) must be processed sequentially by a single agent, so total time grows linearly.</p>
+  <p>Assigning every role to a single agent is convenient at first, but as work scales, three problems become clear. First, context overload: when design review, code writing, testing, and documentation are all handled in sequence within one session, the details of earlier steps fade as things go on, and the consistency of results drops. Second, role conflict: an agent that reviews its own code misses many flaws it wrote — the same problem you get when the author and the reviewer are the same person. Third, lack of parallelism: even independent sub-tasks (e.g., refactoring sev<svg role="img" aria-label="Workspace standards structure diagram" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">gle agent, so total time grows linearly.</p>
   <div class="diagram-frame">
     <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,sans-serif">
@@ -291,9 +286,7 @@
   </div>
 
   <p>A company org analogy makes this easy to understand. If you assign one new hire to handle planning, development, testing, and documentation all at once, it feels fast at first with no communication overhead — but as the workload grows, that person's head (context) turns into a mess, they overlook their own code's flaws (role conflict), and they can't work on three unrelated tasks at the same time (lack of parallelism), so they become a bottleneck. The reason organizations split planners, developers, and QA is exactly why AI work is also split across multiple agents.</p>
-  <p>A multi-agent team structurally solves all three: it separates context by role so each agent focuses on its own role, separates author from verifier to secure an independent perspective, and runs tasks with no mutual dependency concurrently to cut down total time.</p>
-
-  <h2 id="s3">Components of a Multi-Agent Team</h2>
+  <p>A multi-agent team structurally solves all three: it separates context by role so each agent focuses on its own role, separates author from verifier to secure an independent perspective<svg role="img" aria-label="Agent lifecycle stages diagram" viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">"s3">Components of a Multi-Agent Team</h2>
   <p>A multi-agent team is made up of three main elements.</p>
 
   <div class="diagram-frame">
@@ -387,7 +380,7 @@
   <div class="note">A subagent is the "implementation" that makes the "role" concept of a specialist executable in an actual tool. In Chapter 4, we hand-build this definition method and calling approach ourselves, centered on Claude Desktop App/Antigravity Desktop.</div>
 
   <h2 id="s4">Orchestration Patterns</h2>
-  <p>The five workflow patterns Anthropic laid out in its December 2024 "Building Effective Agents" are the most widely used in practice: prompt chaining (pipeline), routing, parallelization (sectioning/voting), orchestrator-workers, and evaluator-optimizer (verify-then-apply). The five patterns aren't mutually exclusive alternatives — they're a toolbox to pick from or combine, based on "is there a dependency between tasks," "can sub-tasks be predicted in advance," and "is verification needed."</p>
+  <p>The five workflow patterns Anthropic laid out in its December 2024 "Building Effective Agents" are the most widely used in practice: prompt chaining (pipeline), routing, parallelization (sectioning/voting), orchestrator-workers, and ev<svg role="img" aria-label="Skill lifecycle stages diagram" viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">om or combine, based on "is there a dependency between tasks," "can sub-tasks be predicted in advance," and "is verification needed."</p>
 
   <div class="note">
     <svg viewBox="0 0 780 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:0 auto;">
@@ -486,7 +479,7 @@
     <li><strong>Orchestrator-Workers.</strong> The team structure described in §3 is itself this pattern. Rather than pre-deciding how to split the work, a central orchestrator decides dynamically on the fly based on the input, delegating to workers (specialists) and synthesizing the results. It's especially suited to complex tasks whose sub-tasks can't be predicted in advance (code changes spanning many files, research that must synthesize multiple sources). The "dynamic team composition" covered in §4b is another name for this exact pattern.</li>
     <li><strong>Evaluator-Optimizer / Verify-then-Apply.</strong> One agent produces a draft, and only after an independent agent (or the consensus of multiple agents) challenges and verifies that draft does it actually get applied. This is a mechanism that prevents plausible-but-wrong results from slipping through. <br><span style="color:var(--text-dim);font-size:14px;">Example: before modifying code, an independent agent re-reviews from a skeptical stance whether "this change is really safe," and only if judged fine does the file actually get modified. It's the same principle as how another person catches errors an author misses when proofreading their own writing. That said, it has a limit — if the evaluator itself can't distinguish good results from bad ones, this loop can spin without making progress.</span></li>
   </ul>
-  <div class="note">The five patterns are more often layered together than used in isolation — routing might feed into the first step of a prompt chain, orchestrator-workers might embed an evaluator-optimizer within each worker's unit of work, and parallelization might slot into the middle of another pattern. §4b covers a concrete example of this combination.</div>
+  <div class="note">The five patterns are more often layer<svg role="img" aria-label="Script lifecycle stages diagram" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"> orchestrator-workers might embed an evaluator-optimizer within each worker's unit of work, and parallelization might slot into the middle of another pattern. §4b covers a concrete example of this combination.</div>
 
   <div class="diagram-frame">
     <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -561,7 +554,7 @@
   <div class="note">The criterion for choosing among the three ultimately comes down to "is this failure transient, has it already reached an irreversible state, or is the judgment itself ambiguous." Retry addresses the first, rollback the second, escalation the third. The riskier the task, the safer it is to lower the bar toward escalation rather than automatic retry (see also the risk-tier classification in Chapter 3 §2).</div>
 
   <h2 id="s4b">Dynamic Team Composition and Diverse Workflows</h2>
-  <p>So far we've covered the orchestrator, specialist, handoff, and orchestration patterns separately, but the real power of harness engineering lies in the fact that these elements are <strong>not locked into a single fixed combination</strong>. Conventional automation scripts hardcode order and participants into the code — "A then always B, then always B then C" — but a multi-agent team built on a harness has the orchestrator judge afresh, for every request, "who's needed this time and in what order."</p>
+  <p>So far we've covered the orchestrator, specialist, handoff, and orchestration patterns separately, but the real power of harness engineering lies in the fact that these elements are <st<svg role="img" aria-label="Diagram 8" viewBox="0 0 660 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">code order and participants into the code — "A then always B, then always B then C" — but a multi-agent team built on a harness has the orchestrator judge afresh, for every request, "who's needed this time and in what order."</p>
 
   <h3>Team Composition Is Not Fixed</h3>
 
@@ -628,7 +621,7 @@
   <p>The orchestrator, specialist, and handoff described so far are not concepts tied to a specific tool. The problem has been that each tool configures this harness differently. Claude Code reads <code>CLAUDE.md</code>, Cursor reads <code>.cursorrules</code>, GitHub Copilot reads <code>.github/copilot-instructions.md</code> — so teams using multiple tools together had to maintain duplicate copies of the same content across each file.</p>
   <p>If you copy the same content (e.g., "always run tests with <code>npm test</code>, and never modify the <code>src/legacy/</code> folder") once per tool your team uses (CLAUDE.md, .cursorrules, copilot-instructions.md...), every rule change requires finding and editing all of them, and missing even one leaves whoever uses that tool working under different rules. It's the same problem as separately translating and keeping the same contract in multiple languages, then having versions drift out of sync when only one gets amended.</p>
   <p><strong>AGENTS.md</strong> is an open standard created in August 2025, led by OpenAI with participation from Google, Cursor, Factory, and others, to solve this problem, and it was donated to the Agentic AI Foundation under the Linux Foundation in December 2025. Placing a single AGENTS.md at the repository root lets over 30 tools — including Codex, Claude Code (via import), GitHub Copilot, Cursor, Google Jules, and the Antigravity family — read it at session start and share common rules like build/test commands, code style, and off-limits areas.</p>
-  <p>This handbook's ongoing emphasis on "support for all four tools" ultimately comes from the same problem awareness. Whether a team uses Claude Desktop App or Antigravity Desktop, keeping shared rules at the repository root (AGENTS.md) separate from per-tool detailed configuration (<code>CLAUDE.md</code>, <code>GEMINI.md</code>, etc.) means the harness itself stays stable even when tools are switched or mixed. The ai-workspace-standards repository, examined in Chapter 5, is a real-world implementation of this principle. The root <code>AGENTS.md</code> file serves as the single source of truth (SSOT) for all agents in the workspace, and the <code>.agents/</code> folder sits alongside <code>.claude/</code> and <code>.gemini/</code>, holding engine-agnostic commands and skills.</p>
+  <p>This handbook's ongoing emphasis on "support for all four tools" ultimately comes from the same problem awareness. Whether a team uses Claude Desktop App or Antigravity Desktop, keeping shared rules at the repository root (AGENTS.md) separate from per-tool detailed configuration (<code>CLAUDE.md</code>, <code>GEMINI.md</code>, etc.) means the harness itself stays stable even when tool<svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">al-world implementation of this principle. The root <code>AGENTS.md</code> file serves as the single source of truth (SSOT) for all agents in the workspace, and the <code>.agents/</code> folder sits alongside <code>.claude/</code> and <code>.gemini/</code>, holding engine-agnostic commands and skills.</p>
   <div class="diagram-frame">
     <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>

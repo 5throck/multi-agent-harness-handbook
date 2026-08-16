@@ -93,7 +93,7 @@
 
   <!-- §1 SVG: Pattern → Workflow relationship -->
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0;">
-    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Workflow design pattern overview diagram" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="wfArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -192,9 +192,7 @@
       <strong>② Revisión Multiperspectiva (Fan-out)</strong>: Agentes revisores especializados examinan simultáneamente las perspectivas de seguridad, rendimiento y legibilidad.<br>
       <strong>③ Agregación de Opiniones (Fan-in)</strong>: Un agente de síntesis compila la retroalimentación de los tres revisores en un único informe.<br>
       <strong>④ Propuesta de Corrección (Pipeline)</strong>: Genera propuestas de corrección de código basadas en la retroalimentación.<br>
-      <strong>⑤ Aprobación Final (Verificar-Luego-Aplicar)</strong>: Revisa el código modificado. Si pasa, va a la <span class="wf-gate">puerta de aprobación humana</span>; si se rechaza, vuelve a ④.
-    </p>
-    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <strong>⑤ Aprobación Final (Verificar-Luego-Aplicar)</strong>: Revisa el código modificado. Si pasa, va a la <span class="wf-gate">puerta de a<svg role="img" aria-label="Diagram 2" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">lns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="100" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="55" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① Análisis de Cambios</text>
         <line x1="105" y1="48" x2="125" y2="48" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#wfArrow)"/>
@@ -223,8 +221,7 @@
       <strong>① Orquestación (PM)</strong>: El agente PM define el alcance de la investigación, el mercado objetivo y el formato del entregable, luego delega a los trabajadores.<br>
       <strong>② Investigación Paralela (Fan-out)</strong>: Tres agentes realizan simultáneamente análisis del tamaño del mercado, análisis de competidores e investigación de tendencias tecnológicas.<br>
       <strong>③ Agregación y Redacción (Pipeline)</strong>: Sintetiza los tres resultados de investigación en un informe borrador y genera visualizaciones (gráficos).<br>
-      <strong>④ Verificación Cruzada (Verificar-Luego-Aplicar)</strong>: Un revisor especializado verifica las fuentes de datos, la consistencia lógica y las omisiones. Después de la <span class="wf-gate">puerta de aprobación humana</span>, se confirma el informe final.
-    </p>
+      <strong>④ Verificación Cruzada (Verificar-Luego-Aplicar)</strong>: Un revisor especializado verifica las fuentes de datos, la consistencia lógica y las omisiones. Después de la <s<svg role="img" aria-label="Diagram 3" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
     <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
         <rect x="5" y="30" width="110" height="36" rx="6" fill="var(--badge-orange-fg)" opacity="0.15" stroke="var(--badge-orange-fg)" stroke-width="1.2"/><text x="60" y="53" text-anchor="middle" font-weight="700" fill="var(--badge-orange-fg)">① Orquestación PM</text>
@@ -254,7 +251,7 @@
       <strong>③ Diseño</strong>: Selecciona el diseño visual y el tema.<br>
       <strong>④ Curación de Imágenes + Generación de Diagramas (Fan-out)</strong>: Genera ilustraciones y diagramas <em>simultáneamente</em> para ahorrar tiempo.<br>
       <strong>⑤⑥⑦ Construir · Medir · Exportar (Pipeline)</strong>: Procesamiento secuencial desde construcción HTML → medición de disposición → exportación PDF.<br>
-      <strong>⑧⑨⑩⑩ Revisión Final (Verificar-Luego-Aplicar)</strong>: Revisión cruzada del PDF completado, luego la <span class="wf-gate">puerta de aprobación humana</span>.
+      <strong>⑧⑨⑩⑩ Revisión Final (Verificar-Luego-Apl<svg role="img" aria-label="Diagram 4" viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">aprobación humana</span>.
     </p>
     <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10" fill="var(--text)">
@@ -290,7 +287,7 @@
       <strong>① Clasificación (Routing)</strong>: Analiza la urgencia y el tipo de una incidencia entrante para determinar la ruta. Los errores se ramifican a una vía de corrección, las solicitudes de funcionalidad a una vía de planificación, y los problemas de seguridad a una vía urgente.<br>
       <strong>② Investigación Automatizada (Orchestrador-Trabajador)</strong>: Agentes trabajadores investigan la incidencia clasificada dividiéndola en subtareas — búsqueda de registros relevantes, intentos de reproducción, evaluación del alcance del impacto.<br>
       <strong>③ Determinación de Prioridad</strong>: Recomienda prioridad y un asignado basándose en los resultados de la investigación.<br>
-      <strong>④ Escalada o Auto-resolución</strong>: Las incidencias menores que pueden resolverse automáticamente (ej., errores de configuración) se corrigen inmediatamente; las incidencias complejas se escalan a la <span class="wf-gate">puerta de aprobación humana</span>.
+      <strong>④ Escalada o Auto-resolución</strong>: Las incidencias menores que pueden resolverse automáticamente (ej., <svg role="img" aria-label="Diagram 5" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">a <span class="wf-gate">puerta de aprobación humana</span>.
     </p>
     <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
@@ -317,7 +314,7 @@
       <strong>① Recopilación de Cambios</strong>: Recopila el historial de commits y diffs para redactar el PR (título, cuerpo).<br>
       <strong>② Verificación de Reglas (Verificar-Luego-Aplicar)</strong>: Verifica automáticamente si el PR cumple con las reglas de CONSTITUTION.md (título en inglés, formato específico, etc.). Si existe alguna violación, vuelve a ① para su corrección.<br>
       <strong>③ Análisis de Impacto</strong>: Analiza cómo el cambio afecta a otros archivos/funcionalidades y añade los hallazgos al cuerpo del PR.<br>
-      <strong>④ Revisión Final + Aprobación</strong>: Revisa todo el PR nuevamente, luego la <span class="wf-gate">puerta de aprobación humana</span>. Una vez aprobado, transición a estado pendiente de fusión.
+      <strong>④ Revisi<svg role="img" aria-label="Diagram 6" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">uerta de aprobación humana</span>. Una vez aprobado, transición a estado pendiente de fusión.
     </p>
     <svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <g font-family="-apple-system,Segoe UI,Noto Sans KR,sans-serif" font-size="10.5" fill="var(--text)">
@@ -409,7 +406,7 @@
 
   <h2 id="s4">Guía de Selección de Flujos de Trabajo</h2>
 
-  <p>Para introducir un flujo de trabajo multiagente para una nueva tarea, necesitas decidir con qué patrón comenzar y cómo expandir desde ahí. El siguiente árbol de decisión te ayuda a elegir el primer paso.</p>
+  <p>Para introducir un flujo de trabajo <svg role="img" aria-label="Diagram 7" viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">sde ahí. El siguiente árbol de decisión te ayuda a elegir el primer paso.</p>
 
   <!-- Decision tree SVG -->
   <div class="decision-box">

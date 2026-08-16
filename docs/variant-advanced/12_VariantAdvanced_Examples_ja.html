@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第12章 · 新規Variant昇格実習例 — シナリオ別学習ガイド - マルチエージェントチーム・ハーネスエンジニアリングハンドブックの資料です。">
+  <meta name="description" content="第12章 · 新規Variant昇格実習例 — シナリオ別学習ガイド - マルチエージェントチーム・ハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第12章 · 新規Variant昇格実習例 — シナリオ別学習ガイド</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -106,7 +106,7 @@
       </div>
 
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-        <svg viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <svg role="img" aria-label="Variant promotion step 1 diagram" viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
           <defs>
             <marker id="compareArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
@@ -333,11 +333,7 @@
     <div class="card-body">
 
       <div class="situation">
-        D-1を完了し、プロトタイプが昇格の準備ができていると判断した経験豊富な実践者が、実際に<code>l3-to-variant-pipeline.ts</code>を実行してco-marketingを公式の<code>templates/co-marketing/</code>に変換する。ここから先は実際のgit履歴に痕跡を残す、取り返しのつかない操作である。
-      </div>
-
-      <div class="note">
-        <svg viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+        D-1を完了し、プロトタイプが昇格の準備ができていると判断した経験豊富な実践者が、実際に<code>l3-to-variant-pipeline.ts</code>を実行してco-marketingを公式の<code>templates/co-marketing/</code>に変換する。ここから先は実際のgit履歴に痕跡を残す、取り返しのつ<svg role="img" aria-label="Variant promotion step 2 diagram" viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
@@ -421,11 +417,7 @@ diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-market
       </ol>
 
       <div class="flow-box">
-        パイプラインのreconcileステップは、共通ファイル（L0/common）と同一のファイルを<code>Projects/co-marketing/</code>から削除することで重複を除去する。ただし、スキルディレクトリは意図的にこのreconcileステップから除外されているため、昇格後に<code>.claude/skills/</code>と<code>.gemini/skills/</code>にスキルが引き続き残っていることを別途確認する必要がある。
-      </div>
-
-      <div class="note">
-        <svg viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+        パイプラインのreconcileステップは、共通ファイル（L0/common）と同一のファイルを<code>Projects/co-marketing/</code>から削除することで重複を除去する。ただし、スキルディレクトリは意図的にこのreconcileステップから除外されているため、昇格後に<code>.claude/skills<svg role="img" aria-label="Variant promotion step 3 diagram" viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">="0 0 640 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
           <defs>
             <marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
           </defs>
@@ -469,10 +461,7 @@ diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-market
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div>
         </div>
-        これらの項目は、reconcileが処理する「共通ファイルの重複除去」とは異なる種類の作業である — variant固有のアセットであるため、パイプラインは自動処理しない。各チェックボックスを確認し、自分で移動する必要がある。
-      </div>
-
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        これらの項目は、reconcileが処理する「共通ファイルの重複除去」とは異なる種類の作業である — variant固有のアセットであるため、パイプラインは自動処理しない。各チェッ<svg role="img" aria-label="Variant promotion step 4 diagram" viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"> var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
         <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
           <defs>
             <marker id="doneArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">

@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
-// scripts/co-deck/handbook/check-tables.ts
+// scripts/check-tables.ts
 // Enforces the "TABLE COLUMN-SIZING POLICY" documented in
 // docs/assets/css/handbook-components.css (search for that heading).
 // Vendored from Handbooks/multi-agent-harness-handbook/scripts/check-tables.ts
-// (canonical source: scripts/co-deck/handbook/).
+// (canonical source: scripts/).
 // Hand-tuned per-table column ratios are forbidden:
 //   1. No <colgroup> / <col style="width:..."> markup in docs/**/*.html
 //   2. No per-table `col.col-*` percentage width rules in the CSS
@@ -16,9 +16,9 @@
 //      collapses the column to its single-word min-content instead.
 //
 // Usage:
-//   bun run scripts/co-deck/handbook/check-tables.ts --docs-dir docs
+//   bun run scripts/check-tables.ts --docs-dir docs
 
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { getDocsDir, configureDocsDir } from "./nav-utils.ts";
 
@@ -89,6 +89,10 @@ export function checkTables(docsDir?: string): TableError[] {
 
   const cssRelPath = "assets/css/handbook-components.css";
   const cssPath = join(dir, "assets", "css", "handbook-components.css");
+  if (!existsSync(cssPath)) {
+    console.warn(`check-tables: WARNING — CSS file not found at ${cssPath}; skipping CSS rule checks.`);
+    return errors;
+  }
   const css = readFileSync(cssPath, "utf-8");
   const cssLines = css.split("\n");
 

@@ -92,7 +92,7 @@
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div>Principle of Least Privilege — Three-Tier Permission Level Hierarchy</div>
-    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+    <svg role="img" aria-label="Three-tier risk classification diagram" viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
       <defs>
         <linearGradient id="pyramidRed" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#cf222e"/>
@@ -142,9 +142,7 @@
   <p>In Chapter 2 we defined the orchestrator as "the role that halts progress at points (gates) requiring confirmation from the user." The most important question in guardrail design is "exactly where should that gate be placed?" Stop too often, and delegating work to an agent becomes meaningless; stop too rarely, and even destructive operations can slip through silently.</p>
   <p>The rule proven in practice is simple. Always stop right before an operation belonging to the "destructive/external impact" tier from §2; post-hoc review is sufficient for tiers below that. For example, the <code>/sync</code> pipeline proceeds automatically through commit, push, and PR creation, but is designed to require separate human approval for actually merging the PR or deploying to production. Explicitly drawing the line — "up to here we trust it to proceed, and from here a human must always look" — is the core of gate design.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <div>Approval Gate Operation Flowchart</div>
-    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px <svg role="img" aria-label="Guardrails approval flow diagram" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto;">tyle="width:100%;max-width:680px;display:block;margin:0 auto;">
       <defs>
         <marker id="agArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
         <marker id="agArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
@@ -220,12 +218,10 @@
   <p>Running each agent in a worktree (an isolated git working directory) or a separate sandbox environment means that even if one agent makes a wrong judgment, its impact doesn't leak outside its own workspace. When running multiple agents in parallel, you must always first decide: "should they share the same space, or be physically separated?"</p>
 
   <h2 id="s6">Audit Logs and Observability</h2>
-  <p>If guardrails are prevention, audit logs are after-the-fact tracing. No guardrail is perfect, so when an incident occurs, you absolutely need a minimal record that lets you retrace "when, which agent, with which tool, did what." If <code>memory/MEMORY.md</code> covered in Chapter 5 serves to record context across sessions, an audit script like <code>audit.ts</code>, run via a <code>PostToolUse</code> hook in CI, is an observability device that mechanically checks every time whether "a change violated the rules."</p>
+  <p>If guardrails are prevention, audit logs are after-the-fact tracing. No guardrail is perfect, so when an incident occurs, you absolutely need a minimal record that lets you retrace "when, which agent, with which tool, did what." If <code>memory/YYYY-MM-DD.md</code> covered in Chapter 5 serves to record context across sessions, an audit script like <code>audit.ts</code>, run via a <code>PostToolUse</code> hook in CI, is an observability device that mechanically checks every time whether "a change violated the rules."</p>
   <div class="warn">In the Claude Desktop App, covered in Chapter 4, hooks like this do not fire. For teams working mainly in the Desktop app, a situation can actually arise where "we thought the audit log was running, but in fact none of it was running at all." When designing guardrails, you must always verify "does this policy actually fire on the tool I'm using?"</div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <div>Audit Log Structure and Audit Flow</div>
-    <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+  <div style="background:var(--bg2);border:1px solid va<svg role="img" aria-label="Audit logging and isolation diagram" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">iewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
       <defs>
         <marker id="alArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
         <marker id="alArrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>

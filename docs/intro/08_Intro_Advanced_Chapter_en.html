@@ -78,7 +78,7 @@
   <p>Agents are defined as <code>.md</code> files under the <code>agents/</code> directory. From birth through operation to eventual retirement, an agent passes through the following five stages.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Lifecycle governance overview diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-purple)"/>
@@ -175,8 +175,7 @@
 
   <p>A skill is a reusable unit of behavior that an agent can invoke during a session. It is defined by a <code>SKILL.md</code> file and placed either in a plugin or in the workspace's <code>.claude/skills/</code>. A skill's lifecycle consists of the following five stages.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <div style="background:var(--bg2);border:1px solid var(--bord<svg role="img" aria-label="Variant creation flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
@@ -273,7 +272,7 @@
 
   <p>Scripts are managed as <code>.ts</code> files under the <code>scripts/</code> directory. They are executable code that automates workspace infrastructure — agent-creation verification, template publishing, project scaffolding, and more. A script's lifecycle consists of the following five stages.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div st<svg role="img" aria-label="Variant promotion flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">in:20px 0 28px;">
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -377,8 +376,6 @@
   </ul>
   <p>To use an analogy, the lifecycle is a "subway route map," and the state is the real-time display showing "which station the train is currently at." Where the train is headed (the route) is fixed, but where it currently is (the station) changes moment to moment.</p>
   <div class="note">State at the level of workflow execution — for example, the Phase Pipeline defined by the PM in <a href="../workflows/09_Workflows_Chapter_en.html">Chapter 9</a> (Phase 0: request received → Phase 1: design → … → Phase 6: sync complete) — is a different dimension of state from an individual component's <code>status</code> field. The former is "what stage the work is at," while the latter is "where the component itself is in its lifecycle."</div>
-
-  <p>Although the lifecycles of agents, skills, and scripts are each defined independently, they are tightly interconnected in an actual workspace.</p>
 
   <p>Although the lifecycles of agents, skills, and scripts are each defined independently, they are tightly interconnected in an actual workspace.</p>
 

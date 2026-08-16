@@ -11,7 +11,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="8장 §2 · 생애주기 관리 - 멀티 에이전트팀 하네스 엔지니어링 핸드북 자료입니다.">
+  <meta name="description" content="8장 §2 · 생애주기 관리 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>8장 §2 · 생애주기 관리</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
@@ -78,7 +78,7 @@
   <p>에이전트는 <code>agents/</code> 디렉터리 아래에 <code>.md</code> 파일로 정의된다. 에이전트 하나가 태어나서 운영되다가 결국 폐기되기까지 다음 다섯 단계를 거친다.</p>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+    <svg role="img" aria-label="Lifecycle governance overview diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-purple)"/>
@@ -175,8 +175,7 @@
 
   <p>스킬은 에이전트가 세션에서 호출할 수 있는 재사용 가능한 동작 단위다. <code>SKILL.md</code> 파일로 정의되며, 플러그인이나 워크스페이스의 <code>.claude/skills/</code>에 배치된다. 스킬의 생애주기는 다음 다섯 단계로 구성된다.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
-    <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <div style="background:var(--bg2);border:1px solid var(--bord<svg role="img" aria-label="Variant creation flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
@@ -273,7 +272,7 @@
 
   <p>스크립트는 <code>scripts/</code> 디렉터리 아래에 <code>.ts</code> 파일로 관리된다. 에이전트 생성 검증, 템플릿 발행, 프로젝트 스캐폴딩 등 워크스페이스 인프라를 자동화하는 실행 가능한 코드다. 스크립트의 생애주기는 다음 다섯 단계로 구성된다.</p>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+  <div st<svg role="img" aria-label="Variant promotion flow diagram" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">in:20px 0 28px;">
     <svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
         <marker id="arrowSc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -377,8 +376,6 @@
   </ul>
   <p>비유하면 생애주기는 "지하철 노선도"이고 상태는 "현재 열차가 어느 역에 있는지"를 보여주는 실시간 표시판이다. 열차가 어디로 가야 하는지(노선)는 고정되어 있지만, 지금 어디에 있는지(역)는 시시각각 변한다.</p>
   <div class="note">워크플로우 실행 차원의 상태 — 예를 들어 PM이 <a href="../workflows/09_Workflows_Chapter.html">9장</a>에서 정의하는 Phase Pipeline(Phase 0: 요청 수신 → Phase 1: 설계 → … → Phase 6: 동기화 완료) — 은 개별 구성요소의 <code>status</code> 필드와는 또 다른 차원의 상태다. 전자는 "작업이 어느 단계에 있는가"이고, 후자는 "이 구성요소 자체가 생애주기의 어디에 있는가"이다.</div>
-
-  <p>에이전트·스킬·스크립트의 생애주기는 각각 독립적으로 정의되어 있지만, 실제 워크스페이스에서는 밀접하게 연결되어 있다.</p>
 
   <p>에이전트·스킬·스크립트의 생애주기는 각각 독립적으로 정의되어 있지만, 실제 워크스페이스에서는 밀접하게 연결되어 있다.</p>
 

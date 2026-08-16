@@ -1,4 +1,4 @@
-// scripts/co-deck/handbook/nav-utils.ts
+// scripts/nav-utils.ts
 // HTML parsing helpers for handbook validation — zero external deps.
 // This file is the canonical source of the handbook validation toolkit.
 // The two handbook repos (intro-to-ai-harness, multi-agent-harness-handbook)

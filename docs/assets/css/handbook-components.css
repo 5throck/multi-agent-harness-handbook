@@ -812,15 +812,18 @@ pre.code-block {
 .warning-box::before { content: "⚠️ "; font-weight: 700; }
 
 .prompt-box {
+  position: relative;
   background: var(--bg-success);
   border-left: 4px solid var(--accent-green);
   padding: 16px 20px;
+  padding-top: 36px;
   border-radius: var(--radius-md);
   margin: 20px 0;
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
 }
 .prompt-box::before { content: "✍️ "; font-weight: 700; }
+.prompt-box > .copy-btn { top: 8px; right: 8px; }
 .prompt-text { font-family: var(--font-mono); font-size: var(--font-size-small); margin-top: 8px; }
 
 /* ==========================================================================

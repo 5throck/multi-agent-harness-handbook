@@ -329,10 +329,11 @@ function checkInstructorGuide(html: string, file: string): AuthoringIssue[] {
 // --- Main ---
 
 const project = resolve(getArg("--project", "."));
+const docsDirFlag = getArg("--docs-dir", "");
 const lang = getArg("--lang", "ko");
 const examplesDir = getArg("--examples-dir", "");
 
-const docsDir = join(project, "docs");
+const docsDir = docsDirFlag ? resolve(docsDirFlag) : join(project, "docs");
 const htmlFiles = examplesDir
   ? findAllHtmlFiles(examplesDir)
   : findAllHtmlFiles(docsDir);

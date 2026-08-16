@@ -28,7 +28,7 @@
   <a href="#s1">Qué es el repositorio</a>
   <a href="#s1b">La arquitectura general de un vistazo</a>
   <a href="#s2">Los cuatro archivos principales</a>
-  <a href="#s3">Plantillas y las 9 variantes</a>
+  <a href="#s3">Plantillas y las 10 variantes</a>
   <a href="#s4">Lista de verificación de inicio de sesión y andamiaje</a>
   <div class="nav-section">Otros capítulos</div>
   <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Barreras de seguridad y el modelo de permisos</a>
@@ -48,7 +48,7 @@
       <li>Qué es ai-workspace-standards y por qué debe clonarse como la "raíz del espacio de trabajo"</li>
       <li>La estructura general de directorios del repositorio y el orden real en que una sesión lee y ejecuta archivos (el flujo de ejecución)</li>
       <li>Los roles de los cuatro archivos principales: CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md</li>
-      <li>Para qué dominio está diseñada cada una de las 9 variantes bajo templates/</li>
+      <li>Para qué dominio está diseñada cada una de las 10 variantes bajo templates/</li>
       <li>Una imagen conceptual de la lista de verificación de inicio de sesión y el flujo de andamiaje de new-project.ts</li>
     </ul>
   </div>
@@ -132,7 +132,7 @@
   <p>Tracemos esta relación usando una regla concreta como ejemplo. Supongamos que hay una regla que dice "los títulos y cuerpos de los PR deben estar escritos en inglés." Esta regla se escribe exactamente una vez, en <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> define <em>cómo</em> hacer cumplir esta regla en Claude Code — por ejemplo, especificando que el filtro de idioma del comando <code>/sync</code> (language-guard.ts) verifique automáticamente esta regla antes de cada commit. <code>GEMINI.md</code> define cómo se hace cumplir la misma regla en el pipeline del lado de Antigravity. Y quién realiza realmente esta verificación — qué agente es responsable de este filtro — se registra en el registro de <code>AGENTS.md</code>. Una sola regla aparece en los cuatro archivos, cada uno desde un ángulo diferente. Esto no es duplicación; son tres respuestas diferentes a las tres preguntas de "qué, cómo y quién."</p>
   <p>Debajo de los cuatro archivos principales se encuentran carpetas que contienen activos ejecutables. Los comandos y habilidades se dividen en tres ubicaciones: <code>.claude/</code> es solo para Claude Code/App, <code>.gemini/</code> es solo para Antigravity CLI/Escritorio, y <code>.agents/</code> contiene comandos y habilidades <strong>neutrales a la herramienta (neutrales al motor)</strong> no vinculados a una sola herramienta. Por ejemplo, comandos de barra como <code>/sync</code>/<code>/meeting</code> o habilidades como <code>create-variant</code>/<code>audit-workspace</code> existen bajo el mismo nombre en las tres carpetas, pero cada implementación difiere ligeramente para coincidir con las convenciones de herramienta de su propia plataforma (sintaxis de la herramienta <code>Agent</code> de Claude Code, enfoque de subagente de Antigravity, etc.). Las herramientas externas que admiten el estándar AGENTS.md (Codex, Cursor, etc.) harán referencia a la carpeta <code>.agents/</code> cuando abran este repositorio.</p>
 
-  <h2 id="s3">Plantillas y las 9 variantes</h2>
+  <h2 id="s3">Plantillas y las 10 variantes</h2>
   <p>El directorio <code>templates/</code> es una colección de "variantes" de plantillas de proyecto con control de versiones. Cada variante contiene una configuración completa de equipo multiagente para un dominio específico, incluyendo un PM, agentes especialistas y un pipeline de gobernanza por etapas. Las variantes que proporciona el repositorio son las siguientes.</p>
 
   <div class="variant-list">

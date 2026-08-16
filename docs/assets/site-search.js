@@ -40,6 +40,7 @@
     { path: 'lecture-guide/00_Course_Overview.html', title: '강의 소개', lang: 'ko' },
     { path: 'lecture-guide/00_Lecture_Guide.html', title: '강의 진행 가이드', lang: 'ko' },
     /* ── English ── */
+    { path: 'intro/00_Prerequisite_Bridge_en.html', title: 'Guide for Graduates · Skip Map for Introductory Course Graduates', lang: 'en' },
     { path: 'intro/01_Why_AI_Chapter_en.html', title: 'Chapter 1 · Work Transformation in the AI Era', lang: 'en' },
     { path: 'concepts/02_Concepts_Chapter_en.html', title: 'Chapter 2 · Harness Engineering and Multi-Agent Team Concepts', lang: 'en' },
     { path: 'guardrails/03_Guardrails_Chapter_en.html', title: 'Chapter 3 · Guardrails and Permission Models', lang: 'en' },
@@ -71,6 +72,7 @@
     { path: 'lecture-guide/00_Course_Overview_en.html', title: 'Course Overview · Multi-Agent Team Harness Engineering Handbook', lang: 'en' },
     { path: 'lecture-guide/00_Lecture_Guide_en.html', title: 'Lecture Guide · Multi-Agent Team Harness Engineering Handbook', lang: 'en' },
     /* ── Japanese ── */
+    { path: 'intro/00_Prerequisite_Bridge_ja.html', title: '修了者ガイド · 入門コース修了者のためのスキップマップ', lang: 'ja' },
     { path: 'intro/01_Why_AI_Chapter_ja.html', title: '第1章 · AI時代の業務革新', lang: 'ja' },
     { path: 'concepts/02_Concepts_Chapter_ja.html', title: '第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念', lang: 'ja' },
     { path: 'guardrails/03_Guardrails_Chapter_ja.html', title: '第3章 · ガードレールと権限モデル', lang: 'ja' },
@@ -102,6 +104,7 @@
     { path: 'lecture-guide/00_Course_Overview_ja.html', title: '講義紹介・マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック', lang: 'ja' },
     { path: 'lecture-guide/00_Lecture_Guide_ja.html', title: '講義進行ガイド · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
     /* ── Spanish ── */
+    { path: 'intro/00_Prerequisite_Bridge_es.html', title: 'Guía para Egresados · Mapa de Omisión para Egresados del Curso Introductorio', lang: 'es' },
     { path: 'intro/01_Why_AI_Chapter_es.html', title: 'Capítulo 1 · Transformación del Trabajo en la Era de la IA', lang: 'es' },
     { path: 'concepts/02_Concepts_Chapter_es.html', title: 'Capítulo 2 · Ingeniería de Harness y Conceptos de Equipos Multiagente', lang: 'es' },
     { path: 'guardrails/03_Guardrails_Chapter_es.html', title: 'Capítulo 3 · Guardrails y Modelos de Permisos', lang: 'es' },

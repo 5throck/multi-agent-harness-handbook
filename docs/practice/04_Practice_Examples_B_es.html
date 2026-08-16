@@ -131,7 +131,7 @@
   </div>
 
   <h3>Instalación en Windows</h3>
-  <p>Dado que la notación de rutas de este manual está basada en Windows, los usuarios de Windows deben descargar <a href="../setup/upstream/setup-windows.ps1">setup-windows.ps1</a>, colocarlo en una carpeta de práctica dedicada (por ejemplo, <code>harness-lab/setup/</code>), abrir PowerShell <strong>como administrador</strong> y ejecutar el siguiente comando.</p>
+  <p>Dado que la notación de rutas de este manual está basada en Windows, los usuarios de Windows deben clonar el repositorio <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> con el comando a continuación, abrir PowerShell <strong>como administrador</strong> y ejecutar los comandos siguientes.</p>
   <div class="tip-box">
     <strong>Cómo abrir PowerShell como administrador</strong><br>
     ① Abra el menú Inicio y busque <code>PowerShell</code>.<br>
@@ -141,7 +141,8 @@
     Si la barra de título muestra algo como <code>Administrador: Windows PowerShell</code> con "Administrador" adjunto, se abrió correctamente. Algunos pasos, como la instalación de winget, pueden generar errores u omitirse silenciosamente sin privilegios de administrador.
   </div>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd ./setup
 .\setup-windows.ps1
 # Indicadores opcionales: -WSL2, -WezTerm, -Docker, -Force (reinstalar también las herramientas ya instaladas)</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
@@ -149,20 +150,22 @@
   <p>Después de que el script termine, cierre y vuelva a abrir completamente su terminal para que los cambios en PATH surtan efecto.</p>
 
   <h3>Instalación en macOS / Linux</h3>
-  <p>En macOS, descargue y use <a href="../setup/upstream/setup-mac.sh">setup-mac.sh</a>; en Linux, use <a href="../setup/upstream/setup-linux.sh">setup-linux.sh</a>. Ambos admiten los indicadores opcionales <code>--wezterm</code> y <code>--docker</code>.</p>
+  <p>Clone el repositorio <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> con el comando a continuación. En macOS, ejecute setup-mac.sh; en Linux, ejecute setup-linux.sh. Ambos admiten los indicadores opcionales <code>--wezterm</code> y <code>--docker</code>.</p>
   <div style="position:relative">
-  <pre class="code-block"># macOS
-cd ./setup && bash upstream/setup-mac.sh
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+
+# macOS
+cd ./setup && bash setup-mac.sh
 
 # Linux
-cd ./setup && bash upstream/setup-linux.sh</pre>
+cd ./setup && bash setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
 
   <h3>Verificación de la instalación</h3>
-  <p>Independientemente del sistema operativo, ejecutar <a href="../setup/upstream/setup-common.ts">setup-common.ts</a> con <code>bun</code> imprime una tabla de verificación que muestra el estado de su instalación. Si cada elemento muestra ✅, está listo para continuar con la práctica a continuación.</p>
+  <p>Independientemente del sistema operativo, ejecutar setup-common.ts con <code>bun</code> imprime una tabla de verificación que muestra el estado de su instalación. Si cada elemento muestra ✅, está listo para continuar con la práctica a continuación.</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div>
 

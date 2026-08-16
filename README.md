@@ -10,12 +10,12 @@ Welcome to the **Multi-Agent Harness Engineering Handbook**, an AI Workspace edu
 > **Note:** The core online handbook site is primarily provided in Korean with multi-language navigation. Language-specific README files help guide global participants and contributors.
 
 ## 💻 Local Setup
-The workshop install scripts under `docs/setup/upstream/` are a [git submodule](https://github.com/5throck/setup), not vendored copies — clone with submodules included, or initialize them after a normal clone:
+The workshop install scripts live in a separate repository, [5throck/setup](https://github.com/5throck/setup) — clone it directly rather than vendoring a copy here:
 ```bash
-git clone --recurse-submodules https://github.com/5throck/multi-agent-harness-handbook.git
-# or, after a normal clone:
-git submodule update --init
+git clone https://github.com/5throck/setup.git
+cd setup
 ```
+See the [Setup Guide](https://5throck.github.io/multi-agent-harness-handbook/setup/SETUP_en.html) for the full walkthrough.
 
 ## 📚 Curriculum / Contents
 - **Ch. 1 · Introduction** — Why AI agent teams & modern AI workspace paradigms

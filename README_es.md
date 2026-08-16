@@ -9,12 +9,12 @@ Cubre desde los conceptos fundamentales de la ingeniería de harness, práctica 
 👉 **[Ver el Sitio Web del Manual](https://5throck.github.io/multi-agent-harness-handbook/)**
 
 ## 💻 Configuración Local
-Los scripts de instalación del taller en `docs/setup/upstream/` son un [git submodule](https://github.com/5throck/setup), no copias incluidas directamente — clona con los submódulos incluidos, o inicialízalos después de un clon normal:
+Los scripts de instalación del taller se mantienen en un repositorio aparte, [5throck/setup](https://github.com/5throck/setup) — clónalo directamente en lugar de una copia incluida aquí:
 ```bash
-git clone --recurse-submodules https://github.com/5throck/multi-agent-harness-handbook.git
-# o, después de un clon normal:
-git submodule update --init
+git clone https://github.com/5throck/setup.git
+cd setup
 ```
+Consulta la [Guía de Instalación](https://5throck.github.io/multi-agent-harness-handbook/setup/SETUP_es.html) para la guía completa.
 
 ## 📚 Currículo / Contenido
 - **Cap. 1 · Introducción** — Por qué equipos de agentes de IA y paradigmas de AI Workspace

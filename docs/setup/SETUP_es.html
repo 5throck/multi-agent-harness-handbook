@@ -21,6 +21,7 @@
   <a href="../index_es.html" class="nav-home">← Inicio del manual</a>
   <div class="nav-title">Guía de configuración del entorno del taller</div>
   <a href="#flow">Flujo de configuración</a>
+  <a href="#step0">Paso 0 — Clonar el Repositorio de Scripts</a>
   <a href="#step1">Paso 1 — Lista de verificación</a>
   <a href="#step2">Paso 2 — Scripts específicos del sistema operativo</a>
   <a href="#step3">Paso 3 — Verificar la instalación</a>
@@ -65,9 +66,17 @@
    └─ Mark  (visor de Markdown)
 
 6. Verificación final ✅
-   └─ bun upstream/setup-common.ts</pre>
+   └─ bun setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
 </div></div>
+
+  <h2 id="step0">Paso 0 — Clonar el Repositorio de Scripts</h2>
+  <p>Los scripts de instalación del taller se mantienen en un <a href="https://github.com/5throck/setup" target="_blank">repositorio aparte (5throck/setup)</a>. Clónalo con el siguiente comando, y luego ejecuta el resto de comandos desde dentro de la carpeta <code>setup/</code> clonada.</p>
+  <div style="position:relative">
+    <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd setup</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  </div>
 
   <h2 id="step1">Paso 1 — Complete la lista de verificación</h2>
   <p>Antes de ejecutar el script, lea y complete primero la <a href="SETUP_CHECKLIST_es.html">Lista de verificación de preinstalación</a>.</p>
@@ -83,25 +92,25 @@
 
   <h3>macOS</h3>
   <div style="position:relative">
-    <pre class="code-block">bash upstream/setup-mac.sh
+    <pre class="code-block">bash setup-mac.sh
 # Opcional: también instalar WezTerm (terminal con aceleración GPU)
-bash upstream/setup-mac.sh --wezterm
+bash setup-mac.sh --wezterm
 # Opcional: también instalar Docker Desktop
-bash upstream/setup-mac.sh --docker
+bash setup-mac.sh --docker
 # Ambos:
-bash upstream/setup-mac.sh --wezterm --docker</pre>
+bash setup-mac.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
   <div style="position:relative">
-    <pre class="code-block">bash upstream/setup-linux.sh
+    <pre class="code-block">bash setup-linux.sh
 # Opcional: también instalar WezTerm
-bash upstream/setup-linux.sh --wezterm
+bash setup-linux.sh --wezterm
 # Opcional: también instalar Docker
-bash upstream/setup-linux.sh --docker
+bash setup-linux.sh --docker
 # Ambos:
-bash upstream/setup-linux.sh --wezterm --docker</pre>
+bash setup-linux.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
 
@@ -109,21 +118,21 @@ bash upstream/setup-linux.sh --wezterm --docker</pre>
   <p><strong>Ejecute PowerShell como administrador</strong>, luego ingrese el comando a continuación.</p>
   <div style="position:relative">
     <pre class="code-block"># Ejecución predeterminada (el script configura la política de ejecución automáticamente)
-.\upstream\setup-windows.ps1
+.\setup-windows.ps1
 
 # Opciones:
-.\upstream\setup-windows.ps1 -WSL2             # También instalar WSL2 (requiere reinicio)
-.\upstream\setup-windows.ps1 -WezTerm          # También instalar WezTerm
-.\upstream\setup-windows.ps1 -Docker           # También instalar Docker Desktop
-.\upstream\setup-windows.ps1 -Force            # Reinstalar todas las herramientas, incluso las ya instaladas
-.\upstream\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Instalar todos los complementos opcionales</pre>
+.\setup-windows.ps1 -WSL2             # También instalar WSL2 (requiere reinicio)
+.\setup-windows.ps1 -WezTerm          # También instalar WezTerm
+.\setup-windows.ps1 -Docker           # También instalar Docker Desktop
+.\setup-windows.ps1 -Force            # Reinstalar todas las herramientas, incluso las ya instaladas
+.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Instalar todos los complementos opcionales</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
   <div class="note"><strong>Después de ejecutar</strong>: cierre y vuelva a abrir su terminal para aplicar los cambios en PATH.</div>
 
   <h2 id="step3">Paso 3 — Verificar la instalación</h2>
   <div style="position:relative">
-    <pre class="code-block">bun upstream/setup-common.ts</pre>
+    <pre class="code-block">bun setup-common.ts</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
   </div>
   <p>Esto imprime una tabla de verificación de las herramientas instaladas. <strong>Está listo una vez que cada elemento muestre ✅.</strong></p>
@@ -171,7 +180,7 @@ bash upstream/setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>WezTerm</strong></td><td>Con aceleración GPU, multiplexor integrado, multiplataforma — recomendado para usuarios avanzados</td><td><code>winget install wez.wezterm</code></td></tr>
     </tbody>
   </table>
-  <p style="font-size:13px;color:var(--text-dim);">Instalación automática de WezTerm: <code>.\upstream\setup-windows.ps1 -WezTerm</code></p>
+  <p style="font-size:13px;color:var(--text-dim);">Instalación automática de WezTerm: <code>.\setup-windows.ps1 -WezTerm</code></p>
 
   <h2 id="trouble">Solución de problemas</h2>
 
@@ -201,7 +210,7 @@ bash upstream/setup-linux.sh --wezterm --docker</pre>
   <p>Los registros de ejecución del script de Windows se guardan automáticamente en <code>%USERPROFILE%\workshop-setup-logs\</code>.</p>
 
   <hr>
-  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Ejecute <code>bun upstream/setup-common.ts</code>, y una vez que cada elemento muestre ✅, el entorno del taller está listo.</p>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Ejecute <code>bun setup-common.ts</code>, y una vez que cada elemento muestre ✅, el entorno del taller está listo.</p>
    <footer>
     Basado en Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · Material educativo en español<br>
     Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·

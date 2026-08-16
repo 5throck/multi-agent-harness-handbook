@@ -21,6 +21,7 @@
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
   <div class="nav-title">Workshop Environment Setup Guide</div>
   <a href="#flow">Setup Flow</a>
+  <a href="#step0">Step 0 — Clone the Setup Scripts Repo</a>
   <a href="#step1">Step 1 — Checklist</a>
   <a href="#step2">Step 2 — OS-Specific Scripts</a>
   <a href="#step3">Step 3 — Verify Installation</a>
@@ -65,9 +66,17 @@
    └─ Mark  (Markdown viewer)
 
 6. Final verification ✅
-   └─ bun upstream/setup-common.ts</pre>
+   └─ bun setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 </div></div>
+
+  <h2 id="step0">Step 0 — Clone the Setup Scripts Repo</h2>
+  <p>The workshop install scripts are maintained in a <a href="https://github.com/5throck/setup" target="_blank">separate repository (5throck/setup)</a>. Clone it with the command below, then run every command that follows from inside the cloned <code>setup/</code> folder.</p>
+  <div style="position:relative">
+    <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd setup</pre>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  </div>
 
   <h2 id="step1">Step 1 — Complete the Checklist</h2>
   <p>Before running the script, first read and complete the <a href="SETUP_CHECKLIST_en.html">Pre-Installation Checklist</a>.</p>
@@ -83,25 +92,25 @@
 
   <h3>macOS</h3>
   <div style="position:relative">
-    <pre class="code-block">bash upstream/setup-mac.sh
+    <pre class="code-block">bash setup-mac.sh
 # Optional: also install WezTerm (GPU-accelerated terminal)
-bash upstream/setup-mac.sh --wezterm
+bash setup-mac.sh --wezterm
 # Optional: also install Docker Desktop
-bash upstream/setup-mac.sh --docker
+bash setup-mac.sh --docker
 # Both:
-bash upstream/setup-mac.sh --wezterm --docker</pre>
+bash setup-mac.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
   <div style="position:relative">
-    <pre class="code-block">bash upstream/setup-linux.sh
+    <pre class="code-block">bash setup-linux.sh
 # Optional: also install WezTerm
-bash upstream/setup-linux.sh --wezterm
+bash setup-linux.sh --wezterm
 # Optional: also install Docker
-bash upstream/setup-linux.sh --docker
+bash setup-linux.sh --docker
 # Both:
-bash upstream/setup-linux.sh --wezterm --docker</pre>
+bash setup-linux.sh --wezterm --docker</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
 
@@ -109,21 +118,21 @@ bash upstream/setup-linux.sh --wezterm --docker</pre>
   <p><strong>Run PowerShell as Administrator</strong>, then enter the command below.</p>
   <div style="position:relative">
     <pre class="code-block"># Default run (the script sets the Execution Policy automatically)
-.\upstream\setup-windows.ps1
+.\setup-windows.ps1
 
 # Options:
-.\upstream\setup-windows.ps1 -WSL2             # Also install WSL2 (restart required)
-.\upstream\setup-windows.ps1 -WezTerm          # Also install WezTerm
-.\upstream\setup-windows.ps1 -Docker           # Also install Docker Desktop
-.\upstream\setup-windows.ps1 -Force            # Reinstall all tools, even already-installed ones
-.\upstream\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Install all optional extras</pre>
+.\setup-windows.ps1 -WSL2             # Also install WSL2 (restart required)
+.\setup-windows.ps1 -WezTerm          # Also install WezTerm
+.\setup-windows.ps1 -Docker           # Also install Docker Desktop
+.\setup-windows.ps1 -Force            # Reinstall all tools, even already-installed ones
+.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Install all optional extras</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
   <div class="note"><strong>After running</strong>: close and reopen your terminal to apply PATH changes.</div>
 
   <h2 id="step3">Step 3 — Verify Installation</h2>
   <div style="position:relative">
-    <pre class="code-block">bun upstream/setup-common.ts</pre>
+    <pre class="code-block">bun setup-common.ts</pre>
     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
   </div>
   <p>This prints a verification table of installed tools. <strong>You're ready once every item shows ✅.</strong></p>
@@ -171,7 +180,7 @@ bash upstream/setup-linux.sh --wezterm --docker</pre>
       <tr><td><strong>WezTerm</strong></td><td>GPU-accelerated, built-in multiplexer, cross-platform — recommended for power users</td><td><code>winget install wez.wezterm</code></td></tr>
     </tbody>
   </table>
-  <p style="font-size:13px;color:var(--text-dim);">Automatic WezTerm install: <code>.\upstream\setup-windows.ps1 -WezTerm</code></p>
+  <p style="font-size:13px;color:var(--text-dim);">Automatic WezTerm install: <code>.\setup-windows.ps1 -WezTerm</code></p>
 
   <h2 id="trouble">Troubleshooting</h2>
 
@@ -201,7 +210,7 @@ bash upstream/setup-linux.sh --wezterm --docker</pre>
   <p>Windows script run logs are automatically saved to <code>%USERPROFILE%\workshop-setup-logs\</code>.</p>
 
   <hr>
-  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Run <code>bun upstream/setup-common.ts</code>, and once every item shows ✅, the workshop environment is ready.</p>
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;">Run <code>bun setup-common.ts</code>, and once every item shows ✅, the workshop environment is ready.</p>
    <footer>
     Based on Claude Code 2026-07 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·

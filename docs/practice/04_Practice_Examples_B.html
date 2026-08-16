@@ -131,7 +131,7 @@
   </div>
 
   <h3>Windows에서 설치하기</h3>
-  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 <a href="../setup/upstream/setup-windows.ps1">setup-windows.ps1</a>을 내려받아 실습 전용 폴더(예: <code>harness-lab/setup/</code>)에 두고, PowerShell을 <strong>관리자 권한으로</strong> 실행한 뒤 아래 명령을 돌린다.</p>
+  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 아래 명령으로 <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> 저장소를 클론한 뒤, PowerShell을 <strong>관리자 권한으로</strong> 실행해서 이어지는 명령을 돌린다.</p>
   <div class="tip-box">
     <strong>PowerShell을 관리자 권한으로 여는 법</strong><br>
     ① 시작 메뉴를 열고 <code>PowerShell</code>을 검색한다.<br>
@@ -141,7 +141,8 @@
     창 제목 표시줄에 <code>관리자: Windows PowerShell</code>처럼 "관리자"가 붙어 있으면 제대로 연 것이다. winget 설치 등 일부 단계는 관리자 권한 없이 실행하면 오류가 나거나 조용히 건너뛰어질 수 있다.
   </div>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd ./setup
 .\setup-windows.ps1
 # 선택 옵션: -WSL2, -WezTerm, -Docker, -Force (이미 설치된 도구도 재설치)</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
@@ -149,20 +150,22 @@
   <p>스크립트가 끝나면 터미널을 완전히 닫았다가 다시 열어야 PATH 변경 사항이 적용된다.</p>
 
   <h3>macOS / Linux에서 설치하기</h3>
-  <p>macOS는 <a href="../setup/upstream/setup-mac.sh">setup-mac.sh</a>, Linux는 <a href="../setup/upstream/setup-linux.sh">setup-linux.sh</a>를 내려받아 사용한다. 둘 다 <code>--wezterm</code>, <code>--docker</code> 선택 플래그를 지원한다.</p>
+  <p>아래 명령으로 <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> 저장소를 클론해서 사용한다. macOS는 setup-mac.sh, Linux는 setup-linux.sh를 실행하며, 둘 다 <code>--wezterm</code>, <code>--docker</code> 선택 플래그를 지원한다.</p>
   <div style="position:relative">
-  <pre class="code-block"># macOS
-cd ./setup && bash upstream/setup-mac.sh
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+
+# macOS
+cd ./setup && bash setup-mac.sh
 
 # Linux
-cd ./setup && bash upstream/setup-linux.sh</pre>
+cd ./setup && bash setup-linux.sh</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
 </div>
 
   <h3>설치 검증하기</h3>
-  <p>운영체제와 무관하게 <a href="../setup/upstream/setup-common.ts">setup-common.ts</a>를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
+  <p>운영체제와 무관하게 setup-common.ts를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
   <div style="position:relative">
-  <pre class="code-block">cd ./setup && bun upstream/setup-common.ts</pre>
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>
 </div>
 

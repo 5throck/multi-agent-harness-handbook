@@ -9,12 +9,12 @@
 👉 **[ハンドブック公式サイトを見る](https://5throck.github.io/multi-agent-harness-handbook/)**
 
 ## 💻 ローカル環境セットアップ
-`docs/setup/upstream/` にあるワークショップのインストールスクリプトは直接コピーしたファイルではなく [git submodule](https://github.com/5throck/setup) です。クローン時にサブモジュールを含めて取得するか、通常クローン後に以下のコマンドで初期化してください。
+ワークショップのインストールスクリプトは別リポジトリ [5throck/setup](https://github.com/5throck/setup) で管理されています。このリポジトリ内にコピーを置くのではなく、直接クローンして使用してください。
 ```bash
-git clone --recurse-submodules https://github.com/5throck/multi-agent-harness-handbook.git
-# 通常クローン済みの場合:
-git submodule update --init
+git clone https://github.com/5throck/setup.git
+cd setup
 ```
+詳しくは[セットアップガイド](https://5throck.github.io/multi-agent-harness-handbook/setup/SETUP_ja.html)を参照してください。
 
 ## 📚 カリキュラム / 目次
 - **第1章 · 導入** — なぜAIエージェントチームなのか＆現代のAIワークスペース

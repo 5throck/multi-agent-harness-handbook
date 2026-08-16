@@ -90,9 +90,16 @@ if (checks.includes("tables")) {
 // authoring / doctor (CLI-oriented tools — run as subprocesses)
 function runSubprocess(scriptName: string, label: string): void {
   const scriptPath = join(import.meta.dirname, scriptName);
-  const r = spawnSync(process.execPath, [scriptPath, "--project", resolve(docsDir, "..")], {
-    encoding: "utf-8",
-  });
+  let r: ReturnType<typeof spawnSync>;
+  try {
+    r = spawnSync(process.execPath, [scriptPath, "--project", resolve(docsDir, "..")], {
+      encoding: "utf-8",
+    });
+  } catch (e: unknown) {
+    const err = e as { message?: string };
+    addReport(label, [{ detail: `Failed to run ${scriptName}: ${err.message || e}` }]);
+    return;
+  }
   const output = `${r.stdout || ""}${r.stderr || ""}`.trim();
   if (r.status !== 0) {
     const lines = output.split("\n").filter((l) => l.trim().length > 0);

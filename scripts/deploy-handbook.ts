@@ -218,13 +218,14 @@ const scanPatterns = [
   "credentials",
 ];
 try {
-  const scanCmd = `grep -rniE "(${scanPatterns.join("|")})\\s*[=:]\\s*['\"]?[^'\"\\s]{8,}" docs/`;
-  run(scanCmd, { cwd: handbookDir, silent: true });
+  // Use grep via execFileSync for safe argument passing (no shell interpolation)
+  const grepArgs = ["-rniE", `(${scanPatterns.join("|")})\\s*[=:]\\s*['\"]?[^'\"\\s]{8,}`, "docs/"];
+  runExec("grep", grepArgs, { cwd: handbookDir, silent: true });
   fatal("Potential secrets detected in docs/ — aborting deployment. Review and remove before retry.");
 } catch (e: unknown) {
-  const err = e as { message?: string };
-  // grep returns non-zero when no matches — that's what we want
-  if (err.message?.includes("Command failed") || err.message?.includes("grep")) {
+  const err = e as { message?: string; status?: number };
+  // grep returns non-zero (exit code 1) when no matches — that's what we want
+  if (err.message?.includes("Command failed") || err.message?.includes("grep") || (err.status != null && err.status !== 0)) {
     log("✅", "No secrets detected");
   } else {
     fatal(`Secret scan error: ${err.message || e}`);

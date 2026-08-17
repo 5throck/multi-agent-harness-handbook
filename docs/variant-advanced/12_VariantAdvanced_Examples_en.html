@@ -69,11 +69,11 @@
  <article class="reading">
   <div class="chapter-eyebrow">Chapter 12</div>
   <h1>Hands-on Examples for New Variant Promotion</h1>
-  <p class="subtitle">A hands-on guide comparing the two paths side by side, using the co-marketing prototype as the baseline &nbsp;|&nbsp; <a href="11_VariantAdvanced_Chapter_en.html">← Back to the reference document</a></p>
+  <p class="subtitle">A hands-on guide comparing the two paths side by side, using the co-retail prototype as the baseline &nbsp;|&nbsp; <a href="11_VariantAdvanced_Chapter_en.html">← Back to the reference document</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">Target Repository</span><span class="vvalue">ai-workspace-standards, main branch</span></div>
-    <div class="version-row"><span class="vlabel">Purpose of This File</span><span class="vvalue">Hands-on practice applying the promotion (Phase B) concept from Chapter 11 to the co-marketing prototype created in Chapter 6 §2</span></div>
+    <div class="version-row"><span class="vlabel">Purpose of This File</span><span class="vvalue">Hands-on practice applying the promotion (Phase B) concept from Chapter 11 to the co-retail prototype created in Chapter 6 §2</span></div>
     <div class="version-row"><span class="vlabel">Reference Document</span><span class="vvalue"><a href="11_VariantAdvanced_Chapter_en.html">11_VariantAdvanced_Chapter_en.html</a> — linked from each scenario</span></div>
     <div class="version-row"><span class="vlabel">Written On</span><span class="vvalue">July 14, 2026</span></div>
   </div>
@@ -94,7 +94,7 @@
     <div class="card-body">
 
       <div class="situation">
-        In Chapter 6 §2, you scaffolded a project from <code>templates/co-work/</code> and also created a Phase A prototype at <code>Projects/co-marketing/</code>. Now you want to place the two directories side by side and check exactly which files exist in the official template but not in the prototype. This assumes you're continuing inside the practice workspace (<code>ai-workspace-standards-demo</code>).
+        In Chapter 6 §2, you scaffolded a project from <code>templates/co-work/</code> and also created a Phase A prototype at <code>Projects/co-retail/</code>. Now you want to place the two directories side by side and check exactly which files exist in the official template but not in the prototype. This assumes you're continuing inside the practice workspace (<code>ai-workspace-standards-demo</code>).
       </div>
 
       <div class="cmd-list">
@@ -117,12 +117,12 @@
             <!-- Title -->
             <text x="340" y="22" text-anchor="middle" font-size="12" fill="var(--text)" font-weight="700">Official Template vs. Phase A Prototype Structure Comparison</text>
 
-            <!-- Left Panel: templates/co-marketing/ -->
+            <!-- Left Panel: templates/co-retail/ -->
             <rect x="20" y="38" width="290" height="258" rx="8" fill="var(--bg-info)" stroke="var(--badge-blue-border)" stroke-width="1.5"/>
             <!-- Header -->
             <rect x="20" y="38" width="290" height="30" rx="8" fill="var(--accent)"/>
             <rect x="20" y="56" width="290" height="12" fill="var(--accent)"/>
-            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">templates/co-marketing/ (Official Template)</text>
+            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">templates/co-retail/ (Official Template)</text>
             <!-- Status badge -->
             <rect x="230" y="42" width="72" height="18" rx="9" fill="var(--accent-green)"/>
             <text x="266" y="55" text-anchor="middle" font-size="9" fill="var(--text-inverse)" font-weight="700">Verified</text>
@@ -161,12 +161,12 @@
             <polygon points="320,166 315,162 315,170" fill="var(--border)"/>
             <polygon points="360,166 365,162 365,170" fill="var(--border)"/>
 
-            <!-- Right Panel: Projects/co-marketing/ -->
+            <!-- Right Panel: Projects/co-retail/ -->
             <rect x="370" y="38" width="290" height="258" rx="8" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1.5"/>
             <!-- Header -->
             <rect x="370" y="38" width="290" height="30" rx="8" fill="var(--accent-amber)"/>
             <rect x="370" y="56" width="290" height="12" fill="var(--accent-amber)"/>
-            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">Projects/co-marketing/ (Phase A)</text>
+            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">Projects/co-retail/ (Phase A)</text>
             <!-- Status badge -->
             <rect x="580" y="42" width="72" height="18" rx="9" fill="var(--accent-red)"/>
             <text x="616" y="55" text-anchor="middle" font-size="9" fill="var(--text-inverse)" font-weight="700">In Progress</text>
@@ -207,9 +207,9 @@
         <li>
           <div class="step-content">
             <strong>Compare the two directory listings side by side</strong>
-            <p>Compare the top-level file listings of co-work, an official variant, and co-marketing, which is still in the prototype stage.</p>
+            <p>Compare the top-level file listings of co-work, an official variant, and co-retail, which is still in the prototype stage.</p>
             <div style="position:relative">
-              <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-marketing/)</pre>
+              <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-retail/)</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -222,9 +222,9 @@
               <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">Next, check the co-marketing prototype's folder listing to confirm the above files don't yet exist there.</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">Next, check the co-retail prototype's folder listing to confirm the above files don't yet exist there.</p>
             <div style="position:relative">
-              <pre class="code-block">ls Projects/co-marketing/</pre>
+              <pre class="code-block">ls Projects/co-retail/</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -246,7 +246,7 @@
   <div class="level-header" id="intermediate">
     <span class="badge badge-b">● Intermediate</span>
     <span class="level-title level-title-b">Daily Workflow</span>
-    <span class="level-desc">Fill out the checklist and manifests needed to make co-marketing eligible for promotion</span>
+    <span class="level-desc">Fill out the checklist and manifests needed to make co-retail eligible for promotion</span>
   </div>
 
   <div class="scenario-card" id="scenario-2">
@@ -258,7 +258,7 @@
     <div class="card-body">
 
       <div class="situation">
-        This is the situation of a practitioner trying to actually close the gaps identified in G-1. To make the co-marketing prototype eligible for official promotion, you need to satisfy the conditions in <code>PROMOTION_CHECKLIST.md</code> and fill in <code>skill_manifest</code>/<code>script_manifest</code> in <code>variant.json</code>.
+        This is the situation of a practitioner trying to actually close the gaps identified in G-1. To make the co-retail prototype eligible for official promotion, you need to satisfy the conditions in <code>PROMOTION_CHECKLIST.md</code> and fill in <code>skill_manifest</code>/<code>script_manifest</code> in <code>variant.json</code>.
       </div>
 
       <div class="cmd-list">
@@ -275,7 +275,7 @@
         <li>
           <div class="step-content">
             <strong>Review the PROMOTION_CHECKLIST.md items</strong>
-            <p>The checklist generally includes items like "required verification scripts pass," "platform parity secured," and "agent frontmatter is complete." For co-marketing, start by re-confirming whether <code>researcher.md</code> and <code>writer.md</code>, created in Chapter 6 §2, have all required fields. The two scripts check different things, so run each separately and check the results independently.</p>
+            <p>The checklist generally includes items like "required verification scripts pass," "platform parity secured," and "agent frontmatter is complete." For co-retail, start by re-confirming whether <code>researcher.md</code> and <code>writer.md</code>, created in Chapter 6 §2, have all required fields. The two scripts check different things, so run each separately and check the results independently.</p>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① Agent frontmatter completeness check</strong> — confirm that required fields such as name, tier, and handoff are all filled in.</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify</pre>
@@ -291,10 +291,10 @@
         <li>
           <div class="step-content">
             <strong>Define the manifests in variant.json</strong>
-            <p>Register the skills co-marketing uses (e.g., campaign-research, copywriting) in <code>skill_manifest.variant_specific</code>, and any variant-specific scripts in <code>script_manifest</code>.</p>
+            <p>Register the skills co-retail uses (e.g., campaign-research, copywriting) in <code>skill_manifest.variant_specific</code>, and any variant-specific scripts in <code>script_manifest</code>.</p>
             <div style="position:relative">
               <pre class="code-block">{
-  "name": "co-marketing",
+  "name": "co-retail",
   "inherits_common": "1.0.0",
   "skill_manifest": {
     "variant_specific": ["campaign-research", "copywriting"]
@@ -334,7 +334,7 @@
     <div class="card-body">
 
       <div class="situation">
-        An experienced practitioner who has finished D-1 and judged the prototype ready for promotion now actually runs <code>l3-to-variant-pipeline.ts</code> to convert co-marketing into an official <code>templates/co-marketing/</code>. From this point on, this is a hard-to-reverse operation that leaves traces in the actual git history.
+        An experienced practitioner who has finished D-1 and judged the prototype ready for promotion now actually runs <code>l3-to-variant-pipeline.ts</code> to convert co-retail into an official <code>templates/co-retail/</code>. From this point on, this is a hard-to-reverse operation that leaves traces in the actual git history.
       </div>
 
       <div class="note">
@@ -370,7 +370,7 @@
           <!-- Final variant -->
           <rect x="520" y="80" width="106" height="36" rx="8" fill="var(--accent-purple)"/>
           <text x="573" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">templates/</text>
-          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--badge-purple-bg)" text-anchor="middle">co-marketing/ (official)</text>
+          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--badge-purple-bg)" text-anchor="middle">co-retail/ (official)</text>
         </svg>
       </div>
 
@@ -393,7 +393,7 @@
             <strong>Run the promotion pipeline</strong>
             <p><code>--source</code> is the Phase A prototype path, <code>--variant</code> is the final variant name, and <code>--variantType</code> is the domain type.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-marketing --variant co-marketing --variantType marketing</pre>
+              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -403,8 +403,8 @@
             <strong>Manually confirm platform parity</strong>
             <p>Use diff to confirm that the commands/skills directory listings in <code>.claude/</code> and <code>.gemini/</code> correspond to each other.</p>
             <div style="position:relative">
-              <pre class="code-block">diff <(ls templates/co-marketing/.claude/commands/) <(ls templates/co-marketing/.gemini/commands/)
-diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.gemini/skills/)</pre>
+              <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
+diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -422,7 +422,7 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       </ol>
 
       <div class="flow-box">
-        The pipeline's reconcile step removes duplication by deleting files in <code>Projects/co-marketing/</code> that are identical to common files (L0/common). However, skill directories are intentionally excluded from this reconcile step, so after promotion you need to separately confirm the skills still remain in <code>.claude/skills/</code> and <code>.gemini/skills/</code>.
+        The pipeline's reconcile step removes duplication by deleting files in <code>Projects/co-retail/</code> that are identical to common files (L0/common). However, skill directories are intentionally excluded from this reconcile step, so after promotion you need to separately confirm the skills still remain in <code>.claude/skills/</code> and <code>.gemini/skills/</code>.
       </div>
 
       <div class="note">
@@ -460,11 +460,11 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       </div>
 
       <div class="tip-box">
-        If <code>_ORIGIN.md</code> has a "Manual Phase B Steps" section, it lists the domain-specific directories the pipeline couldn't move automatically — do a final check to make sure you've manually moved everything on that list. For example, co-marketing's <code>_ORIGIN.md</code> might read like this.
+        If <code>_ORIGIN.md</code> has a "Manual Phase B Steps" section, it lists the domain-specific directories the pipeline couldn't move automatically — do a final check to make sure you've manually moved everything on that list. For example, co-retail's <code>_ORIGIN.md</code> might read like this.
         <div style="position:relative;margin-top:10px;">
           <div style="position:relative">
   <pre class="code-block">## Manual Phase B Steps
-- [ ] Copy the brand-assets/ directory to templates/co-marketing/brand-assets/
+- [ ] Copy the brand-assets/ directory to templates/co-retail/brand-assets/
 - [ ] Carry over the campaign brief skeleton files under campaign-templates/ as-is
 - [ ] Reset the initial channel list in channel-configs.json to an empty array</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>

@@ -69,11 +69,11 @@
  <article class="reading">
   <div class="chapter-eyebrow">12장</div>
   <h1>신규 variant 승격 실습 예시</h1>
-  <p class="subtitle">co-marketing 프로토타입을 기준으로 두 경로를 손으로 비교해보는 실습 가이드 &nbsp;|&nbsp; <a href="11_VariantAdvanced_Chapter.html">← 레퍼런스 문서로 돌아가기</a></p>
+  <p class="subtitle">co-retail 프로토타입을 기준으로 두 경로를 손으로 비교해보는 실습 가이드 &nbsp;|&nbsp; <a href="11_VariantAdvanced_Chapter.html">← 레퍼런스 문서로 돌아가기</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">대상 저장소</span><span class="vvalue">ai-workspace-standards, main 브랜치</span></div>
-    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span class="vvalue">11장에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-marketing 프로토타입에 적용해보는 실습</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span class="vvalue">11장에서 설명한 승격(Phase B) 개념을 6장 §2에서 만든 co-retail 프로토타입에 적용해보는 실습</span></div>
     <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span class="vvalue"><a href="11_VariantAdvanced_Chapter.html">11_VariantAdvanced_Chapter.html</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
     <div class="version-row"><span class="vlabel">작성일</span><span class="vvalue">2026년 7월 14일</span></div>
   </div>
@@ -94,7 +94,7 @@
     <div class="card-body">
 
       <div class="situation">
-        6장 §2에서 <code>templates/co-work/</code>로 프로젝트를 스캐폴딩했고, <code>Projects/co-marketing/</code>에 Phase A 프로토타입도 만들었다. 두 디렉터리를 나란히 놓고 어떤 파일이 정식 템플릿에는 있는데 프로토타입에는 없는지 직접 확인해보려 한다. 연습용 워크스페이스(<code>ai-workspace-standards-demo</code>) 안에서 이어서 진행한다고 전제한다.
+        6장 §2에서 <code>templates/co-work/</code>로 프로젝트를 스캐폴딩했고, <code>Projects/co-retail/</code>에 Phase A 프로토타입도 만들었다. 두 디렉터리를 나란히 놓고 어떤 파일이 정식 템플릿에는 있는데 프로토타입에는 없는지 직접 확인해보려 한다. 연습용 워크스페이스(<code>ai-workspace-standards-demo</code>) 안에서 이어서 진행한다고 전제한다.
       </div>
 
       <div class="cmd-list">
@@ -117,12 +117,12 @@
             <!-- Title -->
             <text x="340" y="22" text-anchor="middle" font-size="12" fill="var(--text)" font-weight="700">정식 템플릿 vs Phase A 프로토타입 구조 비교</text>
 
-            <!-- Left Panel: templates/co-marketing/ -->
+            <!-- Left Panel: templates/co-retail/ -->
             <rect x="20" y="38" width="290" height="258" rx="8" fill="var(--bg-info)" stroke="var(--badge-blue-border)" stroke-width="1.5"/>
             <!-- Header -->
             <rect x="20" y="38" width="290" height="30" rx="8" fill="var(--accent)"/>
             <rect x="20" y="56" width="290" height="12" fill="var(--accent)"/>
-            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">templates/co-marketing/ (정식 템플릿)</text>
+            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">templates/co-retail/ (정식 템플릿)</text>
             <!-- Status badge -->
             <rect x="230" y="42" width="72" height="18" rx="9" fill="var(--accent-green)"/>
             <text x="266" y="55" text-anchor="middle" font-size="9" fill="var(--text-inverse)" font-weight="700">검증 완료</text>
@@ -161,12 +161,12 @@
             <polygon points="320,166 315,162 315,170" fill="var(--border)"/>
             <polygon points="360,166 365,162 365,170" fill="var(--border)"/>
 
-            <!-- Right Panel: Projects/co-marketing/ -->
+            <!-- Right Panel: Projects/co-retail/ -->
             <rect x="370" y="38" width="290" height="258" rx="8" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1.5"/>
             <!-- Header -->
             <rect x="370" y="38" width="290" height="30" rx="8" fill="var(--accent-amber)"/>
             <rect x="370" y="56" width="290" height="12" fill="var(--accent-amber)"/>
-            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">Projects/co-marketing/ (Phase A)</text>
+            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">Projects/co-retail/ (Phase A)</text>
             <!-- Status badge -->
             <rect x="580" y="42" width="72" height="18" rx="9" fill="var(--accent-red)"/>
             <text x="616" y="55" text-anchor="middle" font-size="9" fill="var(--text-inverse)" font-weight="700">진행 중</text>
@@ -207,9 +207,9 @@
         <li>
           <div class="step-content">
             <strong>두 디렉터리 목록 나란히 비교</strong>
-            <p>정식 variant인 co-work과 아직 프로토타입 단계인 co-marketing의 최상위 파일 목록을 비교한다.</p>
+            <p>정식 variant인 co-work과 아직 프로토타입 단계인 co-retail의 최상위 파일 목록을 비교한다.</p>
             <div style="position:relative">
-              <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-marketing/)</pre>
+              <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-retail/)</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
@@ -222,9 +222,9 @@
               <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">이어서 co-marketing 프로토타입 쪽 폴더 목록을 확인해, 위 파일들이 아직 없는지 비교한다.</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">이어서 co-retail 프로토타입 쪽 폴더 목록을 확인해, 위 파일들이 아직 없는지 비교한다.</p>
             <div style="position:relative">
-              <pre class="code-block">ls Projects/co-marketing/</pre>
+              <pre class="code-block">ls Projects/co-retail/</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
@@ -246,7 +246,7 @@
   <div class="level-header" id="intermediate">
     <span class="badge badge-b">● 중급</span>
     <span class="level-title level-title-b">Daily Workflow</span>
-    <span class="level-desc">co-marketing을 승격 가능한 상태로 만들기 위해 체크리스트와 매니페스트를 채워보기</span>
+    <span class="level-desc">co-retail을 승격 가능한 상태로 만들기 위해 체크리스트와 매니페스트를 채워보기</span>
   </div>
 
   <div class="scenario-card" id="scenario-2">
@@ -258,7 +258,7 @@
     <div class="card-body">
 
       <div class="situation">
-        G-1에서 확인한 빈틈들을 실제로 메워보려는 실무자의 상황이다. co-marketing 프로토타입을 정식 승격 대상으로 만들려면 <code>PROMOTION_CHECKLIST.md</code>의 조건들과 <code>variant.json</code>의 <code>skill_manifest</code>/<code>script_manifest</code>를 채워야 한다.
+        G-1에서 확인한 빈틈들을 실제로 메워보려는 실무자의 상황이다. co-retail 프로토타입을 정식 승격 대상으로 만들려면 <code>PROMOTION_CHECKLIST.md</code>의 조건들과 <code>variant.json</code>의 <code>skill_manifest</code>/<code>script_manifest</code>를 채워야 한다.
       </div>
 
       <div class="cmd-list">
@@ -275,7 +275,7 @@
         <li>
           <div class="step-content">
             <strong>PROMOTION_CHECKLIST.md 항목 점검</strong>
-            <p>체크리스트에는 대체로 "필수 검증 스크립트 통과", "플랫폼 패리티 확보", "에이전트 frontmatter 완결성" 같은 항목이 들어간다. co-marketing의 경우 6장 §2에서 만든 <code>researcher.md</code>, <code>writer.md</code>가 필수 필드를 모두 갖췄는지부터 다시 확인한다. 두 스크립트는 서로 다른 것을 검사하므로 각각 실행하고 결과를 따로 확인한다.</p>
+            <p>체크리스트에는 대체로 "필수 검증 스크립트 통과", "플랫폼 패리티 확보", "에이전트 frontmatter 완결성" 같은 항목이 들어간다. co-retail의 경우 6장 §2에서 만든 <code>researcher.md</code>, <code>writer.md</code>가 필수 필드를 모두 갖췄는지부터 다시 확인한다. 두 스크립트는 서로 다른 것을 검사하므로 각각 실행하고 결과를 따로 확인한다.</p>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① 에이전트 frontmatter 완결성 검사</strong> — name, tier, handoff 등 필수 필드가 빠짐없이 채워졌는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify</pre>
@@ -291,10 +291,10 @@
         <li>
           <div class="step-content">
             <strong>variant.json에 manifest 정의</strong>
-            <p>co-marketing이 사용하는 스킬(예: campaign-research, copywriting)과 변형 전용 스크립트가 있다면 <code>skill_manifest.variant_specific</code>과 <code>script_manifest</code>에 각각 등록한다.</p>
+            <p>co-retail이 사용하는 스킬(예: campaign-research, copywriting)과 변형 전용 스크립트가 있다면 <code>skill_manifest.variant_specific</code>과 <code>script_manifest</code>에 각각 등록한다.</p>
             <div style="position:relative">
               <pre class="code-block">{
-  "name": "co-marketing",
+  "name": "co-retail",
   "inherits_common": "1.0.0",
   "skill_manifest": {
     "variant_specific": ["campaign-research", "copywriting"]
@@ -334,7 +334,7 @@
     <div class="card-body">
 
       <div class="situation">
-        D-1까지 마쳐 승격 준비가 끝났다고 판단한 숙련자가, 실제로 <code>l3-to-variant-pipeline.ts</code>를 실행해 co-marketing을 정식 <code>templates/co-marketing/</code>로 전환하려 한다. 이 단계부터는 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다.
+        D-1까지 마쳐 승격 준비가 끝났다고 판단한 숙련자가, 실제로 <code>l3-to-variant-pipeline.ts</code>를 실행해 co-retail을 정식 <code>templates/co-retail/</code>로 전환하려 한다. 이 단계부터는 실제 git 이력에 흔적을 남기는 되돌리기 까다로운 작업이다.
       </div>
 
       <div class="note">
@@ -370,7 +370,7 @@
           <!-- Final variant -->
           <rect x="520" y="80" width="106" height="36" rx="8" fill="var(--accent-purple)"/>
           <text x="573" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">templates/</text>
-          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--badge-purple-bg)" text-anchor="middle">co-marketing/ (정식)</text>
+          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--badge-purple-bg)" text-anchor="middle">co-retail/ (정식)</text>
         </svg>
       </div>
 
@@ -393,7 +393,7 @@
             <strong>승격 파이프라인 실행</strong>
             <p><code>--source</code>는 Phase A 프로토타입 경로, <code>--variant</code>는 최종 variant 이름, <code>--variantType</code>은 도메인 유형이다.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-marketing --variant co-marketing --variantType marketing</pre>
+              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
@@ -403,8 +403,8 @@
             <strong>플랫폼 패리티 수동 확인</strong>
             <p><code>.claude/</code>와 <code>.gemini/</code>의 commands·skills 디렉터리 목록이 서로 대응하는지 diff로 확인한다.</p>
             <div style="position:relative">
-              <pre class="code-block">diff <(ls templates/co-marketing/.claude/commands/) <(ls templates/co-marketing/.gemini/commands/)
-diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.gemini/skills/)</pre>
+              <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
+diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)</pre>
               <button class="copy-btn" onclick="copyCode(this)">복사</button>
             </div>
           </div>
@@ -422,7 +422,7 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       </ol>
 
       <div class="flow-box">
-        파이프라인의 reconcile 단계는 <code>Projects/co-marketing/</code>에 있던 파일 중 공통 파일(L0/common)과 동일한 것은 제거해 중복을 없앤다. 다만 스킬 디렉터리는 이 reconcile 대상에서 의도적으로 제외되므로, 승격 후 <code>.claude/skills/</code>와 <code>.gemini/skills/</code>에 스킬이 그대로 남아 있는지 별도로 확인해야 한다.
+        파이프라인의 reconcile 단계는 <code>Projects/co-retail/</code>에 있던 파일 중 공통 파일(L0/common)과 동일한 것은 제거해 중복을 없앤다. 다만 스킬 디렉터리는 이 reconcile 대상에서 의도적으로 제외되므로, 승격 후 <code>.claude/skills/</code>와 <code>.gemini/skills/</code>에 스킬이 그대로 남아 있는지 별도로 확인해야 한다.
       </div>
 
       <div class="note">
@@ -460,11 +460,11 @@ diff <(ls templates/co-marketing/.claude/skills/) <(ls templates/co-marketing/.g
       </div>
 
       <div class="tip-box">
-        <code>_ORIGIN.md</code>의 "Manual Phase B Steps" 절이 있다면, 파이프라인이 자동으로 옮기지 못한 도메인 전용 디렉터리 목록이 거기 적혀 있다 — 이 목록을 빠짐없이 수동으로 옮겼는지 마지막으로 대조한다. 예를 들어 co-marketing의 <code>_ORIGIN.md</code>라면 아래처럼 적혀 있을 수 있다.
+        <code>_ORIGIN.md</code>의 "Manual Phase B Steps" 절이 있다면, 파이프라인이 자동으로 옮기지 못한 도메인 전용 디렉터리 목록이 거기 적혀 있다 — 이 목록을 빠짐없이 수동으로 옮겼는지 마지막으로 대조한다. 예를 들어 co-retail의 <code>_ORIGIN.md</code>라면 아래처럼 적혀 있을 수 있다.
         <div style="position:relative;margin-top:10px;">
           <div style="position:relative">
   <pre class="code-block">## Manual Phase B Steps
-- [ ] brand-assets/ 디렉터리를 templates/co-marketing/brand-assets/로 복사
+- [ ] brand-assets/ 디렉터리를 templates/co-retail/brand-assets/로 복사
 - [ ] campaign-templates/ 아래 캠페인 브리프 골격 파일을 그대로 이관
 - [ ] channel-configs.json의 채널 목록 초기값을 빈 배열로 초기화</pre>
   <button class="copy-btn" onclick="copyCode(this)">복사</button>

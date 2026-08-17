@@ -69,11 +69,11 @@
  <article class="reading">
   <div class="chapter-eyebrow">第12章</div>
   <h1>新規Variant昇格実習例</h1>
-  <p class="subtitle">co-marketingプロトタイプをベースに、2つの経路を並べて比較する実習ガイド &nbsp;|&nbsp; <a href="11_VariantAdvanced_Chapter_ja.html">← 参考ドキュメントに戻る</a></p>
+  <p class="subtitle">co-retailプロトタイプをベースに、2つの経路を並べて比較する実習ガイド &nbsp;|&nbsp; <a href="11_VariantAdvanced_Chapter_ja.html">← 参考ドキュメントに戻る</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">対象リポジトリ</span><span class="vvalue">ai-workspace-standards、mainブランチ</span></div>
-    <div class="version-row"><span class="vlabel">本ファイルの目的</span><span class="vvalue">第11章の昇格（Phase B）の概念を、第6章§2で作成したco-marketingプロトタイプに適用する実習</span></div>
+    <div class="version-row"><span class="vlabel">本ファイルの目的</span><span class="vvalue">第11章の昇格（Phase B）の概念を、第6章§2で作成したco-retailプロトタイプに適用する実習</span></div>
     <div class="version-row"><span class="vlabel">参考ドキュメント</span><span class="vvalue"><a href="11_VariantAdvanced_Chapter_ja.html">11_VariantAdvanced_Chapter_ja.html</a> — 各シナリオからリンク</span></div>
     <div class="version-row"><span class="vlabel">執筆日</span><span class="vvalue">2026年7月14日</span></div>
   </div>
@@ -94,7 +94,7 @@
     <div class="card-body">
 
       <div class="situation">
-        第6章§2で、<code>templates/co-work/</code>からプロジェクトをスキャフォールディングし、同時に<code>Projects/co-marketing/</code>にPhase Aプロトタイプを作成した。ここでは2つのディレクトリを並べて配置し、正式テンプレートには存在するがプロトタイプには存在しないファイルが正確にどれかを確認する。練習用ワークスペース（<code>ai-workspace-standards-demo</code>）内で継続していることを前提とする。
+        第6章§2で、<code>templates/co-work/</code>からプロジェクトをスキャフォールディングし、同時に<code>Projects/co-retail/</code>にPhase Aプロトタイプを作成した。ここでは2つのディレクトリを並べて配置し、正式テンプレートには存在するがプロトタイプには存在しないファイルが正確にどれかを確認する。練習用ワークスペース（<code>ai-workspace-standards-demo</code>）内で継続していることを前提とする。
       </div>
 
       <div class="cmd-list">
@@ -117,12 +117,12 @@
             <!-- Title -->
             <text x="340" y="22" text-anchor="middle" font-size="12" fill="var(--text)" font-weight="700">公式テンプレート vs Phase A プロトタイプ構造比較</text>
 
-            <!-- Left Panel: templates/co-marketing/ -->
+            <!-- Left Panel: templates/co-retail/ -->
             <rect x="20" y="38" width="290" height="258" rx="8" fill="var(--bg-info)" stroke="var(--badge-blue-border)" stroke-width="1.5"/>
             <!-- Header -->
             <rect x="20" y="38" width="290" height="30" rx="8" fill="var(--accent)"/>
             <rect x="20" y="56" width="290" height="12" fill="var(--accent)"/>
-            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">templates/co-marketing/ (公式テンプレート)</text>
+            <text x="165" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">templates/co-retail/ (公式テンプレート)</text>
             <!-- Status badge -->
             <rect x="230" y="42" width="72" height="18" rx="9" fill="var(--accent-green)"/>
             <text x="266" y="55" text-anchor="middle" font-size="9" fill="var(--text-inverse)" font-weight="700">検証完了</text>
@@ -161,12 +161,12 @@
             <polygon points="320,166 315,162 315,170" fill="var(--border)"/>
             <polygon points="360,166 365,162 365,170" fill="var(--border)"/>
 
-            <!-- Right Panel: Projects/co-marketing/ -->
+            <!-- Right Panel: Projects/co-retail/ -->
             <rect x="370" y="38" width="290" height="258" rx="8" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1.5"/>
             <!-- Header -->
             <rect x="370" y="38" width="290" height="30" rx="8" fill="var(--accent-amber)"/>
             <rect x="370" y="56" width="290" height="12" fill="var(--accent-amber)"/>
-            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">Projects/co-marketing/ (Phase A)</text>
+            <text x="515" y="58" text-anchor="middle" font-size="11.5" fill="var(--text-inverse)" font-weight="700">Projects/co-retail/ (Phase A)</text>
             <!-- Status badge -->
             <rect x="580" y="42" width="72" height="18" rx="9" fill="var(--accent-red)"/>
             <text x="616" y="55" text-anchor="middle" font-size="9" fill="var(--text-inverse)" font-weight="700">進行中</text>
@@ -207,9 +207,9 @@
         <li>
           <div class="step-content">
             <strong>2つのディレクトリの内容を並べて比較する</strong>
-            <p>公式variantであるco-workと、まだプロトタイプ段階のco-marketingのトップレベルのファイル一覧を比較する。</p>
+            <p>公式variantであるco-workと、まだプロトタイプ段階のco-retailのトップレベルのファイル一覧を比較する。</p>
             <div style="position:relative">
-              <pre class="code-block">diff &lt;(ls templates/co-work/) &lt;(ls Projects/co-marketing/)</pre>
+              <pre class="code-block">diff &lt;(ls templates/co-work/) &lt;(ls Projects/co-retail/)</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -222,9 +222,9 @@
               <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">次に、co-marketingプロトタイプのフォルダ一覧を確認し、上記ファイルがまだ存在しないことを確認する。</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">次に、co-retailプロトタイプのフォルダ一覧を確認し、上記ファイルがまだ存在しないことを確認する。</p>
             <div style="position:relative">
-              <pre class="code-block">ls Projects/co-marketing/</pre>
+              <pre class="code-block">ls Projects/co-retail/</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -246,7 +246,7 @@
   <div class="level-header" id="intermediate">
     <span class="badge badge-b">● 中級</span>
     <span class="level-title level-title-b">日常ワークフロー</span>
-    <span class="level-desc">co-marketingを昇格対象にするために必要なチェックリストとマニフェストを記入する</span>
+    <span class="level-desc">co-retailを昇格対象にするために必要なチェックリストとマニフェストを記入する</span>
   </div>
 
   <div class="scenario-card" id="scenario-2">
@@ -258,7 +258,7 @@
     <div class="card-body">
 
       <div class="situation">
-        G-1で特定されたギャップを実際に埋めようとする実践者の状況である。co-marketingプロトタイプを公式昇格の対象にするには、<code>PROMOTION_CHECKLIST.md</code>の条件を満たし、<code>variant.json</code>内の<code>skill_manifest</code>/<code>script_manifest</code>を記入する必要がある。
+        G-1で特定されたギャップを実際に埋めようとする実践者の状況である。co-retailプロトタイプを公式昇格の対象にするには、<code>PROMOTION_CHECKLIST.md</code>の条件を満たし、<code>variant.json</code>内の<code>skill_manifest</code>/<code>script_manifest</code>を記入する必要がある。
       </div>
 
       <div class="cmd-list">
@@ -275,7 +275,7 @@
         <li>
           <div class="step-content">
             <strong>PROMOTION_CHECKLIST.mdの項目を確認する</strong>
-            <p>チェックリストには一般に「必須検証スクリプトが通過すること」「プラットフォームパリティが確保されていること」「エージェントのフロントマターが完了していること」などの項目が含まれる。co-marketingの場合、第6章§2で作成した<code>researcher.md</code>と<code>writer.md</code>にすべての必須フィールドが揃っているかを再確認するところから始める。2つのスクリプトは異なる内容をチェックするため、それぞれ別々に実行し結果を個別に確認する。</p>
+            <p>チェックリストには一般に「必須検証スクリプトが通過すること」「プラットフォームパリティが確保されていること」「エージェントのフロントマターが完了していること」などの項目が含まれる。co-retailの場合、第6章§2で作成した<code>researcher.md</code>と<code>writer.md</code>にすべての必須フィールドが揃っているかを再確認するところから始める。2つのスクリプトは異なる内容をチェックするため、それぞれ別々に実行し結果を個別に確認する。</p>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① エージェントフロントマター完全性チェック</strong> — name、tier、handoffなどの必須フィールドがすべて入力されていることを確認する。</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify</pre>
@@ -291,10 +291,10 @@
         <li>
           <div class="step-content">
             <strong>variant.jsonにマニフェストを定義する</strong>
-            <p>co-marketingが使用するスキル（例：campaign-research、copywriting）を<code>skill_manifest.variant_specific</code>に登録し、variant固有のスクリプトがあれば<code>script_manifest</code>に登録する。</p>
+            <p>co-retailが使用するスキル（例：campaign-research、copywriting）を<code>skill_manifest.variant_specific</code>に登録し、variant固有のスクリプトがあれば<code>script_manifest</code>に登録する。</p>
             <div style="position:relative">
               <pre class="code-block">{
-  "name": "co-marketing",
+  "name": "co-retail",
   "inherits_common": "1.0.0",
   "skill_manifest": {
     "variant_specific": ["campaign-research", "copywriting"]
@@ -334,7 +334,7 @@
     <div class="card-body">
 
       <div class="situation">
-        D-1を完了し、プロトタイプが昇格の準備ができていると判断した経験豊富な実践者が、実際に<code>l3-to-variant-pipeline.ts</code>を実行してco-marketingを公式の<code>templates/co-marketing/</code>に変換する。ここから先は実際のgit履歴に痕跡を残す、取り返しのつかない操作である。
+        D-1を完了し、プロトタイプが昇格の準備ができていると判断した経験豊富な実践者が、実際に<code>l3-to-variant-pipeline.ts</code>を実行してco-retailを公式の<code>templates/co-retail/</code>に変換する。ここから先は実際のgit履歴に痕跡を残す、取り返しのつかない操作である。
       </div>
 
       <div class="note">
@@ -370,7 +370,7 @@
           <!-- Final variant -->
           <rect x="520" y="80" width="106" height="36" rx="8" fill="var(--accent-purple)"/>
           <text x="573" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">マージ</text>
-          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--badge-purple-bg)" text-anchor="middle">co-marketing/ (公式)</text>
+          <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--badge-purple-bg)" text-anchor="middle">co-retail/ (公式)</text>
         </svg>
       </div>
 
@@ -393,7 +393,7 @@
             <strong>昇格パイプラインを実行する</strong>
             <p><code>--source</code>はPhase Aプロトタイプのパス、<code>--variant</code>は最終的なvariant名、<code>--variantType</code>はドメインタイプである。</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-marketing --variant co-marketing --variantType marketing</pre>
+              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -403,8 +403,8 @@
             <strong>プラットフォームパリティを手動で確認する</strong>
             <p>diffを使用して、<code>.claude/</code>と<code>.gemini/</code>のcommands/skillsディレクトリ一覧が対応していることを確認する。</p>
             <div style="position:relative">
-              <pre class="code-block">diff &lt;(ls templates/co-marketing/.claude/commands/) &lt;(ls templates/co-marketing/.gemini/commands/)
-diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-marketing/.gemini/skills/)</pre>
+              <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
+diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
@@ -422,7 +422,7 @@ diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-market
       </ol>
 
       <div class="flow-box">
-        パイプラインのreconcileステップは、共通ファイル（L0/common）と同一のファイルを<code>Projects/co-marketing/</code>から削除することで重複を除去する。ただし、スキルディレクトリは意図的にこのreconcileステップから除外されているため、昇格後に<code>.claude/skills/</code>と<code>.gemini/skills/</code>にスキルが引き続き残っていることを別途確認する必要がある。
+        パイプラインのreconcileステップは、共通ファイル（L0/common）と同一のファイルを<code>Projects/co-retail/</code>から削除することで重複を除去する。ただし、スキルディレクトリは意図的にこのreconcileステップから除外されているため、昇格後に<code>.claude/skills/</code>と<code>.gemini/skills/</code>にスキルが引き続き残っていることを別途確認する必要がある。
       </div>
 
       <div class="note">
@@ -460,11 +460,11 @@ diff &lt;(ls templates/co-marketing/.claude/skills/) &lt;(ls templates/co-market
       </div>
 
       <div class="tip-box">
-        <code>_ORIGIN.md</code>に「Manual Phase B Steps」セクションがある場合、パイプラインが自動的に移動できなかったドメイン固有のディレクトリがリストされている — そのリストのすべての項目を手動で移動したか、最終確認する。例えば、co-marketingの<code>_ORIGIN.md</code>は以下のようになることがある。
+        <code>_ORIGIN.md</code>に「Manual Phase B Steps」セクションがある場合、パイプラインが自動的に移動できなかったドメイン固有のディレクトリがリストされている — そのリストのすべての項目を手動で移動したか、最終確認する。例えば、co-retailの<code>_ORIGIN.md</code>は以下のようになることがある。
         <div style="position:relative;margin-top:10px;">
           <div style="position:relative">
   <pre class="code-block">## Manual Phase B Steps
-- [ ] Copy the brand-assets/ directory to templates/co-marketing/brand-assets/
+- [ ] Copy the brand-assets/ directory to templates/co-retail/brand-assets/
 - [ ] Carry over the campaign brief skeleton files under campaign-templates/ as-is
 - [ ] Reset the initial channel list in channel-configs.json to an empty array</pre>
   <button class="copy-btn" onclick="copyCode(this)">Copy</button>

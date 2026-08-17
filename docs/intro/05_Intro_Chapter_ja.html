@@ -89,10 +89,11 @@
 │   ├── co-deck/   [beta]    ← §3: L2公式variant (講義/プレゼン、11段階)
 │   ├── co-game/             ← §3: L2公式variant (ゲーム開発)
 │   ├── co-export/ [beta]    ← §3: L2公式variant (輸出入貿易コンサルティング)
-│   └── co-news/   [beta]    ← §3: L2公式variant (金融ジャーナリズム)
+│   ├── co-news/   [beta]    ← §3: L2公式variant (金融ジャーナリズム)
+│   ├── co-abap/             ← §3: L2公式variant (SAP ABAP開発)
 ├── Projects/                 (L3 — new-project.tsでスキャフォールディングされた稼働中のプロジェクト作業ディレクトリ)
 │   └── &lt;my-project&gt;/
-│       ├── docs/context.md  ← §4: このプロジェクト専用のSSOT (variantの空の骨格を埋めたもの)
+│       ├── docs/context.md  ← §4: このプロジェクトの設定文書 (variantの空の骨格を埋めたもの)
 │       ├── agents/          ← variantから継承し、このプロジェクト専用として進化を続ける
 │       └── (独立したgitリポジトリ — ワークスペースルートとは別)
 └── memory/
@@ -105,7 +106,7 @@
 
   <p>この構造の上で実際に作業が進行する順序(ランタイムフロー)は次のとおりである。</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
-    <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md → AGENTS.md → memory/YYYY-MM-DD.mdの順に読み込む(§4で扱う)。</li>
+    <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md（プロジェクト設定） → AGENTS.md（エージェントロスター） → memory/YYYY-MM-DD.mdの順に読み込む(§4で扱う)。</li>
     <li><strong>ツール別の実行規則を適用。</strong> Claude Code/AppであればCLAUDE.mdと<code>.claude/</code>が、Antigravity系であればGEMINI.mdと<code>.gemini/</code>が詳細な実行方式を定める。</li>
     <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製し、L3のプロジェクト作業ディレクトリを作成する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。</li>
     <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/propagate-to-templates.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2やL3には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
@@ -147,6 +148,7 @@
     <div class="variant-row"><span class="variant-name">co-game</span><span>HTML5 Canvasゲーム開発向け。</span></div>
     <div class="variant-row"><span class="variant-name">co-export <span class="badge" >beta</span></span><span>輸出入貿易コンサルティング向け。PMと8名の専門エージェント — HS Classification Specialist、FTA Origin Analyst、Customs Duty Drawback Specialist、Export Control Compliance Specialist、Trade Documentation Specialist、Logistics Coordinator、Foreign Regulatory Intelligence Analyst、Market Entry Strategist。</span></div>
     <div class="variant-row"><span class="variant-name">co-news <span class="badge" >beta</span></span><span>上場企業を対象とする韓国の経済・金融ジャーナリズム向け。PM(編集長)と6名の専門エージェント — Financial Analyst、Legal Researcher、Fact-Checker、Reporter、Style Editor、Visual Editor。DARTの財務開示情報と韓国商法のリサーチを統合し、ファクトチェック済みの記事を作成する。</span></div>
+    <div class="variant-row"><span class="variant-name">co-abap</span><span>SAP ABAP開発向け。</span></div>
   </div>
 
   <p>各バリアント(variant)はgitタグ<code>template-vX.Y.Z</code>でバージョン管理され、<code>bun scripts/validate-templates.ts</code>がエージェントfrontmatterの完全性、必須セクション、AGENTS.mdロスターとの整合性、<code>.claude/</code>・<code>.gemini/</code>間のプラットフォームパリティなど、構造的な規定遵守を検査する。</p>
@@ -156,7 +158,7 @@
   <div class="note">この<strong>モデルコストティア(high/medium/low)</strong>は、第8章で扱う<strong>L0 → L1 → L2 → L3の4層</strong>(ファイルがどこから来て、どのように流れるかについての階層)と、名前の「層」という感覚が同じだけで、互いに異なる概念である。一方は「エージェントにどのモデルを割り当てるか」であり、もう一方は「ファイルの原本がどこにあるか」である。</div>
 
   <h2 id="s4">セッション開始チェックリストとスキャフォールディング</h2>
-  <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>を読む。続いてAGENTS.mdで利用可能なエージェントを確認し、<code>memory/YYYY-MM-DD.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
+  <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>（プロジェクト設定文書）を読む。続いて<code>AGENTS.md</code>（エージェントロスター）で利用可能なエージェントを確認し、<code>memory/YYYY-MM-DD.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
   <p>新規プロジェクトを作成する流れは概念的には単純である。<code>bun scripts/new-project.ts</code>スクリプトにプロジェクト名と希望するバリアント(variant)を指定して実行すると、そのバリアント(variant)の構成全体が複製され、完全に独立したgitリポジトリになる。このリポジトリはワークスペースルートとは分離されているが、生まれた時点からCONSTITUTION.mdの共有標準を継承した状態で始まる。チームはその中で、プロジェクト固有の<code>docs/context.md</code>とプロジェクトレベルのCLAUDE.md/GEMINI.mdオーバーライドを埋めながらチームを発展させていく。</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
@@ -198,7 +200,7 @@
     </svg>
   </div>
 
-  <p>ここでCONSTITUTION.mdとcontext.mdの関係を明確にしておく必要がある。両方とも「セッション開始チェックリスト」で読む文書だが、SSOTの階層が異なる。<code>CONSTITUTION.md</code>はL0(ワークスペースルート)にただ1つだけ存在し、<em>すべての</em>プロジェクトが共有するルールを定義する。ガバナンス、PRワークフロー、マルチエージェントの原則がここに含まれる。一方、<code>context.md</code>はL3(個別プロジェクト)ごとに別々に存在し、そのプロジェクト固有の目標・ドメイン知識・現在の進捗状況を格納する<strong>プロジェクト専用のSSOT</strong>である。CONSTITUTION.mdが上から強制されて埋められるファイルではなく、各プロジェクトチームが自ら書き進めていくファイルである点が異なる。だからチェックリストにも順序がある。CONSTITUTION.mdで「何を守るべきか(共通)」をまず確認した後、context.mdで「今このプロジェクトが何をしているか(個別)」を確認する。</p>
+  <p>ここでCONSTITUTION.mdとcontext.mdの関係を明確にしておく必要がある。両方とも「セッション開始チェックリスト」で読む文書だが、SSOTの階層が異なる。<code>CONSTITUTION.md</code>はL0(ワークスペースルート)にただ1つだけ存在し、<em>すべての</em>プロジェクトが共有するルールを定義する。ガバナンス、PRワークフロー、マルチエージェントの原則がここに含まれる。一方、<code>context.md</code>はL3(個別プロジェクト)ごとに別々に存在し、そのプロジェクト固有の目標・ドメイン知識・現在の進捗状況を格納する<strong>プロジェクト専用の設定文書</strong>である。CONSTITUTION.mdが上から強制されて埋められるファイルではなく、各プロジェクトチームが自ら書き進めていくファイルである点が異なる。だからチェックリストにも順序がある。CONSTITUTION.mdで「何を守るべきか(共通)」をまず確認した後、context.mdで「今このプロジェクトが何をしているか(個別)」を確認する。</p>
   <p>ところで、<code>templates/&lt;variant&gt;/docs/context.md</code>のように、variantの中にも同じ名前のファイルがある。これはL3プロジェクトのcontext.mdと名前だけが同じで役割は異なる。variant内のcontext.mdはまだ埋められていない空の骨格(プレースホルダー)であり、<code>new-project.ts</code>が実行される瞬間、他のL2→L3ファイルと同様に一度だけ複製される。複製された後は、原本(バリアント(variant)のcontext.md)との連結が完全に切れ、そのプロジェクトチームが実際の内容で埋めていく独立した文書になる。そのため、以降にバリアント(variant)のcontext.mdの骨格が変わっても、すでにスキャフォールディングされたプロジェクトのcontext.mdには自動的には反映されない。</p>
 
   <div class="note">ワークスペースルートのファイル(CONSTITUTION.md、CLAUDE.mdなど)と、スキャフォールディングされた個別プロジェクトのファイルは、それぞれ別のgitリポジトリに属する。両者を同じ作業の中で一緒に修正しないことが、このリポジトリの基本原則である。</div>

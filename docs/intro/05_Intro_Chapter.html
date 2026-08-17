@@ -89,10 +89,11 @@
 │   ├── co-deck/   [beta]    ← §3: L2 공식 variant (강의/발표, 11단계)
 │   ├── co-game/             ← §3: L2 공식 variant (게임 개발)
 │   ├── co-export/ [beta]    ← §3: L2 공식 variant (수출입 무역 컨설팅)
-│   └── co-news/   [beta]    ← §3: L2 공식 variant (금융/경제 저널리즘)
+│   ├── co-news/   [beta]    ← §3: L2 공식 variant (금융/경제 저널리즘)
+│   ├── co-abap/             ← §3: L2 공식 variant (SAP ABAP 개발)
 ├── Projects/                 (L3 — new-project.ts로 스캐폴딩된 라이브 프로젝트 작업 디렉토리)
 │   └── &lt;my-project&gt;/
-│       ├── docs/context.md  ← §4: 이 프로젝트만의 SSOT (variant의 빈 골격을 채운 것)
+│       ├── docs/context.md  ← §4: 이 프로젝트의 설정 문서 (variant의 빈 골격을 채운 것)
 │       ├── agents/          ← variant에서 상속받아 이 프로젝트 전용으로 계속 진화
 │       └── (독립된 git 저장소 — 워크스페이스 루트와 별개)
 └── memory/
@@ -105,7 +106,7 @@
 
   <p>이 구조 위에서 실제로 일이 진행되는 순서(런타임 흐름)는 다음과 같다.</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
-    <li><strong>세션 시작.</strong> 에이전트가 CONSTITUTION.md → 현재 프로젝트의 docs/context.md → AGENTS.md → memory/YYYY-MM-DD.md 순서로 읽는다(§4에서 다룸).</li>
+    <li><strong>세션 시작.</strong> 에이전트가 CONSTITUTION.md → 현재 프로젝트의 docs/context.md(프로젝트 설정) → AGENTS.md(에이전트 로스터) → memory/YYYY-MM-DD.md 순서로 읽는다(§4에서 다룸).</li>
     <li><strong>도구별 실행 규칙 적용.</strong> Claude Code/App이면 CLAUDE.md와 <code>.claude/</code>, Antigravity 계열이면 GEMINI.md와 <code>.gemini/</code>가 세부 실행 방식을 정한다.</li>
     <li><strong>새 프로젝트가 필요하면.</strong> <code>scripts/new-project.ts</code>가 <code>templates/co-&lt;variant&gt;/</code>(L2)의 전체 구성을 <code>Projects/&lt;name&gt;/</code>로 복제해 L3 프로젝트 작업 디렉토리를 만든다. 이때 <code>templates/co-&lt;variant&gt;/</code> 자신은 한 세대 앞서 <code>templates/common/</code>(L1)에서 스냅샷을 받아 만들어진 상태였다.</li>
     <li><strong>운영 중 L0가 바뀌면.</strong> <code>scripts/propagate-to-templates.ts</code>가 <code>/sync</code> 파이프라인의 일부로 L0의 변경을 L1(<code>templates/common/</code>)에 자동·지속적으로 발행한다. 이미 태어난 L2나 L3에는 자동으로 전파되지 않는다. 이것은 8장에서 다루는 "포크" 원칙이다.</li>
@@ -147,6 +148,7 @@
     <div class="variant-row"><span class="variant-name">co-game</span><span>HTML5 Canvas 게임 개발용.</span></div>
     <div class="variant-row"><span class="variant-name">co-export <span class="badge" >beta</span></span><span>수출입 무역 컨설팅용. PM과 8명의 전문 에이전트 — HS Classification Specialist, FTA Origin Analyst, Customs Duty Drawback Specialist, Export Control Compliance Specialist, Trade Documentation Specialist, Logistics Coordinator, Foreign Regulatory Intelligence Analyst, Market Entry Strategist.</span></div>
     <div class="variant-row"><span class="variant-name">co-news <span class="badge" >beta</span></span><span>상장기업을 다루는 한국 경제/금융 저널리즘용. PM(편집장)과 6명의 전문 에이전트 — Financial Analyst, Legal Researcher, Fact-Checker, Reporter, Style Editor, Visual Editor. DART 공시 정보와 한국 상법 리서치를 종합해 팩트체크된 기사를 작성한다.</span></div>
+    <div class="variant-row"><span class="variant-name">co-abap</span><span>SAP ABAP 개발용.</span></div>
   </div>
 
   <p>각 베리언트(variant)는 git 태그 <code>template-vX.Y.Z</code>로 버전이 관리되며, <code>bun scripts/validate-templates.ts</code>가 에이전트 frontmatter의 완결성, 필수 섹션, AGENTS.md 로스터와의 정합성, <code>.claude/</code>·<code>.gemini/</code> 간 플랫폼 패리티 등 구조적 규정 준수를 검사한다.</p>
@@ -156,7 +158,7 @@
   <div class="note">이 <strong>모델 비용 티어(high/medium/low)</strong>는 8장에서 다루는 <strong>L0 → L1 → L2 → L3 4-tier</strong>(파일이 어디서 왔고 어떻게 흐르는가에 대한 계층)와 이름의 "3단" 감각만 같을 뿐 서로 다른 개념이다. 하나는 "에이전트에게 어떤 모델을 배정할 것인가"이고, 다른 하나는 "파일의 원본이 어디에 있는가"다.</div>
 
   <h2 id="s4">세션 시작 체크리스트와 스캐폴딩</h2>
-  <p>CONSTITUTION.md는 모든 세션이 시작할 때 따라야 할 순서를 정의한다. 먼저 <code>git config core.hooksPath .githooks</code>로 git 훅 경로를 설정하고, CONSTITUTION.md 자체를 읽은 뒤, 작업 중인 프로젝트의 <code>docs/context.md</code>를 읽는다. 이어서 AGENTS.md로 사용 가능한 에이전트를 확인하고, <code>memory/YYYY-MM-DD.md</code>에 이전 세션의 맥락이 남아 있는지 점검한 다음, docs/context.md가 지정한 스킬들을 로드한다.</p>
+  <p>CONSTITUTION.md는 모든 세션이 시작할 때 따라야 할 순서를 정의한다. 먼저 <code>git config core.hooksPath .githooks</code>로 git 훅 경로를 설정하고, CONSTITUTION.md 자체를 읽은 뒤, 작업 중인 프로젝트의 <code>docs/context.md</code>(프로젝트 설정 문서)를 읽는다. 이어서 <code>AGENTS.md</code>(에이전트 로스터)로 사용 가능한 에이전트를 확인하고, <code>memory/YYYY-MM-DD.md</code>에 이전 세션의 맥락이 남아 있는지 점검한 다음, docs/context.md가 지정한 스킬들을 로드한다.</p>
   <p>새 프로젝트를 만드는 흐름은 개념적으로 단순하다. <code>bun scripts/new-project.ts</code> 스크립트에 프로젝트 이름과 원하는 베리언트(variant)를 지정해 실행하면, 그 베리언트(variant)의 전체 구성이 복제되어 완전히 독립된 git 저장소가 된다. 이 저장소는 워크스페이스 루트와 분리되어 있지만, 태어날 때부터 CONSTITUTION.md의 공유 표준을 상속한 상태로 시작한다. 팀은 그 안에서 프로젝트 고유의 <code>docs/context.md</code>와 프로젝트 레벨 CLAUDE.md/GEMINI.md 오버라이드를 채워나가며 팀을 발전시킨다.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
@@ -198,7 +200,7 @@
     </svg>
   </div>
 
-  <p>여기서 CONSTITUTION.md와 context.md의 관계를 분명히 해 둘 필요가 있다. 둘 다 "세션 시작 체크리스트"에서 읽는 문서지만 SSOT의 계층이 다르다. <code>CONSTITUTION.md</code>는 L0(워크스페이스 루트)에 단 하나만 존재하며 <em>모든</em> 프로젝트가 공유하는 규칙을 정의한다. 거버넌스, PR 워크플로우, 멀티 에이전트 원칙이 여기에 포함된다. 반면 <code>context.md</code>는 L3(개별 프로젝트)마다 따로 존재하며, 그 프로젝트만의 목표·도메인 지식·현재 진행 상태를 담는 <strong>프로젝트 전용 SSOT</strong>다. CONSTITUTION.md가 위에서 강제해서 채워지는 파일이 아니라, 각 프로젝트 팀이 직접 써 나가는 파일이라는 점이 다르다. 그래서 체크리스트도 순서가 있다. CONSTITUTION.md로 "무엇을 지켜야 하는가(공통)"를 먼저 확인한 뒤, context.md로 "지금 이 프로젝트가 무엇을 하고 있는가(개별)"를 확인한다.</p>
+  <p>여기서 CONSTITUTION.md와 context.md의 관계를 분명히 해 둘 필요가 있다. 둘 다 "세션 시작 체크리스트"에서 읽는 문서지만 SSOT의 계층이 다르다. <code>CONSTITUTION.md</code>는 L0(워크스페이스 루트)에 단 하나만 존재하며 <em>모든</em> 프로젝트가 공유하는 규칙을 정의한다. 거버넌스, PR 워크플로우, 멀티 에이전트 원칙이 여기에 포함된다. 반면 <code>context.md</code>는 L3(개별 프로젝트)마다 따로 존재하며, 그 프로젝트만의 목표·도메인 지식·현재 진행 상태를 담는 <strong>프로젝트 전용 설정 문서</strong>다. CONSTITUTION.md가 위에서 강제해서 채워지는 파일이 아니라, 각 프로젝트 팀이 직접 써 나가는 파일이라는 점이 다르다. 그래서 체크리스트도 순서가 있다. CONSTITUTION.md로 "무엇을 지켜야 하는가(공통)"를 먼저 확인한 뒤, context.md로 "지금 이 프로젝트가 무엇을 하고 있는가(개별)"를 확인한다.</p>
   <p>그런데 <code>templates/&lt;variant&gt;/docs/context.md</code>처럼 variant 안에도 같은 이름의 파일이 있다. 이것은 L3 프로젝트의 context.md와 이름만 같을 뿐 역할이 다르다. variant 안의 context.md는 아직 채워지지 않은 빈 골격(placeholder)이고, <code>new-project.ts</code>가 실행되는 순간 다른 L2→L3 파일들과 마찬가지로 딱 한 번 복제된다. 복제된 뒤에는 원본(베리언트(variant)의 context.md)과의 연결이 완전히 끊기고, 그 프로젝트 팀이 실제 내용으로 채워 나가는 독립된 문서가 된다. 그래서 이후 베리언트(variant)의 context.md 골격이 바뀌어도 이미 스캐폴딩된 프로젝트의 context.md에는 자동으로 반영되지 않는다.</p>
 
   <div class="note">workspace 루트의 파일(CONSTITUTION.md, CLAUDE.md 등)과 스캐폴딩된 개별 프로젝트의 파일은 서로 다른 git 저장소에 속한다. 둘을 같은 작업에서 함께 수정하지 않는 것이 저장소의 기본 원칙이다.</div>

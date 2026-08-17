@@ -89,10 +89,11 @@
 │   ├── co-deck/   [beta]    ← §3: official L2 variant (lectures/presentations, 11 stages)
 │   ├── co-game/             ← §3: official L2 variant (game development)
 │   ├── co-export/ [beta]    ← §3: official L2 variant (import/export trade consulting)
-│   └── co-news/   [beta]    ← §3: official L2 variant (financial journalism)
+│   ├── co-news/   [beta]    ← §3: official L2 variant (financial journalism)
+│   ├── co-abap/             ← §3: official L2 variant (SAP ABAP development)
 ├── Projects/                 (L3 — live project working directories scaffolded via new-project.ts)
 │   └── &lt;my-project&gt;/
-│       ├── docs/context.md  ← §4: this project's own SSOT (the variant's empty skeleton, filled in)
+│       ├── docs/context.md  ← §4: this project's configuration document (the variant's empty skeleton, filled in)
 │       ├── agents/          ← inherited from the variant, continues to evolve for this project
 │       └── (an independent git repository — separate from the workspace root)
 └── memory/
@@ -105,7 +106,7 @@
 
   <p>The actual order in which work proceeds on top of this structure (the runtime flow) is as follows.</p>
   <ol style="margin:0 0 16px 22px;line-height:2;">
-    <li><strong>Session start.</strong> The agent reads, in order: CONSTITUTION.md → the current project's docs/context.md → AGENTS.md → memory/YYYY-MM-DD.md (covered in §4).</li>
+    <li><strong>Session start.</strong> The agent reads, in order: CONSTITUTION.md → the current project's docs/context.md (project configuration) → AGENTS.md (agent roster) → memory/YYYY-MM-DD.md (covered in §4).</li>
     <li><strong>Tool-specific execution rules apply.</strong> For Claude Code/App, CLAUDE.md and <code>.claude/</code> govern the detailed execution; for the Antigravity family, GEMINI.md and <code>.gemini/</code> do.</li>
     <li><strong>When a new project is needed.</strong> <code>scripts/new-project.ts</code> clones the entire configuration of <code>templates/co-&lt;variant&gt;/</code> (L2) into <code>Projects/&lt;name&gt;/</code>, creating an L3 project working directory. At this point, <code>templates/co-&lt;variant&gt;/</code> itself had already been created a generation earlier by taking a snapshot from <code>templates/common/</code> (L1).</li>
     <li><strong>When L0 changes during operation.</strong> <code>scripts/propagate-to-templates.ts</code>, as part of the <code>/sync</code> pipeline, automatically and continuously publishes L0 changes to L1 (<code>templates/common/</code>). This is not automatically propagated to L2 or L3 instances that have already been born. This is the "fork" principle covered in Chapter 8.</li>
@@ -147,6 +148,7 @@
     <div class="variant-row"><span class="variant-name">co-game</span><span>For HTML5 Canvas game development.</span></div>
     <div class="variant-row"><span class="variant-name">co-export <span class="badge" >beta</span></span><span>For import/export trade consulting. PM plus 8 specialists — HS Classification Specialist, FTA Origin Analyst, Customs Duty Drawback Specialist, Export Control Compliance Specialist, Trade Documentation Specialist, Logistics Coordinator, Foreign Regulatory Intelligence Analyst, and Market Entry Strategist.</span></div>
     <div class="variant-row"><span class="variant-name">co-news <span class="badge" >beta</span></span><span>For Korean business/finance journalism covering listed companies. PM (Editor-in-Chief) plus 6 specialists — Financial Analyst, Legal Researcher, Fact-Checker, Reporter, Style Editor, and Visual Editor. Synthesizes DART financial disclosures and Korean commercial-law research into fact-checked reporting.</span></div>
+    <div class="variant-row"><span class="variant-name">co-abap</span><span>For SAP ABAP development.</span></div>
   </div>
 
   <p>Each variant is versioned with the git tag <code>template-vX.Y.Z</code>, and <code>bun scripts/validate-templates.ts</code> checks structural compliance — the completeness of agent frontmatter, required sections, consistency with the AGENTS.md roster, and platform parity between <code>.claude/</code> and <code>.gemini/</code>.</p>
@@ -156,7 +158,7 @@
   <div class="note">This <strong>model cost tier (high/medium/low)</strong> shares only the "tiered" feel of its name with the <strong>L0 → L1 → L2 → L3 4-tier</strong> (the layering of where files come from and how they flow) covered in Chapter 8 — they are otherwise different concepts. One is "which model to assign to an agent," and the other is "where the original of a file lives."</div>
 
   <h2 id="s4">Session-start checklist and scaffolding</h2>
-  <p>CONSTITUTION.md defines the order every session must follow at startup. First, set the git hooks path with <code>git config core.hooksPath .githooks</code>, then read CONSTITUTION.md itself, then read the <code>docs/context.md</code> of the project you're working on. Next, check AGENTS.md for the available agents, check whether context from a previous session remains in <code>memory/YYYY-MM-DD.md</code>, and finally load whatever skills docs/context.md specifies.</p>
+  <p>CONSTITUTION.md defines the order every session must follow at startup. First, set the git hooks path with <code>git config core.hooksPath .githooks</code>, then read CONSTITUTION.md itself, then read <code>docs/context.md</code> (the project's configuration document) of the project you're working on. Next, check <code>AGENTS.md</code> (the agent roster) for the available agents, check whether context from a previous session remains in <code>memory/YYYY-MM-DD.md</code>, and finally load whatever skills <code>docs/context.md</code> specifies.</p>
   <p>The flow for creating a new project is conceptually simple. Run the <code>bun scripts/new-project.ts</code> script with a project name and the desired variant, and the entire configuration of that variant is cloned into a fully independent git repository. This repository is separate from the workspace root, but it starts out having already inherited CONSTITUTION.md's shared standards from birth. The team then evolves the team by filling in the project's own <code>docs/context.md</code> and any project-level CLAUDE.md/GEMINI.md overrides.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
@@ -198,7 +200,7 @@
     </svg>
   </div>
 
-  <p>It's worth clarifying the relationship between CONSTITUTION.md and context.md here. Both are documents read during the "session-start checklist," but they sit at different layers of the SSOT hierarchy. <code>CONSTITUTION.md</code> exists exactly once, at L0 (the workspace root), and defines rules shared by <em>every</em> project — governance, PR workflow, and multi-agent principles are all here. <code>context.md</code>, by contrast, exists separately for each L3 (individual project), and is the <strong>project-specific SSOT</strong> that holds that project's own goals, domain knowledge, and current progress. The difference is that CONSTITUTION.md isn't a file that's filled in by mandate from above — it's a file each project team writes for itself. That's why the checklist has an order: first confirm "what must be followed (shared)" via CONSTITUTION.md, then confirm "what this project is doing right now (individual)" via context.md.</p>
+  <p>It's worth clarifying the relationship between CONSTITUTION.md and context.md here. Both are documents read during the "session-start checklist," but they sit at different layers of the SSOT hierarchy. <code>CONSTITUTION.md</code> exists exactly once, at L0 (the workspace root), and defines rules shared by <em>every</em> project — governance, PR workflow, and multi-agent principles are all here. <code>context.md</code>, by contrast, exists separately for each L3 (individual project), and is the <strong>project-specific configuration document</strong> that holds that project's own goals, domain knowledge, and current progress. The difference is that CONSTITUTION.md isn't a file that's filled in by mandate from above — it's a file each project team writes for itself. That's why the checklist has an order: first confirm "what must be followed (shared)" via CONSTITUTION.md, then confirm "what this project is doing right now (individual)" via context.md.</p>
   <p>Note, however, that a file with the same name also exists inside each variant, at <code>templates/&lt;variant&gt;/docs/context.md</code>. This shares only its name with an L3 project's context.md — its role is different. The context.md inside a variant is still an unfilled empty skeleton (a placeholder), and the moment <code>new-project.ts</code> runs, it is cloned exactly once, just like the other L2→L3 files. Once cloned, its connection to the original (the variant's context.md) is completely severed, and it becomes an independent document that the project team fills in with real content going forward. So even if the variant's context.md skeleton changes later, it is not automatically reflected into the context.md of a project that has already been scaffolded.</p>
 
   <div class="note">Files at the workspace root (CONSTITUTION.md, CLAUDE.md, etc.) and files in individual scaffolded projects belong to separate git repositories. It is a core principle of this repository that the two are never modified together in the same piece of work.</div>

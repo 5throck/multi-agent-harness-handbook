@@ -16,60 +16,22 @@ permissions:
   contents: read
 
 jobs:
-  validate-handbook:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: oven-sh/setup-bun@v2.2.0
       - run: bun run validate-handbook
-
-  validate-nav:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: oven-sh/setup-bun@v2.2.0
-      - run: bun run validate-nav
-
-  check-authoring:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: oven-sh/setup-bun@v2.2.0
+      - run: bun run check-symmetry
+      - run: bun run check-links
+      - run: bun run check-labels
       - run: bun run check-authoring
-
-  handbook-doctor:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: oven-sh/setup-bun@v2.2.0
       - run: bun run doctor
-
-  check-a11y:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: oven-sh/setup-bun@v2.2.0
       - run: bun run check-a11y
-
-  check-spell:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: oven-sh/setup-bun@v2.2.0
       - run: bun run check-spell
-
-  check-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: oven-sh/setup-bun@v2.2.0
       - run: bun run check-lint
-
-  build-search-index:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: oven-sh/setup-bun@v2.2.0
+      - run: bun run check-external-links
+      - run: bun run check-search
       - run: bun run build-search-index
       - name: Verify search-data.js is up to date
         run: |

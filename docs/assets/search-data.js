@@ -32,8 +32,8 @@ var SEARCH_DATA = {
     { path: 'tools/00_Tools_Manual.html', title: '공통 참고 · 도구 비교 — Claude Code / Claude Desktop App / Antigravity CLI / Antigravity', lang: 'ko' },
     { path: 'glossary/00_Glossary.html', title: '용어집', lang: 'ko' },
     { path: 'faq/00_FAQ.html', title: 'FAQ · 자주 나는 오류와 해결법', lang: 'ko' },
-    { path: 'setup/SETUP_ko.html', title: '워크숍 환경 설치 가이드', lang: 'ko' },
-    { path: 'setup/SETUP_CHECKLIST_ko.html', title: '워크숍 사전 설치 체크리스트', lang: 'ko' },
+    { path: 'setup/SETUP.html', title: '워크숍 환경 설치 가이드', lang: 'ko' },
+    { path: 'setup/SETUP_CHECKLIST.html', title: '워크숍 사전 설치 체크리스트', lang: 'ko' },
     { path: 'lecture-guide/00_Course_Overview.html', title: '강의 소개', lang: 'ko' },
     { path: 'lecture-guide/00_Lecture_Guide.html', title: '강의 진행 가이드', lang: 'ko' },
 

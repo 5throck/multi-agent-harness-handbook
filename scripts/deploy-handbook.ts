@@ -11,7 +11,7 @@
 
 import { writeFileSync, existsSync, readFileSync, mkdirSync, cpSync, readdirSync } from "node:fs";
 import { join, resolve, basename } from "node:path";
-import { execSync, execFileSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 
 // --- CLI args ---
 const args = process.argv.slice(2);
@@ -39,29 +39,6 @@ function fatal(msg: string): never {
   process.exit(1);
 }
 
-function run(cmd: string, opts?: { cwd?: string; silent?: boolean }): string {
-  const cwd = opts?.cwd ?? projectDir;
-  try {
-    const result = execSync(cmd, {
-      cwd,
-      encoding: "utf-8",
-      stdio: opts?.silent ? "pipe" : "inherit",
-      timeout: 60_000,
-    });
-    return (result || "").trim();
-  } catch (e: unknown) {
-    const err = e as { stderr?: string; message?: string };
-    throw new Error(`Command failed: ${cmd}\n${err.stderr || err.message || e}`);
-  }
-}
-
-/**
- * Shell-escape a value for safe interpolation into shell command strings.
- * Wraps in single quotes and escapes any embedded single quotes.
- */
-function shellEscape(value: string): string {
-  return "'" + value.replace(/'/g, "'\\''") + "'";
-}
 
 /**
  * Execute a command using execFileSync with an argument array — no shell
@@ -359,13 +336,13 @@ log("📤", "Committing and pushing to GitHub...");
 
 // Ensure we're on main
 try {
-  run("git rev-parse --abbrev-ref HEAD", { silent: true });
+  runExec("git", ["rev-parse", "--abbrev-ref", "HEAD"], { silent: true });
 } catch {
   fatal("Not inside a git repository");
 }
 
 // Stage all handbook files
-run(`git add ${shellEscape(outputDir)}/.github/workflows/deploy-pages.yml ${shellEscape(outputDir)}/docs/.nojekyll`);
+runExec("git", ["add", `${outputDir}/.github/workflows/deploy-pages.yml`, `${outputDir}/docs/.nojekyll`]);
 log("✅", "Staged deploy workflow and .nojekyll");
 
 // Patch README files with GitHub Pages URL
@@ -374,7 +351,7 @@ for (const readmeFile of readmeFiles) {
   const readmePath = join(handbookDir, readmeFile);
   const patched = patchReadmePagesUrl(readmePath, pagesUrl, repoName);
   if (patched) {
-    run(`git add ${shellEscape(readmePath)}`);
+    runExec("git", ["add", readmePath]);
     log("📝", `Patched ${readmeFile} with GitHub Pages URL`);
   } else {
     log("ℹ️", `${readmeFile} already has correct GitHub Pages URL`);
@@ -382,10 +359,10 @@ for (const readmeFile of readmeFiles) {
 }
 
 // Check if there are changes to commit
-const readmeArgs = readmeFiles.map(f => shellEscape(`${outputDir}/${f}`)).join(" ");
-const status = run(`git status --porcelain -- ${shellEscape(outputDir)}/.github/workflows/deploy-pages.yml ${shellEscape(outputDir)}/docs/.nojekyll ${readmeArgs}`, { silent: true });
+const readmePaths = readmeFiles.map(f => `${outputDir}/${f}`);
+const status = runExec("git", ["status", "--porcelain", "--", `${outputDir}/.github/workflows/deploy-pages.yml`, `${outputDir}/docs/.nojekyll`].concat(readmePaths), { silent: true });
 if (status) {
-  run(`git commit -m "ci(handbook): add GitHub Pages deploy workflow"`);
+  runExec("git", ["commit", "-m", "ci(handbook): add GitHub Pages deploy workflow"]);
   log("✅", "Committed deploy workflow");
 } else {
   log("ℹ️", "No new changes to commit");
@@ -394,17 +371,17 @@ if (status) {
 // Add remote if not already present
 const remoteUrl = `https://github.com/${fullRepo}.git`;
 try {
-  run("git remote get-url origin", { silent: true });
+  runExec("git", ["remote", "get-url", "origin"], { silent: true });
   // Update origin URL if different
-  run(`git remote set-url origin ${shellEscape(remoteUrl)}`);
+  runExec("git", ["remote", "set-url", "origin", remoteUrl]);
 } catch {
-  run(`git remote add origin ${shellEscape(remoteUrl)}`);
+  runExec("git", ["remote", "add", "origin", remoteUrl]);
   log("✅", `Added remote origin → ${remoteUrl}`);
 }
 
 // Push
 try {
-  run("git push -u origin main", { silent: true });
+  runExec("git", ["push", "-u", "origin", "main"], { silent: true });
   log("✅", "Pushed to GitHub");
 } catch (e: unknown) {
   const err = e as { message?: string };

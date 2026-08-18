@@ -17,6 +17,10 @@
     "check-lint": "bun run scripts/check-lint.ts --docs-dir docs",
     "check-external-links": "bun run scripts/check-external-links.ts --docs-dir docs",
     "build-search-index": "bun run scripts/build-search-index.ts --docs-dir docs",
-    "deploy": "bun run scripts/deploy-handbook.ts --project . --output ."
+    "deploy": "bun run scripts/deploy-handbook.ts --project . --output .",
+    "check-symmetry": "bun run scripts/check-symmetry.ts --docs-dir docs",
+    "check-links": "bun run scripts/check-links.ts --docs-dir docs",
+    "check-labels": "bun run scripts/check-labels.ts --docs-dir docs",
+    "check-search": "bun run scripts/check-search.ts --docs-dir docs"
   }
 }

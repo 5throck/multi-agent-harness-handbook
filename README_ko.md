@@ -17,6 +17,7 @@ cd setup
 자세한 안내는 [설치 가이드](https://5throck.github.io/multi-agent-harness-handbook/setup/SETUP_ko.html)를 참고하세요.
 
 ## 📚 커리큘럼 구성
+- **선수 과정 브릿지** — [intro-to-ai-harness](https://5throck.github.io/intro-to-ai-harness/) 입문 과정을 이미 마친 독자를 위한 스킵 맵
 - **1장 · 도입** — 왜 AI 에이전트 팀인가 & 현대적 AI 워크스페이스 패러다임
 - **2장 · 하네스 엔지니어링** — 멀티 에이전트팀 핵심 개념과 오케스트레이션
 - **3장 · 가드레일과 권한 모델** — 에이전트 안전망과 권한 제어
@@ -26,11 +27,16 @@ cd setup
 - **7장 · 기업 내 운영 전략 비교** — 도입 및 거버넌스 전략 분석
 - **8장 · `ai-workspace-standards` 아키텍처 심화** — 배포·SSOT, 생애주기, AGENTS.md 심화, 고도화 로드맵
 - **9장 · 워크플로우 디자인 패턴** — 멀티 에이전트 협업 패턴
-- **10장 · L2 프로젝트 업그레이드** — 실전 프로젝트 에이전트 기능 확장
+- **10장 · L3 프로젝트 업그레이드** — 실전 프로젝트 에이전트 기능 확장
 - **11장 · 신규 variant 생성 (Phase A)** — 커스텀 하네스 설계
 - **12장 · 신규 variant 승격 (Phase B)** — 프로덕션 배포 및 검증
 - **13장 · 캡스톤** — 나만의 워크플로우 설계하기
 - **공통 참고** — 도구 비교 (Claude Code / Claude Desktop App / Antigravity CLI / Antigravity)
+- **FAQ** — 자주 나는 오류와 해결법
+- **용어집** — 핸드북 전반에서 사용하는 핵심 용어 정리
+- **워밍업 실습** — 테트리스에서 팩맨까지
+- **강의 소개** — 학습 목표와 커리큘럼 구성
+- **강의 진행 가이드** — 일자별 일정, 아젠다, 진행자 노트
 
 ## 🎯 대상 버전
 - Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-08)

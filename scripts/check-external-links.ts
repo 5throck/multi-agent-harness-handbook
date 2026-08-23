@@ -4,9 +4,10 @@
 // Extends the internal-only check-links.ts by testing external URLs:
 //   1. Extracts all <a href="http..."> links from HTML files
 //   2. Performs HTTP HEAD requests with a 5-second timeout
-//   3. Reports non-2xx status codes and timeouts
-//   4. Skips known-good domains (creativecommons.org, github.com, claude.ai)
-//   5. Limits concurrency to 5 simultaneous requests
+//   3. Follows redirects (up to 5 hops) and uses HEAD→GET fallback for 403/405/501
+//   4. Reports non-2xx status codes and timeouts (after redirects)
+//   5. Skips known-good domains (creativecommons.org, github.com, claude.ai)
+//   6. Limits concurrency to 5 simultaneous requests
 //
 // Vendored between intro-to-ai-harness and multi-agent-harness-handbook.
 // Uses only Node.js built-in http/https modules (no node-fetch).
@@ -14,6 +15,7 @@
 // Usage:
 //   bun run scripts/check-external-links.ts --docs-dir docs
 // Exit code 0 if no broken links, 1 otherwise.
+// @version 1.1.0
 
 import { findAllHtmlFiles, readFile, getDocsDir, configureDocsDir } from "./nav-utils.ts";
 import { relative } from "node:path";
@@ -44,19 +46,25 @@ export interface ExternalLinkIssue {
   file: string;
   url: string;
   status: number | "TIMEOUT" | "ERROR";
+  redirectChain?: string;
 }
 
 // ---------------------------------------------------------------------------
-// HTTP HEAD request helper
+// HTTP request helper with redirect following and HEAD→GET fallback
 // ---------------------------------------------------------------------------
 
 interface HeadResult {
   status: number;
+  redirectChain?: string;
 }
 
+const MAX_REDIRECTS = 5;
+const RETRIABLE_STATUS_CODES = new Set([403, 405, 501]);
+
 /**
- * Perform an HTTP HEAD request with a timeout.
- * Returns the status code, or "TIMEOUT" / "ERROR" on failure.
+ * Perform an HTTP HEAD request with a timeout, following redirects.
+ * If HEAD returns 403/405/501, retries with GET.
+ * Returns the final status code after following redirects, or "TIMEOUT" / "ERROR".
  */
 function headRequest(urlStr: string): Promise<HeadResult | "TIMEOUT" | "ERROR"> {
   return new Promise((resolve) => {
@@ -69,36 +77,88 @@ function headRequest(urlStr: string): Promise<HeadResult | "TIMEOUT" | "ERROR"> 
     }
 
     const transport = parsed.protocol === "https:" ? https : http;
+    let redirectCount = 0;
+    let currentUrl = urlStr;
+    const redirectChain: string[] = [];
 
-    const req = transport.request(
-      {
-        hostname: parsed.hostname,
-        port: parsed.port || (parsed.protocol === "https:" ? 443 : 80),
-        path: parsed.pathname + parsed.search,
-        method: "HEAD",
-        timeout: TIMEOUT_MS,
-        headers: {
-          "User-Agent": "handbook-link-checker/1.0",
-          "Accept": "*/*",
+    const doRequest = (useGet: boolean = false): void => {
+      let reqParsed: URL;
+      try {
+        reqParsed = new URL(currentUrl);
+      } catch {
+        resolve("ERROR");
+        return;
+      }
+
+      const reqTransport = reqParsed.protocol === "https:" ? https : http;
+      const method = useGet ? "GET" : "HEAD";
+
+      const req = reqTransport.request(
+        {
+          hostname: reqParsed.hostname,
+          port: reqParsed.port || (reqParsed.protocol === "https:" ? 443 : 80),
+          path: reqParsed.pathname + reqParsed.search,
+          method,
+          timeout: TIMEOUT_MS,
+          headers: {
+            "User-Agent": "handbook-link-checker/1.1",
+            "Accept": "*/*",
+          },
         },
-      },
-      (res) => {
-        // Consume response data to free the socket
-        res.resume();
-        resolve({ status: res.statusCode ?? 0 });
-      },
-    );
+        (res) => {
+          // Consume response data to free the socket
+          res.resume();
 
-    req.on("timeout", () => {
-      req.destroy();
-      resolve("TIMEOUT");
-    });
+          const statusCode = res.statusCode ?? 0;
 
-    req.on("error", () => {
-      resolve("ERROR");
-    });
+          // Handle redirects
+          if (statusCode >= 300 && statusCode < 400 && res.headers.location) {
+            if (redirectCount >= MAX_REDIRECTS) {
+              resolve({ status: statusCode, redirectChain: redirectChain.join(" -> ") });
+              return;
+            }
 
-    req.end();
+            redirectCount++;
+            const location = res.headers.location;
+            redirectChain.push(`${currentUrl} -> ${location}`);
+
+            // Handle relative redirects
+            try {
+              currentUrl = new URL(location, currentUrl).href;
+            } catch {
+              resolve("ERROR");
+              return;
+            }
+
+            // Follow redirect with same method
+            doRequest(useGet);
+            return;
+          }
+
+          // HEAD→GET fallback for certain status codes
+          if (!useGet && RETRIABLE_STATUS_CODES.has(statusCode)) {
+            doRequest(true);
+            return;
+          }
+
+          // Final response
+          resolve({ status: statusCode, redirectChain: redirectChain.length > 0 ? redirectChain.join(" -> ") : undefined });
+        },
+      );
+
+      req.on("timeout", () => {
+        req.destroy();
+        resolve("TIMEOUT");
+      });
+
+      req.on("error", () => {
+        resolve("ERROR");
+      });
+
+      req.end();
+    };
+
+    doRequest();
   });
 }
 
@@ -199,9 +259,14 @@ export async function checkExternalLinks(): Promise<ExternalLinkIssue[]> {
     const status = statusMap.get(pair.url);
     if (status === undefined) continue;
     if (typeof status === "object") {
-      // Non-2xx status is a broken link
+      // Non-2xx status is a broken link (after all redirects and fallbacks)
       if (status.status < 200 || status.status >= 300) {
-        all.push({ file: pair.file, url: pair.url, status: status.status });
+        all.push({
+          file: pair.file,
+          url: pair.url,
+          status: status.status,
+          redirectChain: status.redirectChain,
+        });
       }
     } else {
       // TIMEOUT or ERROR
@@ -230,7 +295,8 @@ if (import.meta.main) {
       const key = `${issue.file}:${issue.url}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      console.error(`  ${issue.file}: ${issue.url} -> ${issue.status}`);
+      const redirectInfo = issue.redirectChain ? ` (via: ${issue.redirectChain})` : "";
+      console.error(`  ${issue.file}: ${issue.url} -> ${issue.status}${redirectInfo}`);
     }
     process.exit(1);
   });

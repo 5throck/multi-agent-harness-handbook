@@ -1,3 +1,12 @@
+// Localized copy feedback labels, keyed on the page's <html lang>
+var COPY_LABELS = {
+  en: ['Copied!', 'Failed'],
+  ko: ['완료!', '실패!'],
+  es: ['¡Copiado!', 'Error'],
+  ja: ['コピーしました！', '失敗！']
+};
+var COPY_LABEL = COPY_LABELS[document.documentElement.lang] || COPY_LABELS.en;
+
 function copyCode(btn) {
   var original = btn.textContent;
   var text;
@@ -12,7 +21,7 @@ function copyCode(btn) {
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function () {
-      btn.textContent = '완료!';
+      btn.textContent = COPY_LABEL[0];
       btn.classList.add('copied');
       btn.setAttribute('aria-live', 'polite');
       setTimeout(function () {
@@ -21,7 +30,7 @@ function copyCode(btn) {
         btn.removeAttribute('aria-live');
       }, 1500);
     }).catch(function () {
-      btn.textContent = '실패!';
+      btn.textContent = COPY_LABEL[1];
       btn.classList.add('copied');
       setTimeout(function () {
         btn.textContent = original;
@@ -38,14 +47,14 @@ function copyCode(btn) {
     ta.select();
     try {
       document.execCommand('copy');
-      btn.textContent = '완료!';
+      btn.textContent = COPY_LABEL[0];
       btn.classList.add('copied');
       setTimeout(function () {
         btn.textContent = original;
         btn.classList.remove('copied');
       }, 1500);
     } catch (e) {
-      btn.textContent = '실패!';
+      btn.textContent = COPY_LABEL[1];
       btn.classList.add('copied');
       setTimeout(function () {
         btn.textContent = original;

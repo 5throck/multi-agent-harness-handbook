@@ -129,7 +129,7 @@
   <pre class="code-block" style="margin-top:10px;">gh auth login
 # Follow the prompts: choose GitHub.com → choose HTTPS → choose Login with a web browser (recommended)
 # When the browser opens, log in with the account you just created and confirm the authentication code</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   </div>
 
@@ -148,7 +148,7 @@
 cd ./setup
 .\setup-windows.ps1
 # Optional flags: -WSL2, -WezTerm, -Docker, -Force (reinstall tools even if already installed)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   <p>After the script finishes, you must fully close and reopen your terminal for the PATH changes to take effect.</p>
 
@@ -162,14 +162,14 @@ cd ./setup && bash setup-mac.sh
 
 # Linux
 cd ./setup && bash setup-linux.sh</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <h3>Verifying the Installation</h3>
   <p>Regardless of your OS, running setup-common.ts with <code>bun</code> prints a checklist table showing your installation status. If every item shows ✅, you're ready to proceed with the exercises below.</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <p>Among the tools this project installs, the ones directly relevant to this chapter's four-tool exercises are: Claude Desktop App, <code>claude</code> (Claude Code CLI), Antigravity (Desktop), <code>agy</code> (Antigravity CLI), <code>bun</code> (needed to run subagents based on <code>.claude/agents/*.md</code>), and <code>gh</code> (GitHub CLI), which is used in later chapters as well.</p>
@@ -219,7 +219,7 @@ cd ./setup && bash setup-linux.sh</pre>
             <div style="position:relative">
               <pre class="code-block">mkdir -p harness-lab
 cd harness-lab</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -236,7 +236,7 @@ Input: Path to the text file to review
 Output: A list of typos, logical gaps, and improvement suggestions
 Permissions: Read-only — does not modify the file directly.
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong>, the <code>cat</code> command itself is an alias for <code>Get-Content</code> and can be used as-is for reading files. However, it doesn't support the heredoc syntax (<code>&lt;&lt; 'EOF'</code>) for entering multiple lines directly, so build the same content as a quoted here-string (<code>@'...'@</code>) and write it to the file with <code>Set-Content</code>.</p>
             <div style="position:relative">
@@ -248,7 +248,7 @@ Input: Path to the text file to review
 Output: A list of typos, logical gaps, and improvement suggestions
 Permissions: Read-only — does not modify the file directly.
 '@ | Set-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -269,7 +269,7 @@ Permissions: Read-only — does not modify the file directly.
               <strong>② Request Subagent Creation — Paste the Text Below into the Chat Box and Send</strong>
               <div style="position:relative">
                 <pre class="code-block">Following the reviewer role spec written in AGENTS.md exactly, create a reviewer subagent at .claude/agents/reviewer.md. Allow only the Read and Grep tools, and set the model to sonnet.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 Claude Desktop App reads the "role/input/output/permissions" spec in AGENTS.md and directly creates <code>.claude/agents/reviewer.md</code> using the Write tool, transferring the content into the YAML frontmatter (<code>description</code>, <code>tools</code>) and system prompt — the spec stays the same, only the format has been adapted to the tool. Once creation finishes, compare the file contents shown in the chat against AGENTS.md.
@@ -281,7 +281,7 @@ Permissions: Read-only — does not modify the file directly.
               <strong>③ Create a Target File and Call the Subagent — Continue Pasting in the Same Chat and Send</strong>
               <div style="position:relative">
                 <pre class="code-block">Create a file called notes.txt containing the text "This project is very good. This is very good." Then use the reviewer subagent to review notes.txt.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 Claude Desktop App calls the <code>Agent</code> (Task) tool with <code>description="Review notes.txt"</code> and <code>subagent_type="reviewer"</code>. The screen shows, in order, the subagent being spawned and, once its work is done, a summary result returned to the main session.
@@ -384,7 +384,7 @@ Output: Draft text file
 Permissions: Write access — saves only to the specified file.
 handoff_to: reviewer (review follows once the draft is done)
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong>, append the here-string with <code>Add-Content</code> (you must use <code>Add-Content</code> rather than <code>Set-Content</code>, which overwrites the file and would erase the reviewer entry).</p>
             <div style="position:relative">
@@ -398,7 +398,7 @@ Output: Draft text file
 Permissions: Write access — saves only to the specified file.
 handoff_to: reviewer (review follows once the draft is done)
 '@ | Add-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -413,7 +413,7 @@ handoff_to: reviewer (review follows once the draft is done)
               <strong>① Request writer Subagent Creation — Paste the Text Below into the Chat Box and Send</strong>
               <div style="position:relative">
                 <pre class="code-block">Following the writer role spec written in AGENTS.md exactly, create a writer subagent at .claude/agents/writer.md. Allow the Write and Read tools, and set the model to sonnet.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 Claude Desktop App reads the writer spec in AGENTS.md and directly creates <code>.claude/agents/writer.md</code> using the Write tool. It sits alongside the <code>reviewer.md</code> already created in G-1, inside the same <code>.claude/agents/</code> folder — the <code>handoff_to: reviewer</code> entry in AGENTS.md actually plays out in the next step.
@@ -425,7 +425,7 @@ handoff_to: reviewer (review follows once the draft is done)
               <strong>② Request the writer → reviewer Sequential Pipeline — Continue Pasting in the Same Chat and Send</strong>
               <div style="position:relative">
                 <pre class="code-block">Have the writer subagent write a draft.txt draft on the topic 'The Advantages of Remote Work,' and once that's done, have the reviewer subagent review draft.txt. Proceed through the two stages in order.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 The main session first calls <code>Agent</code> with <code>subagent_type="writer"</code> to generate <code>draft.txt</code>, and only after that result comes back does it send the <code>subagent_type="reviewer"</code> call. Coordinating the dependency between the two specialists is the main session's job, not the subagents'.
@@ -554,7 +554,7 @@ handoff_to: reviewer (review follows once the draft is done)
               <strong>① A Simple Request — A Case That Only Needs reviewer</strong>
               <div style="position:relative">
                 <pre class="code-block">Just skim draft.txt for typos.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 The orchestrator decides <code>writer</code> isn't needed for this request and calls only <code>reviewer</code>. Even with the same team (writer+reviewer) defined, this is the simplest example showing that the orchestrator decides who's actually deployed for each request as it goes.
@@ -566,7 +566,7 @@ handoff_to: reviewer (review follows once the draft is done)
               <strong>② A Complex Request — Combining writer and reviewer with Two Perspectives</strong>
               <div style="position:relative">
                 <pre class="code-block">Write a new draft in draft2.txt on the topic 'The Four-Day Workweek.' Once the draft is done, have it independently reviewed from a grammar perspective and a logic perspective simultaneously.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 This time, after one <code>writer</code> call (the first stage of the pipeline), <code>reviewer</code> is called twice at once (fan-out), each with different instructions — "grammar perspective" and "logic perspective." You can see the pipeline (writer → reviewer) and fan-out (reviewer ×2 running concurrently) orchestration patterns combined within a single request — the same two subagents produced a workflow with a completely different shape than in ①.
@@ -637,7 +637,7 @@ handoff_to: reviewer (review follows once the draft is done)
   "teammateMode": "in-process"
 }
 EOF</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong>, create the same file with a here-string.</p>
               <div style="position:relative">
@@ -649,7 +649,7 @@ EOF</pre>
   "teammateMode": "in-process"
 }
 '@ | Set-Content .claude/settings.json</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -664,7 +664,7 @@ EOF</pre>
               <strong>③ Request Parallel Teammate Spawning — Paste the Text Below into the Chat Box and Send</strong>
               <div style="position:relative">
                 <pre class="code-block">Spawn two writer teammates in parallel — have one write a draft in topic-a.txt on 'remote work' and the other write a draft in topic-b.txt on 'the four-day workweek' at the same time. Once each file is done, have a reviewer teammate review it, and show me the shared task list too.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -844,7 +844,7 @@ EOF</pre>
               <strong>① Prepare the Target File</strong>
               <div style="position:relative">
                 <pre class="code-block">Create a file called argument.txt and write the following into it: "Remote work is always more productive than office work. This is because people who work remotely say remote work is good. Therefore, every company should switch entirely to remote work."</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -854,7 +854,7 @@ EOF</pre>
               <p>Paste the text below into the chat box as-is. Claude Desktop App changes the <code>model</code> field in <code>reviewer.md</code> to <code>haiku</code>, then performs the review.</p>
               <div style="position:relative">
                 <pre class="code-block">Change the model field in .claude/agents/reviewer.md to haiku. Then use the reviewer subagent to review argument.txt.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -864,7 +864,7 @@ EOF</pre>
               <p>The same way, change <code>model</code> to <code>sonnet</code> and review again. Compare against the haiku result to see whether it precisely identifies logical flaws such as circular reasoning.</p>
               <div style="position:relative">
                 <pre class="code-block">Change the model field in .claude/agents/reviewer.md to sonnet. Then use the reviewer subagent to review argument.txt.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -874,7 +874,7 @@ EOF</pre>
               <p>The same way, change <code>model</code> to <code>opus</code> and review again. Note how the response time and depth of insight differ from ②③.</p>
               <div style="position:relative">
                 <pre class="code-block">Change the model field in .claude/agents/reviewer.md to opus. Then use the reviewer subagent to review argument.txt.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -907,13 +907,13 @@ EOF</pre>
     <div style="position:relative">
       <pre class="code-block">cd ..
 rm -rf harness-lab</pre>
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <button class="copy-btn">Copy</button>
     </div>
     <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell</strong></p>
     <div style="position:relative">
       <pre class="code-block">cd ..
 Remove-Item -Recurse -Force harness-lab</pre>
-      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <button class="copy-btn">Copy</button>
     </div>
   </div>
 

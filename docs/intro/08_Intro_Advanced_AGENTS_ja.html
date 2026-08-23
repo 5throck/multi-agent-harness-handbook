@@ -120,7 +120,7 @@
 出力: 草稿テキストファイル
 権限: 書き込み許可 — 指定されたファイルにのみ保存する。
 handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <div class="note">AGENTS.mdはAIツールに向けた指示文ではなく、<strong>人間が定義した複数の役割の登録簿</strong>である。Claude系はこの登録簿を読み込み、ツール別の定義ファイル(<code>.claude/agents/*.md</code>)に「翻訳」し、Antigravity系は登録簿そのものをオーケストレーションが直接読み取り解釈する。</div>
@@ -228,7 +228,7 @@ handoff_to: editor(レビュー完了後に最終編集へ引き継ぐ)
 
 ## Agent: editor
 役割: フィードバックを反映して最終文書を完成させる。</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <div class="note">handoff_toが宣言されていないエージェント(上記例の<code>editor</code>)は、パイプラインの終点である。オーケストレーターはそのエージェントの結果を最終ユーザーに返す。</div>

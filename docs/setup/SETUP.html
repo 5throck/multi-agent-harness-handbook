@@ -68,7 +68,7 @@
 
 6. 최종 확인 ✅
    └─ bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div></div>
 
   <h2 id="step0">Step 0 — 스크립트 저장소 클론</h2>
@@ -76,7 +76,7 @@
   <div style="position:relative">
     <pre class="code-block">git clone https://github.com/5throck/setup.git
 cd setup</pre>
-    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+    <button class="copy-btn">복사</button>
   </div>
 
   <h2 id="step1">Step 1 — 체크리스트 완료</h2>
@@ -100,7 +100,7 @@ bash setup-mac.sh --wezterm
 bash setup-mac.sh --docker
 # 둘 다:
 bash setup-mac.sh --wezterm --docker</pre>
-    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+    <button class="copy-btn">복사</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
@@ -112,7 +112,7 @@ bash setup-linux.sh --wezterm
 bash setup-linux.sh --docker
 # 둘 다:
 bash setup-linux.sh --wezterm --docker</pre>
-    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+    <button class="copy-btn">복사</button>
   </div>
 
   <h3>Windows</h3>
@@ -127,14 +127,14 @@ bash setup-linux.sh --wezterm --docker</pre>
 .\setup-windows.ps1 -Docker           # Docker Desktop 함께 설치
 .\setup-windows.ps1 -Force            # 이미 설치된 도구도 모두 재설치
 .\setup-windows.ps1 -WSL2 -WezTerm -Docker  # 선택 옵션 전부 설치</pre>
-    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+    <button class="copy-btn">복사</button>
   </div>
   <div class="note"><strong>실행 후</strong>: 터미널을 닫고 다시 열어 PATH 변경 사항을 반영하세요.</div>
 
   <h2 id="step3">Step 3 — 설치 확인</h2>
   <div style="position:relative">
     <pre class="code-block">bun setup-common.ts</pre>
-    <button class="copy-btn" onclick="copyCode(this)">복사</button>
+    <button class="copy-btn">복사</button>
   </div>
   <p>설치된 도구의 검증 표를 출력한다. <strong>모든 항목이 ✅로 표시되면 준비 완료이다.</strong></p>
 
@@ -189,7 +189,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>터미널을 재시작하세요. Windows에서는 bun이 User 환경변수에 자동으로 등록됩니다. macOS/Linux:</p>
   <div style="position:relative">
   <pre class="code-block">export PATH="$HOME/.bun/bin:$PATH"</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <p><strong><code>bun install -g</code> 후 <code>claude: command not found</code></strong></p>
@@ -202,7 +202,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>스크립트가 자동으로 <code>RemoteSigned</code>로 설정한다. 수동으로 변경하려면:</p>
   <div style="position:relative">
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <div class="warn"><strong>Windows: 관리자 권한 없이 실행한 경우</strong> — 스크립트가 경고를 표시하지만 계속 진행됩니다. winget 등 일부 설치에서 오류가 발생할 수 있으므로, PowerShell을 관리자 권한으로 재실행하는 것을 권장한다.</div>

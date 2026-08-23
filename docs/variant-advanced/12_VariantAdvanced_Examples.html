@@ -210,7 +210,7 @@
             <p>정식 variant인 co-work과 아직 프로토타입 단계인 co-retail의 최상위 파일 목록을 비교한다.</p>
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-retail/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -220,12 +220,12 @@
             <p>보통 <code>variant.json</code>, <code>README.md</code>/<code>README_ko.md</code>, <code>docs/adr/</code>는 정식 템플릿에는 있지만 Phase A 프로토타입 단계에서는 아직 없거나 비어 있다. 먼저 정식 템플릿(co-work) 쪽에 이 파일들이 실제로 있는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">이어서 co-retail 프로토타입 쪽 폴더 목록을 확인해, 위 파일들이 아직 없는지 비교한다.</p>
             <div style="position:relative">
               <pre class="code-block">ls Projects/co-retail/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -279,12 +279,12 @@
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① 에이전트 frontmatter 완결성 검사</strong> — name, tier, handoff 등 필수 필드가 빠짐없이 채워졌는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② 스킬 매니페스트 검사</strong> — 베리언트(variant)가 참조하는 스킬이 실제로 존재하고 세 플랫폼(.claude/.gemini/.agents)에 고르게 배포돼 있는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -301,7 +301,7 @@
   },
   "script_manifest": []
 }</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -394,7 +394,7 @@
             <p><code>--source</code>는 Phase A 프로토타입 경로, <code>--variant</code>는 최종 variant 이름, <code>--variantType</code>은 도메인 유형이다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -405,7 +405,7 @@
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
 diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -415,7 +415,7 @@ diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/
             <p>모든 절차가 끝난 뒤 마지막으로 구조 검증을 한 번 더 돌려, 신규 베리언트(variant)가 워크스페이스 전체 규정을 만족하는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-templates.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -467,7 +467,7 @@ diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/
 - [ ] brand-assets/ 디렉터리를 templates/co-retail/brand-assets/로 복사
 - [ ] campaign-templates/ 아래 캠페인 브리프 골격 파일을 그대로 이관
 - [ ] channel-configs.json의 채널 목록 초기값을 빈 배열로 초기화</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
         </div>
         이런 항목은 reconcile이 다루는 "공통 파일 중복 제거"와는 성격이 다른, variant 고유의 자산이므로 파이프라인이 알아서 처리해주지 않는다 — 체크박스를 하나씩 직접 확인하며 옮겨야 한다.

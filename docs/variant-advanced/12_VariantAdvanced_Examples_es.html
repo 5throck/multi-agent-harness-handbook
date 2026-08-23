@@ -210,7 +210,7 @@
             <p>Compare los listados de archivos de nivel superior de co-work, una variante oficial, y co-retail, que aún está en fase de prototipo.</p>
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-work/) &lt;(ls Projects/co-retail/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
           </div>
         </li>
@@ -220,12 +220,12 @@
             <p>Típicamente, <code>variant.json</code>, <code>README.md</code>/<code>README_ko.md</code> y <code>docs/adr/</code> existen en la plantilla oficial pero aún faltan o están vacíos en la etapa de prototipo de Fase A. Primero confirme que estos archivos realmente existen en el lado de la plantilla oficial (co-work).</p>
             <div style="position:relative">
               <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">A continuación, verifique el listado de la carpeta del prototipo de co-retail para confirmar que los archivos anteriores aún no existen allí.</p>
             <div style="position:relative">
               <pre class="code-block">ls Projects/co-retail/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
           </div>
         </li>
@@ -279,12 +279,12 @@
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① Verificación de completitud del frontmatter de agente</strong> — confirme que los campos requeridos como nombre, tier y handoff están todos completados.</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Verificación del manifiesto de habilidades</strong> — confirme que las habilidades referenciadas por la variante realmente existen y están desplegadas uniformemente en las tres plataformas (.claude/.gemini/.agents).</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
           </div>
         </li>
@@ -301,7 +301,7 @@
   },
   "script_manifest": []
 }</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
           </div>
         </li>
@@ -394,7 +394,7 @@
             <p><code>--source</code> es la ruta del prototipo de Fase A, <code>--variant</code> es el nombre final de la variante, y <code>--variantType</code> es el tipo de dominio.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
           </div>
         </li>
@@ -405,7 +405,7 @@
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
 diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
           </div>
         </li>
@@ -415,7 +415,7 @@ diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.g
             <p>Después de completar todos los pasos, ejecute la validación estructural una vez más para confirmar que la nueva variante satisface las reglas generales del espacio de trabajo.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-templates.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+              <button class="copy-btn">Copiar</button>
             </div>
           </div>
         </li>
@@ -467,7 +467,7 @@ diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.g
 - [ ] Copiar el directorio brand-assets/ a templates/co-retail/brand-assets/
 - [ ] Transferir los archivos esqueleto de brief de campaña bajo campaign-templates/ tal cual
 - [ ] Restablecer la lista inicial de canales en channel-configs.json a un arreglo vacío</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
         </div>
         Estos elementos son un tipo de preocupación diferente al trabajo de "deduplicar archivos comunes" que maneja la conciliación — son activos específicos de la variante, por lo que el pipeline no los procesará por usted. Debe marcar cada casilla y moverlos usted mismo.

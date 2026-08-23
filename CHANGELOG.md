@@ -2,6 +2,16 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-08-23] — Copy Button CSP Compliance
+
+### Bug Fix
+- **Fixed all copy buttons site-wide** — the CSP meta tag (`script-src 'self'`) added during security hardening blocks inline event handlers, so every `<button onclick="copyCode(this)">` stopped working. Clicks are now handled by document-level event delegation for `.copy-btn` in `copy-code.js`, and all 424 inline handlers across 76 pages were removed.
+
+### Hardening
+- Ported hardened copy logic into `copy-code.js`: null-safe `pre` text lookup, clipboard-API error feedback, and a `textarea` + `document.execCommand('copy')` fallback for non-secure contexts
+- Success/failure feedback now restores each button's original localized label instead of a hardcoded string (button labels vary by page language)
+- No CSP change — the strict `script-src 'self'` policy is preserved
+
 ## [2026-08-16] — Content Accuracy & Security Review
 
 ### Security

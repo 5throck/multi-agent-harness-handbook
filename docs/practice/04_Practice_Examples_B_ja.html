@@ -127,7 +127,7 @@
   <pre class="code-block" style="margin-top:10px;">gh auth login
 # 案内に従って: GitHub.comを選択 → HTTPSを選択 → ブラウザでログイン(推奨)を選択
 # ブラウザが開いたら、先ほど作成したアカウントでログインし、認証コードを確認する</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   </div>
 
@@ -146,7 +146,7 @@
 cd ./setup
 .\setup-windows.ps1
 # 選択オプション: -WSL2, -WezTerm, -Docker, -Force (すでにインストール済みのツールも再インストール)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   <p>スクリプトが終わったら、ターミナルを完全に閉じて再度開く必要がある。PATHの変更が反映されるためだ。</p>
 
@@ -160,14 +160,14 @@ cd ./setup && bash setup-mac.sh
 
 # Linux
 cd ./setup && bash setup-linux.sh</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <h3>インストールの検証</h3>
   <p>OSにかかわらず、setup-common.tsを<code>bun</code>で実行すると、インストール状態を点検するチェックリスト表が出力される。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになる。</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <p>このプロジェクトがインストールするツールのうち、この章の実習に直接関係するものは次の通りである。Antigravity(Desktop)、<code>agy</code>(Antigravity CLI)、そして後の章で使われる<code>gh</code>(GitHub CLI)まで一緒にインストールされる。</p>
@@ -217,7 +217,7 @@ cd ./setup && bash setup-linux.sh</pre>
             <div style="position:relative">
               <pre class="code-block">mkdir -p harness-lab
 cd harness-lab</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
           </div>
         </li>
@@ -234,7 +234,7 @@ cd harness-lab</pre>
 出力: 誤字脱字・論理的欠陥・改善点のリスト
 権限: 読み取り専用 — ファイルを直接修正しない。
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
             <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShellでは</strong><code>cat</code>コマンド自体は<code>Get-Content</code>のエイリアスとしてファイル読み込みにそのまま使える。ただし<code>&lt;&lt; 'EOF'</code>のように複数行を直接入力するheredoc構文はサポートしないため、同じ内容を引用符付きのhere-string(<code>@'...'@</code>)として作成し、<code>Set-Content</code>でファイルに書き込む。</p>
             <div style="position:relative">
@@ -246,7 +246,7 @@ EOF</pre>
 出力: 誤字脱字・論理的欠陥・改善点のリスト
 権限: 読み取り専用 — ファイルを直接修正しない。
 '@ | Set-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
           </div>
         </li>
@@ -261,7 +261,7 @@ EOF</pre>
               <strong>① 検討対象ファイルを事前に用意(ターミナル)</strong>
               <div style="position:relative">
                 <pre class="code-block">echo "このプロジェクトはとても良い。これは非常に良い。" > notes.txt</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -276,7 +276,7 @@ EOF</pre>
               <strong>③ 目標指示 — Workspaceのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.mdに書かれたreviewer役割仕様通りにnotes.txtを検討して。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 Workspaceを担当するエージェントがAGENTS.mdを読み、その中の役割/入力/出力/権限の仕様をそのまま目標として、必要な作業(ファイルの読み込み、改善点の整理)を自ら判断して実行する。AGENTS.mdが「何を検討基準とするか」の唯一の原本であるため、検討基準(誤字脱字・論理的欠陥・改善点)はこの仕様によって決まる。
@@ -288,7 +288,7 @@ EOF</pre>
         <div style="position:relative">
           <pre class="code-block">cd harness-lab && agy
 /goal notes.txtファイルを検討して改善点を要約して</pre>
-          <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+          <button class="copy-btn">コピー</button>
         </div>
       </div>
 
@@ -380,7 +380,7 @@ EOF</pre>
 権限: 書き込み許可 — 指定されたファイルにのみ保存する。
 handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
             <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShellでは</strong>here-stringを<code>Add-Content</code>で追記する(<code>Set-Content</code>はファイルを上書きするため、reviewer項目が消えないよう必ず<code>Add-Content</code>を使う必要がある)。</p>
             <div style="position:relative">
@@ -394,7 +394,7 @@ EOF</pre>
 権限: 書き込み許可 — 指定されたファイルにのみ保存する。
 handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
 '@ | Add-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
           </div>
         </li>
@@ -409,7 +409,7 @@ handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
               <strong>① 2段階の目標指示 — Workspaceのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.mdのwriter仕様通りにdraft.txtに「リモートワークの利点」というテーマで草稿を先に作成し、完了したらAGENTS.mdのreviewer仕様通りにその草稿を検討して。2つの段階を順番に進めて。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 オーケストレーターがAGENTS.mdの<code>handoff_to: reviewer</code>関係を読み取り、目標を「草稿作成 → 検討」の2つの下位作業に自ら分解した後、草稿作成が終わってから初めて検討作業を開始する。順序調整の責任がユーザーではなくオーケストレーター内部にあるという点が特徴である — ただし「何を検討基準とするか」はAGENTS.mdが唯一の原本である。
@@ -422,7 +422,7 @@ handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
           <pre class="code-block">agy
 /goal draft.txtに「リモートワークの利点」というテーマで草稿を先に書き、
 完了したらその草稿を検討して改善点を要約して</pre>
-          <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+          <button class="copy-btn">コピー</button>
         </div>
       </div>
 
@@ -457,7 +457,7 @@ handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
               <strong>① 単純な目標指示</strong>
               <div style="position:relative">
                 <pre class="code-block">draft.txtの誤字脱字だけざっと見て。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 オーケストレーターは今回のリクエストに作成役割は不要だと判断し、検討役割一つだけをその場で構成する。AGENTS.mdに2つの役割が定義されていても、実際に投入される構成はリクエストごとにオーケストレーターがその都度決定するということを示す、最も単純な例である。
@@ -469,7 +469,7 @@ handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
               <strong>② 複合的な目標指示</strong>
               <div style="position:relative">
                 <pre class="code-block">draft2.txtに「週4日勤務制」というテーマで新しい草稿を先に書き、完了したらその草稿を文法の観点と論理の観点の2つで、それぞれ独立して同時に検討して。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 オーケストレーターは①では検討役割一つだけをその場で構成し、②では作成役割一つと検討役割二つ(互いに異なる観点)を新しく構成する。事前に定義されたサブエージェントファイルがそもそも存在しないため、「今回の作業に合ったチームを毎回新しく組む」という原則がより鮮明に現れる。
@@ -531,7 +531,7 @@ handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
               <strong>② Workspace Aのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">topic-a.txtに「在宅勤務」というテーマで3〜5文の草稿を作成して。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -546,7 +546,7 @@ handoff_to: reviewer (草稿完了後にレビューに引き継がれる)
               <strong>④ Workspace Bのチャット画面に下記の文章をそのまま貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">topic-b.txtに「週4日勤務制」というテーマで3〜5文の草稿を作成して。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>

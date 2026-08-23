@@ -129,7 +129,7 @@
   <pre class="code-block" style="margin-top:10px;">gh auth login
 # 안내에 따라: GitHub.com 선택 → HTTPS 선택 → 브라우저로 로그인(권장) 선택
 # 브라우저가 열리면 방금 만든 계정으로 로그인하고 인증 코드를 확인한다</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
   </div>
 
@@ -148,7 +148,7 @@
 cd ./setup
 .\setup-windows.ps1
 # 선택 옵션: -WSL2, -WezTerm, -Docker, -Force (이미 설치된 도구도 재설치)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
   <p>스크립트가 끝나면 터미널을 완전히 닫았다가 다시 열어야 PATH 변경 사항이 적용된다.</p>
 
@@ -162,14 +162,14 @@ cd ./setup && bash setup-mac.sh
 
 # Linux
 cd ./setup && bash setup-linux.sh</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <h3>설치 검증하기</h3>
   <p>운영체제와 무관하게 setup-common.ts를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <p>이 프로젝트가 설치하는 도구 중 이 장의 4도구 실습과 직접 관련된 것은 다음과 같다. Claude Desktop App, <code>claude</code>(Claude Code CLI), Antigravity(Desktop), <code>agy</code>(Antigravity CLI), 그리고 <code>.claude/agents/*.md</code> 기반 서브에이전트 실행에 필요한 <code>bun</code>, 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
@@ -219,7 +219,7 @@ cd ./setup && bash setup-linux.sh</pre>
             <div style="position:relative">
               <pre class="code-block">mkdir -p harness-lab
 cd harness-lab</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -236,7 +236,7 @@ cd harness-lab</pre>
 출력: 오탈자 · 논리적 허점 · 개선점 목록
 권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
             <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> <code>cat</code> 명령 자체는 <code>Get-Content</code>의 별칭으로 파일 읽기에 그대로 쓸 수 있다. 다만 <code>&lt;&lt; 'EOF'</code>처럼 여러 줄을 직접 넣는 heredoc 문법은 지원하지 않으므로, 같은 내용은 따옴표 있는 here-string(<code>@'...'@</code>)으로 만들어 <code>Set-Content</code>로 파일에 쓴다.</p>
             <div style="position:relative">
@@ -248,7 +248,7 @@ EOF</pre>
 출력: 오탈자 · 논리적 허점 · 개선점 목록
 권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
 '@ | Set-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -269,7 +269,7 @@ EOF</pre>
               <strong>② 서브에이전트 생성 요청 — 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.md에 적힌 reviewer 역할 명세를 그대로 따라서, .claude/agents/reviewer.md에 reviewer 서브에이전트를 만들어줘. tools는 Read, Grep만 허용하고 model은 sonnet으로 설정해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 Claude Desktop App이 AGENTS.md의 "역할/입력/출력/권한" 명세를 읽고, 그 내용을 <code>.claude/agents/reviewer.md</code>의 YAML frontmatter(<code>description</code>, <code>tools</code>)와 시스템 프롬프트로 옮겨 Write 도구로 직접 생성한다. 명세는 그대로고 표현 형식만 도구에 맞게 바뀐 것이다 — 생성이 끝나면 채팅에 표시된 파일 내용을 AGENTS.md와 비교해본다.
@@ -281,7 +281,7 @@ EOF</pre>
               <strong>③ 검토 대상 파일 생성 + 서브에이전트 호출 — 같은 채팅창에 이어서 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">notes.txt 파일을 만들고 "이 프로젝트는 매우 좋다. 이것은 아주 좋다."라고 써넣은 뒤, reviewer 서브에이전트로 notes.txt를 검토해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 Claude Desktop App이 <code>Agent</code>(Task) 툴을 <code>description="notes.txt 검토"</code>, <code>subagent_type="reviewer"</code>로 호출한다. 화면에는 서브에이전트가 스폰되는 과정과, 작업을 마친 뒤 메인 세션으로 돌아오는 요약 결과가 순서대로 표시된다.
@@ -384,7 +384,7 @@ EOF</pre>
 권한: 쓰기 허용 — 지정된 파일에만 저장한다.
 handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
             <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string을 <code>Add-Content</code>로 이어붙인다(<code>Set-Content</code>는 파일을 덮어쓰므로 반드시 <code>Add-Content</code>를 써야 reviewer 항목이 지워지지 않는다).</p>
             <div style="position:relative">
@@ -398,7 +398,7 @@ EOF</pre>
 권한: 쓰기 허용 — 지정된 파일에만 저장한다.
 handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 '@ | Add-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -413,7 +413,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>① writer 서브에이전트 생성 요청 — 채팅창에 그대로 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.md에 적힌 writer 역할 명세를 그대로 따라서, .claude/agents/writer.md에 writer 서브에이전트를 만들어줘. tools는 Write, Read를 허용하고 model은 sonnet으로 설정해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 Claude Desktop App이 AGENTS.md의 writer 명세를 읽고 Write 도구로 <code>.claude/agents/writer.md</code>를 직접 생성한다. G-1에서 이미 만들어 둔 <code>reviewer.md</code>와 같은 <code>.claude/agents/</code> 폴더 안에 나란히 놓인다 — AGENTS.md의 <code>handoff_to: reviewer</code>가 다음 단계에서 실제로 이어진다.
@@ -425,7 +425,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>② writer → reviewer 순차 파이프라인 실행 요청 — 같은 채팅창에 이어서 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">writer 서브에이전트로 draft.txt에 '원격 근무의 장점' 주제 초안을 쓰게 하고, 완료되면 reviewer 서브에이전트로 draft.txt를 검토해줘. 두 단계를 순서대로 진행해.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 메인 세션은 먼저 <code>subagent_type="writer"</code>로 <code>Agent</code>를 호출해 <code>draft.txt</code>를 생성시키고, 그 결과가 돌아온 뒤에야 <code>subagent_type="reviewer"</code> 호출을 보낸다. 두 전문가 사이의 의존 관계를 조율하는 것은 서브에이전트가 아니라 메인 세션의 몫이다.
@@ -554,7 +554,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>① 단순 요청 — reviewer 하나만 필요한 경우</strong>
               <div style="position:relative">
                 <pre class="code-block">draft.txt의 오탈자만 훑어봐줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 오케스트레이터는 이번 요청에 <code>writer</code>가 필요 없다고 판단해 <code>reviewer</code> 하나만 호출한다. 같은 팀(writer+reviewer)이 정의돼 있어도, 실제로 투입되는 인원은 요청마다 오케스트레이터가 그때그때 결정한다는 것을 보여주는 가장 단순한 예다.
@@ -566,7 +566,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>② 복합 요청 — writer와 reviewer를 두 관점으로 조합</strong>
               <div style="position:relative">
                 <pre class="code-block">draft2.txt에 '4일 근무제' 주제로 새 초안을 써줘. 초안이 완료되면, 그 초안을 문법 관점과 논리 관점 두 가지로 각각 독립적으로 동시에 검토해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 이번에는 <code>writer</code> 한 번(파이프라인의 첫 단계) 이후에 <code>reviewer</code>가 "문법 관점"과 "논리 관점"이라는 서로 다른 지시를 받아 두 번 동시에(팬아웃) 호출된다. 파이프라인(writer → reviewer)과 팬아웃(reviewer ×2 동시 실행)이라는 두 오케스트레이션 패턴이 한 요청 안에서 조합되는 것을 확인할 수 있다 — 같은 두 서브에이전트로 ①과는 완전히 다른 모양의 워크플로우가 만들어졌다.
@@ -637,7 +637,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
   "teammateMode": "in-process"
 }
 EOF</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string으로 같은 파일을 만든다.</p>
               <div style="position:relative">
@@ -649,7 +649,7 @@ EOF</pre>
   "teammateMode": "in-process"
 }
 '@ | Set-Content .claude/settings.json</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -664,7 +664,7 @@ EOF</pre>
               <strong>③ 팀메이트 병렬 스폰 요청 — 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">writer 팀메이트 두 명을 병렬로 스폰해서 하나는 topic-a.txt에 '재택근무', 다른 하나는 topic-b.txt에 '4일 근무제' 초안을 동시에 쓰게 해줘. 각 파일이 완료되면 reviewer 팀메이트가 검토하게 하고, 공유 작업 목록도 보여줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -844,7 +844,7 @@ EOF</pre>
               <strong>① 검토 대상 파일 준비</strong>
               <div style="position:relative">
                 <pre class="code-block">argument.txt 파일을 만들고 다음 내용을 써줘: "재택근무는 항상 사무실 근무보다 생산적이다. 왜냐하면 재택근무를 하는 사람들이 재택근무가 좋다고 말하기 때문이다. 따라서 모든 회사는 재택근무만 해야 한다."</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -854,7 +854,7 @@ EOF</pre>
               <p>채팅창에 아래 문장을 그대로 붙여넣는다. Claude Desktop App이 <code>reviewer.md</code>의 <code>model</code> 필드를 <code>haiku</code>로 바꾼 뒤 검토를 수행한다.</p>
               <div style="position:relative">
                 <pre class="code-block">.claude/agents/reviewer.md의 model 필드를 haiku로 바꿔줘. 그리고 argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -864,7 +864,7 @@ EOF</pre>
               <p>같은 방식으로 <code>model</code>을 <code>sonnet</code>으로 바꾼 뒤 검토한다. 순환 논증(circular reasoning) 같은 논리적 허점을 정확히 짚어내는지 haiku 결과와 비교한다.</p>
               <div style="position:relative">
                 <pre class="code-block">.claude/agents/reviewer.md의 model 필드를 sonnet으로 바꿔줘. 그리고 argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -874,7 +874,7 @@ EOF</pre>
               <p>같은 방식으로 <code>model</code>을 <code>opus</code>로 바꾼 뒤 검토한다. 응답 시간과 지적의 깊이가 ②③과 어떻게 다른지 기록한다.</p>
               <div style="position:relative">
                 <pre class="code-block">.claude/agents/reviewer.md의 model 필드를 opus로 바꿔줘. 그리고 argument.txt를 reviewer 서브에이전트로 검토해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -907,13 +907,13 @@ EOF</pre>
     <div style="position:relative">
       <pre class="code-block">cd ..
 rm -rf harness-lab</pre>
-      <button class="copy-btn" onclick="copyCode(this)">복사</button>
+      <button class="copy-btn">복사</button>
     </div>
     <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong></p>
     <div style="position:relative">
       <pre class="code-block">cd ..
 Remove-Item -Recurse -Force harness-lab</pre>
-      <button class="copy-btn" onclick="copyCode(this)">복사</button>
+      <button class="copy-btn">복사</button>
     </div>
   </div>
 

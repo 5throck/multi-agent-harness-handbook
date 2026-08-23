@@ -64,7 +64,7 @@ ai-workspace-standards/                (cloned as the workspace root)
 ├── scripts/                           Operational scripts such as new-project.ts (TypeScript, run via bun)
 └── Projects/                          Individual projects in the form &lt;project-name&gt;/ (each its own independent git repository)
 </pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div></div>
 
   <h3>Complete List of the 10 Variants</h3>
@@ -105,7 +105,7 @@ ai-workspace-standards/                (cloned as the workspace root)
   <div style="position:relative">
   <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
 cd C:\git</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <h3><code>bun</code>. Install the runtime</h3>
@@ -113,7 +113,7 @@ cd C:\git</pre>
   <div style="position:relative">
   <pre class="code-block">bun --version
 git --version</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   <p >💡 <strong>Key takeaway:</strong> once both commands print a version number successfully, your local environment is ready.</p>
 
@@ -136,19 +136,19 @@ git --version</pre>
   <p>Before creating a new project, first check which variants exist in the workspace and which versions each is tagged with.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/list-template-versions.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <h3><code>bun scripts/new-project.ts</code>. Create a project from an existing variant</h3>
   <p>The most frequently used command. Pick a variant and run it together with a project name, and the entire composition under <code>templates/&lt;variant&gt;/</code> (agent definitions, skills, commands, governance pipeline) is cloned into a new independent repository.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   <p>If you want to pin a specific version when scaffolding, also specify <code>--version</code>.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop --version 1.4.0</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <table>

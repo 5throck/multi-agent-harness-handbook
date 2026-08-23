@@ -127,7 +127,7 @@
   <pre class="code-block" style="margin-top:10px;">gh auth login
 # 안내에 따라: GitHub.com 선택 → HTTPS 선택 → 브라우저로 로그인(권장) 선택
 # 브라우저가 열리면 방금 만든 계정으로 로그인하고 인증 코드를 확인한다</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
   </div>
 
@@ -146,7 +146,7 @@
 cd ./setup
 .\setup-windows.ps1
 # 선택 옵션: -WSL2, -WezTerm, -Docker, -Force (이미 설치된 도구도 재설치)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
   <p>스크립트가 끝나면 터미널을 완전히 닫았다가 다시 열어야 PATH 변경 사항이 적용된다.</p>
 
@@ -160,14 +160,14 @@ cd ./setup && bash setup-mac.sh
 
 # Linux
 cd ./setup && bash setup-linux.sh</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <h3>설치 검증하기</h3>
   <p>운영체제와 무관하게 setup-common.ts를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <p>이 프로젝트가 설치하는 도구 중 이 장의 실습과 직접 관련된 것은 다음과 같다. Antigravity(Desktop), <code>agy</code>(Antigravity CLI), 그리고 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
@@ -217,7 +217,7 @@ cd ./setup && bash setup-linux.sh</pre>
             <div style="position:relative">
               <pre class="code-block">mkdir -p harness-lab
 cd harness-lab</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -234,7 +234,7 @@ cd harness-lab</pre>
 출력: 오탈자 · 논리적 허점 · 개선점 목록
 권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
             <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> <code>cat</code> 명령 자체는 <code>Get-Content</code>의 별칭으로 파일 읽기에 그대로 쓸 수 있다. 다만 <code>&lt;&lt; 'EOF'</code>처럼 여러 줄을 직접 넣는 heredoc 문법은 지원하지 않으므로, 같은 내용은 따옴표 있는 here-string(<code>@'...'@</code>)으로 만들어 <code>Set-Content</code>로 파일에 쓴다.</p>
             <div style="position:relative">
@@ -246,7 +246,7 @@ EOF</pre>
 출력: 오탈자 · 논리적 허점 · 개선점 목록
 권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
 '@ | Set-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -261,7 +261,7 @@ EOF</pre>
               <strong>① 검토 대상 파일 미리 준비 (터미널)</strong>
               <div style="position:relative">
                 <pre class="code-block">echo "이 프로젝트는 매우 좋다. 이것은 아주 좋다." > notes.txt</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -276,7 +276,7 @@ EOF</pre>
               <strong>③ 목표 지시 — Workspace 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.md에 적힌 reviewer 역할 명세대로 notes.txt를 검토해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 Workspace를 맡은 에이전트가 AGENTS.md를 읽고, 그 안의 역할/입력/출력/권한 명세를 그대로 목표로 삼아 필요한 작업(파일 읽기, 개선점 정리)을 스스로 판단해 수행한다. AGENTS.md가 "무엇을 검토 기준으로 삼는가"의 유일한 원본이므로, 검토 기준(오탈자·논리적 허점·개선점)은 이 명세에 의해 결정된다.
@@ -288,7 +288,7 @@ EOF</pre>
         <div style="position:relative">
           <pre class="code-block">cd harness-lab && agy
 /goal notes.txt 파일을 검토하고 개선점을 요약해줘</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
+          <button class="copy-btn">복사</button>
         </div>
       </div>
 
@@ -380,7 +380,7 @@ EOF</pre>
 권한: 쓰기 허용 — 지정된 파일에만 저장한다.
 handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
             <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string을 <code>Add-Content</code>로 이어붙인다(<code>Set-Content</code>는 파일을 덮어쓰므로 반드시 <code>Add-Content</code>를 써야 reviewer 항목이 지워지지 않는다).</p>
             <div style="position:relative">
@@ -394,7 +394,7 @@ EOF</pre>
 권한: 쓰기 허용 — 지정된 파일에만 저장한다.
 handoff_to: reviewer (초안 완료 후 검토로 이어짐)
 '@ | Add-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">복사</button>
+              <button class="copy-btn">복사</button>
             </div>
           </div>
         </li>
@@ -409,7 +409,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>① 2단계 목표 지시 — Workspace 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.md의 writer 명세대로 draft.txt에 '원격 근무의 장점' 주제 초안을 먼저 작성하고, 완료되면 AGENTS.md의 reviewer 명세대로 그 초안을 검토해줘. 두 단계를 순서대로 진행해.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 오케스트레이터가 AGENTS.md의 <code>handoff_to: reviewer</code> 관계를 읽고 목표를 "초안 작성 → 검토"의 두 하위 작업으로 스스로 쪼갠 뒤, 초안 작성이 끝난 뒤에야 검토 작업을 시작한다. 순서 조율의 책임이 사용자가 아니라 오케스트레이터 내부에 있다는 점이 특징이다 — 다만 "무엇을 검토 기준으로 삼는가"는 AGENTS.md가 유일한 원본이다.
@@ -422,7 +422,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
           <pre class="code-block">agy
 /goal draft.txt에 '원격 근무의 장점' 주제로 초안을 먼저 쓰고,
 완료되면 그 초안을 검토해서 개선점을 요약해줘</pre>
-          <button class="copy-btn" onclick="copyCode(this)">복사</button>
+          <button class="copy-btn">복사</button>
         </div>
       </div>
 
@@ -457,7 +457,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>① 단순 목표 지시</strong>
               <div style="position:relative">
                 <pre class="code-block">draft.txt의 오탈자만 훑어봐줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 오케스트레이터는 이번 요청에 작성 역할이 필요 없다고 판단해 검토 역할 하나만 즉석에서 구성한다. AGENTS.md에 두 역할이 정의돼 있어도, 실제로 투입되는 구성은 요청마다 오케스트레이터가 그때그때 결정한다는 것을 보여주는 가장 단순한 예다.
@@ -469,7 +469,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>② 복합 목표 지시</strong>
               <div style="position:relative">
                 <pre class="code-block">draft2.txt에 '4일 근무제' 주제로 새 초안을 먼저 쓰고, 완료되면 그 초안을 문법 관점과 논리 관점 두 가지로 각각 독립적으로 동시에 검토해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
               <div class="flow-box">
                 오케스트레이터가 ①에서는 검토 역할 하나만 즉석에서 구성하고, ②에서는 작성 역할 하나와 검토 역할 둘(서로 다른 관점)을 새로 구성한다. 사전에 정의된 서브에이전트 파일이 아예 없으므로, "이번 작업에 맞는 팀을 매번 새로 짠다"는 원칙이 더 선명하게 드러난다.
@@ -531,7 +531,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>② Workspace A 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">topic-a.txt에 '재택근무' 주제로 3~5문장 초안을 작성해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>
@@ -546,7 +546,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)
               <strong>④ Workspace B 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
               <div style="position:relative">
                 <pre class="code-block">topic-b.txt에 '4일 근무제' 주제로 3~5문장 초안을 작성해줘.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                <button class="copy-btn">복사</button>
               </div>
             </div>
           </li>

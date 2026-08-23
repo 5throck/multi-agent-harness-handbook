@@ -127,7 +127,7 @@
   <pre class="code-block" style="margin-top:10px;">gh auth login
 # Follow the prompts: choose GitHub.com → HTTPS → Log in with a browser (recommended)
 # When the browser opens, log in with the account you just created and confirm the verification code</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   </div>
 
@@ -146,7 +146,7 @@
 cd ./setup
 .\setup-windows.ps1
 # Optional flags: -WSL2, -WezTerm, -Docker, -Force (reinstall already-installed tools too)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   <p>After the script finishes, fully close and reopen your terminal for the PATH changes to take effect.</p>
 
@@ -160,14 +160,14 @@ cd ./setup && bash setup-mac.sh
 
 # Linux
 cd ./setup && bash setup-linux.sh</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <h3>Verifying the Installation</h3>
   <p>Regardless of operating system, running setup-common.ts with <code>bun</code> prints a checklist table verifying the installation status. If every item shows ✅, you're ready to proceed with the practice below.</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <p>Among the tools this project installs, the ones directly relevant to this chapter's practice are as follows: Antigravity (Desktop), <code>agy</code> (Antigravity CLI), and also <code>gh</code> (GitHub CLI), which is used in later chapters.</p>
@@ -217,7 +217,7 @@ cd ./setup && bash setup-linux.sh</pre>
             <div style="position:relative">
               <pre class="code-block">mkdir -p harness-lab
 cd harness-lab</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -234,7 +234,7 @@ Input: Path to the text file to review
 Output: A list of typos, logical gaps, and improvement points
 Permissions: Read-only — does not modify the file directly.
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>On Windows PowerShell</strong>, the <code>cat</code> command itself is an alias for <code>Get-Content</code> and can be used as-is for reading files. However, the heredoc syntax for entering multiple lines directly, like <code>&lt;&lt; 'EOF'</code>, isn't supported, so write the same content as a quoted here-string (<code>@'...'@</code>) and write it to the file with <code>Set-Content</code>.</p>
             <div style="position:relative">
@@ -246,7 +246,7 @@ Input: Path to the text file to review
 Output: A list of typos, logical gaps, and improvement points
 Permissions: Read-only — does not modify the file directly.
 '@ | Set-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -261,7 +261,7 @@ Permissions: Read-only — does not modify the file directly.
               <strong>① Prepare the file to review beforehand (terminal)</strong>
               <div style="position:relative">
                 <pre class="code-block">echo "This project is very good. This is really great." > notes.txt</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -276,7 +276,7 @@ Permissions: Read-only — does not modify the file directly.
               <strong>③ Give the goal — paste the sentence below into the Workspace chat and send it</strong>
               <div style="position:relative">
                 <pre class="code-block">Review notes.txt according to the reviewer role spec written in AGENTS.md.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 The agent handling the Workspace reads AGENTS.md, takes the role/input/output/permissions spec inside it as its goal, and decides on its own the tasks required (reading the file, compiling improvement points). Since AGENTS.md is the sole source of truth for "what criteria to review by," the review criteria (typos, logical gaps, improvement points) are determined by this spec.
@@ -288,7 +288,7 @@ Permissions: Read-only — does not modify the file directly.
         <div style="position:relative">
           <pre class="code-block">cd harness-lab && agy
 /goal Review the notes.txt file and summarize the improvement points</pre>
-          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <button class="copy-btn">Copy</button>
         </div>
       </div>
 
@@ -380,7 +380,7 @@ Output: A draft text file
 Permissions: Write allowed — saves only to the specified file.
 handoff_to: reviewer (proceeds to review once the draft is complete)
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p style="font-size:13px;color:var(--text-dim);margin-top:10px;"><strong>On Windows PowerShell</strong>, append the here-string with <code>Add-Content</code> (you must use <code>Add-Content</code>, since <code>Set-Content</code> overwrites the file and would erase the reviewer entry).</p>
             <div style="position:relative">
@@ -394,7 +394,7 @@ Output: A draft text file
 Permissions: Write allowed — saves only to the specified file.
 handoff_to: reviewer (proceeds to review once the draft is complete)
 '@ | Add-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -409,7 +409,7 @@ handoff_to: reviewer (proceeds to review once the draft is complete)
               <strong>① Give the two-stage goal — paste the sentence below into the Workspace chat and send it</strong>
               <div style="position:relative">
                 <pre class="code-block">Following the writer spec in AGENTS.md, first write a draft in draft.txt on the topic 'The advantages of remote work', and once it's done, review that draft following the reviewer spec in AGENTS.md. Proceed through the two stages in order.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 The orchestrator reads the <code>handoff_to: reviewer</code> relationship in AGENTS.md and splits the goal on its own into two subtasks, "write draft → review," starting the review task only after the draft writing is complete. The distinctive point is that the responsibility for sequencing lies inside the orchestrator, not with the user — though "what criteria to review by" still has AGENTS.md as the sole source of truth.
@@ -422,7 +422,7 @@ handoff_to: reviewer (proceeds to review once the draft is complete)
           <pre class="code-block">agy
 /goal First write a draft in draft.txt on the topic 'The advantages of remote work',
 then once it's done, review that draft and summarize the improvement points</pre>
-          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <button class="copy-btn">Copy</button>
         </div>
       </div>
 
@@ -457,7 +457,7 @@ then once it's done, review that draft and summarize the improvement points</pre
               <strong>① A simple goal instruction</strong>
               <div style="position:relative">
                 <pre class="code-block">Just skim draft.txt for typos.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 The orchestrator judges that this request doesn't need a writing role and assembles only a review role on the spot. This is the simplest example showing that even though both roles are defined in AGENTS.md, the actual composition deployed is decided by the orchestrator each time, per request.
@@ -469,7 +469,7 @@ then once it's done, review that draft and summarize the improvement points</pre
               <strong>② A compound goal instruction</strong>
               <div style="position:relative">
                 <pre class="code-block">Write a new draft in draft2.txt on the topic 'The four-day workweek' first, and once it's done, review that draft independently and simultaneously from both a grammar perspective and a logic perspective.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
               <div class="flow-box">
                 The orchestrator assembled only a single review role on the spot in ①, and in ② assembles a new team of one writing role and two review roles (with different perspectives). Since there are no predefined subagent files at all, the principle "assemble a new team fitted to this task every time" stands out more clearly.
@@ -531,7 +531,7 @@ then once it's done, review that draft and summarize the improvement points</pre
               <strong>② Paste the sentence below into the Workspace A chat and send it</strong>
               <div style="position:relative">
                 <pre class="code-block">Write a 3–5 sentence draft in topic-a.txt on the topic 'Working from home'.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>
@@ -546,7 +546,7 @@ then once it's done, review that draft and summarize the improvement points</pre
               <strong>④ Paste the sentence below into the Workspace B chat and send it</strong>
               <div style="position:relative">
                 <pre class="code-block">Write a 3–5 sentence draft in topic-b.txt on the topic 'The four-day workweek'.</pre>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <button class="copy-btn">Copy</button>
               </div>
             </div>
           </li>

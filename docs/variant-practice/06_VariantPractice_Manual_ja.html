@@ -64,7 +64,7 @@ ai-workspace-standards/                (ワークスペースルートとして�
 ├── scripts/                           new-project.tsなどの運用スクリプト(TypeScript、bunで実行)
 └── Projects/                          &lt;プロジェクト名&gt;/形式の個別プロジェクト(それぞれ独立したgitリポジトリ)
 </pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div></div>
 
   <h3>Variant全10種類の一覧</h3>
@@ -105,7 +105,7 @@ ai-workspace-standards/                (ワークスペースルートとして�
   <div style="position:relative">
   <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
 cd C:\git</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <h3><code>bun</code>。ランタイムのインストール</h3>
@@ -113,7 +113,7 @@ cd C:\git</pre>
   <div style="position:relative">
   <pre class="code-block">bun --version
 git --version</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   <p >💡 <strong>要点:</strong> 両方のコマンドが正常にバージョンを出力すれば、ローカル環境の準備は完了である。</p>
 
@@ -136,19 +136,19 @@ git --version</pre>
   <p>新しいプロジェクトを作る前に、ワークスペースにどのvariantがあり、それぞれどのバージョンがタグ付けされているかをまず確認する。</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/list-template-versions.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <h3><code>bun scripts/new-project.ts</code>。既存のvariant(バリアント)からプロジェクトを生成</h3>
   <p>最もよく使うコマンドである。variantを一つ選び、プロジェクト名とともに実行すると、<code>templates/&lt;variant&gt;/</code>の全構成(エージェント定義、スキル、コマンド、ガバナンスパイプライン)が新しい独立リポジトリとして複製される。</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   <p>特定のバージョンを固定してスキャフォールディングしたい場合は、<code>--version</code>を併せて指定する。</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop --version 1.4.0</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <table>

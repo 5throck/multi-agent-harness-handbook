@@ -57,14 +57,14 @@
   <p>Comienza ejecutando <code>--dry-run</code> para previsualizar lo que cambiará. No toca ningún archivo — solo imprime el plan en la consola.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
   <p>Si el resultado se ve bien, ejecútalo nuevamente sin <code>--dry-run</code>.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # Opciones opcionales: --variant &lt;variant&gt;  --platform claude|antigravity|both
 #            --prune-removed  --rollback</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
   <p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente.</p>
 
@@ -88,7 +88,7 @@
   <p>Antes de ejecutarse (cuando no está en modo <code>--dry-run</code>), el script ejecuta automáticamente <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code> para tomar una instantánea del estado actual de tu árbol de trabajo. Si no estás satisfecho con el resultado de la actualización, puedes revertirlo inmediatamente con el siguiente comando.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
   <p>Este comando encuentra la instantánea <code>pre-upgrade-snapshot-*</code> que se acaba de crear y la restaura mediante <code>git stash pop</code>. La propia actualización no crea un commit, así que después de revisar el resultado, necesitarás verificar los cambios con <code>git diff</code> como de costumbre y confirmarlos tú mismo.</p>
   <p>Como paso final, <code>.claude/template-version.txt</code> se actualiza a la nueva versión, y los elementos de arranque de seguridad — <code>.gitleaks.toml</code>, hooks de pre-commit, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (patrones .env), y <code>git core.hooksPath</code> — se verifican automáticamente (estos son los mismos elementos cubiertos por los principios de barreras de protección del Capítulo 3). Si <code>core.hooksPath</code> está mal configurado, el script lo corrige por sí solo.</p>

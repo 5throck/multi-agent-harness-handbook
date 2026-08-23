@@ -64,7 +64,7 @@ ai-workspace-standards/                (clonado como la raíz del espacio de tra
 ├── scripts/                           Scripts operativos como new-project.ts (TypeScript, ejecutados vía bun)
 └── Projects/                          Proyectos individuales en la forma &lt;nombre-del-proyecto&gt;/ (cada uno un repositorio git independiente)
 </pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div></div>
 
   <h3>Lista completa de las 10 variantes</h3>
@@ -105,7 +105,7 @@ ai-workspace-standards/                (clonado como la raíz del espacio de tra
   <div style="position:relative">
   <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
 cd C:\git</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
 
   <h3><code>bun</code>. Instalar el runtime</h3>
@@ -113,7 +113,7 @@ cd C:\git</pre>
   <div style="position:relative">
   <pre class="code-block">bun --version
 git --version</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
   <p >💡 <strong>Clave:</strong> una vez que ambos comandos imprimen un número de versión con éxito, su entorno local está listo.</p>
 
@@ -136,19 +136,19 @@ git --version</pre>
   <p>Antes de crear un nuevo proyecto, verifique primero qué variantes existen en el espacio de trabajo y con qué versiones está etiquetada cada una.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/list-template-versions.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
 
   <h3><code>bun scripts/new-project.ts</code>. Crear un proyecto a partir de una variante existente</h3>
   <p>El comando más utilizado con frecuencia. Elija una variante y ejecútela junto con un nombre de proyecto, y toda la composición debajo de <code>templates/&lt;variante&gt;/</code> (definiciones de agentes, habilidades, comandos, pipeline de gobernanza) se clona en un nuevo repositorio independiente.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "mi-nombre-de-proyecto" --variant co-develop</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
   <p>Si desea fijar una versión específica al crear el proyecto, también especifique <code>--version</code>.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "mi-nombre-de-proyecto" --variant co-develop --version 1.4.0</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
 
   <table>

@@ -210,7 +210,7 @@
             <p>公式variantであるco-workと、まだプロトタイプ段階のco-retailのトップレベルのファイル一覧を比較する。</p>
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-work/) &lt;(ls Projects/co-retail/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -220,12 +220,12 @@
             <p>通常、<code>variant.json</code>、<code>README.md</code>/<code>README_ko.md</code>、<code>docs/adr/</code>は公式テンプレートには存在するが、Phase Aプロトタイプ段階ではまだ欠落しているか空のままである。まず、公式テンプレート（co-work）側にこれらのファイルが実際に存在することを確認する。</p>
             <div style="position:relative">
               <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">次に、co-retailプロトタイプのフォルダ一覧を確認し、上記ファイルがまだ存在しないことを確認する。</p>
             <div style="position:relative">
               <pre class="code-block">ls Projects/co-retail/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -279,12 +279,12 @@
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① エージェントフロントマター完全性チェック</strong> — name、tier、handoffなどの必須フィールドがすべて入力されていることを確認する。</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② スキルマニフェストチェック</strong> — variantが参照するスキルが実際に存在し、3つのプラットフォーム（.claude/.gemini/.agents）に均等にデプロイされていることを確認する。</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -301,7 +301,7 @@
   },
   "script_manifest": []
 }</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -394,7 +394,7 @@
             <p><code>--source</code>はPhase Aプロトタイプのパス、<code>--variant</code>は最終的なvariant名、<code>--variantType</code>はドメインタイプである。</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -405,7 +405,7 @@
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
 diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -415,7 +415,7 @@ diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.g
             <p>すべてのステップが完了した後、構造検証をもう一度実行し、新しいvariantがワークスペース全体のルールを満たしていることを確認する。</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-templates.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -467,7 +467,7 @@ diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.g
 - [ ] Copy the brand-assets/ directory to templates/co-retail/brand-assets/
 - [ ] Carry over the campaign brief skeleton files under campaign-templates/ as-is
 - [ ] Reset the initial channel list in channel-configs.json to an empty array</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
         </div>
         これらの項目は、reconcileが処理する「共通ファイルの重複除去」とは異なる種類の作業である — variant固有のアセットであるため、パイプラインは自動処理しない。各チェックボックスを確認し、自分で移動する必要がある。

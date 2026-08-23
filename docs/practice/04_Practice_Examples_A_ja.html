@@ -129,7 +129,7 @@
   <pre class="code-block" style="margin-top:10px;">gh auth login
 # 案内に従って: GitHub.com選択 → HTTPS選択 → ブラウザでログイン(推奨)選択
 # ブラウザが開いたら、さっき作成したアカウントでログインして認証コードを確認します</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   </div>
 
@@ -148,7 +148,7 @@
 cd ./setup
 .\setup-windows.ps1
 # 選択オプション: -WSL2, -WezTerm, -Docker, -Force (既にインストールされているツールも再インストール)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   <p>スクリプトが終了したら、ターミナルを完全に閉じてから再度開くとPATH変更が適用されます。</p>
 
@@ -162,14 +162,14 @@ cd ./setup && bash setup-mac.sh
 
 # Linux
 cd ./setup && bash setup-linux.sh</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <h3>インストールの検証</h3>
   <p>OSに関わらず、setup-common.tsを<code>bun</code>で実行すると、インストール状態をチェックするチェックリスト表が出力されます。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったことになります。</p>
   <div style="position:relative">
   <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
 
   <p>このプロジェクトがインストールするツールのうち、この章の4ツール実習と直接関連するものは以下の通りです。Claude Desktop App、<code>claude</code>(Claude Code CLI)、Antigravity(Desktop)、<code>agy</code>(Antigravity CLI)、および<code>.claude/agents/*.md</code>ベースのサブエージェント実行に必要な<code>bun</code>、以降の章で使用される<code>gh</code>(GitHub CLI)まで一緒にインストールされます。</p>
@@ -219,7 +219,7 @@ cd ./setup && bash setup-linux.sh</pre>
             <div style="position:relative">
               <pre class="code-block">mkdir -p harness-lab
 cd harness-lab</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
           </div>
         </li>
@@ -236,7 +236,7 @@ Input: Path to the text file to be reviewed
 Output: List of typos, logical flaws, and improvement points
 Permissions: Read-only — does not directly modify files.
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
             <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong> <code>cat</code>コマンド自体は<code>Get-Content</code>のエイリアスとしてファイル読み取りにそのまま使用できます。ただし<code>&lt;&lt; 'EOF'</code>のように複数行を直接入力するheredoc構文はサポートされていないため、同じ内容は引用符付きのhere-string(<code>@'...'@</code>)で作成して<code>Set-Content</code>でファイルに書き込みます。</p>
             <div style="position:relative">
@@ -248,7 +248,7 @@ Input: Path to the text file to be reviewed
 Output: List of typos, logical flaws, and improvement points
 Permissions: Read-only — does not directly modify files.
 '@ | Set-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
           </div>
         </li>
@@ -269,7 +269,7 @@ Permissions: Read-only — does not directly modify files.
               <strong>② サブエージェント作成リクエスト — チャットウィンドウに以下の文をそのまま貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.mdに記載されているreviewer役割仕様に従って、.claude/agents/reviewer.mdにreviewerサブエージェントを作成してください。toolsはRead、Grepのみを許可し、modelはsonnetに設定してください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 Claude Desktop AppはAGENTS.mdの「役割/入力/出力/権限」仕様を読み取り、その内容を<code>.claude/agents/reviewer.md</code>のYAML frontmatter(<code>description</code>、<code>tools</code>)とシステムプロンプトに移してWriteツールで直接生成します。仕様はそのままで、表現形式だけがツールに合わせて変わったのです — 生成が終わったら、チャットに表示されたファイル内容をAGENTS.mdと比較してみてください。
@@ -281,7 +281,7 @@ Permissions: Read-only — does not directly modify files.
               <strong>③ レビュー対象ファイルの作成 + サブエージェントの呼び出し — 同じチャットウィンドウに続けて貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">notes.txtファイルを作成し、「このプロジェクトは非常に良い。これはとても良い。」と書き込んだ後、reviewerサブエージェントでnotes.txtをレビューしてください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 Claude Desktop Appは<code>Agent</code>(Task)ツールを<code>description="notes.txtのレビュー"</code>、<code>subagent_type="reviewer"</code>で呼び出します。画面にはサブエージェントがスポーンされる過程と、作業を終えた後にメインセッションに戻る要約結果が順番に表示されます。
@@ -384,7 +384,7 @@ Output: Draft text file
 Permissions: Write allowed — saves only to the specified file.
 handoff_to: reviewer (proceeds to review after draft completion)
 EOF</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
             <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong> here-stringを<code>Add-Content</code>で追記します（<code>Set-Content</code>はファイルを上書きするため、必ず<code>Add-Content</code>を使用してreviewer項目が消えないようにしてください）。</p>
             <div style="position:relative">
@@ -398,7 +398,7 @@ Output: Draft text file
 Permissions: Write allowed — saves only to the specified file.
 handoff_to: reviewer (proceeds to review after draft completion)
 '@ | Add-Content AGENTS.md</pre>
-              <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              <button class="copy-btn">コピー</button>
             </div>
           </div>
         </li>
@@ -413,7 +413,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
               <strong>① writerサブエージェント作成リクエスト — チャットウィンドウにそのまま貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">AGENTS.mdに記載されているwriter役割仕様に従って、.claude/agents/writer.mdにwriterサブエージェントを作成してください。toolsはWrite、Readを許可し、modelはsonnetに設定してください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 Claude Desktop AppはAGENTS.mdのwriter仕様を読み取り、Writeツールで<code>.claude/agents/writer.md</code>を直接生成します。G-1で既に作成しておいた<code>reviewer.md</code>と同じ<code>.claude/agents/</code>フォルダ内に並んで配置されます — AGENTS.mdの<code>handoff_to: reviewer</code>が次のステップで実際に繋がります。
@@ -425,7 +425,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
               <strong>② writer → reviewer 順次パイプライン実行リクエスト — 同じチャットウィンドウに続けて貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">writerサブエージェントでdraft.txtに「リモートワークの利点」というトピックの草稿を書かせ、完了したらreviewerサブエージェントでdraft.txtをレビューしてください。二つのステップを順番に進めてください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 メインセッションはまず<code>subagent_type="writer"</code>で<code>Agent</code>を呼び出して<code>draft.txt</code>を生成させ、その結果が戻ってきてから初めて<code>subagent_type="reviewer"</code>呼び出しを送ります。二つの専門家間の依存関係を調整するのは、サブエージェントではなくメインセッションの役割です。
@@ -554,7 +554,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
               <strong>① 単純リクエスト — reviewer一つだけが必要な場合</strong>
               <div style="position:relative">
                 <pre class="code-block">draft.txtの誤字だけをざっと見てください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 オーケストレーターは今回のリクエストに<code>writer</code>が必要ないと判断し、<code>reviewer</code>一つだけを呼び出します。同じチーム(writer+reviewer)が定義されていても、実際に投入される要員はリクエスト毎にオーケストレーターがその都度決定するということを示す最も単純な例です。
@@ -566,7 +566,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
               <strong>② 複合リクエスト — writerとreviewerを二視点で組み合わせ</strong>
               <div style="position:relative">
                 <pre class="code-block">draft2.txtに「週4日勤務制」というトピックで新しい草稿を書いてください。草稿が完了したら、その草稿を文法視点と論理視点の二つでそれぞれ独立して同時にレビューしてください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <div class="flow-box">
                 今回は<code>writer</code>一回（パイプラインの最初のステップ）の後に、<code>reviewer</code>が「文法視点」と「論理視点」という異なる指示を受けて二回同時に（ファンアウト）呼び出されます。パイプライン(writer → reviewer)とファンアウト(reviewer ×2同時実行)という二つのオーケストレーションパターンが一つのリクエスト内で組み合わされることを確認できます — 同じ二つのサブエージェントで①とは完全に異なる形状のワークフローが作られました。
@@ -637,7 +637,7 @@ handoff_to: reviewer (proceeds to review after draft completion)
   "teammateMode": "in-process"
 }
 EOF</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
               <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong> here-stringで同じファイルを作成します。</p>
               <div style="position:relative">
@@ -649,7 +649,7 @@ EOF</pre>
   "teammateMode": "in-process"
 }
 '@ | Set-Content .claude/settings.json</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -664,7 +664,7 @@ EOF</pre>
               <strong>③ チームメイト並列スポーンリクエスト — チャットウィンドウに以下の文をそのまま貼り付けて送信</strong>
               <div style="position:relative">
                 <pre class="code-block">writerチームメイト二名を並列でスポーンして、一つはtopic-a.txtに「在宅勤務」、もう一つはtopic-b.txtに「週4日勤務制」の草稿を同時に書かせてください。各ファイルが完了したらreviewerチームメイトがレビューするようにし、共有作業リストも表示してください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -844,7 +844,7 @@ EOF</pre>
               <strong>① レビュー対象ファイルの準備</strong>
               <div style="position:relative">
                 <pre class="code-block">argument.txtファイルを作成し、以下の内容を書き込んでください: 「在宅勤務は常にオフィス勤務より生産的である。なぜなら、在宅勤務をしている人々が在宅勤務が良いと言っているからである。したがって、すべての会社は在宅勤務のみを行うべきである。」</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -854,7 +854,7 @@ EOF</pre>
               <p>チャットウィンドウに以下の文をそのまま貼り付けます。Claude Desktop Appは<code>reviewer.md</code>の<code>model</code>フィールドを<code>haiku</code>に変更した後、レビューを実行します。</p>
               <div style="position:relative">
                 <pre class="code-block">.claude/agents/reviewer.mdのmodelフィールドをhaikuに変更してください。そしてargument.txtをreviewerサブエージェントでレビューしてください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -864,7 +864,7 @@ EOF</pre>
               <p>同じ方式で<code>model</code>を<code>sonnet</code>に変更してからレビューします。循環論法(circular reasoning)などの論理的欠陥を正確に指摘できるか、haiku結果と比較します。</p>
               <div style="position:relative">
                 <pre class="code-block">.claude/agents/reviewer.mdのmodelフィールドをsonnetに変更してください。そしてargument.txtをreviewerサブエージェントでレビューしてください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -874,7 +874,7 @@ EOF</pre>
               <p>同じ方式で<code>model</code>を<code>opus</code>に変更してからレビューします。応答時間と指摘の深さが②③とどう異なるか記録します。</p>
               <div style="position:relative">
                 <pre class="code-block">.claude/agents/reviewer.mdのmodelフィールドをopusに変更してください。そしてargument.txtをreviewerサブエージェントでレビューしてください。</pre>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                <button class="copy-btn">コピー</button>
               </div>
             </div>
           </li>
@@ -907,13 +907,13 @@ EOF</pre>
     <div style="position:relative">
       <pre class="code-block">cd ..
 rm -rf harness-lab</pre>
-      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <button class="copy-btn">コピー</button>
     </div>
     <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong></p>
     <div style="position:relative">
       <pre class="code-block">cd ..
 Remove-Item -Recurse -Force harness-lab</pre>
-      <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+      <button class="copy-btn">コピー</button>
     </div>
   </div>
 

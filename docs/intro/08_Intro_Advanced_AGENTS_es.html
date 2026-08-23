@@ -120,7 +120,7 @@ Input: Tema, ruta donde guardar el archivo
 Output: Archivo de texto borrador
 Permissions: Escritura permitida — guarda solo en el archivo especificado.
 handoff_to: reviewer (procede a la revisión después de que el borrador esté completo)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
 
   <div class="note">AGENTS.md no es una instrucción dirigida a una herramienta de IA sino un <strong>registro de roles definidos por un humano</strong>. La familia Claude lee este registro y lo "traduce" a archivos de definición específicos de la herramienta (<code>.claude/agents/*.md</code>), mientras que la familia Antigravity tiene su orquestación que lee e interpreta el registro directamente.</div>
@@ -228,7 +228,7 @@ handoff_to: editor (procede a la edición final después de que la revisión est
 
 ## Agent: editor
 Role: Finaliza el documento incorporando la retroalimentación.</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <button class="copy-btn">Copiar</button>
 </div>
 
   <div class="note">Un agente sin <code>handoff_to</code> declarado (<code>editor</code> en el ejemplo anterior) es el punto final del pipeline. El orquestador devuelve el resultado de ese agente al usuario final.</div>

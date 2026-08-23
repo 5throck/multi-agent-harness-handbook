@@ -120,7 +120,7 @@
 출력: 초안 텍스트 파일
 권한: 쓰기 허용 — 지정된 파일에만 저장한다.
 handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <div class="note">AGENTS.md는 AI 도구를 향한 지시문이 아니라 <strong>사람이 정의한 여러 역할의 등록부</strong>다. Claude 계열은 이 등록부를 읽고 도구별 정의 파일(<code>.claude/agents/*.md</code>)로 "번역"하고, Antigravity 계열은 등록부 자체를 오케스트레이션이 직접 읽고 해석한다.</div>
@@ -228,7 +228,7 @@ handoff_to: editor (검토 완료 후 최종 편집으로 이어짐)
 
 ## Agent: editor
 역할: 피드백을 반영해 최종 문서를 완성한다.</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <div class="note">handoff_to가 선언되지 않은 에이전트(위 예시의 <code>editor</code>)는 파이프라인의 종점이다. 오케스트레이터는 에이전트의 결과를 최종 사용자에게 반환한다.</div>

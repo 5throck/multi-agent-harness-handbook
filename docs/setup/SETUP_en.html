@@ -68,7 +68,7 @@
 
 6. Final verification ✅
    └─ bun setup-common.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div></div>
 
   <h2 id="step0">Step 0 — Clone the Setup Scripts Repo</h2>
@@ -76,7 +76,7 @@
   <div style="position:relative">
     <pre class="code-block">git clone https://github.com/5throck/setup.git
 cd setup</pre>
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <button class="copy-btn">Copy</button>
   </div>
 
   <h2 id="step1">Step 1 — Complete the Checklist</h2>
@@ -100,7 +100,7 @@ bash setup-mac.sh --wezterm
 bash setup-mac.sh --docker
 # Both:
 bash setup-mac.sh --wezterm --docker</pre>
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <button class="copy-btn">Copy</button>
   </div>
 
   <h3>Linux (Ubuntu / Debian)</h3>
@@ -112,7 +112,7 @@ bash setup-linux.sh --wezterm
 bash setup-linux.sh --docker
 # Both:
 bash setup-linux.sh --wezterm --docker</pre>
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <button class="copy-btn">Copy</button>
   </div>
 
   <h3>Windows</h3>
@@ -127,14 +127,14 @@ bash setup-linux.sh --wezterm --docker</pre>
 .\setup-windows.ps1 -Docker           # Also install Docker Desktop
 .\setup-windows.ps1 -Force            # Reinstall all tools, even already-installed ones
 .\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Install all optional extras</pre>
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <button class="copy-btn">Copy</button>
   </div>
   <div class="note"><strong>After running</strong>: close and reopen your terminal to apply PATH changes.</div>
 
   <h2 id="step3">Step 3 — Verify Installation</h2>
   <div style="position:relative">
     <pre class="code-block">bun setup-common.ts</pre>
-    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <button class="copy-btn">Copy</button>
   </div>
   <p>This prints a verification table of installed tools. <strong>You're ready once every item shows ✅.</strong></p>
 
@@ -189,7 +189,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>Restart your terminal. On Windows, bun is automatically registered in the User environment variables. macOS/Linux:</p>
   <div style="position:relative">
   <pre class="code-block">export PATH="$HOME/.bun/bin:$PATH"</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <p><strong><code>claude: command not found</code> after <code>bun install -g</code></strong></p>
@@ -202,7 +202,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>The script automatically sets this to <code>RemoteSigned</code>. To change it manually:</p>
   <div style="position:relative">
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <div class="warn"><strong>Windows: running without administrator privileges</strong> — the script displays a warning but continues. Some installs, such as winget, may fail, so it's recommended to rerun PowerShell as Administrator.</div>

@@ -52,14 +52,14 @@
   <p>まず<code>--dry-run</code>で何が変わるかを事前に確認する。実際にファイルを操作せず、コンソールに計画のみを出力する。</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   <p>出力内容に問題がなければ、<code>--dry-run</code>を外して再度実行する。</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # 任意フラグ: --variant &lt;variant&gt;  --platform claude|antigravity|both
 #            --prune-removed  --rollback</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   <p><code>--variant</code>はプロジェクトの<code>.claude/template-version.txt</code>に記録された値を自動で読み込むため、多くの場合省略できる。このファイルが存在しない古いプロジェクトでは、実行時に確認プロンプトが表示され、<code>--variant</code>を直接指定する必要がある。</p>
 
@@ -83,7 +83,7 @@
   <p>実行前(<code>--dry-run</code>でない場合)、スクリプトは自動的に<code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code>を実行し、現在の作業ツリーの状態をスナップショットとして残す。アップグレードの結果が気に入らない場合は、次のコマンドで即座に元に戻せる。</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
-  <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+  <button class="copy-btn">コピー</button>
 </div>
   <p>このコマンドは、直前に作成された<code>pre-upgrade-snapshot-*</code>スタッシュを探し出し、<code>git stash pop</code>で復元する。アップグレード自体はコミットを作成しないため、結果を確認した後は通常どおり<code>git diff</code>で変更内容を確認し、自分でコミットする必要がある。</p>
   <p>仕上げの段階として、<code>.claude/template-version.txt</code>が新しいバージョンに更新され、<code>.gitleaks.toml</code>・pre-commitフック・<code>.gitattributes</code>(eol=lf)・<code>.gitignore</code>(.envパターン)・<code>git core.hooksPath</code>といったセキュリティブートストラップ項目が自動でチェックされる(第3章のガードレール原則と同じ項目である)。<code>core.hooksPath</code>が誤っている場合、スクリプトが自動で修正する。</p>

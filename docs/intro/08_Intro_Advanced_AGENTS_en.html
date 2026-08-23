@@ -120,7 +120,7 @@ Input: Topic, path to save the file to
 Output: Draft text file
 Permissions: Write allowed — saves only to the specified file.
 handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <div class="note">AGENTS.md is not an instruction directed at an AI tool but a <strong>registry of roles defined by a human</strong>. The Claude family reads this registry and "translates" it into tool-specific definition files (<code>.claude/agents/*.md</code>), while the Antigravity family has its orchestration read and interpret the registry directly.</div>
@@ -228,7 +228,7 @@ handoff_to: editor (proceeds to final editing after review is complete)
 
 ## Agent: editor
 Role: Finalizes the document by incorporating feedback.</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
 
   <div class="note">An agent with no <code>handoff_to</code> declared (<code>editor</code> in the example above) is the endpoint of the pipeline. The orchestrator returns that agent's result to the end user.</div>

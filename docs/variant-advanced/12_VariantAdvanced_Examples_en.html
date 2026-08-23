@@ -210,7 +210,7 @@
             <p>Compare the top-level file listings of co-work, an official variant, and co-retail, which is still in the prototype stage.</p>
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-work/) <(ls Projects/co-retail/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -220,12 +220,12 @@
             <p>Typically, <code>variant.json</code>, <code>README.md</code>/<code>README_ko.md</code>, and <code>docs/adr/</code> exist in the official template but are still missing or empty at the Phase A prototype stage. First confirm these files actually exist on the official template (co-work) side.</p>
             <div style="position:relative">
               <pre class="code-block">ls templates/co-work/variant.json templates/co-work/README_ko.md templates/co-work/docs/adr/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;">Next, check the co-retail prototype's folder listing to confirm the above files don't yet exist there.</p>
             <div style="position:relative">
               <pre class="code-block">ls Projects/co-retail/</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -279,12 +279,12 @@
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>① Agent frontmatter completeness check</strong> — confirm that required fields such as name, tier, and handoff are all filled in.</p>
             <div style="position:relative">
               <pre class="code-block">bun run agent:verify</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
             <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Skill manifest check</strong> — confirm that the skills referenced by the variant actually exist and are evenly deployed across all three platforms (.claude/.gemini/.agents).</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -301,7 +301,7 @@
   },
   "script_manifest": []
 }</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -394,7 +394,7 @@
             <p><code>--source</code> is the Phase A prototype path, <code>--variant</code> is the final variant name, and <code>--variantType</code> is the domain type.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -405,7 +405,7 @@
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
 diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -415,7 +415,7 @@ diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/
             <p>After all steps are complete, run the structural validation one more time to confirm the new variant satisfies the workspace-wide rules.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-templates.ts</pre>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              <button class="copy-btn">Copy</button>
             </div>
           </div>
         </li>
@@ -467,7 +467,7 @@ diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/
 - [ ] Copy the brand-assets/ directory to templates/co-retail/brand-assets/
 - [ ] Carry over the campaign brief skeleton files under campaign-templates/ as-is
 - [ ] Reset the initial channel list in channel-configs.json to an empty array</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
         </div>
         These items are a different kind of concern than the "de-duplicate common files" work reconcile handles — they're variant-specific assets, so the pipeline won't process them for you. You have to check each checkbox off and move them yourself.

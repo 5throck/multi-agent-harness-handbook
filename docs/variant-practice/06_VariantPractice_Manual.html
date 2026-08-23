@@ -64,7 +64,7 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
 ├── scripts/                           new-project.ts 등 운영 스크립트(TypeScript, bun으로 실행)
 └── Projects/                          &lt;프로젝트명&gt;/ 형태의 개별 프로젝트(각자 독립 git 저장소)
 </pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div></div>
 
   <h3>Variant 10종 전체 목록</h3>
@@ -105,7 +105,7 @@ ai-workspace-standards/                (워크스페이스 루트로 클론)
   <div style="position:relative">
   <pre class="code-block">git clone https://github.com/5throck/ai-workspace-standards.git C:\git
 cd C:\git</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <h3><code>bun</code>. 런타임 설치</h3>
@@ -113,7 +113,7 @@ cd C:\git</pre>
   <div style="position:relative">
   <pre class="code-block">bun --version
 git --version</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
   <p >💡 <strong>핵심 한 줄:</strong> 두 명령이 모두 정상적으로 버전을 출력하면 로컬 환경 준비는 끝난 것이다.</p>
 
@@ -136,19 +136,19 @@ git --version</pre>
   <p>새 프로젝트를 만들기 전에, 워크스페이스에 어떤 variant들이 있고 각각 어떤 버전이 태그되어 있는지 먼저 확인한다.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/list-template-versions.ts</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <h3><code>bun scripts/new-project.ts</code>. 기존 베리언트(variant)로 프로젝트 생성</h3>
   <p>가장 자주 쓰는 명령이다. variant 하나를 골라 프로젝트 이름과 함께 실행하면, <code>templates/&lt;variant&gt;/</code>의 전체 구성(에이전트 정의, 스킬, 커맨드, 거버넌스 파이프라인)이 새 독립 저장소로 복제된다.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
   <p>특정 버전을 고정해서 스캐폴딩하고 싶다면 <code>--version</code>을 함께 지정한다.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/new-project.ts "my-project-name" --variant co-develop --version 1.4.0</pre>
-  <button class="copy-btn" onclick="copyCode(this)">복사</button>
+  <button class="copy-btn">복사</button>
 </div>
 
   <table>

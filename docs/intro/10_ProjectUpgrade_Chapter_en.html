@@ -57,14 +57,14 @@
   <p>Start by running <code>--dry-run</code> to preview what will change. It doesn't touch any files — it just prints the plan to the console.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --dry-run</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   <p>If the output looks fine, run it again without <code>--dry-run</code>.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # Optional flags: --variant &lt;variant&gt;  --platform claude|antigravity|both
 #            --prune-removed  --rollback</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   <p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly.</p>
 
@@ -88,7 +88,7 @@
   <p>Before running (when not in <code>--dry-run</code> mode), the script automatically runs <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code> to snapshot the current state of your working tree. If you're not happy with the upgrade result, you can revert it immediately with the following command.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
-  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+  <button class="copy-btn">Copy</button>
 </div>
   <p>This command finds the <code>pre-upgrade-snapshot-*</code> stash that was just created and restores it via <code>git stash pop</code>. The upgrade itself does not create a commit, so after reviewing the result, you'll need to check the changes with <code>git diff</code> as usual and commit them yourself.</p>
   <p>As a final step, <code>.claude/template-version.txt</code> is updated to the new version, and security bootstrap items — <code>.gitleaks.toml</code>, pre-commit hooks, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (.env patterns), and <code>git core.hooksPath</code> — are automatically checked (these are the same items covered by the Chapter 3 guardrail principles). If <code>core.hooksPath</code> is misconfigured, the script fixes it on its own.</p>

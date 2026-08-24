@@ -22,7 +22,7 @@
   <div class="nav-title">10장 · L3 프로젝트 업그레이드</div>
   <a href="#why">왜 필요한가 — 포크 모델의 이면</a>
   <a href="#usage">upgrade-project.ts 사용법</a>
-  <a href="#categories">파일 처리 5분류</a>
+  <a href="#categories">파일 처리 8분류</a>
   <a href="#safety">안전장치 — 스냅샷과 롤백</a>
   <a href="#vs-promotion">승격과의 방향 차이</a>
   <div class="nav-section">다른 장</div>
@@ -36,14 +36,14 @@
   <div class="chapter-eyebrow">10장</div>
   <h1>L3 프로젝트 업그레이드</h1>
   <p class="lead">L3 프로젝트를 만든 뒤 상위 표준(L0/L1)이 바뀌면 무슨 일이 일어날까 — 정답은 "아무 일도 안 일어난다"이다. 8장 §1에서 다룬 포크 모델 때문에, 이미 태어난 L3 프로젝트에 새 변경을 실제로 반영하려면 <code>upgrade-project.ts</code>를 사람이 명시적으로 실행해야 한다. 이 장은 그 절차를 다룬다.</p>
-  <p class="source-line">소스: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.6.0 기준) · 관련: <a href="08_Intro_Advanced_Deploy.html#s1">8장 §1 배포와 SSOT</a></p>
+  <p class="source-line">소스: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.10.1 기준) · 관련: <a href="08_Intro_Advanced_Deploy.html#s1">8장 §1 배포와 SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">이 장에서 다루는 것</div>
     <ul>
       <li>포크 모델에서 "업그레이드"가 왜 자동이 아니라 명령을 실행해야 하는 작업인지</li>
       <li><code>upgrade-project.ts</code>의 기본 사용법과 <code>--dry-run</code> 우선 원칙</li>
-      <li>LOCKED·MERGE·PRESERVE·SYNC_IF_NEWER·PRUNE 5가지 파일 처리 방식</li>
+      <li>LOCKED·MERGE·DOCS_MERGE·VARIANT_DOCS_SYNC·COMMANDS_SYNC·SYNC_IF_NEWER·PRESERVE·PRUNE 8가지 파일 처리 방식</li>
       <li>자동 git stash 스냅샷과 <code>--rollback</code>으로 되돌리는 안전장치</li>
       <li>11장에서 다루는 "승격"과 방향이 정반대라는 점</li>
     </ul>
@@ -68,20 +68,25 @@
 </div>
   <p><code>--variant</code>는 프로젝트의 <code>.claude/template-version.txt</code>에 기록된 값을 자동으로 읽어오므로 대부분 생략해도 된다. 이 파일이 없는 오래된 프로젝트라면 실행 시 확인 프롬프트가 뜨고, <code>--variant</code>를 직접 지정해야 한다.</p>
 
-  <h2 id="categories">파일 처리 5분류</h2>
+  <h2 id="categories">파일 처리 8분류</h2>
   <p>스크립트는 파일을 성격에 따라 다르게 다룬다 — 전부 똑같이 "새 걸로 덮어쓰기"가 아니다.</p>
   <div class="table-compare">
   <table>
     <thead><tr><th>분류</th><th>동작</th><th>대상 예시</th></tr></thead>
     <tbody>
-      <tr><td><strong>LOCKED</strong></td><td>항상 템플릿 내용으로 덮어씀</td><td><code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code></td></tr>
-      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code> 마커로 감싼 구간만 병합, 나머지 로컬 내용은 그대로 보존</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>에 따라), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
-      <tr><td><strong>PRESERVE</strong></td><td>목록에만 표시, 전혀 손대지 않음</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>docs/context.md</code>, <code>src/</code></td></tr>
-      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>템플릿 버전이 프로젝트 버전보다 높을 때만 복사</td><td><code>scripts/*.ts</code>(<code>@version</code> 주석), <code>agents/*.md</code>(frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>LOCKED</strong></td><td>항상 템플릿 내용으로 덮어씀</td><td><code>.githooks/*</code>(pre-commit 라우팅 등), <code>.gitattributes</code></td></tr>
+      <tr><td><strong>LOCKED (merge-aware)</strong></td><td>LOCKED처럼 항상 템플릿을 가져오되 병합 인식 — 프로젝트에만 있는 정규식·허용 목록(<code>regexes</code>/<code>paths</code>) 항목은 보존하고 관리 규칙만 복원한다(v1.10.0부터; 이전의 무조건 덮어쓰기는 프로젝트 전용 허용 목록을 유실시켰음)</td><td><code>.gitleaks.toml</code>(<code>mergeGitleaksToml()</code>)</td></tr>
+      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code> 마커로 감싼 구간만 병합, 나머지 로컬 내용은 그대로 보존</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>에 따라), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>DOCS_MERGE</strong></td><td>문서에도 MERGE와 같은 마커 구간 병합을 적용 — 마커 없는 문서만 예외적으로 통째로 덮어씀(v1.7.0 추가)</td><td><code>AGENTS.md</code>, <code>docs/&lt;variant&gt;.context.md</code>, <code>docs/phase-definitions.md</code></td></tr>
+      <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>파일 안의 <code>*&lt;파일명&gt; version: X.Y</code> 각주 버전(없으면 해시)이 템플릿보다 낮을 때만 갱신(v1.7.0 추가)</td><td><code>docs/context.md</code>(v1.9.0부터), <code>docs/engagement-orchestration.md</code>, <code>docs/team-configuration-guide.md</code></td></tr>
+      <tr><td><strong>COMMANDS_SYNC</strong></td><td>해시가 다르면 플랫폼 명령 파일을 템플릿 내용으로 동기화(v1.7.0 추가)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.md</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>템플릿 버전이 프로젝트 버전보다 높을 때만 복사</td><td><code>scripts/*.ts</code>(<code>@version</code> 주석, JSDoc 헤더 포함), <code>agents/*.md</code>(frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>목록에만 표시, 전혀 손대지 않음</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>src/</code></td></tr>
       <tr><td><strong>PRUNE(선택)</strong></td><td><code>--prune-removed</code> 지정 시, 템플릿에서 사라진 scripts/agents/skills 파일을 프로젝트에서도 제거</td><td>위 SYNC_IF_NEWER 대상과 동일한 디렉터리</td></tr>
     </tbody>
   </table>
   </div>
+  <p>v1.10.x부터 업그레이드는 국가 프로필(국가 스코프 자산)도 인식한다. 실행 전 프로젝트의 <code>.claude/template-version.txt</code>에서 <code>country=</code> 줄을 읽어(없으면 <code>docs/countries/ACTIVE.md</code>의 관할 표기로 대체) 대상 국가를 파악하고, 마무리 시 이 줄을 그대로 보존한다 — 구버전은 이 파일을 재작성하면서 <code>country=</code> 줄을 지워버려 국가 소속 정보를 잃게 했다. 또한 스킬 동기화가 모두 끝난 뒤 레지스트리 기반 prune가 한 번 더 실행되어, 국가 스코프 스킬(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)이 해당 국가가 아닌 프로젝트에 다시 주입됐다면 삭제한다 — 스캐폴딩 시점의 정리 결과를 매번 업그레이드가 되돌리는 사태를 막기 위함이다. 단, 로컬에서 의도적으로 고친 포크는 <code>⚠️ CONFLICT</code> 경고와 함께 그대로 보존된다.</p>
   <p>SYNC_IF_NEWER 대상 파일을 로컬에서 직접 고쳐 쓴 상태인데 템플릿 쪽 버전이 더 높으면, 스크립트는 <code>⚠️ CONFLICT</code>로 표시하면서도 결국 템플릿 내용으로 덮어쓴다. "덮어쓰기 전에 물어봐 주는" 동작이 아니라 "경고만 하고 진행하는" 동작이라는 점을 기억해야 한다 — 그래서 아래 안전장치가 중요하다.</p>
 
   <h2 id="safety">안전장치 — 스냅샷과 롤백</h2>
@@ -91,7 +96,7 @@
   <button class="copy-btn">복사</button>
 </div>
   <p>이 명령은 방금 만든 <code>pre-upgrade-snapshot-*</code> 스태시를 찾아 <code>git stash pop</code>으로 복원한다. 업그레이드 자체는 커밋을 만들지 않으므로, 결과를 확인한 뒤에는 평소처럼 <code>git diff</code>로 변경 내용을 검토하고 직접 커밋해야 한다.</p>
-  <p>마무리 단계로 <code>.claude/template-version.txt</code>가 새 버전으로 갱신되고, <code>.gitleaks.toml</code>·pre-commit 훅·<code>.gitattributes</code>(eol=lf)·<code>.gitignore</code>(.env 패턴)·<code>git core.hooksPath</code> 같은 보안 부트스트랩 항목이 자동으로 점검된다(3장 가드레일 원칙과 동일한 항목들이다). <code>core.hooksPath</code>가 잘못돼 있으면 스크립트가 스스로 고쳐준다.</p>
+  <p>마무리 단계로 <code>.claude/template-version.txt</code>가 새 버전으로 갱신되며 이때 <code>country=</code> 줄은 그대로 보존되고, <code>.gitleaks.toml</code>·pre-commit 훅·<code>.gitattributes</code>(eol=lf)·<code>.gitignore</code>(.env 패턴)·<code>git core.hooksPath</code> 같은 보안 부트스트랩 항목이 자동으로 점검된다(3장 가드레일 원칙과 동일한 항목들이다). <code>core.hooksPath</code>가 잘못돼 있으면 스크립트가 스스로 고쳐준다.</p>
 
   <h2 id="vs-promotion">승격과의 방향 차이</h2>
   <p>11장에서 다루는 "승격"과 이번 장의 "업그레이드"는 이름이 비슷해 보이지만 방향이 정반대다.</p>
@@ -102,7 +107,7 @@
   <p>두 스크립트는 서로 반대 방향으로 파일을 흘려보낼 뿐, 어느 한쪽이 다른 쪽을 대체하지 않는다. 템플릿에 기여하고 싶다면 승격을, 이미 만든 프로젝트를 최신 상태로 유지하고 싶다면 업그레이드를 쓴다.</p>
 
   <div class="note">
-    이 장의 스크립트 동작(플래그, 파일 분류, 안전장치)은 <code>ai-workspace-standards</code> 저장소의 <code>scripts/upgrade-project.ts</code>(v1.6.0) 소스를 직접 확인해 작성했다. 이 핸드북 저장소에는 해당 스크립트가 포함돼 있지 않으므로, 실제 실행 결과는 반드시 최신 소스와 대조해 확인한다.
+    이 장의 스크립트 동작(플래그, 파일 분류, 안전장치)은 <code>ai-workspace-standards</code> 저장소의 <code>scripts/upgrade-project.ts</code>(v1.10.1) 소스를 직접 확인해 작성했다. 이 핸드북 저장소에는 해당 스크립트가 포함돼 있지 않으므로, 실제 실행 결과는 반드시 최신 소스와 대조해 확인한다.
   </div>
 
   <div class="chapter-nav">

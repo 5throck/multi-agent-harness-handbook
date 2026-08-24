@@ -74,6 +74,10 @@
     <dd>The act of using <code>bun scripts/new-project.ts</code> to clone a variant template's entire configuration (agents, skills, commands, governance pipeline) into an independent git repository. The idea being: "you don't build a project from scratch — you start from a pre-designed skeleton."
       <span class="see">Details: <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-2">Chapter 6 §2</a></span></dd>
 
+    <dt>Guardrails <span class="en">Guardrails</span></dt>
+    <dd>Safety mechanisms that enforce behavioral boundaries for agents — such as permission models, hooks, and audits.
+      <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s1">Chapter 3 §1</a></span></dd>
+
     <dt>Hook <span class="en">Hook</span></dt>
     <dd>A script that runs automatically before or after an agent calls a particular tool. Example: a <code>PostToolUse</code> hook that runs an automated audit check after a file edit. In Claude Code (CLI), hooks defined under <code>.claude/hooks/</code> fire as expected, but they do not fire in Claude Desktop App — so it's important to be aware of these per-tool behavioral differences.
       <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logs and Observability</a></span></dd>

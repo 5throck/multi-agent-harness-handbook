@@ -156,7 +156,7 @@ L3 — Projects/&lt;name&gt;/（稼働中のプロジェクト作業ディレク
   <h3>モデルティア戦略 — 組織規模でティアを運用する方法</h3>
   <p>第5章では、<code>tier: high/medium/low</code>が個々のエージェント役割にどう割り当てられるかを見た。ここでは、その割り当てを<strong>変更し維持していく流れ</strong>をアーキテクチャの観点から見ていく。tierの値は<code>agents/*.md</code>のフロントマターにあり、このファイルは上記のSSOT表で見たようにL0が原本であり、§5の<code>upgrade-project.ts</code>が<strong>SYNC_IF_NEWER</strong>として管理する — つまり、tier戦略そのものもL0→L1→L2の原則に忠実に従う。</p>
   <ul>
-    <li><strong>基本の割り当てはL0で一度定める。</strong> PM・Architect系はhigh、code-writer・docs-writer系はmedium、automation-engineer系はlowという原則をワークスペースルートの<code>agents/*.md</code>で確定すれば、すべてのバリアント（variant）のL1テンプレートがこれを継承する。</li>
+    <li><strong>基本の割り当てはL0で一度定める。</strong> Architect系はhigh、code-writer・docs-writer系はmedium、automation-engineer系はlowという原則をワークスペースルートの<code>agents/*.md</code>で確定すれば、すべてのバリアント（variant）のL1テンプレートがこれを継承する。ただしPMだけは例外的な二重構造である — L0の<code>agents/pm.md</code>はhighを維持し、L1/L2テンプレート（<code>templates/common/agents/pm.md</code>）はPR #623（2026-08-23）からmediumをデフォルトとしつつ、高度なオーケストレーションが必要な場合にhighへ上げられるescape hatchを備える。</li>
     <li><strong>ティア基準が変わればバージョンを上げる。</strong>「この役割はもうmediumではなくhighであるべきだ」といった組織レベルの再判断は、L0の<code>agents/*.md</code>を直し<code>@version</code>（またはフロントマターの<code>version:</code>）を上げる形で行われる。すでに作られたL3プロジェクトには自動的には反映されず、各プロジェクトが<code>upgrade-project.ts</code>を実行して初めて新しいティアを受け取る（第10章） — ティアの変更も例外なくフォークモデルに従う。</li>
     <li><strong>プロジェクトごとの例外はL2にのみ残す。</strong> 特定のバリアント（variant）の特定の役割だけ異なるティアが必要な場合（例: 特に複雑なドメインロジックを扱うcode-writerをmediumではなくhighにする）、そのプロジェクトの<code>agents/*.md</code>をローカルで直接修正する。ただしこのファイルはSYNC_IF_NEWERの対象であるため、次回のアップグレード時にL1側のバージョンがより高ければ<code>⚠️ CONFLICT</code>警告とともに上書きされる可能性がある点を考慮する必要がある（§5の安全装置を参照）。</li>
   </ul>

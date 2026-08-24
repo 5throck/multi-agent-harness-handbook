@@ -369,7 +369,7 @@
           <line x1="488" y1="98" x2="516" y2="98" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrow2)"/>
           <!-- Final variant -->
           <rect x="520" y="80" width="106" height="36" rx="8" fill="var(--accent-purple)"/>
-          <text x="573" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">マージ</text>
+          <text x="573" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--text-inverse)" text-anchor="middle" font-weight="600">templates/</text>
           <text x="573" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--badge-purple-bg)" text-anchor="middle">co-retail/ (公式)</text>
         </svg>
       </div>
@@ -391,9 +391,9 @@
         <li>
           <div class="step-content">
             <strong>昇格パイプラインを実行する</strong>
-            <p><code>--source</code>はPhase Aプロトタイプのパス、<code>--variant</code>は最終的なvariant名、<code>--variantType</code>はドメインタイプである。</p>
+            <p><code>--l3-path</code>はPhase Aプロトタイプのパス、<code>--name</code>は最終的なvariant名、<code>--type</code>はドメインタイプ、<code>--description</code>はvariantの説明である。<code>--description</code>と、オプションフラグの<code>--version</code>（デフォルト0.1.0）、<code>--status</code>（デフォルトbeta）は、昇格結果の<code>templates/co-retail/variant.json</code>に直接書き込まれる。</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
+              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --l3-path=Projects/co-retail --name=co-retail --type=collaboration --description="Retail domain agent team"</pre>
               <button class="copy-btn">Copy</button>
             </div>
           </div>
@@ -401,10 +401,12 @@
         <li>
           <div class="step-content">
             <strong>プラットフォームパリティを手動で確認する</strong>
-            <p>diffを使用して、<code>.claude/</code>と<code>.gemini/</code>のcommands/skillsディレクトリ一覧が対応していることを確認する。</p>
+            <p>diffを使用して、<code>.claude/</code>・<code>.gemini/</code>・<code>.agents/</code>のcommands/skillsディレクトリ一覧が対応していることを確認する（Claude/Gemini/Antigravityの3プラットフォームパリティ）。</p>
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
-diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)</pre>
+diff &lt;(ls templates/co-retail/.gemini/commands/) &lt;(ls templates/co-retail/.agents/commands/)
+diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)
+diff &lt;(ls templates/co-retail/.gemini/skills/) &lt;(ls templates/co-retail/.agents/skills/)</pre>
               <button class="copy-btn">Copy</button>
             </div>
           </div>

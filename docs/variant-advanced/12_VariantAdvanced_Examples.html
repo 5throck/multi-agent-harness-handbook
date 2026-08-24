@@ -391,9 +391,9 @@
         <li>
           <div class="step-content">
             <strong>승격 파이프라인 실행</strong>
-            <p><code>--source</code>는 Phase A 프로토타입 경로, <code>--variant</code>는 최종 variant 이름, <code>--variantType</code>은 도메인 유형이다.</p>
+            <p><code>--l3-path</code>는 Phase A 프로토타입 경로, <code>--name</code>은 최종 variant 이름, <code>--type</code>은 도메인 유형, <code>--description</code>은 variant 설명이다. <code>--description</code>과 선택 플래그인 <code>--version</code>(기본값 0.1.0), <code>--status</code>(기본값 beta)는 승격 결과물인 <code>templates/co-retail/variant.json</code>에 직접 기록된다.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
+              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --l3-path=Projects/co-retail --name=co-retail --type=collaboration --description="Retail domain agent team"</pre>
               <button class="copy-btn">복사</button>
             </div>
           </div>
@@ -401,10 +401,12 @@
         <li>
           <div class="step-content">
             <strong>플랫폼 패리티 수동 확인</strong>
-            <p><code>.claude/</code>와 <code>.gemini/</code>의 commands·skills 디렉터리 목록이 서로 대응하는지 diff로 확인한다.</p>
+            <p><code>.claude/</code>와 <code>.gemini/</code>, 그리고 <code>.agents/</code>의 commands·skills 디렉터리 목록이 서로 대응하는지 diff로 확인한다(Claude/Gemini/Antigravity 세 플랫폼 패리티).</p>
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
-diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)</pre>
+diff <(ls templates/co-retail/.gemini/commands/) <(ls templates/co-retail/.agents/commands/)
+diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)
+diff <(ls templates/co-retail/.gemini/skills/) <(ls templates/co-retail/.agents/skills/)</pre>
               <button class="copy-btn">복사</button>
             </div>
           </div>

@@ -17,6 +17,7 @@ cd setup
 Consulta la [Guía de Instalación](https://5throck.github.io/multi-agent-harness-handbook/setup/SETUP_es.html) para la guía completa.
 
 ## 📚 Currículo / Contenido
+- **Guía para Egresados del Curso Introductorio** — Mapa de atajos para lectores que ya completaron el curso [intro-to-ai-harness](https://5throck.github.io/intro-to-ai-harness/)
 - **Cap. 1 · Introducción** — Por qué equipos de agentes de IA y paradigmas de AI Workspace
 - **Cap. 2 · Ingeniería de Harness** — Conceptos clave de orquestación de equipos multi-agente
 - **Cap. 3 · Guardarraíles y Modelos de Permisos** — Gobernanza y control de acceso de agentes
@@ -26,11 +27,16 @@ Consulta la [Guía de Instalación](https://5throck.github.io/multi-agent-harnes
 - **Cap. 7 · Comparación de Estrategias Operativas Empresariales** — Análisis de gobernanza y despliegue
 - **Cap. 8 · Profundización en la Arquitectura de `ai-workspace-standards`** — Despliegue, SSOT, ciclo de vida, AGENTS.md y hoja de ruta
 - **Cap. 9 · Patrones de Diseño de Flujo de Trabajo** — Patrones de cooperación entre agentes
-- **Cap. 10 · Actualización de Proyectos L2** — Expansión de capacidades de agentes en proyectos reales
+- **Cap. 10 · Actualización de Proyectos L3** — Expansión de capacidades de agentes en proyectos reales
 - **Cap. 11 · Creación de una Nueva Variante (Fase A)** — Diseño de harness personalizado
 - **Cap. 12 · Promoción de una Nueva Variante (Fase B)** — Despliegue en producción y validación
 - **Cap. 13 · Proyecto Capstone** — Diseñando su propio flujo de trabajo
 - **Referencia Común** — Comparativa de herramientas: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
+- **Preguntas Frecuentes** — Errores comunes y soluciones
+- **Glosario** — Términos clave y definiciones usados en todo el manual
+- **Ejercicio de Calentamiento** — De Tetris a Pac-Man
+- **Resumen del curso** — Objetivos de aprendizaje y estructura del currículo
+- **Guía del instructor** — Cronograma día por día, agenda y notas para el facilitador
 
 ## 🎯 Versiones Objetivo
 - Claude Code 2026-07

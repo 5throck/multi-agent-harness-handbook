@@ -391,9 +391,9 @@
         <li>
           <div class="step-content">
             <strong>Ejecute el pipeline de promoción</strong>
-            <p><code>--source</code> es la ruta del prototipo de Fase A, <code>--variant</code> es el nombre final de la variante, y <code>--variantType</code> es el tipo de dominio.</p>
+            <p><code>--l3-path</code> es la ruta del prototipo de Fase A, <code>--name</code> es el nombre final de la variante, <code>--type</code> es el tipo de dominio y <code>--description</code> describe la variante. <code>--description</code>, junto con los flags opcionales <code>--version</code> (por defecto 0.1.0) y <code>--status</code> (por defecto beta), se escribe directamente en el <code>templates/co-retail/variant.json</code> resultante.</p>
             <div style="position:relative">
-              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --source Projects/co-retail --variant co-retail --variantType retail</pre>
+              <pre class="code-block">bun scripts/l3-to-variant-pipeline.ts --l3-path=Projects/co-retail --name=co-retail --type=collaboration --description="Retail domain agent team"</pre>
               <button class="copy-btn">Copiar</button>
             </div>
           </div>
@@ -401,10 +401,12 @@
         <li>
           <div class="step-content">
             <strong>Confirme manualmente la paridad de plataforma</strong>
-            <p>Use diff para confirmar que los listados de directorios de comandos/habilidades en <code>.claude/</code> y <code>.gemini/</code> corresponden entre sí.</p>
+            <p>Use diff para confirmar que los listados de directorios de comandos/habilidades en <code>.claude/</code>, <code>.gemini/</code> y <code>.agents/</code> corresponden entre sí (paridad de tres plataformas: Claude/Gemini/Antigravity).</p>
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
-diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)</pre>
+diff &lt;(ls templates/co-retail/.gemini/commands/) &lt;(ls templates/co-retail/.agents/commands/)
+diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)
+diff &lt;(ls templates/co-retail/.gemini/skills/) &lt;(ls templates/co-retail/.agents/skills/)</pre>
               <button class="copy-btn">Copiar</button>
             </div>
           </div>

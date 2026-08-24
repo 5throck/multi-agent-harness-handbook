@@ -116,7 +116,7 @@
 
   <div class="q">¿Cuánto cuesta ejecutar un equipo multiagente en tokens?</div>
   <p class="faq-answer">El costo se determina por la cantidad de agentes × el nivel de modelo de cada agente × la frecuencia de ejecución. La jerarquía de niveles de modelo (<code>tier: high/medium/low</code>) descrita en el Capítulo 5 es el mecanismo clave de control de costos. Por ejemplo, ejecutar los 10 agentes de la variante co-consult en nivel alto puede consumir decenas de miles de tokens en una sola sesión, pero reducir los roles de implementación real a medio/bajo puede recortar los costos entre un 40-60%. El comando <code>/cost</code> de Claude Code permite verificar el uso acumulado de tokens para la sesión actual en tiempo real.</p>
-  <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §Plantillas y las 7 Variantes</a></span>
+  <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §Plantillas y las 11 Variantes</a></span>
 
   <div class="q">Las respuestas de los agentes de repente se vuelven lentas o agotan el tiempo de espera.</div>
   <p class="faq-answer">Cuando la ventana de contexto se llena, la velocidad de procesamiento del modelo disminuye drásticamente. Claude Code permite comprimir la longitud de la conversación con el comando <code>/compact</code>. Además, al ejecutar múltiples agentes en paralelo, las solicitudes a la API pueden acumularse y causar retrasos — en este caso, cambie a ejecución secuencial o reduzca su límite WIP para disminuir el número de ejecuciones concurrentes.</p>
@@ -124,7 +124,7 @@
 
   <div class="q">Ejecutar un ciclo multiagente o un flujo de trabajo largo consume demasiados tokens de API. ¿Cómo lo optimizo?</div>
   <p class="faq-answer">Primero, asigne **niveles de modelo** distintos por rol de agente. Use modelos medio/bajo para escrituras simples de archivos o ejecución de pruebas, y reserve modelos de nivel alto para el control general del flujo o el diseño integral — esto por sí solo puede reducir los costos en un 40% o más. Segundo, mantenga el contexto de la conversación estable para que funcione el caché de prompts — evite cambiar el prompt del sistema y mantenga una sesión continua. Tercero, establezca límites estrictos claros, como <code>Max Turns</code>, para que la conversación entre el orquestador y los especialistas no gire indefinidamente.</p>
-  <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §Plantillas y las 7 Variantes</a></span>
+  <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §Plantillas y las 11 Variantes</a></span>
 
   <h2 id="platform">Problemas Específicos de Plataforma</h2>
 

@@ -22,7 +22,7 @@
   <div class="nav-title">Capítulo 10 · Actualización de Proyecto L3</div>
   <a href="#why">Por qué es necesario — la otra cara del modelo de bifurcación</a>
   <a href="#usage">Cómo usar upgrade-project.ts</a>
-  <a href="#categories">Las 5 categorías de manejo de archivos</a>
+  <a href="#categories">Las 8 categorías de manejo de archivos</a>
   <a href="#safety">Redes de seguridad — instantáneas y reversión</a>
   <a href="#vs-promotion">Cómo se diferencia de la promoción</a>
   <div class="nav-section">Otros capítulos</div>
@@ -36,14 +36,14 @@
   <div class="chapter-eyebrow">Capítulo 10</div>
   <h1>Actualización de Proyecto L3</h1>
   <p class="lead">Una vez que has creado un proyecto L3, ¿qué ocurre cuando los estándares upstream (L0/L1) cambian? La respuesta es: "no ocurre absolutamente nada." Debido al modelo de bifurcación discutido en el Capítulo 8 §1, para incorporar realmente los cambios upstream nuevos a un proyecto L3 ya creado, una persona debe ejecutar explícitamente <code>upgrade-project.ts</code>. Este capítulo cubre ese procedimiento.</p>
-  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.6.0) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y SSOT</a></p>
+  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.10.1) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">Lo Que Cubre Este Capítulo</div>
     <ul>
       <li>Por qué la "actualización" en el modelo de bifurcación es un comando que ejecutas, no algo que ocurre automáticamente</li>
       <li>Uso básico de <code>upgrade-project.ts</code> y el principio de ejecutar primero <code>--dry-run</code></li>
-      <li>Los 5 modos de manejo de archivos: LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER y PRUNE</li>
+      <li>Los 8 modos de manejo de archivos: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE y PRUNE</li>
       <li>La instantánea automática con git stash y la red de seguridad de <code>--rollback</code></li>
       <li>Cómo esto es exactamente la dirección opuesta a la "promoción" cubierta en el Capítulo 11</li>
     </ul>
@@ -68,20 +68,25 @@
 </div>
   <p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente.</p>
 
-  <h2 id="categories">Las 5 categorías de manejo de archivos</h2>
+  <h2 id="categories">Las 8 categorías de manejo de archivos</h2>
   <p>El script trata los archivos de manera diferente según su naturaleza — no es un "sobrescribir todo con la nueva versión" indiscriminado.</p>
   <div class="table-compare">
   <table>
     <thead><tr><th>Categoría</th><th>Comportamiento</th><th>Ejemplos de objetivos</th></tr></thead>
     <tbody>
-      <tr><td><strong>LOCKED</strong></td><td>Siempre sobrescrita con el contenido de la plantilla</td><td><code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code></td></tr>
-      <tr><td><strong>MERGE</strong></td><td>Solo se fusionan las secciones envueltas en marcadores <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>; el resto del contenido local se conserva tal cual</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code> (según <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
-      <tr><td><strong>PRESERVE</strong></td><td>Solo se listan, nunca se tocan</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>docs/context.md</code>, <code>src/</code></td></tr>
-      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copiados solo cuando la versión de la plantilla es más reciente que la versión del proyecto</td><td><code>scripts/*.ts</code> (comentario <code>@version</code>), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>LOCKED</strong></td><td>Siempre sobrescrita con el contenido de la plantilla</td><td><code>.githooks/*</code> (enrutamiento pre-commit, etc.), <code>.gitattributes</code></td></tr>
+      <tr><td><strong>LOCKED (merge-aware)</strong></td><td>Como LOCKED — siempre toma la plantilla — pero consciente de la fusión: las entradas de expresiones regulares y listas de permisos (<code>regexes</code>/<code>paths</code>) que existen solo en el proyecto se conservan mientras se restauran las reglas administradas (desde v1.10.0; la anterior sobrescritura a ciegas eliminaba silenciosamente las entradas de permisos específicas del proyecto)</td><td><code>.gitleaks.toml</code> (<code>mergeGitleaksToml()</code>)</td></tr>
+      <tr><td><strong>MERGE</strong></td><td>Solo se fusionan las secciones envueltas en marcadores <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code>; el resto del contenido local se conserva tal cual</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code> (según <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>DOCS_MERGE</strong></td><td>Aplica la misma fusión por bloques marcados a los documentos — solo los documentos sin marcadores se sobrescriben por completo como excepción (añadido en v1.7.0)</td><td><code>AGENTS.md</code>, <code>docs/&lt;variant&gt;.context.md</code>, <code>docs/phase-definitions.md</code></td></tr>
+      <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>Se actualiza solo cuando la versión del pie de página inline <code>*&lt;nombre-archivo&gt; version: X.Y</code> del archivo (o el hash, si está ausente) es más antigua que la de la plantilla (añadido en v1.7.0)</td><td><code>docs/context.md</code> (desde v1.9.0), <code>docs/engagement-orchestration.md</code>, <code>docs/team-configuration-guide.md</code></td></tr>
+      <tr><td><strong>COMMANDS_SYNC</strong></td><td>Sincroniza los archivos de comandos de la plataforma con el contenido de la plantilla siempre que sus hashes difieran (añadido en v1.7.0)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.md</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copiados solo cuando la versión de la plantilla es más reciente que la versión del proyecto</td><td><code>scripts/*.ts</code> (comentario <code>@version</code>, incluidos encabezados JSDoc), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>Solo se listan, nunca se tocan</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>src/</code></td></tr>
       <tr><td><strong>PRUNE (opcional)</strong></td><td>Cuando se especifica <code>--prune-removed</code>, los archivos de scripts/agents/skills que fueron eliminados de la plantilla también se eliminan del proyecto</td><td>Los mismos directorios que los objetivos SYNC_IF_NEWER anteriores</td></tr>
     </tbody>
   </table>
   </div>
+  <p>Desde la v1.10.x, las actualizaciones también son conscientes del perfil de país. Antes de ejecutarse, el script lee la línea <code>country=</code> del <code>.claude/template-version.txt</code> del proyecto (con respaldo en la jurisdicción indicada en <code>docs/countries/ACTIVE.md</code>) para determinar el país objetivo, y conserva esa línea al reescribir el archivo al final — las versiones anteriores eliminaban la línea durante la reescritura, borrando la procedencia de país del proyecto. Además, después de terminar todas las pasadas de sincronización de habilidades, se ejecuta una pasada de prune basada en el registro que elimina las habilidades con alcance de país (<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>) si fueron reinyectadas en un proyecto cuyo país no coincide — evitando que cada actualización deshaga la limpieza realizada durante el scaffolding. Los forks modificados deliberadamente a nivel local, sin embargo, se conservan con una advertencia <code>⚠️ CONFLICT</code>.</p>
   <p>Si un objetivo SYNC_IF_NEWER ha sido editado localmente pero la versión de la plantilla es más reciente, el script lo marca como <code>⚠️ CONFLICT</code> pero aun así lo sobrescribe con el contenido de la plantilla al final. Ten en cuenta que esto es "advertir y continuar," no "preguntar antes de sobrescribir" — por eso la red de seguridad descrita a continuación es importante.</p>
 
   <h2 id="safety">Redes de seguridad — instantáneas y reversión</h2>
@@ -91,7 +96,7 @@
   <button class="copy-btn">Copiar</button>
 </div>
   <p>Este comando encuentra la instantánea <code>pre-upgrade-snapshot-*</code> que se acaba de crear y la restaura mediante <code>git stash pop</code>. La propia actualización no crea un commit, así que después de revisar el resultado, necesitarás verificar los cambios con <code>git diff</code> como de costumbre y confirmarlos tú mismo.</p>
-  <p>Como paso final, <code>.claude/template-version.txt</code> se actualiza a la nueva versión, y los elementos de arranque de seguridad — <code>.gitleaks.toml</code>, hooks de pre-commit, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (patrones .env), y <code>git core.hooksPath</code> — se verifican automáticamente (estos son los mismos elementos cubiertos por los principios de barreras de protección del Capítulo 3). Si <code>core.hooksPath</code> está mal configurado, el script lo corrige por sí solo.</p>
+  <p>Como paso final, <code>.claude/template-version.txt</code> se actualiza a la nueva versión — conservando su línea <code>country=</code> — y los elementos de arranque de seguridad — <code>.gitleaks.toml</code>, hooks de pre-commit, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (patrones .env), y <code>git core.hooksPath</code> — se verifican automáticamente (estos son los mismos elementos cubiertos por los principios de barreras de protección del Capítulo 3). Si <code>core.hooksPath</code> está mal configurado, el script lo corrige por sí solo.</p>
 
   <h2 id="vs-promotion">Cómo se diferencia de la promoción</h2>
   <p>La "promoción" cubierta en el Capítulo 11 y la "actualización" de este capítulo suenan similares, pero se ejecutan en direcciones exactamente opuestas.</p>
@@ -102,7 +107,7 @@
   <p>Los dos scripts simplemente mueven archivos en direcciones opuestas — ninguno reemplaza al otro. Si deseas contribuir de vuelta a la plantilla, usa la promoción; si deseas mantener un proyecto existente actualizado, usa la actualización.</p>
 
   <div class="note">
-    El comportamiento del script descrito en este capítulo (opciones, categorías de archivos, redes de seguridad) se escribió examinando directamente la fuente de <code>scripts/upgrade-project.ts</code> (v1.6.0) en el repositorio <code>ai-workspace-standards</code>. Este repositorio del manual no incluye ese script, así que siempre contrasta los resultados de ejecución reales con la última fuente.
+    El comportamiento del script descrito en este capítulo (opciones, categorías de archivos, redes de seguridad) se escribió examinando directamente la fuente de <code>scripts/upgrade-project.ts</code> (v1.10.1) en el repositorio <code>ai-workspace-standards</code>. Este repositorio del manual no incluye ese script, así que siempre contrasta los resultados de ejecución reales con la última fuente.
   </div>
 
   <div class="chapter-nav">

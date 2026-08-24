@@ -17,7 +17,7 @@
   <div class="nav-title">第10章・L3プロジェクトのアップグレード</div>
   <a href="#why">なぜ必要か — フォークモデルの裏側</a>
   <a href="#usage">upgrade-project.ts の使い方</a>
-  <a href="#categories">ファイル処理の5分類</a>
+  <a href="#categories">ファイル処理の8分類</a>
   <a href="#safety">安全装置 — スナップショットとロールバック</a>
   <a href="#vs-promotion">昇格との方向の違い</a>
   <div class="nav-section">他の章</div>
@@ -31,14 +31,14 @@
   <div class="chapter-eyebrow">第10章</div>
   <h1>L3プロジェクトのアップグレード</h1>
   <p class="lead">L3プロジェクトを作成した後に上位標準(L0/L1)が変更されると何が起きるのか — 答えは「何も起きない」である。第8章 §1で扱ったフォークモデルのため、すでに生まれたL3プロジェクトに新しい変更を実際に反映するには、人が明示的に<code>upgrade-project.ts</code>を実行する必要がある。本章ではその手順を扱う。</p>
-  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.6.0時点) ・関連: <a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></p>
+  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.10.1時点) ・関連: <a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">本章で扱う内容</div>
     <ul>
       <li>フォークモデルにおいて「アップグレード」がなぜ自動ではなくコマンド実行を要する作業なのか</li>
       <li><code>upgrade-project.ts</code>の基本的な使い方と<code>--dry-run</code>を先に行う原則</li>
-      <li>LOCKED・MERGE・PRESERVE・SYNC_IF_NEWER・PRUNEの5つのファイル処理方式</li>
+      <li>LOCKED・MERGE・DOCS_MERGE・VARIANT_DOCS_SYNC・COMMANDS_SYNC・SYNC_IF_NEWER・PRESERVE・PRUNEの8つのファイル処理方式</li>
       <li>自動のgit stashスナップショットと<code>--rollback</code>による復元という安全装置</li>
       <li>第11章で扱う「昇格」とは方向が正反対である点</li>
     </ul>
@@ -63,20 +63,25 @@
 </div>
   <p><code>--variant</code>はプロジェクトの<code>.claude/template-version.txt</code>に記録された値を自動で読み込むため、多くの場合省略できる。このファイルが存在しない古いプロジェクトでは、実行時に確認プロンプトが表示され、<code>--variant</code>を直接指定する必要がある。</p>
 
-  <h2 id="categories">ファイル処理の5分類</h2>
+  <h2 id="categories">ファイル処理の8分類</h2>
   <p>スクリプトは性質に応じてファイルを異なる方法で扱う — すべてを一律に「新しい内容で上書き」するわけではない。</p>
   <div class="table-compare">
   <table>
     <thead><tr><th>分類</th><th>動作</th><th>対象例</th></tr></thead>
     <tbody>
-      <tr><td><strong>LOCKED</strong></td><td>常にテンプレートの内容で上書きする</td><td><code>.githooks/*</code>、<code>.gitattributes</code>、<code>.gitleaks.toml</code></td></tr>
-      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>マーカーで囲まれた区間のみをマージし、それ以外のローカル内容はそのまま保持する</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>による)、<code>.gitignore</code>、<code>agents/pm.md</code></td></tr>
-      <tr><td><strong>PRESERVE</strong></td><td>一覧に表示するのみで、一切手を加えない</td><td><code>README.md</code>、<code>README_ko.md</code>、<code>docs/context.md</code>、<code>src/</code></td></tr>
-      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>テンプレートのバージョンがプロジェクトのバージョンより新しい場合のみコピーする</td><td><code>scripts/*.ts</code>(<code>@version</code>コメント)、<code>agents/*.md</code>(frontmatterの<code>version:</code>)、<code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>LOCKED</strong></td><td>常にテンプレートの内容で上書きする</td><td><code>.githooks/*</code>(pre-commitルーティングなど)、<code>.gitattributes</code></td></tr>
+      <tr><td><strong>LOCKED (merge-aware)</strong></td><td>LOCKEDと同様に常にテンプレートを採用するが、マージ認識型 — プロジェクトのみが持つ正規表現・許可リスト(<code>regexes</code>/<code>paths</code>)の項目は保持し、管理対象ルールだけを復元する(v1.10.0以降。以前の無条件上書きはプロジェクト固有の許可リストを失わせていた)</td><td><code>.gitleaks.toml</code>(<code>mergeGitleaksToml()</code>)</td></tr>
+      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code>マーカーで囲まれた区間のみをマージし、それ以外のローカル内容はそのまま保持する</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>による)、<code>.gitignore</code>、<code>agents/pm.md</code></td></tr>
+      <tr><td><strong>DOCS_MERGE</strong></td><td>ドキュメントにもMERGEと同じマーカー区間マージを適用 — マーカーのない文書だけ例外的に丸ごと上書きする(v1.7.0で追加)</td><td><code>AGENTS.md</code>、<code>docs/&lt;variant&gt;.context.md</code>、<code>docs/phase-definitions.md</code></td></tr>
+      <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>ファイル内の<code>*&lt;ファイル名&gt; version: X.Y</code>脚注バージョン(なければハッシュ)がテンプレートより古い場合のみ更新する(v1.7.0で追加)</td><td><code>docs/context.md</code>(v1.9.0から)、<code>docs/engagement-orchestration.md</code>、<code>docs/team-configuration-guide.md</code></td></tr>
+      <tr><td><strong>COMMANDS_SYNC</strong></td><td>ハッシュが異なる場合、プラットフォームのコマンドファイルをテンプレートの内容で同期する(v1.7.0で追加)</td><td><code>.claude/commands/*.md</code>、<code>.gemini/commands/*.md</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>テンプレートのバージョンがプロジェクトのバージョンより新しい場合のみコピーする</td><td><code>scripts/*.ts</code>(<code>@version</code>コメント、JSDocヘッダーを含む)、<code>agents/*.md</code>(frontmatterの<code>version:</code>)、<code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>一覧に表示するのみで、一切手を加えない</td><td><code>README.md</code>、<code>README_ko.md</code>、<code>src/</code></td></tr>
       <tr><td><strong>PRUNE(任意)</strong></td><td><code>--prune-removed</code>を指定した場合、テンプレートから削除されたscripts/agents/skillsファイルをプロジェクトからも削除する</td><td>上記SYNC_IF_NEWER対象と同じディレクトリ</td></tr>
     </tbody>
   </table>
   </div>
+  <p>v1.10.xから、アップグレードは国プロフィール(国スコープ資産)にも対応する。実行前にプロジェクトの<code>.claude/template-version.txt</code>から<code>country=</code>行を読み(なければ<code>docs/countries/ACTIVE.md</code>の管轄表記で代用)て対象国を判定し、仕上げの書き換え時にはこの行をそのまま保持する — 旧バージョンは書き換え時にこの行を消してしまい、プロジェクトの所属国情報を失わせていた。さらに、すべてのスキル同期が終わった後、レジストリ駆動のpruneがもう一度実行され、国スコープスキル(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)が該当国以外のプロジェクトに再注入されていれば削除する — スキャフォールディング時の整理結果をアップグレードのたびに取り消してしまう事態を防ぐためである。ただし、ローカルで意図的に改変されたフォークは<code>⚠️ CONFLICT</code>警告付きでそのまま保持される。</p>
   <p>SYNC_IF_NEWER対象のファイルをローカルで直接修正済みの状態で、かつテンプレート側のバージョンがより新しい場合、スクリプトは<code>⚠️ CONFLICT</code>と表示しつつも、最終的にはテンプレートの内容で上書きする。「上書き前に確認する」動作ではなく、「警告のみして進める」動作である点を覚えておく必要がある — だからこそ、以下の安全装置が重要になる。</p>
 
   <h2 id="safety">安全装置 — スナップショットとロールバック</h2>
@@ -86,7 +91,7 @@
   <button class="copy-btn">コピー</button>
 </div>
   <p>このコマンドは、直前に作成された<code>pre-upgrade-snapshot-*</code>スタッシュを探し出し、<code>git stash pop</code>で復元する。アップグレード自体はコミットを作成しないため、結果を確認した後は通常どおり<code>git diff</code>で変更内容を確認し、自分でコミットする必要がある。</p>
-  <p>仕上げの段階として、<code>.claude/template-version.txt</code>が新しいバージョンに更新され、<code>.gitleaks.toml</code>・pre-commitフック・<code>.gitattributes</code>(eol=lf)・<code>.gitignore</code>(.envパターン)・<code>git core.hooksPath</code>といったセキュリティブートストラップ項目が自動でチェックされる(第3章のガードレール原則と同じ項目である)。<code>core.hooksPath</code>が誤っている場合、スクリプトが自動で修正する。</p>
+  <p>仕上げの段階として、<code>.claude/template-version.txt</code>が新しいバージョンに更新され(このとき<code>country=</code>行は保持される)、<code>.gitleaks.toml</code>・pre-commitフック・<code>.gitattributes</code>(eol=lf)・<code>.gitignore</code>(.envパターン)・<code>git core.hooksPath</code>といったセキュリティブートストラップ項目が自動でチェックされる(第3章のガードレール原則と同じ項目である)。<code>core.hooksPath</code>が誤っている場合、スクリプトが自動で修正する。</p>
 
   <h2 id="vs-promotion">昇格との方向の違い</h2>
   <p>第11章で扱う「昇格」と本章の「アップグレード」は名前こそ似ているが、方向は正反対である。</p>
@@ -97,7 +102,7 @@
   <p>両スクリプトは互いに逆方向へファイルを流すだけで、どちらか一方が他方を代替するものではない。テンプレートに貢献したいなら昇格を、すでに作成したプロジェクトを最新の状態に保ちたいならアップグレードを使う。</p>
 
   <div class="note">
-    本章で扱ったスクリプトの動作(フラグ、ファイル分類、安全装置)は、<code>ai-workspace-standards</code>リポジトリの<code>scripts/upgrade-project.ts</code>(v1.6.0)のソースを直接確認して執筆した。このハンドブックのリポジトリには該当スクリプトが含まれていないため、実際の実行結果は必ず最新のソースと照らし合わせて確認すること。
+    本章で扱ったスクリプトの動作(フラグ、ファイル分類、安全装置)は、<code>ai-workspace-standards</code>リポジトリの<code>scripts/upgrade-project.ts</code>(v1.10.1)のソースを直接確認して執筆した。このハンドブックのリポジトリには該当スクリプトが含まれていないため、実際の実行結果は必ず最新のソースと照らし合わせて確認すること。
   </div>
 
   <div class="chapter-nav">

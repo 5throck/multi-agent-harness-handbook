@@ -67,7 +67,7 @@ ai-workspace-standards/                (ワークスペースルートとして�
   <button class="copy-btn">コピー</button>
 </div></div>
 
-  <h3>Variant全10種類の一覧</h3>
+  <h3>Variant全11種類の一覧</h3>
   <table>
     <thead><tr><th>Variant</th><th>目的</th></tr></thead>
     <tbody>
@@ -80,7 +80,8 @@ ai-workspace-standards/                (ワークスペースルートとして�
       <tr><td><code>co-security</code></td><td>セキュリティレビュー — レッドチーム/侵入テストワークフロー</td></tr>
       <tr><td><code>co-game</code></td><td>ゲーム開発 — Vanilla TypeScriptによるHTML5 Canvasゲーム</td></tr>
       <tr><td><code>co-export</code> <span class="badge">beta</span></td><td>輸出入貿易コンサルティング</td></tr>
-      <tr><td><code>co-news</code> <span class="badge">beta</span></td><td>上場企業を対象とする韓国の経済・金融ジャーナリズム</td></tr>
+      <tr><td><code>co-hr</code> <span class="badge">beta</span></td><td>人事・労務関係 — 労働法コンプライアンス、HRM/HRD、組織設計コンサルティング</td></tr>
+      <tr><td><code>co-news</code> <span class="badge">beta</span></td><td>上場企業を対象とする経済・金融ジャーナリズム — 国プロフィル(KR)ベースの開示・商法リサーチ</td></tr>
     </tbody>
   </table>
 
@@ -90,7 +91,7 @@ ai-workspace-standards/                (ワークスペースルートとして�
     <li><strong><code>CONSTITUTION.md</code></strong> — 最初に読むべきファイル。ワークスペース全体の共有標準(ガバナンス、PRワークフロー、マルチエージェント原則)が定義されている。</li>
     <li><strong><code>CLAUDE.md</code> / <code>GEMINI.md</code></strong> — 使用しているAIコーディングツールに対応するファイルを確認する。プラットフォームごとの動作方式(フック、スラッシュコマンド、エージェントディスパッチルール)が定義されている。</li>
     <li><strong><code>AGENTS.md</code></strong> — このワークスペースで呼び出し可能なエージェントロスター。「誰がどの役割を担うか」を一目で確認できる。</li>
-    <li><strong><code>templates/</code></strong> — 利用可能なvariant全10種類がこのディレクトリの下にある。各variantフォルダを開き、エージェント構成とガバナンスパイプラインを確認する。</li>
+    <li><strong><code>templates/</code></strong> — 利用可能なvariant全11種類がこのディレクトリの下にある。各variantフォルダを開き、エージェント構成とガバナンスパイプラインを確認する。</li>
     <li><strong><code>scripts/</code></strong> — <code>new-project.ts</code>がここにある。このスクリプトがvariant(バリアント)を実際のプロジェクトとして複製する中核コマンドである。</li>
   </ol>
   <div class="note">この見取り図は、第4章の実習でエージェントに実際に触れる前に、「このリポジトリに何が入っているのか」の感覚をつかむための短い案内である。実習の際はまずこの5箇所だけを開いてみて、残りの構成は必要になったときに随時戻って確認する進め方でよい。</div>

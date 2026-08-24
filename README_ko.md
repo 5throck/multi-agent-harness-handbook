@@ -14,7 +14,7 @@
 git clone https://github.com/5throck/setup.git
 cd setup
 ```
-자세한 안내는 [설치 가이드](https://5throck.github.io/multi-agent-harness-handbook/setup/SETUP_ko.html)를 참고하세요.
+자세한 안내는 [설치 가이드](https://5throck.github.io/multi-agent-harness-handbook/setup/SETUP.html)를 참고하세요.
 
 ## 📚 커리큘럼 구성
 - **선수 과정 브릿지** — [intro-to-ai-harness](https://5throck.github.io/intro-to-ai-harness/) 입문 과정을 이미 마친 독자를 위한 스킵 맵

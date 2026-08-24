@@ -116,7 +116,7 @@
 
   <div class="q">マルチエージェントチームを稼働させると、トークンコストはどのくらいかかりますか?</div>
   <p class="faq-answer">コストはエージェント数×各エージェントのモデルティア×実行頻度によって決まります。5章で説明されているモデルティアリング(<code>tier: high/medium/low</code>)は、コスト管理の中核となる仕組みです。例えば、co-consultバリアントの10名のエージェントをすべてhighで動かすと1セッションで数万トークンを消費しますが、実際の実装役割をmedium/lowに下げることで、コストを40~60%削減できます。Claude Codeの<code>/cost</code>コマンドで、現在のセッションの累積トークンをリアルタイムに確認できます。</p>
-  <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">5章§templatesとvariant 7種</a></span>
+  <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">5章§templatesとvariant 11種</a></span>
 
   <div class="q">エージェントの応答が急に遅くなったり、タイムアウトしたりします。</div>
   <p class="faq-answer">コンテキストウィンドウが一杯になると、モデルの処理速度が急激に低下します。Claude Codeでは<code>/compact</code>コマンドで会話の長さを圧縮できます。また、複数のエージェントを並列に投入した際にAPIリクエストがキューに溜まって遅延する現象もよく見られます。この場合は順次実行に切り替えるか、WIP上限を下げて同時実行数を減らしてください。</p>
@@ -124,7 +124,7 @@
 
   <div class="q">複数のエージェントループや長いワークフローを実行すると、APIトークンのコストがかかりすぎます。最適化方法は?</div>
   <p class="faq-answer">第一に、エージェントの役割ごとに**モデルティア(Model Tier)**を分けて指定します。単純なファイル書き込みやテスト実行にはmedium/lowモデルを、全体のフロー制御や総合設計にはhighモデルを配置することで、コストを40%以上削減できます。第二に、プロンプトキャッシング(Prompt Caching)が機能するよう、会話の文脈が一定である間はシステムプロンプトを変更せず、連続したセッションを維持します。第三に、オーケストレーターとスペシャリストの対話が無限にスピンしないよう、<code>Max Turns</code>のようなハード上限値を明確に設定します。</p>
-  <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">5章§templatesとvariant 7種</a></span>
+  <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">5章§templatesとvariant 11種</a></span>
 
   <h2 id="platform">プラットフォーム別の問題</h2>
 

@@ -74,6 +74,10 @@
     <dd><code>bun scripts/new-project.ts</code>によって、variantテンプレートの全体構成(エージェント・スキル・コマンド・ガバナンスパイプライン)を独立したgitリポジトリとして複製する作業。「プロジェクトをゼロから作るのではなく、あらかじめ設計された骨組みの上から始める」という意味を持つ。
       <span class="see">詳細: <a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-2">第6章 §2</a></span></dd>
 
+    <dt>ガードレール <span class="en">Guardrails</span></dt>
+    <dd>許可モデル・フック・監査など、エージェントの行動境界を強制する安全装置。
+      <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s1">第3章 §1</a></span></dd>
+
     <dt>フック <span class="en">Hook</span></dt>
     <dd>エージェントが特定のツールを呼び出す前後に自動実行されるスクリプト。例: <code>PostToolUse</code>フックによるファイル修正後の自動監査(audit)チェック。Claude Code(CLI)では<code>.claude/hooks/</code>に定義されたフックが発火するが、Claude Desktop Appでは動作しないため、ツールごとの挙動の違いに注意する必要がある。
       <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">第3章 §監査ログと可観測性</a></span></dd>

@@ -1,11 +1,14 @@
 #!/usr/bin/env bun
 // scripts/handbook-doctor.ts
 // Enhanced static analyzer for handbook HTML files.
-// 12 checks: nav, broken links, dark palette, lang pair, visual, Course Overview,
-// Instructor Guide, unused assets, duplicate IDs, hardcoded colors, empty title/h1.
+// 13 checks: nav, broken links, dark palette, lang pair, visual, Course Overview,
+// Instructor Guide, unused assets, duplicate IDs, hardcoded colors, empty title/h1,
+// i18n parity.
 
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join, relative, resolve, dirname } from "node:path";
+import { configureDocsDir } from "./nav-utils.ts";
+import { checkI18nParity } from "./check-i18n-parity.ts";
 
 const args = process.argv.slice(2);
 function getArg(name: string, fallback: string): string {
@@ -252,6 +255,21 @@ for (const file of htmlFiles) {
   if (h1Match && h1Match[1].trim() === "") {
     allIssues.push({ file: rel, check: "empty-h1", detail: "Empty <h1> tag", severity: "error" });
   }
+}
+
+// --- Check 13: i18n content parity ---
+// Cross-language parity between base pages and their _en/_ja/_es variants:
+// missing variants, heading/pre count drift vs base, >15% li/tr deviation,
+// numeric-token drift, and wrong-language internal links. Delegates to the
+// standalone checker so `bun run check-i18n` and the doctor stay in sync.
+configureDocsDir(docsDir);
+for (const issue of checkI18nParity()) {
+  allIssues.push({
+    file: issue.fileA ?? issue.fileB ?? issue.group,
+    check: "i18n-parity",
+    detail: `[${issue.type}] ${issue.detail}`,
+    severity: issue.severity === "fail" ? "error" : "warn",
+  });
 }
 
 // --- Helpers ---

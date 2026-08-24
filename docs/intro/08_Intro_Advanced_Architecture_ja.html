@@ -128,9 +128,9 @@ tier:                          # プラットフォームごとのモデルエ�
     Tier Ceiling Ruleは「この作業に最も適したティア以上を割り当てるな」ではなく、「このエージェントの定義されたティア以上を使うな」である。役割ベースであって作業ベースではない。
   </div>
 
-  <h2 id="platform-parity">プラットフォームパリティ — .claude/と.gemini/を構造的に同一に保つ方法</h2>
-  <p>この リポジトリはClaude系（<code>.claude/</code>）とAntigravity/Gemini系（<code>.gemini/</code>）の2つのプラットフォームを同時にサポートする。この2つのディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。これを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
-  <p>この検査は2つのディレクトリを構造的に照合し、片方にしか存在しないエージェント・スキル・コマンドがないかを確認する。第11章で扱う昇格（promote）パイプラインもこの検査を昇格前の必須ゲートとして含んでおり、「Claude用だけ作ってAntigravity用を忘れた」状態では、そもそも正式なvariant（バリアント）になることができない。2つのプラットフォームが異なる実行方式（§1のCLAUDE.md/GEMINI.md MERGE例を参照）を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
+  <h2 id="platform-parity">プラットフォームパリティ — .claude/・.gemini/・.agents/を構造的に同一に保つ方法</h2>
+  <p>このリポジトリは3つのプラットフォームを同時にサポートする — Claude Code（<code>.claude/</code>）、Gemini CLI（<code>.gemini/</code>）、Antigravity（<code>.agents/</code>）。プラットフォームディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。スキル層は<code>skills/</code>が単一の情報源（SSOT）であり、<code>sync-skills.ts</code>がこれを3つのプラットフォームディレクトリすべてへ配布する。構造的なずれを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
+  <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「3プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第11章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。3つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
 
   <h2 id="execution-plan-templates">実行計画テンプレート — マルチエージェント作業の構造化された実行設計</h2>
   <p>PMが複雑な作業を複数のエージェントに分配する際、<strong>実行計画（Execution Plan）</strong>形式を使用する。この計画は「誰が何をどのティアで、どの順序で」行うかをテーブルで明示し、実行の一貫性を保証する。</p>
@@ -165,6 +165,7 @@ tier:                          # プラットフォームごとのモデルエ�
   </table>
   </div>
   <p>例外を適用する場合、Row 0のAgent/Tier/Model列は空欄（<code>—</code>）で表示する。</p>
+  <p>この例外体系は文書ルールに留まらず、同期パイプラインが機械的に強制する。ADR-0055 Stage 2以降、<code>dev-sync.ts</code>のステップ3.9（specレジストリチェック）は、コード変更に対応するspec活動がない場合、同期を<strong>FATALでブロック</strong>する。これを回避する唯一の方法は、<code>audit.ts --spec-exempt=E1..E5</code>（または<code>SYNC_SPEC_EXEMPT</code>環境変数）で上記カテゴリの一つを明示することであり、specは<code>docs/specs/registry.json</code>に登録される（2026-08-24時点）。</p>
 
   <h3>実践例：PMが作成した実行計画</h3>
   <p>以下は「agents/pm.mdとスクリプトを更新するプラットフォームパリティ作業」の実際の実行計画例である。</p>

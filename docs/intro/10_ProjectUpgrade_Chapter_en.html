@@ -22,7 +22,7 @@
   <div class="nav-title">Chapter 10 - L3 Project Upgrade</div>
   <a href="#why">Why it's needed — the flip side of the fork model</a>
   <a href="#usage">How to use upgrade-project.ts</a>
-  <a href="#categories">The 5 file-handling categories</a>
+  <a href="#categories">The 8 file-handling categories</a>
   <a href="#safety">Safety nets — snapshots and rollback</a>
   <a href="#vs-promotion">How this differs from promotion</a>
   <div class="nav-section">Other chapters</div>
@@ -36,14 +36,14 @@
   <div class="chapter-eyebrow">Chapter 10</div>
   <h1>L3 Project Upgrade</h1>
   <p class="lead">Once you've created an L3 project, what happens when the upstream standards (L0/L1) change? The answer is: "nothing happens at all." Because of the fork model discussed in Chapter 8 §1, actually bringing new upstream changes into an already-created L3 project requires a human to explicitly run <code>upgrade-project.ts</code>. This chapter covers that procedure.</p>
-  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.6.0) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and SSOT</a></p>
+  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.10.1) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">What this chapter covers</div>
     <ul>
       <li>Why "upgrading" in the fork model is a command you run, not something that happens automatically</li>
       <li>Basic usage of <code>upgrade-project.ts</code> and the principle of running <code>--dry-run</code> first</li>
-      <li>The 5 file-handling modes: LOCKED, MERGE, PRESERVE, SYNC_IF_NEWER, and PRUNE</li>
+      <li>The 8 file-handling modes: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE, and PRUNE</li>
       <li>The automatic git stash snapshot and the <code>--rollback</code> safety net</li>
       <li>How this is the exact opposite direction from the "promotion" covered in Chapter 11</li>
     </ul>
@@ -68,20 +68,25 @@
 </div>
   <p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly.</p>
 
-  <h2 id="categories">The 5 file-handling categories</h2>
+  <h2 id="categories">The 8 file-handling categories</h2>
   <p>The script treats files differently depending on their nature — it isn't a blanket "overwrite everything with the new version."</p>
   <div class="table-compare">
   <table>
     <thead><tr><th>Category</th><th>Behavior</th><th>Example targets</th></tr></thead>
     <tbody>
-      <tr><td><strong>LOCKED</strong></td><td>Always overwritten with the template's content</td><td><code>.githooks/*</code>, <code>.gitattributes</code>, <code>.gitleaks.toml</code></td></tr>
-      <tr><td><strong>MERGE</strong></td><td>Only the sections wrapped in <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code> markers are merged; the rest of the local content is preserved as-is</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code> (depending on <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
-      <tr><td><strong>PRESERVE</strong></td><td>Listed only, never touched</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>docs/context.md</code>, <code>src/</code></td></tr>
-      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copied only when the template version is newer than the project's version</td><td><code>scripts/*.ts</code> (<code>@version</code> comment), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>LOCKED</strong></td><td>Always overwritten with the template's content</td><td><code>.githooks/*</code> (pre-commit routing, etc.), <code>.gitattributes</code></td></tr>
+      <tr><td><strong>LOCKED (merge-aware)</strong></td><td>Like LOCKED — always takes the template — but merge-aware: regex and allowlist entries (<code>regexes</code>/<code>paths</code>) that exist only in the project are preserved while the managed rules are restored (since v1.10.0; the previous blind overwrite silently dropped project-specific allowlist entries)</td><td><code>.gitleaks.toml</code> (<code>mergeGitleaksToml()</code>)</td></tr>
+      <tr><td><strong>MERGE</strong></td><td>Only the sections wrapped in <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code> markers are merged; the rest of the local content is preserved as-is</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code> (depending on <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>DOCS_MERGE</strong></td><td>Applies the same managed-block merge to docs — only documents without markers are overwritten wholesale as an exception (added in v1.7.0)</td><td><code>AGENTS.md</code>, <code>docs/&lt;variant&gt;.context.md</code>, <code>docs/phase-definitions.md</code></td></tr>
+      <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>Updated only when the file's inline <code>*&lt;filename&gt; version: X.Y</code> footer version (or hash, if absent) is older than the template's (added in v1.7.0)</td><td><code>docs/context.md</code> (since v1.9.0), <code>docs/engagement-orchestration.md</code>, <code>docs/team-configuration-guide.md</code></td></tr>
+      <tr><td><strong>COMMANDS_SYNC</strong></td><td>Synchronizes platform command files with the template's content whenever their hashes differ (added in v1.7.0)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.md</code></td></tr>
+      <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copied only when the template version is newer than the project's version</td><td><code>scripts/*.ts</code> (<code>@version</code> comment, including JSDoc headers), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
+      <tr><td><strong>PRESERVE</strong></td><td>Listed only, never touched</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>src/</code></td></tr>
       <tr><td><strong>PRUNE (optional)</strong></td><td>When <code>--prune-removed</code> is specified, scripts/agents/skills files that were removed from the template are also removed from the project</td><td>Same directories as the SYNC_IF_NEWER targets above</td></tr>
     </tbody>
   </table>
   </div>
+  <p>Since v1.10.x, upgrades are also country-profile aware. Before running, the script reads the <code>country=</code> line from the project's <code>.claude/template-version.txt</code> (falling back to the jurisdiction noted in <code>docs/countries/ACTIVE.md</code>) to determine the target country, and preserves that line when it rewrites the file at the end — older versions dropped the line during the rewrite, erasing the project's country provenance. In addition, after all skill-sync passes finish, a registry-driven prune pass runs once more and deletes country-scoped skills (<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>) if they were re-injected into a project whose country doesn't match — preventing upgrades from undoing the pruning done at scaffold time. Forks deliberately modified locally, however, are kept with a <code>⚠️ CONFLICT</code> warning.</p>
   <p>If a SYNC_IF_NEWER target has been edited locally but the template's version is newer, the script marks it as <code>⚠️ CONFLICT</code> but still overwrites it with the template's content in the end. Keep in mind that this is "warn and proceed," not "ask before overwriting" — which is exactly why the safety net described below matters.</p>
 
   <h2 id="safety">Safety nets — snapshots and rollback</h2>
@@ -91,7 +96,7 @@
   <button class="copy-btn">Copy</button>
 </div>
   <p>This command finds the <code>pre-upgrade-snapshot-*</code> stash that was just created and restores it via <code>git stash pop</code>. The upgrade itself does not create a commit, so after reviewing the result, you'll need to check the changes with <code>git diff</code> as usual and commit them yourself.</p>
-  <p>As a final step, <code>.claude/template-version.txt</code> is updated to the new version, and security bootstrap items — <code>.gitleaks.toml</code>, pre-commit hooks, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (.env patterns), and <code>git core.hooksPath</code> — are automatically checked (these are the same items covered by the Chapter 3 guardrail principles). If <code>core.hooksPath</code> is misconfigured, the script fixes it on its own.</p>
+  <p>As a final step, <code>.claude/template-version.txt</code> is updated to the new version — with its <code>country=</code> line preserved — and security bootstrap items — <code>.gitleaks.toml</code>, pre-commit hooks, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (.env patterns), and <code>git core.hooksPath</code> — are automatically checked (these are the same items covered by the Chapter 3 guardrail principles). If <code>core.hooksPath</code> is misconfigured, the script fixes it on its own.</p>
 
   <h2 id="vs-promotion">How this differs from promotion</h2>
   <p>The "promotion" covered in Chapter 11 and this chapter's "upgrade" sound similar, but they run in exactly opposite directions.</p>
@@ -102,7 +107,7 @@
   <p>The two scripts simply move files in opposite directions — neither replaces the other. If you want to contribute back to the template, use promotion; if you want to keep an existing project up to date, use upgrade.</p>
 
   <div class="note">
-    The script behavior described in this chapter (flags, file categories, safety nets) was written by directly examining the source of <code>scripts/upgrade-project.ts</code> (v1.6.0) in the <code>ai-workspace-standards</code> repository. This handbook repository does not include that script, so always cross-check actual execution results against the latest source.
+    The script behavior described in this chapter (flags, file categories, safety nets) was written by directly examining the source of <code>scripts/upgrade-project.ts</code> (v1.10.1) in the <code>ai-workspace-standards</code> repository. This handbook repository does not include that script, so always cross-check actual execution results against the latest source.
   </div>
 
   <div class="chapter-nav">

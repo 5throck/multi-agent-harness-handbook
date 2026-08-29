@@ -31,6 +31,7 @@
   <a href="#s2-lifecycle-why">Why Lifecycle Management Is Necessary</a>
   <a href="#s2-agent-lifecycle">Agent Lifecycle</a>
   <a href="#s2-skill-lifecycle">Skill Lifecycle</a>
+  <a href="#s2-skill-graph">Skill Relationship Graph</a>
   <a href="#s2-script-lifecycle">Script Lifecycle</a>
   <a href="#state-vs-lifecycle">State vs. Lifecycle</a>
   <div class="nav-section">Other sections in this chapter</div>
@@ -54,6 +55,7 @@
     <ul>
       <li>Agent lifecycle: create → verify → operate → improve → deprecate</li>
       <li>Skill lifecycle: define → test → deploy → version → retire</li>
+      <li>Skill relationship graph: managing skill relations as a generated projection</li>
       <li>Script lifecycle: write → lint → test → register → deprecate</li>
       <li>The distinction between state and lifecycle</li>
       <li>Why lifecycle management is necessary</li>
@@ -266,6 +268,57 @@
 
   <div class="note">
     <code>validate-skills.ts</code> is the core tool of the Test stage in the skill lifecycle. This script checks not only basic formatting but also trigger conflicts between skills and referential integrity. It must be run every time a new skill is added or an existing skill is modified. Like <code>agent:verify</code> for agents, including it in a CI/CD pipeline automatically prevents deployment of unverified skills.
+  </div>
+
+  <!-- ─── Skill Relationship Graph ─── -->
+
+  <h2 id="s2-skill-graph">Skill Relationship Graph</h2>
+
+  <p>As skills multiply, what matters as much as each skill's quality is the <strong>web of relations between skills</strong>. Which skill must run first, which skills are used together, which agent uses which skill — if humans maintain this information as prose, it goes stale almost immediately. The skill relationship graph solves this by never hand-writing it: relations are always re-generated from machine-readable sources of truth (ADR-0060, <em>Skill Relationship Graph as Generated Projection</em>).</p>
+
+  <h3 id="s2-skill-graph-principle">Core Principle — The Graph Is a Build Artifact, Not a Primary Store</h3>
+  <p>The graph files (<code>docs/skill-graph.json</code>, <code>docs/skill-graph.md</code>) are <strong>build artifacts</strong>. The sources of truth for relations are pre-existing data, and the graph is a projection that can always be re-derived from them.</p>
+  <ul>
+    <li><code>SKILL.md</code> frontmatter — <code>prerequisites</code> and typed <code>relates_to</code></li>
+    <li>Agent files' <code>required_skills</code></li>
+    <li><code>variant.json</code>'s <code>skill_manifest</code></li>
+    <li>Backtick references in document prose (exact match)</li>
+    <li><code>docs/skill-graph.overrides.json</code> — escape hatch for non-derivable or suppressed relations</li>
+  </ul>
+  <p>This principle keeps the graph from going stale. Re-running the generator always yields a graph reflecting the current state, and a determinism check verifies that the same input produces the same output.</p>
+
+  <h3 id="s2-skill-graph-edges">Node and Edge Types</h3>
+  <p>Nodes carry types such as <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, and <code>output_type</code>, tagged by layer (<code>L0</code> workspace root, <code>common</code>, <code>variant:&lt;name&gt;</code>, <code>L3</code> project). The main edge types are below. All edges are <strong>advisory</strong> — they never hard-block execution.</p>
+  <table>
+    <thead><tr><th>Edge</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>requires</code></td><td>B is a mandatory prerequisite of A (derived from frontmatter <code>prerequisites</code>)</td></tr>
+      <tr><td><code>relates_to</code></td><td>Generic association (legacy)</td></tr>
+      <tr><td><code>composes_with</code></td><td>Symmetric composition (stored as a single edge with <code>symmetric: true</code>)</td></tr>
+      <tr><td><code>follows</code></td><td>Pure sequencing with no dependency implication</td></tr>
+      <tr><td><code>enables</code></td><td>A's output unlocks C</td></tr>
+      <tr><td><code>used_by</code> / <code>phase</code></td><td>An agent uses a skill / a skill belongs to a workflow phase</td></tr>
+      <tr><td><code>supersedes</code> / <code>references</code> / <code>cites_skill</code></td><td>Document succession, cross-document citations, decision records citing skills</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="s2-skill-graph-layers">The Three-Layer Model for Relations</h3>
+  <ul>
+    <li><strong>L-A Explicit</strong> — typed <code>relates_to</code> in frontmatter. Permanent by intent and a primary source.</li>
+    <li><strong>L-B Experimental</strong> — relations in the overrides file. <code>reason</code>/<code>since</code> are mandatory, and a staleness warning fires after 90 days.</li>
+    <li><strong>L-C Projection</strong> — the generated graph JSON. Always regenerated with determinism verified.</li>
+  </ul>
+
+  <h3 id="s2-skill-graph-tools">Tooling and Pipeline Integration</h3>
+  <ul>
+    <li><code>scripts/generate-skill-graph.ts</code> — scans SSOT sources and builds the graph; <code>--scope &lt;name&gt;</code> produces a per-template scoped graph.</li>
+    <li><code>scripts/verify-skill-graph.ts</code> — drift-checks the committed graph against its sources.</li>
+    <li><code>dev-sync.ts</code> (sync pipeline step 4.65) — regenerates and verifies all scope graphs on every <code>/sync</code>.</li>
+    <li><code>new-project.ts</code> (scaffolding step 7.6) — generates the graph at project creation time.</li>
+  </ul>
+
+  <div class="note">
+    Keeping relations as data rather than prose shares the same root as the SSOT principle running through this handbook. An organization that has humans edit lists inevitably ends up with stale lists; a list derived from data stays current through regeneration. Two construction strategies were compared experimentally — the <strong>Declarative</strong> strategy of stating relations directly in frontmatter, and the <strong>Inferential</strong> strategy of deriving them from existing structured data (procedure schemas, rule predicates). The comparison concluded that inference works well in areas with rich procedure schemas but the declarative strategy wins elsewhere, so no new default extraction mode was adopted.
   </div>
 
   <!-- ─── Script Lifecycle ─── -->

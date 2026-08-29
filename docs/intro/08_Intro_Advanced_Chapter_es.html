@@ -31,6 +31,7 @@
   <a href="#s2-lifecycle-why">Por Qué Es Necesaria la Gestión del Ciclo de Vida</a>
   <a href="#s2-agent-lifecycle">Ciclo de Vida del Agente</a>
   <a href="#s2-skill-lifecycle">Ciclo de Vida de la Habilidad</a>
+  <a href="#s2-skill-graph">Grafo de Relaciones de Habilidades</a>
   <a href="#s2-script-lifecycle">Ciclo de Vida del Script</a>
   <a href="#state-vs-lifecycle">Estado vs. Ciclo de Vida</a>
   <div class="nav-section">Otras secciones de este capítulo</div>
@@ -54,6 +55,7 @@
     <ul>
       <li>Ciclo de vida del agente: crear → verificar → operar → mejorar → deprecación</li>
       <li>Ciclo de vida de la habilidad: definir → probar → desplegar → versionar → retirar</li>
+      <li>Grafo de relaciones de habilidades: gestionar las relaciones como una proyección generada</li>
       <li>Ciclo de vida del script: escribir → analizar → probar → registrar → deprecación</li>
       <li>La distinción entre estado y ciclo de vida</li>
       <li>Por qué es necesaria la gestión del ciclo de vida</li>
@@ -266,6 +268,57 @@
 
   <div class="note">
     <code>validate-skills.ts</code> es la herramienta central de la etapa de Probar en el ciclo de vida de las habilidades. Este script verifica no solo el formato básico sino también los conflictos de disparadores entre habilidades y la integridad referencial. Debe ejecutarse cada vez que se añade una nueva habilidad o se modifica una existente. Al igual que <code>agent:verify</code> para los agentes, incluirlo en un pipeline de CI/CD previene automáticamente el despliegue de habilidades no verificadas.
+  </div>
+
+  <!-- ─── Grafo de Relaciones de Habilidades ─── -->
+
+  <h2 id="s2-skill-graph">Grafo de Relaciones de Habilidades</h2>
+
+  <p>A medida que se multiplican las habilidades, importa tanto como la calidad de cada una la <strong>red de relaciones entre habilidades</strong>. Qué habilidad debe ejecutarse primero, qué habilidades se usan juntas, qué agente usa cada habilidad — si los humanos mantienen esta información como texto, envejece casi de inmediato. El grafo de relaciones de habilidades lo resuelve sin escribirlo a mano: las relaciones siempre se regeneran a partir de fuentes de verdad legibles por máquina (ADR-0060, <em>Skill Relationship Graph as Generated Projection</em>).</p>
+
+  <h3 id="s2-skill-graph-principle">Principio Central — El Grafo Es un Artefacto de Construcción, No un Almacén Primario</h3>
+  <p>Los archivos del grafo (<code>docs/skill-graph.json</code>, <code>docs/skill-graph.md</code>) son <strong>artefactos de construcción</strong>. Las fuentes de verdad de las relaciones son datos preexistentes, y el grafo es una proyección que siempre puede volver a derivarse de ellos.</p>
+  <ul>
+    <li>Frontmatter de <code>SKILL.md</code> — <code>prerequisites</code> y <code>relates_to</code> tipificado</li>
+    <li><code>required_skills</code> de los archivos de agentes</li>
+    <li><code>skill_manifest</code> de <code>variant.json</code></li>
+    <li>Referencias entre comillas invertidas en la prosa de documentos (coincidencia exacta)</li>
+    <li><code>docs/skill-graph.overrides.json</code> — vía de escape para relaciones no derivables o suprimidas</li>
+  </ul>
+  <p>Este principio evita que el grafo quede obsoleto. Volver a ejecutar el generador siempre produce un grafo que refleja el estado actual, y una verificación de determinismo comprueba que la misma entrada produce la misma salida.</p>
+
+  <h3 id="s2-skill-graph-edges">Tipos de Nodos y Aristas</h3>
+  <p>Los nodos llevan tipos como <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code> y <code>output_type</code>, etiquetados por capa (<code>L0</code> raíz del workspace, <code>common</code>, <code>variant:&lt;name&gt;</code>, <code>L3</code> proyecto). Los principales tipos de aristas son los siguientes. Todas las aristas son <strong>consultivas (advisory)</strong> — nunca bloquean la ejecución de forma absoluta.</p>
+  <table>
+    <thead><tr><th>Arista</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td><code>requires</code></td><td>B es un prerrequisito obligatorio de A (derivado del frontmatter <code>prerequisites</code>)</td></tr>
+      <tr><td><code>relates_to</code></td><td>Asociación genérica (legado)</td></tr>
+      <tr><td><code>composes_with</code></td><td>Composición simétrica (almacenada como una sola arista con <code>symmetric: true</code>)</td></tr>
+      <tr><td><code>follows</code></td><td>Secuenciación pura sin implicación de dependencia</td></tr>
+      <tr><td><code>enables</code></td><td>La salida de A habilita a C</td></tr>
+      <tr><td><code>used_by</code> / <code>phase</code></td><td>Un agente usa una habilidad / una habilidad pertenece a una fase del flujo de trabajo</td></tr>
+      <tr><td><code>supersedes</code> / <code>references</code> / <code>cites_skill</code></td><td>Sucesión de documentos, citas entre documentos, registros de decisión que citan habilidades</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="s2-skill-graph-layers">El Modelo de Tres Capas para las Relaciones</h3>
+  <ul>
+    <li><strong>L-A Explícito</strong> — <code>relates_to</code> tipificado en el frontmatter. Permanente por intención y fuente primaria.</li>
+    <li><strong>L-B Experimental</strong> — relaciones en el archivo de overrides. <code>reason</code>/<code>since</code> son obligatorios, y una advertencia de obsolescencia se activa tras 90 días.</li>
+    <li><strong>L-C Proyección</strong> — el JSON del grafo generado. Siempre regenerado con determinismo verificado.</li>
+  </ul>
+
+  <h3 id="s2-skill-graph-tools">Herramientas e Integración con el Pipeline</h3>
+  <ul>
+    <li><code>scripts/generate-skill-graph.ts</code> — escanea las fuentes SSOT y construye el grafo; <code>--scope &lt;name&gt;</code> produce un grafo de alcance por plantilla.</li>
+    <li><code>scripts/verify-skill-graph.ts</code> — verifica la deriva del grafo confirmado frente a sus fuentes.</li>
+    <li><code>dev-sync.ts</code> (paso 4.65 del pipeline de sincronización) — regenera y verifica todos los grafos de alcance en cada <code>/sync</code>.</li>
+    <li><code>new-project.ts</code> (paso 7.6 del scaffolding) — genera el grafo en el momento de la creación del proyecto.</li>
+  </ul>
+
+  <div class="note">
+    Mantener las relaciones como datos en lugar de prosa comparte la misma raíz que el principio SSOT que recorre este manual. Una organización en la que los humanos editan listas inevitablemente acaba con listas obsoletas; una lista derivada de datos se mantiene actualizada mediante la regeneración. Se compararon experimentalmente dos estrategias de construcción — la estrategia <strong>Declarativa</strong>, que declara las relaciones directamente en el frontmatter, y la estrategia <strong>Inferencial</strong>, que las deriva de datos estructurados existentes (esquemas de procedimiento, predicados de reglas). La comparación concluyó que la inferencia funciona bien en áreas con esquemas de procedimiento ricos, pero la estrategia declarativa gana en el resto, por lo que no se adoptó ningún nuevo modo de extracción predeterminado.
   </div>
 
   <!-- ─── Script Lifecycle ─── -->

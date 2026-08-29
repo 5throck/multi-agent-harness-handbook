@@ -93,6 +93,10 @@
     <dt>Ciclo de Vida / Estado <span class="en">Lifecycle / State</span></dt>
     <dd>Ciclo de vida se refiere a la secuencia completa de etapas por las que pasa un agente, habilidad o script (por ejemplo, Crear → Verificar → Operar → Mejorar → Deprecar). Estado es una instantánea de en qué etapa del ciclo de vida se encuentra ese componente en un momento dado. El campo <code>status</code> en el frontmatter YAML (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) almacena el valor del estado. El ciclo de vida puede pensarse como un "mapa del metro," y el estado como el letrero que muestra "en qué estación está el tren actual."
       <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#state-vs-lifecycle">Capítulo 8 §2 · Distinguiendo Estado de Ciclo de Vida</a></span></dd>
+
+    <dt>Grafo de Relaciones de Habilidades <span class="en">Skill Relationship Graph</span></dt>
+    <dd>Una proyección legible por máquina de las relaciones entre habilidades, agentes, ADR y registros de decisión. Siempre se regenera a partir de fuentes de verdad (frontmatter de SKILL.md: <code>prerequisites</code>/<code>relates_to</code>, <code>required_skills</code> de los agentes, <code>variant.json</code>, etc.) y no es en sí mismo un almacén de datos primario (ADR-0060). Los resultados son <code>docs/skill-graph.json</code> y el <code>docs/skill-graph.md</code> legible por humanos. Todas las aristas de relación son consultivas (advisory) y nunca bloquean la ejecución de forma absoluta.
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#s2-skill-graph">Capítulo 8 §2 · Grafo de Relaciones de Habilidades</a></span></dd>
   </dl>
 
   <h2 id="team">Componentes del Equipo Multiagente</h2>

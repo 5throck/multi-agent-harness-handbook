@@ -93,6 +93,10 @@
     <dt>생애주기 / 상태 <span class="en">Lifecycle / State</span></dt>
     <dd>생애주기는 에이전트·스킬·스크립트가 거치는 순차적 단계 전체(예: Create→Verify→Operate→Improve→Deprecate)를 말한다. 상태는 특정 시점에 그 구성요소가 생애주기의 어느 단계에 있는지를 나타내는 스냅샷이다. YAML frontmatter의 <code>status</code> 필드(<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>)가 상태 값을 저장한다. 생애주기는 "지하철 노선도"이고 상태는 "현재 열차가 어느 역에 있는지"를 보여주는 표시판에 비유할 수 있다.
       <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Chapter.html#state-vs-lifecycle">8장 §2 · 상태와 생애주기의 구분</a></span></dd>
+
+    <dt>스킬 관계 그래프 <span class="en">Skill Relationship Graph</span></dt>
+    <dd>스킬·에이전트·ADR·의사결정 기록 사이의 관계를 기계가 읽을 수 있는 형태로 표현한 투영(projection). 원천(SKILL.md 프론트매터의 <code>prerequisites</code>/<code>relates_to</code>, 에이전트 <code>required_skills</code>, <code>variant.json</code> 등)에서 항상 다시 생성되며 그 자체는 1차 저장소가 아니다(ADR-0060). 결과물은 <code>docs/skill-graph.json</code>과 사람이 읽는 <code>docs/skill-graph.md</code>다. 모든 관계 엣지는 자문적(advisory)이며 실행을 강제로 막지 않는다.
+      <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Chapter.html#s2-skill-graph">8장 §2 · 스킬 관계 그래프</a></span></dd>
   </dl>
 
   <h2 id="team">멀티 에이전트팀 구성요소</h2>

@@ -408,6 +408,16 @@
   <p>これら7つのフェーズは、§3のワークフロー事例と直接対応しています。例えば、「コードレビュー」事例の全体フローは、フェーズ1-2（分析）→ フェーズ4（レビュー実行）→ フェーズ6（QA）のミニチュアです。実践で新しいワークフローを設計する際、これらのフェーズを念頭に置くことで、「人間ゲートをどこに配置するか」「どのステージが並列実行に安全か」を体系的に決定しやすくなります。</p>
 
 
+
+  <h2 id="procedure-schema">手順スキーマ — ワークフローの宣言的SSOT (ADR-0063)</h2>
+  <p>この章のパターンが「事例」なら、手順スキーマはその事例を <strong>機械が読める宣言</strong> に引き上げる装置だ。variantテンプレートの <code>procedures/&lt;name&gt;/schema.yaml</code> にワークフロー段階を <code>{id, agent_key, skill_key, output_type, description}</code> として記録し、段階間の関係は <code>follows</code>·<code>enables</code>·<code>composes_with</code> 型で宣言する(補足A参照)。</p>
+  <ul>
+    <li><strong>検証はリポジトリ整合性検査</strong> — <code>scripts/validate-procedures.ts</code> がスキーマ形状、列挙型、閉じた <code>_output-types.yaml</code> 語彙、そしてすべての <code>agent_key</code>/<code>skill_key</code> が実在のエージェントファイル・スキルディレクトリに解決されるかを検査する。<code>/sync</code> は失敗時に停止する</li>
+    <li><strong>グラフとの接続</strong> — 手順から導出されるグラフノード(<code>procedure</code>、<code>output_type</code>)とエッジ(<code>step_uses_skill</code>、<code>step_by_agent</code>、<code>produces</code>)は <strong>生成プロジェクション</strong> だ。手で編集することは禁じられ、手順を直して再生成する</li>
+    <li><strong>カバレッジは (agent_key, phase) 単位</strong> — エージェントフロントマターの <code>phases:</code> が必要なペアを宣言すると、実際の手順段階がそのペアを覆うかを <code>scripts/procedure-coverage.ts</code> が報告する。ギャップは決して自動填充されず、<code>--tickets</code> が決定論的キー(<code>&lt;variant&gt;:&lt;agent_key&gt;:&lt;phase&gt;</code>)のガバナンスチケットを登録して人が判断する</li>
+  </ul>
+  <p>要するに、ワークフロー知識 — どのエージェントがどの段階で、どのスキルで、何を産出するか — が散文ではなく検証可能なデータになる。これがこの章のパターンと手順スキーマの違いだ。</p>
+
   <h2 id="s4">ワークフロー選択ガイド</h2>
 
   <p>新しいタスクにマルチエージェントワークフローを導入するには、どのパターンから始め、そこからどのように拡張するかを決定する必要があります。以下の意思決定ツリーが、最初のステップの選択をサポートします。</p>

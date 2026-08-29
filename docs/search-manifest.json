@@ -641,6 +641,46 @@
       "path": "appendix/A_Skill_Graph_es.html",
       "title": "Apéndice A · Grafo de Relaciones de Habilidades — Estructura y Operación",
       "lang": "es"
+    },
+    {
+      "path": "appendix/B_Governance_Enforcement.html",
+      "title": "부록 B · 거버넌스 강제 계층",
+      "lang": "ko"
+    },
+    {
+      "path": "appendix/B_Governance_Enforcement_en.html",
+      "title": "Appendix B · Governance Enforcement Layers",
+      "lang": "en"
+    },
+    {
+      "path": "appendix/B_Governance_Enforcement_ja.html",
+      "title": "補足B · ガバナンス強制層",
+      "lang": "ja"
+    },
+    {
+      "path": "appendix/B_Governance_Enforcement_es.html",
+      "title": "Apéndice B · Capas de Aplicación de Gobernanza",
+      "lang": "es"
+    },
+    {
+      "path": "appendix/C_Decision_System.html",
+      "title": "부록 C · 의사결정 시스템",
+      "lang": "ko"
+    },
+    {
+      "path": "appendix/C_Decision_System_en.html",
+      "title": "Appendix C · Decision System",
+      "lang": "en"
+    },
+    {
+      "path": "appendix/C_Decision_System_ja.html",
+      "title": "補足C · 意思決定システム",
+      "lang": "ja"
+    },
+    {
+      "path": "appendix/C_Decision_System_es.html",
+      "title": "Apéndice C · Sistema de Decisión",
+      "lang": "es"
     }
   ]
 }

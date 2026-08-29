@@ -56,6 +56,11 @@
     </ul>
   </div>
 
+  <div class="note">
+    <strong>2026-08 update</strong> — parts of this roadmap have since been implemented. Governance-level hardening is covered in <a href="../appendix/B_Governance_Enforcement_en.html">Appendix B · Governance Enforcement Layers</a> and <a href="../appendix/C_Decision_System_en.html">Appendix C · Decision System</a>; the mechanization of workflow structure in <a href="../appendix/A_Skill_Graph_en.html">Appendix A · Skill Relationship Graph</a> and the procedure schema (ADR-0063) section of Chapter 9. The remaining items here (container integration, memory aggregation, variant deployment automation) are still active directions.
+  </div>
+
+
   <h2 id="container">Container-Based Service Integration</h2>
   <p>Today, a project scaffolded from any given variant only operates by connecting directly, inside a local workspace, to AI coding tools like Claude Code/App or Antigravity. But in real enterprise environments, projects often need to be deployed as <strong>independent services</strong> on a per-project basis.</p>
   <p>The core of this advancement is that a scaffolded project should be able to run in a Docker or Kubernetes environment, **connected to a frontend service such as Open WebUI so it can be supported on a per-user basis**. In that form, each user invokes their assigned agent team through a browser interface, reviews results, and retains context across sessions.</p>

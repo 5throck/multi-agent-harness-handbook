@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+  補足(叙述型)テンプレート — 意思決定システム。
+  検索インデックスの前提: 本文の節は必ず <h2 id="..."> （必要に応じ <h3>）構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="補足C · 意思決定システム - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>補足C · 意思決定システム</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">補足C · 意思決定システム</div>
+  <a href="#c1-overview">概要 — 決定も資産である</a>
+  <a href="#c2-record">Decision Recordの構造</a>
+  <a href="#c3-validation">validate-decisions.ts の7検査</a>
+  <a href="#c4-registry">スペックレジストリとE1–E5免除</a>
+  <a href="#c5-backlog">ガバナンスバックログ</a>
+  <a href="#c6-reflection">ガバナンス反映検証</a>
+  <a href="#c7-lifecycle">決定の寿命</a>
+  <a href="#c8-workflow">実務 — 一つの決定の旅</a>
+  <div class="nav-section">他の補足</div>
+  <a href="A_Skill_Graph_ja.html">補足A · スキル関係グラフ</a>
+  <a href="B_Governance_Enforcement_ja.html">補足B · ガバナンス強制層</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">補足C</div>
+  <h1>意思決定システム — 決定が記録され検証される方法</h1>
+  <p class="lead">組織のアーキテクチャは決定の集積だ。だが決定が議事録や記憶の中にだけ生きていると、三か月後には「なぜこうしたのか?」が繰り返される。この補足は、ワークスペースが決定を一級資産として扱う装置 — Decision Record、スペックレジストリ、ガバナンスバックログ、反映検証 — を扱う。</p>
+  <p class="source-line">出典: ai-workspace-standards ADR-0061 <em>Decision Record Standard</em> · ADR-0055 <em>Spec Registry Enforcement</em> · ADR-0059 <em>Governance Reflection Validators</em> · docs/designs/2026-08-16-governance-backlog-design.md · <code>scripts/validate-decisions.ts</code> · <code>scripts/ticket.ts</code></p>
+
+  <div class="keypoints">
+    <div class="kp-title">この補足で扱うこと</div>
+    <ul>
+      <li>Decision Recordの構造と Agent→Skill→Knowledge→Evidence→Rule→Decision チェーン</li>
+      <li>証拠台帳(evidence ledger)と supersession-only 変更モデル</li>
+      <li>スペックレジストリ、コード変更時のスペック関連性ゲート、E1–E5免除コード</li>
+      <li>ガバナンスバックログチケットと not_before 予約</li>
+      <li>ガバナンス文書に一度もリンクされないADRを捉える反映検証</li>
+    </ul>
+  </div>
+
+  <h2 id="c1-overview">概要 — 決定も資産である</h2>
+  <p>コードはレビューされテストを通るが、決定はそうでないことが多い。「このスキルは実験的関係のままにする」「このvariantは昇格を保留する」といった判断が会話と記憶の中にしかなければ、組織は同じ議論を繰り返す。ワークスペースの答えは、決定を <strong>ファイルとして書き、チェーンで根拠を束ね、機械で検証する</strong> ことだ。補足Aのグラフが決定記録をノードとして取り込むのもこのためだ — 関係と根拠が一枚の地図に載って初めて探索できる。</p>
+
+  <h2 id="c2-record">Decision Recordの構造</h2>
+  <p>Decision Recordは <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> ファイルで、Agent → Skill → Knowledge → Evidence → Rule → Decision のチェーンを閉じる文書だ。必須フロントマターは <code>id</code>、<code>date</code>、<code>agent</code>、<code>decision</code>、<code>alternatives</code>、<code>status</code> で、任意配列として <code>evidence_refs</code>、<code>knowledge_refs</code>、<code>rules_applied</code>、<code>skills_used</code> がある。</p>
+  <ul>
+    <li><strong>証拠台帳</strong> — <code>docs/evidence/ledger.md</code>。(主張、出典、URL/参照、検証方法、状態)の行を持ち、行IDは <code>EV-YYYYMMDD-NN</code> 形式。決定記録の <code>evidence_refs</code> はこの台帳の行IDのみを指せる</li>
+    <li><strong>ゲート時点の記録</strong> — PMエージェントは、ゲート時点の決定(スペシャリスト選定、設計承認など)について、ディスパッチが続行する <strong>前に</strong> 記録を残さなければならない</li>
+    <li><strong>supersession-only 変更モデル</strong> — 決定記録は削除しない。覆された決定は、新しい記録が古い記録を継承(supersede)する。「決定の歴史」は上書きではなく接続される</li>
+  </ul>
+
+  <h2 id="c3-validation">validate-decisions.ts の7検査</h2>
+  <p><code>scripts/validate-decisions.ts</code> はすべての <code>DEC-*.md</code> に対して以下を検査する。</p>
+  <ol>
+    <li>フロントマターの存在</li>
+    <li>六つの必須フィールドの完備</li>
+    <li><code>id</code> とファイル名の接尾の一致</li>
+    <li><code>status</code> 語彙 (<code>proposed | accepted | superseded</code>)</li>
+    <li><code>evidence_refs</code> が台帳行IDの部分集合か</li>
+    <li><code>knowledge_refs</code> が実在ファイルに解決されるか</li>
+    <li><code>rules_applied</code> 形式(<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>)と <code>skills_used</code> の実在スキル解決</li>
+  </ol>
+  <p>この検証は <strong>fail-closed</strong> だ — errorレベルの問題が一つでもあれば exit 1。「警告だけ出るソフト検査」とは違い、壊れた決定記録のまま同期は進まない。</p>
+
+  <h2 id="c4-registry">スペックレジストリとE1–E5免除</h2>
+  <p>決定の前段には設計(spec)がある。ADR-0055の <strong>スペックレジストリ</strong>(<code>docs/specs/registry.json</code>)は設計文書を id・タイトル・ファイル・状態(<code>proposed | approved | implemented</code>)・最終更新日で追跡する。</p>
+  <p>核心は <strong>スペック関連性ゲート</strong> だ。コード変更があるのに、その変更に関連するスペック活動(レジストリへの触及り、7日以内に更新された approved/implemented スペック)がないと、監査が失敗する。「コードは変えたのに設計記録は凍ったまま」という状態を構造的に捉える装置だ。</p>
+  <p>もちろん、すべての変更に設計文書を要求すれば過剰だ。だから免除コードは五つだけに限定される。</p>
+  <table>
+    <thead><tr><th>コード</th><th>対象</th></tr></thead>
+    <tbody>
+      <tr><td><code>E1</code></td><td>memory-log — セッションログの記録</td></tr>
+      <tr><td><code>E2</code></td><td>changelog — CHANGELOG.md の更新のみの変更</td></tr>
+      <tr><td><code>E3</code></td><td>hotfix-typo — 一行の些細な修正</td></tr>
+      <tr><td><code>E4</code></td><td>pure-readme — 構造変化のないREADME本文の変更</td></tr>
+      <tr><td><code>E5</code></td><td>sync-only — ライフサイクル締め(<code>/sync</code>)の実行のみの変更</td></tr>
+    </tbody>
+  </table>
+  <p>場当たり的な免除は禁止で、<strong>存在しない免除コードを使うこと自体がハード失敗</strong>だ。免除の濫用はガバナンス違反だ。</p>
+
+  <h2 id="c5-backlog">ガバナンスバックログ</h2>
+  <p>すべての決定が今下されるべきではない。「いつか判断する必要があるもの」は <strong>ガバナンスバックログ</strong> チケットとして先送りされる。サービスチケット(第7章)が一回限りの作業依頼なら、ガバナンスバックログチケットは <strong>gitで追跡される未来の決定</strong> だ。</p>
+  <ul>
+    <li><code>scripts/ticket.ts</code> で管理され、<code>tickets/governance/</code> にgit追跡ファイルとして保存</li>
+    <li><code>kind: manual</code> チケットに <code>not_before</code> 日付を付けると、その日が来るまで <code>list --ready --kind manual</code> に現れない — <strong>熟成(soak)予約</strong></li>
+    <li>状態機械は <code>backlog → waiting → review → done</code></li>
+    <li>セッション開始や週次点検で準備完了チケットが表面化すると、PMは純粋な判断は自ら review→done とし、実装が必要なものは正規のPMゲートウェイへディスパッチする</li>
+  </ul>
+  <p>「今は決定しない」ということ自体を記録として残す装置だ。忘却ではなく予約だ。</p>
+
+  <h2 id="c6-reflection">ガバナンス反映検証</h2>
+  <p>ADR-0059が生まれたきっかけは具体的な事故だった — あるADRがガバナンス文書のどこにも参照されないまま承認され、実際には誰も従わなくなった。<code>scripts/verify-adr-governance.ts</code> は二つのことを検出する。</p>
+  <ul>
+    <li><strong>リンクのないADR</strong> — 基準日(2026-08-23)以降に承認されたのに、CONSTITUTION・<code>docs/constitution/</code>・<code>docs/governance/</code> のどこにも言及がないADR。「承認済みだが未反映」状態だ</li>
+    <li><strong>マーカーハッシュのドリフト</strong> — 憲法原文から複製された文書セクション(マーカーで束ねられた intentional duplicate)のハッシュが原文と食い違う場合。原文が変わったのに写しが追いついていないシグナル</li>
+  </ul>
+  <p><code>--strict</code> ではこの二つは <code>/sync</code> を止める。マーカードリフトの治癒手順は決まっている — 複製セクションをレビュー・更新し、<code>--update-marker-hashes</code> でハッシュを再投入してから再同期。</p>
+
+  <h2 id="c7-lifecycle">決定の寿命</h2>
+  <p>決定に関する時間ルールは二つある。混同しやすいので範囲を正確に整理しよう。</p>
+  <ul>
+    <li><strong>7日soak(ADR-0055)</strong> — スペックレジストリ強制がburn-in期間中は警告レベルのみで動くようにした導入猶予。過去7日以内に更新されたスペックは「活動中」と認められる</li>
+    <li><strong>90日ルール(ADR-0060)</strong> — スキルグラフのオーバーライドにおける実験的関係専用。フロントマターへ昇格しないまま90日が経つと陳腐化の警告が出る(補足A)</li>
+  </ul>
+
+  <h2 id="c8-workflow">実務 — 一つの決定の旅</h2>
+  <ol>
+    <li><strong>設計</strong> — 変更が些細でなければ設計文書を書き、レジストリに登録する(proposed → approved)。</li>
+    <li><strong>実装+記録</strong> — 実装とともに、ゲート時点の判断をDecision Recordとして残す。証拠は先に台帳に書き、<code>EV-</code> IDで参照する。</li>
+    <li><strong>検証</strong> — <code>/sync</code> がaudit(スペック関連性)・<code>validate-decisions.ts</code>・ガバナンス反映検証を通す。一つでもFailなら進行不可。</li>
+    <li><strong>反映</strong> — 承認されたADRはガバナンス文書に接続されなければならない。リンクしないまま放置するとADR-0059検証が捉える。</li>
+    <li><strong>先送り</strong> — 今判断する根拠が足りなければ、バックログチケットとして <code>not_before</code> 付きで予約する。責任を持つのは記憶ではなくチケットだ。</li>
+  </ol>
+
+  <div class="chapter-nav">
+    <a href="B_Governance_Enforcement_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">補足B · ガバナンス強制層</div></a>
+    <a href="../glossary/00_Glossary_ja.html" class="next"><div class="dir">参考 →</div><div class="ttl">用語集</div></a>
+  </div>
+
+  <footer>
+    Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

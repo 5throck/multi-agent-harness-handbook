@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+  부록(서술형) 템플릿 — 의사결정 시스템.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="부록 C · 의사결정 시스템 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>부록 C · 의사결정 시스템</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
+  <div class="nav-title">부록 C · 의사결정 시스템</div>
+  <a href="#c1-overview">개요 — 결정도 자산이다</a>
+  <a href="#c2-record">Decision Record의 구조</a>
+  <a href="#c3-validation">validate-decisions.ts의 7가지 검사</a>
+  <a href="#c4-registry">스펙 레지스트리와 E1–E5 면제</a>
+  <a href="#c5-backlog">거버넌스 백로그</a>
+  <a href="#c6-reflection">거버넌스 반영 검증</a>
+  <a href="#c7-lifecycle">결정의 수명</a>
+  <a href="#c8-workflow">실전 — 결정 하나의 여정</a>
+  <div class="nav-section">다른 부록</div>
+  <a href="A_Skill_Graph.html">부록 A · 스킬 관계 그래프</a>
+  <a href="B_Governance_Enforcement.html">부록 B · 거버넌스 강제 계층</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">부록 C</div>
+  <h1>의사결정 시스템 — 결정이 기록되고 검증되는 법</h1>
+  <p class="lead">조직의 아키텍처는 결정의 축적이다. 그런데 결정이 회의록이나 기억 속에만 살면, 세 달 뒤에는 "왜 이렇게 했지?"가 반복된다. 이 부록은 워크스페이스가 결정을 일급 자산으로 다루는 장치 — Decision Record, 스펙 레지스트리, 거버넌스 백로그, 반영 검증 — 를 다룬다.</p>
+  <p class="source-line">출처: ai-workspace-standards ADR-0061 <em>Decision Record Standard</em> · ADR-0055 <em>Spec Registry Enforcement</em> · ADR-0059 <em>Governance Reflection Validators</em> · docs/designs/2026-08-16-governance-backlog-design.md · <code>scripts/validate-decisions.ts</code> · <code>scripts/ticket.ts</code></p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 부록에서 다루는 것</div>
+    <ul>
+      <li>Decision Record의 구조와 Agent→Skill→Knowledge→Evidence→Rule→Decision 체인</li>
+      <li>증거 장부(evidence ledger)와 supersession-only 변경 모델</li>
+      <li>스펙 레지스트리와 코드 변경 시 스펙 관련성 게이트, E1–E5 면제 코드</li>
+      <li>거버넌스 백로그 티켓과 not_before 예약</li>
+      <li>거버넌스 문서에 연결되지 않은 ADR을 잡아내는 반영 검증</li>
+    </ul>
+  </div>
+
+  <h2 id="c1-overview">개요 — 결정도 자산이다</h2>
+  <p>코드는 리뷰받고 테스트를 거치지만, 결정은 그렇지 않은 경우가 많다. "이 스킬은 실험적 관계로만 둔다", "이 variant는 승격 보류다" 같은 판단이 대화와 기억에만 있으면 조직은 같은 논쟁을 반복한다. 워크스페이스의 답은 결정을 <strong>파일로 쓰고, 체인으로 근거를 묶고, 기계로 검증한다</strong>는 것이다. 부록 A의 그래프가 결정 기록을 노드로 품는 이유도 이 때문이다 — 관계와 근거가 한 지도에 놓여야 탐색이 된다.</p>
+
+  <h2 id="c2-record">Decision Record의 구조</h2>
+  <p>Decision Record는 <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> 파일로, Agent → Skill → Knowledge → Evidence → Rule → Decision의 체인을 닫는 문서다. 필수 프론트매터는 <code>id</code>, <code>date</code>, <code>agent</code>, <code>decision</code>, <code>alternatives</code>, <code>status</code>이고, 선택 배열로 <code>evidence_refs</code>, <code>knowledge_refs</code>, <code>rules_applied</code>, <code>skills_used</code>가 있다.</p>
+  <ul>
+    <li><strong>증거 장부</strong> — <code>docs/evidence/ledger.md</code>. (주장, 출처, URL/참조, 검증 방법, 상태)의 행을 가지며 행 ID는 <code>EV-YYYYMMDD-NN</code> 형식. 결정 기록의 <code>evidence_refs</code>는 이 장부의 행 ID만 가리킬 수 있다</li>
+    <li><strong>게이트 시점 기록</strong> — PM 에이전트는 게이트 순간의 결정(스페셜리스트 선정, 설계 승인 등)에 대해 배포가 계속되기 <strong>전에</strong> 기록을 남겨야 한다</li>
+    <li><strong>supersession-only 변경 모델</strong> — 결정 기록은 지우지 않는다. 뒤집힌 결정은 새 기록이 옛 기록을 계승(supersede)한다. "결정의 역사"는 덧씌워지는 게 아니라 연결된다</li>
+  </ul>
+
+  <h2 id="c3-validation">validate-decisions.ts의 7가지 검사</h2>
+  <p><code>scripts/validate-decisions.ts</code>는 모든 <code>DEC-*.md</code>에 대해 다음을 검사한다.</p>
+  <ol>
+    <li>프론트매터 존재 여부</li>
+    <li>여섯 개 필수 필드 완비</li>
+    <li><code>id</code>와 파일명 접미 일치</li>
+    <li><code>status</code> 어휘 (<code>proposed | accepted | superseded</code>)</li>
+    <li><code>evidence_refs</code>가 장부 행 ID의 부분집합인지</li>
+    <li><code>knowledge_refs</code>가 실제 존재하는 파일인지</li>
+    <li><code>rules_applied</code> 형식(<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>)과 <code>skills_used</code>의 실제 스킬 해결 가능 여부</li>
+  </ol>
+  <p>이 검증은 <strong>fail-closed</strong>다 — error 수준 문제가 하나라도 있으면 exit 1. "경고만 뜨는 소프트 검사"와 달리, 결정 기록이 깨진 채로는 동기화가 진행되지 않는다.</p>
+
+  <h2 id="c4-registry">스펙 레지스트리와 E1–E5 면제</h2>
+  <p>결정의 앞단에는 설계(spec)가 있다. ADR-0055의 <strong>스펙 레지스트리</strong>(<code>docs/specs/registry.json</code>)는 설계 문서를 id·제목·파일·상태(<code>proposed | approved | implemented</code>)·최종 갱신일로 추적한다.</p>
+  <p>핵심은 <strong>스펙 관련성 게이트</strong>다. 코드 변경이 있는데 그 변경과 관련된 스펙 활동(레지스트리 건드림, 7일 이내 갱신된 approved/implemented 스펙)이 없으면, 감사가 실패한다. "코드는 바꿨는데 설계 기록은 얼어 있다"는 상태를 구조적으로 잡아내는 장치다.</p>
+  <p>물론 모든 변경에 설계 문서를 요구하면 과하다. 그래서 면제 코드가 다섯 개뿐으로 제한된다.</p>
+  <table>
+    <thead><tr><th>코드</th><th>대상</th></tr></thead>
+    <tbody>
+      <tr><td><code>E1</code></td><td>memory-log — 세션 로그 기록</td></tr>
+      <tr><td><code>E2</code></td><td>changelog — CHANGELOG.md 갱신만 있는 변경</td></tr>
+      <tr><td><code>E3</code></td><td>hotfix-typo — 한 줄짜리 사소한 수정</td></tr>
+      <tr><td><code>E4</code></td><td>pure-readme — 구조 변화 없는 README 본문 변경</td></tr>
+      <tr><td><code>E5</code></td><td>sync-only — 라이프사이클 마감(<code>/sync</code>) 실행만 있는 변경</td></tr>
+    </tbody>
+  </table>
+  <p>임의 면제는 금지고, <strong>존재하지 않는 면제 코드를 쓰는 것 자체가 하드 실패</strong>다. 면제의 남용은 거버넌스 위반이다.</p>
+
+  <h2 id="c5-backlog">거버넌스 백로그</h2>
+  <p>모든 결정이 지금 내려져야 하는 것은 아니다. "언젠가 판단할 필요가 있는 것"은 <strong>거버넌스 백로그</strong> 티켓으로 미뤄진다. 서비스 티켓(7장)이 일회성 작업 요청이라면, 거버넌스 백로그 티켓은 <strong>git에 추적되는 미래의 결정</strong>이다.</p>
+  <ul>
+    <li><code>scripts/ticket.ts</code>로 관리되며 <code>tickets/governance/</code>에 git 추적 파일로 저장</li>
+    <li><code>kind: manual</code> 티켓에 <code>not_before</code> 날짜를 달면, 그 날짜가 지나기 전엔 <code>list --ready --kind manual</code>에 나오지 않는다 — <strong>숙성(soak) 예약</strong></li>
+    <li>상태 기계는 <code>backlog → waiting → review → done</code></li>
+    <li>세션 시작이나 주간 점검 때 준비된 티켓이 표면화되면, PM은 순수 판단은 스스로 리뷰→완료 처리하고, 구현이 필요한 건 정규 PM 게이트웨이로 배포한다</li>
+  </ul>
+  <p>"지금 결정하지 않겠다"는 것 자체를 기록으로 남기는 장치다. 망각이 아니라 예약이다.</p>
+
+  <h2 id="c6-reflection">거버넌스 반영 검증</h2>
+  <p>ADR-0059가 태어난 계기는 구체적 사고였다 — 어떤 ADR이 거버넌스 문서 어디에도 참조되지 않은 채 승인돼, 실제로 아무도 따르지 않게 된 것. <code>scripts/verify-adr-governance.ts</code>는 두 가지를 검출한다.</p>
+  <ul>
+    <li><strong>연결 없는 ADR</strong> — 기준일(2026-08-23) 이후 승인됐는데 CONSTITUTION·<code>docs/constitution/</code>·<code>docs/governance/</code> 어디에도 언급이 없는 ADR. "승인됐지만 반영 안 됨" 상태다</li>
+    <li><strong>마커 해시 드리프트</strong> — 헌법 원본에서 복제된 문서 구간(마커로 묶인 intentional duplicate)의 해시가 원본과 어긋난 경우. 원본이 바뀌었는데 사본이 따라가지 못했다는 신호</li>
+  </ul>
+  <p><code>--strict</code>에서 이 둘은 <code>/sync</code>를 막는다. 마커 드리프트의 치유 절차는 정해져 있다 — 복제 구간을 검토·갱신하고 <code>--update-marker-hashes</code>로 해시를 다시 심은 뒤 재동기화.</p>
+
+  <h2 id="c7-lifecycle">결정의 수명</h2>
+  <p>결정 관련 시간 규칙을 정리하면 둘이다. 헷갈리기 쉬우니 범위를 정확히 하자.</p>
+  <ul>
+    <li><strong>7일 soak(ADR-0055)</strong> — 스펙 레지스트리 강제가 burn-in 기간 동안 경고 수준으로만 동작하도록 한 도입 유예. 최근 7일 안에 갱신된 스펙은 "활동 중"으로 인정된다</li>
+    <li><strong>90일 규칙(ADR-0060)</strong> — 스킬 그래프 오버라이드의 실험적 관계 전용. 프론트매터로 승격하지 않고 90일이 지나면 낡음 경고가 뜬다(부록 A)</li>
+  </ul>
+
+  <h2 id="c8-workflow">실전 — 결정 하나의 여정</h2>
+  <ol>
+    <li><strong>설계</strong> — 변경이 사소하지 않다면 설계 문서를 쓰고 레지스트리에 등록한다(proposed → approved).</li>
+    <li><strong>구현+기록</strong> — 구현과 함께, 게이트 순간의 판단을 Decision Record로 남긴다. 증거는 장부에 먼저 적고 <code>EV-</code> ID로 참조.</li>
+    <li><strong>검증</strong> — <code>/sync</code>가 audit(스펙 관련성)·<code>validate-decisions.ts</code>·거버넌스 반영 검증을 통과시킨다. 하나라도 Fail이면 진행 불가.</li>
+    <li><strong>반영</strong> — 승인된 ADR은 거버넌스 문서에 연결돼야 한다. 연결 없이 두면 ADR-0059 검증이 잡아낸다.</li>
+    <li><strong>미루기</strong> — 지금 판단할 근거가 부족하면 백로그 티켓으로 <code>not_before</code>와 함께 예약한다. 기억이 아니라 티켓이 책임진다.</li>
+  </ol>
+
+  <div class="chapter-nav">
+    <a href="B_Governance_Enforcement.html" class="prev"><div class="dir">← 이전</div><div class="ttl">부록 B · 거버넌스 강제 계층</div></a>
+    <a href="../glossary/00_Glossary.html" class="next"><div class="dir">참고 →</div><div class="ttl">용어집</div></a>
+  </div>
+
+  <footer>
+    Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 기준 · 한국어 교육 자료<br>
+    공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    본 핸드북의 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (저작자표시-비영리-동일조건변경허락 4.0 국제)</a> 라이선스에 따라 이용할 수 있습니다.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

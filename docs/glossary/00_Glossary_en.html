@@ -93,6 +93,10 @@
     <dt>Lifecycle / State <span class="en">Lifecycle / State</span></dt>
     <dd>Lifecycle refers to the entire sequence of stages an agent, skill, or script passes through (e.g., Create → Verify → Operate → Improve → Deprecate). State is a snapshot of which lifecycle stage that component is in at a given moment. The <code>status</code> field in the YAML frontmatter (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) stores the state value. Lifecycle can be thought of as a "subway map," and state as the sign showing "which station the current train is at."
       <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#state-vs-lifecycle">Chapter 8 §2 · Distinguishing State from Lifecycle</a></span></dd>
+
+    <dt>Skill Relationship Graph <span class="en">Skill Relationship Graph</span></dt>
+    <dd>A machine-readable projection of the relations between skills, agents, ADRs, and decision records. It is always regenerated from sources of truth (SKILL.md frontmatter <code>prerequisites</code>/<code>relates_to</code>, agent <code>required_skills</code>, <code>variant.json</code>, etc.) and is not itself a primary data store (ADR-0060). The outputs are <code>docs/skill-graph.json</code> and the human-readable <code>docs/skill-graph.md</code>. All relation edges are advisory and never hard-block execution.
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#s2-skill-graph">Chapter 8 §2 · Skill Relationship Graph</a></span></dd>
   </dl>
 
   <h2 id="team">Multi-Agent Team Components</h2>

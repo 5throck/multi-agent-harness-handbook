@@ -31,6 +31,7 @@
   <a href="#s2-lifecycle-why">ライフサイクル管理が必要な理由</a>
   <a href="#s2-agent-lifecycle">エージェントのライフサイクル</a>
   <a href="#s2-skill-lifecycle">スキルのライフサイクル</a>
+  <a href="#s2-skill-graph">スキル関係グラフ</a>
   <a href="#s2-script-lifecycle">スクリプトのライフサイクル</a>
   <a href="#state-vs-lifecycle">状態（State）とライフサイクル（Lifecycle）</a>
   <div class="nav-section">この章の他の節</div>
@@ -54,6 +55,7 @@
     <ul>
       <li>エージェントのライフサイクル: create → verify → operate → improve → deprecate</li>
       <li>スキルのライフサイクル: define → test → deploy → version → retire</li>
+      <li>スキル関係グラフ: スキル間の関係を生成プロジェクションとして管理する方法</li>
       <li>スクリプトのライフサイクル: write → lint → test → register → deprecate</li>
       <li>状態（State）とライフサイクル（Lifecycle）の区別</li>
       <li>ライフサイクル管理がなぜ必要なのか</li>
@@ -266,6 +268,57 @@
 
   <div class="note">
     <code>validate-skills.ts</code> は、スキルのライフサイクルにおける Test 段階の中核となるツールです。このスクリプトは単純な形式チェックだけでなく、スキル間のトリガー衝突や参照の整合性まで点検します。新しいスキルを追加したり既存のスキルを修正したりするたびに必ず実行する必要があります。エージェントの <code>agent:verify</code> と同様に、CI/CDパイプラインに組み込むことで、未検証のスキルが配備されることを自動的に防止できます。
+  </div>
+
+  <!-- ─── スキル関係グラフ ─── -->
+
+  <h2 id="s2-skill-graph">スキル関係グラフ</h2>
+
+  <p>スキルが増えてくると、個々のスキルの品質と同じくらい重要になるのが <strong>スキル間の関係</strong> です。どのスキルを先に実行すべきか、どのスキルが一緒に使われるか、どのエージェントがどのスキルを使うか — こうした情報を人が文章で維持すると、すぐに古くなってしまいます。スキル関係グラフはこの問題を「直接書かず、機械が読める原典から常に再生成する」方式で解決します(ADR-0060, <em>Skill Relationship Graph as Generated Projection</em>)。</p>
+
+  <h3 id="s2-skill-graph-principle">核心原則 — グラフは1次ストアではなく生成物</h3>
+  <p>グラフファイル(<code>docs/skill-graph.json</code>、<code>docs/skill-graph.md</code>)は <strong>ビルドアーティファクト</strong> です。関係の原典(source of truth)は次のような既存データであり、グラフはそこから常に再導出(re-derive)できるプロジェクション(projection)です。</p>
+  <ul>
+    <li><code>SKILL.md</code> のフロントマター — <code>prerequisites</code>、型付き <code>relates_to</code></li>
+    <li>エージェントファイルの <code>required_skills</code></li>
+    <li><code>variant.json</code> の <code>skill_manifest</code></li>
+    <li>ドキュメント本文のバッククォート参照(完全一致)</li>
+    <li><code>docs/skill-graph.overrides.json</code> — 導出不可能な関係や抑止したい関係のためのエスケープハッチ</li>
+  </ul>
+  <p>この原則のおかげで、グラフは古くなりません。生成スクリプトを再実行すれば常に現在の状態を反映したグラフが得られ、決定論性検証により同じ入力が同じ出力を生むことが確認されます。</p>
+
+  <h3 id="s2-skill-graph-edges">ノードと関係(エッジ)の型</h3>
+  <p>ノードは <code>skill</code>、<code>agent</code>、<code>adr</code>、<code>decision</code>、<code>procedure</code>、<code>output_type</code> などの型を持ち、レイヤー(<code>L0</code> ワークスペースルート、<code>common</code>、<code>variant:&lt;name&gt;</code>、<code>L3</code> プロジェクト)でタグ付けされます。主なエッジ型は以下のとおりです。すべてのエッジは <strong>助言的(advisory)</strong> であり、実行を強制的に妨げることはありません。</p>
+  <table>
+    <thead><tr><th>エッジ</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td><code>requires</code></td><td>BはAの必須前提スキルである(フロントマターの <code>prerequisites</code> から導出)</td></tr>
+      <tr><td><code>relates_to</code></td><td>一般的な関連(レガシー)</td></tr>
+      <tr><td><code>composes_with</code></td><td>対称的な組み合わせ関係(<code>symmetric: true</code> で単一エッジとして保存)</td></tr>
+      <tr><td><code>follows</code></td><td>順序のみを示し、依存性を含意しない</td></tr>
+      <tr><td><code>enables</code></td><td>Aの産出物がCを可能にする</td></tr>
+      <tr><td><code>used_by</code> / <code>phase</code></td><td>エージェントがスキルを使用する / スキルがワークフロー段階に割り当てられる</td></tr>
+      <tr><td><code>supersedes</code> / <code>references</code> / <code>cites_skill</code></td><td>ドキュメントの継承、ドキュメント間の引用、意思決定記録によるスキルの引用</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="s2-skill-graph-layers">関係の3層モデル</h3>
+  <ul>
+    <li><strong>L-A 明示的(Explicit)</strong> — フロントマターの型付き <code>relates_to</code>。意図として恒久的で、1次原典です。</li>
+    <li><strong>L-B 実験的(Experimental)</strong> — オーバーライドファイル内の関係。<code>reason</code>/<code>since</code> の記録が必須で、90日が経過すると陳腐化の警告が表示されます。</li>
+    <li><strong>L-C プロジェクション(Projection)</strong> — 生成されたグラフJSON。常に再生成され、決定論性が検証されます。</li>
+  </ul>
+
+  <h3 id="s2-skill-graph-tools">ツールとパイプラインの統合</h3>
+  <ul>
+    <li><code>scripts/generate-skill-graph.ts</code> — SSOT原典を走査してグラフを生成します。<code>--scope &lt;name&gt;</code> でテンプレート別のスコープグラフを作成します。</li>
+    <li><code>scripts/verify-skill-graph.ts</code> — コミット済みグラフが原典と一致するかドリフト検証します。</li>
+    <li><code>dev-sync.ts</code>(同期パイプラインのステップ4.65)— <code>/sync</code> のたびにすべてのスコープのグラフを再生成・検証します。</li>
+    <li><code>new-project.ts</code>(スキャフォールディングのステップ7.6)— 新規プロジェクト作成時にグラフを即座に生成します。</li>
+  </ul>
+
+  <div class="note">
+    関係を文章ではなくデータとして扱うこの発想は、この教材全体を貫くSSOT原則と同じ根を持っています。「人がリストを修正する」組織のリストは必ず古くなりますが、「データから導出されるリスト」は再生成によって常に最新を保てます。2つの構築戦略が比較実験されました — フロントマターに直接宣言する <strong>宣言的(Declarative)</strong> 戦略と、既存の構造化データ(手順スキーマなど)から関係を導出する <strong>推論的(Inferential)</strong> 戦略です。比較の結果、手順スキーマが豊富な領域では推論がうまく機能したものの、そうでないテンプレートでは宣言的戦略が優れているという結論になり、新しいデフォルト抽出モードは採用されませんでした。
   </div>
 
   <!-- ─── スクリプトのライフサイクル ─── -->

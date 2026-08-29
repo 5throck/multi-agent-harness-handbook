@@ -93,6 +93,10 @@
     <dt>ライフサイクル / 状態 <span class="en">Lifecycle / State</span></dt>
     <dd>ライフサイクルとは、エージェント・スキル・スクリプトが経る一連の段階全体(例: Create→Verify→Operate→Improve→Deprecate)を指す。状態とは、ある時点でその構成要素がライフサイクルのどの段階にあるかを示すスナップショットである。YAMLフロントマターの<code>status</code>フィールド(<code>draft</code>、<code>active</code>、<code>deprecated</code>、<code>retired</code>)が状態の値を保持する。ライフサイクルは「路線図」、状態は「今どの駅に列車がいるか」を示す表示板に例えられる。
       <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#state-vs-lifecycle">第8章 §2 · 状態とライフサイクルの区別</a></span></dd>
+
+    <dt>スキル関係グラフ <span class="en">Skill Relationship Graph</span></dt>
+    <dd>スキル・エージェント・ADR・意思決定記録の間の関係を機械が読める形で表現したプロジェクション(projection)。原典(SKILL.mdフロントマターの <code>prerequisites</code>/<code>relates_to</code>、エージェントの <code>required_skills</code>、<code>variant.json</code> など)から常に再生成され、それ自体は1次ストアではない(ADR-0060)。成果物は <code>docs/skill-graph.json</code> と人が読む <code>docs/skill-graph.md</code>。すべての関係エッジは助言的(advisory)であり、実行を強制的に妨げない。
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#s2-skill-graph">第8章 §2 · スキル関係グラフ</a></span></dd>
   </dl>
 
   <h2 id="team">マルチエージェントチーム構成要素</h2>

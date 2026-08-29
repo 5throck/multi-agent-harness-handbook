@@ -30,6 +30,7 @@
   <a href="#s2">처음부터 만드는 경로</a>
   <a href="#s3">기존 프로젝트를 승격하는 경로</a>
   <a href="#s4">어느 경로를 언제 선택할 것인가</a>
+  <a href="#s5">라이선스 — AGPL-3.0 상속</a>
   <div class="nav-section">다른 장</div>
   <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 엔터프라이즈 연계</a>
   <a href="../intro/10_ProjectUpgrade_Chapter.html">10장 · L3 프로젝트 업그레이드</a>
@@ -123,6 +124,14 @@
     </div>
   </div>
   <p>결국 선택 기준은 하나로 요약된다. 참고할 선례가 전혀 없는 새로운 도메인이라면 처음부터 설계하는 경로가 자연스럽다. 반대로 조직 안에 이미 한 번 이상 검증되어 다들 베껴 쓰고 있는 프로젝트가 있다면, 그 검증된 결과물을 존중해 승격 경로로 정식화하는 편이 더 안전하고 효율적이다. 두 경로 모두 결국 같은 <code>templates/co-&lt;name&gt;/</code> 형태로 수렴한다는 점에서, 이는 "어떤 산으로 오를 것인가"의 문제이지 "다른 산에 도착하는가"의 문제는 아니다.</p>
+
+  <h2 id="s5">라이선스 — AGPL-3.0 상속</h2>
+  <p>variant 템플릿으로 무엇을 만들든 라이선스는 따라온다. ai-workspace 루트는 AGPL-3.0을 쓰며, 라이선스 롤아웃 정책(2026-08)에 따라 <strong>루트의 AGPL-3.0 전문이 모든 variant 템플릿의 <code>LICENSE</code> 파일로 그대로 배포</strong>된다. 즉, 어떤 경로로 만든 variant 프로젝트든 태어날 때부터 AGPL-3.0을 상속받는다.</p>
+  <ul>
+    <li>템플릿의 <code>LICENSE</code>는 표준 AGPL-3.0 전문이며, 프로젝트별로 임의 수정하지 않는다</li>
+    <li><code>upgrade-project.ts</code>와 승격 파이프라인은 <code>LICENSE</code>를 상위 표준과 동일하게 유지·전파한다 — 프로젝트에서 삭제해도 다음 업그레이드 때 복원된다</li>
+    <li>사내 비공개 사용은 자유롭지만, <strong>네트워크 서비스로 제공하면 소스코드 공개 의무</strong>(AGPL 조항 13)가 발생한다. 외부 배포·상용 라이선스가 필요하면 별도 협의가 필요하다</li>
+  </ul>
 
   <div class="video-refs">
     <h3 id="videos">참고 영상</h3>

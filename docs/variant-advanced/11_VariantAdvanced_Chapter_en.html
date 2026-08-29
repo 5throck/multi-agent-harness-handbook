@@ -30,6 +30,7 @@
   <a href="#s2">The Build-From-Scratch Path</a>
   <a href="#s3">The Path of Promoting an Existing Project</a>
   <a href="#s4">Which Path to Choose, and When</a>
+  <a href="#s5">Licensing — AGPL-3.0 Inheritance</a>
   <div class="nav-section">Other Chapters</div>
   <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Enterprise Integration</a>
   <a href="../intro/10_ProjectUpgrade_Chapter_en.html">Chapter 10 · L3 Project Upgrade</a>
@@ -123,6 +124,14 @@
     </div>
   </div>
   <p>In the end, the criterion for choosing comes down to one thing. If it's a new domain with no precedent to refer to at all, the design-from-scratch path is the natural choice. Conversely, if there's already a project within the organization that has been validated at least once and that everyone is copying, it's safer and more efficient to respect that validated result and formalize it through the promotion path. Since both paths ultimately converge on the same <code>templates/co-&lt;name&gt;/</code> shape, this is a question of "which mountain to climb," not "which mountain you end up on."</p>
+
+  <h2 id="s5">Licensing — AGPL-3.0 Inheritance</h2>
+  <p>Whatever you build from a variant template, the license comes with it. The ai-workspace root is AGPL-3.0, and per the license rollout policy (2026-08) the <strong>full AGPL-3.0 text from the root is shipped verbatim as the <code>LICENSE</code> file of every variant template</strong>. In other words, every variant project inherits AGPL-3.0 from birth, whichever path created it.</p>
+  <ul>
+    <li>The template's <code>LICENSE</code> is the standard AGPL-3.0 full text and is not freely modified per project</li>
+    <li><code>upgrade-project.ts</code> and the promotion pipeline keep <code>LICENSE</code> identical to the upstream standard and propagate it — deleting it in a project only lasts until the next upgrade restores it</li>
+    <li>Private internal use is free, but <strong>offering it as a network service triggers the source-disclosure obligation</strong> (AGPL section 13). External distribution or commercial licensing requires separate negotiation</li>
+  </ul>
 
   <div class="video-refs">
     <h3 id="videos">Reference Videos</h3>

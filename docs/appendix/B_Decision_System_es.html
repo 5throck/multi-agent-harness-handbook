@@ -6,10 +6,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Apéndice C · Sistema de Decisión - Manual de Ingeniería de Harness para Equipos Multiagente">
+  <meta name="description" content="Referencia B · Sistema de Decisión - Manual de Ingeniería de Harness para Equipos Multiagente">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Apéndice C · Sistema de Decisión</title>
+  <title>Sistema de Decisión</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
-  <div class="nav-title">Apéndice C · Sistema de Decisión</div>
+  <div class="nav-title">Referencia B · Sistema de Decisión</div>
   <a href="#c1-overview">Resumen — Las Decisiones Son Activos</a>
   <a href="#c2-record">Estructura de un Decision Record</a>
   <a href="#c3-validation">Las Siete Verificaciones de validate-decisions.ts</a>
@@ -28,15 +28,15 @@
   <a href="#c7-lifecycle">La Vida Útil de una Decisión</a>
   <a href="#c8-workflow">Práctico — El Viaje de una Decisión</a>
   <div class="nav-section">Otros Apéndices</div>
-  <a href="A_Skill_Graph_es.html">Apéndice A · Grafo de Relaciones de Habilidades</a>
-  <a href="B_Governance_Enforcement_es.html">Apéndice B · Capas de Aplicación de Gobernanza</a>
+  <a href="C_Skill_Graph_es.html">Referencia C · Grafo de Relaciones de Habilidades</a>
+  <a href="A_Governance_Enforcement_es.html">Referencia A · Capas de Aplicación de Gobernanza</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">Apéndice C</div>
+  <div class="chapter-eyebrow">Referencia B</div>
   <h1>El Sistema de Decisión — Cómo las Decisiones se Registran y Verifican</h1>
-  <p class="lead">La arquitectura de una organización es una acumulación de decisiones. Pero cuando las decisiones viven solo en actas y memoria, tres meses después todos vuelven a preguntar "¿por qué lo hicimos así?". Este apéndice cubre los mecanismos con los que el workspace trata las decisiones como activos de primera clase — Decision Records, el registro de especificaciones, el backlog de gobernanza y la validación de reflexión.</p>
+  <p class="lead">La arquitectura de una organización es una acumulación de decisiones. Pero cuando las decisiones viven solo en actas y memoria, tres meses después todos vuelven a preguntar "¿por qué lo hicimos así?". Este documento cubre los mecanismos con los que el workspace trata las decisiones como activos de primera clase — Decision Records, el registro de especificaciones, el backlog de gobernanza y la validación de reflexión.</p>
   <p class="source-line">Fuente: ai-workspace-standards ADR-0061 <em>Decision Record Standard</em> · ADR-0055 <em>Spec Registry Enforcement</em> · ADR-0059 <em>Governance Reflection Validators</em> · docs/designs/2026-08-16-governance-backlog-design.md · <code>scripts/validate-decisions.ts</code> · <code>scripts/ticket.ts</code></p>
 
   <div class="keypoints">
@@ -51,7 +51,7 @@
   </div>
 
   <h2 id="c1-overview">Resumen — Las Decisiones Son Activos</h2>
-  <p>El código se revisa y se prueba, pero las decisiones a menudo no. Juicios como "mantener esta habilidad solo como relación experimental" o "retener la promoción de esta variante" que existen solo en conversaciones y recuerdos hacen que la organización re-discuta los mismos argumentos. La respuesta del workspace: <strong>escribir las decisiones como archivos, vincular su fundamento en una cadena y verificarlas mecánicamente</strong>. Por eso el grafo del Apéndice A incorpora los registros de decisión como nodos — las relaciones y el fundamento deben compartir un mismo mapa para poder navegarse.</p>
+  <p>El código se revisa y se prueba, pero las decisiones a menudo no. Juicios como "mantener esta habilidad solo como relación experimental" o "retener la promoción de esta variante" que existen solo en conversaciones y recuerdos hacen que la organización re-discuta los mismos argumentos. La respuesta del workspace: <strong>escribir las decisiones como archivos, vincular su fundamento en una cadena y verificarlas mecánicamente</strong>. Por eso el grafo del Referencia C incorpora los registros de decisión como nodos — las relaciones y el fundamento deben compartir un mismo mapa para poder navegarse.</p>
 
   <h2 id="c2-record">Estructura de un Decision Record</h2>
   <p>Un Decision Record es un archivo en <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> que cierra la cadena Agent → Skill → Knowledge → Evidence → Rule → Decision. El frontmatter obligatorio es <code>id</code>, <code>date</code>, <code>agent</code>, <code>decision</code>, <code>alternatives</code>, <code>status</code>, con arreglos opcionales <code>evidence_refs</code>, <code>knowledge_refs</code>, <code>rules_applied</code>, <code>skills_used</code>.</p>
@@ -112,7 +112,7 @@
   <p>Dos reglas temporales gobiernan las decisiones. Son fáciles de confundir, así que delimitemos sus alcances con precisión.</p>
   <ul>
     <li><strong>Soak de 7 días (ADR-0055)</strong> — el período de gracia durante el cual la aplicación del registro de especificaciones funcionó solo a nivel de advertencia para su arrastre. Una especificación actualizada en los últimos 7 días cuenta como "activa"</li>
-    <li><strong>Regla de 90 días (ADR-0060)</strong> — específica de las relaciones experimentales en los overrides del grafo de habilidades. Tras 90 días sin promoción al frontmatter, se dispara una advertencia de obsolescencia (Apéndice A)</li>
+    <li><strong>Regla de 90 días (ADR-0060)</strong> — específica de las relaciones experimentales en los overrides del grafo de habilidades. Tras 90 días sin promoción al frontmatter, se dispara una advertencia de obsolescencia (Referencia C)</li>
   </ul>
 
   <h2 id="c8-workflow">Práctico — El Viaje de una Decisión</h2>
@@ -125,7 +125,7 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="B_Governance_Enforcement_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Apéndice B · Capas de Aplicación de Gobernanza</div></a>
+    <a href="A_Governance_Enforcement_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Referencia A · Capas de Aplicación de Gobernanza</div></a>
     <a href="../glossary/00_Glossary_es.html" class="next"><div class="dir">Referencia →</div><div class="ttl">Glosario</div></a>
   </div>
 

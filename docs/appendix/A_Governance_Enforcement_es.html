@@ -6,10 +6,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Apéndice B · Capas de Aplicación de Gobernanza - Manual de Ingeniería de Harness para Equipos Multiagente">
+  <meta name="description" content="Referencia A · Capas de Aplicación de Gobernanza - Manual de Ingeniería de Harness para Equipos Multiagente">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Apéndice B · Capas de Aplicación de Gobernanza</title>
+  <title>Capas de Aplicación de Gobernanza</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
-  <div class="nav-title">Apéndice B · Capas de Aplicación de Gobernanza</div>
+  <div class="nav-title">Referencia A · Capas de Aplicación de Gobernanza</div>
   <a href="#b1-overview">Resumen — Defensa en Tres Capas</a>
   <a href="#b2-gateguard">GateGuard — Exigencia de Hechos Antes de Editar</a>
   <a href="#b3-phases">Tres Etapas de Maduración de la Gobernanza</a>
@@ -27,15 +27,15 @@
   <a href="#b6-platform">Diferencias de Aplicación por Plataforma</a>
   <a href="#b7-workflow">Qué Hacer al Ser Bloqueado</a>
   <div class="nav-section">Otros Apéndices</div>
-  <a href="A_Skill_Graph_es.html">Apéndice A · Grafo de Relaciones de Habilidades</a>
-  <a href="C_Decision_System_es.html">Apéndice C · Sistema de Decisión</a>
+  <a href="C_Skill_Graph_es.html">Referencia C · Grafo de Relaciones de Habilidades</a>
+  <a href="B_Decision_System_es.html">Referencia B · Sistema de Decisión</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">Apéndice B</div>
+  <div class="chapter-eyebrow">Referencia A</div>
   <h1>Capas de Aplicación de Gobernanza — Cómo las Reglas se Vuelven Reglas</h1>
-  <p class="lead">El modelo de permisos del Capítulo 3 dice "qué no se debe hacer". Este apéndice responde a la siguiente pregunta — "¿cómo se previenen de forma fiable las violaciones?" El workspace aplica la misma regla en tres capas — hook, prompt y skill — de modo que cuando una capa no está disponible, otra sostiene la línea.</p>
+  <p class="lead">El modelo de permisos del Capítulo 3 dice "qué no se debe hacer". Este documento responde a la siguiente pregunta — "¿cómo se previenen de forma fiable las violaciones?" El workspace aplica la misma regla en tres capas — hook, prompt y skill — de modo que cuando una capa no está disponible, otra sostiene la línea.</p>
   <p class="source-line">Fuente: ai-workspace-standards CONSTITUTION.md §11 · diseños de gobernanza ECC Fase 1–3 (docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
 
   <div class="keypoints">
@@ -88,7 +88,7 @@
     <li><code>scripts/audit.ts</code> — el auditor maestro de estándares del workspace: comprobaciones estructurales, enlaces muertos, vigilancia de codificación, validación de esquemas de frontmatter, comprobaciones del registro de especificaciones, y más; sale con 1 ante cualquier FAIL</li>
     <li><code>scripts/qa-gate.ts</code> — la puerta de calidad de la Fase 6: ejecuta audit.ts como paso 1 (fallo duro), luego pruebas del proyecto, consistencia documental y verificación del despliegue de registros de gobernanza; cualquier fallo detiene el pipeline</li>
     <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — validan el frontmatter y los registros de gobernanza (<code>docs/lifecycle/</code>) de agentes, skills y plantillas</li>
-    <li><code>scripts/verify-adr-governance.ts</code> — detecta ADR aceptados sin referencias en documentos de gobernanza y deriva de hashes de marcadores frente a las fuentes de la constitución (detallado en el Apéndice C)</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — detecta ADR aceptados sin referencias en documentos de gobernanza y deriva de hashes de marcadores frente a las fuentes de la constitución (detallado en el Referencia B)</li>
   </ul>
 
   <h2 id="b5-failclosed">fail-closed vs warn — Dónde Detenerse y Dónde Dejar Pasar</h2>
@@ -118,8 +118,8 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="A_Skill_Graph_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Apéndice A · Grafo de Relaciones de Habilidades</div></a>
-    <a href="C_Decision_System_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Apéndice C · Sistema de Decisión</div></a>
+    <a href="C_Skill_Graph_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Referencia C · Grafo de Relaciones de Habilidades</div></a>
+    <a href="B_Decision_System_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Referencia B · Sistema de Decisión</div></a>
   </div>
 
   <footer>

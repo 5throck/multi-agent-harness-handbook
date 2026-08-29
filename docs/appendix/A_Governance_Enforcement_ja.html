@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--
-  補足(叙述型)テンプレート — ガバナンス強制層とGateGuard。
+  参照文書(叙述型)テンプレート — ガバナンス強制層とGateGuard。
   検索インデックスの前提: 本文の節は必ず <h2 id="..."> （必要に応じ <h3>）構造を維持する。
 -->
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="補足B · ガバナンス強制層 - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
+  <meta name="description" content="参照A · ガバナンス強制層 - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>補足B · ガバナンス強制層</title>
+  <title>ガバナンス強制層</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">補足B · ガバナンス強制層</div>
+  <div class="nav-title">参照A · ガバナンス強制層</div>
   <a href="#b1-overview">概要 — 防御は三重</a>
   <a href="#b2-gateguard">GateGuard — 編集前ファクト強制</a>
   <a href="#b3-phases">ガバナンス成熟の3段階</a>
@@ -26,20 +26,20 @@
   <a href="#b5-failclosed">fail-closedとwarn</a>
   <a href="#b6-platform">プラットフォーム別の強制力の違い</a>
   <a href="#b7-workflow">ブロックされたときの対処法</a>
-  <div class="nav-section">他の補足</div>
-  <a href="A_Skill_Graph_ja.html">補足A · スキル関係グラフ</a>
-  <a href="C_Decision_System_ja.html">補足C · 意思決定システム</a>
+  <div class="nav-section">他の参照</div>
+  <a href="C_Skill_Graph_ja.html">参照C · スキル関係グラフ</a>
+  <a href="B_Decision_System_ja.html">参照B · 意思決定システム</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">補足B</div>
+  <div class="chapter-eyebrow">参照A</div>
   <h1>ガバナンス強制層 — ルールがルールになる方法</h1>
-  <p class="lead">第3章の権限モデルは「何をしてはいけないか」を語る。この補足はその次の問い — 「違反をどう確実に防ぐか」 — を扱う。ワークスペースは同じルールをフック・プロンプト・スキルの三層に掛けて、一つの層が欠けても別の層が持ちこたえる構造にしている。</p>
+  <p class="lead">第3章の権限モデルは「何をしてはいけないか」を語る。この文書はその次の問い — 「違反をどう確実に防ぐか」 — を扱う。ワークスペースは同じルールをフック・プロンプト・スキルの三層に掛けて、一つの層が欠けても別の層が持ちこたえる構造にしている。</p>
   <p class="source-line">出典: ai-workspace-standards CONSTITUTION.md §11 · ECCガバナンス Phase 1–3設計(docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
 
   <div class="keypoints">
-    <div class="kp-title">この補足で扱うこと</div>
+    <div class="kp-title">この文書で扱うこと</div>
     <ul>
       <li>フック・プロンプト・スキル3層強制モデルと各層の強度・カバレッジ</li>
       <li>GateGuardの「編集前ファクト強制」 — 何を調査させるのか</li>
@@ -88,7 +88,7 @@
     <li><code>scripts/audit.ts</code> — ワークスペース標準の総合監査スクリプト。構造検査、リンク切れ、エンコーディング警戒、フロントマタースキーマ検証、スペックレジストリ検査などを実行し、FAILが一つでもあれば exit 1</li>
     <li><code>scripts/qa-gate.ts</code> — Phase 6品質ゲート。audit.tsを第1段階としてハード実行し、プロジェクトテスト・ドキュメント整合性・ガバナンスレコードのデプロイ確認を続ける。一つでも失敗すればパイプライン停止</li>
     <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — それぞれエージェント・スキル・テンプレートのフロントマターとガバナンスレコード(<code>docs/lifecycle/</code>)を検証</li>
-    <li><code>scripts/verify-adr-governance.ts</code> — ガバナンス文書に参照されないまま承認されたADRと、憲法原文とのマーカーハッシュのドリフトを検出(補足Cで詳述)</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — ガバナンス文書に参照されないまま承認されたADRと、憲法原文とのマーカーハッシュのドリフトを検出(参照Bで詳述)</li>
   </ul>
 
   <h2 id="b5-failclosed">fail-closedとwarn — どこで止まり、どこで見過ごすか</h2>
@@ -118,8 +118,8 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="A_Skill_Graph_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">補足A · スキル関係グラフ</div></a>
-    <a href="C_Decision_System_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">補足C · 意思決定システム</div></a>
+    <a href="C_Skill_Graph_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">参照C · スキル関係グラフ</div></a>
+    <a href="B_Decision_System_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">参照B · 意思決定システム</div></a>
   </div>
 
   <footer>

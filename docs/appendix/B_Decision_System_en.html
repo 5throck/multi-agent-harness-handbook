@@ -6,10 +6,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Appendix C · Decision System - Multi-Agent Team Harness Engineering Handbook">
+  <meta name="description" content="Reference B · Decision System - Multi-Agent Team Harness Engineering Handbook">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Appendix C · Decision System</title>
+  <title>Decision System</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Appendix C · Decision System</div>
+  <div class="nav-title">Reference B · Decision System</div>
   <a href="#c1-overview">Overview — Decisions Are Assets</a>
   <a href="#c2-record">Structure of a Decision Record</a>
   <a href="#c3-validation">The Seven Checks of validate-decisions.ts</a>
@@ -28,19 +28,19 @@
   <a href="#c7-lifecycle">The Lifespan of a Decision</a>
   <a href="#c8-workflow">Practical — The Journey of One Decision</a>
   <div class="nav-section">Other Appendices</div>
-  <a href="A_Skill_Graph_en.html">Appendix A · Skill Relationship Graph</a>
-  <a href="B_Governance_Enforcement_en.html">Appendix B · Governance Enforcement Layers</a>
+  <a href="C_Skill_Graph_en.html">Reference C · Skill Relationship Graph</a>
+  <a href="A_Governance_Enforcement_en.html">Reference A · Governance Enforcement Layers</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">Appendix C</div>
+  <div class="chapter-eyebrow">Reference B</div>
   <h1>The Decision System — How Decisions Are Recorded and Verified</h1>
-  <p class="lead">An organization's architecture is an accumulation of decisions. But when decisions live only in meeting notes and memory, three months later everyone asks "why did we do it this way?" again. This appendix covers the mechanisms by which the workspace treats decisions as first-class assets — Decision Records, the spec registry, the governance backlog, and reflection validation.</p>
+  <p class="lead">An organization's architecture is an accumulation of decisions. But when decisions live only in meeting notes and memory, three months later everyone asks "why did we do it this way?" again. This document covers the mechanisms by which the workspace treats decisions as first-class assets — Decision Records, the spec registry, the governance backlog, and reflection validation.</p>
   <p class="source-line">Source: ai-workspace-standards ADR-0061 <em>Decision Record Standard</em> · ADR-0055 <em>Spec Registry Enforcement</em> · ADR-0059 <em>Governance Reflection Validators</em> · docs/designs/2026-08-16-governance-backlog-design.md · <code>scripts/validate-decisions.ts</code> · <code>scripts/ticket.ts</code></p>
 
   <div class="keypoints">
-    <div class="kp-title">What This Appendix Covers</div>
+    <div class="kp-title">What This Reference Bovers</div>
     <ul>
       <li>The structure of a Decision Record and the Agent→Skill→Knowledge→Evidence→Rule→Decision chain</li>
       <li>The evidence ledger and the supersession-only mutation model</li>
@@ -51,7 +51,7 @@
   </div>
 
   <h2 id="c1-overview">Overview — Decisions Are Assets</h2>
-  <p>Code gets reviewed and tested, but decisions often don't. Judgments like "keep this skill as an experimental relation only" or "hold this variant's promotion" that exist only in conversations and memories make the organization relitigate the same arguments. The workspace's answer: <strong>write decisions as files, bind their rationale into a chain, and verify them mechanically</strong>. This is also why Appendix A's graph embraces decision records as nodes — relations and rationale must share one map to be navigable.</p>
+  <p>Code gets reviewed and tested, but decisions often don't. Judgments like "keep this skill as an experimental relation only" or "hold this variant's promotion" that exist only in conversations and memories make the organization relitigate the same arguments. The workspace's answer: <strong>write decisions as files, bind their rationale into a chain, and verify them mechanically</strong>. This is also why Reference C's graph embraces decision records as nodes — relations and rationale must share one map to be navigable.</p>
 
   <h2 id="c2-record">Structure of a Decision Record</h2>
   <p>A Decision Record is a file at <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> that closes the Agent → Skill → Knowledge → Evidence → Rule → Decision chain. Required frontmatter is <code>id</code>, <code>date</code>, <code>agent</code>, <code>decision</code>, <code>alternatives</code>, <code>status</code>, with optional arrays <code>evidence_refs</code>, <code>knowledge_refs</code>, <code>rules_applied</code>, <code>skills_used</code>.</p>
@@ -112,7 +112,7 @@
   <p>Two time rules govern decisions. They are easy to confuse, so let's scope them precisely.</p>
   <ul>
     <li><strong>7-day soak (ADR-0055)</strong> — the grace period during which spec-registry enforcement ran at warn-only level for burn-in. A spec updated within the last 7 days counts as "active"</li>
-    <li><strong>90-day rule (ADR-0060)</strong> — specific to experimental relations in skill-graph overrides. After 90 days without promotion to frontmatter, a staleness warning fires (Appendix A)</li>
+    <li><strong>90-day rule (ADR-0060)</strong> — specific to experimental relations in skill-graph overrides. After 90 days without promotion to frontmatter, a staleness warning fires (Reference C)</li>
   </ul>
 
   <h2 id="c8-workflow">Practical — The Journey of One Decision</h2>
@@ -125,7 +125,7 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="B_Governance_Enforcement_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Appendix B · Governance Enforcement Layers</div></a>
+    <a href="A_Governance_Enforcement_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Reference A · Governance Enforcement Layers</div></a>
     <a href="../glossary/00_Glossary_en.html" class="next"><div class="dir">Reference →</div><div class="ttl">Glossary</div></a>
   </div>
 

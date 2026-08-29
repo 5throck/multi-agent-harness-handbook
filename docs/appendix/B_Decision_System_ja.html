@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--
-  補足(叙述型)テンプレート — 意思決定システム。
+  参照文書(叙述型)テンプレート — 意思決定システム。
   検索インデックスの前提: 本文の節は必ず <h2 id="..."> （必要に応じ <h3>）構造を維持する。
 -->
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="補足C · 意思決定システム - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
+  <meta name="description" content="参照B · 意思決定システム - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>補足C · 意思決定システム</title>
+  <title>意思決定システム</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">補足C · 意思決定システム</div>
+  <div class="nav-title">参照B · 意思決定システム</div>
   <a href="#c1-overview">概要 — 決定も資産である</a>
   <a href="#c2-record">Decision Recordの構造</a>
   <a href="#c3-validation">validate-decisions.ts の7検査</a>
@@ -27,20 +27,20 @@
   <a href="#c6-reflection">ガバナンス反映検証</a>
   <a href="#c7-lifecycle">決定の寿命</a>
   <a href="#c8-workflow">実務 — 一つの決定の旅</a>
-  <div class="nav-section">他の補足</div>
-  <a href="A_Skill_Graph_ja.html">補足A · スキル関係グラフ</a>
-  <a href="B_Governance_Enforcement_ja.html">補足B · ガバナンス強制層</a>
+  <div class="nav-section">他の参照</div>
+  <a href="C_Skill_Graph_ja.html">参照C · スキル関係グラフ</a>
+  <a href="A_Governance_Enforcement_ja.html">参照A · ガバナンス強制層</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">補足C</div>
+  <div class="chapter-eyebrow">参照B</div>
   <h1>意思決定システム — 決定が記録され検証される方法</h1>
-  <p class="lead">組織のアーキテクチャは決定の集積だ。だが決定が議事録や記憶の中にだけ生きていると、三か月後には「なぜこうしたのか?」が繰り返される。この補足は、ワークスペースが決定を一級資産として扱う装置 — Decision Record、スペックレジストリ、ガバナンスバックログ、反映検証 — を扱う。</p>
+  <p class="lead">組織のアーキテクチャは決定の集積だ。だが決定が議事録や記憶の中にだけ生きていると、三か月後には「なぜこうしたのか?」が繰り返される。この文書は、ワークスペースが決定を一級資産として扱う装置 — Decision Record、スペックレジストリ、ガバナンスバックログ、反映検証 — を扱う。</p>
   <p class="source-line">出典: ai-workspace-standards ADR-0061 <em>Decision Record Standard</em> · ADR-0055 <em>Spec Registry Enforcement</em> · ADR-0059 <em>Governance Reflection Validators</em> · docs/designs/2026-08-16-governance-backlog-design.md · <code>scripts/validate-decisions.ts</code> · <code>scripts/ticket.ts</code></p>
 
   <div class="keypoints">
-    <div class="kp-title">この補足で扱うこと</div>
+    <div class="kp-title">この文書で扱うこと</div>
     <ul>
       <li>Decision Recordの構造と Agent→Skill→Knowledge→Evidence→Rule→Decision チェーン</li>
       <li>証拠台帳(evidence ledger)と supersession-only 変更モデル</li>
@@ -51,7 +51,7 @@
   </div>
 
   <h2 id="c1-overview">概要 — 決定も資産である</h2>
-  <p>コードはレビューされテストを通るが、決定はそうでないことが多い。「このスキルは実験的関係のままにする」「このvariantは昇格を保留する」といった判断が会話と記憶の中にしかなければ、組織は同じ議論を繰り返す。ワークスペースの答えは、決定を <strong>ファイルとして書き、チェーンで根拠を束ね、機械で検証する</strong> ことだ。補足Aのグラフが決定記録をノードとして取り込むのもこのためだ — 関係と根拠が一枚の地図に載って初めて探索できる。</p>
+  <p>コードはレビューされテストを通るが、決定はそうでないことが多い。「このスキルは実験的関係のままにする」「このvariantは昇格を保留する」といった判断が会話と記憶の中にしかなければ、組織は同じ議論を繰り返す。ワークスペースの答えは、決定を <strong>ファイルとして書き、チェーンで根拠を束ね、機械で検証する</strong> ことだ。参照Cのグラフが決定記録をノードとして取り込むのもこのためだ — 関係と根拠が一枚の地図に載って初めて探索できる。</p>
 
   <h2 id="c2-record">Decision Recordの構造</h2>
   <p>Decision Recordは <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> ファイルで、Agent → Skill → Knowledge → Evidence → Rule → Decision のチェーンを閉じる文書だ。必須フロントマターは <code>id</code>、<code>date</code>、<code>agent</code>、<code>decision</code>、<code>alternatives</code>、<code>status</code> で、任意配列として <code>evidence_refs</code>、<code>knowledge_refs</code>、<code>rules_applied</code>、<code>skills_used</code> がある。</p>
@@ -112,7 +112,7 @@
   <p>決定に関する時間ルールは二つある。混同しやすいので範囲を正確に整理しよう。</p>
   <ul>
     <li><strong>7日soak(ADR-0055)</strong> — スペックレジストリ強制がburn-in期間中は警告レベルのみで動くようにした導入猶予。過去7日以内に更新されたスペックは「活動中」と認められる</li>
-    <li><strong>90日ルール(ADR-0060)</strong> — スキルグラフのオーバーライドにおける実験的関係専用。フロントマターへ昇格しないまま90日が経つと陳腐化の警告が出る(補足A)</li>
+    <li><strong>90日ルール(ADR-0060)</strong> — スキルグラフのオーバーライドにおける実験的関係専用。フロントマターへ昇格しないまま90日が経つと陳腐化の警告が出る(参照C)</li>
   </ul>
 
   <h2 id="c8-workflow">実務 — 一つの決定の旅</h2>
@@ -125,7 +125,7 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="B_Governance_Enforcement_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">補足B · ガバナンス強制層</div></a>
+    <a href="A_Governance_Enforcement_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">参照A · ガバナンス強制層</div></a>
     <a href="../glossary/00_Glossary_ja.html" class="next"><div class="dir">参考 →</div><div class="ttl">用語集</div></a>
   </div>
 

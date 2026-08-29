@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--
+  Appendix (narrative) template — Skill Relationship Graph in depth.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Appendix A · Skill Relationship Graph - Multi-Agent Team Harness Engineering Handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Appendix A · Skill Relationship Graph</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Appendix A · Skill Relationship Graph</div>
+  <a href="#a1-overview">Overview — Why a Graph</a>
+  <a href="#a2-sources">Data Sources and Priority</a>
+  <a href="#a3-schema">Node and Edge Schema</a>
+  <a href="#a4-edges">Edge Types in Detail</a>
+  <a href="#a5-layers">The Three-Layer Relation Model</a>
+  <a href="#a6-pipeline">Generation Pipeline</a>
+  <a href="#a7-strategies">Declarative vs Inferential Strategies</a>
+  <a href="#a8-decision-chain">Decision Chain and Validation</a>
+  <a href="#a9-workflow">Practical Workflow</a>
+  <a href="#a10-roadmap">Roadmap</a>
+  <div class="nav-section">Reference</div>
+  <a href="../tools/00_Tools_Manual_en.html">Tool Comparison</a>
+  <a href="../glossary/00_Glossary_en.html">Glossary</a>
+  <a href="../faq/00_FAQ_en.html">FAQ</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">Appendix A</div>
+  <h1>Skill Relationship Graph — Structure and Operations</h1>
+  <p class="lead">Once skills number in the dozens, "which skill presupposes what" disappears from organizational memory. This appendix consolidates the concrete structure of the skill relationship graph introduced in Chapter 8 §2 — data sources, schema, relation vocabulary, generation pipeline, validation, and the operational workflow — into a single chapter.</p>
+  <p class="source-line">Source: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Appendix Covers</div>
+    <ul>
+      <li>Why the graph is a "constantly regenerated projection", not a primary store</li>
+      <li>The five data sources relations are derived from, and their priority</li>
+      <li>Node/edge schema and the vocabulary of ten typed relations</li>
+      <li>The explicit/experimental/projection three-layer model and the 90-day rule</li>
+      <li>The generation/verification/sync pipeline and the procedure for adding a relation</li>
+    </ul>
+  </div>
+
+  <h2 id="a1-overview">Overview — Why a Graph</h2>
+  <p>If relations between skills, agents, and ADRs ("this skill must run before that one", "this agent uses that skill") are kept as free text, three things inevitably happen. First, the source changes but the prose stays, so it <strong>goes stale</strong>. Second, relations scatter across files and become <strong>unsearchable</strong>. Third, unless a human curates the list, nothing is <strong>verified</strong> either.</p>
+  <p>The skill relationship graph solves this by <em>deriving</em> rather than writing. The sources of relations are structured data that already exists (SKILL.md frontmatter, agent files, variant manifests), and the graph is their projection. You can always delete the graph files — rerunning the generator births them again in exactly the same way. That is why ADR-0060 pins the principle under the name <em>Generated Projection</em>.</p>
+
+  <h2 id="a2-sources">Data Sources and Priority</h2>
+  <p>The generator scans the following sources in priority order. Earlier sources are more explicitly intentional; later ones more implicitly derived.</p>
+  <ol>
+    <li><strong>SKILL.md frontmatter</strong> — <code>prerequisites</code> (mandatory predecessor skills) and typed <code>relates_to</code> (relation vocabulary + target + optional note). The most explicit source.</li>
+    <li><strong>Agent files' <code>required_skills</code></strong> — produces agent → skill <code>used_by</code> relations.</li>
+    <li><strong><code>variant.json</code>'s <code>skill_manifest</code></strong> — the manifest of which skills a variant attaches to which agents and phases. Source of <code>phase</code> relations.</li>
+    <li><strong>Backtick references in document prose</strong> — a document mentioning a skill by its exact backticked name produces a <code>references</code> edge (exact match only, to avoid false positives).</li>
+    <li><strong><code>docs/skill-graph.overrides.json</code></strong> — escape hatch to add relations not derivable from the sources above, or to suppress auto-derived ones. Per-scope overrides are also supported.</li>
+  </ol>
+  <p>Edges from frontmatter carry <code>provenance: {file, field, index?}</code>. Tracing "why does this relation exist" always leads back to a specific field of a specific source file.</p>
+
+  <h2 id="a3-schema">Node and Edge Schema</h2>
+  <p>The committed graph artifacts are two — machine-readable <code>docs/skill-graph.json</code> and the human-readable relation table <code>docs/skill-graph.md</code>. The top-level JSON structure is <code>{version, nodes[], edges[]}</code>.</p>
+  <div style="position:relative">
+  <pre class="code-block">{
+  "version": "1.7",
+  "nodes": [
+    { "id": "handbook", "type": "skill", "layer": "common" },
+    { "id": "handbook-reviewer", "type": "agent", "layer": "common" },
+    { "id": "ADR-0060", "type": "adr", "layer": "L0" }
+  ],
+  "edges": [
+    {
+      "from": "handbook",
+      "to": "research",
+      "type": "requires",
+      "provenance": {
+        "file": "skills/handbook/SKILL.md",
+        "field": "prerequisites",
+        "index": 0
+      }
+    },
+    {
+      "from": "handbook-reviewer",
+      "to": "handbook",
+      "type": "used_by"
+    }
+  ]
+}</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+  <p>Nodes carry <code>id</code>, <code>type</code>, and <code>layer</code>. Types include <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, and <code>output_type</code>; layers are <code>L0</code> (workspace root), <code>common</code> (shared template), <code>variant:&lt;name&gt;</code>, and <code>L3</code> (individual project).</p>
+
+  <h2 id="a4-edges">Edge Types in Detail</h2>
+  <p>The full relation vocabulary grown across Amendments 1–6, with direction, symmetry, and source. All edges are <strong>advisory</strong> — they inform routing and planning but never hard-block execution.</p>
+  <table>
+    <thead><tr><th>Edge</th><th>Meaning</th><th>Direction/Symmetry</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td><code>requires</code></td><td>B is a mandatory predecessor of A</td><td>A→B (asymmetric)</td><td>frontmatter <code>prerequisites</code></td></tr>
+      <tr><td><code>relates_to</code></td><td>Generic association (legacy)</td><td>A→B</td><td>frontmatter <code>relates_to</code></td></tr>
+      <tr><td><code>composes_with</code></td><td>Co-use composition within the same agent</td><td>symmetric (single edge with <code>symmetric: true</code>)</td><td>Amendment 8 — derived from co-declaration in one agent's <code>required_skills</code></td></tr>
+      <tr><td><code>follows</code></td><td>Pure sequencing; no dependency implied</td><td>A→B</td><td>frontmatter</td></tr>
+      <tr><td><code>enables</code></td><td>A's output unlocks C</td><td>A→C</td><td>frontmatter</td></tr>
+      <tr><td><code>used_by</code></td><td>An agent uses a skill</td><td>agent→skill</td><td>agent <code>required_skills</code></td></tr>
+      <tr><td><code>phase</code></td><td>A skill belongs to a workflow phase</td><td>skill→phase</td><td><code>variant.json</code> <code>skill_manifest</code></td></tr>
+      <tr><td><code>supersedes</code></td><td>Document succession (old → new)</td><td>old→new</td><td>document metadata</td></tr>
+      <tr><td><code>references</code></td><td>Cross-document citation</td><td>A→B</td><td>backtick references</td></tr>
+      <tr><td><code>cites_skill</code></td><td>A decision record cites a skill</td><td>decision→skill</td><td>decision record body</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    The most common mistake is confusing the direction of <code>requires</code>. <code>A requires B</code> means "you need B before A", not "A produces B". If the direction is unclear, check the source frontmatter via the provenance field.
+  </div>
+
+  <h2 id="a5-layers">The Three-Layer Relation Model</h2>
+  <p>Three kinds of relations coexist in the same graph. Their lifespans and trust levels differ, so they are handled as distinct layers.</p>
+  <ul>
+    <li><strong>L-A Explicit</strong> — typed <code>relates_to</code> in frontmatter. Permanent by intent, the primary source of the graph.</li>
+    <li><strong>L-B Experimental</strong> — relations in the overrides file. <code>reason</code> and <code>since</code> are mandatory, and a staleness warning fires after 90 days. It is the waiting room for relations "that probably belong in the graph but are still being observed before entering frontmatter".</li>
+    <li><strong>L-C Projection</strong> — the generated graph itself. Always regenerated, with a determinism check confirming "same input → same output" holds.</li>
+  </ul>
+  <p>When an experimental relation is judged stable, move it to frontmatter to promote it to L-A. To remove an L-A relation, delete it from frontmatter — there is no path that edits the graph files directly.</p>
+
+  <h2 id="a6-pipeline">Generation Pipeline</h2>
+  <p>The graph interlocks with the pipeline at four points.</p>
+  <ul>
+    <li><code>scripts/generate-skill-graph.ts</code> — scans sources and produces <code>skill-graph.json</code>/<code>.md</code>. <code>--scope &lt;name&gt;</code> creates a per-template scoped graph (common + each variant, 14 scopes in total).</li>
+    <li><code>scripts/verify-skill-graph.ts</code> — verifies the committed graph against its sources (drift) and invariants.</li>
+    <li><code>dev-sync.ts</code> step 4.65 — regenerates and drift-checks all scope graphs on every <code>/sync</code>. Keeping the graph current is baked into the commit flow.</li>
+    <li><code>new-project.ts</code> step 7.6 — generates the project's <code>docs/skill-graph.json</code> at scaffold time, without waiting for the first <code>/sync</code>.</li>
+  </ul>
+  <p>A scope graph is a <strong>scoped view</strong> of the unified L0 graph. Because a variant template ships its own scope graph, a project born from it starts with a relation map relevant to itself from day one.</p>
+
+  <h2 id="a7-strategies">Declarative vs Inferential Strategies</h2>
+  <p>There are two strategies for where relations come from.</p>
+  <ul>
+    <li><strong>Declarative</strong> — relations are stated directly in frontmatter (Amendment 3). Intent is explicit and validation is simple, but it depends on the discipline of skill authors.</li>
+    <li><strong>Inferential</strong> — relations are derived from existing structured data (Amendment 4, co-newbiz precedent), grounded in phase adjacency of procedure schemas or rule predicates. Coverage grows without adding any frontmatter.</li>
+  </ul>
+  <p>The comparison experiment (<code>scripts/experiments/infer-graph-from-phases.ts</code>, read-only) concluded with a split verdict — inference works well in areas rich in procedure schemas, but the declarative strategy wins elsewhere. No new default extraction mode was adopted; the two coexist: derive where schemas exist, declare for the rest.</p>
+
+  <h2 id="a8-decision-chain">Decision Chain and Validation</h2>
+  <p>The reason the graph embraces ADRs and decision records is to put "relations" and "rationale" on one map. The decision chain of ADR-0061 — Agent, Skill, Knowledge, Evidence, Rule, Decision — is validated fail-closed by <code>scripts/validate-decisions.ts</code>.</p>
+  <ul>
+    <li>Presence of required frontmatter in decision records and references into the evidence ledger</li>
+    <li>Rule ID format and resolvability of skill references</li>
+    <li><strong>Propagation-coupling rule</strong> — a skill published to L1 must not relate to targets absent from L1. Otherwise every downstream copy grows dangling edges.</li>
+  </ul>
+  <p>Via <code>supersedes</code> and <code>cites_skill</code> edges, the graph shows "on which skills this decision was made, and which documents it succeeded". It is a structural device preventing relations from accumulating without rationale.</p>
+
+  <h2 id="a9-workflow">Practical Workflow — Adding a Relation</h2>
+  <p>The minimal procedure when actually adding one relation.</p>
+  <ol>
+    <li><strong>Declare</strong> — write the relation in the target skill's <code>SKILL.md</code> frontmatter:
+<div style="position:relative">
+  <pre class="code-block">relates_to:
+  - { skill: research, type: requires }
+  - { skill: pdf-export, type: enables, note: "produces layout spec" }</pre>
+  <button class="copy-btn">Copy</button>
+</div></li>
+    <li><strong>Validate</strong> — run <code>bun scripts/validate-skills.ts</code> (relation form checks), then <code>bun scripts/generate-skill-graph.ts</code>.</li>
+    <li><strong>Confirm</strong> — run <code>bun scripts/verify-skill-graph.ts</code> to confirm no drift, and visually check the skill's relation table in <code>docs/skill-graph.md</code>.</li>
+    <li><strong>Commit</strong> — <code>/sync</code> performs all-scope regeneration and verification at step 4.65, so just make sure you did not edit the graph files directly before committing.</li>
+  </ol>
+  <p>For a relation you are not yet sure about, write it in the overrides file instead of frontmatter. Leaving <code>reason</code> and <code>since</code> means the system will ask "still observing?" after 90 days.</p>
+
+  <h2 id="a10-roadmap">Roadmap</h2>
+  <p>The Phase 2+ vision of ADR-0060 is as follows; none of it is implemented yet.</p>
+  <ul>
+    <li><strong>Lifecycle state machine</strong> — track skill draft/active/retired transitions as graph node state</li>
+    <li><strong>Versioning and migration</strong> — tooling to move between graph schema versions</li>
+    <li><strong>Graph intelligence</strong> — relation-driven routing suggestions and automatic context bundle composition</li>
+    <li><strong>Audit trail snapshots</strong> — point-in-time graph snapshots for querying relation history</li>
+  </ul>
+  <p>The point is that today's design does not block these extensions. Because the graph is a projection, not a primary store, adding consumers or node state only requires changing the sources and the generator.</p>
+
+   <div class="chapter-nav">
+    <a href="../capstone/13_Capstone_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 13 · Capstone Exercise</div></a>
+    <a href="../glossary/00_Glossary_en.html" class="next"><div class="dir">Reference →</div><div class="ttl">Glossary</div></a>
+  </div>
+  <footer>
+    Based on Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · English Educational Materials<br>
+    Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    Handbook content is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International)</a>.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

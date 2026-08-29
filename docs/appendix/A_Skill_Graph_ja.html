@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--
+  補足(叙述型)テンプレート — スキル関係グラフ詳細。
+  検索インデックスの前提: 本文の節は必ず <h2 id="..."> （必要に応じ <h3>）構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="補足A · スキル関係グラフ - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>補足A · スキル関係グラフ</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">補足A · スキル関係グラフ</div>
+  <a href="#a1-overview">概要 — なぜグラフか</a>
+  <a href="#a2-sources">データ原典と優先順位</a>
+  <a href="#a3-schema">ノードとエッジのスキーマ</a>
+  <a href="#a4-edges">エッジ型の詳細</a>
+  <a href="#a5-layers">関係の3層モデル</a>
+  <a href="#a6-pipeline">生成パイプライン</a>
+  <a href="#a7-strategies">宣言的 vs 推論的 構築戦略</a>
+  <a href="#a8-decision-chain">意思決定チェーンと検証</a>
+  <a href="#a9-workflow">実務ワークフロー</a>
+  <a href="#a10-roadmap">ロードマップ</a>
+  <div class="nav-section">共通参照</div>
+  <a href="../tools/00_Tools_Manual_ja.html">ツール比較</a>
+  <a href="../glossary/00_Glossary_ja.html">用語集</a>
+  <a href="../faq/00_FAQ_ja.html">FAQ</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">補足A</div>
+  <h1>スキル関係グラフ — 構造と運用</h1>
+  <p class="lead">スキルが数十を超えると「どのスキルが何を前提とするか」は組織の記憶の外へ消えていく。この補足は、第8章 §2で紹介したスキル関係グラフの具体的構造 — データ原典、スキーマ、関係語彙、生成パイプライン、検証と運用ワークフロー — を一つの章としてまとめる。</p>
+  <p class="source-line">出典: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+
+  <div class="keypoints">
+    <div class="kp-title">この補足で扱うこと</div>
+    <ul>
+      <li>グラフがなぜ1次ストアではなく「常に再生成されるプロジェクション」なのか</li>
+      <li>関係を導出する5つのデータ原典とその優先順位</li>
+      <li>ノード/エッジのスキーマと10個の型付き関係語彙</li>
+      <li>明示的・実験的・プロジェクションの3層モデルと90日ルール</li>
+      <li>生成・検証・同期パイプラインと関係追加の実務手順</li>
+    </ul>
+  </div>
+
+  <h2 id="a1-overview">概要 — なぜグラフか</h2>
+  <p>スキル・エージェント・ADRの間の関係(「このスキルはあのスキルを先に実行すべき」「このエージェントはあのスキルを使う」)を自由テキストで書いておくと、三つのことが必ず起こる。第一に、原典が変わっても文章はそのまま残り <strong>古くなる</strong>。第二に、関係がファイルのあちこちに散らばり <strong>検索できなくなる</strong>。第三に、人がリストを手入れしない限り <strong>検証もされない</strong>。</p>
+  <p>スキル関係グラフはこれを「直接書かず、導出する」ことで解決した。関係の原典はすでに存在する構造化データ(SKILL.mdフロントマター、エージェントファイル、variantマニフェスト)であり、グラフはそのプロジェクションである。グラフファイルはいつ消してもよい — ジェネレーターを再実行すれば、まったく同じ方法で再び生まれる。ADR-0060がこの原則を <em>Generated Projection</em> という名で固定したのはこのためだ。</p>
+
+  <h2 id="a2-sources">データ原典と優先順位</h2>
+  <p>ジェネレーターは次の原典を優先順に走査する。前の原典ほど意図が明示的で、後ほど暗黙的導出である。</p>
+  <ol>
+    <li><strong>SKILL.mdフロントマター</strong> — <code>prerequisites</code>(必須前提スキル)と型付き <code>relates_to</code>(関係語彙+対象+任意メモ)。最も明示的な原典。</li>
+    <li><strong>エージェントファイルの <code>required_skills</code></strong> — エージェント→スキルの <code>used_by</code> 関係を作る。</li>
+    <li><strong><code>variant.json</code> の <code>skill_manifest</code></strong> — variantがどのスキルをどのエージェント・フェーズに紐づけるかのマニフェスト。<code>phase</code> 関係の原典。</li>
+    <li><strong>ドキュメント本文のバッククォート参照</strong> — ドキュメントがスキル名を正確なバッククォート名で言及すると <code>references</code> エッジになる(誤検出を防ぐため完全一致のみ)。</li>
+    <li><strong><code>docs/skill-graph.overrides.json</code></strong> — 上記の原典では導出できない関係を追加、または自動導出された関係を抑止するエスケープハッチ。スコープ別オーバーライドも対応。</li>
+  </ol>
+  <p>フロントマター由来のエッジには <code>provenance: {file, field, index?}</code> が付く。「この関係はなぜ存在するのか」を辿ると、必ず原典ファイルの特定フィールドに戻れる。</p>
+
+  <h2 id="a3-schema">ノードとエッジのスキーマ</h2>
+  <p>グラフのコミット成果物は二つ — 機械用の <code>docs/skill-graph.json</code> と人が読む関係表 <code>docs/skill-graph.md</code>。JSONの最上位構造は <code>{version, nodes[], edges[]}</code> だ。</p>
+  <div style="position:relative">
+  <pre class="code-block">{
+  "version": "1.7",
+  "nodes": [
+    { "id": "handbook", "type": "skill", "layer": "common" },
+    { "id": "handbook-reviewer", "type": "agent", "layer": "common" },
+    { "id": "ADR-0060", "type": "adr", "layer": "L0" }
+  ],
+  "edges": [
+    {
+      "from": "handbook",
+      "to": "research",
+      "type": "requires",
+      "provenance": {
+        "file": "skills/handbook/SKILL.md",
+        "field": "prerequisites",
+        "index": 0
+      }
+    },
+    {
+      "from": "handbook-reviewer",
+      "to": "handbook",
+      "type": "used_by"
+    }
+  ]
+}</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+  <p>ノードは <code>id</code>・<code>type</code>・<code>layer</code> を持つ。型は <code>skill</code>、<code>agent</code>、<code>adr</code>、<code>decision</code>、<code>procedure</code>、<code>output_type</code> などで、レイヤーは <code>L0</code>(ワークスペースルート)、<code>common</code>(共通テンプレート)、<code>variant:&lt;name&gt;</code>、<code>L3</code>(個別プロジェクト)だ。</p>
+
+  <h2 id="a4-edges">エッジ型の詳細</h2>
+  <p>Amendment 1–6にわたって育った関係語彙の全体。方向と対称性、原典を併せて整理する。すべてのエッジは <strong>助言的(advisory)</strong> — ルーティングと計画に情報を与えるが、実行を強制的に妨げない。</p>
+  <table>
+    <thead><tr><th>エッジ</th><th>意味</th><th>方向/対称</th><th>原典</th></tr></thead>
+    <tbody>
+      <tr><td><code>requires</code></td><td>BはAの必須前提スキルである</td><td>A→B(非対称)</td><td>フロントマター <code>prerequisites</code></td></tr>
+      <tr><td><code>relates_to</code></td><td>一般的な関連(レガシー)</td><td>A→B</td><td>フロントマター <code>relates_to</code></td></tr>
+      <tr><td><code>composes_with</code></td><td>同じエージェント内で共に使われる組合せ関係</td><td>対称(<code>symmetric: true</code> の単一エッジ)</td><td>Amendment 8 — 一つのエージェントの <code>required_skills</code> 共同宣言から導出</td></tr>
+      <tr><td><code>follows</code></td><td>順序のみを示す。依存を含意しない</td><td>A→B</td><td>フロントマター</td></tr>
+      <tr><td><code>enables</code></td><td>Aの産出物がCを可能にする</td><td>A→C</td><td>フロントマター</td></tr>
+      <tr><td><code>used_by</code></td><td>エージェントがスキルを使用する</td><td>agent→skill</td><td>エージェント <code>required_skills</code></td></tr>
+      <tr><td><code>phase</code></td><td>スキルがワークフローフェーズに割り当てられる</td><td>skill→phase</td><td><code>variant.json</code> <code>skill_manifest</code></td></tr>
+      <tr><td><code>supersedes</code></td><td>ドキュメントの継承(旧→新)</td><td>old→new</td><td>ドキュメントメタ</td></tr>
+      <tr><td><code>references</code></td><td>ドキュメント間の引用</td><td>A→B</td><td>バッククォート参照</td></tr>
+      <tr><td><code>cites_skill</code></td><td>意思決定記録がスキルを引用</td><td>decision→skill</td><td>意思決定記録本文</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    最もよくある間違いは <code>requires</code> の方向の混同だ。<code>A requires B</code> は「Aを使うにはBが先」という意味であり、「AがBを生み出す」ではない。方向が曖昧なら provenance フィールドで原典フロントマターを確認せよ。
+  </div>
+
+  <h2 id="a5-layers">関係の3層モデル</h2>
+  <p>同じグラフの中に三種類の関係が混在している。寿命と信頼度が異なるため、層を区別して扱う。</p>
+  <ul>
+    <li><strong>L-A 明示的(Explicit)</strong> — フロントマターの型付き <code>relates_to</code>。意図として恒久的で、グラフの1次原典。</li>
+    <li><strong>L-B 実験的(Experimental)</strong> — オーバーライドファイルの関係。<code>reason</code> と <code>since</code> の記録が必須で、90日が経過すると陳腐化の警告が出る。「グラフにあるべきだがフロントマターに入れる前の観察中」の関係の待合室。</li>
+    <li><strong>L-C プロジェクション(Projection)</strong> — 生成されたグラフそのもの。常に再生成され、決定論性検証で「同じ入力→同じ出力」が崩れていないことを確認。</li>
+  </ul>
+  <p>実験的関係が安定したと判断されればフロントマターへ移してL-Aへ昇格する。逆にL-Aを無くすにはフロントマターから消せばよい — グラフファイルを直接編集する経路は存在しない。</p>
+
+  <h2 id="a6-pipeline">生成パイプライン</h2>
+  <p>グラフは四つの場所でパイプラインと噛み合う。</p>
+  <ul>
+    <li><code>scripts/generate-skill-graph.ts</code> — 原典を走査して <code>skill-graph.json</code>/<code>.md</code> を生成。<code>--scope &lt;name&gt;</code> でテンプレート別スコープグラフを作る(共通+各variant、計14スコープ)。</li>
+    <li><code>scripts/verify-skill-graph.ts</code> — コミット済みグラフが原典と一致するか(ドリフト)と不変式を検証。</li>
+    <li><code>dev-sync.ts</code> ステップ4.65 — <code>/sync</code> のたびに全スコープのグラフを再生成しドリフト確認。「グラフを最新に保つ作業」がコミットフローに組み込まれている。</li>
+    <li><code>new-project.ts</code> ステップ7.6 — 新規プロジェクトのスキャフォールディング時に、そのプロジェクトの <code>docs/skill-graph.json</code> を即座に生成。最初の <code>/sync</code> を待たせない。</li>
+  </ul>
+  <p>スコープグラフは統合L0グラフの <strong>範囲ビュー</strong> だ。variantテンプレートが自スコープのグラフを同梱するため、そこから生まれるプロジェクトは初日から自分に関係の深い関係地図を持って始まる。</p>
+
+  <h2 id="a7-strategies">宣言的 vs 推論的 構築戦略</h2>
+  <p>関係をどこから引き出すかについて、二つの戦略がある。</p>
+  <ul>
+    <li><strong>宣言的(Declarative)</strong> — フロントマターに関係を直接宣言する(Amendment 3)。意図が明確で検証が単純だが、スキル作成者の規律に依存する。</li>
+    <li><strong>推論的(Inferential)</strong> — 既存の構造化データから関係を導出する(Amendment 4、co-newbiz前例)。手順スキーマのフェーズ隣接性やルール述語を根拠とする。フロントマターを一つも追加せずにカバレッジを増やせる。</li>
+  </ul>
+  <p>比較実験(<code>scripts/experiments/infer-graph-from-phases.ts</code>、読み取り専用)の結論は折半だ — 手順スキーマが豊富な領域では推論がよく機能するが、そうでないテンプレートでは宣言的戦略が優れる。そのため新しいデフォルト抽出モードは採用されず、両戦略は共存する。スキーマのある所は導出し、残りは宣言で埋める。</p>
+
+  <h2 id="a8-decision-chain">意思決定チェーンと検証</h2>
+  <p>グラフがADR・意思決定記録まで取り込む理由は「関係」と「根拠」を一枚の地図に載せるためだ。ADR-0061の意思決定チェーン — Agent, Skill, Knowledge, Evidence, Rule, Decision — を <code>scripts/validate-decisions.ts</code> が fail-closed で検証する。</p>
+  <ul>
+    <li>意思決定記録の必須フロントマターと証拠台帳(evidence ledger)参照の存在</li>
+    <li>ルールID形式とスキル参照の解決可能性</li>
+    <li><strong>伝播結合ルール</strong> — L1に発行されたスキルが、L1に存在しない対象と関係を結ぶことを禁止。守らないと下位コピーごとに宙ぶらりんのエッジ(dangling edge)が生える。</li>
+  </ul>
+  <p>グラフは <code>supersedes</code>・<code>cites_skill</code> エッジで「この決定がどのスキルの上に、どのドキュメントを継承して出たか」を示す。関係が根拠なしに増えるのを構造的に防ぐ装置だ。</p>
+
+  <h2 id="a9-workflow">実務ワークフロー — 関係を追加する</h2>
+  <p>実際に関係を一つ追加するときの最小手順だ。</p>
+  <ol>
+    <li><strong>宣言</strong> — 対象スキルの <code>SKILL.md</code> フロントマターに関係を書く:
+<div style="position:relative">
+  <pre class="code-block">relates_to:
+  - { skill: research, type: requires }
+  - { skill: pdf-export, type: enables, note: "produces layout spec" }</pre>
+  <button class="copy-btn">コピー</button>
+</div></li>
+    <li><strong>検証</strong> — <code>bun scripts/validate-skills.ts</code>(関係形式検査)の後、<code>bun scripts/generate-skill-graph.ts</code> を実行。</li>
+    <li><strong>確認</strong> — <code>bun scripts/verify-skill-graph.ts</code> でドリフトなしを確認し、<code>docs/skill-graph.md</code> で当該スキルの関係表を目視確認。</li>
+    <li><strong>コミット</strong> — <code>/sync</code> がステップ4.65で全スコープ再生成・検証を行うため、コミット前にグラフファイルを直接触っていないかだけ確認すればよい。</li>
+  </ol>
+  <p>まだ確信のない関係は、フロントマターではなくオーバーライドファイルに書く。<code>reason</code> と <code>since</code> を残しておけば、90日後にシステムが「まだ観察中か?」と尋ねてくる。</p>
+
+  <h2 id="a10-roadmap">ロードマップ</h2>
+  <p>ADR-0060の Phase 2+ ビジョンは以下のとおり。現時点ではすべて未実装だ。</p>
+  <ul>
+    <li><strong>ライフサイクル状態機械</strong> — スキルの draft/active/retired 遷移をグラフノード状態として追跡</li>
+    <li><strong>バージョン管理・マイグレーション</strong> — グラフスキーマ版間の移行ツール</li>
+    <li><strong>グラフインテリジェンス</strong> — 関係を利用したルーティング提案、コンテキストバンドル自動構成</li>
+    <li><strong>監査証跡スナップショット</strong> — 時点別グラフスナップショットで関係変化の履歴照会</li>
+  </ul>
+  <p>要点は、今の設計がこの拡張を妨げないことだ。グラフは1次ストアではなくプロジェクションなので、消費者を増やしたりノードに状態を足しても、原典とジェネレーターだけ変えればよい。</p>
+
+   <div class="chapter-nav">
+    <a href="../capstone/13_Capstone_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第13章 · キャップストーン演習</div></a>
+    <a href="../glossary/00_Glossary_ja.html" class="next"><div class="dir">参考 →</div><div class="ttl">用語集</div></a>
+  </div>
+  <footer>
+    Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -410,7 +410,7 @@
 
 
   <h2 id="procedure-schema">Procedure Schema — the Declarative SSOT of Workflows (ADR-0063)</h2>
-  <p>If this chapter's patterns are "cases", the procedure schema is the device that lifts those cases into <strong>machine-readable declarations</strong>. A variant template's <code>procedures/&lt;name&gt;/schema.yaml</code> records workflow steps as <code>{id, agent_key, skill_key, output_type, description}</code>, with relations between steps declared as typed <code>follows</code>·<code>enables</code>·<code>composes_with</code> (see Appendix A).</p>
+  <p>If this chapter's patterns are "cases", the procedure schema is the device that lifts those cases into <strong>machine-readable declarations</strong>. A variant template's <code>procedures/&lt;name&gt;/schema.yaml</code> records workflow steps as <code>{id, agent_key, skill_key, output_type, description}</code>, with relations between steps declared as typed <code>follows</code>·<code>enables</code>·<code>composes_with</code> (see Reference C).</p>
   <ul>
     <li><strong>Validation is a repository consistency check</strong> — <code>scripts/validate-procedures.ts</code> checks schema shape, enums, the closed <code>_output-types.yaml</code> vocabulary, and that every <code>agent_key</code>/<code>skill_key</code> resolves to a real agent file or skill directory. <code>/sync</code> blocks on failure</li>
     <li><strong>Connection to the graph</strong> — procedure-derived graph nodes (<code>procedure</code>, <code>output_type</code>) and edges (<code>step_uses_skill</code>, <code>step_by_agent</code>, <code>produces</code>) are <strong>generated projections</strong>. Hand-editing them is forbidden; repair the procedure and regenerate</li>

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--
-  부록(서술형) 템플릿 — 거버넌스 강제 계층과 GateGuard.
+  참고 문서(서술형) 템플릿 — 거버넌스 강제 계층과 GateGuard.
   검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
 -->
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="부록 B · 거버넌스 강제 계층 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="description" content="참고 A · 거버넌스 강제 계층 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>부록 B · 거버넌스 강제 계층</title>
+  <title>거버넌스 강제 계층</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index.html" class="nav-home">← 핸드북 홈</a>
-  <div class="nav-title">부록 B · 거버넌스 강제 계층</div>
+  <div class="nav-title">참고 A · 거버넌스 강제 계층</div>
   <a href="#b1-overview">개요 — 방어는 세 겹</a>
   <a href="#b2-gateguard">GateGuard — 편집 전 사실 강제</a>
   <a href="#b3-phases">거버넌스 성숙 3단계</a>
@@ -26,20 +26,20 @@
   <a href="#b5-failclosed">fail-closed와 warn</a>
   <a href="#b6-platform">플랫폼별 강제력 차이</a>
   <a href="#b7-workflow">차단됐을 때 대응법</a>
-  <div class="nav-section">다른 부록</div>
-  <a href="A_Skill_Graph.html">부록 A · 스킬 관계 그래프</a>
-  <a href="C_Decision_System.html">부록 C · 의사결정 시스템</a>
+  <div class="nav-section">다른 참고 문서</div>
+  <a href="C_Skill_Graph.html">참고 C · 스킬 관계 그래프</a>
+  <a href="B_Decision_System.html">참고 B · 의사결정 시스템</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">부록 B</div>
+  <div class="chapter-eyebrow">참고 A</div>
   <h1>거버넌스 강제 계층 — 규칙이 규칙이 되는 법</h1>
-  <p class="lead">3장에서 배운 권한 모델은 "무엇을 하면 안 되는가"를 말한다. 이 부록은 그 다음 질문 — "위반을 어떻게 확실히 막는가" — 에 대한 답을 다룬다. 워크스페이스는 같은 규칙을 훅·프롬프트·스킬 세 계층에 걸어 놓아서, 한 계층이 빠져도 다른 계층이 버티게 만든다.</p>
+  <p class="lead">3장에서 배운 권한 모델은 "무엇을 하면 안 되는가"를 말한다. 이 문서는 그 다음 질문 — "위반을 어떻게 확실히 막는가" — 에 대한 답을 다룬다. 워크스페이스는 같은 규칙을 훅·프롬프트·스킬 세 계층에 걸어 놓아서, 한 계층이 빠져도 다른 계층이 버티게 만든다.</p>
   <p class="source-line">출처: ai-workspace-standards CONSTITUTION.md §11 · ECC 거버넌스 Phase 1–3 설계(docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
 
   <div class="keypoints">
-    <div class="kp-title">이 부록에서 다루는 것</div>
+    <div class="kp-title">이 문서에서 다루는 것</div>
     <ul>
       <li>훅·프롬프트·스킬 3계층 강제 모델과 각 계층의 강도·커버리지</li>
       <li>GateGuard의 "편집 전 사실 강제" — 무엇을 조사하게 만드는가</li>
@@ -88,7 +88,7 @@
     <li><code>scripts/audit.ts</code> — 워크스페이스 표준 종합 감사기. 구조 검사, 죽은 링크, 인코딩 경계, 프론트매터 스키마 검증, 스펙 레지스트리 검사 등을 수행하며 FAIL이 하나라도 있으면 exit 1</li>
     <li><code>scripts/qa-gate.ts</code> — Phase 6 품질 게이트. audit.ts를 1단계로 하드 실행하고, 프로젝트 테스트·문서 일관성·거버넌스 레코드 배포 확인을 잇는다. 하나라도 실패하면 파이프라인 정지</li>
     <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — 각각 에이전트·스킬·템플릿의 프론트매터와 거버넌스 레코드(<code>docs/lifecycle/</code>) 검증</li>
-    <li><code>scripts/verify-adr-governance.ts</code> — 거버넌스 문서에 참조되지 않은 채 승인된 ADR과, 헌법 원본과의 마커 해시 드리프트를 검출(부록 C에서 자세히)</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — 거버넌스 문서에 참조되지 않은 채 승인된 ADR과, 헌법 원본과의 마커 해시 드리프트를 검출(참고 B에서 자세히)</li>
   </ul>
 
   <h2 id="b5-failclosed">fail-closed와 warn — 어디서 멈추고 어디서 눈감는가</h2>
@@ -118,8 +118,8 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="A_Skill_Graph.html" class="prev"><div class="dir">← 이전</div><div class="ttl">부록 A · 스킬 관계 그래프</div></a>
-    <a href="C_Decision_System.html" class="next"><div class="dir">다음 →</div><div class="ttl">부록 C · 의사결정 시스템</div></a>
+    <a href="C_Skill_Graph.html" class="prev"><div class="dir">← 이전</div><div class="ttl">참고 C · 스킬 관계 그래프</div></a>
+    <a href="B_Decision_System.html" class="next"><div class="dir">다음 →</div><div class="ttl">참고 B · 의사결정 시스템</div></a>
   </div>
 
   <footer>

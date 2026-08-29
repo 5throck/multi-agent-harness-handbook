@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--
-  부록(서술형) 템플릿 — 의사결정 시스템.
+  참고 문서(서술형) 템플릿 — 의사결정 시스템.
   검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
 -->
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="부록 C · 의사결정 시스템 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="description" content="참고 B · 의사결정 시스템 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>부록 C · 의사결정 시스템</title>
+  <title>의사결정 시스템</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index.html" class="nav-home">← 핸드북 홈</a>
-  <div class="nav-title">부록 C · 의사결정 시스템</div>
+  <div class="nav-title">참고 B · 의사결정 시스템</div>
   <a href="#c1-overview">개요 — 결정도 자산이다</a>
   <a href="#c2-record">Decision Record의 구조</a>
   <a href="#c3-validation">validate-decisions.ts의 7가지 검사</a>
@@ -27,20 +27,20 @@
   <a href="#c6-reflection">거버넌스 반영 검증</a>
   <a href="#c7-lifecycle">결정의 수명</a>
   <a href="#c8-workflow">실전 — 결정 하나의 여정</a>
-  <div class="nav-section">다른 부록</div>
-  <a href="A_Skill_Graph.html">부록 A · 스킬 관계 그래프</a>
-  <a href="B_Governance_Enforcement.html">부록 B · 거버넌스 강제 계층</a>
+  <div class="nav-section">다른 참고 문서</div>
+  <a href="C_Skill_Graph.html">참고 C · 스킬 관계 그래프</a>
+  <a href="A_Governance_Enforcement.html">참고 A · 거버넌스 강제 계층</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">부록 C</div>
+  <div class="chapter-eyebrow">참고 B</div>
   <h1>의사결정 시스템 — 결정이 기록되고 검증되는 법</h1>
-  <p class="lead">조직의 아키텍처는 결정의 축적이다. 그런데 결정이 회의록이나 기억 속에만 살면, 세 달 뒤에는 "왜 이렇게 했지?"가 반복된다. 이 부록은 워크스페이스가 결정을 일급 자산으로 다루는 장치 — Decision Record, 스펙 레지스트리, 거버넌스 백로그, 반영 검증 — 를 다룬다.</p>
+  <p class="lead">조직의 아키텍처는 결정의 축적이다. 그런데 결정이 회의록이나 기억 속에만 살면, 세 달 뒤에는 "왜 이렇게 했지?"가 반복된다. 이 문서는 워크스페이스가 결정을 일급 자산으로 다루는 장치 — Decision Record, 스펙 레지스트리, 거버넌스 백로그, 반영 검증 — 를 다룬다.</p>
   <p class="source-line">출처: ai-workspace-standards ADR-0061 <em>Decision Record Standard</em> · ADR-0055 <em>Spec Registry Enforcement</em> · ADR-0059 <em>Governance Reflection Validators</em> · docs/designs/2026-08-16-governance-backlog-design.md · <code>scripts/validate-decisions.ts</code> · <code>scripts/ticket.ts</code></p>
 
   <div class="keypoints">
-    <div class="kp-title">이 부록에서 다루는 것</div>
+    <div class="kp-title">이 문서에서 다루는 것</div>
     <ul>
       <li>Decision Record의 구조와 Agent→Skill→Knowledge→Evidence→Rule→Decision 체인</li>
       <li>증거 장부(evidence ledger)와 supersession-only 변경 모델</li>
@@ -51,7 +51,7 @@
   </div>
 
   <h2 id="c1-overview">개요 — 결정도 자산이다</h2>
-  <p>코드는 리뷰받고 테스트를 거치지만, 결정은 그렇지 않은 경우가 많다. "이 스킬은 실험적 관계로만 둔다", "이 variant는 승격 보류다" 같은 판단이 대화와 기억에만 있으면 조직은 같은 논쟁을 반복한다. 워크스페이스의 답은 결정을 <strong>파일로 쓰고, 체인으로 근거를 묶고, 기계로 검증한다</strong>는 것이다. 부록 A의 그래프가 결정 기록을 노드로 품는 이유도 이 때문이다 — 관계와 근거가 한 지도에 놓여야 탐색이 된다.</p>
+  <p>코드는 리뷰받고 테스트를 거치지만, 결정은 그렇지 않은 경우가 많다. "이 스킬은 실험적 관계로만 둔다", "이 variant는 승격 보류다" 같은 판단이 대화와 기억에만 있으면 조직은 같은 논쟁을 반복한다. 워크스페이스의 답은 결정을 <strong>파일로 쓰고, 체인으로 근거를 묶고, 기계로 검증한다</strong>는 것이다. 참고 C의 그래프가 결정 기록을 노드로 품는 이유도 이 때문이다 — 관계와 근거가 한 지도에 놓여야 탐색이 된다.</p>
 
   <h2 id="c2-record">Decision Record의 구조</h2>
   <p>Decision Record는 <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> 파일로, Agent → Skill → Knowledge → Evidence → Rule → Decision의 체인을 닫는 문서다. 필수 프론트매터는 <code>id</code>, <code>date</code>, <code>agent</code>, <code>decision</code>, <code>alternatives</code>, <code>status</code>이고, 선택 배열로 <code>evidence_refs</code>, <code>knowledge_refs</code>, <code>rules_applied</code>, <code>skills_used</code>가 있다.</p>
@@ -112,7 +112,7 @@
   <p>결정 관련 시간 규칙을 정리하면 둘이다. 헷갈리기 쉬우니 범위를 정확히 하자.</p>
   <ul>
     <li><strong>7일 soak(ADR-0055)</strong> — 스펙 레지스트리 강제가 burn-in 기간 동안 경고 수준으로만 동작하도록 한 도입 유예. 최근 7일 안에 갱신된 스펙은 "활동 중"으로 인정된다</li>
-    <li><strong>90일 규칙(ADR-0060)</strong> — 스킬 그래프 오버라이드의 실험적 관계 전용. 프론트매터로 승격하지 않고 90일이 지나면 낡음 경고가 뜬다(부록 A)</li>
+    <li><strong>90일 규칙(ADR-0060)</strong> — 스킬 그래프 오버라이드의 실험적 관계 전용. 프론트매터로 승격하지 않고 90일이 지나면 낡음 경고가 뜬다(참고 C)</li>
   </ul>
 
   <h2 id="c8-workflow">실전 — 결정 하나의 여정</h2>
@@ -125,7 +125,7 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="B_Governance_Enforcement.html" class="prev"><div class="dir">← 이전</div><div class="ttl">부록 B · 거버넌스 강제 계층</div></a>
+    <a href="A_Governance_Enforcement.html" class="prev"><div class="dir">← 이전</div><div class="ttl">참고 A · 거버넌스 강제 계층</div></a>
     <a href="../glossary/00_Glossary.html" class="next"><div class="dir">참고 →</div><div class="ttl">용어집</div></a>
   </div>
 

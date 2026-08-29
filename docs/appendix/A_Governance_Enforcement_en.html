@@ -6,10 +6,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Appendix B · Governance Enforcement Layers - Multi-Agent Team Harness Engineering Handbook">
+  <meta name="description" content="Reference A · Governance Enforcement Layers - Multi-Agent Team Harness Engineering Handbook">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Appendix B · Governance Enforcement Layers</title>
+  <title>Governance Enforcement Layers</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -18,7 +18,7 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Appendix B · Governance Enforcement Layers</div>
+  <div class="nav-title">Reference A · Governance Enforcement Layers</div>
   <a href="#b1-overview">Overview — Defense in Three Layers</a>
   <a href="#b2-gateguard">GateGuard — Pre-Edit Fact-Forcing</a>
   <a href="#b3-phases">Three Stages of Governance Maturation</a>
@@ -27,19 +27,19 @@
   <a href="#b6-platform">Platform Differences in Enforcement</a>
   <a href="#b7-workflow">What to Do When Blocked</a>
   <div class="nav-section">Other Appendices</div>
-  <a href="A_Skill_Graph_en.html">Appendix A · Skill Relationship Graph</a>
-  <a href="C_Decision_System_en.html">Appendix C · Decision System</a>
+  <a href="C_Skill_Graph_en.html">Reference C · Skill Relationship Graph</a>
+  <a href="B_Decision_System_en.html">Reference B · Decision System</a>
 </nav>
 
 <main>
 <article class="reading">
-  <div class="chapter-eyebrow">Appendix B</div>
+  <div class="chapter-eyebrow">Reference A</div>
   <h1>Governance Enforcement Layers — How Rules Become Rules</h1>
-  <p class="lead">Chapter 3's permission model tells you "what not to do". This appendix answers the next question — "how are violations reliably prevented?" The workspace applies the same rule across three layers — hook, prompt, and skill — so that when one layer is unavailable, another holds the line.</p>
+  <p class="lead">Chapter 3's permission model tells you "what not to do". This document answers the next question — "how are violations reliably prevented?" The workspace applies the same rule across three layers — hook, prompt, and skill — so that when one layer is unavailable, another holds the line.</p>
   <p class="source-line">Source: ai-workspace-standards CONSTITUTION.md §11 · ECC governance Phase 1–3 designs (docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
 
   <div class="keypoints">
-    <div class="kp-title">What This Appendix Covers</div>
+    <div class="kp-title">What This Reference Bovers</div>
     <ul>
       <li>The hook/prompt/skill three-layer enforcement model — strength and coverage of each</li>
       <li>GateGuard's pre-edit fact-forcing — what it makes agents investigate</li>
@@ -88,7 +88,7 @@
     <li><code>scripts/audit.ts</code> — the master workspace standards auditor: structural checks, dead links, encoding vigilance, frontmatter schema validation, spec-registry checks, and more; exits 1 on any FAIL</li>
     <li><code>scripts/qa-gate.ts</code> — the Phase 6 quality gate: runs audit.ts as step 1 (hard fail), then project tests, documentation consistency, and governance-record deployment verification; any failure halts the pipeline</li>
     <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — validate agent, skill, and template frontmatter and their governance records (<code>docs/lifecycle/</code>)</li>
-    <li><code>scripts/verify-adr-governance.ts</code> — detects ADRs accepted without governance-doc references and marker-hash drift against constitution sources (detailed in Appendix C)</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — detects ADRs accepted without governance-doc references and marker-hash drift against constitution sources (detailed in Reference B)</li>
   </ul>
 
   <h2 id="b5-failclosed">fail-closed vs warn — Where to Stop and Where to Let Slide</h2>
@@ -118,8 +118,8 @@
   </ol>
 
   <div class="chapter-nav">
-    <a href="A_Skill_Graph_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Appendix A · Skill Relationship Graph</div></a>
-    <a href="C_Decision_System_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Appendix C · Decision System</div></a>
+    <a href="C_Skill_Graph_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Reference C · Skill Relationship Graph</div></a>
+    <a href="B_Decision_System_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Reference B · Decision System</div></a>
   </div>
 
   <footer>

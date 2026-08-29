@@ -410,7 +410,7 @@
 
 
   <h2 id="procedure-schema">절차 스키마 — 워크플로우의 선언적 SSOT (ADR-0063)</h2>
-  <p>이 장의 패턴들이 "사례"라면, 절차 스키마는 그 사례들을 <strong>기계가 읽는 선언</strong>으로 끌어올린 장치다. variant 템플릿의 <code>procedures/&lt;name&gt;/schema.yaml</code>에 워크플로우 단계를 <code>{id, agent_key, skill_key, output_type, description}</code>으로 기록하고, 단계 사이의 관계는 <code>follows</code>·<code>enables</code>·<code>composes_with</code> 타입으로 선언한다(부록 A 참조).</p>
+  <p>이 장의 패턴들이 "사례"라면, 절차 스키마는 그 사례들을 <strong>기계가 읽는 선언</strong>으로 끌어올린 장치다. variant 템플릿의 <code>procedures/&lt;name&gt;/schema.yaml</code>에 워크플로우 단계를 <code>{id, agent_key, skill_key, output_type, description}</code>으로 기록하고, 단계 사이의 관계는 <code>follows</code>·<code>enables</code>·<code>composes_with</code> 타입으로 선언한다(참고 C 참조).</p>
   <ul>
     <li><strong>검증은 저장소 일관성 검사</strong> — <code>scripts/validate-procedures.ts</code>가 스키마 형태, 열거형, 닫힌 <code>_output-types.yaml</code> 어휘, 그리고 모든 <code>agent_key</code>/<code>skill_key</code>가 실제 에이전트 파일·스킬 디렉터리로 해결되는지를 검사한다. <code>/sync</code>가 실패 시 중단된다</li>
     <li><strong>그래프와의 연결</strong> — 절차에서 유도된 그래프 노드(<code>procedure</code>, <code>output_type</code>)와 엣지(<code>step_uses_skill</code>, <code>step_by_agent</code>, <code>produces</code>)는 <strong>생성 투영</strong>이다. 손으로 고치는 것은 금지되고, 절차를 고쳐 재생성한다</li>

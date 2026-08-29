@@ -30,6 +30,7 @@
   <a href="#s2">El Camino de Construcción Desde Cero</a>
   <a href="#s3">El Camino de Promover un Proyecto Existente</a>
   <a href="#s4">Qué Camino Elegir y Cuándo</a>
+  <a href="#s5">Licencia — Herencia de AGPL-3.0</a>
   <div class="nav-section">Otros Capítulos</div>
   <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Integración Empresarial</a>
   <a href="../intro/10_ProjectUpgrade_Chapter_es.html">Capítulo 10 · Actualización de Proyecto L3</a>
@@ -123,6 +124,14 @@
     </div>
   </div>
   <p>Al final, el criterio de elección se reduce a una cosa. Si es un dominio nuevo sin ningún precedente al que referirse, el camino de diseño desde cero es la elección natural. Por el contrario, si ya existe un proyecto dentro de la organización que ha sido validado al menos una vez y que todos están copiando, es más seguro y eficiente respetar ese resultado validado y formalizarlo a través del camino de promoción. Dado que ambos caminos finalmente convergen en la misma forma <code>templates/co-&lt;nombre&gt;/</code>, se trata de la pregunta de "qué montaña escalar," no de "en qué montaña se termina."</p>
+
+  <h2 id="s5">Licencia — Herencia de AGPL-3.0</h2>
+  <p>Construyas lo que construyas a partir de una plantilla de variante, la licencia viene con ello. La raíz de ai-workspace es AGPL-3.0 y, según la política de despliegue de licencias (2026-08), el <strong>texto completo de AGPL-3.0 de la raíz se distribuye textualmente como el archivo <code>LICENSE</code> de cada plantilla de variante</strong>. Es decir, todo proyecto de variante hereda AGPL-3.0 desde su nacimiento, sea cual sea el camino que lo creó.</p>
+  <ul>
+    <li>El <code>LICENSE</code> de la plantilla es el texto estándar completo de AGPL-3.0 y no se modifica libremente por proyecto</li>
+    <li><code>upgrade-project.ts</code> y el pipeline de promoción mantienen <code>LICENSE</code> idéntico al estándar superior y lo propagan — borrarlo en un proyecto solo dura hasta que la siguiente actualización lo restaura</li>
+    <li>El uso interno privado es libre, pero <strong>ofrecerlo como servicio de red activa la obligación de divulgación del código fuente</strong> (sección 13 de AGPL). La distribución externa o la licencia comercial requieren negociación aparte</li>
+  </ul>
 
   <div class="video-refs">
     <h3 id="videos">Videos de Referencia</h3>

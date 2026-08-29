@@ -408,6 +408,16 @@
   <p>These seven phases correspond directly to the workflow cases in §3. For example, the overall flow of the "code review" case is a miniature of Phase 1-2 (analysis) → Phase 4 (review execution) → Phase 6 (QA). Keeping these phases in mind when designing a new workflow in practice makes it easier to systematically decide "where to place the human gate" and "which stages are safe for parallel execution."</p>
 
 
+
+  <h2 id="procedure-schema">Procedure Schema — the Declarative SSOT of Workflows (ADR-0063)</h2>
+  <p>If this chapter's patterns are "cases", the procedure schema is the device that lifts those cases into <strong>machine-readable declarations</strong>. A variant template's <code>procedures/&lt;name&gt;/schema.yaml</code> records workflow steps as <code>{id, agent_key, skill_key, output_type, description}</code>, with relations between steps declared as typed <code>follows</code>·<code>enables</code>·<code>composes_with</code> (see Appendix A).</p>
+  <ul>
+    <li><strong>Validation is a repository consistency check</strong> — <code>scripts/validate-procedures.ts</code> checks schema shape, enums, the closed <code>_output-types.yaml</code> vocabulary, and that every <code>agent_key</code>/<code>skill_key</code> resolves to a real agent file or skill directory. <code>/sync</code> blocks on failure</li>
+    <li><strong>Connection to the graph</strong> — procedure-derived graph nodes (<code>procedure</code>, <code>output_type</code>) and edges (<code>step_uses_skill</code>, <code>step_by_agent</code>, <code>produces</code>) are <strong>generated projections</strong>. Hand-editing them is forbidden; repair the procedure and regenerate</li>
+    <li><strong>Coverage is (agent_key, phase)-unit</strong> — an agent frontmatter's <code>phases:</code> declares required pairs, and <code>scripts/procedure-coverage.ts</code> reports whether actual procedure steps cover each pair. Gaps are never auto-filled: <code>--tickets</code> registers governance tickets keyed deterministically (<code>&lt;variant&gt;:&lt;agent_key&gt;:&lt;phase&gt;</code>) for human judgment</li>
+  </ul>
+  <p>In short, workflow knowledge — which agent acts at which step, with which skill, producing what — becomes verifiable data rather than prose. That is the difference between this chapter's patterns and the procedure schema.</p>
+
   <h2 id="s4">Workflow Selection Guide</h2>
 
   <p>To introduce a multi-agent workflow for a new task, you need to decide which pattern to start with and how to expand from there. The following decision tree helps you choose the first step.</p>

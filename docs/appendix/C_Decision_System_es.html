@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+  Apéndice (plantilla narrativa) — Sistema de decisión.
+  Supuesto del índice de búsqueda: las secciones del cuerpo deben mantener la estructura <h2 id="..."> (y <h3> donde sea necesario).
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Apéndice C · Sistema de Decisión - Manual de Ingeniería de Harness para Equipos Multiagente">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Apéndice C · Sistema de Decisión</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Apéndice C · Sistema de Decisión</div>
+  <a href="#c1-overview">Resumen — Las Decisiones Son Activos</a>
+  <a href="#c2-record">Estructura de un Decision Record</a>
+  <a href="#c3-validation">Las Siete Verificaciones de validate-decisions.ts</a>
+  <a href="#c4-registry">Registro de Especificaciones y Exenciones E1–E5</a>
+  <a href="#c5-backlog">El Backlog de Gobernanza</a>
+  <a href="#c6-reflection">Validación de Reflexión de Gobernanza</a>
+  <a href="#c7-lifecycle">La Vida Útil de una Decisión</a>
+  <a href="#c8-workflow">Práctico — El Viaje de una Decisión</a>
+  <div class="nav-section">Otros Apéndices</div>
+  <a href="A_Skill_Graph_es.html">Apéndice A · Grafo de Relaciones de Habilidades</a>
+  <a href="B_Governance_Enforcement_es.html">Apéndice B · Capas de Aplicación de Gobernanza</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">Apéndice C</div>
+  <h1>El Sistema de Decisión — Cómo las Decisiones se Registran y Verifican</h1>
+  <p class="lead">La arquitectura de una organización es una acumulación de decisiones. Pero cuando las decisiones viven solo en actas y memoria, tres meses después todos vuelven a preguntar "¿por qué lo hicimos así?". Este apéndice cubre los mecanismos con los que el workspace trata las decisiones como activos de primera clase — Decision Records, el registro de especificaciones, el backlog de gobernanza y la validación de reflexión.</p>
+  <p class="source-line">Fuente: ai-workspace-standards ADR-0061 <em>Decision Record Standard</em> · ADR-0055 <em>Spec Registry Enforcement</em> · ADR-0059 <em>Governance Reflection Validators</em> · docs/designs/2026-08-16-governance-backlog-design.md · <code>scripts/validate-decisions.ts</code> · <code>scripts/ticket.ts</code></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Qué Cubre Este Apéndice</div>
+    <ul>
+      <li>La estructura de un Decision Record y la cadena Agent→Skill→Knowledge→Evidence→Rule→Decision</li>
+      <li>El libro de evidencias (evidence ledger) y el modelo de mutación solo-por-sucesión</li>
+      <li>El registro de especificaciones, la puerta de relevancia de especificaciones para cambios de código, y los códigos de exención E1–E5</li>
+      <li>Los tickets del backlog de gobernanza y la programación con not_before</li>
+      <li>La validación de reflexión que detecta ADR nunca enlazados en los documentos de gobernanza</li>
+    </ul>
+  </div>
+
+  <h2 id="c1-overview">Resumen — Las Decisiones Son Activos</h2>
+  <p>El código se revisa y se prueba, pero las decisiones a menudo no. Juicios como "mantener esta habilidad solo como relación experimental" o "retener la promoción de esta variante" que existen solo en conversaciones y recuerdos hacen que la organización re-discuta los mismos argumentos. La respuesta del workspace: <strong>escribir las decisiones como archivos, vincular su fundamento en una cadena y verificarlas mecánicamente</strong>. Por eso el grafo del Apéndice A incorpora los registros de decisión como nodos — las relaciones y el fundamento deben compartir un mismo mapa para poder navegarse.</p>
+
+  <h2 id="c2-record">Estructura de un Decision Record</h2>
+  <p>Un Decision Record es un archivo en <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> que cierra la cadena Agent → Skill → Knowledge → Evidence → Rule → Decision. El frontmatter obligatorio es <code>id</code>, <code>date</code>, <code>agent</code>, <code>decision</code>, <code>alternatives</code>, <code>status</code>, con arreglos opcionales <code>evidence_refs</code>, <code>knowledge_refs</code>, <code>rules_applied</code>, <code>skills_used</code>.</p>
+  <ul>
+    <li><strong>Libro de evidencias</strong> — <code>docs/evidence/ledger.md</code>. Filas de (afirmación, fuente, url/ref, verificación, estado) con IDs de fila de la forma <code>EV-YYYYMMDD-NN</code>. Los <code>evidence_refs</code> de un registro solo pueden apuntar a estos IDs de fila</li>
+    <li><strong>Registro en el momento de la puerta</strong> — el agente PM debe emitir un registro para las decisiones en el momento de la puerta (selección de especialistas, aprobación de diseño) <strong>antes</strong> de que el despacho continúe</li>
+    <li><strong>Mutación solo por sucesión</strong> — los registros de decisión nunca se borran. Una decisión revertida es un nuevo registro que sucede (supersede) al antiguo. La historia de las decisiones se enlaza, no se sobrescribe</li>
+  </ul>
+
+  <h2 id="c3-validation">Las Siete Verificaciones de validate-decisions.ts</h2>
+  <p><code>scripts/validate-decisions.ts</code> verifica en cada <code>DEC-*.md</code> lo siguiente.</p>
+  <ol>
+    <li>Presencia del frontmatter</li>
+    <li>Integridad de los seis campos obligatorios</li>
+    <li>Alineación de <code>id</code> con el nombre del archivo</li>
+    <li>Vocabulario de <code>status</code> (<code>proposed | accepted | superseded</code>)</li>
+    <li>Que <code>evidence_refs</code> sea un subconjunto de los IDs de fila del libro</li>
+    <li>Que <code>knowledge_refs</code> resuelva a archivos existentes</li>
+    <li>Formato de <code>rules_applied</code> (<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>) y resolución de <code>skills_used</code> a habilidades reales</li>
+  </ol>
+  <p>Esta validación es <strong>fail-closed</strong> — cualquier problema de nivel error significa exit 1. A diferencia de comprobaciones suaves que solo advierten, la sincronización no avanza con un registro de decisión roto.</p>
+
+  <h2 id="c4-registry">Registro de Especificaciones y Exenciones E1–E5</h2>
+  <p>Antes de una decisión viene su diseño (spec). El <strong>registro de especificaciones</strong> de ADR-0055 (<code>docs/specs/registry.json</code>) rastrea los documentos de diseño por id, título, archivo, estado (<code>proposed | approved | implemented</code>) y fecha de última actualización.</p>
+  <p>El núcleo es la <strong>puerta de relevancia de especificaciones</strong>. Si un cambio toca código pero no muestra actividad de especificación relacionada — tocar <code>docs/specs/</code> o <code>docs/designs/</code>, o una especificación approved/implemented actualizada en los últimos 7 días — la auditoría falla. Es un dispositivo que detecta estructuralmente el estado de "el código cambió pero el registro de diseño se congeló".</p>
+  <p>Claro que exigir un documento de diseño para cada cambio sería excesivo. Por eso las exenciones están limitadas a exactamente cinco códigos.</p>
+  <table>
+    <thead><tr><th>Código</th><th>Objetivo</th></tr></thead>
+    <tbody>
+      <tr><td><code>E1</code></td><td>memory-log — entradas del registro de sesión</td></tr>
+      <tr><td><code>E2</code></td><td>changelog — cambios que solo actualizan CHANGELOG.md</td></tr>
+      <tr><td><code>E3</code></td><td>hotfix-typo — correcciones triviales de una línea</td></tr>
+      <tr><td><code>E4</code></td><td>pure-readme — texto del cuerpo del README, sin cambio estructural</td></tr>
+      <tr><td><code>E5</code></td><td>sync-only — solo ejecución del cierre de ciclo de vida (<code>/sync</code>)</td></tr>
+    </tbody>
+  </table>
+  <p>Las exenciones ad-hoc están prohibidas, y <strong>usar un código de exención inexistente es en sí mismo un fallo duro</strong>. El abuso de exenciones es una violación de gobernanza.</p>
+
+  <h2 id="c5-backlog">El Backlog de Gobernanza</h2>
+  <p>No toda decisión debe tomarse ahora. Lo que "algún día requerirá un juicio" se difiere como tickets del <strong>backlog de gobernanza</strong>. Donde un ticket de servicio (Capítulo 7) es una solicitud de trabajo puntual, un ticket del backlog de gobernanza es una <strong>decisión futura rastreada en git</strong>.</p>
+  <ul>
+    <li>Gestionado vía <code>scripts/ticket.ts</code>, almacenado como archivos rastreados por git en <code>tickets/governance/</code></li>
+    <li>Un ticket <code>kind: manual</code> con fecha <code>not_before</code> permanece oculto de <code>list --ready --kind manual</code> hasta que esa fecha pase — una <strong>reserva de maduración (soak)</strong></li>
+    <li>La máquina de estados es <code>backlog → waiting → review → done</code></li>
+    <li>Cuando los tickets listos aparecen al inicio de sesión o en la revisión semanal, el PM resuelve las decisiones puras vía review→done y despacha las necesidades de implementación por la puerta PM normal</li>
+  </ul>
+  <p>Es un dispositivo que registra el "elegimos no decidir ahora" en sí mismo. No es olvido — es reserva.</p>
+
+  <h2 id="c6-reflection">Validación de Reflexión de Gobernanza</h2>
+  <p>ADR-0059 nació de un incidente concreto — un ADR fue aceptado sin una sola referencia en ningún documento de gobernanza, así que en realidad nadie lo siguió. <code>scripts/verify-adr-governance.ts</code> detecta dos cosas.</p>
+  <ul>
+    <li><strong>ADR sin enlaces</strong> — ADR aceptados en o después de la fecha de corte (2026-08-23) sin ninguna mención en CONSTITUTION, <code>docs/constitution/</code> o <code>docs/governance/</code>. El estado "aceptado pero nunca reflejado"</li>
+    <li><strong>Deriva de hashes de marcadores</strong> — secciones de documentos duplicadas de las fuentes de la constitución (duplicados intencionales ligados por marcadores) cuyos hashes ya no coinciden con la fuente. Una señal de que la fuente cambió pero la copia no siguió</li>
+  </ul>
+  <p>Con <code>--strict</code>, ambas bloquean <code>/sync</code>. El procedimiento de remedio para la deriva de marcadores está fijado — revisar y actualizar la sección duplicada, re-sembrar los hashes con <code>--update-marker-hashes</code> y resincronizar.</p>
+
+  <h2 id="c7-lifecycle">La Vida Útil de una Decisión</h2>
+  <p>Dos reglas temporales gobiernan las decisiones. Son fáciles de confundir, así que delimitemos sus alcances con precisión.</p>
+  <ul>
+    <li><strong>Soak de 7 días (ADR-0055)</strong> — el período de gracia durante el cual la aplicación del registro de especificaciones funcionó solo a nivel de advertencia para su arrastre. Una especificación actualizada en los últimos 7 días cuenta como "activa"</li>
+    <li><strong>Regla de 90 días (ADR-0060)</strong> — específica de las relaciones experimentales en los overrides del grafo de habilidades. Tras 90 días sin promoción al frontmatter, se dispara una advertencia de obsolescencia (Apéndice A)</li>
+  </ul>
+
+  <h2 id="c8-workflow">Práctico — El Viaje de una Decisión</h2>
+  <ol>
+    <li><strong>Diseñar</strong> — si el cambio no es trivial, escribe un documento de diseño y regístralo (proposed → approved).</li>
+    <li><strong>Implementar + registrar</strong> — junto con la implementación, registra el juicio del momento de la puerta como un Decision Record. La evidencia va primero al libro, referenciada por IDs <code>EV-</code>.</li>
+    <li><strong>Verificar</strong> — <code>/sync</code> ejecuta la auditoría (relevancia de especificaciones), <code>validate-decisions.ts</code> y la validación de reflexión de gobernanza. Cualquier Fail bloquea el avance.</li>
+    <li><strong>Reflejar</strong> — un ADR aceptado debe enlazarse en los documentos de gobernanza. Déjalo sin enlazar y el validador ADR-0059 lo detectará.</li>
+    <li><strong>Diferir</strong> — si falta evidencia para decidir ahora, resérvalo como ticket de backlog con <code>not_before</code>. El ticket asume la responsabilidad, no la memoria.</li>
+  </ol>
+
+  <div class="chapter-nav">
+    <a href="B_Governance_Enforcement_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Apéndice B · Capas de Aplicación de Gobernanza</div></a>
+    <a href="../glossary/00_Glossary_es.html" class="next"><div class="dir">Referencia →</div><div class="ttl">Glosario</div></a>
+  </div>
+
+  <footer>
+    Basado en Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · Material educativo en español<br>
+    Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    El contenido de este manual está bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual 4.0 Internacional)</a>.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

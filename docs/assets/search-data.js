@@ -37,6 +37,8 @@ var SEARCH_DATA = {
     { path: 'lecture-guide/00_Course_Overview.html', title: '강의 소개', lang: 'ko' },
     { path: 'lecture-guide/00_Lecture_Guide.html', title: '강의 진행 가이드', lang: 'ko' },
     { path: 'appendix/A_Skill_Graph.html', title: '부록 A · 스킬 관계 그래프 — 구조와 운영', lang: 'ko' },
+    { path: 'appendix/B_Governance_Enforcement.html', title: '부록 B · 거버넌스 강제 계층', lang: 'ko' },
+    { path: 'appendix/C_Decision_System.html', title: '부록 C · 의사결정 시스템', lang: 'ko' },
 
     /* ── EN ── */
     { path: 'intro/00_Prerequisite_Bridge_en.html', title: 'Guide for Graduates · Skip Map for Introductory Course Graduates', lang: 'en' },
@@ -71,6 +73,8 @@ var SEARCH_DATA = {
     { path: 'lecture-guide/00_Course_Overview_en.html', title: 'Course Overview · Multi-Agent Team Harness Engineering Handbook', lang: 'en' },
     { path: 'lecture-guide/00_Lecture_Guide_en.html', title: 'Lecture Guide · Multi-Agent Team Harness Engineering Handbook', lang: 'en' },
     { path: 'appendix/A_Skill_Graph_en.html', title: 'Appendix A · Skill Relationship Graph — Structure and Operations', lang: 'en' },
+    { path: 'appendix/B_Governance_Enforcement_en.html', title: 'Appendix B · Governance Enforcement Layers', lang: 'en' },
+    { path: 'appendix/C_Decision_System_en.html', title: 'Appendix C · Decision System', lang: 'en' },
 
     /* ── JA ── */
     { path: 'intro/00_Prerequisite_Bridge_ja.html', title: '修了者ガイド · 入門コース修了者のためのスキップマップ', lang: 'ja' },
@@ -105,6 +109,8 @@ var SEARCH_DATA = {
     { path: 'lecture-guide/00_Course_Overview_ja.html', title: '講義紹介・マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック', lang: 'ja' },
     { path: 'lecture-guide/00_Lecture_Guide_ja.html', title: '講義進行ガイド · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
     { path: 'appendix/A_Skill_Graph_ja.html', title: '補足A · スキル関係グラフ — 構造と運用', lang: 'ja' },
+    { path: 'appendix/B_Governance_Enforcement_ja.html', title: '補足B · ガバナンス強制層', lang: 'ja' },
+    { path: 'appendix/C_Decision_System_ja.html', title: '補足C · 意思決定システム', lang: 'ja' },
 
     /* ── ES ── */
     { path: 'intro/00_Prerequisite_Bridge_es.html', title: 'Guía para Egresados · Mapa de Omisión para Egresados del Curso Introductorio', lang: 'es' },
@@ -138,7 +144,9 @@ var SEARCH_DATA = {
     { path: 'setup/SETUP_CHECKLIST_es.html', title: 'Lista de Verificación Preinstalación del Taller · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
     { path: 'lecture-guide/00_Course_Overview_es.html', title: 'Resumen del Curso · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
     { path: 'lecture-guide/00_Lecture_Guide_es.html', title: 'Guía del Docente · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
-    { path: 'appendix/A_Skill_Graph_es.html', title: 'Apéndice A · Grafo de Relaciones de Habilidades — Estructura y Operación', lang: 'es' }
+    { path: 'appendix/A_Skill_Graph_es.html', title: 'Apéndice A · Grafo de Relaciones de Habilidades — Estructura y Operación', lang: 'es' },
+    { path: 'appendix/B_Governance_Enforcement_es.html', title: 'Apéndice B · Capas de Aplicación de Gobernanza', lang: 'es' },
+    { path: 'appendix/C_Decision_System_es.html', title: 'Apéndice C · Sistema de Decisión', lang: 'es' }
   ],
 
   LABELS: {

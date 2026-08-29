@@ -408,6 +408,16 @@
   <p>이 7단계 페이즈는 §3의 워크플로우 사례와 직접 대응된다. 예를 들어 "코드 리뷰" 사례의 전체 흐름은 Phase 1~2(분석) → Phase 4(검토 실행) → Phase 6(QA)의 축소판이다. 실무에서 새 워크플로우를 설계할 때 이 페이즈를 염두에 두면 "어디에 인간 게이트를 둘 것인가"와 "병렬 실행이 안전한 단계는 어디인가"를 더 체계적으로 결정할 수 있다.</p>
 
 
+
+  <h2 id="procedure-schema">절차 스키마 — 워크플로우의 선언적 SSOT (ADR-0063)</h2>
+  <p>이 장의 패턴들이 "사례"라면, 절차 스키마는 그 사례들을 <strong>기계가 읽는 선언</strong>으로 끌어올린 장치다. variant 템플릿의 <code>procedures/&lt;name&gt;/schema.yaml</code>에 워크플로우 단계를 <code>{id, agent_key, skill_key, output_type, description}</code>으로 기록하고, 단계 사이의 관계는 <code>follows</code>·<code>enables</code>·<code>composes_with</code> 타입으로 선언한다(부록 A 참조).</p>
+  <ul>
+    <li><strong>검증은 저장소 일관성 검사</strong> — <code>scripts/validate-procedures.ts</code>가 스키마 형태, 열거형, 닫힌 <code>_output-types.yaml</code> 어휘, 그리고 모든 <code>agent_key</code>/<code>skill_key</code>가 실제 에이전트 파일·스킬 디렉터리로 해결되는지를 검사한다. <code>/sync</code>가 실패 시 중단된다</li>
+    <li><strong>그래프와의 연결</strong> — 절차에서 유도된 그래프 노드(<code>procedure</code>, <code>output_type</code>)와 엣지(<code>step_uses_skill</code>, <code>step_by_agent</code>, <code>produces</code>)는 <strong>생성 투영</strong>이다. 손으로 고치는 것은 금지되고, 절차를 고쳐 재생성한다</li>
+    <li><strong>커버리지는 (agent_key, phase) 단위</strong> — 에이전트 프론트매터의 <code>phases:</code>가 필요한 쌍을 선언하면, 실제 절차 단계가 그 쌍을 덮는지 <code>scripts/procedure-coverage.ts</code>가 보고한다. 갭은 절대 자동 채워지지 않고, <code>--tickets</code>로 결정적 키(<code>&lt;variant&gt;:&lt;agent_key&gt;:&lt;phase&gt;</code>)의 거버넌스 티켓이 등록돼 사람이 판단한다</li>
+  </ul>
+  <p>요컨대 워크플로우 지식 — 어느 에이전트가 어느 단계에서, 어떤 스킬로, 무엇을 산출하는가 — 가 산문이 아니라 검증 가능한 데이터가 된다. 이것이 9장의 패턴들과 절차 스키마의 차이다.</p>
+
   <h2 id="s4">워크플로우 선택 가이드</h2>
 
   <p>새로운 업무에 멀티 에이전트 워크플로우를 도입하려면, 어떤 패턴으로 시작하고 어떻게 확장해 나갈지 결정해야 한다. 다음 의사결정 나무는 첫 단계를 고르는 데 도움이 된다.</p>

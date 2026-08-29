@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+  부록(서술형) 템플릿 — 거버넌스 강제 계층과 GateGuard.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="부록 B · 거버넌스 강제 계층 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>부록 B · 거버넌스 강제 계층</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
+  <div class="nav-title">부록 B · 거버넌스 강제 계층</div>
+  <a href="#b1-overview">개요 — 방어는 세 겹</a>
+  <a href="#b2-gateguard">GateGuard — 편집 전 사실 강제</a>
+  <a href="#b3-phases">거버넌스 성숙 3단계</a>
+  <a href="#b4-scripts">검증 스크립트 가족</a>
+  <a href="#b5-failclosed">fail-closed와 warn</a>
+  <a href="#b6-platform">플랫폼별 강제력 차이</a>
+  <a href="#b7-workflow">차단됐을 때 대응법</a>
+  <div class="nav-section">다른 부록</div>
+  <a href="A_Skill_Graph.html">부록 A · 스킬 관계 그래프</a>
+  <a href="C_Decision_System.html">부록 C · 의사결정 시스템</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">부록 B</div>
+  <h1>거버넌스 강제 계층 — 규칙이 규칙이 되는 법</h1>
+  <p class="lead">3장에서 배운 권한 모델은 "무엇을 하면 안 되는가"를 말한다. 이 부록은 그 다음 질문 — "위반을 어떻게 확실히 막는가" — 에 대한 답을 다룬다. 워크스페이스는 같은 규칙을 훅·프롬프트·스킬 세 계층에 걸어 놓아서, 한 계층이 빠져도 다른 계층이 버티게 만든다.</p>
+  <p class="source-line">출처: ai-workspace-standards CONSTITUTION.md §11 · ECC 거버넌스 Phase 1–3 설계(docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 부록에서 다루는 것</div>
+    <ul>
+      <li>훅·프롬프트·스킬 3계층 강제 모델과 각 계층의 강도·커버리지</li>
+      <li>GateGuard의 "편집 전 사실 강제" — 무엇을 조사하게 만드는가</li>
+      <li>거버넌스 인프라가 3단계에 걸쳐 성숙한 과정</li>
+      <li>검증 스크립트 가족과 fail-closed vs warn의 구분</li>
+      <li>플랫폼마다 강제력이 다른 이유와 차단 시 대응법</li>
+    </ul>
+  </div>
+
+  <h2 id="b1-overview">개요 — 방어는 한 번이 아니라 세 번</h2>
+  <p>"에이전트가 파일을 함부로 고치지 못하게 한다"는 규칙 하나를 생각해 보자. 이 규칙을 시스템 프롬프트에만 적어 두면 어떻게 될까 — 에이전트가 지시를 놓치거나 무시하면 끝이다. 워크스페이스는 이 문제를 <strong>3계층 강제 모델</strong>로 풀었다.</p>
+  <table>
+    <thead><tr><th>계층</th><th>수단</th><th>강도</th><th>커버리지</th></tr></thead>
+    <tbody>
+      <tr><td>1. 훅(Hook)</td><td>결정론적 스크립트(Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>최강 — 게이트를 통과하기 전엔 진행 불가</td><td>Claude Code CLI·Gemini CLI 전 지원, Desktop App 조건부, Antigravity 미지원</td></tr>
+      <tr><td>2. 프롬프트(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>에 내장된 시스템 지시</td><td>중간 — 에이전트 자기 준수에 의존</td><td>네 플랫폼 모두</td></tr>
+      <tr><td>3. 스킬(Skill)</td><td><code>/gateguard</code> 등 온디맨드 수동 호출</td><td>최약(선택적) — 사람이 실행</td><td>네 플랫폼 모두</td></tr>
+    </tbody>
+  </table>
+  <p>설계 의도는 명확하다. 가장 강한 훅이 플랫폼마다 지원 편차가 크므로, 훅이 없는 환경에서도 프롬프트 계층이 최소한의 방어를 하고, 스킬 계층이 사람 주도 점검 수단을 남긴다. 한 계층의 실패가 전체 실패가 아니다.</p>
+
+  <h2 id="b2-gateguard">GateGuard — 편집 전 사실 강제</h2>
+  <p>GateGuard는 <strong>사전 편집 품질 게이트</strong>다. 세션에서 어떤 파일이든 처음 편집을 시도하는 순간 발화하며, 에이전트에게 편집 전에 세 가지를 조사해 보라고 <strong>강제</strong>한다.</p>
+  <ul>
+    <li>이 파일을 <strong>가져다 쓰는(importer/참조) 곳</strong>은 어디인가</li>
+    <li>이 파일이 내보내는 <strong>스키마·인터페이스·타입</strong>은 무엇인가</li>
+    <li>사용자 지시가 이 작업에 <strong>범위 제약</strong>을 걸고 있는가</li>
+  </ul>
+  <p>조사가 끝나면 <code>[GATEGUARD] Pre-edit investigation complete</code> 블록에 위험도와 권고를 구조화해 출력한다. 동작 모드는 둘이다 — <strong>ask 모드</strong>(Claude 기본)는 에이전트가 조사 결과를 제시할 때까지 진행을 유예하고, <strong>deny 모드</strong>(Gemini 기본, Claude는 <code>--mode deny</code>로 선택)는 종료 코드 2로 편집 자체를 하드 차단한다. 세션 상태는 <code>.gateguard-state/</code>에 PID 키 JSON으로 남아 훅 프로세스가 재시작돼도 유지된다. <code>memory/</code>, <code>CHANGELOG.md</code> 같은 안전 경로는 면제다.</p>
+  <div class="note">
+    GateGuard의 핵심 통찰은 "에이전트의 실수 대부분은 조사 부족에서 온다"는 것이다. 파일을 고치기 전에 누가 이 파일을 쓰는지만 확인해도, 스키마를 깨뜨리는 편집의 상당수가 사전에 걸러진다. 규칙을 어기지 못하게 막는 게 아니라, <strong>제대로 생각하지 못하게 두지 않는</strong> 장치다.
+  </div>
+
+  <h2 id="b3-phases">거버넌스 성숙 3단계</h2>
+  <p>이 인프라는 하루에 만들어지지 않았다. ECC 거버넌스 로드맵의 세 단계로 쌓였다.</p>
+  <ul>
+    <li><strong>Phase 1 — 코어 인프라(P0)</strong>: 3계층 모델 정립, GateGuard 훅+프롬프트+스킬 구현, 에이전트/스킬 프론트매터 JSON 스키마, 프롬프트 방어 기선(인코딩 경계·남용 패턴 감지), CONSTITUTION §11 신설</li>
+    <li><strong>Phase 2 — 강화(P1)</strong>: 커맨드 프론트매터 스키마, GateGuard <code>--mode ask|deny</code> 설정화, Gemini <code>AfterTool</code> 연동(<code>post-write-lifecycle-check.ts</code>), 훅 신뢰성 서브프로세스 단위 테스트</li>
+    <li><strong>Phase 3 — 성숙(P2)</strong>: PID 키 상태 영속화(<code>.gateguard-state/</code>), audit.ts의 자동 인코딩 경계(CRLF·호몰글리프·제로폭 문자), <code>GOVERNED_CONFIG_PATHS</code>로 <code>CLAUDE.md</code>·<code>CONSTITUTION.md</code>·<code>package.json</code> 등 고가치 설정 파일 편집 게이팅</li>
+  </ul>
+  <p>교훈은 단순하다 — 거버넌스도 소프트웨어다. 첫 판에 완성을 목표하지 말고, 코어 → 강화 → 성숙의 반복으로 실제 차단 사례를 흡수하며 키운다.</p>
+
+  <h2 id="b4-scripts">검증 스크립트 가족</h2>
+  <p>훅이 "편집 순간"의 게이트라면, 검증 스크립트들은 "커밋·동기화 시점"의 게이트다.</p>
+  <ul>
+    <li><code>scripts/audit.ts</code> — 워크스페이스 표준 종합 감사기. 구조 검사, 죽은 링크, 인코딩 경계, 프론트매터 스키마 검증, 스펙 레지스트리 검사 등을 수행하며 FAIL이 하나라도 있으면 exit 1</li>
+    <li><code>scripts/qa-gate.ts</code> — Phase 6 품질 게이트. audit.ts를 1단계로 하드 실행하고, 프로젝트 테스트·문서 일관성·거버넌스 레코드 배포 확인을 잇는다. 하나라도 실패하면 파이프라인 정지</li>
+    <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — 각각 에이전트·스킬·템플릿의 프론트매터와 거버넌스 레코드(<code>docs/lifecycle/</code>) 검증</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — 거버넌스 문서에 참조되지 않은 채 승인된 ADR과, 헌법 원본과의 마커 해시 드리프트를 검출(부록 C에서 자세히)</li>
+  </ul>
+
+  <h2 id="b5-failclosed">fail-closed와 warn — 어디서 멈추고 어디서 눈감는가</h2>
+  <p>audit.ts의 검사 결과는 세 단계다.</p>
+  <ul>
+    <li><strong>Pass</strong> — 통과</li>
+    <li><strong>Fail</strong> — 오류 카운터를 올리고, 최종적으로 <code>process.exit(1)</code>. 파이프라인 전체가 멈춘다(<strong>fail-closed</strong>)</li>
+    <li><strong>Warn</strong> — 노란 경고만 출력하고 통과시킨다</li>
+  </ul>
+  <p>무엇을 Warn으로 남길지는 정책적 선택이다. variant 스크립트 드리프트, 컨텍스트 공통화, CRLF(Windows 전환기 동안 임시) 등은 Warn — 자동 고장 내기엔 오탐 위험이 있지만 반드시 눈에 보여야 하는 것들이다. 반면 필수 필드 누락 같은 스키마 오류는 Fail이다. 스키마 검증 내부에서도 <code>error</code>(필수 누락)와 <code>warning</code>(권장 누락)이 구분되고, Fail로 이어지는 건 error뿐이다.</p>
+
+  <h2 id="b6-platform">플랫폼별 강제력 차이</h2>
+  <p>같은 규칙이어도 플랫폼에 따라 체감이 다르다는 점을 정직하게 인정하는 것이 이 설계의 성숙한 부분이다.</p>
+  <ul>
+    <li><strong>Claude Code CLI / Gemini CLI</strong> — 훅 완전 지원. 기계적 차단이 동작한다.</li>
+    <li><strong>Claude Desktop App</strong> — 훅이 조건부로 발화. 프롬프트 계층이 주 방어선.</li>
+    <li><strong>Antigravity</strong> — 훅 미지원. 오직 프롬프트 지시만 남는다. 여기서 규칙을 무시하면 기계적 차단은 없지만, 그것은 <strong>거버넌스 위반</strong>으로 기록된다.</li>
+  </ul>
+  <p>따라서 "훅이 없는 플랫폼에서는 규칙이 선택 사항"이 아니라, "강제 계층이 약해질 뿐 위반의 성격은 같다"는 해석이 정확하다.</p>
+
+  <h2 id="b7-workflow">차단됐을 때 대응법</h2>
+  <ol>
+    <li><strong>게이트 메시지를 읽는다</strong> — GateGuard ask 모드라면 조사해야 할 방향(참조자·스키마·범위)이 이유에 적혀 있다.</li>
+    <li><strong>조사하고 결과를 제시한다</strong> — importers, 스키마, 범위 제약을 확인한 뒤 그 근거를 답하면 진행이 허용된다.</li>
+    <li><strong>deny 모드라면</strong> — 편집은 하드 차단된다. 조사 후에 같은 편집을 다시 시도하면 된다. 우회(<code>--no-verify</code> 등)는 금지다. 비밀 스캔과 모든 품질 게이트를 건너뛰게 된다.</li>
+    <li><strong>qa-gate에서 막혔다면</strong> — FAIL 메시지의 첫 번째 항목부터 고친다. 두 번 반복해도 못 넘기면 PM에게 에스컬레이션이 규정된 절차다(최대 2회 반복).</li>
+  </ol>
+
+  <div class="chapter-nav">
+    <a href="A_Skill_Graph.html" class="prev"><div class="dir">← 이전</div><div class="ttl">부록 A · 스킬 관계 그래프</div></a>
+    <a href="C_Decision_System.html" class="next"><div class="dir">다음 →</div><div class="ttl">부록 C · 의사결정 시스템</div></a>
+  </div>
+
+  <footer>
+    Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 기준 · 한국어 교육 자료<br>
+    공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    본 핸드북의 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (저작자표시-비영리-동일조건변경허락 4.0 국제)</a> 라이선스에 따라 이용할 수 있습니다.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

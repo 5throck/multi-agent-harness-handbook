@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+  Apéndice (plantilla narrativa) — Capas de aplicación de gobernanza y GateGuard.
+  Supuesto del índice de búsqueda: las secciones del cuerpo deben mantener la estructura <h2 id="..."> (y <h3> donde sea necesario).
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Apéndice B · Capas de Aplicación de Gobernanza - Manual de Ingeniería de Harness para Equipos Multiagente">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Apéndice B · Capas de Aplicación de Gobernanza</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Apéndice B · Capas de Aplicación de Gobernanza</div>
+  <a href="#b1-overview">Resumen — Defensa en Tres Capas</a>
+  <a href="#b2-gateguard">GateGuard — Exigencia de Hechos Antes de Editar</a>
+  <a href="#b3-phases">Tres Etapas de Maduración de la Gobernanza</a>
+  <a href="#b4-scripts">La Familia de Scripts de Validación</a>
+  <a href="#b5-failclosed">fail-closed vs warn</a>
+  <a href="#b6-platform">Diferencias de Aplicación por Plataforma</a>
+  <a href="#b7-workflow">Qué Hacer al Ser Bloqueado</a>
+  <div class="nav-section">Otros Apéndices</div>
+  <a href="A_Skill_Graph_es.html">Apéndice A · Grafo de Relaciones de Habilidades</a>
+  <a href="C_Decision_System_es.html">Apéndice C · Sistema de Decisión</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">Apéndice B</div>
+  <h1>Capas de Aplicación de Gobernanza — Cómo las Reglas se Vuelven Reglas</h1>
+  <p class="lead">El modelo de permisos del Capítulo 3 dice "qué no se debe hacer". Este apéndice responde a la siguiente pregunta — "¿cómo se previenen de forma fiable las violaciones?" El workspace aplica la misma regla en tres capas — hook, prompt y skill — de modo que cuando una capa no está disponible, otra sostiene la línea.</p>
+  <p class="source-line">Fuente: ai-workspace-standards CONSTITUTION.md §11 · diseños de gobernanza ECC Fase 1–3 (docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Qué Cubre Este Apéndice</div>
+    <ul>
+      <li>El modelo de aplicación de tres capas hook/prompt/skill — fuerza y cobertura de cada una</li>
+      <li>La exigencia de hechos antes de editar de GateGuard — qué obliga a investigar</li>
+      <li>Cómo maduró la infraestructura de gobernanza en tres fases</li>
+      <li>La familia de scripts de validación y la distinción fail-closed vs warn</li>
+      <li>Por qué la aplicación difiere según la plataforma, y qué hacer al ser bloqueado</li>
+    </ul>
+  </div>
+
+  <h2 id="b1-overview">Resumen — La Defensa No Es Una Vez, Sino Tres</h2>
+  <p>Piensa en una sola regla: "un agente no debe editar archivos a la ligera". Si vive solo en el prompt del sistema, todo termina en cuanto el agente pierde o ignora la instrucción. El workspace lo resuelve con un <strong>modelo de aplicación de tres capas</strong>.</p>
+  <table>
+    <thead><tr><th>Capa</th><th>Medio</th><th>Fuerza</th><th>Cobertura</th></tr></thead>
+    <tbody>
+      <tr><td>1. Hook</td><td>Scripts deterministas (Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>La más fuerte — no se puede avanzar hasta pasar la puerta</td><td>Claude Code CLI y Gemini CLI soporte completo; Desktop App condicional; Antigravity sin soporte</td></tr>
+      <tr><td>2. Prompt</td><td>Instrucciones del sistema embebidas en <code>CLAUDE.md</code>/<code>GEMINI.md</code></td><td>Media — depende del auto-cumplimiento del agente</td><td>Las cuatro plataformas</td></tr>
+      <tr><td>3. Skill</td><td>Invocación manual bajo demanda como <code>/gateguard</code></td><td>La más débil (opcional) — iniciada por humanos</td><td>Las cuatro plataformas</td></tr>
+    </tbody>
+  </table>
+  <p>La intención de diseño es clara. La capa más fuerte, los hooks, tiene soporte desigual entre plataformas — donde no hay hooks, la capa de prompt proporciona defensa mínima, y la capa de skill deja una herramienta de inspección iniciada por humanos. El fallo de una capa no es el fallo del todo.</p>
+
+  <h2 id="b2-gateguard">GateGuard — Exigencia de Hechos Antes de Editar</h2>
+  <p>GateGuard es una <strong>puerta de calidad pre-edición</strong>. Se activa la primera vez que se intenta editar cualquier archivo en una sesión, y <strong>obliga</strong> al agente a investigar tres cosas antes de editar.</p>
+  <ul>
+    <li>Qué archivos <strong>importan o referencian</strong> el objetivo</li>
+    <li>Qué <strong>esquemas, interfaces o tipos</strong> exporta el archivo</li>
+    <li>Si las instrucciones del usuario imponen <strong>restricciones de alcance</strong> a esta tarea</li>
+  </ul>
+  <p>Al completarse la investigación, emite un bloque estructurado <code>[GATEGUARD] Pre-edit investigation complete</code> con nivel de riesgo y recomendación. Hay dos modos — el <strong>modo ask</strong> (predeterminado en Claude) retiene el avance hasta que el agente presente sus hallazgos, y el <strong>modo deny</strong> (predeterminado en Gemini; opcional en Claude vía <code>--mode deny</code>) bloquea la edición de forma absoluta con código de salida 2. El estado de la sesión persiste como JSON con clave PID en <code>.gateguard-state/</code>, sobreviviendo a reinicios del proceso de hooks. Las rutas seguras como <code>memory/</code> y <code>CHANGELOG.md</code> están exentas.</p>
+  <div class="note">
+    La intuición central de GateGuard: "la mayoría de los errores del agente provienen de una investigación insuficiente". Con solo verificar quién importa un archivo antes de editarlo se filtra gran parte de las ediciones que rompen esquemas. El dispositivo no hace imposible romper reglas — hace imposible <strong>avanzar sin pensar debidamente</strong>.
+  </div>
+
+  <h2 id="b3-phases">Tres Etapas de Maduración de la Gobernanza</h2>
+  <p>Esta infraestructura no se construyó en un día. Se acumuló en tres fases de la hoja de ruta de gobernanza ECC.</p>
+  <ul>
+    <li><strong>Fase 1 — Infraestructura central (P0)</strong>: el modelo de tres capas, GateGuard hook + prompt + skill, esquemas JSON para el frontmatter de agentes/skills, líneas base de defensa de prompts (vigilancia de codificación, detección de patrones de abuso), y la creación de CONSTITUTION §11</li>
+    <li><strong>Fase 2 — Reforzamiento (P1)</strong>: esquema de frontmatter de comandos, configurabilidad de GateGuard <code>--mode ask|deny</code>, integración con Gemini <code>AfterTool</code> (<code>post-write-lifecycle-check.ts</code>), pruebas unitarias de subprocessos para fiabilidad de hooks</li>
+    <li><strong>Fase 3 — Maduración (P2)</strong>: persistencia de estado con clave PID (<code>.gateguard-state/</code>), vigilancia de codificación automatizada en audit.ts (CRLF, homoglifos, caracteres de ancho cero), y control de archivos de configuración de alto valor (<code>CLAUDE.md</code>, <code>CONSTITUTION.md</code>, <code>package.json</code>) vía <code>GOVERNED_CONFIG_PATHS</code></li>
+  </ul>
+  <p>La lección es simple — la gobernanza también es software. No apuntes a la perfección en la primera versión; hazla crecer mediante core → reforzamiento → maduración, absorbiendo casos reales de bloqueo.</p>
+
+  <h2 id="b4-scripts">La Familia de Scripts de Validación</h2>
+  <p>Si los hooks son las puertas del "momento de edición", los scripts de validación son las puertas del "momento de commit y sincronización".</p>
+  <ul>
+    <li><code>scripts/audit.ts</code> — el auditor maestro de estándares del workspace: comprobaciones estructurales, enlaces muertos, vigilancia de codificación, validación de esquemas de frontmatter, comprobaciones del registro de especificaciones, y más; sale con 1 ante cualquier FAIL</li>
+    <li><code>scripts/qa-gate.ts</code> — la puerta de calidad de la Fase 6: ejecuta audit.ts como paso 1 (fallo duro), luego pruebas del proyecto, consistencia documental y verificación del despliegue de registros de gobernanza; cualquier fallo detiene el pipeline</li>
+    <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — validan el frontmatter y los registros de gobernanza (<code>docs/lifecycle/</code>) de agentes, skills y plantillas</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — detecta ADR aceptados sin referencias en documentos de gobernanza y deriva de hashes de marcadores frente a las fuentes de la constitución (detallado en el Apéndice C)</li>
+  </ul>
+
+  <h2 id="b5-failclosed">fail-closed vs warn — Dónde Detenerse y Dónde Dejar Pasar</h2>
+  <p>Los resultados de audit.ts tienen tres grados.</p>
+  <ul>
+    <li><strong>Pass</strong> — aprobado</li>
+    <li><strong>Fail</strong> — incrementa un contador de errores y termina en <code>process.exit(1)</code>, deteniendo todo el pipeline (<strong>fail-closed</strong>)</li>
+    <li><strong>Warn</strong> — imprime una advertencia amarilla y deja pasar</li>
+  </ul>
+  <p>Qué permanece en Warn es una decisión de política. La deriva de scripts de variantes, la comúnización de contexto y CRLF (temporalmente, durante el despliegue en Windows) son Warn — hacerlas fallar automáticamente arriesga falsos positivos, pero deben seguir siendo visibles. Los errores de esquema como campos obligatorios ausentes, en cambio, son Fail. Dentro de la validación de esquemas, <code>error</code> (obligatorio ausente) y <code>warning</code> (recomendado ausente) se distinguen, y solo los error llevan a Fail.</p>
+
+  <h2 id="b6-platform">Diferencias de Aplicación por Plataforma</h2>
+  <p>Parte de la madurez de este diseño es admitir honestamente que la misma regla se siente distinta según la plataforma.</p>
+  <ul>
+    <li><strong>Claude Code CLI / Gemini CLI</strong> — soporte completo de hooks; el bloqueo mecánico funciona.</li>
+    <li><strong>Claude Desktop App</strong> — los hooks se activan condicionalmente; la capa de prompt es la línea principal de defensa.</li>
+    <li><strong>Antigravity</strong> — sin soporte de hooks; solo quedan las instrucciones del prompt. Ignorar la regla ahí no produce bloqueo mecánico, pero se registra como una <strong>violación de gobernanza</strong>.</li>
+  </ul>
+  <p>Así que la lectura correcta no es "las reglas son opcionales donde no hay hooks" sino "la capa de aplicación se debilita; la naturaleza de la violación no cambia."</p>
+
+  <h2 id="b7-workflow">Qué Hacer al Ser Bloqueado</h2>
+  <ol>
+    <li><strong>Lee el mensaje de la puerta</strong> — en el modo ask de GateGuard, la razón indica qué investigar (quienes referencian, esquemas, alcance).</li>
+    <li><strong>Investiga y presenta hallazgos</strong> — confirma importadores, esquemas y restricciones de alcance, y responde con esa evidencia para que se permita avanzar.</li>
+    <li><strong>En modo deny</strong> — la edición queda bloqueada de forma absoluta. Investiga y reintenta la misma edición. Los atajos (<code>--no-verify</code> etc.) están prohibidos — saltan el escaneo de secretos y todas las puertas de calidad.</li>
+    <li><strong>Bloqueado en qa-gate</strong> — corrige el primer elemento de la lista FAIL. Si dos iteraciones no bastan, la escalada al PM es el procedimiento definido (máximo 2 reintentos).</li>
+  </ol>
+
+  <div class="chapter-nav">
+    <a href="A_Skill_Graph_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Apéndice A · Grafo de Relaciones de Habilidades</div></a>
+    <a href="C_Decision_System_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Apéndice C · Sistema de Decisión</div></a>
+  </div>
+
+  <footer>
+    Basado en Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · Material educativo en español<br>
+    Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    El contenido de este manual está bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual 4.0 Internacional)</a>.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

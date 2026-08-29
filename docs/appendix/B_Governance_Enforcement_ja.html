@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+  補足(叙述型)テンプレート — ガバナンス強制層とGateGuard。
+  検索インデックスの前提: 本文の節は必ず <h2 id="..."> （必要に応じ <h3>）構造を維持する。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="補足B · ガバナンス強制層 - マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>補足B · ガバナンス強制層</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">補足B · ガバナンス強制層</div>
+  <a href="#b1-overview">概要 — 防御は三重</a>
+  <a href="#b2-gateguard">GateGuard — 編集前ファクト強制</a>
+  <a href="#b3-phases">ガバナンス成熟の3段階</a>
+  <a href="#b4-scripts">検証スクリプト群</a>
+  <a href="#b5-failclosed">fail-closedとwarn</a>
+  <a href="#b6-platform">プラットフォーム別の強制力の違い</a>
+  <a href="#b7-workflow">ブロックされたときの対処法</a>
+  <div class="nav-section">他の補足</div>
+  <a href="A_Skill_Graph_ja.html">補足A · スキル関係グラフ</a>
+  <a href="C_Decision_System_ja.html">補足C · 意思決定システム</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">補足B</div>
+  <h1>ガバナンス強制層 — ルールがルールになる方法</h1>
+  <p class="lead">第3章の権限モデルは「何をしてはいけないか」を語る。この補足はその次の問い — 「違反をどう確実に防ぐか」 — を扱う。ワークスペースは同じルールをフック・プロンプト・スキルの三層に掛けて、一つの層が欠けても別の層が持ちこたえる構造にしている。</p>
+  <p class="source-line">出典: ai-workspace-standards CONSTITUTION.md §11 · ECCガバナンス Phase 1–3設計(docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
+
+  <div class="keypoints">
+    <div class="kp-title">この補足で扱うこと</div>
+    <ul>
+      <li>フック・プロンプト・スキル3層強制モデルと各層の強度・カバレッジ</li>
+      <li>GateGuardの「編集前ファクト強制」 — 何を調査させるのか</li>
+      <li>ガバナンスインフラが3段階で成熟した過程</li>
+      <li>検証スクリプト群とfail-closed vs warnの区別</li>
+      <li>プラットフォームごとに強制力が違う理由と、ブロック時の対処法</li>
+    </ul>
+  </div>
+
+  <h2 id="b1-overview">概要 — 防御は一度ではなく三度</h2>
+  <p>「エージェントがファイルを勝手に編集できないようにする」というルールを一つ考えてみよう。このルールをシステムプロンプトにだけ書いておくとどうなるか — エージェントが指示を見落とすか無視したら終わりだ。ワークスペースはこの問題を <strong>3層強制モデル</strong> で解いた。</p>
+  <table>
+    <thead><tr><th>層</th><th>手段</th><th>強度</th><th>カバレッジ</th></tr></thead>
+    <tbody>
+      <tr><td>1. フック(Hook)</td><td>決定論的スクリプト(Claude <code>PreToolUse</code>、Gemini <code>BeforeTool</code>)</td><td>最強 — ゲートを通過するまで進行不可</td><td>Claude Code CLI・Gemini CLIは完全対応、Desktop Appは条件付き、Antigravityは未対応</td></tr>
+      <tr><td>2. プロンプト(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>に組み込まれたシステム指示</td><td>中 — エージェントの自己遵守に依存</td><td>4プラットフォームすべて</td></tr>
+      <tr><td>3. スキル(Skill)</td><td><code>/gateguard</code> などのオンデマンド手動呼び出し</td><td>最弱(任意) — 人が実行</td><td>4プラットフォームすべて</td></tr>
+    </tbody>
+  </table>
+  <p>設計意図は明確だ。最も強いフックはプラットフォームごとの対応差が大きいため、フックのない環境ではプロンプト層が最低限の防御を担い、スキル層が人主導の点検手段を残す。一つの層の失敗が全体の失敗ではない。</p>
+
+  <h2 id="b2-gateguard">GateGuard — 編集前ファクト強制</h2>
+  <p>GateGuardは <strong>事前編集品質ゲート</strong> だ。セッション内で最初にファイル編集を試みた瞬間に発火し、編集前に三つのことを調査するようエージェントに <strong>強制</strong> する。</p>
+  <ul>
+    <li>このファイルを <strong>利用している(importer/参照)箇所</strong> はどこか</li>
+    <li>このファイルが公開する <strong>スキーマ・インターフェース・型</strong> は何か</li>
+    <li>ユーザーの指示はこの作業に <strong>スコープ制約</strong> を課しているか</li>
+  </ul>
+  <p>調査が終わると <code>[GATEGUARD] Pre-edit investigation complete</code> ブロックにリスク度と推奨を構造化して出力する。動作モードは二つ — <strong>askモード</strong>(Claudeのデフォルト)はエージェントが調査結果を提示するまで進行を保留し、<strong>denyモード</strong>(Geminiのデフォルト、Claudeは <code>--mode deny</code> で選択)は終了コード2で編集自体をハードブロックする。セッション状態は <code>.gateguard-state/</code> にPIDキーのJSONで残り、フックプロセスの再起動にも耐える。<code>memory/</code>、<code>CHANGELOG.md</code> などの安全パスは免除だ。</p>
+  <div class="note">
+    GateGuardの核心的洞察は「エージェントのミスの大半は調査不足から来る」というものだ。編集前に誰がこのファイルを使っているか確認するだけで、スキーマを壊す編集のかなりの部分が事前に filtering される。ルール違反を不可能にするのではなく、<strong>きちんと考えないまま進むこと</strong> を不可能にする仕掛けだ。
+  </div>
+
+  <h2 id="b3-phases">ガバナンス成熟の3段階</h2>
+  <p>このインフラは一日にして成らずだ。ECCガバナンスロードマップの三段階で積み上がった。</p>
+  <ul>
+    <li><strong>Phase 1 — コアインフラ(P0)</strong>: 3層モデルの確立、GateGuardのフック+プロンプト+スキル実装、エージェント/スキルフロントマターのJSONスキーマ、プロンプト防御の基準線(エンコーディング警戒・濫用パターン検知)、CONSTITUTION §11の新設</li>
+    <li><strong>Phase 2 — 強化(P1)</strong>: コマンドフロントマタースキーマ、GateGuard <code>--mode ask|deny</code> の設定化、Gemini <code>AfterTool</code> 連携(<code>post-write-lifecycle-check.ts</code>)、フック信頼性のサブプロセス単体テスト</li>
+    <li><strong>Phase 3 — 成熟(P2)</strong>: PIDキー状態の永続化(<code>.gateguard-state/</code>)、audit.tsの自動エンコーディング警戒(CRLF・ホモグリフ・ゼロ幅文字)、<code>GOVERNED_CONFIG_PATHS</code> による <code>CLAUDE.md</code>・<code>CONSTITUTION.md</code>・<code>package.json</code> など高価値設定ファイルの編集ゲーティング</li>
+  </ul>
+  <p>教訓はシンプルだ — ガバナンスもソフトウェアだ。初版で完成を目指さず、コア→強化→成熟の反復で実際のブロック事例を吸収しながら育てる。</p>
+
+  <h2 id="b4-scripts">検証スクリプト群</h2>
+  <p>フックが「編集の瞬間」のゲートなら、検証スクリプト群は「コミット・同期の時点」のゲートだ。</p>
+  <ul>
+    <li><code>scripts/audit.ts</code> — ワークスペース標準の総合監査スクリプト。構造検査、リンク切れ、エンコーディング警戒、フロントマタースキーマ検証、スペックレジストリ検査などを実行し、FAILが一つでもあれば exit 1</li>
+    <li><code>scripts/qa-gate.ts</code> — Phase 6品質ゲート。audit.tsを第1段階としてハード実行し、プロジェクトテスト・ドキュメント整合性・ガバナンスレコードのデプロイ確認を続ける。一つでも失敗すればパイプライン停止</li>
+    <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — それぞれエージェント・スキル・テンプレートのフロントマターとガバナンスレコード(<code>docs/lifecycle/</code>)を検証</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — ガバナンス文書に参照されないまま承認されたADRと、憲法原文とのマーカーハッシュのドリフトを検出(補足Cで詳述)</li>
+  </ul>
+
+  <h2 id="b5-failclosed">fail-closedとwarn — どこで止まり、どこで見過ごすか</h2>
+  <p>audit.tsの検査結果は三段階だ。</p>
+  <ul>
+    <li><strong>Pass</strong> — 通過</li>
+    <li><strong>Fail</strong> — エラーカウンターを増やし、最終的に <code>process.exit(1)</code>。パイプライン全体が止まる(<strong>fail-closed</strong>)</li>
+    <li><strong>Warn</strong> — 黄色の警告を出力するだけで通過させる</li>
+  </ul>
+  <p>何をWarnのままにするかは政策的選択だ。variantスクリプトのドリフト、コンテキスト共通化、CRLF(Windows移行期の暫定)などはWarn — 自動失敗にするには偽陽性のリスクがあるが、必ず目に見えるべきものだ。一方、必須フィールド欠落などのスキーマエラーはFailだ。スキーマ検証の内部でも <code>error</code>(必須欠落)と <code>warning</code>(推奨欠落)が区別され、Failにつながるのはerrorだけだ。</p>
+
+  <h2 id="b6-platform">プラットフォーム別の強制力の違い</h2>
+  <p>同じルールでもプラットフォームによって体感が違うことを正直に認めるのが、この設計の成熟した部分だ。</p>
+  <ul>
+    <li><strong>Claude Code CLI / Gemini CLI</strong> — フック完全対応。機械的ブロックが機能する。</li>
+    <li><strong>Claude Desktop App</strong> — フックは条件付きで発火。プロンプト層が主防御線。</li>
+    <li><strong>Antigravity</strong> — フック未対応。プロンプトの指示だけが残る。ここでルールを無視しても機械的ブロックはないが、それは <strong>ガバナンス違反</strong> として記録される。</li>
+  </ul>
+  <p>したがって「フックのないプラットフォームではルールが任意」というより「強制層が弱くなるだけで、違反の性質は同じ」と解釈するのが正確だ。</p>
+
+  <h2 id="b7-workflow">ブロックされたときの対処法</h2>
+  <ol>
+    <li><strong>ゲートメッセージを読む</strong> — GateGuardのaskモードなら、調査すべき方向(参照元・スキーマ・スコープ)が理由に書かれている。</li>
+    <li><strong>調査して結果を提示する</strong> — importer、スキーマ、スコープ制約を確認し、その根拠を答えれば進行が許可される。</li>
+    <li><strong>denyモードなら</strong> — 編集はハードブロックされる。調査後に同じ編集を再試行すればよい。迂回(<code>--no-verify</code> など)は禁止だ。シークレットスキャンとすべての品質ゲートをスキップすることになる。</li>
+    <li><strong>qa-gateで止まったら</strong> — FAILメッセージの最初の項目から直す。2回繰り返しても通過できなければPMへのエスカレーションが規定の手順だ(最大2回の反復)。</li>
+  </ol>
+
+  <div class="chapter-nav">
+    <a href="A_Skill_Graph_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">補足A · スキル関係グラフ</div></a>
+    <a href="C_Decision_System_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">補足C · 意思決定システム</div></a>
+  </div>
+
+  <footer>
+    Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -57,6 +57,11 @@
     </ul>
   </div>
 
+  <div class="note">
+    <strong>Actualización 2026-08</strong> — partes de esta hoja de ruta ya se han implementado desde que se escribió esta sección. El reforzamiento a nivel de gobernanza se cubre en el <a href="../appendix/B_Governance_Enforcement_es.html">Apéndice B · Capas de Aplicación de Gobernanza</a> y el <a href="../appendix/C_Decision_System_es.html">Apéndice C · Sistema de Decisión</a>; la mecanización de la estructura del flujo de trabajo en el <a href="../appendix/A_Skill_Graph_es.html">Apéndice A · Grafo de Relaciones de Habilidades</a> y la sección de esquema de procedimientos (ADR-0063) del Capítulo 9. Los demás puntos de esta sección (integración de contenedores, agregación de memoria, automatización de despliegue de variantes) siguen siendo direcciones activas.
+  </div>
+
+
   <h2 id="container">Integración de Servicios Basada en Contenedores</h2>
   <p>Hoy en día, un proyecto generado desde cualquier variante dada solo opera conectándose directamente, dentro de un espacio de trabajo local, a herramientas de codificación de IA como Claude Code/App o Antigravity. Pero en entornos empresariales reales, los proyectos a menudo necesitan desplegarse como <strong>servicios independientes</strong> por proyecto.</p>
   <p>El núcleo de este avance es que un proyecto generado debería poder ejecutarse en un entorno Docker o Kubernetes, **conectado a un servicio frontend como Open WebUI para que pueda ser soportado por usuario**. En esa forma, cada usuario invoca su equipo de agentes asignado a través de una interfaz de navegador, revisa los resultados y conserva el contexto entre sesiones.</p>

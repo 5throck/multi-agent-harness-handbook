@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+  Appendix (narrative) template — Governance enforcement layers and GateGuard.
+  Search index assumption: body sections must keep the <h2 id="..."> (and <h3> where needed) structure.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Appendix B · Governance Enforcement Layers - Multi-Agent Team Harness Engineering Handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Appendix B · Governance Enforcement Layers</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Appendix B · Governance Enforcement Layers</div>
+  <a href="#b1-overview">Overview — Defense in Three Layers</a>
+  <a href="#b2-gateguard">GateGuard — Pre-Edit Fact-Forcing</a>
+  <a href="#b3-phases">Three Stages of Governance Maturation</a>
+  <a href="#b4-scripts">The Validator Script Family</a>
+  <a href="#b5-failclosed">fail-closed vs warn</a>
+  <a href="#b6-platform">Platform Differences in Enforcement</a>
+  <a href="#b7-workflow">What to Do When Blocked</a>
+  <div class="nav-section">Other Appendices</div>
+  <a href="A_Skill_Graph_en.html">Appendix A · Skill Relationship Graph</a>
+  <a href="C_Decision_System_en.html">Appendix C · Decision System</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">Appendix B</div>
+  <h1>Governance Enforcement Layers — How Rules Become Rules</h1>
+  <p class="lead">Chapter 3's permission model tells you "what not to do". This appendix answers the next question — "how are violations reliably prevented?" The workspace applies the same rule across three layers — hook, prompt, and skill — so that when one layer is unavailable, another holds the line.</p>
+  <p class="source-line">Source: ai-workspace-standards CONSTITUTION.md §11 · ECC governance Phase 1–3 designs (docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
+
+  <div class="keypoints">
+    <div class="kp-title">What This Appendix Covers</div>
+    <ul>
+      <li>The hook/prompt/skill three-layer enforcement model — strength and coverage of each</li>
+      <li>GateGuard's pre-edit fact-forcing — what it makes agents investigate</li>
+      <li>How the governance infrastructure matured across three phases</li>
+      <li>The validator script family and the fail-closed vs warn distinction</li>
+      <li>Why enforcement differs per platform, and what to do when blocked</li>
+    </ul>
+  </div>
+
+  <h2 id="b1-overview">Overview — Defense Is Not Once, but Three Times</h2>
+  <p>Consider a single rule: "an agent must not edit files carelessly." If it lives only in the system prompt, everything ends the moment the agent misses or ignores the instruction. The workspace solves this with a <strong>three-layer enforcement model</strong>.</p>
+  <table>
+    <thead><tr><th>Layer</th><th>Means</th><th>Strength</th><th>Coverage</th></tr></thead>
+    <tbody>
+      <tr><td>1. Hook</td><td>Deterministic scripts (Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>Strongest — cannot proceed until the gate passes</td><td>Claude Code CLI and Gemini CLI full support; Desktop App conditional; Antigravity unsupported</td></tr>
+      <tr><td>2. Prompt</td><td>System instructions embedded in <code>CLAUDE.md</code>/<code>GEMINI.md</code></td><td>Medium — relies on agent self-compliance</td><td>All four platforms</td></tr>
+      <tr><td>3. Skill</td><td>On-demand manual invocation such as <code>/gateguard</code></td><td>Weakest (optional) — human-initiated</td><td>All four platforms</td></tr>
+    </tbody>
+  </table>
+  <p>The design intent is clear. The strongest layer, hooks, has uneven platform support — so where hooks are missing, the prompt layer provides minimum defense, and the skill layer leaves a human-driven inspection tool. The failure of one layer is not the failure of the whole.</p>
+
+  <h2 id="b2-gateguard">GateGuard — Pre-Edit Fact-Forcing</h2>
+  <p>GateGuard is a <strong>pre-edit quality gate</strong>. It fires the first time any file edit is attempted in a session, and <strong>forces</strong> the agent to investigate three things before editing.</p>
+  <ul>
+    <li>Which files <strong>import or reference</strong> the target</li>
+    <li>What <strong>schemas, interfaces, or types</strong> the file exports</li>
+    <li>Whether user instructions impose <strong>scope constraints</strong> on this task</li>
+  </ul>
+  <p>Once the investigation completes, it emits a structured <code>[GATEGUARD] Pre-edit investigation complete</code> block with a risk level and recommendation. There are two modes — <strong>ask mode</strong> (Claude default) holds progress until the agent presents its findings, while <strong>deny mode</strong> (Gemini default; opt-in for Claude via <code>--mode deny</code>) hard-blocks the edit with exit code 2. Session state persists as PID-keyed JSON in <code>.gateguard-state/</code>, surviving hook process re-spawns. Safe paths such as <code>memory/</code> and <code>CHANGELOG.md</code> are exempt.</p>
+  <div class="note">
+    The core insight of GateGuard: "most agent mistakes come from insufficient investigation." Just checking who imports a file before editing it filters out a large share of schema-breaking edits. The device does not make rule-breaking impossible — it makes <strong>proceeding without thinking properly</strong> impossible.
+  </div>
+
+  <h2 id="b3-phases">Three Stages of Governance Maturation</h2>
+  <p>This infrastructure was not built in a day. It accumulated through three phases of the ECC governance roadmap.</p>
+  <ul>
+    <li><strong>Phase 1 — Core infrastructure (P0)</strong>: the three-layer model, GateGuard hook + prompt + skill, JSON schemas for agent/skill frontmatter, prompt-defense baselines (encoding vigilance, abuse-pattern detection), and CONSTITUTION §11</li>
+    <li><strong>Phase 2 — Hardening (P1)</strong>: command frontmatter schema, GateGuard <code>--mode ask|deny</code> configurability, Gemini <code>AfterTool</code> integration (<code>post-write-lifecycle-check.ts</code>), hook-reliability subprocess unit tests</li>
+    <li><strong>Phase 3 — Maturation (P2)</strong>: PID-keyed state persistence (<code>.gateguard-state/</code>), automated encoding vigilance in audit.ts (CRLF, homoglyphs, zero-width characters), and gating of high-value config files (<code>CLAUDE.md</code>, <code>CONSTITUTION.md</code>, <code>package.json</code>) via <code>GOVERNED_CONFIG_PATHS</code></li>
+  </ul>
+  <p>The lesson is simple — governance is software too. Don't aim for completeness in the first version; grow it through core → hardening → maturation, absorbing real blockage cases along the way.</p>
+
+  <h2 id="b4-scripts">The Validator Script Family</h2>
+  <p>If hooks are the gates of the "editing moment", the validator scripts are the gates of the "commit and sync moment".</p>
+  <ul>
+    <li><code>scripts/audit.ts</code> — the master workspace standards auditor: structural checks, dead links, encoding vigilance, frontmatter schema validation, spec-registry checks, and more; exits 1 on any FAIL</li>
+    <li><code>scripts/qa-gate.ts</code> — the Phase 6 quality gate: runs audit.ts as step 1 (hard fail), then project tests, documentation consistency, and governance-record deployment verification; any failure halts the pipeline</li>
+    <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — validate agent, skill, and template frontmatter and their governance records (<code>docs/lifecycle/</code>)</li>
+    <li><code>scripts/verify-adr-governance.ts</code> — detects ADRs accepted without governance-doc references and marker-hash drift against constitution sources (detailed in Appendix C)</li>
+  </ul>
+
+  <h2 id="b5-failclosed">fail-closed vs warn — Where to Stop and Where to Let Slide</h2>
+  <p>audit.ts results come in three grades.</p>
+  <ul>
+    <li><strong>Pass</strong> — passed</li>
+    <li><strong>Fail</strong> — increments an error counter and ends in <code>process.exit(1)</code>, halting the entire pipeline (<strong>fail-closed</strong>)</li>
+    <li><strong>Warn</strong> — prints a yellow warning and passes</li>
+  </ul>
+  <p>What stays at Warn is a policy choice. Variant script drift, context commonization, and CRLF (temporarily, during the Windows rollout) are Warn — auto-failing them risks false positives, but they must remain visible. Schema errors like missing required fields, by contrast, are Fail. Within schema validation, <code>error</code> (required missing) and <code>warning</code> (recommended missing) are distinguished, and only errors lead to Fail.</p>
+
+  <h2 id="b6-platform">Platform Differences in Enforcement</h2>
+  <p>Part of this design's maturity is honestly admitting that the same rule feels different per platform.</p>
+  <ul>
+    <li><strong>Claude Code CLI / Gemini CLI</strong> — full hook support; mechanical blocking works.</li>
+    <li><strong>Claude Desktop App</strong> — hooks fire conditionally; the prompt layer is the main line of defense.</li>
+    <li><strong>Antigravity</strong> — no hook support; only prompt instructions remain. Ignoring the rule there triggers no mechanical block, but it is recorded as a <strong>governance violation</strong>.</li>
+  </ul>
+  <p>So the correct reading is not "rules are optional where hooks are missing" but "the enforcement layer weakens; the nature of the violation does not."</p>
+
+  <h2 id="b7-workflow">What to Do When Blocked</h2>
+  <ol>
+    <li><strong>Read the gate message</strong> — in GateGuard ask mode, the reason states what to investigate (referencers, schemas, scope).</li>
+    <li><strong>Investigate and present findings</strong> — confirm importers, schemas, and scope constraints, then answer with that evidence to be allowed through.</li>
+    <li><strong>In deny mode</strong> — the edit is hard-blocked. Investigate, then retry the same edit. Bypasses (<code>--no-verify</code> etc.) are forbidden — they skip secret scanning and every quality gate.</li>
+    <li><strong>Blocked at qa-gate</strong> — fix the first item in the FAIL list. If two iterations don't clear it, escalation to the PM is the defined procedure (maximum 2 retries).</li>
+  </ol>
+
+  <div class="chapter-nav">
+    <a href="A_Skill_Graph_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Appendix A · Skill Relationship Graph</div></a>
+    <a href="C_Decision_System_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Appendix C · Decision System</div></a>
+  </div>
+
+  <footer>
+    Based on Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · English Educational Materials<br>
+    Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    Handbook content is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International)</a>.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

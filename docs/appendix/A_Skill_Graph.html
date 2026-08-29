@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--
+  부록(서술형) 템플릿 — 스킬 관계 그래프 상세.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="부록 A · 스킬 관계 그래프 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>부록 A · 스킬 관계 그래프</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
+  <div class="nav-title">부록 A · 스킬 관계 그래프</div>
+  <a href="#a1-overview">개요 — 왜 그래프인가</a>
+  <a href="#a2-sources">데이터 원천과 우선순위</a>
+  <a href="#a3-schema">노드와 엣지 스키마</a>
+  <a href="#a4-edges">엣지 타입 상세</a>
+  <a href="#a5-layers">관계의 3계층 모델</a>
+  <a href="#a6-pipeline">생성 파이프라인</a>
+  <a href="#a7-strategies">선언적 vs 추론적 구축 전략</a>
+  <a href="#a8-decision-chain">의사결정 체인과 검증</a>
+  <a href="#a9-workflow">실전 워크플로우</a>
+  <a href="#a10-roadmap">로드맵</a>
+  <div class="nav-section">공통 참고</div>
+  <a href="../tools/00_Tools_Manual.html">도구 비교</a>
+  <a href="../glossary/00_Glossary.html">용어집</a>
+  <a href="../faq/00_FAQ.html">FAQ</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">부록 A</div>
+  <h1>스킬 관계 그래프 — 구조와 운영</h1>
+  <p class="lead">스킬이 수십 개를 넘어서면 "어떤 스킬이 무엇을 전제로 하는가"가 조직의 기억 밖으로 사라진다. 이 부록은 8장 §2에서 소개한 스킬 관계 그래프의 구체적 구조 — 데이터 원천, 스키마, 관계 어휘, 생성 파이프라인, 검증과 운영 워크플로우 — 를 하나의 장으로 정리한다.</p>
+  <p class="source-line">출처: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 부록에서 다루는 것</div>
+    <ul>
+      <li>그래프가 왜 1차 저장소가 아니라 "항상 재생성되는 투영"인가</li>
+      <li>관계를 유도하는 다섯 가지 데이터 원천과 우선순위</li>
+      <li>노드/엣지 스키마와 10개의 타입화된 관계 어휘</li>
+      <li>명시적·실험적·투영의 3계층 관계 모델과 90일 규칙</li>
+      <li>생성·검증·동기화 파이프라인과 실전 관계 추가 절차</li>
+    </ul>
+  </div>
+
+  <h2 id="a1-overview">개요 — 왜 그래프인가</h2>
+  <p>스킬·에이전트·ADR 사이의 관계("이 스킬은 저 스킬을 먼저 실행해야 한다", "이 에이전트는 저 스킬을 쓴다")를 자유 텍스트로 적어 두면 세 가지가 반드시 일어난다. 첫째, 원천이 바뀌어도 문서는 그대로 남아 <strong>낡는다</strong>. 둘째, 관계가 파일 여기저기 흩어져 <strong>검색이 안 된다</strong>. 셋째, 사람이 목록을 고유지 않는 한 <strong>검증도 안 된다</strong>.</p>
+  <p>스킬 관계 그래프는 이를 "직접 쓰지 않고 유도한다"로 풀었다. 관계의 원천은 이미 존재하는 구조화 데이터(SKILL.md 프론트매터, 에이전트 파일, variant 매니페스트)이고, 그래프는 그 투영(projection)이다. 그래프 파일은 언제 지워도 좋다 — 제너레이터를 다시 돌리면 정확히 같은 방식으로 다시 태어난다. ADR-0060이 이 원칙을 <em>Generated Projection</em>이라는 이름으로 못 박은 이유다.</p>
+
+  <h2 id="a2-sources">데이터 원천과 우선순위</h2>
+  <p>제너레이터는 다음 원천을 우선순위 순으로 훑는다. 앞의 원천일수록 의도가 명시적인 것이고, 뒤로 갈수록 암시적 유다.</p>
+  <ol>
+    <li><strong>SKILL.md 프론트매터</strong> — <code>prerequisites</code>(필수 선행 스킬)와 타입화된 <code>relates_to</code>(관계 어휘 + 대상 + 선택적 메모). 가장 명시적인 원천이다.</li>
+    <li><strong>에이전트 파일의 <code>required_skills</code></strong> — 에이전트 → 스킬의 <code>used_by</code> 관계를 만든다.</li>
+    <li><strong><code>variant.json</code>의 <code>skill_manifest</code></strong> — variant가 어떤 스킬을 어떤 에이전트·페이즈에 물리는지의 매니페스트. <code>phase</code> 관계의 원천이다.</li>
+    <li><strong>문서 본문의 백틱 참조</strong> — 문서가 스킬 이름을 정확한 백틱 이름으로 언급하면 <code>references</code> 엣지가 된다(오탐을 막기 위해 정확 일치만 인정).</li>
+    <li><strong><code>docs/skill-graph.overrides.json</code></strong> — 위 원천으로는 유도되지 않는 관계를 추가하거나, 자동 유도된 관계를 억제하는 탈출구. 스코프별 오버라이드도 지원한다.</li>
+  </ol>
+  <p>프론트매터에서 온 엣지에는 <code>provenance: {file, field, index?}</code>가 붙는다. "이 관계가 왜 있나"를 추적하면 언제나 원천 파일의 몇 번째 필드로 돌아갈 수 있다.</p>
+
+  <h2 id="a3-schema">노드와 엣지 스키마</h2>
+  <p>그래프의 커밋 아티팩트는 두 개다 — 기계용 <code>docs/skill-graph.json</code>과 사람이 읽는 관계 표 <code>docs/skill-graph.md</code>. JSON의 최상위 구조는 <code>{version, nodes[], edges[]}</code>다.</p>
+  <div style="position:relative">
+  <pre class="code-block">{
+  "version": "1.7",
+  "nodes": [
+    { "id": "handbook", "type": "skill", "layer": "common" },
+    { "id": "handbook-reviewer", "type": "agent", "layer": "common" },
+    { "id": "ADR-0060", "type": "adr", "layer": "L0" }
+  ],
+  "edges": [
+    {
+      "from": "handbook",
+      "to": "research",
+      "type": "requires",
+      "provenance": {
+        "file": "skills/handbook/SKILL.md",
+        "field": "prerequisites",
+        "index": 0
+      }
+    },
+    {
+      "from": "handbook-reviewer",
+      "to": "handbook",
+      "type": "used_by"
+    }
+  ]
+}</pre>
+  <button class="copy-btn">복사</button>
+</div>
+  <p>노드는 <code>id</code>·<code>type</code>·<code>layer</code>를 갖는다. 타입은 <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, <code>output_type</code> 등이고, 계층은 <code>L0</code>(워크스페이스 루트), <code>common</code>(공통 템플릿), <code>variant:&lt;name&gt;</code>, <code>L3</code>(개별 프로젝트)다.</p>
+
+  <h2 id="a4-edges">엣지 타입 상세</h2>
+  <p>Amendment 1–6에 걸쳐 자란 관계 어휘 전체다. 방향과 대칭성, 원천을 함께 정리한다. 모든 엣지는 <strong>자문적(advisory)</strong> — 라우팅과 계획에 정보를 주지만 실행을 강제로 막지는 않는다.</p>
+  <table>
+    <thead><tr><th>엣지</th><th>의미</th><th>방향/대칭</th><th>원천</th></tr></thead>
+    <tbody>
+      <tr><td><code>requires</code></td><td>B는 A의 필수 선행 스킬이다</td><td>A→B (비대칭)</td><td>프론트매터 <code>prerequisites</code></td></tr>
+      <tr><td><code>relates_to</code></td><td>일반적 연관(레거시)</td><td>A→B</td><td>프론트매터 <code>relates_to</code></td></tr>
+      <tr><td><code>composes_with</code></td><td>같은 에이전트 안에서 함께 쓰이는 조합 관계</td><td>대칭 (<code>symmetric: true</code> 단일 엣지)</td><td>Amendment 8 — 한 에이전트의 <code>required_skills</code> 공동 선언에서 유도</td></tr>
+      <tr><td><code>follows</code></td><td>순서만 나타냄. 의존성을 함축하지 않는다</td><td>A→B</td><td>프론트매터</td></tr>
+      <tr><td><code>enables</code></td><td>A의 산출물이 C를 가능하게 한다</td><td>A→C</td><td>프론트매터</td></tr>
+      <tr><td><code>used_by</code></td><td>에이전트가 스킬을 사용한다</td><td>agent→skill</td><td>에이전트 <code>required_skills</code></td></tr>
+      <tr><td><code>phase</code></td><td>스킬이 워크플로우 페이즈에 배속된다</td><td>skill→phase</td><td><code>variant.json</code> <code>skill_manifest</code></td></tr>
+      <tr><td><code>supersedes</code></td><td>문서 계승(구 문서 → 신 문서)</td><td>old→new</td><td>문서 메타</td></tr>
+      <tr><td><code>references</code></td><td>문서 간 인용</td><td>A→B</td><td>백틱 참조</td></tr>
+      <tr><td><code>cites_skill</code></td><td>의사결정 기록이 스킬을 인용</td><td>decision→skill</td><td>결정 기록 본문</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <code>requires</code>의 방향을 혼동하지 않는 것이 가장 흔한 실수다. <code>A requires B</code>는 "A를 쓰려면 B가 먼저다"이지 "A가 B를 만들어낸다"가 아니다. 방향이 헷갈리면 provenance 필드로 원천 프론트매터를 확인하라.
+  </div>
+
+  <h2 id="a5-layers">관계의 3계층 모델</h2>
+  <p>같은 그래프 안에 세 종류의 관계가 섞여 있다. 수명과 신뢰도가 다르므로 계층을 구분해 다룬다.</p>
+  <ul>
+    <li><strong>L-A 명시적(Explicit)</strong> — 프론트매터의 타입화된 <code>relates_to</code>. 의도적으로 영구적이며 그래프의 1차 원천이다.</li>
+    <li><strong>L-B 실험적(Experimental)</strong> — 오버라이드 파일의 관계. 반드시 <code>reason</code>과 <code>since</code>를 적어야 하고, 90일이 지나면 낡음 경고가 뜬다. "그래프에 있어야 할 것 같은데 프론트매터에 넣기 전 관찰 중"인 관계의 대기소다.</li>
+    <li><strong>L-C 투영(Projection)</strong> — 생성된 그래프 자체. 항상 재생성되며, 결정론성 검증으로 "같은 입력 → 같은 출력"이 깨지지 않았음을 확인한다.</li>
+  </ul>
+  <p>실험적 관계가 안정됐다고 판단되면 프론트매터로 옮겨 L-A로 올린다. 반대로 L-A를 없애려면 프론트매터에서 지우면 된다 — 그래프 파일을 직접 고치는 경로는 존재하지 않는다.</p>
+
+  <h2 id="a6-pipeline">생성 파이프라인</h2>
+  <p>그래프는 네 지점에서 파이프라인과 맞물린다.</p>
+  <ul>
+    <li><code>scripts/generate-skill-graph.ts</code> — 원천을 훑어 <code>skill-graph.json</code>/<code>.md</code>를 생성. <code>--scope &lt;name&gt;</code>으로 템플릿별 범위 그래프를 만든다(공통 + 각 variant, 총 14개 스코프).</li>
+    <li><code>scripts/verify-skill-graph.ts</code> — 커밋된 그래프가 원천과 일치하는지(드리프트)와 불변식을 검증.</li>
+    <li><code>dev-sync.ts</code> 4.65단계 — 매 <code>/sync</code>마다 전 스코프 그래프를 재생성하고 드리프트를 확인. "그래프를 고르는 작업"이 커밋 흐름에 녹아 있다.</li>
+    <li><code>new-project.ts</code> 7.6단계 — 새 프로젝트 스캐폴딩 시점에 그 프로젝트의 <code>docs/skill-graph.json</code>을 즉시 생성. 첫 <code>/sync</code>를 기다리게 하지 않는다.</li>
+  </ul>
+  <p>스코프 그래프는 통합 L0 그래프의 <strong>범위 뷰</strong>다. variant 템플릿이 자기 스코프 그래프를 배송하면, 그 템플릿에서 태어난 프로젝트는 처음부터 자기에게 relevant한 관계 지도를 갖고 시작한다.</p>
+
+  <h2 id="a7-strategies">선언적 vs 추론적 구축 전략</h2>
+  <p>관계를 어디서 끌어낼 것인가에는 두 전략이 있다.</p>
+  <ul>
+    <li><strong>선언적(Declarative)</strong> — 프론트매터에 관계를 직접 선언한다(Amendment 3). 의도가 명확하고 검증이 단순하지만, 스킬 작성자의 규율에 의존한다.</li>
+    <li><strong>추론적(Inferential)</strong> — 기존 구조화 데이터에서 관계를 유도한다(Amendment 4, co-newbiz 선례). 절차 스키마의 페이즈 인접성이나 규칙 술어를 근거로 삼는다. 프론트매터를 하나도 추가하지 않고 커버리지를 늘릴 수 있다.</li>
+  </ul>
+  <p>비교 실험(<code>scripts/experiments/infer-graph-from-phases.ts</code>, 읽기 전용)의 결론은 절충이다 — 절차 스키마가 풍부한 영역에서는 추론이 잘 동작하지만, 그렇지 않은 템플릿에서는 선언적 전략이 더 낫다. 그래서 새로운 기본 추출 모드는 채택되지 않았고, 두 전략은 공존한다: 스키마가 있는 곳은 유도하고, 나머지는 선언으로 채운다.</p>
+
+  <h2 id="a8-decision-chain">의사결정 체인과 검증</h2>
+  <p>그래프가 ADR·결정 기록까지 품는 이유는 "관계"와 "근거"를 한 지도에 올리기 위해서다. ADR-0061의 의사결정 체인 — Agent, Skill, Knowledge, Evidence, Rule, Decision — 을 <code>scripts/validate-decisions.ts</code>가 fail-closed로 검증한다.</p>
+  <ul>
+    <li>결정 기록의 필수 프론트매터와 증거 장부(evidence ledger) 참조 존재 여부</li>
+    <li>규칙 ID 형식과 스킬 참조 해결 가능 여부</li>
+    <li><strong>전파 결합 규칙</strong> — L1에 발행된 스킬이 L1에 없는 대상과 관계를 맺는 것을 금지한다. 없으면 하위 복사본마다 매달린 엣지(dangling edge)가 생긴다.</li>
+  </ul>
+  <p>그래프는 <code>supersedes</code>·<code>cites_skill</code> 엣지로 "이 결정이 어떤 스킬 위에서, 어떤 문서를 계승해서 나왔는지"를 보여준다. 관계가 근거 없이 늘어나는 것을 구조적으로 막는 장치다.</p>
+
+  <h2 id="a9-workflow">실전 워크플로우 — 관계 추가하기</h2>
+  <p>실제로 관계 하나를 추가할 때의 최소 절차다.</p>
+  <ol>
+    <li><strong>선언</strong> — 대상 스킬의 <code>SKILL.md</code> 프론트매터에 관계를 쓴다:
+<div style="position:relative">
+  <pre class="code-block">relates_to:
+  - { skill: research, type: requires }
+  - { skill: pdf-export, type: enables, note: "produces layout spec" }</pre>
+  <button class="copy-btn">복사</button>
+</div></li>
+    <li><strong>검증</strong> — <code>bun scripts/validate-skills.ts</code>(관계 형식 검사) 후 <code>bun scripts/generate-skill-graph.ts</code> 실행.</li>
+    <li><strong>확인</strong> — <code>bun scripts/verify-skill-graph.ts</code>로 드리프트 없음 확인, <code>docs/skill-graph.md</code>에서 해당 스킬의 관계 표를 눈으로 확인.</li>
+    <li><strong>커밋</strong> — <code>/sync</code>가 4.65단계에서 전 스코프 재생성·검증을 대신 해 주므로, 커밋 전에 직접 그래프 파일을 고르지 않았는지만 확인하면 된다.</li>
+  </ol>
+  <p>아직 확신이 없는 관계라면 프론트매터 대신 오버라이드 파일에 적는다. <code>reason</code>과 <code>since</code>를 남기면 90일 뒤 시스템이 "아직 관찰 중인가?"를 물어본다.</p>
+
+  <h2 id="a10-roadmap">로드맵</h2>
+  <p>ADR-0060의 Phase 2+ 비전은 다음과 같다. 현재는 미구현 상태다.</p>
+  <ul>
+    <li><strong>생애주기 상태 기계</strong> — 스킬의 draft/active/retired 전이를 그래프 노드 상태로 추적</li>
+    <li><strong>버전 관리·마이그레이션</strong> — 그래프 스키마 버전 간 이동 도구</li>
+    <li><strong>그래프 인텔리전스</strong> — 관계를 이용한 라우팅 제안, 컨텍스트 번들 자동 구성</li>
+    <li><strong>감사 추적 스냅샷</strong> — 시점별 그래프 스냅샷으로 관계 변화 이력 조회</li>
+  </ul>
+  <p>핵심은 지금의 설계가 이 확장을 막지 않는다는 것이다. 그래프가 1차 저장소가 아니라 투영이기 때문에, 소비자를 늘리거나 노드에 상태를 더해도 원천과 제너레이터만 고치면 된다.</p>
+
+  <div class="chapter-nav">
+    <a href="../capstone/13_Capstone.html" class="prev"><div class="dir">← 이전</div><div class="ttl">13장 · 캡스톤 실습</div></a>
+    <a href="../glossary/00_Glossary.html" class="next"><div class="dir">참고 →</div><div class="ttl">용어집</div></a>
+  </div>
+  <footer>
+    Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) 기준 · 한국어 교육 자료<br>
+    공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    본 핸드북의 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (저작자표시-비영리-동일조건변경허락 4.0 국제)</a> 라이선스에 따라 이용할 수 있습니다.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

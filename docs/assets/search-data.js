@@ -36,6 +36,7 @@ var SEARCH_DATA = {
     { path: 'setup/SETUP_CHECKLIST.html', title: '워크숍 사전 설치 체크리스트', lang: 'ko' },
     { path: 'lecture-guide/00_Course_Overview.html', title: '강의 소개', lang: 'ko' },
     { path: 'lecture-guide/00_Lecture_Guide.html', title: '강의 진행 가이드', lang: 'ko' },
+    { path: 'appendix/A_Skill_Graph.html', title: '부록 A · 스킬 관계 그래프 — 구조와 운영', lang: 'ko' },
 
     /* ── EN ── */
     { path: 'intro/00_Prerequisite_Bridge_en.html', title: 'Guide for Graduates · Skip Map for Introductory Course Graduates', lang: 'en' },
@@ -69,6 +70,7 @@ var SEARCH_DATA = {
     { path: 'setup/SETUP_CHECKLIST_en.html', title: 'Workshop Pre-Installation Checklist · Multi-Agent Team Harness Engineering Handbook', lang: 'en' },
     { path: 'lecture-guide/00_Course_Overview_en.html', title: 'Course Overview · Multi-Agent Team Harness Engineering Handbook', lang: 'en' },
     { path: 'lecture-guide/00_Lecture_Guide_en.html', title: 'Lecture Guide · Multi-Agent Team Harness Engineering Handbook', lang: 'en' },
+    { path: 'appendix/A_Skill_Graph_en.html', title: 'Appendix A · Skill Relationship Graph — Structure and Operations', lang: 'en' },
 
     /* ── JA ── */
     { path: 'intro/00_Prerequisite_Bridge_ja.html', title: '修了者ガイド · 入門コース修了者のためのスキップマップ', lang: 'ja' },
@@ -102,6 +104,7 @@ var SEARCH_DATA = {
     { path: 'setup/SETUP_CHECKLIST_ja.html', title: 'ワークショップ事前インストールチェックリスト · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
     { path: 'lecture-guide/00_Course_Overview_ja.html', title: '講義紹介・マルチエージェントチーム・ハーネスエンジニアリング・ハンドブック', lang: 'ja' },
     { path: 'lecture-guide/00_Lecture_Guide_ja.html', title: '講義進行ガイド · マルチエージェントチームハーネスエンジニアリングハンドブック', lang: 'ja' },
+    { path: 'appendix/A_Skill_Graph_ja.html', title: '補足A · スキル関係グラフ — 構造と運用', lang: 'ja' },
 
     /* ── ES ── */
     { path: 'intro/00_Prerequisite_Bridge_es.html', title: 'Guía para Egresados · Mapa de Omisión para Egresados del Curso Introductorio', lang: 'es' },
@@ -134,7 +137,8 @@ var SEARCH_DATA = {
     { path: 'setup/SETUP_es.html', title: 'Guía de Configuración del Entorno del Taller · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
     { path: 'setup/SETUP_CHECKLIST_es.html', title: 'Lista de Verificación Preinstalación del Taller · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
     { path: 'lecture-guide/00_Course_Overview_es.html', title: 'Resumen del Curso · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
-    { path: 'lecture-guide/00_Lecture_Guide_es.html', title: 'Guía del Docente · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' }
+    { path: 'lecture-guide/00_Lecture_Guide_es.html', title: 'Guía del Docente · Manual de Ingeniería de Harness para Equipos Multiagente', lang: 'es' },
+    { path: 'appendix/A_Skill_Graph_es.html', title: 'Apéndice A · Grafo de Relaciones de Habilidades — Estructura y Operación', lang: 'es' }
   ],
 
   LABELS: {

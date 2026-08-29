@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--
+  Apéndice (plantilla narrativa) — Grafo de Relaciones de Habilidades en detalle.
+  Supuesto del índice de búsqueda: las secciones del cuerpo deben mantener la estructura <h2 id="..."> (y <h3> donde sea necesario).
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Apéndice A · Grafo de Relaciones de Habilidades - Manual de Ingeniería de Harness para Equipos Multiagente">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Apéndice A · Grafo de Relaciones de Habilidades</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Apéndice A · Grafo de Relaciones de Habilidades</div>
+  <a href="#a1-overview">Resumen — Por Qué un Grafo</a>
+  <a href="#a2-sources">Fuentes de Datos y Prioridad</a>
+  <a href="#a3-schema">Esquema de Nodos y Aristas</a>
+  <a href="#a4-edges">Tipos de Aristas en Detalle</a>
+  <a href="#a5-layers">El Modelo de Relaciones de Tres Capas</a>
+  <a href="#a6-pipeline">Pipeline de Generación</a>
+  <a href="#a7-strategies">Estrategias Declarativa vs Inferencial</a>
+  <a href="#a8-decision-chain">Cadena de Decisión y Validación</a>
+  <a href="#a9-workflow">Flujo de Trabajo Práctico</a>
+  <a href="#a10-roadmap">Hoja de Ruta</a>
+  <div class="nav-section">Referencia Común</div>
+  <a href="../tools/00_Tools_Manual_es.html">Comparación de Herramientas</a>
+  <a href="../glossary/00_Glossary_es.html">Glosario</a>
+  <a href="../faq/00_FAQ_es.html">FAQ</a>
+</nav>
+
+<main>
+<article class="reading">
+  <div class="chapter-eyebrow">Apéndice A</div>
+  <h1>Grafo de Relaciones de Habilidades — Estructura y Operación</h1>
+  <p class="lead">Cuando las habilidades superan la decena, "qué habilidad presupone qué" desaparece de la memoria organizacional. Este apéndice consolida en un solo capítulo la estructura concreta del grafo de relaciones de habilidades presentado en el Capítulo 8 §2 — fuentes de datos, esquema, vocabulario de relaciones, pipeline de generación, validación y flujo de trabajo operativo.</p>
+  <p class="source-line">Fuente: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Enmiendas 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+
+  <div class="keypoints">
+    <div class="kp-title">Qué Cubre Este Apéndice</div>
+    <ul>
+      <li>Por qué el grafo es una "proyección regenerada constantemente", no un almacén primario</li>
+      <li>Las cinco fuentes de datos de las que se derivan las relaciones, y su prioridad</li>
+      <li>El esquema de nodos/aristas y el vocabulario de diez relaciones tipificadas</li>
+      <li>El modelo de tres capas explícito/experimental/proyección y la regla de 90 días</li>
+      <li>El pipeline de generación/verificación/sincronización y el procedimiento para añadir una relación</li>
+    </ul>
+  </div>
+
+  <h2 id="a1-overview">Resumen — Por Qué un Grafo</h2>
+  <p>Si las relaciones entre habilidades, agentes y ADR ("esta habilidad debe ejecutarse antes que aquella", "este agente usa esa habilidad") se guardan como texto libre, inevitablemente ocurren tres cosas. Primero, la fuente cambia pero la prosa permanece, así que <strong>envejece</strong>. Segundo, las relaciones se dispersan entre archivos y se vuelven <strong>inbuscables</strong>. Tercero, salvo que un humano cure la lista, nada queda <strong>verificado</strong>.</p>
+  <p>El grafo de relaciones de habilidades lo resuelve <em>derivando</em> en lugar de escribir. Las fuentes de las relaciones son datos estructurados que ya existen (frontmatter de SKILL.md, archivos de agentes, manifiestos de variant), y el grafo es su proyección. Siempre puedes borrar los archivos del grafo — volver a ejecutar el generador los hace nacer de nuevo exactamente igual. Por eso ADR-0060 fija el principio con el nombre <em>Generated Projection</em>.</p>
+
+  <h2 id="a2-sources">Fuentes de Datos y Prioridad</h2>
+  <p>El generador escanea las siguientes fuentes en orden de prioridad. Las primeras son más explícitamente intencionales; las últimas, derivaciones más implícitas.</p>
+  <ol>
+    <li><strong>Frontmatter de SKILL.md</strong> — <code>prerequisites</code> (habilidades predecesoras obligatorias) y <code>relates_to</code> tipificado (vocabulario de relación + objetivo + nota opcional). La fuente más explícita.</li>
+    <li><strong><code>required_skills</code> de los archivos de agentes</strong> — produce relaciones <code>used_by</code> agente → habilidad.</li>
+    <li><strong><code>skill_manifest</code> de <code>variant.json</code></strong> — el manifiesto de qué habilidades asocia una variante a qué agentes y fases. Fuente de las relaciones <code>phase</code>.</li>
+    <li><strong>Referencias entre comillas invertidas en la prosa</strong> — un documento que menciona una habilidad por su nombre exacto entre backticks produce una arista <code>references</code> (solo coincidencia exacta, para evitar falsos positivos).</li>
+    <li><strong><code>docs/skill-graph.overrides.json</code></strong> — vía de escape para añadir relaciones no derivables de las fuentes anteriores, o suprimir las auto-derivadas. También admite overrides por ámbito.</li>
+  </ol>
+  <p>Las aristas provenientes del frontmatter llevan <code>provenance: {file, field, index?}</code>. Rastrear "por qué existe esta relación" siempre lleva de vuelta a un campo concreto de un archivo fuente concreto.</p>
+
+  <h2 id="a3-schema">Esquema de Nodos y Aristas</h2>
+  <p>Los artefactos confirmados del grafo son dos — el <code>docs/skill-graph.json</code> legible por máquina y la tabla de relaciones legible por humanos <code>docs/skill-graph.md</code>. La estructura JSON de nivel superior es <code>{version, nodes[], edges[]}</code>.</p>
+  <div style="position:relative">
+  <pre class="code-block">{
+  "version": "1.7",
+  "nodes": [
+    { "id": "handbook", "type": "skill", "layer": "common" },
+    { "id": "handbook-reviewer", "type": "agent", "layer": "common" },
+    { "id": "ADR-0060", "type": "adr", "layer": "L0" }
+  ],
+  "edges": [
+    {
+      "from": "handbook",
+      "to": "research",
+      "type": "requires",
+      "provenance": {
+        "file": "skills/handbook/SKILL.md",
+        "field": "prerequisites",
+        "index": 0
+      }
+    },
+    {
+      "from": "handbook-reviewer",
+      "to": "handbook",
+      "type": "used_by"
+    }
+  ]
+}</pre>
+  <button class="copy-btn">Copiar</button>
+</div>
+  <p>Los nodos llevan <code>id</code>, <code>type</code> y <code>layer</code>. Los tipos incluyen <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code> y <code>output_type</code>; las capas son <code>L0</code> (raíz del workspace), <code>common</code> (plantilla común), <code>variant:&lt;name&gt;</code> y <code>L3</code> (proyecto individual).</p>
+
+  <h2 id="a4-edges">Tipos de Aristas en Detalle</h2>
+  <p>El vocabulario completo de relaciones crecido a lo largo de las Enmiendas 1–6, con dirección, simetría y fuente. Todas las aristas son <strong>consultivas (advisory)</strong> — informan el enrutamiento y la planificación, pero nunca bloquean la ejecución de forma absoluta.</p>
+  <table>
+    <thead><tr><th>Arista</th><th>Significado</th><th>Dirección/Simetría</th><th>Fuente</th></tr></thead>
+    <tbody>
+      <tr><td><code>requires</code></td><td>B es un predecesor obligatorio de A</td><td>A→B (asimétrica)</td><td>frontmatter <code>prerequisites</code></td></tr>
+      <tr><td><code>relates_to</code></td><td>Asociación genérica (legado)</td><td>A→B</td><td>frontmatter <code>relates_to</code></td></tr>
+      <tr><td><code>composes_with</code></td><td>Composición de co-uso dentro del mismo agente</td><td>simétrica (arista única con <code>symmetric: true</code>)</td><td>Enmienda 8 — derivada de la co-declaración en el <code>required_skills</code> de un agente</td></tr>
+      <tr><td><code>follows</code></td><td>Solo secuenciación; no implica dependencia</td><td>A→B</td><td>frontmatter</td></tr>
+      <tr><td><code>enables</code></td><td>La salida de A habilita a C</td><td>A→C</td><td>frontmatter</td></tr>
+      <tr><td><code>used_by</code></td><td>Un agente usa una habilidad</td><td>agent→skill</td><td><code>required_skills</code> del agente</td></tr>
+      <tr><td><code>phase</code></td><td>Una habilidad pertenece a una fase del flujo de trabajo</td><td>skill→phase</td><td><code>skill_manifest</code> de <code>variant.json</code></td></tr>
+      <tr><td><code>supersedes</code></td><td>Sucesión de documentos (antiguo → nuevo)</td><td>old→new</td><td>metadatos del documento</td></tr>
+      <tr><td><code>references</code></td><td>Cita entre documentos</td><td>A→B</td><td>referencias backtick</td></tr>
+      <tr><td><code>cites_skill</code></td><td>Un registro de decisión cita una habilidad</td><td>decision→skill</td><td>cuerpo del registro de decisión</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    El error más común es confundir la dirección de <code>requires</code>. <code>A requires B</code> significa "necesitas B antes de A", no "A produce B". Si la dirección no está clara, comprueba el frontmatter fuente mediante el campo provenance.
+  </div>
+
+  <h2 id="a5-layers">El Modelo de Relaciones de Tres Capas</h2>
+  <p>En el mismo grafo coexisten tres clases de relaciones. Sus vidas útiles y niveles de confianza difieren, por lo que se tratan como capas distintas.</p>
+  <ul>
+    <li><strong>L-A Explícito</strong> — <code>relates_to</code> tipificado en el frontmatter. Permanente por intención, la fuente primaria del grafo.</li>
+    <li><strong>L-B Experimental</strong> — relaciones en el archivo de overrides. <code>reason</code> y <code>since</code> son obligatorios, y una advertencia de obsolescencia se activa tras 90 días. Es la sala de espera de las relaciones "que probablemente pertenecen al grafo pero aún se observan antes de entrar al frontmatter".</li>
+    <li><strong>L-C Proyección</strong> — el grafo generado en sí. Siempre regenerado, con una verificación de determinismo que confirma que "misma entrada → misma salida" se mantiene.</li>
+  </ul>
+  <p>Cuando una relación experimental se considera estable, se mueve al frontmatter para promoverla a L-A. Para eliminar una L-A, bórrala del frontmatter — no existe ninguna vía que edite los archivos del grafo directamente.</p>
+
+  <h2 id="a6-pipeline">Pipeline de Generación</h2>
+  <p>El grafo se engarza con el pipeline en cuatro puntos.</p>
+  <ul>
+    <li><code>scripts/generate-skill-graph.ts</code> — escanea las fuentes y produce <code>skill-graph.json</code>/<code>.md</code>. <code>--scope &lt;name&gt;</code> crea un grafo de ámbito por plantilla (común + cada variante, 14 ámbitos en total).</li>
+    <li><code>scripts/verify-skill-graph.ts</code> — verifica el grafo confirmado contra sus fuentes (deriva) y las invariantes.</li>
+    <li><code>dev-sync.ts</code> paso 4.65 — regenera y comprueba la deriva de todos los grafos de ámbito en cada <code>/sync</code>. Mantener el grafo al día está integrado en el flujo de commits.</li>
+    <li><code>new-project.ts</code> paso 7.6 — genera el <code>docs/skill-graph.json</code> del proyecto en el momento del scaffolding, sin esperar al primer <code>/sync</code>.</li>
+  </ul>
+  <p>Un grafo de ámbito es una <strong>vista acotada</strong> del grafo L0 unificado. Como una plantilla de variante envía su propio grafo de ámbito, un proyecto nacido de ella empieza desde el primer día con un mapa de relaciones relevante para sí mismo.</p>
+
+  <h2 id="a7-strategies">Estrategias Declarativa vs Inferencial</h2>
+  <p>Hay dos estrategias para de dónde salen las relaciones.</p>
+  <ul>
+    <li><strong>Declarativa</strong> — las relaciones se declaran directamente en el frontmatter (Enmienda 3). La intención es explícita y la validación simple, pero depende de la disciplina de los autores de habilidades.</li>
+    <li><strong>Inferencial</strong> — las relaciones se derivan de datos estructurados existentes (Enmienda 4, precedente co-newbiz), basándose en la adyacencia de fases de los esquemas de procedimiento o en predicados de reglas. La cobertura crece sin añadir ningún frontmatter.</li>
+  </ul>
+  <p>El experimento comparativo (<code>scripts/experiments/infer-graph-from-phases.ts</code>, de solo lectura) concluyó con un veredicto dividido — la inferencia funciona bien en áreas ricas en esquemas de procedimiento, pero la estrategia declarativa gana en el resto. No se adoptó ningún nuevo modo de extracción predeterminado; ambos coexisten: derivar donde hay esquemas, declarar para el resto.</p>
+
+  <h2 id="a8-decision-chain">Cadena de Decisión y Validación</h2>
+  <p>La razón por la que el grafo abraza los ADR y los registros de decisión es poner "relaciones" y "fundamento" en un solo mapa. La cadena de decisión de ADR-0061 — Agent, Skill, Knowledge, Evidence, Rule, Decision — se valida de forma fail-closed mediante <code>scripts/validate-decisions.ts</code>.</p>
+  <ul>
+    <li>Presencia del frontmatter obligatorio en los registros de decisión y de referencias al libro de evidencias (evidence ledger)</li>
+    <li>Formato de los ID de reglas y resolubilidad de las referencias a habilidades</li>
+    <li><strong>Regla de acoplamiento de propagación</strong> — una habilidad publicada en L1 no debe relacionarse con objetivos ausentes de L1. De lo contrario, cada copia descendiente crece con aristas colgantes (dangling edges).</li>
+  </ul>
+  <p>Mediante las aristas <code>supersedes</code> y <code>cites_skill</code>, el grafo muestra "sobre qué habilidades se tomó esta decisión y qué documentos sucedió". Es un dispositivo estructural que impide que las relaciones se acumulen sin fundamento.</p>
+
+  <h2 id="a9-workflow">Flujo de Trabajo Práctico — Añadir una Relación</h2>
+  <p>El procedimiento mínimo cuando realmente se añade una relación.</p>
+  <ol>
+    <li><strong>Declarar</strong> — escribe la relación en el frontmatter de <code>SKILL.md</code> de la habilidad objetivo:
+<div style="position:relative">
+  <pre class="code-block">relates_to:
+  - { skill: research, type: requires }
+  - { skill: pdf-export, type: enables, note: "produces layout spec" }</pre>
+  <button class="copy-btn">Copiar</button>
+</div></li>
+    <li><strong>Validar</strong> — ejecuta <code>bun scripts/validate-skills.ts</code> (verificación de forma de relaciones) y luego <code>bun scripts/generate-skill-graph.ts</code>.</li>
+    <li><strong>Confirmar</strong> — ejecuta <code>bun scripts/verify-skill-graph.ts</code> para confirmar que no hay deriva, y comprueba visualmente la tabla de relaciones de la habilidad en <code>docs/skill-graph.md</code>.</li>
+    <li><strong>Confirmar (commit)</strong> — <code>/sync</code> realiza la regeneración y verificación de todos los ámbitos en el paso 4.65, así que solo asegúrate de no haber editado los archivos del grafo directamente antes del commit.</li>
+  </ol>
+  <p>Para una relación de la que aún no estás seguro, escríbela en el archivo de overrides en lugar del frontmatter. Dejar <code>reason</code> y <code>since</code> hace que el sistema pregunte "¿aún observando?" a los 90 días.</p>
+
+  <h2 id="a10-roadmap">Hoja de Ruta</h2>
+  <p>La visión Phase 2+ de ADR-0060 es la siguiente; ninguna está implementada todavía.</p>
+  <ul>
+    <li><strong>Máquina de estados del ciclo de vida</strong> — rastrear las transiciones draft/active/retired de las habilidades como estado del nodo del grafo</li>
+    <li><strong>Versionado y migración</strong> — herramientas para moverse entre versiones del esquema del grafo</li>
+    <li><strong>Inteligencia del grafo</strong> — sugerencias de enrutamiento basadas en relaciones y composición automática de paquetes de contexto</li>
+    <li><strong>Instantáneas de pista de auditoría</strong> — instantáneas puntuales del grafo para consultar el historial de relaciones</li>
+  </ul>
+  <p>La clave es que el diseño actual no bloquea estas extensiones. Como el grafo es una proyección, no un almacén primario, añadir consumidores o estado a los nodos solo requiere cambiar las fuentes y el generador.</p>
+
+  <div class="chapter-nav">
+    <a href="../capstone/13_Capstone_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 13 · Ejercicio Integrador</div></a>
+    <a href="../glossary/00_Glossary_es.html" class="next"><div class="dir">Referencia →</div><div class="ttl">Glosario</div></a>
+  </div>
+  <footer>
+    Basado en Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / ai-workspace-standards main (2026-08-15) · Material educativo en español<br>
+    Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    El contenido de este manual está bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual 4.0 Internacional)</a>.
+  </footer>
+</article>
+</main>
+</div>
+
+  <script src="../assets/inpage-search.js" defer></script>
+  <script src="../assets/copy-code.js"></script>
+  <script src="../assets/dark-mode-toggle.js"></script>
+  <script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

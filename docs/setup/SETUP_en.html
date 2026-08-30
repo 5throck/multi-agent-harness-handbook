@@ -118,15 +118,15 @@ bash setup-linux.sh --wezterm --docker</pre>
   <h3>Windows</h3>
   <p><strong>Run PowerShell as Administrator</strong>, then enter the command below.</p>
   <div style="position:relative">
-    <pre class="code-block"># Default run (the script sets the Execution Policy automatically)
-.\setup-windows.ps1
+    <pre class="code-block"># Default run (Bypass so the script itself is allowed to start)
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
 
 # Options:
-.\setup-windows.ps1 -WSL2             # Also install WSL2 (restart required)
-.\setup-windows.ps1 -WezTerm          # Also install WezTerm
-.\setup-windows.ps1 -Docker           # Also install Docker Desktop
-.\setup-windows.ps1 -Force            # Reinstall all tools, even already-installed ones
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Install all optional extras</pre>
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2             # Also install WSL2 (restart required)
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WezTerm          # Also install WezTerm
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Docker           # Also install Docker Desktop
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Force            # Reinstall all tools, even already-installed ones
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Install all optional extras</pre>
     <button class="copy-btn">Copy</button>
   </div>
   <div class="note"><strong>After running</strong>: close and reopen your terminal to apply PATH changes.</div>
@@ -199,7 +199,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>The Antigravity CLI installer places the binary in <code>~/.local/bin</code> or <code>/usr/local/bin</code>. Run <code>source ~/.bashrc</code> or restart your terminal.</p>
 
   <p><strong>Windows: "running scripts is disabled on this system"</strong></p>
-  <p>The script automatically sets this to <code>RemoteSigned</code>. To change it manually:</p>
+  <p>PowerShell blocks unsigned scripts before they can start, so launch with <code>powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1</code>. For a persistent per-user fix:</p>
   <div style="position:relative">
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
   <button class="copy-btn">Copy</button>

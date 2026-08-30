@@ -119,14 +119,14 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p><strong>PowerShellを管理者権限で実行</strong>し、以下のコマンドを入力してください。</p>
   <div style="position:relative">
     <pre class="code-block"># 基本実行 (Execution Policyはスクリプトが自動で設定します)
-.\setup-windows.ps1
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
 
 # オプション:
-.\setup-windows.ps1 -WSL2             # WSL2も一緒にインストール (再起動が必要)
-.\setup-windows.ps1 -WezTerm          # WezTermも一緒にインストール
-.\setup-windows.ps1 -Docker           # Docker Desktopも一緒にインストール
-.\setup-windows.ps1 -Force            # 既にインストール済みのツールもすべて再インストール
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # オプションをすべてインストール</pre>
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2             # WSL2も一緒にインストール (再起動が必要)
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WezTerm          # WezTermも一緒にインストール
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Docker           # Docker Desktopも一緒にインストール
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Force            # 既にインストール済みのツールもすべて再インストール
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Docker  # オプションをすべてインストール</pre>
     <button class="copy-btn">コピー</button>
   </div>
   <div class="note"><strong>実行後</strong>: ターミナルを閉じて再度開き、PATHの変更を反映してください。</div>

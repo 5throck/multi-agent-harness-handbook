@@ -118,15 +118,15 @@ bash setup-linux.sh --wezterm --docker</pre>
   <h3>Windows</h3>
   <p><strong>PowerShell을 관리자 권한으로 실행</strong>한 뒤 아래 명령어를 입력하세요.</p>
   <div style="position:relative">
-    <pre class="code-block"># 기본 실행 (Execution Policy는 스크립트가 자동으로 설정합니다)
-.\setup-windows.ps1
+    <pre class="code-block"># 기본 실행 — 스크립트가 차단되지 않도록 Bypass로 실행
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
 
 # 옵션:
-.\setup-windows.ps1 -WSL2             # WSL2 함께 설치 (재시작 필요)
-.\setup-windows.ps1 -WezTerm          # WezTerm 함께 설치
-.\setup-windows.ps1 -Docker           # Docker Desktop 함께 설치
-.\setup-windows.ps1 -Force            # 이미 설치된 도구도 모두 재설치
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # 선택 옵션 전부 설치</pre>
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2             # WSL2 함께 설치 (재시작 필요)
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WezTerm          # WezTerm 함께 설치
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Docker           # Docker Desktop 함께 설치
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Force            # 이미 설치된 도구도 모두 재설치
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Docker  # 선택 옵션 전부 설치</pre>
     <button class="copy-btn">복사</button>
   </div>
   <div class="note"><strong>실행 후</strong>: 터미널을 닫고 다시 열어 PATH 변경 사항을 반영하세요.</div>
@@ -199,7 +199,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p>Antigravity CLI 설치 스크립트는 바이너리를 <code>~/.local/bin</code> 또는 <code>/usr/local/bin</code>에 저장한다. <code>source ~/.bashrc</code>를 실행하거나 터미널을 재시작하세요.</p>
 
   <p><strong>Windows: "스크립트 실행이 비활성화되어 있습니다"</strong></p>
-  <p>스크립트가 자동으로 <code>RemoteSigned</code>로 설정한다. 수동으로 변경하려면:</p>
+  <p>PowerShell은 서명되지 않은 스크립트를 시작 단계에서 차단하므로 <code>powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1</code>으로 실행하세요. 영구적으로 변경하려면 (사용자 단위):</p>
   <div style="position:relative">
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
   <button class="copy-btn">복사</button>

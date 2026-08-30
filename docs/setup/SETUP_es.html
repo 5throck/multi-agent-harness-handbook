@@ -119,14 +119,14 @@ bash setup-linux.sh --wezterm --docker</pre>
   <p><strong>Ejecute PowerShell como administrador</strong>, luego ingrese el comando a continuación.</p>
   <div style="position:relative">
     <pre class="code-block"># Ejecución predeterminada (el script configura la política de ejecución automáticamente)
-.\setup-windows.ps1
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
 
 # Opciones:
-.\setup-windows.ps1 -WSL2             # También instalar WSL2 (requiere reinicio)
-.\setup-windows.ps1 -WezTerm          # También instalar WezTerm
-.\setup-windows.ps1 -Docker           # También instalar Docker Desktop
-.\setup-windows.ps1 -Force            # Reinstalar todas las herramientas, incluso las ya instaladas
-.\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Instalar todos los complementos opcionales</pre>
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2             # También instalar WSL2 (requiere reinicio)
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WezTerm          # También instalar WezTerm
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Docker           # También instalar Docker Desktop
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -Force            # Reinstalar todas las herramientas, incluso las ya instaladas
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Docker  # Instalar todos los complementos opcionales</pre>
     <button class="copy-btn">Copiar</button>
   </div>
   <div class="note"><strong>Después de ejecutar</strong>: cierre y vuelva a abrir su terminal para aplicar los cambios en PATH.</div>

@@ -318,6 +318,8 @@
     </svg>
   </div>
 
+  <div class="note"><strong>새 소식(2026-09)</strong> &mdash; 감사 장치에는 검사가 계속 더해지고 있다. 이제 <code>scripts/verify-skill-graph.ts</code>가 존재하면 감사가 커밋된 스킬 그래프를 원천과 대조해 검증하고(ADR-0060 수정안 9, 자세한 내용은 참고 C), 스키마가 허용한 곳에서는 UI 소스를 디자인 토큰 SSOT과 대조해 린트하며, 잡동사니 아티팩트 검사는 스키마나 루트 허용목록이 없으면 더 이상 조용히 통과하지 않고 실패한다(v2.31.0). 함께 <code>validate-md-language.ts</code> v1.9.0은 영어 기본 정책을 <code>**/*.md</code>에서 <code>**/*.{yaml,yml}</code>로 확장했다. 파이프가 없는 YAML 파일은 최상위 <code>lang:</code> / <code>lang_reason:</code> 키로 예외를 선언한다. §6의 교훈이 여기서도 반복된다. 규칙은 무언가가 기계적으로 검사하는 순간에만 가드레일이 된다.</div>
+
   <div class="note">한 문장으로 요약하면: 가드레일은 <strong>위험도에 따라 권한을 차등 부여(§2·§3)</strong>하고, <strong>돌이킬 수 없는 지점 앞에서는 반드시 사람이 확인(§4)</strong>하며, <strong>병렬 작업은 물리적으로 격리(§5)</strong>하고, <strong>모든 것이 실패했을 때를 대비해 기록을 남기는(§6)</strong> 네 가지 습관이다. 4장부터는 이 원칙을 실제 실습 코드 안에 적용해 가며 진행한다.</div>
 
   <div class="chapter-nav">

@@ -318,6 +318,8 @@
     </svg>
   </div>
 
+  <div class="note"><strong>What's new (2026-09)</strong> — the audit device keeps gaining checks: it now re-verifies the committed skill graph against its sources whenever <code>scripts/verify-skill-graph.ts</code> is present (ADR-0060 Amendment 9; Reference C has the details), lints UI sources against the design-token SSOT where the schema enables it, and fails loud when its stray-artifact check has no schema or root allowlist to work from (v2.31.0). Next to it, <code>validate-md-language.ts</code> v1.9.0 extended the English-by-default policy from <code>**/*.md</code> to <code>**/*.{yaml,yml}</code> — plain YAML files declare a locale exception with top-level <code>lang:</code> / <code>lang_reason:</code> keys. The lesson of §6 repeats here: a rule only guards once something mechanical checks it.</div>
+
   <div class="note">In one sentence: guardrails are the combination of four habits — <strong>granting differentiated permissions based on risk level (§2·§3)</strong>, <strong>always requiring human confirmation before an irreversible point (§4)</strong>, <strong>physically isolating parallel work (§5)</strong>, and <strong>keeping records in case everything else fails (§6)</strong>. Starting in Chapter 4, we apply these principles directly within hands-on practice code.</div>
 
   <div class="chapter-nav">

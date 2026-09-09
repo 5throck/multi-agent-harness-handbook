@@ -40,7 +40,7 @@
   <div class="chapter-eyebrow">참고 C</div>
   <h1>스킬 관계 그래프 — 구조와 운영</h1>
   <p class="lead">스킬이 수십 개를 넘어서면 "어떤 스킬이 무엇을 전제로 하는가"가 조직의 기억 밖으로 사라진다. 이 문서는 8장 §2에서 소개한 스킬 관계 그래프의 구체적 구조 — 데이터 원천, 스키마, 관계 어휘, 생성 파이프라인, 검증과 운영 워크플로우 — 를 하나의 장으로 정리한다.</p>
-  <p class="source-line">출처: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+  <p class="source-line">출처: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–9) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.8.5 · <code>scripts/verify-skill-graph.ts</code> v1.5.0</p>
 
   <div class="keypoints">
     <div class="kp-title">이 문서에서 다루는 것</div>
@@ -138,6 +138,9 @@
     <li><code>dev-sync.ts</code> 4.65단계 — 매 <code>/sync</code>마다 전 스코프 그래프를 재생성하고 드리프트를 확인. "그래프를 고르는 작업"이 커밋 흐름에 녹아 있다.</li>
     <li><code>new-project.ts</code> 7.6단계 — 새 프로젝트 스캐폴딩 시점에 그 프로젝트의 <code>docs/skill-graph.json</code>을 즉시 생성. 첫 <code>/sync</code>를 기다리게 하지 않는다.</li>
   </ul>
+  <div class="note">
+    <p><strong>What's new (2026-09) — 드리프트 게이트가 이제 스스로 활성화된다(수정안 9).</strong> 그동안 프로젝션 검증은 <code>/sync</code>가 4.65단계를 돌려줘야 했고, sync를 건너뛰면 낡은 그래프가 그대로 남았다. audit.ts v2.30.0(ADR-0060 수정안 9, 2026-09-06)부터 공유 audit이 자체 검사를 붙였다. 감사 대상 컨텍스트(L0 루트 또는 L3 프로젝트)에 <code>scripts/verify-skill-graph.ts</code>가 존재하면 audit이 이를 실행해, 커밋된 <code>docs/skill-graph.json</code>과 다시 뽑은 그래프 사이 드리프트를 <strong>실패</strong>로 처리한다. "그래프를 갖고 있다"와 "게이트가 그 그래프를 지켜보고 있다"가 더 이상 어긋날 수 없다 — 제너레이터 쌍의 존재 자체가 활성 조건이라 프로젝트가 별도로 연결할 것이 없고, 앞으로의 스캐폴드는 첫날부터 이 강제를 상속받는다. 게이트가 발동하면 처방은 <code>bun scripts/generate-skill-graph.ts</code> → diff 검토 → 커밋.</p>
+  </div>
   <p>스코프 그래프는 통합 L0 그래프의 <strong>범위 뷰</strong>다. variant 템플릿이 자기 스코프 그래프를 배송하면, 그 템플릿에서 태어난 프로젝트는 처음부터 자기에게 relevant한 관계 지도를 갖고 시작한다.</p>
 
   <h2 id="a7-strategies">선언적 vs 추론적 구축 전략</h2>
@@ -168,7 +171,7 @@
   <button class="copy-btn">복사</button>
 </div></li>
     <li><strong>검증</strong> — <code>bun scripts/validate-skills.ts</code>(관계 형식 검사) 후 <code>bun scripts/generate-skill-graph.ts</code> 실행.</li>
-    <li><strong>확인</strong> — <code>bun scripts/verify-skill-graph.ts</code>로 드리프트 없음 확인, <code>docs/skill-graph.md</code>에서 해당 스킬의 관계 표를 눈으로 확인.</li>
+    <li><strong>확인</strong> — <code>bun scripts/verify-skill-graph.ts</code>로 드리프트 없음 확인, <code>docs/skill-graph.md</code>에서 해당 스킬의 관계 표를 눈으로 확인. 손으로 돌리는 일은 예의일 뿐이다 — 같은 검사를 audit이 이제 자동으로 돌린다(수정안 9).</li>
     <li><strong>커밋</strong> — <code>/sync</code>가 4.65단계에서 전 스코프 재생성·검증을 대신 해 주므로, 커밋 전에 직접 그래프 파일을 고르지 않았는지만 확인하면 된다.</li>
   </ol>
   <p>아직 확신이 없는 관계라면 프론트매터 대신 오버라이드 파일에 적는다. <code>reason</code>과 <code>since</code>를 남기면 90일 뒤 시스템이 "아직 관찰 중인가?"를 물어본다.</p>

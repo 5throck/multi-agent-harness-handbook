@@ -36,7 +36,7 @@
   <div class="chapter-eyebrow">Reference A</div>
   <h1>Governance Enforcement Layers — How Rules Become Rules</h1>
   <p class="lead">Chapter 3's permission model tells you "what not to do". This document answers the next question — "how are violations reliably prevented?" The workspace applies the same rule across three layers — hook, prompt, and skill — so that when one layer is unavailable, another holds the line.</p>
-  <p class="source-line">Source: ai-workspace-standards CONSTITUTION.md §11 · ECC governance Phase 1–3 designs (docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.2.0 · <code>scripts/audit.ts</code> v2.28.0</p>
+  <p class="source-line">Source: ai-workspace-standards CONSTITUTION.md §11 · ECC governance Phase 1–3 designs (docs/designs/ecc-phase*.md) · <code>scripts/hooks/gateguard-fact-force.ts</code> v1.3.0 · <code>scripts/audit.ts</code> v2.32.0</p>
 
   <div class="keypoints">
     <div class="kp-title">What This Reference Bovers</div>
@@ -68,7 +68,7 @@
     <li>What <strong>schemas, interfaces, or types</strong> the file exports</li>
     <li>Whether user instructions impose <strong>scope constraints</strong> on this task</li>
   </ul>
-  <p>Once the investigation completes, it emits a structured <code>[GATEGUARD] Pre-edit investigation complete</code> block with a risk level and recommendation. There are two modes — <strong>ask mode</strong> (Claude default) holds progress until the agent presents its findings, while <strong>deny mode</strong> (Gemini default; opt-in for Claude via <code>--mode deny</code>) hard-blocks the edit with exit code 2. Session state persists as PID-keyed JSON in <code>.gateguard-state/</code>, surviving hook process re-spawns. Safe paths such as <code>memory/</code> and <code>CHANGELOG.md</code> are exempt.</p>
+  <p>Once the investigation completes, it emits a structured <code>[GATEGUARD] Pre-edit investigation complete</code> block with a risk level and recommendation. There are two modes — <strong>ask mode</strong> (Claude default) holds progress until the agent presents its findings, while <strong>deny mode</strong> (Gemini default; opt-in for Claude via <code>--mode deny</code>) hard-blocks the edit with exit code 2. There is no cross-invocation state: the hook process is spawned fresh for every tool call, so first-edit tracking is per invocation and the gate re-evaluates the same file on each run. (An earlier PID-keyed persistence file, <code>.gateguard-state/</code>, was removed in v1.3.0 — each hook call is a new process, so the state was never read back.) Safe paths such as <code>memory/</code> and <code>CHANGELOG.md</code> are exempt.</p>
   <div class="note">
     The core insight of GateGuard: "most agent mistakes come from insufficient investigation." Just checking who imports a file before editing it filters out a large share of schema-breaking edits. The device does not make rule-breaking impossible — it makes <strong>proceeding without thinking properly</strong> impossible.
   </div>
@@ -78,9 +78,9 @@
   <ul>
     <li><strong>Phase 1 — Core infrastructure (P0)</strong>: the three-layer model, GateGuard hook + prompt + skill, JSON schemas for agent/skill frontmatter, prompt-defense baselines (encoding vigilance, abuse-pattern detection), and CONSTITUTION §11</li>
     <li><strong>Phase 2 — Hardening (P1)</strong>: command frontmatter schema, GateGuard <code>--mode ask|deny</code> configurability, Gemini <code>AfterTool</code> integration (<code>post-write-lifecycle-check.ts</code>), hook-reliability subprocess unit tests</li>
-    <li><strong>Phase 3 — Maturation (P2)</strong>: PID-keyed state persistence (<code>.gateguard-state/</code>), automated encoding vigilance in audit.ts (CRLF, homoglyphs, zero-width characters), and gating of high-value config files (<code>CLAUDE.md</code>, <code>CONSTITUTION.md</code>, <code>package.json</code>) via <code>GOVERNED_CONFIG_PATHS</code></li>
+    <li><strong>Phase 3 — Maturation (P2)</strong>: automated encoding vigilance in audit.ts (CRLF, homoglyphs, zero-width characters), and gating of high-value config files (<code>CLAUDE.md</code>, <code>CONSTITUTION.md</code>, <code>package.json</code>) via <code>GOVERNED_CONFIG_PATHS</code>. The PID-keyed state persistence (<code>.gateguard-state/</code>) shipped in this phase was later removed in v1.3.0 — see the note in the GateGuard section above.</li>
   </ul>
-  <p>The lesson is simple — governance is software too. Don't aim for completeness in the first version; grow it through core → hardening → maturation, absorbing real blockage cases along the way.</p>
+  <p>The lesson is simple — governance is software too. Don't aim for completeness in the first version; grow it through core → hardening → maturation, absorbing real blockage cases along the way. Maturation also means retiring what never worked: the state-persistence removal is the same discipline applied backwards.</p>
 
   <h2 id="b4-scripts">The Validator Script Family</h2>
   <p>If hooks are the gates of the "editing moment", the validator scripts are the gates of the "commit and sync moment".</p>
@@ -90,6 +90,9 @@
     <li><code>scripts/validate-agents.ts</code> / <code>validate-skills.ts</code> / <code>validate-templates.ts</code> — validate agent, skill, and template frontmatter and their governance records (<code>docs/lifecycle/</code>)</li>
     <li><code>scripts/verify-adr-governance.ts</code> — detects ADRs accepted without governance-doc references and marker-hash drift against constitution sources (detailed in Reference B)</li>
   </ul>
+  <div class="note">
+    <p><strong>What's new (2026-09)</strong> — audit.ts gained two more fail-closed checks. <strong>Design-lint gate</strong>: <code>scripts/design-lint.ts</code> fails when UI sources configured via the <code>designLint:</code> block in <code>docs/workspace-schema.json</code> hardcode raw hex/rgb()/hsl() colors instead of consuming the design-token SSOT (schema-scoped — projects without configured roots are skipped cleanly). <strong>Skill-graph drift gate</strong>: when <code>scripts/verify-skill-graph.ts</code> exists in the audited context, the audit spawns it and fails on drift between the committed <code>docs/skill-graph.json</code> and the agents/skills it is derived from (ADR-0060 Amendment 9); the remedy is <code>bun scripts/generate-skill-graph.ts</code>, review, commit. Both turn "regenerate the projection" from a chore into an enforced gate — the same fail-closed pattern this reference describes, applied to new artifact types.</p>
+  </div>
 
   <h2 id="b5-failclosed">fail-closed vs warn — Where to Stop and Where to Let Slide</h2>
   <p>audit.ts results come in three grades.</p>

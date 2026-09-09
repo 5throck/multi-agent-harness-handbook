@@ -40,7 +40,7 @@
   <div class="chapter-eyebrow">Reference C</div>
   <h1>Skill Relationship Graph — Structure and Operations</h1>
   <p class="lead">Once skills number in the dozens, "which skill presupposes what" disappears from organizational memory. This document consolidates the concrete structure of the skill relationship graph introduced in Chapter 8 §2 — data sources, schema, relation vocabulary, generation pipeline, validation, and the operational workflow — into a single chapter.</p>
-  <p class="source-line">Source: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+  <p class="source-line">Source: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–9) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.8.5 · <code>scripts/verify-skill-graph.ts</code> v1.5.0</p>
 
   <div class="keypoints">
     <div class="kp-title">What This Reference Bovers</div>
@@ -138,6 +138,9 @@
     <li><code>dev-sync.ts</code> step 4.65 — regenerates and drift-checks all scope graphs on every <code>/sync</code>. Keeping the graph current is baked into the commit flow.</li>
     <li><code>new-project.ts</code> step 7.6 — generates the project's <code>docs/skill-graph.json</code> at scaffold time, without waiting for the first <code>/sync</code>.</li>
   </ul>
+  <div class="note">
+    <p><strong>What's new (2026-09) — the drift gate is now self-activating (Amendment 9).</strong> Until now, verifying the projection depended on <code>/sync</code> running step 4.65; skip the sync and a stale graph sat unnoticed. Since audit.ts v2.30.0 (ADR-0060 Amendment 9, 2026-09-06), the shared audit appends its own check: whenever <code>scripts/verify-skill-graph.ts</code> exists in the audited context (the L0 root or an L3 project), the audit spawns it and <strong>fails</strong> on drift between the committed <code>docs/skill-graph.json</code> and the re-derived graph. "Has the graph" and "is the gate watching it" can no longer diverge — the generator pair's presence <em>is</em> the activation condition, so a project needs no wiring of its own, and every future scaffold inherits enforcement on day one. When the gate fires, the remedy is <code>bun scripts/generate-skill-graph.ts</code>, review the diff, commit.</p>
+  </div>
   <p>A scope graph is a <strong>scoped view</strong> of the unified L0 graph. Because a variant template ships its own scope graph, a project born from it starts with a relation map relevant to itself from day one.</p>
 
   <h2 id="a7-strategies">Declarative vs Inferential Strategies</h2>
@@ -168,7 +171,7 @@
   <button class="copy-btn">Copy</button>
 </div></li>
     <li><strong>Validate</strong> — run <code>bun scripts/validate-skills.ts</code> (relation form checks), then <code>bun scripts/generate-skill-graph.ts</code>.</li>
-    <li><strong>Confirm</strong> — run <code>bun scripts/verify-skill-graph.ts</code> to confirm no drift, and visually check the skill's relation table in <code>docs/skill-graph.md</code>.</li>
+    <li><strong>Confirm</strong> — run <code>bun scripts/verify-skill-graph.ts</code> to confirm no drift, and visually check the skill's relation table in <code>docs/skill-graph.md</code>. Running it by hand is a courtesy: the audit runs the same check automatically now (Amendment 9).</li>
     <li><strong>Commit</strong> — <code>/sync</code> performs all-scope regeneration and verification at step 4.65, so just make sure you did not edit the graph files directly before committing.</li>
   </ol>
   <p>For a relation you are not yet sure about, write it in the overrides file instead of frontmatter. Leaving <code>reason</code> and <code>since</code> means the system will ask "still observing?" after 90 days.</p>

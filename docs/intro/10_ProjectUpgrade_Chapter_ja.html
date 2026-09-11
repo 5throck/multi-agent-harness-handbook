@@ -31,7 +31,7 @@
   <div class="chapter-eyebrow">第10章</div>
   <h1>L3プロジェクトのアップグレード</h1>
   <p class="lead">L3プロジェクトを作成した後に上位標準(L0/L1)が変更されると何が起きるのか — 答えは「何も起きない」である。第8章 §1で扱ったフォークモデルのため、すでに生まれたL3プロジェクトに新しい変更を実際に反映するには、人が明示的に<code>upgrade-project.ts</code>を実行する必要がある。本章ではその手順を扱う。</p>
-  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.10.1時点) ・関連: <a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></p>
+  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.22.1時点) ・<a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/lib/upgrade-policy.ts" target="_blank">scripts/lib/upgrade-policy.ts</a>(ADR-0073) ・関連: <a href="08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">本章で扱う内容</div>
@@ -40,6 +40,8 @@
       <li><code>upgrade-project.ts</code>の基本的な使い方と<code>--dry-run</code>を先に行う原則</li>
       <li>LOCKED・MERGE・DOCS_MERGE・VARIANT_DOCS_SYNC・COMMANDS_SYNC・SYNC_IF_NEWER・PRESERVE・PRUNEの8つのファイル処理方式</li>
       <li>自動のgit stashスナップショットと<code>--rollback</code>による復元という安全装置</li>
+      <li>2026-09の新情報(ADR-0073): 分類が<code>lib/upgrade-policy.ts</code>に移り、デフォルト配送(SYNC)ポリシーのTEMPLATE TREE SYNCパスと<code>check-upgrade-coverage.ts --strict</code>ゲートが追加された点</li>
+      <li>アップグレード3スクリプトがL0専用となりワークスペースルートから実行すべき理由</li>
       <li>第11章で扱う「昇格」とは方向が正反対である点</li>
     </ul>
   </div>
@@ -58,10 +60,13 @@
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # 任意フラグ: --variant &lt;variant&gt;  --platform claude|antigravity|both
-#            --prune-removed  --rollback</pre>
+#            --prune-removed  --rollback  --yes  --skip-context-commonization</pre>
   <button class="copy-btn">コピー</button>
 </div>
-  <p><code>--variant</code>はプロジェクトの<code>.claude/template-version.txt</code>に記録された値を自動で読み込むため、多くの場合省略できる。このファイルが存在しない古いプロジェクトでは、実行時に確認プロンプトが表示され、<code>--variant</code>を直接指定する必要がある。</p>
+  <p><code>--variant</code>はプロジェクトの<code>.claude/template-version.txt</code>に記録された値を自動で読み込むため、多くの場合省略できる。このファイルが存在しない古いプロジェクトでは、実行時に確認プロンプトが表示され、<code>--variant</code>を直接指定する必要がある。2026-09以降に追加された2つのフラグ: <code>--yes</code>/<code>-y</code>は対話型の確認プロンプトをスキップし、<code>--skip-context-commonization</code>はCONTEXT_COMMONIZATIONパス(v1.20.0で追加)を省略する — このパスは<code>docs/context.md</code>の更新後、<code>docs/&lt;variant&gt;.context.md</code>のほぼ重複するセクションを整理する。トークン重複が65%以上のセクションは自動削除、30〜65%は手動のContext Commonization Review対象として表示、それ未満はそのまま残す。</p>
+  <div class="note">
+    <strong>どこで実行するか(2026-09の新情報)</strong> — アップグレード3スクリプト(<code>upgrade-project.ts</code>、<code>lib/upgrade-policy.ts</code>、<code>check-upgrade-coverage.ts</code>)は現在<strong>L0専用</strong>である(ADR-0073修正1)。ワークスペースルートから <code>bun scripts/upgrade-project.ts Projects/&lt;name&gt;</code> として実行するか、プロジェクト内からはワークスペース側のコピーを <code>bun ../../scripts/upgrade-project.ts .</code> として呼び出す。理由は単純だ — スクリプトはテンプレートツリーを自分の位置基準で解決するため、プロジェクト内のコピーは <code>&lt;project&gt;/templates/common</code> を探すことになり、そのパスは存在しない。つまりプロジェクト別コピーは最初から動作しない化石であり、整理された。収束を担うツール自身が古いバージョンでプロジェクトを書き換えるほど悪いバージョン不整合はない。
+  </div>
 
   <h2 id="categories">ファイル処理の8分類</h2>
   <p>スクリプトは性質に応じてファイルを異なる方法で扱う — すべてを一律に「新しい内容で上書き」するわけではない。</p>
@@ -81,6 +86,16 @@
     </tbody>
   </table>
   </div>
+  <div class="note">
+    <p><strong>2026-09の新情報: 分類は列挙からポリシーファイルへ(ADR-0073)。</strong> どのファイルがどの分類に属するかは、以前は<code>upgrade-project.ts</code>内のリストとしてハードコードされていた。そのため、どのリストにも該当しないテンプレートファイルは既存プロジェクトに<em>黙って配信されなかった</em> — variantドキュメントツリーの大半(<code>user-guide</code>、<code>handoff-spec</code>、<code>VERSION_MANIFEST</code>、<code>skill-graph.overrides.json</code>、variantドメイン文書、<code>countries/KR.md</code>)と<code>.github/</code>、<code>.claude|gemini/settings.json</code>、<code>.editorconfig</code>、<code>skills.json</code>が正確にその取り残され組だった。現在は分類を<code>scripts/lib/upgrade-policy.ts</code>が担い、新しい<strong>TEMPLATE TREE SYNC</strong>パスが実効テンプレートツリー(<code>templates/common</code>にvariantを重ねたもの)を走査して<em>すべての</em>ファイルの分類を解釈する。フォールバックポリシーは<strong>SYNC — デフォルトで配信する</strong>: カバレッジは列挙ではなくデニーリスト方式だ。下位ポリシーは3つ:</p>
+    <ul>
+      <li><strong>SYNC</strong> — なければ追加、あればインラインのバージョン/ハッシュ更新に標準の競合警告。v1.22.0から、旧VARIANT_DOCS_SYNCがハードコードしていた5ファイルもこのパスが担う。</li>
+      <li><strong>WORKSPACE</strong> — ワークスペースシードディレクトリ(<code>docs/designs/</code>、<code>docs/lifecycle/</code>など)は存在しない場合のみ追加し、プロジェクト側の修正を決して上書きしない。</li>
+      <li><strong>JSON_MERGE</strong> — プラットフォームの<code>.claude/settings.json</code> / <code>.gemini/settings.json</code>はディープマージし、プロジェクト専用の配列要素を保持する。</li>
+    </ul>
+    <p>同時に追加された<code>check-upgrade-coverage.ts --strict</code>は<code>audit.ts</code>内で自動実行される(ADR-0060スキルグラフドリフトゲートと同じ自己起動方式)。ファイルの分類を解釈できない場合、配信予定ファイルに<code>{{PLACEHOLDER}}</code>トークンが残っている場合、JSON_MERGE対象のパースに失敗した場合に失敗扱いになる。第3章の教訓が再び — ルールがゲートになった。</p>
+  </div>
+
   <p>v1.10.xから、アップグレードは国プロフィール(国スコープ資産)にも対応する。実行前にプロジェクトの<code>.claude/template-version.txt</code>から<code>country=</code>行を読み(なければ<code>docs/countries/ACTIVE.md</code>の管轄表記で代用)て対象国を判定し、仕上げの書き換え時にはこの行をそのまま保持する — 旧バージョンは書き換え時にこの行を消してしまい、プロジェクトの所属国情報を失わせていた。さらに、すべてのスキル同期が終わった後、レジストリ駆動のpruneがもう一度実行され、国スコープスキル(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)が該当国以外のプロジェクトに再注入されていれば削除する — スキャフォールディング時の整理結果をアップグレードのたびに取り消してしまう事態を防ぐためである。ただし、ローカルで意図的に改変されたフォークは<code>⚠️ CONFLICT</code>警告付きでそのまま保持される。</p>
   <p>SYNC_IF_NEWER対象のファイルをローカルで直接修正済みの状態で、かつテンプレート側のバージョンがより新しい場合、スクリプトは<code>⚠️ CONFLICT</code>と表示しつつも、最終的にはテンプレートの内容で上書きする。「上書き前に確認する」動作ではなく、「警告のみして進める」動作である点を覚えておく必要がある — だからこそ、以下の安全装置が重要になる。</p>
 
@@ -102,7 +117,7 @@
   <p>両スクリプトは互いに逆方向へファイルを流すだけで、どちらか一方が他方を代替するものではない。テンプレートに貢献したいなら昇格を、すでに作成したプロジェクトを最新の状態に保ちたいならアップグレードを使う。</p>
 
   <div class="note">
-    本章で扱ったスクリプトの動作(フラグ、ファイル分類、安全装置)は、<code>ai-workspace-standards</code>リポジトリの<code>scripts/upgrade-project.ts</code>(v1.10.1)のソースを直接確認して執筆した。このハンドブックのリポジトリには該当スクリプトが含まれていないため、実際の実行結果は必ず最新のソースと照らし合わせて確認すること。
+    本章で扱ったスクリプトの動作(フラグ、ファイル分類、安全装置)は、<code>ai-workspace-standards</code>リポジトリの<code>scripts/upgrade-project.ts</code>(v1.22.1)と<code>scripts/lib/upgrade-policy.ts</code>のソースを直接確認して執筆した。このハンドブックのリポジトリには該当スクリプトが含まれていないため、実際の実行結果は必ず最新のソースと照らし合わせて確認すること。
   </div>
 
   <div class="chapter-nav">

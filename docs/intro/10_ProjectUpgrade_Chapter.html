@@ -36,7 +36,7 @@
   <div class="chapter-eyebrow">10장</div>
   <h1>L3 프로젝트 업그레이드</h1>
   <p class="lead">L3 프로젝트를 만든 뒤 상위 표준(L0/L1)이 바뀌면 무슨 일이 일어날까 — 정답은 "아무 일도 안 일어난다"이다. 8장 §1에서 다룬 포크 모델 때문에, 이미 태어난 L3 프로젝트에 새 변경을 실제로 반영하려면 <code>upgrade-project.ts</code>를 사람이 명시적으로 실행해야 한다. 이 장은 그 절차를 다룬다.</p>
-  <p class="source-line">소스: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.10.1 기준) · 관련: <a href="08_Intro_Advanced_Deploy.html#s1">8장 §1 배포와 SSOT</a></p>
+  <p class="source-line">소스: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a>(v1.22.1 기준) · <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/lib/upgrade-policy.ts" target="_blank">scripts/lib/upgrade-policy.ts</a>(ADR-0073) · 관련: <a href="08_Intro_Advanced_Deploy.html#s1">8장 §1 배포와 SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">이 장에서 다루는 것</div>
@@ -45,6 +45,8 @@
       <li><code>upgrade-project.ts</code>의 기본 사용법과 <code>--dry-run</code> 우선 원칙</li>
       <li>LOCKED·MERGE·DOCS_MERGE·VARIANT_DOCS_SYNC·COMMANDS_SYNC·SYNC_IF_NEWER·PRESERVE·PRUNE 8가지 파일 처리 방식</li>
       <li>자동 git stash 스냅샷과 <code>--rollback</code>으로 되돌리는 안전장치</li>
+      <li>2026-09 신규(ADR-0073): 파일 분류가 <code>lib/upgrade-policy.ts</code>로 옮겨가고, 기본 전달( SYNC) 정책의 TEMPLATE TREE SYNC 패스와 <code>check-upgrade-coverage.ts --strict</code> 게이트가 생긴 점</li>
+      <li>업그레이드 3종 스크립트가 L0 전용이 되어 워크스페이스 루트에서 실행해야 하는 이유</li>
       <li>11장에서 다루는 "승격"과 방향이 정반대라는 점</li>
     </ul>
   </div>
@@ -63,10 +65,13 @@
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # 선택 플래그: --variant &lt;variant&gt;  --platform claude|antigravity|both
-#            --prune-removed  --rollback</pre>
+#            --prune-removed  --rollback  --yes  --skip-context-commonization</pre>
   <button class="copy-btn">복사</button>
 </div>
-  <p><code>--variant</code>는 프로젝트의 <code>.claude/template-version.txt</code>에 기록된 값을 자동으로 읽어오므로 대부분 생략해도 된다. 이 파일이 없는 오래된 프로젝트라면 실행 시 확인 프롬프트가 뜨고, <code>--variant</code>를 직접 지정해야 한다.</p>
+  <p><code>--variant</code>는 프로젝트의 <code>.claude/template-version.txt</code>에 기록된 값을 자동으로 읽어오므로 대부분 생략해도 된다. 이 파일이 없는 오래된 프로젝트라면 실행 시 확인 프롬프트가 뜨고, <code>--variant</code>를 직접 지정해야 한다. 2026-09 이후 추가된 플래그 둘: <code>--yes</code>/<code>-y</code>는 대화형 확인 프롬프트를 건너뛰고, <code>--skip-context-commonization</code>은 CONTEXT_COMMONIZATION 패스(v1.20.0 추가)를 생략한다 — 이 패스는 <code>docs/context.md</code>가 새로 채워진 뒤 <code>docs/&lt;variant&gt;.context.md</code>의 거의 같은 구간을 정리한다. 토큰 겹침이 65% 이상이면 자동 삭제, 30~65%면 수동 검토(Context Commonization Review) 대상 표시, 그 미만은 그대로 둔다.</p>
+  <div class="note">
+    <strong>어디서 실행하는가(2026-09 신규)</strong> — 업그레이드 3종 스크립트(<code>upgrade-project.ts</code>, <code>lib/upgrade-policy.ts</code>, <code>check-upgrade-coverage.ts</code>)는 이제 <strong>L0 전용</strong>이다(ADR-0073 수정안 1). 워크스페이스 루트에서 <code>bun scripts/upgrade-project.ts Projects/&lt;name&gt;</code>으로 실행하거나, 프로젝트 안에서라면 워크스페이스 쪽 복사본을 <code>bun ../../scripts/upgrade-project.ts .</code>로 호출한다. 이유는 단순하다 — 스크립트는 템플릿 트리를 자신의 위치 기준으로 찾기 때문에, 프로젝트 안 복사본은 <code>&lt;project&gt;/templates/common</code>을 찾게 되고 이 경로는 존재하지 않는다. 즉 프로젝트별 복사본은 처음부터 동작하지 않는 유물이었고 정리되었다. 수렴을 담당하는 도구 자체가 낡은 버전으로 프로젝트를 고치는 것보다 나쁜 버전 불일치는 없다.
+  </div>
 
   <h2 id="categories">파일 처리 8분류</h2>
   <p>스크립트는 파일을 성격에 따라 다르게 다룬다 — 전부 똑같이 "새 걸로 덮어쓰기"가 아니다.</p>
@@ -86,6 +91,16 @@
     </tbody>
   </table>
   </div>
+  <div class="note">
+    <p><strong>2026-09 신규: 분류는 열거가 아니라 정책 파일이 됐다(ADR-0073).</strong> 파일이 어느 분류에 속하는지는 예전에 <code>upgrade-project.ts</code> 안에 목록으로 박혀 있었다. 그래서 어느 목록에도 걸리지 않는 템플릿 파일은 기존 프로젝트에 <em>조용히 전달되지 않았다</em> — variant 문서 트리 대부분(<code>user-guide</code>, <code>handoff-spec</code>, <code>VERSION_MANIFEST</code>, <code>skill-graph.overrides.json</code>, variant 도메인 문서, <code>countries/KR.md</code>)과 <code>.github/</code>, <code>.claude|gemini/settings.json</code>, <code>.editorconfig</code>, <code>skills.json</code>이 정확히 그 빠진 있었다. 이제 분류는 <code>scripts/lib/upgrade-policy.ts</code>가 담당하고, 새 <strong>TEMPLATE TREE SYNC</strong> 패스가 유효 템플릿 트리(<code>templates/common</code> 위에 variant를 덧씌운 것)를 훑으며 <em>모든</em> 파일의 분류를 해석한다. 폴백 정책은 <strong>SYNC — 기본으로 전달한다</strong>: 커버리지는 열거가 아니라 거부 목록 방식이다. 하위 정책 셋:</p>
+    <ul>
+      <li><strong>SYNC</strong> — 없으면 추가, 있으면 인라인 버전/해시 갱신에 표준 충돌 경고. v1.22.0부터 예전 VARIANT_DOCS_SYNC가 하드코딩하던 5개 파일도 이 패스가 담당한다.</li>
+      <li><strong>WORKSPACE</strong> — 워크스페이스 시드 디렉터리(<code>docs/designs/</code>, <code>docs/lifecycle/</code> 등)는 없을 때만 추가하며, 프로젝트 쪽 수정을 절대 덮어쓰지 않는다.</li>
+      <li><strong>JSON_MERGE</strong> — 플랫폼 <code>.claude/settings.json</code> / <code>.gemini/settings.json</code>은 깊은 병합하며 프로젝트 전용 배열 항목을 보존한다.</li>
+    </ul>
+    <p>함께 추가된 <code>check-upgrade-coverage.ts --strict</code>는 <code>audit.ts</code> 안에서 자동으로 실행된다(ADR-0060 스킬 그래프 드리프트 게이트와 같은 자동 활성화 방식). 파일의 분류를 해석할 수 없거나, 전달될 파일에 <code>{{PLACEHOLDER}}</code> 토큰이 남아 있거나, JSON_MERGE 대상이 파싱에 실패하면 실패 처리한다. 3장의 교훈이 다시 — 규칙이 게이트가 됐다.</p>
+  </div>
+
   <p>v1.10.x부터 업그레이드는 국가 프로필(국가 스코프 자산)도 인식한다. 실행 전 프로젝트의 <code>.claude/template-version.txt</code>에서 <code>country=</code> 줄을 읽어(없으면 <code>docs/countries/ACTIVE.md</code>의 관할 표기로 대체) 대상 국가를 파악하고, 마무리 시 이 줄을 그대로 보존한다 — 구버전은 이 파일을 재작성하면서 <code>country=</code> 줄을 지워버려 국가 소속 정보를 잃게 했다. 또한 스킬 동기화가 모두 끝난 뒤 레지스트리 기반 prune가 한 번 더 실행되어, 국가 스코프 스킬(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)이 해당 국가가 아닌 프로젝트에 다시 주입됐다면 삭제한다 — 스캐폴딩 시점의 정리 결과를 매번 업그레이드가 되돌리는 사태를 막기 위함이다. 단, 로컬에서 의도적으로 고친 포크는 <code>⚠️ CONFLICT</code> 경고와 함께 그대로 보존된다.</p>
   <p>SYNC_IF_NEWER 대상 파일을 로컬에서 직접 고쳐 쓴 상태인데 템플릿 쪽 버전이 더 높으면, 스크립트는 <code>⚠️ CONFLICT</code>로 표시하면서도 결국 템플릿 내용으로 덮어쓴다. "덮어쓰기 전에 물어봐 주는" 동작이 아니라 "경고만 하고 진행하는" 동작이라는 점을 기억해야 한다 — 그래서 아래 안전장치가 중요하다.</p>
 
@@ -107,7 +122,7 @@
   <p>두 스크립트는 서로 반대 방향으로 파일을 흘려보낼 뿐, 어느 한쪽이 다른 쪽을 대체하지 않는다. 템플릿에 기여하고 싶다면 승격을, 이미 만든 프로젝트를 최신 상태로 유지하고 싶다면 업그레이드를 쓴다.</p>
 
   <div class="note">
-    이 장의 스크립트 동작(플래그, 파일 분류, 안전장치)은 <code>ai-workspace-standards</code> 저장소의 <code>scripts/upgrade-project.ts</code>(v1.10.1) 소스를 직접 확인해 작성했다. 이 핸드북 저장소에는 해당 스크립트가 포함돼 있지 않으므로, 실제 실행 결과는 반드시 최신 소스와 대조해 확인한다.
+    이 장의 스크립트 동작(플래그, 파일 분류, 안전장치)은 <code>ai-workspace-standards</code> 저장소의 <code>scripts/upgrade-project.ts</code>(v1.22.1)와 <code>scripts/lib/upgrade-policy.ts</code> 소스를 직접 확인해 작성했다. 이 핸드북 저장소에는 해당 스크립트가 포함돼 있지 않으므로, 실제 실행 결과는 반드시 최신 소스와 대조해 확인한다.
   </div>
 
   <div class="chapter-nav">

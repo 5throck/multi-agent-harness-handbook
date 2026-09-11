@@ -36,7 +36,7 @@
   <div class="chapter-eyebrow">Chapter 10</div>
   <h1>L3 Project Upgrade</h1>
   <p class="lead">Once you've created an L3 project, what happens when the upstream standards (L0/L1) change? The answer is: "nothing happens at all." Because of the fork model discussed in Chapter 8 §1, actually bringing new upstream changes into an already-created L3 project requires a human to explicitly run <code>upgrade-project.ts</code>. This chapter covers that procedure.</p>
-  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.10.1) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and SSOT</a></p>
+  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.22.1) · <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/lib/upgrade-policy.ts" target="_blank">scripts/lib/upgrade-policy.ts</a> (ADR-0073) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">What this chapter covers</div>
@@ -45,6 +45,8 @@
       <li>Basic usage of <code>upgrade-project.ts</code> and the principle of running <code>--dry-run</code> first</li>
       <li>The 8 file-handling modes: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE, and PRUNE</li>
       <li>The automatic git stash snapshot and the <code>--rollback</code> safety net</li>
+      <li>What&rsquo;s new in 2026-09 (ADR-0073): classification moved to <code>lib/upgrade-policy.ts</code> with a deliver-by-default TEMPLATE TREE SYNC pass, gated by <code>check-upgrade-coverage.ts --strict</code></li>
+      <li>Why the upgrade trio is L0-only &mdash; run it from the workspace root, never from a project&rsquo;s own copy</li>
       <li>How this is the exact opposite direction from the "promotion" covered in Chapter 11</li>
     </ul>
   </div>
@@ -63,10 +65,13 @@
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # Optional flags: --variant &lt;variant&gt;  --platform claude|antigravity|both
-#            --prune-removed  --rollback</pre>
+#            --prune-removed  --rollback  --yes  --skip-context-commonization</pre>
   <button class="copy-btn">Copy</button>
 </div>
-  <p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly.</p>
+  <p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly. The two flags added since 2026-09: <code>--yes</code>/<code>-y</code> skips the interactive confirmation prompts, and <code>--skip-context-commonization</code> opts out of the CONTEXT_COMMONIZATION pass (added in v1.20.0), which prunes near-duplicate sections of <code>docs/&lt;variant&gt;.context.md</code> once the refreshed <code>docs/context.md</code> supersedes them — sections at 65%+ token overlap are removed, 30–65% are flagged for the manual Context Commonization Review, and anything below is left alone.</p>
+  <div class="note">
+    <strong>Where to run it (what&rsquo;s new in 2026-09)</strong> — the upgrade trio (<code>upgrade-project.ts</code>, <code>lib/upgrade-policy.ts</code>, <code>check-upgrade-coverage.ts</code>) is now <strong>L0-only</strong> (ADR-0073 Amendment 1). Run it from the workspace root as <code>bun scripts/upgrade-project.ts Projects/&lt;name&gt;</code>, or from inside a project invoke the workspace copy with <code>bun ../../scripts/upgrade-project.ts .</code>. The reason: the script resolves the template tree relative to its own location, so an in-project copy looks for <code>&lt;project&gt;/templates/common</code>, which never exists — per-project copies were inert fossils and have been retired. A stale upgrader mutating your project is the worst possible version skew for the very tool meant to converge it.
+  </div>
 
   <h2 id="categories">The 8 file-handling categories</h2>
   <p>The script treats files differently depending on their nature — it isn't a blanket "overwrite everything with the new version."</p>
@@ -86,6 +91,16 @@
     </tbody>
   </table>
   </div>
+  <div class="note">
+    <p><strong>What&rsquo;s new (2026-09): classification is a policy file, not an enumeration (ADR-0073).</strong> Which category a file falls into used to be hardcoded list-by-list inside <code>upgrade-project.ts</code>, so a template file claimed by no list was <em>silently never delivered</em> to existing projects — most of the variant docs tree (<code>user-guide</code>, <code>handoff-spec</code>, <code>VERSION_MANIFEST</code>, <code>skill-graph.overrides.json</code>, variant domain docs, <code>countries/KR.md</code>), plus <code>.github/</code>, <code>.claude|gemini/settings.json</code>, <code>.editorconfig</code>, and <code>skills.json</code> had exactly that gap. Classification now lives in <code>scripts/lib/upgrade-policy.ts</code>, and a new <strong>TEMPLATE TREE SYNC</strong> pass walks the effective template tree (the variant overlay over <code>templates/common</code>) resolving a claim for <em>every</em> file. The fallback policy is <strong>SYNC — deliver by default</strong>: coverage is deny-list, not enumeration. Three sub-policies:</p>
+    <ul>
+      <li><strong>SYNC</strong> — add-if-missing, then inline-version/hash update with the standard conflict warning. Since v1.22.0 this pass also owns the five files the old VARIANT_DOCS_SYNC category hardcoded.</li>
+      <li><strong>WORKSPACE</strong> — workspace seed directories (<code>docs/designs/</code>, <code>docs/lifecycle/</code>, …) are add-if-missing only; project-side edits are never overwritten.</li>
+      <li><strong>JSON_MERGE</strong> — platform <code>.claude/settings.json</code> / <code>.gemini/settings.json</code> are deep-merged with project-only array entries preserved.</li>
+    </ul>
+    <p>The companion <code>check-upgrade-coverage.ts --strict</code> runs automatically inside <code>audit.ts</code> (same self-activating convention as the ADR-0060 skill-graph drift gate) and fails when a file's claim cannot be resolved, a delivered file still contains a <code>{{PLACEHOLDER}}</code> token, or a JSON_MERGE target stops parsing. Chapter 3's lesson again — the rule became a gate.</p>
+  </div>
+
   <p>Since v1.10.x, upgrades are also country-profile aware. Before running, the script reads the <code>country=</code> line from the project's <code>.claude/template-version.txt</code> (falling back to the jurisdiction noted in <code>docs/countries/ACTIVE.md</code>) to determine the target country, and preserves that line when it rewrites the file at the end — older versions dropped the line during the rewrite, erasing the project's country provenance. In addition, after all skill-sync passes finish, a registry-driven prune pass runs once more and deletes country-scoped skills (<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>) if they were re-injected into a project whose country doesn't match — preventing upgrades from undoing the pruning done at scaffold time. Forks deliberately modified locally, however, are kept with a <code>⚠️ CONFLICT</code> warning.</p>
   <p>If a SYNC_IF_NEWER target has been edited locally but the template's version is newer, the script marks it as <code>⚠️ CONFLICT</code> but still overwrites it with the template's content in the end. Keep in mind that this is "warn and proceed," not "ask before overwriting" — which is exactly why the safety net described below matters.</p>
 
@@ -107,7 +122,7 @@
   <p>The two scripts simply move files in opposite directions — neither replaces the other. If you want to contribute back to the template, use promotion; if you want to keep an existing project up to date, use upgrade.</p>
 
   <div class="note">
-    The script behavior described in this chapter (flags, file categories, safety nets) was written by directly examining the source of <code>scripts/upgrade-project.ts</code> (v1.10.1) in the <code>ai-workspace-standards</code> repository. This handbook repository does not include that script, so always cross-check actual execution results against the latest source.
+    The script behavior described in this chapter (flags, file categories, safety nets) was written by directly examining the source of <code>scripts/upgrade-project.ts</code> (v1.22.1) and <code>scripts/lib/upgrade-policy.ts</code> in the <code>ai-workspace-standards</code> repository. This handbook repository does not include those scripts, so always cross-check actual execution results against the latest source.
   </div>
 
   <div class="chapter-nav">

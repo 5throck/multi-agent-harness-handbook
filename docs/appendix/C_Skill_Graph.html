@@ -40,14 +40,15 @@
   <div class="chapter-eyebrow">참고 C</div>
   <h1>스킬 관계 그래프 — 구조와 운영</h1>
   <p class="lead">스킬이 수십 개를 넘어서면 "어떤 스킬이 무엇을 전제로 하는가"가 조직의 기억 밖으로 사라진다. 이 문서는 8장 §2에서 소개한 스킬 관계 그래프의 구체적 구조 — 데이터 원천, 스키마, 관계 어휘, 생성 파이프라인, 검증과 운영 워크플로우 — 를 하나의 장으로 정리한다.</p>
-  <p class="source-line">출처: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+  <p class="source-line">출처: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · ADR-0072 <em>Skill Term Nodes</em> · <code>scripts/generate-skill-graph.ts</code> v1.10.0</p>
 
   <div class="keypoints">
     <div class="kp-title">이 문서에서 다루는 것</div>
     <ul>
       <li>그래프가 왜 1차 저장소가 아니라 "항상 재생성되는 투영"인가</li>
-      <li>관계를 유도하는 다섯 가지 데이터 원천과 우선순위</li>
+      <li>관계를 유도하는 여섯 가지 데이터 원천과 우선순위</li>
       <li>노드/엣지 스키마와 10개의 타입화된 관계 어휘</li>
+      <li>2026-09 신규(ADR-0072): <code>references/terms-ko.json</code>의 한국어 용어가 <code>term:&lt;용어&gt;</code> 노드로 그래프에 오르는 방식</li>
       <li>명시적·실험적·투영의 3계층 관계 모델과 90일 규칙</li>
       <li>생성·검증·동기화 파이프라인과 실전 관계 추가 절차</li>
     </ul>
@@ -61,6 +62,7 @@
   <p>제너레이터는 다음 원천을 우선순위 순으로 훑는다. 앞의 원천일수록 의도가 명시적인 것이고, 뒤로 갈수록 암시적 유다.</p>
   <ol>
     <li><strong>SKILL.md 프론트매터</strong> — <code>prerequisites</code>(필수 선행 스킬)와 타입화된 <code>relates_to</code>(관계 어휘 + 대상 + 선택적 메모). 가장 명시적인 원천이다.</li>
+    <li><strong>스킬별 <code>references/terms-ko.json</code></strong>(2026-09 추가, ADR-0072) — 한국어 도메인 용어를 <code>term:&lt;용어&gt;</code> 노드로 만들고 <code>references</code> 엣지로 스킬과 연결한다. 항목은 평범한 용어 설명 문자열이거나 <code>en</code>/<code>mapsTo</code>와 선택적 <code>items</code> 맵을 담은 객체 둘 다 파싱하며, 깨진 JSON 파일은 건너뛰어 빌드가 결정론을 유지한다.</li>
     <li><strong>에이전트 파일의 <code>required_skills</code></strong> — 에이전트 → 스킬의 <code>used_by</code> 관계를 만든다.</li>
     <li><strong><code>variant.json</code>의 <code>skill_manifest</code></strong> — variant가 어떤 스킬을 어떤 에이전트·페이즈에 물리는지의 매니페스트. <code>phase</code> 관계의 원천이다.</li>
     <li><strong>문서 본문의 백틱 참조</strong> — 문서가 스킬 이름을 정확한 백틱 이름으로 언급하면 <code>references</code> 엣지가 된다(오탐을 막기 위해 정확 일치만 인정).</li>
@@ -98,7 +100,11 @@
 }</pre>
   <button class="copy-btn">복사</button>
 </div>
-  <p>노드는 <code>id</code>·<code>type</code>·<code>layer</code>를 갖는다. 타입은 <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, <code>output_type</code> 등이고, 계층은 <code>L0</code>(워크스페이스 루트), <code>common</code>(공통 템플릿), <code>variant:&lt;name&gt;</code>, <code>L3</code>(개별 프로젝트)다.</p>
+  <p>노드는 <code>id</code>·<code>type</code>·<code>layer</code>를 갖는다. 타입은 <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, <code>output_type</code>, 그리고 2026-09(ADR-0072)부터 한국어 용어 노드를 뜻하는 <code>term</code> 등이고, 계층은 <code>L0</code>(워크스페이스 루트), <code>common</code>(공통 템플릿), <code>variant:&lt;name&gt;</code>, <code>L3</code>(개별 프로젝트)다.</p>
+
+  <div class="note">
+    <p><strong>2026-09 신규: 한국어 용어 노드(ADR-0072).</strong> k-* 스킬들은 한국어 도메인 용어를 스킬별 데이터 파일 <code>references/terms-ko.json</code>에 담는다 — 마크다운이 아닌 참조 자산이므로, 문서 본문을 훑는 스캐너가 아니라 그래프 제너레이터가 읽는다. 항목 하나하나가 소유 스킬과 같은 계층의 <code>term:&lt;용어&gt;</code> 노드가 되고, 스킬 → 용어 <code>references</code> 엣지가 붙는다. "전자공시나 <code>100대 통계지표</code>를 다루는 스킬이 뭐지"가 문장 감이 아니라 그래프 질의로 답된다. 제너레이터 v1.10.0부터 이 어휘는 <code>docs/skill-graph.md</code>에도 <em>Korean Term Vocabulary</em> 표(용어 | 계층 | 참조 스킬)로 렌더링되며, 기계용 SSOT은 여전히 <code>docs/skill-graph.json</code>이다. <code>verify-skill-graph.ts</code>도 노드 타입 합집합에 <code>term</code>을 더해 용어 불변식을 검증한다 — id가 <code>term:</code>으로 올바르게 이름공간돼 있는지, 중복이 없는지, 그리고 고아(참조 엣지가 하나도 없는 용어 노드)가 없는지.</p>
+  </div>
 
   <h2 id="a4-edges">엣지 타입 상세</h2>
   <p>Amendment 1–6에 걸쳐 자란 관계 어휘 전체다. 방향과 대칭성, 원천을 함께 정리한다. 모든 엣지는 <strong>자문적(advisory)</strong> — 라우팅과 계획에 정보를 주지만 실행을 강제로 막지는 않는다.</p>
@@ -113,7 +119,7 @@
       <tr><td><code>used_by</code></td><td>에이전트가 스킬을 사용한다</td><td>agent→skill</td><td>에이전트 <code>required_skills</code></td></tr>
       <tr><td><code>phase</code></td><td>스킬이 워크플로우 페이즈에 배속된다</td><td>skill→phase</td><td><code>variant.json</code> <code>skill_manifest</code></td></tr>
       <tr><td><code>supersedes</code></td><td>문서 계승(구 문서 → 신 문서)</td><td>old→new</td><td>문서 메타</td></tr>
-      <tr><td><code>references</code></td><td>문서 간 인용</td><td>A→B</td><td>백틱 참조</td></tr>
+      <tr><td><code>references</code></td><td>문서 간 인용. 스킬의 <code>references/terms-ko.json</code>이 선언한 용어의 skill → <code>term:</code> 노드 연결도 이 엣지다(ADR-0072)</td><td>A→B</td><td>백틱 참조, <code>terms-ko.json</code></td></tr>
       <tr><td><code>cites_skill</code></td><td>의사결정 기록이 스킬을 인용</td><td>decision→skill</td><td>결정 기록 본문</td></tr>
     </tbody>
   </table>

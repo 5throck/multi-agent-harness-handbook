@@ -2,6 +2,14 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-11] — Upstream Sync: ADR-0073 Upgrade Policy & ADR-0072 Skill Term Nodes
+
+### Changed
+- Synced handbook facts with `ai-workspace-standards` main (2026-09).
+- **Ch.10 (ko/en/ja/es)** re-pinned to **upgrade-project.ts v1.22.1** + **`scripts/lib/upgrade-policy.ts` (ADR-0073)**: classification moved out of hardcoded lists into a policy file; new **TEMPLATE TREE SYNC** pass walks the effective template tree and resolves a classification for *every* file (fallback policy **SYNC — deliver by default**, a deny-list rather than an enumeration; WORKSPACE is add-if-missing only; JSON_MERGE deep-merges `.claude/settings.json` / `.gemini/settings.json`); since v1.22.0 the pass also owns the five files formerly hardcoded as VARIANT_DOCS_SYNC. Documented the new `--yes` / `--skip-context-commonization` flags (CONTEXT_COMMONIZATION since v1.20.0: ≥65% token overlap removed, 30–65% flagged for review) and **ADR-0073 Amendment 1** — the upgrade trio is **L0-only**: run `bun scripts/upgrade-project.ts Projects/<name>` from the workspace root, or `bun ../../scripts/upgrade-project.ts .` from inside a project (the script resolves the template tree relative to its own location, so per-project copies were inert fossils and were retired). Companion gate `check-upgrade-coverage.ts --strict` auto-runs inside `audit.ts`.
+- **Appendix C (ko/en)**: skill-graph sources gain **ADR-0072 Skill Term Nodes** — each skill's `references/terms-ko.json` yields `term:<용어>` nodes (inheriting the owning skill's layer) plus skill→term `references` edges; generator pinned to **generate-skill-graph.ts v1.10.0**, which renders the Korean Term Vocabulary table (term | layer | referencing skills) into `docs/skill-graph.md`; `verify-skill-graph.ts` mirrors the `term` node type with namespacing/duplicate/orphan invariants.
+- **Ch.01 (ko/en)**: skill example `<code>audit-workspace</code>` → `project-review` (audit-workspace deprecated 2026-09-10; project-review Step 0 is a documented superset).
+
 ## [2026-08-24] — Workspace-State Sync & i18n Parity Gate
 
 ### Added

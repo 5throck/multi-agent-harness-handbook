@@ -40,14 +40,15 @@
   <div class="chapter-eyebrow">Reference C</div>
   <h1>Skill Relationship Graph — Structure and Operations</h1>
   <p class="lead">Once skills number in the dozens, "which skill presupposes what" disappears from organizational memory. This document consolidates the concrete structure of the skill relationship graph introduced in Chapter 8 §2 — data sources, schema, relation vocabulary, generation pipeline, validation, and the operational workflow — into a single chapter.</p>
-  <p class="source-line">Source: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+  <p class="source-line">Source: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · ADR-0072 <em>Skill Term Nodes</em> · <code>scripts/generate-skill-graph.ts</code> v1.10.0</p>
 
   <div class="keypoints">
     <div class="kp-title">What This Reference Bovers</div>
     <ul>
       <li>Why the graph is a "constantly regenerated projection", not a primary store</li>
-      <li>The five data sources relations are derived from, and their priority</li>
+      <li>The six data sources relations are derived from, and their priority</li>
       <li>Node/edge schema and the vocabulary of ten typed relations</li>
+      <li>What&rsquo;s new in 2026-09 (ADR-0072): Korean term vocabulary as <code>term:&lt;용어&gt;</code> nodes from <code>references/terms-ko.json</code></li>
       <li>The explicit/experimental/projection three-layer model and the 90-day rule</li>
       <li>The generation/verification/sync pipeline and the procedure for adding a relation</li>
     </ul>
@@ -61,6 +62,7 @@
   <p>The generator scans the following sources in priority order. Earlier sources are more explicitly intentional; later ones more implicitly derived.</p>
   <ol>
     <li><strong>SKILL.md frontmatter</strong> — <code>prerequisites</code> (mandatory predecessor skills) and typed <code>relates_to</code> (relation vocabulary + target + optional note). The most explicit source.</li>
+    <li><strong>Each skill's <code>references/terms-ko.json</code></strong> (added 2026-09, ADR-0072) — Korean domain vocabulary as <code>term:&lt;용어&gt;</code> nodes joined to their skill by <code>references</code> edges. An entry may be a plain glossary string or an object with <code>en</code>/<code>mapsTo</code> and an optional nested <code>items</code> map; malformed files are skipped so the build stays deterministic.</li>
     <li><strong>Agent files' <code>required_skills</code></strong> — produces agent → skill <code>used_by</code> relations.</li>
     <li><strong><code>variant.json</code>'s <code>skill_manifest</code></strong> — the manifest of which skills a variant attaches to which agents and phases. Source of <code>phase</code> relations.</li>
     <li><strong>Backtick references in document prose</strong> — a document mentioning a skill by its exact backticked name produces a <code>references</code> edge (exact match only, to avoid false positives).</li>
@@ -98,7 +100,10 @@
 }</pre>
   <button class="copy-btn">Copy</button>
 </div>
-  <p>Nodes carry <code>id</code>, <code>type</code>, and <code>layer</code>. Types include <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, and <code>output_type</code>; layers are <code>L0</code> (workspace root), <code>common</code> (shared template), <code>variant:&lt;name&gt;</code>, and <code>L3</code> (individual project).</p>
+  <p>Nodes carry <code>id</code>, <code>type</code>, and <code>layer</code>. Types include <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, <code>output_type</code>, and &mdash; since 2026-09 (ADR-0072) &mdash; <code>term</code> for Korean vocabulary nodes; layers are <code>L0</code> (workspace root), <code>common</code> (shared template), <code>variant:&lt;name&gt;</code>, and <code>L3</code> (individual project).</p>
+  <div class="note">
+    <p><strong>What&rsquo;s new (2026-09): Korean term nodes (ADR-0072).</strong> The k-* skills keep their Korean domain vocabulary in a per-skill data file, <code>references/terms-ko.json</code> &mdash; a non-Markdown reference asset, which is exactly why the graph generator (not the document scanner) is what reads it. Each entry becomes a <code>term:&lt;용어&gt;</code> node whose layer matches the owning skill, plus a skill &rarr; term <code>references</code> edge. "Which skills talk about <code>전자공시</code> or <code>100대 통계지표</code>" is now a first-class graph query instead of a prose guess. Since generator v1.10.0 the vocabulary is also rendered into <code>docs/skill-graph.md</code> as a <em>Korean Term Vocabulary</em> table (term | layer | referencing skills); <code>docs/skill-graph.json</code> remains the machine SSOT. <code>verify-skill-graph.ts</code> mirrors the new <code>term</code> member of the node-type union and enforces the term invariants &mdash; ids properly namespaced <code>term:</code>, no duplicates, and no orphan term node (every term must be referenced by at least one skill edge).</p>
+  </div>
 
   <h2 id="a4-edges">Edge Types in Detail</h2>
   <p>The full relation vocabulary grown across Amendments 1–6, with direction, symmetry, and source. All edges are <strong>advisory</strong> — they inform routing and planning but never hard-block execution.</p>
@@ -113,7 +118,7 @@
       <tr><td><code>used_by</code></td><td>An agent uses a skill</td><td>agent→skill</td><td>agent <code>required_skills</code></td></tr>
       <tr><td><code>phase</code></td><td>A skill belongs to a workflow phase</td><td>skill→phase</td><td><code>variant.json</code> <code>skill_manifest</code></td></tr>
       <tr><td><code>supersedes</code></td><td>Document succession (old → new)</td><td>old→new</td><td>document metadata</td></tr>
-      <tr><td><code>references</code></td><td>Cross-document citation</td><td>A→B</td><td>backtick references</td></tr>
+      <tr><td><code>references</code></td><td>Cross-document citation; also skill → <code>term:</code> node when the skill's <code>references/terms-ko.json</code> declares the term (ADR-0072)</td><td>A→B</td><td>backtick references; <code>terms-ko.json</code></td></tr>
       <tr><td><code>cites_skill</code></td><td>A decision record cites a skill</td><td>decision→skill</td><td>decision record body</td></tr>
     </tbody>
   </table>

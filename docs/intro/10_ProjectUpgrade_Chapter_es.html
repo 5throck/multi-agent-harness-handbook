@@ -36,7 +36,7 @@
   <div class="chapter-eyebrow">Capítulo 10</div>
   <h1>Actualización de Proyecto L3</h1>
   <p class="lead">Una vez que has creado un proyecto L3, ¿qué ocurre cuando los estándares upstream (L0/L1) cambian? La respuesta es: "no ocurre absolutamente nada." Debido al modelo de bifurcación discutido en el Capítulo 8 §1, para incorporar realmente los cambios upstream nuevos a un proyecto L3 ya creado, una persona debe ejecutar explícitamente <code>upgrade-project.ts</code>. Este capítulo cubre ese procedimiento.</p>
-  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.10.1) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y SSOT</a></p>
+  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.22.1) · <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/lib/upgrade-policy.ts" target="_blank">scripts/lib/upgrade-policy.ts</a> (ADR-0073) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">Lo Que Cubre Este Capítulo</div>
@@ -45,6 +45,8 @@
       <li>Uso básico de <code>upgrade-project.ts</code> y el principio de ejecutar primero <code>--dry-run</code></li>
       <li>Los 8 modos de manejo de archivos: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE y PRUNE</li>
       <li>La instantánea automática con git stash y la red de seguridad de <code>--rollback</code></li>
+      <li>Novedad 2026-09 (ADR-0073): la clasificación se trasladó a <code>lib/upgrade-policy.ts</code>, con la pasada TEMPLATE TREE SYNC de la política de entrega por defecto (SYNC) y la compuerta <code>check-upgrade-coverage.ts --strict</code></li>
+      <li>Por qué el trío de scripts de actualización es ahora exclusivo de L0 y debe ejecutarse desde la raíz del workspace</li>
       <li>Cómo esto es exactamente la dirección opuesta a la "promoción" cubierta en el Capítulo 11</li>
     </ul>
   </div>
@@ -63,10 +65,13 @@
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
 # Opciones opcionales: --variant &lt;variant&gt;  --platform claude|antigravity|both
-#            --prune-removed  --rollback</pre>
+#            --prune-removed  --rollback  --yes  --skip-context-commonization</pre>
   <button class="copy-btn">Copiar</button>
 </div>
-  <p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente.</p>
+  <p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente. Dos opciones añadidas a partir de 2026-09: <code>--yes</code>/<code>-y</code> omite los mensajes de confirmación interactivos, y <code>--skip-context-commonization</code> omite la pasada CONTEXT_COMMONIZATION (añadida en v1.20.0) — que tras rellenar <code>docs/context.md</code> depura las secciones casi duplicadas de <code>docs/&lt;variant&gt;.context.md</code>. Las secciones con un solapamiento de tokens del 65% o más se eliminan automáticamente, las del 30–65% se marcan para una revisión manual de Context Commonization Review, y las que quedan por debajo se dejan tal cual.</p>
+  <div class="note">
+    <strong>Dónde ejecutarlo (novedad 2026-09)</strong> — el trío de scripts de actualización (<code>upgrade-project.ts</code>, <code>lib/upgrade-policy.ts</code>, <code>check-upgrade-coverage.ts</code>) es ahora <strong>exclusivo de L0</strong> (Enmienda 1 de ADR-0073). Ejecútalo desde la raíz del workspace como <code>bun scripts/upgrade-project.ts Projects/&lt;name&gt;</code>, o desde dentro de un proyecto invocando la copia del workspace con <code>bun ../../scripts/upgrade-project.ts .</code>. El motivo es simple — el script resuelve el árbol de plantillas en relación con su propia ubicación, por lo que una copia dentro del proyecto buscaría <code>&lt;project&gt;/templates/common</code>, una ruta que no existe. Las copias por proyecto eran fósiles inertes desde el principio y se han retirado. No hay peor desviación de versiones que la propia herramienta de convergencia reescribiendo tu proyecto con una versión antigua.
+  </div>
 
   <h2 id="categories">Las 8 categorías de manejo de archivos</h2>
   <p>El script trata los archivos de manera diferente según su naturaleza — no es un "sobrescribir todo con la nueva versión" indiscriminado.</p>
@@ -86,6 +91,16 @@
     </tbody>
   </table>
   </div>
+  <div class="note">
+    <p><strong>Novedad 2026-09: la clasificación ya no es una enumeración, es un archivo de políticas (ADR-0073).</strong> Qué categoría recibía cada archivo solía estar incrustado como listas dentro de <code>upgrade-project.ts</code>. En consecuencia, cualquier archivo de plantilla que no cayera en ninguna lista <em>no se entregaba silenciosamente</em> a los proyectos existentes — exactamente eso le ocurría a la mayor parte del árbol de documentos de variant (<code>user-guide</code>, <code>handoff-spec</code>, <code>VERSION_MANIFEST</code>, <code>skill-graph.overrides.json</code>, los documentos de dominio del variant, <code>countries/KR.md</code>), además de <code>.github/</code>, <code>.claude|gemini/settings.json</code>, <code>.editorconfig</code> y <code>skills.json</code>. Ahora la clasificación vive en <code>scripts/lib/upgrade-policy.ts</code>, y la nueva pasada <strong>TEMPLATE TREE SYNC</strong> recorre el árbol de plantillas efectivo (<code>templates/common</code> con el variant superpuesto) interpretando la clasificación de <em>todos</em> los archivos. La política de respaldo es <strong>SYNC — entregar por defecto</strong>: la cobertura funciona por lista de denegación, no por enumeración. Las tres subpolíticas:</p>
+    <ul>
+      <li><strong>SYNC</strong> — añade si falta, actualiza versión/hash en línea con la advertencia de conflicto estándar si existe. Desde v1.22.0, esta pasada también cubre los 5 archivos que el antiguo VARIANT_DOCS_SYNC codificaba de forma rígida.</li>
+      <li><strong>WORKSPACE</strong> — los directorios semilla del workspace (<code>docs/designs/</code>, <code>docs/lifecycle/</code>, etc.) solo se añaden si no existen y nunca sobrescriben las modificaciones del proyecto.</li>
+      <li><strong>JSON_MERGE</strong> — los <code>.claude/settings.json</code> / <code>.gemini/settings.json</code> de la plataforma se fusionan en profundidad, conservando las entradas de array exclusivas del proyecto.</li>
+    </ul>
+    <p>El <code>check-upgrade-coverage.ts --strict</code> añadido junto con esto se ejecuta automáticamente dentro de <code>audit.ts</code> (el mismo mecanismo de autoactivación que la compuerta de deriva del grafo de habilidades de ADR-0060). Falla si no puede resolver la clasificación de un archivo, si un archivo por entregar aún contiene tokens <code>{{PLACEHOLDER}}</code>, o si un objetivo JSON_MERGE no se puede parsear. La lección del Capítulo 3, de nuevo — la regla se convirtió en compuerta.</p>
+  </div>
+
   <p>Desde la v1.10.x, las actualizaciones también son conscientes del perfil de país. Antes de ejecutarse, el script lee la línea <code>country=</code> del <code>.claude/template-version.txt</code> del proyecto (con respaldo en la jurisdicción indicada en <code>docs/countries/ACTIVE.md</code>) para determinar el país objetivo, y conserva esa línea al reescribir el archivo al final — las versiones anteriores eliminaban la línea durante la reescritura, borrando la procedencia de país del proyecto. Además, después de terminar todas las pasadas de sincronización de habilidades, se ejecuta una pasada de prune basada en el registro que elimina las habilidades con alcance de país (<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>) si fueron reinyectadas en un proyecto cuyo país no coincide — evitando que cada actualización deshaga la limpieza realizada durante el scaffolding. Los forks modificados deliberadamente a nivel local, sin embargo, se conservan con una advertencia <code>⚠️ CONFLICT</code>.</p>
   <p>Si un objetivo SYNC_IF_NEWER ha sido editado localmente pero la versión de la plantilla es más reciente, el script lo marca como <code>⚠️ CONFLICT</code> pero aun así lo sobrescribe con el contenido de la plantilla al final. Ten en cuenta que esto es "advertir y continuar," no "preguntar antes de sobrescribir" — por eso la red de seguridad descrita a continuación es importante.</p>
 
@@ -107,7 +122,7 @@
   <p>Los dos scripts simplemente mueven archivos en direcciones opuestas — ninguno reemplaza al otro. Si deseas contribuir de vuelta a la plantilla, usa la promoción; si deseas mantener un proyecto existente actualizado, usa la actualización.</p>
 
   <div class="note">
-    El comportamiento del script descrito en este capítulo (opciones, categorías de archivos, redes de seguridad) se escribió examinando directamente la fuente de <code>scripts/upgrade-project.ts</code> (v1.10.1) en el repositorio <code>ai-workspace-standards</code>. Este repositorio del manual no incluye ese script, así que siempre contrasta los resultados de ejecución reales con la última fuente.
+    El comportamiento del script descrito en este capítulo (opciones, categorías de archivos, redes de seguridad) se escribió examinando directamente la fuente de <code>scripts/upgrade-project.ts</code> (v1.22.1) y <code>scripts/lib/upgrade-policy.ts</code> en el repositorio <code>ai-workspace-standards</code>. Este repositorio del manual no incluye ese script, así que siempre contrasta los resultados de ejecución reales con la última fuente.
   </div>
 
   <div class="chapter-nav">

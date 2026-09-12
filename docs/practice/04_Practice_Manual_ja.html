@@ -39,6 +39,7 @@
   <div class="nav-section">姉妹ドキュメント</div>
   <a href="04_Practice_Manual_A_ja.html">第4章 §1-A · Claude中心</a>
   <a href="04_Practice_Manual_B_ja.html">第4章 §1-B · Antigravity中心</a>
+  <a href="04_Practice_Manual_C_ja.html">第4章 §1-C · Codex中心</a>
   <div class="nav-section">他の章</div>
   <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章 · ガードレールと権限モデル</a>
   <a href="../intro/05_Intro_Chapter_ja.html">第5章 · 導入</a>
@@ -49,14 +50,14 @@
  <article class="reading">
   <div class="chapter-eyebrow">第4章 §1</div>
   <h1>第4章 §1 · ハーネスベースのマルチエージェントチーム活用</h1>
-  <p class="subtitle">Claude Code / Claude Desktop App / Antigravity CLI / Antigravity(Desktop)の4つのツールでサブエージェントを定義し、呼び出し、並列・自動化の単位に拡張する方法を並べて整理したリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a></p>
+  <p class="subtitle">Claude Code / Claude Desktop App / Antigravity CLI / Antigravity(Desktop) / Codex CLI / Codex Desktop Appの6つのツールでサブエージェント（またはそれに相当する作業）を定義し、遂行し、並列・自動化の単位に拡張する方法を並べて整理したリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a> · <a href="https://developers.openai.com/codex" target="_blank">Codex</a></p>
 
   <div class="version-box">
-    <div class="version-row"><span class="vlabel">対象バージョン</span><span class="vvalue">Claude Code 2026-07リリース / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0</span></div>
-    <div class="version-row"><span class="vlabel">参照ドキュメントURL</span><span class="vvalue"><a href="https://code.claude.com/docs/en/sub-agents" target="_blank">code.claude.com/docs/en/sub-agents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">antigravity.google/docs/cli/getting-started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">antigravity.google/docs/cli/using</a> · <a href="https://code.claude.com/docs" target="_blank">Claude Code (Agent Manager)</a></span></div>
-    <div class="version-row"><span class="vlabel">資料収集日</span><span class="vvalue">2026-07-14</span></div>
-    <div class="version-row"><span class="vlabel">バージョン確認方法</span><span class="vvalue">Claude Code/App: <code>claude --version</code> · Antigravity CLI: <code>agy --version</code> またはセッション内で <code>/usage</code> · Antigravity Desktop: アプリ内の情報画面</span></div>
-    <div class="version-row"><span class="vlabel">改訂時の確認事項</span><span class="vvalue">Claude Code Agent TeamsとAntigravity CLI/Agent Managerはいずれも急速に変化する機能のため、フラグ名・コマンド・UI構成がリリースごとに変わる可能性があるので最新のリリースノートを優先的に確認すること</span></div>
+    <div class="version-row"><span class="vlabel">対象バージョン</span><span class="vvalue">Claude Code 2026-09リリース / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0 / Codex CLI・Desktop App</span></div>
+    <div class="version-row"><span class="vlabel">参照ドキュメントURL</span><span class="vvalue"><a href="https://code.claude.com/docs/en/sub-agents" target="_blank">code.claude.com/docs/en/sub-agents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">antigravity.google/docs/cli/getting-started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">antigravity.google/docs/cli/using</a> · <a href="https://code.claude.com/docs" target="_blank">Claude Code (Agent Manager)</a> · <a href="https://developers.openai.com/codex" target="_blank">developers.openai.com/codex</a></span></div>
+    <div class="version-row"><span class="vlabel">資料収集日</span><span class="vvalue">2026-09-12</span></div>
+    <div class="version-row"><span class="vlabel">バージョン確認方法</span><span class="vvalue">Claude Code/App: <code>claude --version</code> · Antigravity CLI: <code>agy --version</code> またはセッション内で <code>/usage</code> · Antigravity Desktop: アプリ内の情報画面 · Codex CLI: <code>codex --version</code> · Codex Desktop App: アプリ内の情報画面</span></div>
+    <div class="version-row"><span class="vlabel">改訂時の確認事項</span><span class="vvalue">Claude Code Agent TeamsとAntigravity CLI/Agent Managerはいずれも急速に変化する機能のため、フラグ名・コマンド・UI構成がリリースごとに変わる可能性があるので最新のリリースノートを優先的に確認すること。Codexにネイティブなサブエージェントツールが追加されたかも再確認</span></div>
   </div>
 
   <div class="warning-box">2026-06-18を境に、Googleは個人(Free/Pro/Ultra)ユーザー向けのGemini CLIサービスを終了し、その後継として<strong>Antigravity CLI(<code>agy</code>)</strong>が導入された。本章はそれ以前はGemini コマンドラインインターフェース(CLI)を基準に書かれていたが、現時点を基準にAntigravity CLI/デスクトップ(Desktop)へ全面的に更新した。ツール別特性の詳細な比較は<a href="../tools/00_Tools_Manual_ja.html">ツール比較</a>を参照。</div>
@@ -66,22 +67,26 @@
   <div class="tree-box"><div style="position:relative">
   <pre>
 ハーネスベースのマルチエージェントチーム活用 (Desktopアプリを基準に、CLIは同一概念の代替として併記)
-├── サブエージェントの定義
+├── サブエージェント/役割の定義
 │   ├── Claude Desktop App / Claude Code    .claude/agents/*.md (YAML frontmatter、事前定義 — 両方とも同一)
-│   └── Antigravity(Desktop) / CLI  事前定義ファイルなし — オーケストレーターが目標を見て動的に生成
+│   ├── Antigravity(Desktop) / CLI  事前定義ファイルなし — オーケストレーターが目標を見て動的に生成
+│   └── Codex Desktop App / CLI     agents/&lt;name&gt;.mdを読み取り専用の役割コンテキストとして参照 (両方とも同一)
 ├── サブエージェントの呼び出し/委任
 │   ├── Claude Desktop App / Claude Code    Agent(Task)ツール — description / prompt / subagent_type
-│   └── Antigravity(Desktop)/CLI    Agent Manager UI(Desktop) · /goal, /agent, /agentsパネル(CLI)
+│   ├── Antigravity(Desktop)/CLI    Agent Manager UI(Desktop) · /goal, /agent, /agentsパネル(CLI)
+│   └── Codex Desktop App/CLI       なし — PMがセッション内で役割を順次切り替える
 ├── 並列実行
 │   ├── Claude Desktop App                  Agent Teams(in-processのみ)
 │   ├── Claude Code                 Agent Teams(in-process/tmux) + 1メッセージで複数Agent呼び出し
 │   ├── Antigravity Desktop         Agent Manager — Workspaceごとのエージェント(Local/New Worktree Mode)
-│   └── Antigravity CLI             セッション内部並列サブエージェント + セッション間(複数ターミナル)並列
+│   ├── Antigravity CLI             セッション内部並列サブエージェント + セッション間(複数ターミナル)並列
+│   └── Codex Desktop App/CLI       セッション内並列なし — 複数ウィンドウ/ターミナルによるセッション間並列のみ可能
 └── 自動化/フック
     ├── Claude Desktop App                  フック未発火 — 手動実行が必要
     ├── Claude Code                 PostToolUse/TeammateIdle/TaskCompletedフックが自動発火
     ├── Antigravity Desktop         該当なし — GUI中心
-    └── Antigravity CLI             agy -p "プロンプト"(非対話型CI用)、agy inspect(設定確認)
+    ├── Antigravity CLI             agy -p "プロンプト"(非対話型CI用)、agy inspect(設定確認)
+    └── Codex Desktop App/CLI       フックスイート未実行 — CODEX.mdの指針をPMがプロンプトで自己強制
 </pre>
   <button class="copy-btn">コピー</button>
 </div></div>
@@ -135,21 +140,23 @@
   <!-- ── セクション1 ── -->
   <h2 id="section-1">1. サブエージェントの定義 — 事前定義 vs 動的生成</h2>
 
-  <p>Anthropic系(Claude Desktop App/Claude Code)は、プロジェクトフォルダ配下にマークダウンファイル1つでサブエージェントを1つ事前定義しておく。Google系(Antigravity Desktop/CLI)には別途の定義ファイルがない — オーケストレーターが与えられた目標を見て、その都度サブエージェントを作成する。以下ではClaude Desktop AppとAntigravity(Desktop)を基準にまず説明し、それぞれのCLI対応を続けて紹介する。</p>
+  <p>Anthropic系(Claude Desktop App/Claude Code)は、プロジェクトフォルダ配下にマークダウンファイル1つでサブエージェントを1つ事前定義しておく。Google系(Antigravity Desktop/CLI)には別途の定義ファイルがない — オーケストレーターが与えられた目標を見て、その都度サブエージェントを作成する。OpenAI系(Codex Desktop App/CLI)にはネイティブなサブエージェント自体が存在せず、ワークスペース共通フォルダの<code>agents/&lt;name&gt;.md</code>をPMが読み取り専用の役割コンテキストとして参照する。以下ではClaude Desktop AppとAntigravity(Desktop)を基準にまず説明し、それぞれのCLI対応とCodexを続けて紹介する。</p>
 
   <p >
     Claude系の具体的な定義・呼び出し方法は<a href="04_Practice_Manual_A_ja.html">§1-A Claude中心</a>で、
-    Antigravity系の具体的な方法は<a href="04_Practice_Manual_B_ja.html">§1-B Antigravity中心</a>で扱う。
+    Antigravity系の具体的な方法は<a href="04_Practice_Manual_B_ja.html">§1-B Antigravity中心</a>で、
+    Codex系の具体的な方法は<a href="04_Practice_Manual_C_ja.html">§1-C Codex中心</a>で扱う。
   </p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>frontmatterフィールド</th><th>Claude Desktop App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th></tr></thead>
+    <thead><tr><th>frontmatterフィールド</th><th>Claude Desktop App / Claude Code (.claude/agents)</th><th>Antigravity (Desktop/CLI)</th><th>Codex (Desktop/CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td><code>name</code></td>
         <td>必須。<code>subagent_type</code>の値と一致しないと呼び出し不可</td>
         <td rowspan="4">該当なし — 定義ファイル自体が存在せず、オーケストレーターが実行時点で役割・ツール範囲を自ら判断してサブエージェントを生成する</td>
+        <td rowspan="4">呼び出しの概念がない — <code>agents/&lt;name&gt;.md</code>はPMが参照する読み取り専用の役割文書に過ぎず、frontmatterフィールドは実行に関与しない</td>
       </tr>
       <tr>
         <td><code>description</code></td>
@@ -167,37 +174,39 @@
   </table>
   </div>
 
-  <div class="warning-box">Antigravity(Desktop/CLI)には「サブエージェント定義ファイル」という概念自体が存在しない — 初級実習でAntigravity側にClaude Desktop App/Codeの<code>reviewer.md</code>と全く同じ例を無理に作ると事実と乖離する。Antigravityの「入門実習」はファイルを作ることではなく、目標を与えてオーケストレーターが自ら作業を分割していく過程を観察することである。</div>
+  <div class="warning-box">Antigravity(Desktop/CLI)には「サブエージェント定義ファイル」という概念自体が存在しない — 初級実習でAntigravity側にClaude Desktop App/Codeの<code>reviewer.md</code>と全く同じ例を無理に作ると事実と乖離する。Antigravityの「入門実習」はファイルを作ることではなく、目標を与えてオーケストレーターが自ら作業を分割していく過程を観察することである。Codex(Desktop/CLI)はさらに一歩進んで、<strong>サブエージェントの呼び出し自体が存在しない</strong>。「Codexでreviewerサブエージェントを呼び出す」という表現は誤りだ。PMが<code>agents/reviewer.md</code>を参照し、その役割のように考えるだけである。</div>
 
   <hr>
 
   <!-- ── セクション2 ── -->
   <h2 id="section-2">2. サブエージェントの呼び出し/委任</h2>
 
-  <p>Anthropic系(Claude Desktop App/Claude Code)は<code>Agent</code>/<code>Task</code>ツールで別コンテキストのサブエージェントをスポーンする。Google系(Antigravity Desktop/CLI)はAgent Manager UIまたはスラッシュコマンドでエージェントに目標を委任する。</p>
+  <p>Anthropic系(Claude Desktop App/Claude Code)は<code>Agent</code>/<code>Task</code>ツールで別コンテキストのサブエージェントをスポーンする。Google系(Antigravity Desktop/CLI)はAgent Manager UIまたはスラッシュコマンドでエージェントに目標を委任する。OpenAI系(Codex Desktop App/CLI)には「呼び出し」という動作自体がない — PMが同じセッション内で役割を順次切り替えながら作業を続ける。</p>
 
   <p >
     Claude系の具体的な呼び出し方法は<a href="04_Practice_Manual_A_ja.html#section-2">§1-A セクション2</a>で、
-    Antigravity系の具体的な方法は<a href="04_Practice_Manual_B_ja.html#section-2">§1-B セクション2</a>で扱う。
+    Antigravity系の具体的な方法は<a href="04_Practice_Manual_B_ja.html#section-2">§1-B セクション2</a>で、
+    Codex系の順次役割切り替え方式は<a href="04_Practice_Manual_C_ja.html#section-2">§1-C セクション2</a>で扱う。
   </p>
 
   <hr>
 
   <!-- ── セクション3 ── -->
-  <h2 id="section-3">3. 並列実行 — 4つのツール比較</h2>
+  <h2 id="section-3">3. 並列実行 — 6つのツール比較</h2>
 
-  <p>4つのツールすべてが並列実行をサポートするが、方式が異なる。Claude系はAgent Teams / 複数Agent呼び出し、Antigravity系はAgent Manager / セッション間並列を使用する。</p>
+  <p>6つのツールすべてが何らかの形で複数の作業を同時に進められるが、方式が異なる。Claude系はAgent Teams / 複数Agent呼び出し、Antigravity系はAgent Manager / セッション間並列を使用する。Codex系は<strong>セッション内並列をサポートせず</strong>、複数のウィンドウ・ターミナルでセッション自体を分けることしかできない。</p>
 
-  <div class="warning-box">同一ディレクトリ・Workspaceで複数のエージェントを同時に動かすと「認知的重複(cognitive overlap)」が発生することがある — あるエージェントが同じフォルダで作業中の別のエージェントの結果を自分の作業コンテキストと誤認(ハルシネーション)する問題である。Workspaceやworktreeでエージェントを分離することが推奨される慣行であり、例外的に見逃してよい些細な問題ではない。</div>
+  <div class="warning-box">同一ディレクトリ・Workspaceで複数のエージェントを同時に動かすと「認知的重複(cognitive overlap)」が発生することがある — あるエージェントが同じフォルダで作業中の別のエージェントの結果を自分の作業コンテキストと誤認(ハルシネーション)する問題である。Workspaceやworktreeでエージェントを分離することが推奨される慣行であり、例外的に見逃してよい些細な問題ではない。Codexはそもそもセッション内並列がないため、この問題自体が発生しない。</div>
 
   <p >
     Claude系の並列実行方式は<a href="04_Practice_Manual_A_ja.html#section-3">§1-A セクション3</a>で、
-    Antigravity系の並列実行方式は<a href="04_Practice_Manual_B_ja.html#section-3">§1-B セクション3</a>で扱う。
+    Antigravity系の並列実行方式は<a href="04_Practice_Manual_B_ja.html#section-3">§1-B セクション3</a>で、
+    Codex系のセッション間並列方式は<a href="04_Practice_Manual_C_ja.html#section-3">§1-C セクション3</a>で扱う。
   </p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>項目</th><th>Antigravity (Desktop)</th><th>Claude Desktop App</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th></tr></thead>
+    <thead><tr><th>項目</th><th>Antigravity (Desktop)</th><th>Claude Desktop App</th><th>Antigravity CLI (agy)</th><th>Claude Code (CLI)</th><th>Codex (Desktop/CLI)</th></tr></thead>
     <tbody>
       <tr>
         <td>並列実行単位</td>
@@ -205,6 +214,7 @@
         <td>Agent Teams (in-processのみ)</td>
         <td>セッション内部 + セッション間(複数ターミナル)</td>
         <td>1メッセージ内での複数Agent呼び出し / Agent Teams(in-process + tmux)</td>
+        <td>セッション内並列なし / 複数ウィンドウ・ターミナルによるセッション間並列のみ可能</td>
       </tr>
     </tbody>
   </table>
@@ -215,11 +225,12 @@
   <!-- ── セクション4 ── -->
   <h2 id="section-4">4. 自動化/フック — 何が自動的に発火するか</h2>
 
-  <p>Claude Code(CLI)はイベントフック(PostToolUse/TeammateIdle/TaskCompleted)を自動発火するが、Claude Desktop AppとAntigravityデスクトップ(Desktop)はフックを自動発火しない。Antigravity コマンドラインインターフェース(CLI)は<code>agy -p</code>で非対話型実行、<code>agy inspect</code>で設定点検を提供する。</p>
+  <p>Claude Code(CLI)はイベントフック(PostToolUse/TeammateIdle/TaskCompleted)を自動発火するが、Claude Desktop AppとAntigravityデスクトップ(Desktop)はフックを自動発火しない。Antigravity コマンドラインインターフェース(CLI)は<code>agy -p</code>で非対話型実行、<code>agy inspect</code>で設定点検を提供する。Codex(Desktop/CLI)は<strong>ワークスペースのフックスイートを一切実行せず</strong>、<code>CODEX.md</code>に記された指針をPMが毎セッション自ら認識し実行する(プロンプト自己強制)方式で代替する。</p>
 
   <p >
     Claude系の自動化/フックの詳細は<a href="04_Practice_Manual_A_ja.html#section-4">§1-A セクション4</a>で、
-    Antigravity系の自動化/フックの詳細は<a href="04_Practice_Manual_B_ja.html#section-4">§1-B セクション4</a>で扱う。
+    Antigravity系の自動化/フックの詳細は<a href="04_Practice_Manual_B_ja.html#section-4">§1-B セクション4</a>で、
+    Codex系のプロンプト自己強制方式は<a href="04_Practice_Manual_C_ja.html#section-4">§1-C セクション4</a>で扱う。
   </p>
 
   <p >実務のヒント: Antigravityには計算された作業量(work done)に基づく、定期的に更新される使用量クォータがある。正確な数値はアカウント・プランごとに異なる可能性があるため、複数のエージェントを長時間並列で動かす作業を計画する際はこの点を考慮しておく方が安全である。</p>
@@ -235,17 +246,19 @@
     <li>📖 <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started 公式ドキュメント</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using AGY CLI 公式ドキュメント</a></li>
     <li>📖 <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager 公式ドキュメント</a></li>
+    <li>📖 <a href="https://developers.openai.com/codex" target="_blank">Codex — 公式ドキュメント</a></li>
     <li>⚙️ <a href="04_Practice_Examples_A_ja.html">第4章 §2 実習例 — 04_Practice_Examples_A_ja.html</a></li>
   </ul>
 
   <hr>
-  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code 2026-07 · Antigravity CLI 1.1.0+ · Antigravity 2.0 基準 | 2026年7月</p>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Claude Code 2026-09 · Antigravity CLI 1.1.0+ · Antigravity 2.0 · Codex CLI/Desktop App 基準 | 2026年9月</p>
   <div class="chapter-nav">
     <a href="../guardrails/03_Guardrails_Chapter_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第3章 · ガードレール</div></a>
     <div class="branch">
       <div class="branch-label">ツール選択</div>
       <a href="04_Practice_Manual_A_ja.html" >Claude (A)</a>
       <a href="04_Practice_Manual_B_ja.html" >Antigravity (B)</a>
+      <a href="04_Practice_Manual_C_ja.html" >Codex (C)</a>
     </div>
   </div>
    <footer>

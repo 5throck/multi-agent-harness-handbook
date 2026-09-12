@@ -43,6 +43,11 @@
       "lang": "ko"
     },
     {
+      "path": "practice/04_Practice_Manual_C.html",
+      "title": "4장 §1-C · 서브에이전트 활용 상세 — Codex 중심",
+      "lang": "ko"
+    },
+    {
       "path": "practice/04_Practice_Examples_A.html",
       "title": "4장 §2-A · 멀티 에이전트 팀 실습 — Claude 중심 시나리오별 학습 가이드",
       "lang": "ko"
@@ -195,6 +200,11 @@
     {
       "path": "practice/04_Practice_Manual_B_en.html",
       "title": "Chapter 4 §1-B · Subagent Usage in Detail — Antigravity Focus",
+      "lang": "en"
+    },
+    {
+      "path": "practice/04_Practice_Manual_C_en.html",
+      "title": "Chapter 4 §1-C · Subagent Usage in Detail — Codex Focus",
       "lang": "en"
     },
     {
@@ -353,6 +363,11 @@
       "lang": "ja"
     },
     {
+      "path": "practice/04_Practice_Manual_C_ja.html",
+      "title": "第4章 §1-C・サブエージェント活用詳細 — Codex中心",
+      "lang": "ja"
+    },
+    {
       "path": "practice/04_Practice_Examples_A_ja.html",
       "title": "4章 §2-A・マルチエージェントチーム実習 (Claude中心)",
       "lang": "ja"
@@ -505,6 +520,11 @@
     {
       "path": "practice/04_Practice_Manual_B_es.html",
       "title": "Capítulo 4 §1-B · Uso Detallado de Subagentes — Enfoque en Antigravity",
+      "lang": "es"
+    },
+    {
+      "path": "practice/04_Practice_Manual_C_es.html",
+      "title": "Capítulo 4 §1-C · Uso Detallado de Subagentes — Enfoque en Codex",
       "lang": "es"
     },
     {

@@ -54,8 +54,8 @@
   <table>
     <thead><tr><th>Layer</th><th>Means</th><th>Strength</th><th>Coverage</th></tr></thead>
     <tbody>
-      <tr><td>1. Hook</td><td>Deterministic scripts (Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>Strongest — cannot proceed until the gate passes</td><td>Claude Code CLI and Gemini CLI full support; Desktop App conditional; Antigravity unsupported</td></tr>
-      <tr><td>2. Prompt</td><td>System instructions embedded in <code>CLAUDE.md</code>/<code>GEMINI.md</code></td><td>Medium — relies on agent self-compliance</td><td>All four platforms</td></tr>
+      <tr><td>1. Hook</td><td>Deterministic scripts (Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>Strongest — cannot proceed until the gate passes</td><td>Claude Code CLI and Gemini CLI full support; Desktop App conditional; Antigravity and Codex unsupported</td></tr>
+      <tr><td>2. Prompt</td><td>System instructions embedded in <code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code></td><td>Medium — relies on agent self-compliance</td><td>All four platforms</td></tr>
       <tr><td>3. Skill</td><td>On-demand manual invocation such as <code>/gateguard</code></td><td>Weakest (optional) — human-initiated</td><td>All four platforms</td></tr>
     </tbody>
   </table>
@@ -106,6 +106,7 @@
     <li><strong>Claude Code CLI / Gemini CLI</strong> — full hook support; mechanical blocking works.</li>
     <li><strong>Claude Desktop App</strong> — hooks fire conditionally; the prompt layer is the main line of defense.</li>
     <li><strong>Antigravity</strong> — no hook support; only prompt instructions remain. Ignoring the rule there triggers no mechanical block, but it is recorded as a <strong>governance violation</strong>.</li>
+    <li><strong>Codex (CLI · Desktop App)</strong> — no hook support. Instead, <code>CODEX.md</code> is injected directly as the system prompt, so the prompt layer is the baseline defense. Ignoring the rule there triggers no mechanical block, but likewise it is recorded as a <strong>governance violation</strong>.</li>
   </ul>
   <p>So the correct reading is not "rules are optional where hooks are missing" but "the enforcement layer weakens; the nature of the violation does not."</p>
 

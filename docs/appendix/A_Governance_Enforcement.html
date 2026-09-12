@@ -54,8 +54,8 @@
   <table>
     <thead><tr><th>계층</th><th>수단</th><th>강도</th><th>커버리지</th></tr></thead>
     <tbody>
-      <tr><td>1. 훅(Hook)</td><td>결정론적 스크립트(Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>최강 — 게이트를 통과하기 전엔 진행 불가</td><td>Claude Code CLI·Gemini CLI 전 지원, Desktop App 조건부, Antigravity 미지원</td></tr>
-      <tr><td>2. 프롬프트(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>에 내장된 시스템 지시</td><td>중간 — 에이전트 자기 준수에 의존</td><td>네 플랫폼 모두</td></tr>
+      <tr><td>1. 훅(Hook)</td><td>결정론적 스크립트(Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>최강 — 게이트를 통과하기 전엔 진행 불가</td><td>Claude Code CLI·Gemini CLI 전 지원, Desktop App 조건부, Antigravity·Codex 미지원</td></tr>
+      <tr><td>2. 프롬프트(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>에 내장된 시스템 지시</td><td>중간 — 에이전트 자기 준수에 의존</td><td>네 플랫폼 모두</td></tr>
       <tr><td>3. 스킬(Skill)</td><td><code>/gateguard</code> 등 온디맨드 수동 호출</td><td>최약(선택적) — 사람이 실행</td><td>네 플랫폼 모두</td></tr>
     </tbody>
   </table>
@@ -106,6 +106,7 @@
     <li><strong>Claude Code CLI / Gemini CLI</strong> — 훅 완전 지원. 기계적 차단이 동작한다.</li>
     <li><strong>Claude Desktop App</strong> — 훅이 조건부로 발화. 프롬프트 계층이 주 방어선.</li>
     <li><strong>Antigravity</strong> — 훅 미지원. 오직 프롬프트 지시만 남는다. 여기서 규칙을 무시하면 기계적 차단은 없지만, 그것은 <strong>거버넌스 위반</strong>으로 기록된다.</li>
+    <li><strong>Codex (CLI·Desktop App)</strong> — 훅 미지원. 대신 <code>CODEX.md</code>가 시스템 프롬프트로 직접 주입되므로 프롬프트 계층이 기본 방어선이다. 규칙을 무시해도 기계적 차단은 없지만, 마찬가지로 <strong>거버넌스 위반</strong>으로 기록된다.</li>
   </ul>
   <p>따라서 "훅이 없는 플랫폼에서는 규칙이 선택 사항"이 아니라, "강제 계층이 약해질 뿐 위반의 성격은 같다"는 해석이 정확하다.</p>
 

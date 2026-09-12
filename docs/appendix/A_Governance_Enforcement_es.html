@@ -54,8 +54,8 @@
   <table>
     <thead><tr><th>Capa</th><th>Medio</th><th>Fuerza</th><th>Cobertura</th></tr></thead>
     <tbody>
-      <tr><td>1. Hook</td><td>Scripts deterministas (Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>La más fuerte — no se puede avanzar hasta pasar la puerta</td><td>Claude Code CLI y Gemini CLI soporte completo; Desktop App condicional; Antigravity sin soporte</td></tr>
-      <tr><td>2. Prompt</td><td>Instrucciones del sistema embebidas en <code>CLAUDE.md</code>/<code>GEMINI.md</code></td><td>Media — depende del auto-cumplimiento del agente</td><td>Las cuatro plataformas</td></tr>
+      <tr><td>1. Hook</td><td>Scripts deterministas (Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>La más fuerte — no se puede avanzar hasta pasar la puerta</td><td>Claude Code CLI y Gemini CLI soporte completo; Desktop App condicional; Antigravity y Codex sin soporte</td></tr>
+      <tr><td>2. Prompt</td><td>Instrucciones del sistema embebidas en <code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code></td><td>Media — depende del auto-cumplimiento del agente</td><td>Las cuatro plataformas</td></tr>
       <tr><td>3. Skill</td><td>Invocación manual bajo demanda como <code>/gateguard</code></td><td>La más débil (opcional) — iniciada por humanos</td><td>Las cuatro plataformas</td></tr>
     </tbody>
   </table>
@@ -106,6 +106,7 @@
     <li><strong>Claude Code CLI / Gemini CLI</strong> — soporte completo de hooks; el bloqueo mecánico funciona.</li>
     <li><strong>Claude Desktop App</strong> — los hooks se activan condicionalmente; la capa de prompt es la línea principal de defensa.</li>
     <li><strong>Antigravity</strong> — sin soporte de hooks; solo quedan las instrucciones del prompt. Ignorar la regla ahí no produce bloqueo mecánico, pero se registra como una <strong>violación de gobernanza</strong>.</li>
+    <li><strong>Codex (CLI · Desktop App)</strong> — sin soporte de hooks. En cambio, <code>CODEX.md</code> se inyecta directamente como prompt del sistema, por lo que la capa de prompt es la defensa básica. Ignorar la regla ahí no produce bloqueo mecánico, pero igualmente se registra como una <strong>violación de gobernanza</strong>.</li>
   </ul>
   <p>Así que la lectura correcta no es "las reglas son opcionales donde no hay hooks" sino "la capa de aplicación se debilita; la naturaleza de la violación no cambia."</p>
 

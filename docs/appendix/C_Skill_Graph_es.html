@@ -55,7 +55,7 @@
 
   <h2 id="a1-overview">Resumen — Por Qué un Grafo</h2>
   <p>Si las relaciones entre habilidades, agentes y ADR ("esta habilidad debe ejecutarse antes que aquella", "este agente usa esa habilidad") se guardan como texto libre, inevitablemente ocurren tres cosas. Primero, la fuente cambia pero la prosa permanece, así que <strong>envejece</strong>. Segundo, las relaciones se dispersan entre archivos y se vuelven <strong>inbuscables</strong>. Tercero, salvo que un humano cure la lista, nada queda <strong>verificado</strong>.</p>
-  <p>El grafo de relaciones de habilidades lo resuelve <em>derivando</em> en lugar de escribir. Las fuentes de las relaciones son datos estructurados que ya existen (frontmatter de SKILL.md, archivos de agentes, manifiestos de variant), y el grafo es su proyección. Siempre puedes borrar los archivos del grafo — volver a ejecutar el generador los hace nacer de nuevo exactamente igual. Por eso ADR-0060 fija el principio con el nombre <em>Generated Projection</em>.</p>
+  <p>El grafo de relaciones de habilidades lo resuelve <em>derivando</em> en lugar de escribir. Las fuentes de las relaciones son datos estructurados que ya existen (frontmatter de SKILL.md, archivos de agentes, manifiestos de variant), y el grafo es su proyección. Siempre puede borrar los archivos del grafo — volver a ejecutar el generador los hace nacer de nuevo exactamente igual. Por eso ADR-0060 fija el principio con el nombre <em>Generated Projection</em>.</p>
 
   <h2 id="a2-sources">Fuentes de Datos y Prioridad</h2>
   <p>El generador escanea las siguientes fuentes en orden de prioridad. Las primeras son más explícitamente intencionales; las últimas, derivaciones más implícitas.</p>

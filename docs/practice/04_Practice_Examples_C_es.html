@@ -109,7 +109,7 @@
 
   <!-- ══════════════════════════════ Preparación ══════════════════════════════ -->
   <h2 id="setup">Preparación: Instalación de las Herramientas Necesarias</h2>
-  <p>La práctica siguiente se centra en Codex Desktop App y Codex CLI. Si aún no tienes estas herramientas localmente, la automatización de configuración de entorno incluida en este manual — la <a href="../setup/SETUP_es.html">guía de setup</a> — instala automáticamente exactamente lo que necesita la práctica de este capítulo. Sigue las instrucciones para descargar y ejecutar el script localmente.</p>
+  <p>La práctica siguiente se centra en Codex Desktop App y Codex CLI. Si aún no tiene estas herramientas localmente, la automatización de configuración de entorno incluida en este manual — la <a href="../setup/SETUP_es.html">guía de setup</a> — instala automáticamente exactamente lo que necesita la práctica de este capítulo. Sigue las instrucciones para descargar y ejecutar el script localmente.</p>
 
   <div class="platform-block" >
     <div class="platform-block-title">📦 Antes de Ejecutar el Script</div>
@@ -123,13 +123,13 @@
   </div>
 
   <div class="tip-box">
-    <strong>Si Aún No Tienes una Cuenta de GitHub</strong><br>
-    ① Ve a <a href="https://github.com/signup" target="_blank">github.com/signup</a> en tu navegador.<br>
-    ② Introduce tu dirección de correo, contraseña y nombre de usuario — el nombre de usuario pasa a formar parte de la URL de tu repositorio (<code>github.com/&lt;username&gt;/...</code>), así que elígelo con cuidado.<br>
+    <strong>Si Aún No Tiene una Cuenta de GitHub</strong><br>
+    ① Vaya a <a href="https://github.com/signup" target="_blank">github.com/signup</a> en su navegador.<br>
+    ② Introduzca su dirección de correo, contraseña y nombre de usuario — el nombre de usuario pasa a formar parte de la URL de su repositorio (<code>github.com/&lt;username&gt;/...</code>), así que elígelo con cuidado.<br>
     ③ Supera la verificación de rompecabezas/código que evita registros automatizados.<br>
-    ④ Abre el correo de verificación enviado a la dirección con la que te registraste y completa la <strong>verificación de correo</strong> — omitir esto puede bloquear más tarde <code>gh auth login</code> o la creación de repositorios.<br>
+    ④ Abra el correo de verificación enviado a la dirección con la que se registró y complete la <strong>verificación de correo</strong> — omitir esto puede bloquear más tarde <code>gh auth login</code> o la creación de repositorios.<br>
     ⑤ El plan gratuito (Free) es suficiente — la práctica y los ejercicios de PR de este manual no necesitan un plan de pago.<br>
-    Una vez completado el registro, la <a href="https://cli.github.com/" target="_blank">GitHub CLI (<code>gh</code>)</a> se instala junto con el script de setup anterior, y el comando <code>gh auth login</code> de abajo conecta tu terminal a esa cuenta.
+    Una vez completado el registro, la <a href="https://cli.github.com/" target="_blank">GitHub CLI (<code>gh</code>)</a> se instala junto con el script de setup anterior, y el comando <code>gh auth login</code> de abajo conecta su terminal a esa cuenta.
     <div style="position:relative">
   <pre class="code-block" style="margin-top:10px;">gh auth login
 # Sigue las indicaciones: elige GitHub.com → HTTPS → Iniciar sesión con un navegador web (recomendado)
@@ -145,7 +145,7 @@
     ① Abre el menú Inicio y busca <code>PowerShell</code>.<br>
     ② Haz <strong>clic derecho</strong> en "Windows PowerShell" en los resultados de búsqueda.<br>
     ③ Selecciona <strong>"Ejecutar como administrador"</strong> en el menú.<br>
-    ④ Haz clic en <strong>"Sí"</strong> cuando aparezca el aviso de Control de Cuentas de Usuario (UAC).<br>
+    ④ Haga clic en <strong>"Sí"</strong> cuando aparezca el aviso de Control de Cuentas de Usuario (UAC).<br>
     Si la barra de título muestra algo como <code>Administrador: Windows PowerShell</code>, lo abriste correctamente. Algunos pasos, como las instalaciones de winget, pueden fallar o saltarse silenciosamente sin privilegios de administrador.
   </div>
   <div style="position:relative">
@@ -155,7 +155,7 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
 # Flags opcionales: -WSL2, -WezTerm, -Docker, -Force (reinstalar herramientas aunque ya estén presentes)</pre>
   <button class="copy-btn">Copiar</button>
 </div>
-  <p>Después de que el script termine, cierra completamente y reabre tu terminal para que los cambios de PATH surtan efecto.</p>
+  <p>Después de que el script termine, cierra completamente y vuelve a abrir su terminal para que los cambios de PATH surtan efecto.</p>
 
   <h3>Instalación en macOS / Linux</h3>
   <p>Clona el repositorio <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> con el comando de abajo. Ejecuta setup-mac.sh en macOS y setup-linux.sh en Linux; ambos soportan los flags opcionales <code>--wezterm</code> y <code>--docker</code>.</p>
@@ -216,7 +216,7 @@ cd ./setup && bash setup-linux.sh</pre>
         <li>
           <div class="step-content">
             <strong>① Crear la Carpeta de Práctica y Entrar en Ella</strong>
-            <p>Crea una nueva carpeta <code>harness-lab</code> bajo tu directorio actual y entra en ella. Cada comando a partir de ahora se ejecuta dentro de esta carpeta.</p>
+            <p>Cree una nueva carpeta <code>harness-lab</code> bajo su directorio actual y entre en ella. Cada comando a partir de ahora se ejecuta dentro de esta carpeta.</p>
             <div style="position:relative">
               <pre class="code-block">mkdir -p harness-lab
 cd harness-lab</pre>
@@ -633,7 +633,7 @@ EOF</pre>
 
       <div class="platform-block codexcli">
         <div class="platform-block-title"><span class="badge">Codex CLI</span> — Dos Terminales, Dos Sesiones</div>
-        <p class="text-dim" style="margin-bottom:10px;">Abre dos ventanas de terminal apuntando a la misma carpeta <code>harness-lab/</code> (o usa una ventana dividida con tmux o similar — la propia Codex CLI no tiene soporte integrado como el <code>teammateMode: "tmux"</code> de Claude Code, así que configuras el multiplexor de terminal tú mismo).</p>
+        <p class="text-dim" style="margin-bottom:10px;">Abra dos ventanas de terminal apuntando a la misma carpeta <code>harness-lab/</code> (o use una ventana dividida con tmux o similar — la propia Codex CLI no tiene soporte integrado como el <code>teammateMode: "tmux"</code> de Claude Code, así que configure el multiplexor de terminal usted mismo).</p>
         <ol class="step-list">
           <li>
             <div class="step-content">
@@ -670,7 +670,7 @@ codex</pre>
           Como las dos sesiones se ejecutan como procesos separados, realmente avanzan al mismo tiempo — pero esto es diferente en naturaleza del paralelismo de Claude Agent Teams, donde un único orquestador coordina a dos compañeros de equipo mediante una lista de tareas compartida. Las dos sesiones de Codex no tienen conciencia una de la otra, no hay lista de tareas compartida y no hay canal de comunicación directo entre sesiones como <code>SendMessage</code>. Si ambas sesiones tocan el mismo archivo a la vez (por ejemplo, ambas intentando editar <code>AGENTS.md</code>), puede ocurrir un conflicto simple a nivel del sistema de archivos — asignar <strong>archivos objetivo completamente separados</strong> es una práctica de seguridad tan importante aquí como lo es para Claude/Antigravity.
         </div>
         <div class="tip-box">
-          Si quieres ver el progreso de ambas sesiones de un vistazo, dividir las ventanas lado a lado con un multiplexor de terminal como WezTerm o tmux ayuda — esto es un asunto de configuración del entorno de terminal, no una característica propia de Codex.
+          Si quiere ver el progreso de ambas sesiones de un vistazo, dividir las ventanas lado a lado con un multiplexor de terminal como WezTerm o tmux ayuda — esto es un asunto de configuración del entorno de terminal, no una característica propia de Codex.
         </div>
         <div class="warning-box">
           <strong>Fallo Común</strong> — si ambas sesiones intentan modificar <code>agents/writer.md</code> en sí (por ejemplo, enviando solicitudes de "cambiar el nivel" desde ambas a la vez), puede ocurrir una carrera de escritura y el cambio de un lado puede quedar sobrescrito. Al ejecutar en paralelo, haz que cada sesión toque solo su propio archivo objetivo (topic-a.txt/topic-b.txt), y evita solicitudes que cambien el propio archivo de definición de rol en una sesión paralela.
@@ -800,10 +800,10 @@ codex</pre>
           Para una simple revisión de errores tipográficos, los tres niveles apenas difieren, pero para un trabajo como este — "detectar un fallo en la estructura de un argumento" — cuanto más bajo el nivel, más claramente tiende a fallar en señalar el razonamiento circular como tal y en su lugar comenta solo sobre la redacción superficial. Por el contrario, <code>gpt-5.6-luna</code> responde más rápido de los tres — vivir la compensación entre velocidad y profundidad deja mucho más claro por qué existe el principio del Capítulo 5: "un juicio más pesado requiere un nivel más alto, las tareas más rutinarias requieren uno más bajo".
         </div>
         <div class="tip-box">
-          Simplemente puedes decirle a Codex Desktop App "cambia el campo tier.codex" cada vez — no necesitas abrir el archivo de definición tú mismo; el PM edita <code>agents/reviewer.md</code> por su cuenta y luego revisa en ese rol.
+          Simplemente puede decirle a Codex Desktop App "cambie el campo tier.codex" cada vez — no necesita abrir el archivo de definición usted mismo; el PM edita <code>agents/reviewer.md</code> por su cuenta y luego revisa en ese rol.
         </div>
         <div class="warning-box">
-          <strong>Fallo Común</strong> — si el campo <code>tier.codex</code> recibe un valor que no existe (un error como usar nombres de la familia Claude tales como <code>haiku</code>/<code>sonnet</code>/<code>opus</code>, por ejemplo), el PM puede ignorarlo silenciosamente y volver a un nivel por defecto. Después de terminar ②③④, abre <code>agents/reviewer.md</code> tú mismo y confirma que el valor de <code>tier.codex</code> coincide exactamente con el previsto — <code>low</code>/<code>medium</code>/<code>high</code>.
+          <strong>Fallo Común</strong> — si el campo <code>tier.codex</code> recibe un valor que no existe (un error como usar nombres de la familia Claude tales como <code>haiku</code>/<code>sonnet</code>/<code>opus</code>, por ejemplo), el PM puede ignorarlo silenciosamente y volver a un nivel por defecto. Después de terminar ②③④, abra <code>agents/reviewer.md</code> usted mismo y confirme que el valor de <code>tier.codex</code> coincide exactamente con el previsto — <code>low</code>/<code>medium</code>/<code>high</code>.
         </div>
       </div>
 
@@ -816,7 +816,7 @@ codex</pre>
 
   <!-- ══════════════════════════════ Cierre ══════════════════════════════ -->
   <h2 id="cleanup">Cierre de la Práctica</h2>
-  <p>Una vez completados los cinco escenarios, decide qué hacer con la carpeta <code>harness-lab/</code>. Como el siguiente capítulo (Capítulo 5) usa una nueva carpeta de práctica, no tienes que conservarla, pero si quieres comparar las definiciones de <code>AGENTS.md</code>/<code>agents/*.md</code> que construiste hasta ahora, vale la pena revisarlas una vez antes de borrarlas.</p>
+  <p>Una vez completados los cinco escenarios, decide qué hacer con la carpeta <code>harness-lab/</code>. Como el siguiente capítulo (Capítulo 5) usa una nueva carpeta de práctica, no tiene que conservarla, pero si quiere comparar las definiciones de <code>AGENTS.md</code>/<code>agents/*.md</code> que construiste hasta ahora, vale la pena revisarlas una vez antes de borrarlas.</p>
 
   <div class="platform-block" >
     <div class="platform-block-title">🧹 Limpieza de la Carpeta harness-lab</div>
@@ -835,7 +835,7 @@ Remove-Item -Recurse -Force harness-lab</pre>
   </div>
 
   <div class="tip-box">
-    <strong>Si Quieres Conservarla</strong> — en lugar de borrar la carpeta, también puedes simplemente dejar un commit local con <code>git init && git add -A && git commit -m "registro de práctica harness-lab"</code>. Consérvalo después como referencia, y siéntete libre de comenzar la práctica del siguiente capítulo en una nueva carpeta separada.
+    <strong>Si Quiere Conservarla</strong> — en lugar de borrar la carpeta, también puede simplemente dejar un commit local con <code>git init && git add -A && git commit -m "registro de práctica harness-lab"</code>. Consérvalo después como referencia, y siéntete libre de comenzar la práctica del siguiente capítulo en una nueva carpeta separada.
   </div>
 
   <div class="warning-box">

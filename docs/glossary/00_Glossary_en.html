@@ -79,7 +79,7 @@
       <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s1">Chapter 3 §1</a></span></dd>
 
     <dt>Hook <span class="en">Hook</span></dt>
-    <dd>A script that runs automatically before or after an agent calls a particular tool. Example: a <code>PostToolUse</code> hook that runs an automated audit check after a file edit. In Claude Code (CLI), hooks defined under <code>.claude/hooks/</code> fire as expected, but they do not fire in Claude Desktop App — so it's important to be aware of these per-tool behavioral differences.
+    <dd>A script that runs automatically before or after an agent calls a particular tool. Example: a <code>PostToolUse</code> hook that runs an automated audit check after a file edit. In Claude Code (CLI), hooks defined under <code>.claude/hooks/</code> fire as expected, but they do not fire in Claude Desktop App — so it's important to be aware of these per-tool behavioral differences. Codex does not support hooks — it substitutes CODEX.md instructions that the session executes on its own.
       <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logs and Observability</a></span></dd>
 
     <dt>Kanban / WIP Limit <span class="en">Kanban / WIP Limit</span></dt>
@@ -150,6 +150,12 @@
     <dt>AGENTS.md</dt>
     <dd>An open standard file read in common by 30+ AI coding tools. It defines tool-neutral rules such as build/test commands and code style. In this repository it additionally doubles as the "agent roster."
       <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s5">Chapter 2 §AGENTS.md, the Harness That Crosses Tools</a></span></dd>
+
+    <dt>CODEX.md</dt>
+    <dd>The behavioral instruction file for the Codex family (CLI · Desktop App). In Codex, which has no hooks, this file is the basis of <strong>prompt self-enforcement</strong> — the PM perceives and executes the rules written here each session.</dd>
+
+    <dt>Role Context <span class="en">Role Context</span></dt>
+    <dd>Codex's approach to implementing subagents. Without separate definition files, the PM reads the role definitions in AGENTS.md and CODEX.md and sequentially switches to the next role as each step completes. See <a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C</a>.</dd>
 
     <dt>teammateMode</dt>
     <dd>The parallel execution mode for Agent Teams (an experimental feature). Claude Desktop App only supports <code>in-process</code>, while Claude Code (CLI) additionally supports <code>tmux</code> split-pane mode.

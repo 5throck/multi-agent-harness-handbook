@@ -45,7 +45,7 @@
   <span class="see">詳細: <a href="../practice/04_Practice_Examples_A_ja.html#scenario-2">4章§2-A D-1</a></span>
 
   <div class="q">Claude Desktop Appでファイルを保存した後、監査スクリプトが自動的に実行されません。</div>
-  <p class="faq-answer">これは正常な動作です。<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>のようなフックはClaude Desktop Appでは発火せず、Claude Code(CLI)セッションでのみ自動実行されます。Desktop Appを使用するチームは、フックが行うはずだった処理をセッション終了後に手動で実行する必要があります。これを知らずにいると、「監査が実行されたと思っていたが実際は実行されていなかった」という事故につながる可能性があります。</p>
+  <p class="faq-answer">これは正常な動作です。<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>のようなフックはClaude Desktop Appでは発火せず、Claude Code(CLI)セッションでのみ自動実行されます。Desktop Appを使用するチームは、フックが行うはずだった処理をセッション終了後に手動で実行する必要があります。Codexはフック機構そのものがないため、CODEX.mdの指示をPMが自ら実行する方式で代用します(第4章 §1-C参照)。これを知らずにいると、「監査が実行されたと思っていたが実際は実行されていなかった」という事故につながる可能性があります。</p>
   <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-1">共通リファレンス§1</a>、<a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">3章§監査ログと観測性</a></span>
 
   <div class="q">reviewerにレビューだけを依頼したのに、ファイルを修正してしまいました。</div>
@@ -93,7 +93,7 @@
   <span class="see">詳細: <a href="../variant-advanced/12_VariantAdvanced_Examples_ja.html">12章 実習</a></span>
 
   <div class="q">ai-workspace-standardsを実際の本番環境(Docker/Kubernetes)で使用するには?</div>
-  <p class="faq-answer">現在、ai-workspace-standardsはローカルのAIコーディングツール(Claude Code/App、Antigravityなど)と直接連携する方式でのみ動作します。DockerまたはKubernetes環境でOpen WebUIのようなフロントエンドサービスと連携し、ユーザー単位でエージェントチームをサポートする形態は<strong>高度化の方向性</strong>として議論中であり、まだ実装されていません。
+  <p class="faq-answer">現在、ai-workspace-standardsはローカルのAIコーディングツール(Claude Code/App、Antigravity、Codexなど)と直接連携する方式でのみ動作します。DockerまたはKubernetes環境でOpen WebUIのようなフロントエンドサービスと連携し、ユーザー単位でエージェントチームをサポートする形態は<strong>高度化の方向性</strong>として議論中であり、まだ実装されていません。
     <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#container">8章§5 高度化ロードマップ</a></span></p>
 
   <div class="q">複数のプロジェクトの<code>memory/YYYY-MM-DD.md</code>を一箇所にまとめて見ることはできますか?</div>

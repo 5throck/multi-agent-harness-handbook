@@ -58,6 +58,11 @@
       "lang": "ko"
     },
     {
+      "path": "practice/04_Practice_Examples_C.html",
+      "title": "4장 §2-C · 멀티 에이전트 팀 실습 — Codex 중심 시나리오별 학습 가이드",
+      "lang": "ko"
+    },
+    {
       "path": "intro/05_Intro_Chapter.html",
       "title": "5장 · ai-workspace-standards 소개",
       "lang": "ko"
@@ -215,6 +220,11 @@
     {
       "path": "practice/04_Practice_Examples_B_en.html",
       "title": "Chapter 4 §2-B · Multi-Agent Team Practice — An Antigravity-Focused Scenario-Based Learning Guide",
+      "lang": "en"
+    },
+    {
+      "path": "practice/04_Practice_Examples_C_en.html",
+      "title": "Chapter 4 §2-C · Multi-Agent Team Practice — A Codex-Focused Scenario-Based Learning Guide",
       "lang": "en"
     },
     {
@@ -378,6 +388,11 @@
       "lang": "ja"
     },
     {
+      "path": "practice/04_Practice_Examples_C_ja.html",
+      "title": "第4章 §2-C・マルチエージェントチーム実習 — Codex中心シナリオ別学習ガイド",
+      "lang": "ja"
+    },
+    {
       "path": "intro/05_Intro_Chapter_ja.html",
       "title": "第5章 · ai-workspace-standards 紹介",
       "lang": "ja"
@@ -535,6 +550,11 @@
     {
       "path": "practice/04_Practice_Examples_B_es.html",
       "title": "Capítulo 4 §2-B · Práctica de Equipos Multiagente — Guía de Aprendizaje por Escenarios con Antigravity",
+      "lang": "es"
+    },
+    {
+      "path": "practice/04_Practice_Examples_C_es.html",
+      "title": "Capítulo 4 §2-C · Práctica de Equipos Multiagente — Guía de Aprendizaje por Escenarios con Codex",
       "lang": "es"
     },
     {

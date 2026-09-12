@@ -131,6 +131,7 @@
   <h2 id="s4">Step 3 — Define Subagents and Implement the Workflow</h2>
   <p>Using the same approach as the Chapter 4 §2 exercise, ask Claude Desktop App (or Code) directly in chat to create the subagent for you. Below is a blank template — replace the bracketed parts with your own answers and paste it into the chat window.</p>
   <div class="note">Antigravity CLI (<code>agy</code>) users can follow the same four-step structure. Just write the subagent definition in <code>AGENTS.md</code> instead of <code>.claude/agents/</code>, and assign role-based tasks with the <code>/goal</code> command instead of Claude's Agent tool.</div>
+  <div class="note">Codex CLI · Desktop App users can practice the same four-step structure with the sequential role-switching approach from <a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C</a>. Instead of invoking subagents, delegate the role-based tasks to the PM in order and observe how the role switches at each step.</div>
   <div style="position:relative">
     <pre class="code-block">Create a subagent named [role name] at .claude/agents/[role name].md.
 [One sentence describing what this agent does]. Allow only [the minimum permissions decided in Step 2]

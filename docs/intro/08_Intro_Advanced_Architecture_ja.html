@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">第8章 §4</div>
   <h1>アーキテクチャ深掘り</h1>
-  <p class="lead">§1でL0→L1→L2の「何がどこからどこへ流れるか」を扱ったのに対し、この節ではその流れが<strong>実際にどのように実装されているか</strong>を掘り下げる — ファイルがそのままコピーされずに再生成される理由、継承フロントマターが解釈される順序、ボイラープレート・ティア戦略が実践でどのように適用されるかの具体例、そして2つのプラットフォーム（.claude/.gemini）が構造的にずれないよう保たれる方法までを扱う。</p>
+  <p class="lead">§1でL0→L1→L2の「何がどこからどこへ流れるか」を扱ったのに対し、この節ではその流れが<strong>実際にどのように実装されているか</strong>を掘り下げる — ファイルがそのままコピーされずに再生成される理由、継承フロントマターが解釈される順序、ボイラープレート・ティア戦略が実践でどのように適用されるかの具体例、そしてプラットフォームディレクトリ（.claude/.gemini/.agents/.codex）が構造的にずれないよう保たれる方法までを扱う。</p>
 
   <div class="keypoints">
     <div class="kp-title">この節で扱う内容</div>
@@ -57,7 +57,7 @@
       <li><code>extends</code> フロントマターが実際に解釈される順序</li>
       <li>LOCKED/MERGE/PRESERVE分類を実際のファイルに適用した例</li>
       <li>3ティア戦略 — High/Medium/Lowの定義、frontmatter例、Tier Adjustment Rules、Tier Ceiling Rule</li>
-      <li><code>.claude/</code>・<code>.gemini/</code>のプラットフォームパリティが強制される仕組み</li>
+      <li><code>.claude/</code>・<code>.gemini/</code>・<code>.agents/</code>・<code>.codex/</code>のプラットフォームパリティが強制される仕組み</li>
       <li>実行計画テンプレート — Design Gate（Row 0）、例外カテゴリ（E1〜E5）、実践例</li>
     </ul>
   </div>
@@ -95,6 +95,7 @@ name: pm                       # pm, code-writer, automation-engineer ...
 tier:                          # プラットフォームごとのモデルエイリアス（実行時に変換される）
   claude: high                 #   high = claude-opus-5-0
   antigravity: high            #   high = gemini-3.1-pro
+  codex: high                  #   high = gpt-5.6-sol
 ---</pre>
   <button class="copy-btn">コピー</button>
 </div>
@@ -103,11 +104,11 @@ tier:                          # プラットフォームごとのモデルエ�
   <h3>ティアの定義とモデルマッピング</h3>
   <div class="table-compare narrow-col-1">
   <table>
-    <thead><tr><th>ティア</th><th>目的</th><th>Claude系の例</th><th>Antigravity系の例</th></tr></thead>
+    <thead><tr><th>ティア</th><th>目的</th><th>Claude系の例</th><th>Antigravity系の例</th><th>Codex系の例</th></tr></thead>
     <tbody>
-      <tr><td><strong>High</strong></td><td>複雑な推論、アーキテクチャ設計、計画立案</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td></tr>
-      <tr><td><strong>Medium</strong></td><td>コードレビュー、テスト、PRレビュー、品質ゲート</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td></tr>
-      <tr><td><strong>Low</strong></td><td>高速で反復的なコーディング、スクリプト保守</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td></tr>
+      <tr><td><strong>High</strong></td><td>複雑な推論、アーキテクチャ設計、計画立案</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
+      <tr><td><strong>Medium</strong></td><td>コードレビュー、テスト、PRレビュー、品質ゲート</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td><td>gpt-5.6-terra</td></tr>
+      <tr><td><strong>Low</strong></td><td>高速で反復的なコーディング、スクリプト保守</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td><td>gpt-5.6-luna</td></tr>
     </tbody>
   </table>
   </div>
@@ -128,9 +129,9 @@ tier:                          # プラットフォームごとのモデルエ�
     Tier Ceiling Ruleは「この作業に最も適したティア以上を割り当てるな」ではなく、「このエージェントの定義されたティア以上を使うな」である。役割ベースであって作業ベースではない。
   </div>
 
-  <h2 id="platform-parity">プラットフォームパリティ — .claude/・.gemini/・.agents/を構造的に同一に保つ方法</h2>
-  <p>このリポジトリは3つのプラットフォームを同時にサポートする — Claude Code（<code>.claude/</code>）、Gemini CLI（<code>.gemini/</code>）、Antigravity（<code>.agents/</code>）。プラットフォームディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。スキル層は<code>skills/</code>が単一の情報源（SSOT）であり、<code>sync-skills.ts</code>がこれを3つのプラットフォームディレクトリすべてへ配布する。構造的なずれを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
-  <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「3プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第11章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。3つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
+  <h2 id="platform-parity">プラットフォームパリティ — .claude/・.gemini/・.agents/・.codex/を構造的に同一に保つ方法</h2>
+  <p>このリポジトリは4つのプラットフォームを同時にサポートする — Claude Code（<code>.claude/</code>）、Gemini CLI（<code>.gemini/</code>）、Antigravity（<code>.agents/</code>）、Codex（<code>.codex/</code>）。プラットフォームディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。スキル層は<code>skills/</code>が単一の情報源（SSOT）であり、<code>sync-skills.ts</code>がこれを4つのプラットフォームディレクトリすべてへ配布する。構造的なずれを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
+  <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>とCodex用の<code>.codex/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「4プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第11章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。4つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
 
   <h2 id="execution-plan-templates">実行計画テンプレート — マルチエージェント作業の構造化された実行設計</h2>
   <p>PMが複雑な作業を複数のエージェントに分配する際、<strong>実行計画（Execution Plan）</strong>形式を使用する。この計画は「誰が何をどのティアで、どの順序で」行うかをテーブルで明示し、実行の一貫性を保証する。</p>

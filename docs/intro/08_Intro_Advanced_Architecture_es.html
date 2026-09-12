@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">Cap. 8 §4</div>
   <h1>Arquitectura Avanzada</h1>
-  <p class="lead">Donde el §1 cubrió "qué fluye hacia dónde" a través de L0→L1→L2, esta sección profundiza en <strong>cómo se implementa realmente ese flujo</strong> — por qué los archivos se regeneran en lugar de copiarse textualmente, el orden en que se resuelve el frontmatter heredado, ejemplos concretos de cómo se aplican la plantilla base y la estrategia de niveles en la práctica, y cómo se evita que las dos plataformas (.claude/.gemini) se desvíen estructuralmente.</p>
+  <p class="lead">Donde el §1 cubrió "qué fluye hacia dónde" a través de L0→L1→L2, esta sección profundiza en <strong>cómo se implementa realmente ese flujo</strong> — por qué los archivos se regeneran en lugar de copiarse textualmente, el orden en que se resuelve el frontmatter heredado, ejemplos concretos de cómo se aplican la plantilla base y la estrategia de niveles en la práctica, y cómo se evita que los directorios de plataforma (.claude/.gemini/.agents/.codex) se desvíen estructuralmente.</p>
 
   <div class="keypoints">
     <div class="kp-title">Lo Que Cubre Esta Sección</div>
@@ -57,7 +57,7 @@
       <li>El orden de resolución real del campo de frontmatter <code>extends</code></li>
       <li>Ejemplos de aplicación de la clasificación LOCKED/MERGE/PRESERVE a archivos reales</li>
       <li>La estrategia de 3 niveles — definiciones Alto/Medio/Bajo, ejemplos de frontmatter, Reglas de Ajuste de Nivel y la Regla del Techo de Nivel</li>
-      <li>Cómo se aplica la paridad de plataformas <code>.claude/</code>/<code>.gemini/</code></li>
+      <li>Cómo se aplica la paridad de plataformas <code>.claude/</code>/<code>.gemini/</code>/<code>.agents/</code>/<code>.codex/</code></li>
       <li>Plantillas de plan de ejecución — la Puerta de Diseño (Fila 0), categorías de excepción (E1–E5), y un ejemplo resuelto</li>
     </ul>
   </div>
@@ -95,6 +95,7 @@ name: pm                       # pm, code-writer, automation-engineer ...
 tier:                          # alias de modelo específico de plataforma (traducido en tiempo de ejecución)
   claude: high                 #   high = claude-opus-5-0
   antigravity: high            #   high = gemini-3.1-pro
+  codex: high                  #   high = gpt-5.6-sol
 ---</pre>
   <button class="copy-btn">Copiar</button>
 </div>
@@ -103,11 +104,11 @@ tier:                          # alias de modelo específico de plataforma (trad
   <h3>Definiciones de Niveles y Mapeo de Modelos</h3>
   <div class="table-compare narrow-col-1">
   <table>
-    <thead><tr><th>Nivel</th><th>Propósito</th><th>Ejemplo de la Familia Claude</th><th>Ejemplo de la Familia Antigravity</th></tr></thead>
+    <thead><tr><th>Nivel</th><th>Propósito</th><th>Ejemplo de la Familia Claude</th><th>Ejemplo de la Familia Antigravity</th><th>Ejemplo de la Familia Codex</th></tr></thead>
     <tbody>
-      <tr><td><strong>Alto</strong></td><td>Razonamiento complejo, diseño de arquitectura, planificación</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td></tr>
-      <tr><td><strong>Medio</strong></td><td>Revisión de código, pruebas, revisión de PR, puertas de calidad</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td></tr>
-      <tr><td><strong>Bajo</strong></td><td>Codificación rápida y repetitiva, mantenimiento de scripts</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td></tr>
+      <tr><td><strong>Alto</strong></td><td>Razonamiento complejo, diseño de arquitectura, planificación</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
+      <tr><td><strong>Medio</strong></td><td>Revisión de código, pruebas, revisión de PR, puertas de calidad</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td><td>gpt-5.6-terra</td></tr>
+      <tr><td><strong>Bajo</strong></td><td>Codificación rápida y repetitiva, mantenimiento de scripts</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td><td>gpt-5.6-luna</td></tr>
     </tbody>
   </table>
   </div>
@@ -128,9 +129,9 @@ tier:                          # alias de modelo específico de plataforma (trad
     La Regla del Techo de Nivel no es "nunca asignar más del nivel mejor adaptado a esta tarea" — es "nunca usar más del nivel definido de este agente." Es basada en roles, no en tareas.
   </div>
 
-  <h2 id="platform-parity">Paridad de Plataformas — Manteniendo .claude/, .gemini/ y .agents/ Estructuralmente Idénticos</h2>
-  <p>Este repositorio soporta tres plataformas simultáneamente — Claude Code (<code>.claude/</code>), Gemini CLI (<code>.gemini/</code>) y Antigravity (<code>.agents/</code>). Si los directorios de plataformas se desvían con el tiempo (por ejemplo, si <code>.claude/agents/reviewer.md</code> existe pero <code>.gemini/agents/reviewer.md</code> falta), los usuarios de una herramienta terminan sin poder usar una función determinada. Para las habilidades, <code>skills/</code> es la única fuente de verdad (SSOT), y <code>sync-skills.ts</code> la distribuye a los tres directorios de plataformas. El mecanismo que previene la deriva estructural es la <strong>verificación de paridad de plataformas</strong> en <code>validate-templates.ts</code>.</p>
-  <p>Los alcances de las verificaciones tienen diferencias sutiles. <code>validate-templates.ts</code> solo referencia cruzada la estructura de plantillas como comandos entre los dos directorios <code>.claude/</code> y <code>.gemini/</code> (el árbol <code>.agents/</code> de Antigravity se mantiene por su propia ruta de sincronización), mientras que el contenido de las habilidades se valida en la SSOT mediante <code>validate-skills.ts</code>. Es decir, que "las tres plataformas expongan las mismas funciones" queda garantizado por la combinación del script de distribución y la validación de la SSOT. El pipeline de promoción cubierto en el Capítulo 11 también incluye la verificación de paridad como una puerta obligatoria antes de la promoción, por lo que algo construido solo para una plataforma olvidando otra nunca puede convertirse en una variante oficial en primer lugar. Aunque las tres plataformas usan mecanismos de ejecución diferentes, el principio de que <strong>el conjunto de funciones proporcionadas debe ser siempre el mismo</strong> se aplica a través de verificaciones estructurales.</p>
+  <h2 id="platform-parity">Paridad de Plataformas — Manteniendo .claude/, .gemini/, .agents/ y .codex/ Estructuralmente Idénticos</h2>
+  <p>Este repositorio soporta cuatro plataformas simultáneamente — Claude Code (<code>.claude/</code>), Gemini CLI (<code>.gemini/</code>), Antigravity (<code>.agents/</code>) y Codex (<code>.codex/</code>). Si los directorios de plataformas se desvían con el tiempo (por ejemplo, si <code>.claude/agents/reviewer.md</code> existe pero <code>.gemini/agents/reviewer.md</code> falta), los usuarios de una herramienta terminan sin poder usar una función determinada. Para las habilidades, <code>skills/</code> es la única fuente de verdad (SSOT), y <code>sync-skills.ts</code> la distribuye a los cuatro directorios de plataformas. El mecanismo que previene la deriva estructural es la <strong>verificación de paridad de plataformas</strong> en <code>validate-templates.ts</code>.</p>
+  <p>Los alcances de las verificaciones tienen diferencias sutiles. <code>validate-templates.ts</code> solo referencia cruzada la estructura de plantillas como comandos entre los dos directorios <code>.claude/</code> y <code>.gemini/</code> (los árboles <code>.agents/</code> de Antigravity y <code>.codex/</code> de Codex se mantienen por sus propias rutas de sincronización), mientras que el contenido de las habilidades se valida en la SSOT mediante <code>validate-skills.ts</code>. Es decir, que "las cuatro plataformas expongan las mismas funciones" queda garantizado por la combinación del script de distribución y la validación de la SSOT. El pipeline de promoción cubierto en el Capítulo 11 también incluye la verificación de paridad como una puerta obligatoria antes de la promoción, por lo que algo construido solo para una plataforma olvidando otra nunca puede convertirse en una variante oficial en primer lugar. Aunque las cuatro plataformas usan mecanismos de ejecución diferentes, el principio de que <strong>el conjunto de funciones proporcionadas debe ser siempre el mismo</strong> se aplica a través de verificaciones estructurales.</p>
 
   <h2 id="execution-plan-templates">Plantillas de Plan de Ejecución — Diseño de Ejecución Estructurado para Trabajo Multiagente</h2>
   <p>Cuando el PM distribuye trabajo complejo entre múltiples agentes, usa el formato de <strong>Plan de Ejecución</strong>. Este plan detalla "quién hace qué, a qué nivel, en qué orden" en una tabla, garantizando la consistencia de la ejecución.</p>

@@ -281,7 +281,7 @@
               <pre class="code-block">bun run agent:verify</pre>
               <button class="copy-btn">Copy</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Skill manifest check</strong> — confirm that the skills referenced by the variant actually exist and are evenly deployed across all three platforms (.claude/.gemini/.agents).</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Skill manifest check</strong> — confirm that the skills referenced by the variant actually exist and are evenly deployed across all four platforms (.claude/.gemini/.agents/.codex).</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
               <button class="copy-btn">Copy</button>
@@ -401,12 +401,13 @@
         <li>
           <div class="step-content">
             <strong>Manually confirm platform parity</strong>
-            <p>Use diff to confirm that the commands/skills directory listings across <code>.claude/</code>, <code>.gemini/</code>, and <code>.agents/</code> correspond to each other (three-platform parity: Claude/Gemini/Antigravity).</p>
+            <p>Use diff to confirm that the commands/skills/prompts directory listings across <code>.claude/</code>, <code>.gemini/</code>, <code>.agents/</code>, and <code>.codex/</code> correspond to each other (four-platform parity: Claude/Gemini/Antigravity/Codex).</p>
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
 diff <(ls templates/co-retail/.gemini/commands/) <(ls templates/co-retail/.agents/commands/)
 diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)
-diff <(ls templates/co-retail/.gemini/skills/) <(ls templates/co-retail/.agents/skills/)</pre>
+diff <(ls templates/co-retail/.gemini/skills/) <(ls templates/co-retail/.agents/skills/)
+diff <(ls templates/co-retail/.agents/skills/) <(ls templates/co-retail/.codex/skills/)</pre>
               <button class="copy-btn">Copy</button>
             </div>
           </div>

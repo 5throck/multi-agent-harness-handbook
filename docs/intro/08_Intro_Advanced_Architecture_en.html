@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">Ch. 8 §4</div>
   <h1>Advanced Architecture</h1>
-  <p class="lead">Where §1 covered "what flows where" across L0→L1→L2, this section digs into <strong>how that flow is actually implemented</strong> — why files are regenerated rather than copied verbatim, the order in which inherited frontmatter is resolved, concrete examples of how boilerplate and tier strategy are applied in practice, and how the two platforms (.claude/.gemini) are kept from structurally drifting apart.</p>
+  <p class="lead">Where §1 covered "what flows where" across L0→L1→L2, this section digs into <strong>how that flow is actually implemented</strong> — why files are regenerated rather than copied verbatim, the order in which inherited frontmatter is resolved, concrete examples of how boilerplate and tier strategy are applied in practice, and how the platform directories (.claude/.gemini/.agents/.codex) are kept from structurally drifting apart.</p>
 
   <div class="keypoints">
     <div class="kp-title">What This Section Covers</div>
@@ -57,7 +57,7 @@
       <li>The actual resolution order of the <code>extends</code> frontmatter field</li>
       <li>Examples of applying the LOCKED/MERGE/PRESERVE classification to real files</li>
       <li>The 3-tier strategy — High/Medium/Low definitions, frontmatter examples, Tier Adjustment Rules, and the Tier Ceiling Rule</li>
-      <li>How <code>.claude/</code>/<code>.gemini/</code> platform parity is enforced</li>
+      <li>How <code>.claude/</code>/<code>.gemini/</code>/<code>.agents/</code>/<code>.codex/</code> platform parity is enforced</li>
       <li>Execution plan templates — the Design Gate (Row 0), exception categories (E1–E5), and a worked example</li>
     </ul>
   </div>
@@ -95,6 +95,7 @@ name: pm                       # pm, code-writer, automation-engineer ...
 tier:                          # platform-specific model alias (translated at runtime)
   claude: high                 #   high = claude-opus-5-0
   antigravity: high            #   high = gemini-3.1-pro
+  codex: high                  #   high = gpt-5.6-sol
 ---</pre>
   <button class="copy-btn">Copy</button>
 </div>
@@ -103,11 +104,11 @@ tier:                          # platform-specific model alias (translated at ru
   <h3>Tier Definitions and Model Mapping</h3>
   <div class="table-compare narrow-col-1">
   <table>
-    <thead><tr><th>Tier</th><th>Purpose</th><th>Claude-family Example</th><th>Antigravity-family Example</th></tr></thead>
+    <thead><tr><th>Tier</th><th>Purpose</th><th>Claude-family Example</th><th>Antigravity-family Example</th><th>Codex-family Example</th></tr></thead>
     <tbody>
-      <tr><td><strong>High</strong></td><td>Complex reasoning, architecture design, planning</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td></tr>
-      <tr><td><strong>Medium</strong></td><td>Code review, testing, PR review, quality gates</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td></tr>
-      <tr><td><strong>Low</strong></td><td>Fast, repetitive coding, script maintenance</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td></tr>
+      <tr><td><strong>High</strong></td><td>Complex reasoning, architecture design, planning</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
+      <tr><td><strong>Medium</strong></td><td>Code review, testing, PR review, quality gates</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td><td>gpt-5.6-terra</td></tr>
+      <tr><td><strong>Low</strong></td><td>Fast, repetitive coding, script maintenance</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td><td>gpt-5.6-luna</td></tr>
     </tbody>
   </table>
   </div>
@@ -128,9 +129,9 @@ tier:                          # platform-specific model alias (translated at ru
     The Tier Ceiling Rule is not "never assign more than the tier best suited to this task" — it is "never use more than this agent's defined tier." It is role-based, not task-based.
   </div>
 
-  <h2 id="platform-parity">Platform Parity — Keeping .claude/, .gemini/, and .agents/ Structurally Identical</h2>
-  <p>This repository supports three platforms simultaneously — Claude Code (<code>.claude/</code>), Gemini CLI (<code>.gemini/</code>), and Antigravity (<code>.agents/</code>). If the platform directories drift apart over time (for example, if <code>.claude/agents/reviewer.md</code> exists but <code>.gemini/agents/reviewer.md</code> is missing), users of one tool end up unable to use a given feature. For skills, <code>skills/</code> is the single source of truth (SSOT), and <code>sync-skills.ts</code> distributes it to all three platform directories. The mechanism that guards against structural drift is the <strong>platform parity check</strong> in <code>validate-templates.ts</code>.</p>
-  <p>The checker scopes differ subtly. <code>validate-templates.ts</code> cross-references template structure such as commands only between the two directories <code>.claude/</code> and <code>.gemini/</code> (the Antigravity <code>.agents/</code> tree is maintained through its own sync path), while skill content itself is validated at the SSOT by <code>validate-skills.ts</code>. In other words, "all three platforms expose the same features" is guaranteed by the combination of the distribution script and SSOT validation. The promotion pipeline covered in Chapter 11 also includes the parity check as a mandatory pre-promotion gate, so something built for one platform while another was forgotten can never become an official variant in the first place. Even though the three platforms use different execution mechanisms, the principle that <strong>the set of features provided must always be the same</strong> is enforced through structural checks.</p>
+  <h2 id="platform-parity">Platform Parity — Keeping .claude/, .gemini/, .agents/, and .codex/ Structurally Identical</h2>
+  <p>This repository supports four platforms simultaneously — Claude Code (<code>.claude/</code>), Gemini CLI (<code>.gemini/</code>), Antigravity (<code>.agents/</code>), and Codex (<code>.codex/</code>). If the platform directories drift apart over time (for example, if <code>.claude/agents/reviewer.md</code> exists but <code>.gemini/agents/reviewer.md</code> is missing), users of one tool end up unable to use a given feature. For skills, <code>skills/</code> is the single source of truth (SSOT), and <code>sync-skills.ts</code> distributes it to all four platform directories. The mechanism that guards against structural drift is the <strong>platform parity check</strong> in <code>validate-templates.ts</code>.</p>
+  <p>The checker scopes differ subtly. <code>validate-templates.ts</code> cross-references template structure such as commands only between the two directories <code>.claude/</code> and <code>.gemini/</code> (the Antigravity <code>.agents/</code> and Codex <code>.codex/</code> trees are maintained through their own sync paths), while skill content itself is validated at the SSOT by <code>validate-skills.ts</code>. In other words, "all four platforms expose the same features" is guaranteed by the combination of the distribution script and SSOT validation. The promotion pipeline covered in Chapter 11 also includes the parity check as a mandatory pre-promotion gate, so something built for one platform while another was forgotten can never become an official variant in the first place. Even though the four platforms use different execution mechanisms, the principle that <strong>the set of features provided must always be the same</strong> is enforced through structural checks.</p>
 
   <h2 id="execution-plan-templates">Execution Plan Templates — Structured Execution Design for Multi-Agent Work</h2>
   <p>When the PM distributes complex work across multiple agents, it uses the <strong>Execution Plan</strong> format. This plan spells out "who does what, at what tier, in what order" in a table, guaranteeing consistency of execution.</p>

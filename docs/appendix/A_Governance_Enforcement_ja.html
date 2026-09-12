@@ -54,8 +54,8 @@
   <table>
     <thead><tr><th>層</th><th>手段</th><th>強度</th><th>カバレッジ</th></tr></thead>
     <tbody>
-      <tr><td>1. フック(Hook)</td><td>決定論的スクリプト(Claude <code>PreToolUse</code>、Gemini <code>BeforeTool</code>)</td><td>最強 — ゲートを通過するまで進行不可</td><td>Claude Code CLI・Gemini CLIは完全対応、Desktop Appは条件付き、Antigravityは未対応</td></tr>
-      <tr><td>2. プロンプト(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>に組み込まれたシステム指示</td><td>中 — エージェントの自己遵守に依存</td><td>4プラットフォームすべて</td></tr>
+      <tr><td>1. フック(Hook)</td><td>決定論的スクリプト(Claude <code>PreToolUse</code>、Gemini <code>BeforeTool</code>)</td><td>最強 — ゲートを通過するまで進行不可</td><td>Claude Code CLI・Gemini CLIは完全対応、Desktop Appは条件付き、Antigravity・Codexは未対応</td></tr>
+      <tr><td>2. プロンプト(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>に組み込まれたシステム指示</td><td>中 — エージェントの自己遵守に依存</td><td>4プラットフォームすべて</td></tr>
       <tr><td>3. スキル(Skill)</td><td><code>/gateguard</code> などのオンデマンド手動呼び出し</td><td>最弱(任意) — 人が実行</td><td>4プラットフォームすべて</td></tr>
     </tbody>
   </table>
@@ -106,6 +106,7 @@
     <li><strong>Claude Code CLI / Gemini CLI</strong> — フック完全対応。機械的ブロックが機能する。</li>
     <li><strong>Claude Desktop App</strong> — フックは条件付きで発火。プロンプト層が主防御線。</li>
     <li><strong>Antigravity</strong> — フック未対応。プロンプトの指示だけが残る。ここでルールを無視しても機械的ブロックはないが、それは <strong>ガバナンス違反</strong> として記録される。</li>
+    <li><strong>Codex (CLI・Desktop App)</strong> — フック未対応。代わりに <code>CODEX.md</code> がシステムプロンプトとして直接注入されるため、プロンプト層が基本防御線になる。ここでルールを無視しても機械的ブロックはないが、同様に <strong>ガバナンス違反</strong> として記録される。</li>
   </ul>
   <p>したがって「フックのないプラットフォームではルールが任意」というより「強制層が弱くなるだけで、違反の性質は同じ」と解釈するのが正確だ。</p>
 

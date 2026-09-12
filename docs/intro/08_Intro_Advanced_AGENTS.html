@@ -46,7 +46,7 @@
     <div class="kp-title">이 절에서 다루는 것</div>
     <ul>
       <li>에이전트 항목의 필드 구조와 의미</li>
-      <li>AGENTS.md(공통 명세)가 Claude 계열과 Antigravity 계열에서 각각 어떻게 "구현"되는지</li>
+      <li>AGENTS.md(공통 명세)가 Claude 계열·Antigravity 계열·Codex 계열에서 각각 어떻게 "구현"되는지</li>
       <li>최소 권한 원칙과 handoff 선언</li>
       <li>검증 도구(<code>agent:verify</code>)와 생애주기 연결</li>
     </ul>
@@ -123,43 +123,48 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
   <button class="copy-btn">복사</button>
 </div>
 
-  <div class="note">AGENTS.md는 AI 도구를 향한 지시문이 아니라 <strong>사람이 정의한 여러 역할의 등록부</strong>다. Claude 계열은 이 등록부를 읽고 도구별 정의 파일(<code>.claude/agents/*.md</code>)로 "번역"하고, Antigravity 계열은 등록부 자체를 오케스트레이션이 직접 읽고 해석한다.</div>
+  <div class="note">AGENTS.md는 AI 도구를 향한 지시문이 아니라 <strong>사람이 정의한 여러 역할의 등록부</strong>다. Claude 계열은 이 등록부를 읽고 도구별 정의 파일(<code>.claude/agents/*.md</code>)로 "번역"하고, Antigravity 계열은 등록부 자체를 오케스트레이션이 직접 읽고 해석하며, Codex 계열은 별도 서브에이전트 정의 없이 PM이 등록부를 역할 컨텍스트로 읽고 순차 전환하며 해석한다(<a href="../practice/04_Practice_Manual_C.html">4장 §1-C</a>).</div>
 
   <!-- ═══════════════════════════════════════════════════════
        2. 도구별 구현 매핑
        ═══════════════════════════════════════════════════════ -->
   <h2 id="impl-mapping">도구별 구현 매핑</h2>
 
-  <p>AGENTS.md는 도구 중립적인 공통 명세다. 하지만 실제로 서브에이전트를 "구현"하는 방식은 Claude 계열과 Antigravity 계열에서 근본적으로 다르다.</p>
+  <p>AGENTS.md는 도구 중립적인 공통 명세다. 하지만 실제로 서브에이전트를 "구현"하는 방식은 Claude 계열, Antigravity 계열, Codex 계열에서 서로 다르다.</p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>층위</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <thead><tr><th>층위</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th><th>Codex CLI / Desktop App</th></tr></thead>
     <tbody>
       <tr>
         <td>AGENTS.md 읽기</td>
         <td>메인 세션이 <code>AGENTS.md</code>를 읽고 에이전트 목록을 파악</td>
         <td>오케스트레이터가 <code>AGENTS.md</code>를 읽고 동적으로 서브에이전트 생성</td>
+        <td>PM이 <code>AGENTS.md</code>·<code>CODEX.md</code>를 역할 컨텍스트로 읽음</td>
       </tr>
       <tr>
         <td>서브에이전트 정의</td>
         <td><code>.claude/agents/{name}.md</code> 파일에 YAML frontmatter(<code>name</code>, <code>description</code>, <code>tools</code>, <code>model</code>) + 시스템 프롬프트</td>
         <td>정의 파일 없음 — 오케스트레이터가 실행 시점에 역할·툴 범위를 자율 판단</td>
+        <td>정의 파일 없음 — PM이 역할 정의를 순차적으로 불러와 해당 역할을 수행</td>
       </tr>
       <tr>
         <td>권한 구현</td>
         <td><code>.claude/agents/*.md</code>의 <code>tools</code> 필드에 <code>Read, Grep</code> 등 필요한 최소 툴만 나열</td>
         <td>오케스트레이터가 AGENTS.md의 <code>권한</code> 필드를 해석해 툴 접근을 스스로 제한</td>
+        <td>툴 제한 장치 없음 — PM이 AGENTS.md의 <code>권한</code> 필드를 스스로 준수</td>
       </tr>
       <tr>
         <td>handoff</td>
         <td><code>handoff_to</code>는 참고 힌트. 메인 세션이 <code>Agent</code> 툴을 순차 호출해 관계를 조율</td>
         <td>오케스트레이터가 <code>handoff_to</code>를 읽고 자동으로 순차 파이프라인 구성</td>
+        <td><code>handoff_to</code>는 힌트 — PM이 역할 순차 전환으로 파이프라인을 재현</td>
       </tr>
       <tr>
         <td>상세 참조</td>
         <td><a href="../practice/04_Practice_Manual_A.html">4장 §1-A Claude 중심</a></td>
         <td><a href="../practice/04_Practice_Manual_B.html">4장 §1-B Antigravity 중심</a></td>
+        <td><a href="../practice/04_Practice_Manual_C.html">4장 §1-C Codex 중심</a></td>
       </tr>
     </tbody>
   </table>
@@ -195,6 +200,7 @@ handoff_to: reviewer (초안 완료 후 검토로 이어짐)</pre>
       <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">오케스트레이터가 실시간 해석</text>
     </svg>
   </div>
+  <div class="note">Codex 계열은 Antigravity와 마찬가지로 정의 파일 없이 등록부를 직접 해석하는 쪽에 속하지만, 오케스트레이터의 동적 생성이 아니라 <strong>PM이 역할 컨텍스트를 순차 전환</strong>하는 방식이다 — 상세는 <a href="../practice/04_Practice_Manual_C.html">4장 §1-C</a>.</div>
 
   <!-- ═══════════════════════════════════════════════════════
        3. 작성 가이드

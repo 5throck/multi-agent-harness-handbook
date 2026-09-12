@@ -46,7 +46,7 @@
     <div class="kp-title">この節で扱うこと</div>
     <ul>
       <li>エージェント項目のフィールド構造と意味</li>
-      <li>AGENTS.md(共通仕様)がClaude系とAntigravity系でそれぞれどのように「実装」されるか</li>
+      <li>AGENTS.md(共通仕様)がClaude系・Antigravity系・Codex系でそれぞれどのように「実装」されるか</li>
       <li>最小権限の原則とhandoff宣言</li>
       <li>検証ツール(<code>agent:verify</code>)とライフサイクルの連携</li>
     </ul>
@@ -123,43 +123,48 @@ handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
   <button class="copy-btn">コピー</button>
 </div>
 
-  <div class="note">AGENTS.mdはAIツールに向けた指示文ではなく、<strong>人間が定義した複数の役割の登録簿</strong>である。Claude系はこの登録簿を読み込み、ツール別の定義ファイル(<code>.claude/agents/*.md</code>)に「翻訳」し、Antigravity系は登録簿そのものをオーケストレーションが直接読み取り解釈する。</div>
+  <div class="note">AGENTS.mdはAIツールに向けた指示文ではなく、<strong>人間が定義した複数の役割の登録簿</strong>である。Claude系はこの登録簿を読み込み、ツール別の定義ファイル(<code>.claude/agents/*.md</code>)に「翻訳」し、Antigravity系は登録簿そのものをオーケストレーションが直接読み取り解釈し、Codex系は別途サブエージェント定義なしにPMが登録簿を役割コンテキストとして読み込み、順次切り替えながら解釈する(<a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C</a>)。</div>
 
   <!-- ═══════════════════════════════════════════════════════
        2. ツール別実装マッピング
        ═══════════════════════════════════════════════════════ -->
   <h2 id="impl-mapping">ツール別実装マッピング</h2>
 
-  <p>AGENTS.mdはツール中立な共通仕様である。しかし、実際にサブエージェントを「実装」する方式は、Claude系とAntigravity系で根本的に異なる。</p>
+  <p>AGENTS.mdはツール中立な共通仕様である。しかし、実際にサブエージェントを「実装」する方式は、Claude系・Antigravity系・Codex系でそれぞれ異なる。</p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>階層</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <thead><tr><th>階層</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th><th>Codex CLI / Desktop App</th></tr></thead>
     <tbody>
       <tr>
         <td>AGENTS.mdの読み込み</td>
         <td>メインセッションが<code>AGENTS.md</code>を読み込み、エージェント一覧を把握する</td>
         <td>オーケストレーターが<code>AGENTS.md</code>を読み込み、動的にサブエージェントを生成する</td>
+        <td>PMが<code>AGENTS.md</code>と<code>CODEX.md</code>を役割コンテキストとして読み込む</td>
       </tr>
       <tr>
         <td>サブエージェント定義</td>
         <td><code>.claude/agents/{name}.md</code>ファイルにYAML frontmatter(<code>name</code>、<code>description</code>、<code>tools</code>、<code>model</code>)+システムプロンプト</td>
         <td>定義ファイルなし — オーケストレーターが実行時点で役割・ツール範囲を自律的に判断する</td>
+        <td>定義ファイルなし — PMが役割定義を順次読み込み、その役割を遂行する</td>
       </tr>
       <tr>
         <td>権限の実装</td>
         <td><code>.claude/agents/*.md</code>の<code>tools</code>フィールドに<code>Read, Grep</code>など必要最小限のツールのみを列挙</td>
         <td>オーケストレーターがAGENTS.mdの<code>権限</code>フィールドを解釈し、ツールアクセスを自ら制限する</td>
+        <td>ツール制限装置なし — PMがAGENTS.mdの<code>権限</code>フィールドを自ら遵守する</td>
       </tr>
       <tr>
         <td>handoff</td>
         <td><code>handoff_to</code>は参考ヒント。メインセッションが<code>Agent</code>ツールを順次呼び出して関係を調整する</td>
         <td>オーケストレーターが<code>handoff_to</code>を読み取り、自動で順次パイプラインを構成する</td>
+        <td><code>handoff_to</code>はヒント — PMが役割の順次切り替えでパイプラインを再現する</td>
       </tr>
       <tr>
         <td>詳細参照</td>
         <td><a href="../practice/04_Practice_Manual_A_ja.html">第4章 §1-A Claude中心</a></td>
         <td><a href="../practice/04_Practice_Manual_B_ja.html">第4章 §1-B Antigravity中心</a></td>
+        <td><a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C Codex中心</a></td>
       </tr>
     </tbody>
   </table>
@@ -195,6 +200,7 @@ handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
       <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">オーケストレーターがリアルタイムで解釈</text>
     </svg>
   </div>
+  <div class="note">Codex系はAntigravityと同様に定義ファイルなしで登録簿を直接解釈する側だが、オーケストレーターの動的生成ではなく、<strong>PMが役割コンテキストを順次切り替える</strong>方式だ — 詳細は<a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C</a>。</div>
 
   <!-- ═══════════════════════════════════════════════════════
        3. 作成ガイド

@@ -46,7 +46,7 @@
     <div class="kp-title">What this section covers</div>
     <ul>
       <li>The field structure and meaning of an agent entry</li>
-      <li>How the common AGENTS.md specification is each "implemented" differently in the Claude family and the Antigravity family</li>
+      <li>How the common AGENTS.md specification is each "implemented" differently in the Claude, Antigravity, and Codex families</li>
       <li>The principle of least privilege and handoff declarations</li>
       <li>The verification tool (<code>agent:verify</code>) and its connection to the lifecycle</li>
     </ul>
@@ -123,43 +123,48 @@ handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
   <button class="copy-btn">Copy</button>
 </div>
 
-  <div class="note">AGENTS.md is not an instruction directed at an AI tool but a <strong>registry of roles defined by a human</strong>. The Claude family reads this registry and "translates" it into tool-specific definition files (<code>.claude/agents/*.md</code>), while the Antigravity family has its orchestration read and interpret the registry directly.</div>
+  <div class="note">AGENTS.md is not an instruction directed at an AI tool but a <strong>registry of roles defined by a human</strong>. The Claude family reads this registry and "translates" it into tool-specific definition files (<code>.claude/agents/*.md</code>), the Antigravity family has its orchestration read and interpret the registry directly, and the Codex family — without separate subagent definitions — has the PM read the registry as role context and interpret it through sequential role switching (<a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C</a>).</div>
 
   <!-- ═══════════════════════════════════════════════════════
        2. Tool-Specific Implementation Mapping
        ═══════════════════════════════════════════════════════ -->
   <h2 id="impl-mapping">Tool-Specific Implementation Mapping</h2>
 
-  <p>AGENTS.md is a tool-neutral common specification. However, the way subagents are actually "implemented" differs fundamentally between the Claude family and the Antigravity family.</p>
+  <p>AGENTS.md is a tool-neutral common specification. However, the way subagents are actually "implemented" differs across the Claude, Antigravity, and Codex families.</p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Layer</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <thead><tr><th>Layer</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th><th>Codex CLI / Desktop App</th></tr></thead>
     <tbody>
       <tr>
         <td>Reading AGENTS.md</td>
         <td>The main session reads <code>AGENTS.md</code> and identifies the agent roster</td>
         <td>The orchestrator reads <code>AGENTS.md</code> and dynamically creates subagents</td>
+        <td>The PM reads <code>AGENTS.md</code> and <code>CODEX.md</code> as role context</td>
       </tr>
       <tr>
         <td>Subagent definition</td>
         <td><code>.claude/agents/{name}.md</code> files with YAML frontmatter (<code>name</code>, <code>description</code>, <code>tools</code>, <code>model</code>) plus a system prompt</td>
         <td>No definition file — the orchestrator autonomously determines the role and tool scope at execution time</td>
+        <td>No definition file — the PM sequentially loads each role definition and performs that role</td>
       </tr>
       <tr>
         <td>Permission implementation</td>
         <td>Only the minimum required tools (<code>Read</code>, <code>Grep</code>, etc.) are listed in the <code>tools</code> field of <code>.claude/agents/*.md</code></td>
         <td>The orchestrator interprets the <code>Permissions</code> field of AGENTS.md and restricts tool access on its own</td>
+        <td>No tool-restriction mechanism — the PM complies with the <code>Permissions</code> field of AGENTS.md on its own</td>
       </tr>
       <tr>
         <td>Handoff</td>
         <td><code>handoff_to</code> is a reference hint. The main session coordinates the relationship by invoking the <code>Agent</code> tool sequentially</td>
         <td>The orchestrator reads <code>handoff_to</code> and automatically constructs a sequential pipeline</td>
+        <td><code>handoff_to</code> is a hint — the PM reproduces the pipeline through sequential role switching</td>
       </tr>
       <tr>
         <td>Detailed reference</td>
         <td><a href="../practice/04_Practice_Manual_A_en.html">Chapter 4 §1-A Claude-Centric</a></td>
         <td><a href="../practice/04_Practice_Manual_B_en.html">Chapter 4 §1-B Antigravity-Centric</a></td>
+        <td><a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C Codex-Centric</a></td>
       </tr>
     </tbody>
   </table>
@@ -195,6 +200,7 @@ handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
       <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">Orchestrator interprets in real time</text>
     </svg>
   </div>
+  <div class="note">The Codex family, like Antigravity, interprets the registry directly without definition files — but not through orchestrator-driven dynamic generation; instead the <strong>PM switches role contexts sequentially</strong>. See <a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C</a>.</div>
 
   <!-- ═══════════════════════════════════════════════════════
        3. Authoring Guide

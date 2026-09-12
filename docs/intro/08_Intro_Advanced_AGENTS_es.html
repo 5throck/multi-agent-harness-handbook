@@ -46,7 +46,7 @@
     <div class="kp-title">Lo que cubre esta sección</div>
     <ul>
       <li>Estructura de campos y significado de una entrada de agente</li>
-      <li>Cómo la especificación común de AGENTS.md se "implementa" de manera diferente en la familia Claude y la familia Antigravity</li>
+      <li>Cómo la especificación común de AGENTS.md se "implementa" de manera diferente en las familias Claude, Antigravity y Codex</li>
       <li>El principio de mínimo privilegio y las declaraciones de entrega</li>
       <li>La herramienta de verificación (<code>agent:verify</code>) y su conexión con el ciclo de vida</li>
     </ul>
@@ -123,43 +123,48 @@ handoff_to: reviewer (procede a la revisión después de que el borrador esté c
   <button class="copy-btn">Copiar</button>
 </div>
 
-  <div class="note">AGENTS.md no es una instrucción dirigida a una herramienta de IA sino un <strong>registro de roles definidos por un humano</strong>. La familia Claude lee este registro y lo "traduce" a archivos de definición específicos de la herramienta (<code>.claude/agents/*.md</code>), mientras que la familia Antigravity tiene su orquestación que lee e interpreta el registro directamente.</div>
+  <div class="note">AGENTS.md no es una instrucción dirigida a una herramienta de IA sino un <strong>registro de roles definidos por un humano</strong>. La familia Claude lee este registro y lo "traduce" a archivos de definición específicos de la herramienta (<code>.claude/agents/*.md</code>), la familia Antigravity tiene su orquestación que lee e interpreta el registro directamente, y la familia Codex — sin definiciones de subagente separadas — hace que el PM lea el registro como contexto de rol y lo interprete mediante transiciones secuenciales de rol (<a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C</a>).</div>
 
   <!-- ═══════════════════════════════════════════════════════
        2. Tool-Specific Implementation Mapping
        ═══════════════════════════════════════════════════════ -->
   <h2 id="impl-mapping">Mapeo de Implementación por Herramienta</h2>
 
-  <p>AGENTS.md es una especificación común neutral frente a herramientas. Sin embargo, la forma en que los subagentes se "implementan" realmente difiere fundamentalmente entre la familia Claude y la familia Antigravity.</p>
+  <p>AGENTS.md es una especificación común neutral frente a herramientas. Sin embargo, la forma en que los subagentes se "implementan" realmente difiere entre las familias Claude, Antigravity y Codex.</p>
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Capa</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th></tr></thead>
+    <thead><tr><th>Capa</th><th>Claude Desktop App / Claude Code</th><th>Antigravity Desktop / CLI</th><th>Codex CLI / Desktop App</th></tr></thead>
     <tbody>
       <tr>
         <td>Lectura de AGENTS.md</td>
         <td>La sesión principal lee <code>AGENTS.md</code> e identifica el registro de agentes</td>
         <td>El orquestador lee <code>AGENTS.md</code> y crea subagentes dinámicamente</td>
+        <td>El PM lee <code>AGENTS.md</code> y <code>CODEX.md</code> como contexto de rol</td>
       </tr>
       <tr>
         <td>Definición de subagente</td>
         <td>Archivos <code>.claude/agents/{nombre}.md</code> con frontmatter YAML (<code>name</code>, <code>description</code>, <code>tools</code>, <code>model</code>) más un prompt del sistema</td>
         <td>Sin archivo de definición — el orquestador determina autónomamente el rol y alcance de herramientas en tiempo de ejecución</td>
+        <td>Sin archivo de definición — el PM carga secuencialmente cada definición de rol y desempeña ese rol</td>
       </tr>
       <tr>
         <td>Implementación de permisos</td>
         <td>Solo las herramientas mínimas necesarias (<code>Read</code>, <code>Grep</code>, etc.) se enumeran en el campo <code>tools</code> de <code>.claude/agents/*.md</code></td>
         <td>El orquestador interpreta el campo <code>Permissions</code> de AGENTS.md y restringe el acceso a herramientas por su cuenta</td>
+        <td>Sin mecanismo de restricción de herramientas — el PM cumple por su cuenta el campo <code>Permissions</code> de AGENTS.md</td>
       </tr>
       <tr>
         <td>Entrega</td>
         <td><code>handoff_to</code> es una pista de referencia. La sesión principal coordina la relación invocando la herramienta <code>Agent</code> secuencialmente</td>
         <td>El orquestador lee <code>handoff_to</code> y construye automáticamente un pipeline secuencial</td>
+        <td><code>handoff_to</code> es una pista — el PM reproduce el pipeline mediante transiciones secuenciales de rol</td>
       </tr>
       <tr>
         <td>Referencia detallada</td>
         <td><a href="../practice/04_Practice_Manual_A_es.html">Capítulo 4 §1-A Centrado en Claude</a></td>
         <td><a href="../practice/04_Practice_Manual_B_es.html">Capítulo 4 §1-B Centrado en Antigravity</a></td>
+        <td><a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C Centrado en Codex</a></td>
       </tr>
     </tbody>
   </table>
@@ -195,6 +200,7 @@ handoff_to: reviewer (procede a la revisión después de que el borrador esté c
       <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">El orquestador interpreta en tiempo real</text>
     </svg>
   </div>
+  <div class="note">La familia Codex, como Antigravity, interpreta el registro directamente sin archivos de definición — pero no mediante generación dinámica del orquestador, sino mediante la <strong>transición secuencial de contextos de rol por parte del PM</strong>. Véase <a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C</a>.</div>
 
   <!-- ═══════════════════════════════════════════════════════
        3. Authoring Guide

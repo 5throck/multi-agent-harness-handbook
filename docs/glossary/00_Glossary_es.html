@@ -79,7 +79,7 @@
       <span class="see">Detalles: <a href="../guardrails/03_Guardrails_Chapter_es.html#s1">Capítulo 3 §1</a></span></dd>
 
     <dt>Hook <span class="en">Hook</span></dt>
-    <dd>Un script que se ejecuta automáticamente antes o después de que un agente llame a una herramienta en particular. Ejemplo: un hook <code>PostToolUse</code> que ejecuta una verificación de auditoría automatizada después de una edición de archivo. En Claude Code (CLI), los hooks definidos bajo <code>.claude/hooks/</code> se activan como se espera, pero no se activan en Claude Desktop App (Escritorio) — por lo que es importante conocer estas diferencias de comportamiento por herramienta.
+    <dd>Un script que se ejecuta automáticamente antes o después de que un agente llame a una herramienta en particular. Ejemplo: un hook <code>PostToolUse</code> que ejecuta una verificación de auditoría automatizada después de una edición de archivo. En Claude Code (CLI), los hooks definidos bajo <code>.claude/hooks/</code> se activan como se espera, pero no se activan en Claude Desktop App (Escritorio) — por lo que es importante conocer estas diferencias de comportamiento por herramienta. Codex no soporta hooks — lo sustituye con instrucciones de CODEX.md que la sesión ejecuta por sí misma.
       <span class="see">Detalles: <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registros de Auditoría y Observabilidad</a></span></dd>
 
     <dt>Kanban / Límite WIP <span class="en">Kanban / WIP Limit</span></dt>
@@ -150,6 +150,12 @@
     <dt>AGENTS.md</dt>
     <dd>Un archivo de estándar abierto leído en común por más de 30 herramientas de codificación con IA. Define reglas neutrales a la herramienta como comandos de compilación/prueba y estilo de código. En este repositorio adicionalmente sirve como "plantilla de agentes."
       <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s5">Capítulo 2 §AGENTS.md, el Arnes que Cruza Herramientas</a></span></dd>
+
+    <dt>CODEX.md</dt>
+    <dd>El archivo de instrucciones de comportamiento de la familia Codex (CLI · Desktop App). En Codex, que no tiene hooks, este archivo es la base de la <strong>auto-aplicación por prompt</strong> — el PM percibe y ejecuta las reglas escritas aquí en cada sesión.</dd>
+
+    <dt>Contexto de Rol <span class="en">Role Context</span></dt>
+    <dd>El enfoque de Codex para implementar subagentes. Sin archivos de definición separados, el PM lee las definiciones de rol de AGENTS.md y CODEX.md y cambia secuencialmente al siguiente rol a medida que cada paso se completa. Véase <a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C</a>.</dd>
 
     <dt>teammateMode</dt>
     <dd>El modo de ejecución paralela para Agent Teams (una función experimental). Claude Desktop App (Escritorio) solo soporta <code>in-process</code>, mientras que Claude Code (CLI) adicionalmente soporta el modo panel dividido <code>tmux</code>.

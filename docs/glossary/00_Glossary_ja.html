@@ -79,7 +79,7 @@
       <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s1">第3章 §1</a></span></dd>
 
     <dt>フック <span class="en">Hook</span></dt>
-    <dd>エージェントが特定のツールを呼び出す前後に自動実行されるスクリプト。例: <code>PostToolUse</code>フックによるファイル修正後の自動監査(audit)チェック。Claude Code(CLI)では<code>.claude/hooks/</code>に定義されたフックが発火するが、Claude Desktop Appでは動作しないため、ツールごとの挙動の違いに注意する必要がある。
+    <dd>エージェントが特定のツールを呼び出す前後に自動実行されるスクリプト。例: <code>PostToolUse</code>フックによるファイル修正後の自動監査(audit)チェック。Claude Code(CLI)では<code>.claude/hooks/</code>に定義されたフックが発火するが、Claude Desktop Appでは動作しないため、ツールごとの挙動の違いに注意する必要がある。Codexはフック未対応 — CODEX.mdの指示をセッションが自ら実行する方式で代用する。
       <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">第3章 §監査ログと可観測性</a></span></dd>
 
     <dt>かんばん / WIP制限 <span class="en">Kanban / WIP Limit</span></dt>
@@ -150,6 +150,12 @@
     <dt>AGENTS.md</dt>
     <dd>30以上のAIコーディングツールが共通して読み込むオープンスタンダードファイル。ビルド・テストコマンドやコードスタイルなど、ツールに依存しない規則を定義する。本リポジトリでは、これに加えて「エージェントロースター」の役割も兼ねている。
       <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s5">第2章 §ツールを横断するハーネス、AGENTS.md</a></span></dd>
+
+    <dt>CODEX.md</dt>
+    <dd>Codex系(CLI・Desktop App)の行動指示ファイル。フックのないCodexでは、このファイルに記載された規則をPMが毎セッション自ら認識して実行する<strong>プロンプト自己強制</strong>の根拠となる。</dd>
+
+    <dt>役割コンテキスト <span class="en">Role Context</span></dt>
+    <dd>Codexのサブエージェント実装方式。別途の定義ファイルなしに、PMがAGENTS.mdとCODEX.mdの役割定義を読み込み、各段階が終わるごとに次の役割へ順次切り替える。詳しくは<a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C</a>。</dd>
 
     <dt>teammateMode</dt>
     <dd>Agent Teams(実験的機能)の並列実行モード。Claude Desktop Appは<code>in-process</code>のみをサポートし、Claude Code(CLI)は<code>tmux</code>分割ペインモードも追加でサポートする。

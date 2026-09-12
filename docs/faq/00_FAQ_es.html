@@ -45,7 +45,7 @@
   <span class="see">Detalles: <a href="../practice/04_Practice_Examples_A_es.html#scenario-2">Capítulo 4 §2-A D-1</a></span>
 
   <div class="q">Después de guardar un archivo en Claude Desktop App, el script de auditoría no se ejecuta automáticamente.</div>
-  <p class="faq-answer">Esto es esperado. Hooks como <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> no se activan en Claude Desktop App (Escritorio) — solo se ejecutan automáticamente en sesiones de Claude Code (CLI). Los equipos que usan la Aplicación de Escritorio deben ejecutar manualmente lo que el hook habría hecho después de que termine la sesión. Pasar esto por alto puede llevar a incidentes donde se asume "la auditoría se ejecutó" cuando en realidad no lo hizo.</p>
+  <p class="faq-answer">Esto es esperado. Hooks como <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> no se activan en Claude Desktop App (Escritorio) — solo se ejecutan automáticamente en sesiones de Claude Code (CLI). Los equipos que usan la Aplicación de Escritorio deben ejecutar manualmente lo que el hook habría hecho después de que termine la sesión. Codex no tiene mecanismo de hooks en absoluto, por lo que lo sustituye con instrucciones de CODEX.md que el PM ejecuta por sí mismo (véase el Capítulo 4 §1-C). Pasar esto por alto puede llevar a incidentes donde se asume "la auditoría se ejecutó" cuando en realidad no lo hizo.</p>
   <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-1">Referencia Común §1</a>, <a href="../guardrails/03_Guardrails_Chapter_es.html#s6">Capítulo 3 §Registro de Auditoría y Observabilidad</a></span>
 
   <div class="q">Le pedí al revisor que solo revisara, pero modificó el archivo de todos modos.</div>
@@ -93,7 +93,7 @@
   <span class="see">Detalles: <a href="../variant-advanced/12_VariantAdvanced_Examples_es.html">Ejercicios del Capítulo 12</a></span>
 
   <div class="q">¿Cómo uso ai-workspace-standards en un entorno de producción real (Docker/Kubernetes)?</div>
-  <p class="faq-answer">Actualmente, ai-workspace-standards solo funciona integrándose directamente con herramientas locales de codificación con IA (Claude Code/App, Antigravity, etc.). El soporte de equipos de agentes por usuario en un entorno Docker o Kubernetes en conjunto con un servicio frontend como Open WebUI está en discusión como una <strong>mejora futura</strong>, pero aún no se ha implementado.
+  <p class="faq-answer">Actualmente, ai-workspace-standards solo funciona integrándose directamente con herramientas locales de codificación con IA (Claude Code/App, Antigravity, Codex, etc.). El soporte de equipos de agentes por usuario en un entorno Docker o Kubernetes en conjunto con un servicio frontend como Open WebUI está en discusión como una <strong>mejora futura</strong>, pero aún no se ha implementado.
     <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#container">Capítulo 8 §5 Hoja de Ruta Avanzada</a></span></p>
 
   <div class="q">¿Puedo consolidar <code>memory/YYYY-MM-DD.md</code> de múltiples proyectos en un solo lugar?</div>

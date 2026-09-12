@@ -45,7 +45,7 @@
   <span class="see">Details: <a href="../practice/04_Practice_Examples_A_en.html#scenario-2">Chapter 4 §2-A D-1</a></span>
 
   <div class="q">After saving a file in the Claude Desktop App, the audit script doesn't run automatically.</div>
-  <p class="faq-answer">This is expected. Hooks such as <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> do not fire in the Claude Desktop App — they only run automatically in Claude Code (CLI) sessions. Teams using the Desktop App must run whatever the hook would have done manually after the session ends. Missing this can lead to incidents where you assume "the audit ran" when it actually didn't.</p>
+  <p class="faq-answer">This is expected. Hooks such as <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code> do not fire in the Claude Desktop App — they only run automatically in Claude Code (CLI) sessions. Teams using the Desktop App must run whatever the hook would have done manually after the session ends. Codex has no hook mechanism at all, so it substitutes CODEX.md instructions that the PM executes on its own (see Chapter 4 §1-C). Missing this can lead to incidents where you assume "the audit ran" when it actually didn't.</p>
   <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-1">Common Reference §1</a>, <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logging and Observability</a></span>
 
   <div class="q">I asked the reviewer only to review, but it modified the file anyway.</div>
@@ -93,7 +93,7 @@
   <span class="see">Details: <a href="../variant-advanced/12_VariantAdvanced_Examples_en.html">Chapter 12 Exercises</a></span>
 
   <div class="q">How do I use ai-workspace-standards in an actual production environment (Docker/Kubernetes)?</div>
-  <p class="faq-answer">Currently, ai-workspace-standards only works by integrating directly with local AI coding tools (Claude Code/App, Antigravity, etc.). Supporting per-user agent teams in a Docker or Kubernetes environment in conjunction with a frontend service like Open WebUI is under discussion as a <strong>future enhancement</strong>, but has not yet been implemented.
+  <p class="faq-answer">Currently, ai-workspace-standards only works by integrating directly with local AI coding tools (Claude Code/App, Antigravity, Codex, etc.). Supporting per-user agent teams in a Docker or Kubernetes environment in conjunction with a frontend service like Open WebUI is under discussion as a <strong>future enhancement</strong>, but has not yet been implemented.
     <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#container">Chapter 8 §5 Advanced Roadmap</a></span></p>
 
   <div class="q">Can I aggregate <code>memory/YYYY-MM-DD.md</code> from multiple projects into one place?</div>

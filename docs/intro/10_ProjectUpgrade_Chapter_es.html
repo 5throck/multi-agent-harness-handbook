@@ -90,12 +90,12 @@
   <p>Si un objetivo SYNC_IF_NEWER ha sido editado localmente pero la versión de la plantilla es más reciente, el script lo marca como <code>⚠️ CONFLICT</code> pero aun así lo sobrescribe con el contenido de la plantilla al final. Ten en cuenta que esto es "advertir y continuar," no "preguntar antes de sobrescribir" — por eso la red de seguridad descrita a continuación es importante.</p>
 
   <h2 id="safety">Redes de seguridad — instantáneas y reversión</h2>
-  <p>Antes de ejecutarse (cuando no está en modo <code>--dry-run</code>), el script ejecuta automáticamente <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code> para tomar una instantánea del estado actual de tu árbol de trabajo. Si no estás satisfecho con el resultado de la actualización, puedes revertirlo inmediatamente con el siguiente comando.</p>
+  <p>Antes de ejecutarse (cuando no está en modo <code>--dry-run</code>), el script ejecuta automáticamente <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code> para tomar una instantánea del estado actual de su árbol de trabajo. Si no está satisfecho con el resultado de la actualización, puede revertirlo inmediatamente con el siguiente comando.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt; --rollback</pre>
   <button class="copy-btn">Copiar</button>
 </div>
-  <p>Este comando encuentra la instantánea <code>pre-upgrade-snapshot-*</code> que se acaba de crear y la restaura mediante <code>git stash pop</code>. La propia actualización no crea un commit, así que después de revisar el resultado, necesitarás verificar los cambios con <code>git diff</code> como de costumbre y confirmarlos tú mismo.</p>
+  <p>Este comando encuentra la instantánea <code>pre-upgrade-snapshot-*</code> que se acaba de crear y la restaura mediante <code>git stash pop</code>. La propia actualización no crea un commit, así que después de revisar el resultado, necesitará verificar los cambios con <code>git diff</code> como de costumbre y confirmarlos usted mismo.</p>
   <p>Como paso final, <code>.claude/template-version.txt</code> se actualiza a la nueva versión — conservando su línea <code>country=</code> — y los elementos de arranque de seguridad — <code>.gitleaks.toml</code>, hooks de pre-commit, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (patrones .env), y <code>git core.hooksPath</code> — se verifican automáticamente (estos son los mismos elementos cubiertos por los principios de barreras de protección del Capítulo 3). Si <code>core.hooksPath</code> está mal configurado, el script lo corrige por sí solo.</p>
 
   <h2 id="vs-promotion">Cómo se diferencia de la promoción</h2>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第4章 §1-C · サブエージェント活用詳細 — Codex中心 - マルチエージェントチーム・ハーネスエンジニアリングハンドブック">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>第4章 §1-C · Sub-Agent Usage Details — Codex-Focused</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+    .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
+    @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
+    .platform-col { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+    .platform-col pre.code-block { max-width: 100%; }
+    .platform-col.codexapp { border-top: 3px solid var(--accent-purple); }
+    .platform-col.codexcli { border-top: 3px dashed var(--accent-purple); }
+    .platform-col h3 { margin-top: 0; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── サイドバーナビゲーション ── -->
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第4章 §1-C · Codex中心の詳細</div>
+  <a href="#section-1">1. 役割を定義する</a>
+  <a href="#section-2">2. 役割を遂行/切り替える</a>
+  <a href="#section-3">3. 並列実行</a>
+  <a href="#section-4">4. 自動化/フック</a>
+  <div class="nav-section">参考</div>
+  <a href="#refs">参考リンク</a>
+  <div class="nav-section">姉妹ドキュメント</div>
+  <a href="04_Practice_Manual_ja.html">第4章 §1 · 共通リファレンス</a>
+  <a href="04_Practice_Manual_A_ja.html">第4章 §1-A · Claude中心</a>
+  <a href="04_Practice_Manual_B_ja.html">第4章 §1-B · Antigravity中心</a>
+  <div class="nav-section">他の章</div>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章 · ガードレールと権限モデル</a>
+  <a href="../intro/05_Intro_Chapter_ja.html">第5章 · 導入</a>
+</nav>
+
+<!-- ── 本文 ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第4章 §1-C</div>
+  <h1>Sub-Agent Usage Details — Codex-Focused</h1>
+  <p class="subtitle">Codex CLI / Codex Desktop Appで「サブエージェント」に相当する作業を遂行し、順次実行し、自動化単位に拡張する方法をCodex系列に限定してまとめた詳細ドキュメント &nbsp;|&nbsp; 共通概念は<a href="04_Practice_Manual_ja.html">第4章 §1 リファレンス</a>で、Claude系列は<a href="04_Practice_Manual_A_ja.html">第4章 §1-A</a>で、Antigravity系列は<a href="04_Practice_Manual_B_ja.html">第4章 §1-B</a>で扱う。</p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象バージョン</span><span class="vvalue">Codex CLI / Codex Desktop App — Claude対応は<a href="04_Practice_Manual_A_ja.html">§1-A</a>、Antigravity対応は<a href="04_Practice_Manual_B_ja.html">§1-B</a>参照</span></div>
+    <div class="version-row"><span class="vlabel">参考ドキュメントURL</span><span class="vvalue"><a href="https://developers.openai.com/codex" target="_blank">developers.openai.com/codex</a></span></div>
+    <div class="version-row"><span class="vlabel">ドキュメント収集日</span><span class="vvalue">2026-09-12</span></div>
+    <div class="version-row"><span class="vlabel">バージョン確認方法</span><span class="vvalue">Codex CLI: <code>codex --version</code> · Codex Desktop App: アプリの「バージョン情報」画面</span></div>
+  </div>
+
+  <div class="warning-box">Codexには<strong>ネイティブなサブエージェントツールがない。</strong>本ドキュメント全体で「サブエージェント」という用語をそのまま使わず<strong>「役割（role）」</strong>という表現を使う理由がここにある — Claude/Antigravityのドキュメントで言うサブエージェントは、独立したプロセス・独立したコンテキストウィンドウを持つ独立した存在だが、Codexで PM が「担う」役割は、同じセッション内で続く思考の切り替えに過ぎない。詳しい背景は<a href="../tools/00_Tools_Manual_ja.html#section-3">ツール比較 §3</a>を参照。</div>
+
+  <hr>
+
+  <!-- ── セクション1 ── -->
+  <h2 id="section-1">1. 役割を定義する</h2>
+
+  <p>Codex CLIとCodex Desktop Appは<strong>事前に定義ファイルを作成する必要がない</strong>。代わりに、ワークスペースルートの<code>agents/&lt;name&gt;.md</code>にすでにある各専門エージェントの定義ファイルを、PMがセッション開始時に読み込み、役割コンテキストとして使う。Claude系列の<code>.claude/agents/*.md</code>と形式は似ているが用途が異なる — Claudeでは呼び出し時に<code>subagent_type</code>で参照される「実行可能な定義」だが、Codexでは PM が<strong>参考資料として読み込み、その役割のように考えるための素材</strong>だ。</p>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> agents/&lt;name&gt;.md — 読み取り専用の役割コンテキスト</h3>
+    <p>Codex Desktop AppでPMは、ワークスペースの<code>agents/reviewer.md</code>のようなファイルを会話中に直接読み込み、「この役割が定義した通りに作業する」と宣言する。ファイル自体はClaude系列と同じfrontmatter形式を共有できるが、Codexがこれを実行可能なサブエージェントとしてスポーンすることはない — あくまで参照される文書だ。<strong>Codex CLIでも全く同じファイルが全く同じ方法で使われる</strong> — 両者の間で役割定義方法に違いはない。</p>
+    <div style="position:relative">
+  <pre class="code-block">agents/reviewer.md の内容（Claude用と
+同じ形式でもよい）:
+---
+name: reviewer
+description: テキストファイルの誤字と
+  論理的な欠陥をレビューする。
+---
+
+あなたはレビュアーの役割です。与えられた
+ファイルを読み、改善点をリストにまとめて
+報告してください。</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — Codex Desktop Appと同一のagents/&lt;name&gt;.md</h3>
+    <p>Codex Desktop Appで使ったのと全く同じ<code>agents/&lt;name&gt;.md</code>ファイルをそのまま参照する。Desktop AppとCLIの間で役割定義方法の違いはない。</p>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>比較項目</th><th>Claude系列 (.claude/agents)</th><th>Codex系列 (agents/&lt;name&gt;.md)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>ファイルの場所</td>
+        <td><code>.claude/agents/*.md</code>（プラットフォーム専用フォルダ）</td>
+        <td><code>agents/&lt;name&gt;.md</code>（ワークスペース共通フォルダ — プラットフォーム専用コピーなし）</td>
+      </tr>
+      <tr>
+        <td>用途</td>
+        <td>実行可能なサブエージェント定義 — <code>subagent_type</code>で呼び出す</td>
+        <td>読み取り専用の役割コンテキスト — PMが参照してその役割のように考える</td>
+      </tr>
+      <tr>
+        <td>呼び出しメカニズム</td>
+        <td><code>Agent</code>/<code>Task</code>ツール</td>
+        <td>なし — PMがファイルを読み「この役割を遂行する」と宣言するだけ</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション2 ── -->
+  <h2 id="section-2">2. 役割を遂行/切り替える</h2>
+
+  <p>Codex CLIとCodex Desktop Appはどちらも、独立したコンテキストを持つサブエージェントをスポーンする代わりに、<strong>PMが同じセッション内で役割を着替える</strong>。「今は設計者の役割でこのファイルを分析し、次は実装者の役割でコードを書く」という具合に、段階を順番に踏んでいく。</p>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> — PMの順次役割切り替え</h3>
+    <p>Codex Desktop AppでPMに複数の専門性が必要な作業を依頼すると、PMは各段階で該当する役割の定義ファイルを読み込み、その役割の視点で作業した後、次の役割へ移る。複数の役割が並列に同時存在することはなく、各段階は前段階の結果を引き継ぐ。<strong>Codex CLIでも全く同じ順次切り替え方式がそのまま動作する</strong> — チャット画面の代わりにターミナルで同じ依頼をすれば、同様に処理される。</p>
+    <div style="position:relative">
+  <pre class="code-block">ユーザー: 「src/auth/login.tsのセッション
+期限切れ処理ロジックをレビューして、
+バグがあれば直して。」
+
+PMの内部進行（1つのセッション内で順次）:
+1. agents/reviewer.mdを役割コンテキストとして
+   読み込みコードをレビュー
+2. 発見した問題を整理
+3. agents/automation-engineer.mdに役割を
+   切り替えて修正を実装</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — Codex Desktop Appと同一の順次切り替え</h3>
+    <p>Codex Desktop Appと全く同じ順次役割切り替え方式だ。ターミナルで自然言語で依頼すれば、同じ方法でPMが役割を着替えながら作業する。</p>
+  </div>
+
+  <div class="warning-box">この実習でClaude/Antigravityの例をそのまま真似て「Codexでreviewerサブエージェントを呼び出す」という表現を使うと事実と異なる。Codexの「入門実習」はサブエージェントを呼び出すことではなく、<strong>PMに複数の役割が必要な作業を任せ、順次役割が切り替わる過程を観察すること</strong>だ。</div>
+
+  <hr>
+
+  <!-- ── セクション3 ── -->
+  <h2 id="section-3">3. 並列実行</h2>
+
+  <p>Codex系列は<strong>セッション内並列実行をサポートしていない。</strong>すべての役割切り替えは1つの線形セッション内で順番に起こる。</p>
+
+  <div class="warning-box">Claude系列のAgent TeamsやAntigravity系列のAgent Manager/動的サブエージェントに相当する「セッション内並列」はCodexにない。複数の作業を同時に進めたい場合は<strong>ターミナル（またはウィンドウ）を複数開いてセッション自体を分離</strong>する必要がある — これは並列実行というより、複数の独立したセッションを並べて置くことに近い。</div>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> — 複数ウィンドウによるセッション間並列</h3>
+    <p>Codex Desktop Appで異なる作業を同時に進めるには、アプリのウィンドウ（またはタブ）を複数開き、それぞれ別のセッションとして作業する。複数のセッションが同じファイルを同時に触らない限り競合しない。<strong>Codex CLIでも同じ原理で、ターミナルを複数開いてセッション間並列を実現する。</strong></p>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — 複数ターミナルによるセッション間並列</h3>
+    <p>Codex Desktop Appと全く同じ原理だ。1つの<code>codex</code>セッションがAPI層をリファクタリングしている間に別のセッションがテストを書いても、同じファイルに触れない限り競合しない。</p>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>項目</th><th>Codex Desktop App</th><th>Codex CLI</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>並列実行単位</td>
+        <td>セッション内並列なし / 複数ウィンドウによるセッション間並列のみ可能</td>
+        <td>セッション内並列なし / 複数ターミナルによるセッション間並列のみ可能</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── セクション4 ── -->
+  <h2 id="section-4">4. 自動化/フック</h2>
+
+  <p>Codex系列では自動化・フックはDesktop AppとCLIの間に違いがない — <strong>どちらもワークスペースのフックスイートを一切実行しない。</strong></p>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> — フック未実行、プロンプトで自己強制</h3>
+    <p>Claude Codeの<code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>のような自動発火イベントに対応する仕組みがCodex Desktop Appにはない。監査スクリプトの実行やゲートルールといったガバナンスは、<code>CODEX.md</code>に明記された指針をPMが<strong>毎セッション自ら認識して実行する</strong>方式（プロンプト自己強制）で代替する。<strong>Codex CLIも全く同じだ</strong> — フックの仕組み自体がない。</p>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — Codex Desktop Appと同様にフックなし</h3>
+    <p>Codex Desktop Appと全く同じだ。<code>CODEX.md</code>に書かれた指針（例：「ファイルを変更した後は必ず<code>bun scripts/audit.ts</code>を実行する」）をPMがセッション内で自ら認識し実行する必要がある — イベントに反応して自動実行される仕組みはない。</p>
+    <div style="position:relative">
+  <pre class="code-block"># CODEX.mdに書かれた指針の例
+# （自動発火ではなく、PMが直接認識・実行）:
+# 「ファイルをWrite/Editした後は必ず
+#  bun scripts/audit.tsを実行して監査する。」
+
+bun scripts/audit.ts</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+  </div>
+
+  <div class="warning-box">Codexでこのハンドブックのマルチエージェント実習に取り組む際は、常に「サブエージェントを呼び出す」を<strong>「PMが該当する役割の定義ファイルを読み込み、その役割を遂行する」</strong>に、「フックが自動発火する」を<strong>「PMがCODEX.mdの指針を自ら認識し実行する」</strong>に読み替える。</div>
+
+  <hr>
+
+  <!-- ── 参考リンク ── -->
+  <h2 id="refs">参考リンク</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://developers.openai.com/codex" target="_blank">Codex — 公式ドキュメント</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_ja.html">第4章 §1 共通リファレンス — 04_Practice_Manual_ja.html</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_A_ja.html">第4章 §1-A Claude中心 — 04_Practice_Manual_A_ja.html</a></li>
+    <li>⚙️ <a href="04_Practice_Manual_B_ja.html">第4章 §1-B Antigravity中心 — 04_Practice_Manual_B_ja.html</a></li>
+    <li>⚙️ <a href="../tools/00_Tools_Manual_ja.html#section-3">ツール比較 §3 — Codex Desktop App vs Codex CLI</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Codex CLI/Desktop App 基準 | 2026年9月</p>
+  <div class="chapter-nav">
+    <a href="04_Practice_Manual_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第4章 §1 · リファレンス</div></a>
+    <div class="branch">
+      <div class="branch-label">第4章 §1</div>
+      <a href="04_Practice_Manual_A_ja.html" >Claude (A)</a>
+      <a href="04_Practice_Manual_B_ja.html" >Antigravity (B)</a>
+      <a href="04_Practice_Manual_C_ja.html" >Codex (C)</a>
+    </div>
+  </div>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script src="../assets/copy-code.js"></script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -48,7 +48,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">8장 §4</div>
   <h1>아키텍처 심화</h1>
-  <p class="lead">§1에서 L0→L1→L2가 "무엇이 어디서 어디로 흐르는가"를 다뤘다면, 이 절은 그 흐름이 <strong>실제로 어떻게 구현되는지</strong>를 파고든다 — 파일이 그대로 복사되지 않고 재생성되는 이유, 상속 프론트매터가 해석되는 순서, 보일러플레이트·티어 전략이 실전에서 어떻게 적용되는지의 구체적 예시, 그리고 두 플랫폼(.claude/.gemini)이 구조적으로 어긋나지 않게 유지되는 방법까지 다룬다.</p>
+  <p class="lead">§1에서 L0→L1→L2가 "무엇이 어디서 어디로 흐르는가"를 다뤘다면, 이 절은 그 흐름이 <strong>실제로 어떻게 구현되는지</strong>를 파고든다 — 파일이 그대로 복사되지 않고 재생성되는 이유, 상속 프론트매터가 해석되는 순서, 보일러플레이트·티어 전략이 실전에서 어떻게 적용되는지의 구체적 예시, 그리고 플랫폼 디렉터리(.claude/.gemini/.agents/.codex)가 구조적으로 어긋나지 않게 유지되는 방법까지 다룬다.</p>
 
   <div class="keypoints">
     <div class="kp-title">이 절에서 다루는 것</div>
@@ -103,11 +103,11 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <h3>티어 정의와 모델 매핑</h3>
   <div class="table-compare narrow-col-1">
   <table>
-    <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th></tr></thead>
+    <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th><th>Codex 계열 예시</th></tr></thead>
     <tbody>
-      <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td></tr>
-      <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td></tr>
-      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td></tr>
+      <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
+      <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td><td>gpt-5.6-terra</td></tr>
+      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td><td>gpt-5.6-luna</td></tr>
     </tbody>
   </table>
   </div>
@@ -128,9 +128,9 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
     Tier Ceiling Rule은 "이 작업에 가장 적합한 티어 이상은 배정하지 마라"가 아니라 "이 에이전트의 정의된 티어 이상은 사용하지 마라"이다. 역할 기반이 작업 기반이다.
   </div>
 
-  <h2 id="platform-parity">플랫폼 패리티 — .claude/, .gemini/, .agents/를 구조적으로 동일하게 유지하는 법</h2>
-  <p>이 저장소는 세 플랫폼을 동시에 지원한다 — Claude Code(<code>.claude/</code>), Gemini CLI(<code>.gemini/</code>), Antigravity(<code>.agents/</code>). 플랫폼 디렉터리들이 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 스킬 계층은 <code>skills/</code>가 단일 출처(SSOT)이며, <code>sync-skills.ts</code>가 이를 세 플랫폼 디렉터리 모두에 배포한다. 구조적 어긋남을 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
-  <p>다만 검사 스코프에는 미묘한 차이가 있다. <code>validate-templates.ts</code>는 커맨드 등 템플릿 구조를 <code>.claude/</code>와 <code>.gemini/</code> 두 디렉터리에 대해서만 대조하고(Antigravity용 <code>.agents/</code> 트리는 별도 동기화 경로로 운영된다), 스킬 내용 자체는 SSOT인 <code>skills/</code>를 <code>validate-skills.ts</code>가 검사한다. 즉 "세 플랫폼이 같은 기능을 제공하는가"는 배포 스크립트와 SSOT 검증의 조합으로 보장된다. 11장에서 다루는 승격(promote) 파이프라인도 패리티 검사를 승격 전 필수 게이트로 포함하고 있어서, 한 플랫폼용으로만 만들고 다른 플랫폼을 깜빡한 상태로는 애초에 정식 베리언트(variant)가 될 수 없다. 세 플랫폼이 서로 다른 실행 방식을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
+  <h2 id="platform-parity">플랫폼 패리티 — .claude/, .gemini/, .agents/, .codex/를 구조적으로 동일하게 유지하는 법</h2>
+  <p>이 저장소는 네 플랫폼을 동시에 지원한다 — Claude Code(<code>.claude/</code>), Gemini CLI(<code>.gemini/</code>), Antigravity(<code>.agents/</code>), Codex(<code>.codex/</code>). 플랫폼 디렉터리들이 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 스킬 계층은 <code>skills/</code>가 단일 출처(SSOT)이며, <code>sync-skills.ts</code>가 이를 네 플랫폼 디렉터리 모두에 배포한다. 구조적 어긋남을 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
+  <p>다만 검사 스코프에는 미묘한 차이가 있다. <code>validate-templates.ts</code>는 커맨드 등 템플릿 구조를 <code>.claude/</code>와 <code>.gemini/</code> 두 디렉터리에 대해서만 대조하고(Antigravity용 <code>.agents/</code>와 Codex용 <code>.codex/</code> 트리는 별도 동기화 경로로 운영된다), 스킬 내용 자체는 SSOT인 <code>skills/</code>를 <code>validate-skills.ts</code>가 검사한다. 즉 "네 플랫폼이 같은 기능을 제공하는가"는 배포 스크립트와 SSOT 검증의 조합으로 보장된다. 11장에서 다루는 승격(promote) 파이프라인도 패리티 검사를 승격 전 필수 게이트로 포함하고 있어서, 한 플랫폼용으로만 만들고 다른 플랫폼을 깜빡한 상태로는 애초에 정식 베리언트(variant)가 될 수 없다. 네 플랫폼이 서로 다른 실행 방식을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
 
   <h2 id="execution-plan-templates">실행 계획 템플릿 — 다중 에이전트 작업의 구조화된 실행 설계</h2>
   <p>PM이 복잡한 작업을 여러 에이전트에 분배할 때 <strong>실행 계획(Execution Plan)</strong> 형식을 사용한다. 이 계획은 "누가 무엇을 어떤 티어로, 어떤 순서로"를 테이블로 명시하여 실행의 일관성을 보장한다.</p>

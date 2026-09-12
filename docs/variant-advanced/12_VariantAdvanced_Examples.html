@@ -281,7 +281,7 @@
               <pre class="code-block">bun run agent:verify</pre>
               <button class="copy-btn">복사</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② 스킬 매니페스트 검사</strong> — 베리언트(variant)가 참조하는 스킬이 실제로 존재하고 세 플랫폼(.claude/.gemini/.agents)에 고르게 배포돼 있는지 확인한다.</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② 스킬 매니페스트 검사</strong> — 베리언트(variant)가 참조하는 스킬이 실제로 존재하고 네 플랫폼(.claude/.gemini/.agents/.codex)에 고르게 배포돼 있는지 확인한다.</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
               <button class="copy-btn">복사</button>
@@ -401,12 +401,13 @@
         <li>
           <div class="step-content">
             <strong>플랫폼 패리티 수동 확인</strong>
-            <p><code>.claude/</code>와 <code>.gemini/</code>, 그리고 <code>.agents/</code>의 commands·skills 디렉터리 목록이 서로 대응하는지 diff로 확인한다(Claude/Gemini/Antigravity 세 플랫폼 패리티).</p>
+            <p><code>.claude/</code>와 <code>.gemini/</code>, 그리고 <code>.agents/</code>·<code>.codex/</code>의 commands·skills·prompts 디렉터리 목록이 서로 대응하는지 diff로 확인한다(Claude/Gemini/Antigravity/Codex 네 플랫폼 패리티).</p>
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
 diff <(ls templates/co-retail/.gemini/commands/) <(ls templates/co-retail/.agents/commands/)
 diff <(ls templates/co-retail/.claude/skills/) <(ls templates/co-retail/.gemini/skills/)
-diff <(ls templates/co-retail/.gemini/skills/) <(ls templates/co-retail/.agents/skills/)</pre>
+diff <(ls templates/co-retail/.gemini/skills/) <(ls templates/co-retail/.agents/skills/)
+diff <(ls templates/co-retail/.agents/skills/) <(ls templates/co-retail/.codex/skills/)</pre>
               <button class="copy-btn">복사</button>
             </div>
           </div>

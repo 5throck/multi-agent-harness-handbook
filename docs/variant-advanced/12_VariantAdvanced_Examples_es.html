@@ -281,7 +281,7 @@
               <pre class="code-block">bun run agent:verify</pre>
               <button class="copy-btn">Copiar</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Verificación del manifiesto de habilidades</strong> — confirme que las habilidades referenciadas por la variante realmente existen y están desplegadas uniformemente en las tres plataformas (.claude/.gemini/.agents).</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Verificación del manifiesto de habilidades</strong> — confirme que las habilidades referenciadas por la variante realmente existen y están desplegadas uniformemente en las cuatro plataformas (.claude/.gemini/.agents/.codex).</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
               <button class="copy-btn">Copiar</button>
@@ -401,12 +401,13 @@
         <li>
           <div class="step-content">
             <strong>Confirme manualmente la paridad de plataforma</strong>
-            <p>Use diff para confirmar que los listados de directorios de comandos/habilidades en <code>.claude/</code>, <code>.gemini/</code> y <code>.agents/</code> corresponden entre sí (paridad de tres plataformas: Claude/Gemini/Antigravity).</p>
+            <p>Use diff para confirmar que los listados de directorios de comandos/habilidades/prompts en <code>.claude/</code>, <code>.gemini/</code>, <code>.agents/</code> y <code>.codex/</code> corresponden entre sí (paridad de cuatro plataformas: Claude/Gemini/Antigravity/Codex).</p>
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
 diff &lt;(ls templates/co-retail/.gemini/commands/) &lt;(ls templates/co-retail/.agents/commands/)
 diff &lt;(ls templates/co-retail/.claude/skills/) &lt;(ls templates/co-retail/.gemini/skills/)
-diff &lt;(ls templates/co-retail/.gemini/skills/) &lt;(ls templates/co-retail/.agents/skills/)</pre>
+diff &lt;(ls templates/co-retail/.gemini/skills/) &lt;(ls templates/co-retail/.agents/skills/)
+diff &lt;(ls templates/co-retail/.agents/skills/) &lt;(ls templates/co-retail/.codex/skills/)</pre>
               <button class="copy-btn">Copiar</button>
             </div>
           </div>

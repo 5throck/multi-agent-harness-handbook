@@ -58,11 +58,13 @@
 4. CLIツール
    └─ gh  (GitHub CLI)
    └─ claude  (Claude Code CLI)
+   └─ codex  (Codex CLI)
    └─ agy  (Antigravity CLI)
 
 5. デスクトップアプリ
    └─ Google Chrome
    └─ Claudeデスクトップアプリ
+   └─ Codexデスクトップアプリ
    └─ Antigravityデスクトップアプリ
    └─ Mark  (Markdownビューア)
 
@@ -83,7 +85,7 @@ cd setup</pre>
   <p>スクリプトを実行する前に、<a href="SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>を先に読んで完了させてください。</p>
   <p><strong>主な確認事項</strong></p>
   <ul>
-    <li><strong>Claude Pro/Max</strong>および<strong>Gemini Advanced</strong>の購読完了（APIキーではなく購読プラン）</li>
+    <li><strong>Claude Pro/Max</strong>、<strong>ChatGPT Plus/Pro</strong>（Codex用）および<strong>Gemini Advanced</strong>の購読完了（APIキーではなく購読プラン）</li>
     <li><strong>GitHubアカウント</strong>の作成と<code>gh auth login</code>の準備</li>
     <li>空きディスク容量<strong>5 GB以上</strong>、<strong>管理者/sudo権限</strong>の保有確認</li>
   </ul>
@@ -118,7 +120,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <h3>Windows</h3>
   <p><strong>PowerShellを管理者権限で実行</strong>し、以下のコマンドを入力してください。</p>
   <div style="position:relative">
-    <pre class="code-block"># 基本実行 (Execution Policyはスクリプトが自動で設定します)
+    <pre class="code-block"># 基本実行（スクリプトがブロックされないようBypassで実行）
 powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
 
 # オプション:
@@ -136,7 +138,7 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
     <pre class="code-block">bun setup-common.ts</pre>
     <button class="copy-btn">コピー</button>
   </div>
-  <p>インストール済みツールの検証表を出力します。<strong>すべての項目が✅と表示されれば準備完了です。</strong></p>
+  <p>インストール済みツールの検証表を出力します — bun/uvの最小バージョンチェックと<code>claude</code>/<code>codex</code>/<code>gh</code>のログイン状態確認が含まれます。<strong>すべての項目が✅と表示されれば準備完了です。</strong></p>
 
   <h2 id="tools">インストールツール一覧</h2>
   <div class="table-code">
@@ -149,9 +151,11 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
       <tr><td><strong>python3</strong></td><td>Pythonランタイム</td><td><code>brew install python3</code></td><td><code>apt install python3</code></td><td><code>winget Python.Python.3.13</code></td></tr>
       <tr><td><strong>uv</strong></td><td>Pythonパッケージマネージャー</td><td><code>brew install uv</code></td><td><code>astral.sh/uv/install.sh</code></td><td><code>winget astral-sh.uv</code></td></tr>
       <tr><td><strong>claude</strong></td><td>Claude Code CLI</td><td colspan="3"><code>bun install -g @anthropic-ai/claude-code</code></td></tr>
+      <tr><td><strong>codex</strong></td><td>Codex CLI</td><td><code>brew install --cask codex</code></td><td><code>chatgpt.com/codex/install.sh</code></td><td><code>winget OpenAI.Codex</code></td></tr>
       <tr><td><strong>agy</strong></td><td>Antigravity CLI</td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.ps1</code></td></tr>
       <tr><td><strong>Google Chrome</strong></td><td>ブラウザ</td><td><code>brew install --cask google-chrome</code></td><td>.debを直接ダウンロード</td><td><code>winget Google.Chrome</code></td></tr>
       <tr><td><strong>Claude Desktop</strong></td><td>Claudeデスクトップアプリ</td><td><code>brew install --cask claude</code></td><td>⚠️ 手動インストール</td><td><code>winget Anthropic.Claude</code></td></tr>
+      <tr><td><strong>Codex Desktop</strong></td><td>Codexデスクトップアプリ</td><td>DMG（自動、署名検証済み）</td><td>— (CLIのみ対応)</td><td>Microsoft Store</td></tr>
       <tr><td><strong>Antigravity Desktop</strong></td><td>Antigravityデスクトップアプリ</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td></tr>
       <tr><td><strong>Mark</strong></td><td>Markdownビューア</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td><td>⚠️ 手動インストール</td></tr>
       <tr><td><strong>PowerShell 7+</strong></td><td>シェル</td><td>—</td><td>—</td><td><code>winget Microsoft.PowerShell</code></td></tr>
@@ -195,11 +199,14 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
   <p><strong><code>bun install -g</code>後に<code>claude: command not found</code></strong></p>
   <p>スクリプトはbunが失敗した場合、npmフォールバックで自動的に再試行します。それでも問題が解決しない場合は、<code>bun pm ls -g</code>でパスを確認し、PATHに追加してください。</p>
 
+  <p><strong>インストール後に<code>codex: command not found</code></strong></p>
+  <p>スクリプトはNode.js不要のスタンドアロンcodexバイナリをインストールします（macOSはbrew cask、Linuxは公式インストーラー、Windowsはwinget）。PATHが<code>~/.local/bin</code>（Linux）またはwinget linksディレクトリ（Windows）を認識するよう、ターミナルを再起動してください。</p>
+
   <p><strong>インストール後に<code>agy: command not found</code></strong></p>
   <p>Antigravity CLIのインストールスクリプトは、バイナリを<code>~/.local/bin</code>または<code>/usr/local/bin</code>に保存します。<code>source ~/.bashrc</code>を実行するか、ターミナルを再起動してください。</p>
 
   <p><strong>Windows: 「このシステムではスクリプトの実行が無効になっています」</strong></p>
-  <p>スクリプトが自動的に<code>RemoteSigned</code>に設定します。手動で変更する場合:</p>
+  <p>PowerShellは未署名のスクリプトを起動段階でブロックするため、<code>powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1</code>で実行してください。永続的に変更する場合（ユーザー単位）:</p>
   <div style="position:relative">
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
   <button class="copy-btn">コピー</button>

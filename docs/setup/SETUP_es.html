@@ -58,11 +58,13 @@
 4. Herramientas de CLI
    └─ gh  (GitHub CLI)
    └─ claude  (Claude Code CLI)
+   └─ codex  (Codex CLI)
    └─ agy  (Antigravity CLI)
 
 5. Aplicaciones de escritorio
    └─ Google Chrome
    └─ Claude aplicación de escritorio
+   └─ Codex aplicación de escritorio
    └─ Antigravity aplicación de escritorio
    └─ Mark  (visor de Markdown)
 
@@ -83,7 +85,7 @@ cd setup</pre>
   <p>Antes de ejecutar el script, lea y complete primero la <a href="SETUP_CHECKLIST_es.html">Lista de verificación de preinstalación</a>.</p>
   <p><strong>Elementos clave a confirmar</strong></p>
   <ul>
-    <li>Suscripción activa a <strong>Claude Pro/Max</strong> y <strong>Gemini Advanced</strong> (un plan de suscripción, no una clave API)</li>
+    <li>Suscripción activa a <strong>Claude Pro/Max</strong>, <strong>ChatGPT Plus/Pro</strong> (para Codex) y <strong>Gemini Advanced</strong> (un plan de suscripción, no una clave API)</li>
     <li>Una <strong>cuenta de GitHub</strong> creada, lista para <code>gh auth login</code></li>
     <li>Al menos <strong>5 GB</strong> de espacio libre en disco y <strong>privilegios de administrador/sudo</strong> confirmados</li>
   </ul>
@@ -118,7 +120,7 @@ bash setup-linux.sh --wezterm --docker</pre>
   <h3>Windows</h3>
   <p><strong>Ejecute PowerShell como administrador</strong>, luego ingrese el comando a continuación.</p>
   <div style="position:relative">
-    <pre class="code-block"># Ejecución predeterminada (el script configura la política de ejecución automáticamente)
+    <pre class="code-block"># Ejecución predeterminada (Bypass para que el script pueda iniciarse)
 powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
 
 # Opciones:
@@ -136,7 +138,7 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
     <pre class="code-block">bun setup-common.ts</pre>
     <button class="copy-btn">Copiar</button>
   </div>
-  <p>Esto imprime una tabla de verificación de las herramientas instaladas. <strong>Está listo una vez que cada elemento muestre ✅.</strong></p>
+  <p>Esto imprime una tabla de verificación de las herramientas instaladas, incluidas las comprobaciones de versión mínima de <code>bun</code>/<code>uv</code> y el estado de inicio de sesión de <code>claude</code>/<code>codex</code>/<code>gh</code>. <strong>Está listo una vez que cada elemento muestre ✅.</strong></p>
 
   <h2 id="tools">Lista de herramientas</h2>
   <div class="table-code">
@@ -149,9 +151,11 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
       <tr><td><strong>python3</strong></td><td>Entorno de ejecución de Python</td><td><code>brew install python3</code></td><td><code>apt install python3</code></td><td><code>winget Python.Python.3.13</code></td></tr>
       <tr><td><strong>uv</strong></td><td>Gestor de paquetes de Python</td><td><code>brew install uv</code></td><td><code>astral.sh/uv/install.sh</code></td><td><code>winget astral-sh.uv</code></td></tr>
       <tr><td><strong>claude</strong></td><td>Claude Code CLI</td><td colspan="3"><code>bun install -g @anthropic-ai/claude-code</code></td></tr>
+      <tr><td><strong>codex</strong></td><td>Codex CLI</td><td><code>brew install --cask codex</code></td><td><code>chatgpt.com/codex/install.sh</code></td><td><code>winget OpenAI.Codex</code></td></tr>
       <tr><td><strong>agy</strong></td><td>Antigravity CLI</td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.ps1</code></td></tr>
       <tr><td><strong>Google Chrome</strong></td><td>Navegador</td><td><code>brew install --cask google-chrome</code></td><td>Descarga directa .deb</td><td><code>winget Google.Chrome</code></td></tr>
       <tr><td><strong>Claude Desktop</strong></td><td>Aplicación de escritorio Claude</td><td><code>brew install --cask claude</code></td><td>⚠️ Instalación manual</td><td><code>winget Anthropic.Claude</code></td></tr>
+      <tr><td><strong>Codex Desktop</strong></td><td>Aplicación de escritorio Codex</td><td>DMG (automático, firma verificada)</td><td>— (solo CLI)</td><td>Microsoft Store</td></tr>
       <tr><td><strong>Antigravity Desktop</strong></td><td>Aplicación de escritorio Antigravity</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td></tr>
       <tr><td><strong>Mark</strong></td><td>Visor de Markdown</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td><td>⚠️ Instalación manual</td></tr>
       <tr><td><strong>PowerShell 7+</strong></td><td>Shell</td><td>—</td><td>—</td><td><code>winget Microsoft.PowerShell</code></td></tr>
@@ -195,11 +199,14 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
   <p><strong><code>claude: command not found</code> después de <code>bun install -g</code></strong></p>
   <p>El script reintenta automáticamente con un respaldo a npm si bun falla. Si el problema persiste, verifique la ruta con <code>bun pm ls -g</code> y agréguela a su PATH.</p>
 
+  <p><strong><code>codex: command not found</code> después de la instalación</strong></p>
+  <p>Los scripts instalan el binario independiente de codex (brew cask en macOS, el instalador oficial en Linux, winget en Windows) — no requiere Node.js. Reinicie su terminal para que PATH reconozca <code>~/.local/bin</code> (Linux) o el directorio de enlaces de winget (Windows).</p>
+
   <p><strong><code>agy: command not found</code> después de la instalación</strong></p>
   <p>El instalador de Antigravity CLI coloca el binario en <code>~/.local/bin</code> o <code>/usr/local/bin</code>. Ejecute <code>source ~/.bashrc</code> o reinicie su terminal.</p>
 
   <p><strong>Windows: "running scripts is disabled on this system"</strong></p>
-  <p>El script configura esto automáticamente como <code>RemoteSigned</code>. Para cambiarlo manualmente:</p>
+  <p>PowerShell bloquea los scripts sin firmar antes de iniciarlos, así que ejecute <code>powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1</code>. Para un cambio persistente por usuario:</p>
   <div style="position:relative">
   <pre class="code-block">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
   <button class="copy-btn">Copiar</button>

@@ -58,11 +58,13 @@
 4. CLI 도구
    └─ gh  (GitHub CLI)
    └─ claude  (Claude Code CLI)
+   └─ codex  (Codex CLI)
    └─ agy  (Antigravity CLI)
 
 5. 데스크탑 앱
    └─ Google Chrome
    └─ Claude 데스크탑 앱
+   └─ Codex 데스크탑 앱
    └─ Antigravity 데스크탑 앱
    └─ Mark  (Markdown 뷰어)
 
@@ -83,7 +85,7 @@ cd setup</pre>
   <p>스크립트 실행 전 <a href="SETUP_CHECKLIST.html">사전 설치 체크리스트</a>를 먼저 읽고 완료하세요.</p>
   <p><strong>주요 확인 사항</strong></p>
   <ul>
-    <li><strong>Claude Pro/Max</strong> 및 <strong>Gemini Advanced</strong> 구독 완료 (API Key가 아닌 구독 플랜)</li>
+    <li><strong>Claude Pro/Max</strong>, <strong>ChatGPT Plus/Pro</strong> (Codex용) 및 <strong>Gemini Advanced</strong> 구독 완료 (API Key가 아닌 구독 플랜)</li>
     <li><strong>GitHub 계정</strong> 생성 및 <code>gh auth login</code> 준비</li>
     <li>여유 디스크 공간 <strong>5 GB 이상</strong>, <strong>관리자/sudo 권한</strong> 보유 확인</li>
   </ul>
@@ -136,7 +138,7 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
     <pre class="code-block">bun setup-common.ts</pre>
     <button class="copy-btn">복사</button>
   </div>
-  <p>설치된 도구의 검증 표를 출력한다. <strong>모든 항목이 ✅로 표시되면 준비 완료이다.</strong></p>
+  <p>설치된 도구의 검증 표를 출력한다 — bun/uv 최소 버전 확인과 <code>claude</code>/<code>codex</code>/<code>gh</code> 로그인 상태 점검을 포함한다. <strong>모든 항목이 ✅로 표시되면 준비 완료이다.</strong></p>
 
   <h2 id="tools">설치 도구 목록</h2>
   <div class="table-code">
@@ -149,9 +151,11 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
       <tr><td><strong>python3</strong></td><td>Python 런타임</td><td><code>brew install python3</code></td><td><code>apt install python3</code></td><td><code>winget Python.Python.3.13</code></td></tr>
       <tr><td><strong>uv</strong></td><td>Python 패키지 매니저</td><td><code>brew install uv</code></td><td><code>astral.sh/uv/install.sh</code></td><td><code>winget astral-sh.uv</code></td></tr>
       <tr><td><strong>claude</strong></td><td>Claude Code CLI</td><td colspan="3"><code>bun install -g @anthropic-ai/claude-code</code></td></tr>
+      <tr><td><strong>codex</strong></td><td>Codex CLI</td><td><code>brew install --cask codex</code></td><td><code>chatgpt.com/codex/install.sh</code></td><td><code>winget OpenAI.Codex</code></td></tr>
       <tr><td><strong>agy</strong></td><td>Antigravity CLI</td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.ps1</code></td></tr>
       <tr><td><strong>Google Chrome</strong></td><td>브라우저</td><td><code>brew install --cask google-chrome</code></td><td>.deb 직접 다운로드</td><td><code>winget Google.Chrome</code></td></tr>
       <tr><td><strong>Claude Desktop</strong></td><td>Claude 데스크탑 앱</td><td><code>brew install --cask claude</code></td><td>⚠️ 수동 설치</td><td><code>winget Anthropic.Claude</code></td></tr>
+      <tr><td><strong>Codex Desktop</strong></td><td>Codex 데스크탑 앱</td><td>DMG (자동, 서명 검증)</td><td>— (CLI만 지원)</td><td>Microsoft Store</td></tr>
       <tr><td><strong>Antigravity Desktop</strong></td><td>Antigravity 데스크탑 앱</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td></tr>
       <tr><td><strong>Mark</strong></td><td>Markdown 뷰어</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td><td>⚠️ 수동 설치</td></tr>
       <tr><td><strong>PowerShell 7+</strong></td><td>셸</td><td>—</td><td>—</td><td><code>winget Microsoft.PowerShell</code></td></tr>
@@ -194,6 +198,9 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
 
   <p><strong><code>bun install -g</code> 후 <code>claude: command not found</code></strong></p>
   <p>스크립트가 bun 실패 시 npm fallback으로 자동 재시도한다. 여전히 문제가 있다면 <code>bun pm ls -g</code>로 경로를 확인한 뒤 PATH에 추가하세요.</p>
+
+  <p><strong>설치 후 <code>codex: command not found</code></strong></p>
+  <p>스크립트는 Node.js 없이 독립 실행형 codex 바이너리를 설치한다 (macOS는 brew cask, Linux는 공식 설치 스크립트, Windows는 winget). PATH가 <code>~/.local/bin</code>(Linux) 또는 winget links 디렉터리(Windows)를 인식하도록 터미널을 재시작하세요.</p>
 
   <p><strong>설치 후 <code>agy: command not found</code></strong></p>
   <p>Antigravity CLI 설치 스크립트는 바이너리를 <code>~/.local/bin</code> 또는 <code>/usr/local/bin</code>에 저장한다. <code>source ~/.bashrc</code>를 실행하거나 터미널을 재시작하세요.</p>

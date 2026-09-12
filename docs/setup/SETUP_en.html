@@ -58,11 +58,13 @@
 4. CLI tools
    └─ gh  (GitHub CLI)
    └─ claude  (Claude Code CLI)
+   └─ codex  (Codex CLI)
    └─ agy  (Antigravity CLI)
 
 5. Desktop apps
    └─ Google Chrome
    └─ Claude Desktop app
+   └─ Codex Desktop app
    └─ Antigravity Desktop app
    └─ Mark  (Markdown viewer)
 
@@ -83,7 +85,7 @@ cd setup</pre>
   <p>Before running the script, first read and complete the <a href="SETUP_CHECKLIST_en.html">Pre-Installation Checklist</a>.</p>
   <p><strong>Key items to confirm</strong></p>
   <ul>
-    <li>Active subscription to <strong>Claude Pro/Max</strong> and <strong>Gemini Advanced</strong> (a subscription plan, not an API key)</li>
+    <li>Active subscription to <strong>Claude Pro/Max</strong>, <strong>ChatGPT Plus/Pro</strong> (for Codex), and <strong>Gemini Advanced</strong> (a subscription plan, not an API key)</li>
     <li>A <strong>GitHub account</strong> created, ready for <code>gh auth login</code></li>
     <li>At least <strong>5 GB</strong> of free disk space and confirmed <strong>administrator/sudo privileges</strong></li>
   </ul>
@@ -136,7 +138,7 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
     <pre class="code-block">bun setup-common.ts</pre>
     <button class="copy-btn">Copy</button>
   </div>
-  <p>This prints a verification table of installed tools. <strong>You're ready once every item shows ✅.</strong></p>
+  <p>This prints a verification table of installed tools, including minimum-version checks for <code>bun</code>/<code>uv</code> and login status for <code>claude</code>/<code>codex</code>/<code>gh</code>. <strong>You're ready once every item shows ✅.</strong></p>
 
   <h2 id="tools">Tool List</h2>
   <div class="table-code">
@@ -149,9 +151,11 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
       <tr><td><strong>python3</strong></td><td>Python runtime</td><td><code>brew install python3</code></td><td><code>apt install python3</code></td><td><code>winget Python.Python.3.13</code></td></tr>
       <tr><td><strong>uv</strong></td><td>Python package manager</td><td><code>brew install uv</code></td><td><code>astral.sh/uv/install.sh</code></td><td><code>winget astral-sh.uv</code></td></tr>
       <tr><td><strong>claude</strong></td><td>Claude Code CLI</td><td colspan="3"><code>bun install -g @anthropic-ai/claude-code</code></td></tr>
+      <tr><td><strong>codex</strong></td><td>Codex CLI</td><td><code>brew install --cask codex</code></td><td><code>chatgpt.com/codex/install.sh</code></td><td><code>winget OpenAI.Codex</code></td></tr>
       <tr><td><strong>agy</strong></td><td>Antigravity CLI</td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.sh</code></td><td><code>antigravity.google/cli/install.ps1</code></td></tr>
       <tr><td><strong>Google Chrome</strong></td><td>Browser</td><td><code>brew install --cask google-chrome</code></td><td>Direct .deb download</td><td><code>winget Google.Chrome</code></td></tr>
       <tr><td><strong>Claude Desktop</strong></td><td>Claude Desktop app</td><td><code>brew install --cask claude</code></td><td>⚠️ Manual install</td><td><code>winget Anthropic.Claude</code></td></tr>
+      <tr><td><strong>Codex Desktop</strong></td><td>Codex Desktop app</td><td>DMG (auto, signature-verified)</td><td>— (CLI only)</td><td>Microsoft Store</td></tr>
       <tr><td><strong>Antigravity Desktop</strong></td><td>Antigravity Desktop app</td><td>⚠️ Manual install</td><td>⚠️ Manual install</td><td>⚠️ Manual install</td></tr>
       <tr><td><strong>Mark</strong></td><td>Markdown viewer</td><td>⚠️ Manual install</td><td>⚠️ Manual install</td><td>⚠️ Manual install</td></tr>
       <tr><td><strong>PowerShell 7+</strong></td><td>Shell</td><td>—</td><td>—</td><td><code>winget Microsoft.PowerShell</code></td></tr>
@@ -194,6 +198,9 @@ powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1 -WSL2 -WezTerm -Doc
 
   <p><strong><code>claude: command not found</code> after <code>bun install -g</code></strong></p>
   <p>The script automatically retries with an npm fallback if bun fails. If the problem persists, check the path with <code>bun pm ls -g</code> and add it to your PATH.</p>
+
+  <p><strong><code>codex: command not found</code> after installation</strong></p>
+  <p>The scripts install the standalone codex binary (brew cask on macOS, the official installer on Linux, winget on Windows) — no Node.js required. Restart your terminal so PATH picks up <code>~/.local/bin</code> (Linux) or the winget links directory (Windows).</p>
 
   <p><strong><code>agy: command not found</code> after installation</strong></p>
   <p>The Antigravity CLI installer places the binary in <code>~/.local/bin</code> or <code>/usr/local/bin</code>. Run <code>source ~/.bashrc</code> or restart your terminal.</p>

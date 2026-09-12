@@ -24,10 +24,10 @@
   <div class="nav-section">プラットフォーム特性</div>
   <a href="#section-1">1. Claude Desktop App vs Claude Code (CLI)</a>
   <a href="#section-2">2. Antigravity (Desktop) vs Antigravity CLI (agy)</a>
-  <a href="#section-2b">2b. Codex Desktop App vs Codex CLI</a>
-  <a href="#section-3">3. マルチエージェント対応比較表</a>
-  <a href="#section-4">4. 本ハンドブックでどのツールを選ぶべきか</a>
-  <a href="#section-5">5. AGENTS.md — 6つのツールを結びつける</a>
+  <a href="#section-3">3. Codex Desktop App vs Codex CLI</a>
+  <a href="#section-4">4. マルチエージェント対応比較表</a>
+  <a href="#section-5">5. 本ハンドブックでどのツールを選ぶべきか</a>
+  <a href="#section-6">6. AGENTS.md — 6つのツールを結びつける</a>
   <div class="nav-section">参考文献</div>
   <a href="#refs">参考リンク</a>
   <div class="nav-section">その他の章</div>
@@ -167,7 +167,7 @@ OpenAI family
 
   <hr>
 
-  <h2 id="section-2b">2b. Codex Desktop App vs Codex CLI</h2>
+  <h2 id="section-3">3. Codex Desktop App vs Codex CLI</h2>
   <p>OpenAI陣営は<strong>Codex</strong>です。Codex Desktop AppとCodex CLIはどちらもリポジトリルートの<code>CODEX.md</code>を読み込んで行動指針に従いますが、前述の4ツールと構造的に異なる点が一つあります — <strong>Codexにはネイティブなサブエージェントツールがありません。</strong> Claude系の<code>Agent</code>/<code>Task</code>ツールや、Antigravity系の動的サブエージェント生成に相当する機能がCodexには存在しないため、複数の専門エージェントをオーケストレーションするハーネスパターンそのものを別の方法で実装する必要があります。</p>
 
   <h3>サブエージェントがないなら — PMが直接順次実行する</h3>
@@ -209,7 +209,7 @@ OpenAI family
 
   <hr>
 
-  <h2 id="section-3">3. マルチエージェント対応比較表</h2>
+  <h2 id="section-4">4. マルチエージェント対応比較表</h2>
   <div class="table-compare">
   <table>
     <thead><tr><th>項目</th><th>Claude Desktop App</th><th>Antigravity (Desktop)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th><th>Codex (Desktop/CLI)</th></tr></thead>
@@ -290,14 +290,14 @@ OpenAI family
 
   <hr>
 
-  <h2 id="section-4">4. 本ハンドブックでどのツールを選ぶべきか</h2>
-  <p>本ハンドブックは<strong>Claude Desktop App</strong>と<strong>Antigravity (Desktop)</strong>をデフォルトの実習ツールとして案内します。GUIから始める方が導入のハードルが低いためです。第2章でもまずこれら2つのDesktopツールを示し、直後にClaude Code (CLI)・Antigravity CLI (<code>agy</code>)の手順を並べて紹介し、Codex (Desktop/CLI)に切り替える際の違いは§2bを参照して読み替えます。1つのツールだけを選んで追うことも、複数を比較しながら練習することもできます。以下の基準で選びやすくなります。</p>
+  <h2 id="section-5">5. 本ハンドブックでどのツールを選ぶべきか</h2>
+  <p>本ハンドブックは<strong>Claude Desktop App</strong>と<strong>Antigravity (Desktop)</strong>をデフォルトの実習ツールとして案内します。GUIから始める方が導入のハードルが低いためです。第2章でもまずこれら2つのDesktopツールを示し、直後にClaude Code (CLI)・Antigravity CLI (<code>agy</code>)の手順を並べて紹介し、Codex (Desktop/CLI)に切り替える際の違いは§3を参照して読み替えます。1つのツールだけを選んで追うことも、複数を比較しながら練習することもできます。以下の基準で選びやすくなります。</p>
   <ol style="margin:0 0 16px 20px;line-height:2;">
     <li><strong>まずはGUIで感触をつかみたい場合。</strong>Claude Desktop AppまたはAntigravity (Desktop)から始めてください。これが本ハンドブックのデフォルトレベルです。</li>
     <li><strong>複数の異なるプロジェクトを同時に管理したい場合。</strong>Antigravity (Desktop)のAgent Manager（ワークスペースごとの分離）はまさにこのシナリオのために設計されています。</li>
     <li><strong>フックベースの自動化（監査/QAゲート）が必要な場合。</strong>Claude Code (CLI)に移行してください。Claude Desktop AppとAntigravity・Codex系には対応する自動フックがありません。</li>
     <li><strong>サブエージェントを一つ一つ定義せず、オーケストレータに自律的に分割させたい場合。</strong>Antigravity CLI (<code>agy</code>)は目標から動的にサブエージェントを生成します。ただし、きめ細かな制御はやや限定的です。</li>
-    <li><strong>すでにCodexの契約・環境があり、そのまま使いたい場合。</strong>Codex (Desktop/CLI)で実習できます。ただし、サブエージェント・並列実行・フックに依存する実習（Agent Teams、SendMessageなど）は、§2bで説明した順次-役割-切り替え方式に読み替えてください。</li>
+    <li><strong>すでにCodexの契約・環境があり、そのまま使いたい場合。</strong>Codex (Desktop/CLI)で実習できます。ただし、サブエージェント・並列実行・フックに依存する実習（Agent Teams、SendMessageなど）は、§3で説明した順次-役割-切り替え方式に読み替えてください。</li>
   </ol>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
@@ -399,13 +399,13 @@ OpenAI family
     </svg>
   </div>
 
-  <p style="font-size:13px;color:var(--text-dim);margin:4px 0 16px;">上の意思決定フローはClaude/Antigravity系4ツールの選択基準を示しています。Codex (Desktop/CLI)にはこの図に乗せるサブエージェント・フックの軸自体がありません — 「すでにCodex環境があるか」が事実上唯一の判断基準であり、あるなら§2bを参照して順次-役割-切り替え方式に読み替えてください。</p>
+  <p style="font-size:13px;color:var(--text-dim);margin:4px 0 16px;">上の意思決定フローはClaude/Antigravity系4ツールの選択基準を示しています。Codex (Desktop/CLI)にはこの図に乗せるサブエージェント・フックの軸自体がありません — 「すでにCodex環境があるか」が事実上唯一の判断基準であり、あるなら§3を参照して順次-役割-切り替え方式に読み替えてください。</p>
 
   <p >💡 <strong>重要ポイント:</strong> 6つのツールはすべて同じ基本ハーネスエンジニアリング構造を共有しています。「狭い役割を与え、オーケストレータがそれらを調整する」。変わるのは、その構造が載る実行環境（CLI/GUI、フックの有無、サブエージェントが事前定義・動的生成・そもそも存在しないかのいずれか）です。</p>
 
   <hr>
 
-  <h2 id="section-5">5. AGENTS.md — 6つのツールを結びつける</h2>
+  <h2 id="section-6">6. AGENTS.md — 6つのツールを結びつける</h2>
   <p>これまで比較してきたフック、並列実行、サブエージェント定義の方法はツールごとに異なりますが、リポジトリルートの設定は1つに統一できます。<strong>AGENTS.md</strong>は2025年8月にOpenAIがGoogle、Cursor、Factoryと共同で作成し、2025年12月にLinux FoundationのAgentic AI Foundationに寄贈したオープン標準です。Codex、Cursor、GitHub Copilot、Google Julesなど30以上のツールでサポートされており、Claude Code（インポート経由）とAntigravity系も対応しています。興味深いことに、Codexはこの標準を共同で作成した当事者そのものです — Codexは<code>AGENTS.md</code>を<strong>ネイティブに</strong>読み込み、その上にツール固有の指針を記した<code>CODEX.md</code>を重ねます。</p>
   <p>リポジトリルートに単一の<code>AGENTS.md</code>を配置すると、6つのツールすべてがセッション開始時にそれを読み込み、ビルド/テストコマンド、コードスタイル、立ち入り禁止エリアなどの共通ルールを共有できます。ツール固有の動作（フック、teammateMode、サブエージェント定義場所など）は、上の比較表にある通り、<code>CLAUDE.md</code>・<code>GEMINI.md</code>・<code>CODEX.md</code>などのツール固有ファイルに別途記録されます。AGENTS.mdが共通部分を扱い、ツール固有ファイルが差分を扱う構造です。</p>
   <div class="table-compare">

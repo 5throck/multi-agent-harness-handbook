@@ -24,10 +24,10 @@
   <div class="nav-section">Platform Characteristics</div>
   <a href="#section-1">1. Claude Desktop App vs Claude Code (CLI)</a>
   <a href="#section-2">2. Antigravity (Desktop) vs Antigravity CLI (agy)</a>
-  <a href="#section-2b">2b. Codex Desktop App vs Codex CLI</a>
-  <a href="#section-3">3. Multi-Agent Support Comparison Table</a>
-  <a href="#section-4">4. Which Tool to Choose for This Handbook</a>
-  <a href="#section-5">5. AGENTS.md — Tying the Six Tools Together</a>
+  <a href="#section-3">3. Codex Desktop App vs Codex CLI</a>
+  <a href="#section-4">4. Multi-Agent Support Comparison Table</a>
+  <a href="#section-5">5. Which Tool to Choose for This Handbook</a>
+  <a href="#section-6">6. AGENTS.md — Tying the Six Tools Together</a>
   <div class="nav-section">References</div>
   <a href="#refs">Reference Links</a>
   <div class="nav-section">Other Chapters</div>
@@ -167,7 +167,7 @@ OpenAI family
 
   <hr>
 
-  <h2 id="section-2b">2b. Codex Desktop App vs Codex CLI</h2>
+  <h2 id="section-3">3. Codex Desktop App vs Codex CLI</h2>
   <p>The OpenAI camp is <strong>Codex</strong>. Both Codex Desktop App and Codex CLI read the repository root's <code>CODEX.md</code> for behavioral instructions, but there's one structural difference from the four tools above — <strong>Codex has no native subagent tool.</strong> There's nothing in Codex equivalent to Claude's <code>Agent</code>/<code>Task</code> tool or Antigravity's dynamic subagent spawning, so the harness pattern of orchestrating multiple specialist agents has to be implemented a different way.</p>
 
   <h3>No subagents — the PM runs roles sequentially instead</h3>
@@ -209,7 +209,7 @@ OpenAI family
 
   <hr>
 
-  <h2 id="section-3">3. Multi-Agent Support Comparison Table</h2>
+  <h2 id="section-4">4. Multi-Agent Support Comparison Table</h2>
   <div class="table-compare">
   <table>
     <thead><tr><th>Item</th><th>Claude Desktop App</th><th>Antigravity (Desktop)</th><th>Claude Code (CLI)</th><th>Antigravity CLI (agy)</th><th>Codex (Desktop/CLI)</th></tr></thead>
@@ -290,14 +290,14 @@ OpenAI family
 
   <hr>
 
-  <h2 id="section-4">4. Which Tool to Choose for This Handbook</h2>
-  <p>This handbook guides you using <strong>Claude Desktop App</strong> and <strong>Antigravity (Desktop)</strong> as its default hands-on tools, because starting with a GUI has a lower barrier to entry. Chapter 2 likewise shows these two Desktop tools first, then immediately follows with the Claude Code (CLI)·Antigravity CLI (<code>agy</code>) procedures side by side, with Codex (Desktop/CLI) differences noted per §2b where they diverge. You can pick just one tool and follow along, or compare and practice with several together. The following criteria make the choice easier.</p>
+  <h2 id="section-5">5. Which Tool to Choose for This Handbook</h2>
+  <p>This handbook guides you using <strong>Claude Desktop App</strong> and <strong>Antigravity (Desktop)</strong> as its default hands-on tools, because starting with a GUI has a lower barrier to entry. Chapter 2 likewise shows these two Desktop tools first, then immediately follows with the Claude Code (CLI)·Antigravity CLI (<code>agy</code>) procedures side by side, with Codex (Desktop/CLI) differences noted per §3 where they diverge. You can pick just one tool and follow along, or compare and practice with several together. The following criteria make the choice easier.</p>
   <ol style="margin:0 0 16px 20px;line-height:2;">
     <li><strong>If you just want to get a feel for it via GUI first.</strong> Start with Claude Desktop App or Antigravity (Desktop). This is the handbook's default path.</li>
     <li><strong>If you want to supervise several different projects at once.</strong> Antigravity (Desktop)'s Agent Manager (isolation per workspace) is designed exactly for this scenario.</li>
     <li><strong>If you need hook-based automation (audit/QA gates).</strong> Move to Claude Code (CLI). Claude Desktop App and the Antigravity/Codex families have no corresponding automatic hooks.</li>
     <li><strong>If you want an orchestrator to split things up on its own without defining subagents one by one.</strong> Antigravity CLI (<code>agy</code>) dynamically creates subagents just from a goal. In exchange, fine-grained control is relatively limited.</li>
-    <li><strong>If you already have a Codex subscription/environment and want to stick with it.</strong> You can follow along in Codex (Desktop/CLI). Exercises that rely on subagents, parallel execution, or hooks (Agent Teams, SendMessage, etc.) should be re-read using the sequential-role-switching approach described in §2b.</li>
+    <li><strong>If you already have a Codex subscription/environment and want to stick with it.</strong> You can follow along in Codex (Desktop/CLI). Exercises that rely on subagents, parallel execution, or hooks (Agent Teams, SendMessage, etc.) should be re-read using the sequential-role-switching approach described in §3.</li>
   </ol>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
@@ -399,13 +399,13 @@ OpenAI family
     </svg>
   </div>
 
-  <p style="font-size:13px;color:var(--text-dim);margin:4px 0 16px;">The decision flow above shows the choice among the four Claude/Antigravity tools. Codex (Desktop/CLI) has no subagent or hook axis to place on this diagram — whether you already have a Codex environment is effectively the only deciding factor, and if so, see §2b for how to re-read the exercises using the sequential-role-switching approach.</p>
+  <p style="font-size:13px;color:var(--text-dim);margin:4px 0 16px;">The decision flow above shows the choice among the four Claude/Antigravity tools. Codex (Desktop/CLI) has no subagent or hook axis to place on this diagram — whether you already have a Codex environment is effectively the only deciding factor, and if so, see §3 for how to re-read the exercises using the sequential-role-switching approach.</p>
 
   <p >💡 <strong>Key takeaway:</strong> All six tools share the same basic harness-engineering structure: "give roles a narrow scope and let an orchestrator coordinate them." What changes is which execution environment (CLI/GUI, hooks or not, whether subagents are predefined, created on the fly, or don't exist at all) that structure is laid on top of.</p>
 
   <hr>
 
-  <h2 id="section-5">5. AGENTS.md — Tying the Six Tools Together</h2>
+  <h2 id="section-6">6. AGENTS.md — Tying the Six Tools Together</h2>
   <p>The hooks, parallel execution, and subagent-definition methods compared so far differ from tool to tool, but the repository-root configuration can still be unified into one. <strong>AGENTS.md</strong> is an open standard created in August 2025 by OpenAI together with Google, Cursor, and Factory, and donated to the Linux Foundation's Agentic AI Foundation in December 2025. It's supported by more than 30 tools, including Codex, Cursor, GitHub Copilot, and Google Jules, as well as Claude Code (via import) and the Antigravity family. Notably, Codex is one of the standard's original co-creators — it reads <code>AGENTS.md</code> <strong>natively</strong>, and layers a tool-specific <code>CODEX.md</code> on top of it.</p>
   <p>Placing a single <code>AGENTS.md</code> at the repository root lets all six tools read it at session start and share common rules such as build/test commands, code style, and off-limits areas. Tool-specific behavior (hooks, teammateMode, where subagents are defined, etc.) is still recorded separately, as compared in the table above, in tool-specific files such as <code>CLAUDE.md</code>, <code>GEMINI.md</code>, and <code>CODEX.md</code>. AGENTS.md handles the common denominator, and tool-specific files handle the differences.</p>
   <div class="table-compare">

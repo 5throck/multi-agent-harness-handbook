@@ -17,7 +17,7 @@
   <div class="nav-title">第10章・L3プロジェクトのアップグレード</div>
   <a href="#why">なぜ必要か — フォークモデルの裏側</a>
   <a href="#usage">upgrade-project.ts の使い方</a>
-  <a href="#categories">ファイル処理の8分類</a>
+  <a href="#categories">主なファイル処理分類</a>
   <a href="#safety">安全装置 — スナップショットとロールバック</a>
   <a href="#vs-promotion">昇格との方向の違い</a>
   <div class="nav-section">他の章</div>
@@ -63,7 +63,7 @@
 </div>
   <p><code>--variant</code>はプロジェクトの<code>.claude/template-version.txt</code>に記録された値を自動で読み込むため、多くの場合省略できる。このファイルが存在しない古いプロジェクトでは、実行時に確認プロンプトが表示され、<code>--variant</code>を直接指定する必要がある。</p>
 
-  <h2 id="categories">ファイル処理の8分類</h2>
+  <h2 id="categories">主なファイル処理分類</h2>
   <p>スクリプトは性質に応じてファイルを異なる方法で扱う — すべてを一律に「新しい内容で上書き」するわけではない。</p>
   <div class="table-compare">
   <table>
@@ -81,6 +81,7 @@
     </tbody>
   </table>
   </div>
+  <div class="note">2026-09-20時点の最新<code>upgrade-project.ts</code>は、上記の従来分類に加えて、専用分類を持たないテンプレートファイルを既定で届ける<strong>TEMPLATE TREE SYNC</strong>、国別<code>.env.sample</code>をマージする<strong>ENV_SAMPLE SYNC</strong>、重複するcontextセクションを整理する<strong>CONTEXT_COMMONIZATION</strong>、LICENSE/SECURITYなどをadd-if-missingで届ける<strong>GOVERNANCE FILES SYNC</strong>を使用する。Codex表面も<code>CODEX.md</code>のMERGEと<code>.codex/config.toml</code>のadd-if-missing対象に含まれ、graft関連表面も同じアップグレードエンジンで配布される。</div>
   <p>v1.10.xから、アップグレードは国プロフィール(国スコープ資産)にも対応する。実行前にプロジェクトの<code>.claude/template-version.txt</code>から<code>country=</code>行を読み(なければ<code>docs/countries/ACTIVE.md</code>の管轄表記で代用)て対象国を判定し、仕上げの書き換え時にはこの行をそのまま保持する — 旧バージョンは書き換え時にこの行を消してしまい、プロジェクトの所属国情報を失わせていた。さらに、すべてのスキル同期が終わった後、レジストリ駆動のpruneがもう一度実行され、国スコープスキル(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)が該当国以外のプロジェクトに再注入されていれば削除する — スキャフォールディング時の整理結果をアップグレードのたびに取り消してしまう事態を防ぐためである。ただし、ローカルで意図的に改変されたフォークは<code>⚠️ CONFLICT</code>警告付きでそのまま保持される。</p>
   <p>SYNC_IF_NEWER対象のファイルをローカルで直接修正済みの状態で、かつテンプレート側のバージョンがより新しい場合、スクリプトは<code>⚠️ CONFLICT</code>と表示しつつも、最終的にはテンプレートの内容で上書きする。「上書き前に確認する」動作ではなく、「警告のみして進める」動作である点を覚えておく必要がある — だからこそ、以下の安全装置が重要になる。</p>
 

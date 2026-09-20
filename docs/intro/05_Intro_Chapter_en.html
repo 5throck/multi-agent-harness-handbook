@@ -29,8 +29,8 @@
   <div class="nav-title">Chapter 5 · Introducing ai-workspace-standards</div>
   <a href="#s1">What the repository is</a>
   <a href="#s1b">The overall architecture at a glance</a>
-  <a href="#s2">The four core files</a>
-  <a href="#s3">templates and the 11 variants</a>
+  <a href="#s2">The five core files</a>
+  <a href="#s3">templates and the 13 variants</a>
   <a href="#s4">Session-start checklist and scaffolding</a>
   <div class="nav-section">Other chapters</div>
   <a href="../guardrails/03_Guardrails_Chapter_en.html">Chapter 3 · Guardrails and the permission model</a>
@@ -49,8 +49,8 @@
     <ul>
       <li>What ai-workspace-standards is, and why it must be cloned as the "workspace root"</li>
       <li>The overall directory structure of the repository, and the actual order in which a session reads and executes files (the runtime flow)</li>
-      <li>The roles of the four core files: CONSTITUTION.md, CLAUDE.md, GEMINI.md, AGENTS.md</li>
-      <li>Which domain each of the 11 variants under templates/ is designed for</li>
+      <li>The roles of the five core files: CONSTITUTION.md, CLAUDE.md, GEMINI.md, CODEX.md, AGENTS.md</li>
+      <li>Which domain each of the 13 variants under templates/ is designed for</li>
       <li>A conceptual picture of the session-start checklist and the new-project.ts scaffolding flow</li>
     </ul>
   </div>
@@ -63,7 +63,7 @@
     <span class="by">— why it's cloned as the workspace root</span></div>
 
   <h2 id="s1b">The overall architecture at a glance</h2>
-  <p>Before dissecting the four core files, the variants, and L0→L1→L2 one by one in the following sections, it helps to first see the whole picture of where these pieces actually sit in the repository and under what names, so you don't lose your bearings. Cloning the workspace root produces the following top-level structure.</p>
+  <p>Before dissecting the five core files, the variants, and L0→L1→L2 one by one in the following sections, it helps to first see the whole picture of where these pieces actually sit in the repository and under what names, so you don't lose your bearings. Cloning the workspace root produces the following top-level structure.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">
@@ -71,11 +71,13 @@
 ├── CONSTITUTION.md          ← §2: what must be followed (master standard, L0 original)
 ├── CLAUDE.md                ← §2: how it runs in Claude Code/App
 ├── GEMINI.md                ← §2: how it runs in Antigravity CLI/Desktop
+├── CODEX.md                 ← §2: how it runs in Codex CLI/Desktop App
 ├── AGENTS.md                ← §2: who does the work (agent roster, L0 original)
 ├── agents/                  ← §5: original agent definitions such as pm.md (L0, edit only here)
 │   └── pm.md
 ├── .claude/                 ← §2: Claude-only commands/skills (/sync, create-variant, etc.)
 ├── .gemini/                 ← §2: Antigravity-only commands/skills (same names, different implementation)
+├── .codex/                  ← §2: Codex-only prompts/skills/config
 ├── .agents/                 ← §2: tool-agnostic commands/skills (for tools supporting the AGENTS.md standard)
 ├── scripts/                 ← §4·§5: operational scripts such as new-project.ts, propagate-to-templates.ts
 ├── templates/                (L1 + official L2)
@@ -91,6 +93,8 @@
 │   ├── co-export/ [beta]    ← §3: official L2 variant (import/export trade consulting)
 │   ├── co-hr/     [beta]    ← §3: official L2 variant (HR/labor compliance)
 │   ├── co-news/   [beta]    ← §3: official L2 variant (financial journalism)
+│   ├── co-price/  [beta]    ← §3: official L2 variant (price management/consulting simulator)
+│   ├── co-safety/ [beta]    ← §3: official L2 variant (EHS/GxP compliance platform)
 │   ├── co-abap/             ← §3: official L2 variant (SAP ABAP development)
 ├── Projects/                 (L3 — live project working directories scaffolded via new-project.ts)
 │   └── &lt;my-project&gt;/
@@ -114,10 +118,10 @@
   </ol>
   <div class="note">In one sentence: <strong>L0 is "right below the root," L1 is "templates/common/," L2 is "templates/co-*/," and L3 is "Projects/*/, the live project working directory"</strong> — remembering just these four coordinates lets you follow every explanation in the rest of this chapter against the actual folder locations.</div>
 
-  <h2 id="s2">The four core files</h2>
-  <p>At the workspace root there are four core files that every project references in common.</p>
+  <h2 id="s2">The five core files</h2>
+  <p>At the workspace root there are five core files that every project references in common.</p>
   <p><code>CONSTITUTION.md</code> is the master shared standard, the document that should be read first at the start of any session. It defines the governance rules, PR workflow, and multi-agent architecture principles for the entire workspace. <code>CLAUDE.md</code> holds the concrete behavior for Claude Code/App (hooks, slash commands, agent dispatch rules), while <code>GEMINI.md</code> defines the equivalent behavior for Antigravity CLI/Desktop. <code>AGENTS.md</code> serves as the canonical roster of agents available across the entire workspace. This filename is the same as the open AGENTS.md standard introduced in Chapter 2, which is read in common by 30+ tools including Claude Code — though in this repository it also doubles as a more specific "agent registry and orchestration reference." The top of the file even states explicitly that "this file is not an instruction directed at AI tools, but a registry of human-defined roles."</p>
-  <p>To summarize the relationship among these four files in one sentence: CONSTITUTION.md defines "what must be followed," CLAUDE.md/GEMINI.md define "how that is executed on each platform," and AGENTS.md defines "who does the work."</p>
+  <p>To summarize the relationship among these five files in one sentence: CONSTITUTION.md defines "what must be followed," CLAUDE.md/GEMINI.md/CODEX.md define "how that is executed on each platform," and AGENTS.md defines "who does the work."</p>
 
   <p>An agent entry in AGENTS.md consists of the following fields. <strong>Concrete authoring guidance and tool-specific implementation mapping are covered in Chapter 8 §3, AGENTS.md Deep Dive.</strong></p>
   <div class="table-compare narrow-col-3">
@@ -133,10 +137,10 @@
     </tbody>
   </table>
   </div>
-  <p>Let's trace this relationship using a concrete rule as an example. Suppose there's a rule that says "PR titles and bodies must be written in English." This rule itself is written exactly once, in <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> defines <em>how</em> to enforce this rule in Claude Code — for instance, by specifying that the <code>/sync</code> command's language gate (language-guard.ts) automatically checks this rule before every commit. <code>GEMINI.md</code> defines how the same rule is enforced in the Antigravity-side pipeline. And who actually performs this check — which agent is responsible for this gate — is registered in the roster in <code>AGENTS.md</code>. A single rule shows up in all four files, each from a different angle. This isn't duplication; it's three different answers to the three questions of "what, how, and who."</p>
-  <p>Below the four core files sit folders holding executable assets. Commands and skills are split across three locations: <code>.claude/</code> is Claude Code/App-only, <code>.gemini/</code> is Antigravity CLI/Desktop-only, and <code>.agents/</code> holds <strong>tool-agnostic (engine-agnostic)</strong> commands and skills not tied to a single tool. For example, slash commands like <code>/sync</code>/<code>/meeting</code> or skills like <code>create-variant</code>/<code>audit-workspace</code> exist under the same name in all three folders, but each implementation differs slightly to match its own platform's tooling conventions (Claude Code's <code>Agent</code> tool syntax, Antigravity's sub-agent approach, etc.). External tools that support the AGENTS.md standard (Codex, Cursor, etc.) will reference the <code>.agents/</code> folder when they open this repository.</p>
+  <p>Let's trace this relationship using a concrete rule as an example. Suppose there's a rule that says "PR titles and bodies must be written in English." This rule itself is written exactly once, in <code>CONSTITUTION.md</code>. <code>CLAUDE.md</code> defines <em>how</em> to enforce this rule in Claude Code — for instance, by specifying that the <code>/sync</code> command's language gate (language-guard.ts) automatically checks this rule before every commit. <code>GEMINI.md</code> defines how the same rule is enforced in the Gemini/Antigravity-side pipeline, and <code>CODEX.md</code> defines how a Codex session applies the same rule through prompts and manual gates. And who actually performs this check — which agent is responsible for this gate — is registered in the roster in <code>AGENTS.md</code>. A single rule shows up in all five files, each from a different angle. This isn't duplication; it's three different answers to the three questions of "what, how, and who."</p>
+  <p>Below the five core files sit folders holding executable assets. Commands, skills, and prompts are split across four surfaces: <code>.claude/</code> is Claude Code/App-only, <code>.gemini/</code> is Gemini/Antigravity CLI/Desktop-only, <code>.codex/</code> is Codex CLI/Desktop App-only, and <code>.agents/</code> holds <strong>tool-agnostic (engine-agnostic)</strong> commands and skills not tied to a single tool. For example, commands like <code>/sync</code>/<code>/meeting</code> or skills like <code>create-variant</code>/<code>audit-workspace</code> exist under the same name on platform surfaces, but each implementation differs slightly to match its own tooling conventions (Claude Code's <code>Agent</code> tool syntax, Antigravity's sub-agent approach, Codex prompts and sequential role switching, etc.). External tools that support the AGENTS.md standard (Codex, Cursor, etc.) can reference the shared rules and the <code>.agents/</code> assets together.</p>
 
-  <h2 id="s3">templates and the 11 variants</h2>
+  <h2 id="s3">templates and the 13 variants</h2>
   <p>The <code>templates/</code> directory is a collection of version-controlled project template "variants." Each variant contains a complete multi-agent team configuration for a specific domain, including a PM, specialist agents, and a staged governance pipeline. The variants the repository provides are as follows.</p>
 
   <div class="variant-list">
@@ -150,18 +154,20 @@
     <div class="variant-row"><span class="variant-name">co-export <span class="badge" >beta</span></span><span>For import/export trade consulting. PM plus 8 specialists — HS Classification Specialist, FTA Origin Analyst, Customs Duty Drawback Specialist, Export Control Compliance Specialist, Trade Documentation Specialist, Logistics Coordinator, Foreign Regulatory Intelligence Analyst, and Market Entry Strategist.</span></div>
     <div class="variant-row"><span class="variant-name">co-hr <span class="badge" >beta</span></span><span>For HR &amp; labor relations. Labor-law compliance for the target jurisdiction (via country profiles), plus HRM/HRD, org design, and change-management consulting.</span></div>
     <div class="variant-row"><span class="variant-name">co-news <span class="badge" >beta</span></span><span>For business/finance journalism covering listed companies. PM (Editor-in-Chief) plus 6 specialists — Financial Analyst, Legal Researcher, Fact-Checker, Reporter, Style Editor, and Visual Editor. Synthesizes regulator financial disclosures and commercial-law research into fact-checked reporting via the country-profile mechanism (docs/countries/) — under the KR profile this draws on Korean listed-company disclosures (DART).</span></div>
+    <div class="variant-row"><span class="variant-name">co-price <span class="badge" >beta</span></span><span>For price management and consulting simulation. Includes a K-Beauty sample dataset and covers pricing strategy, simulation, and consulting deliverables.</span></div>
+    <div class="variant-row"><span class="variant-name">co-safety <span class="badge" >beta</span></span><span>For an EHS/GxP compliance platform. Covers regulatory and risk-management workflows for industrial safety, process safety, pharmaceutical quality, and medical-device safety.</span></div>
     <div class="variant-row"><span class="variant-name">co-abap</span><span>For SAP ABAP development.</span></div>
   </div>
 
-  <p>Each variant is versioned with the git tag <code>template-vX.Y.Z</code>, and <code>bun scripts/validate-templates.ts</code> checks structural compliance — the completeness of agent frontmatter, required sections, consistency with the AGENTS.md roster, and platform parity between <code>.claude/</code> and <code>.gemini/</code>.</p>
+  <p>Each variant is versioned with the git tag <code>template-vX.Y.Z</code>, and <code>bun scripts/validate-templates.ts</code> checks structural compliance — the completeness of agent frontmatter, required sections, consistency with the AGENTS.md roster, and platform parity across <code>.claude/</code>, <code>.gemini/</code>, <code>.agents/</code>, and <code>.codex/</code> surfaces.</p>
   <p>As the name <code>templates/</code> suggests, what this repository ultimately ships is <strong>boilerplate</strong> — a starting point that already has the PM role definitions, governance pipeline, and platform-specific command/skill wiring you'd otherwise have to write from scratch for every project. But unlike the usual "copy it and everyone tweaks it themselves" boilerplate, this repository explicitly lays out, as a layered structure, <em>where that starting point came from and how it gets updated</em>. That's the L0 → L1 → L2 → L3 model covered in the next section.</p>
-  <p>One of the things this boilerplate has already set up in advance is <strong>model assignment per agent role</strong>. Each agent definition file (<code>agents/*.md</code>) inside a variant has a <code>tier</code> field in its frontmatter, and this value assigns <code>high</code>/<code>medium</code>/<code>low</code> per platform (<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>). Roles requiring heavy judgment (PM, Architect) get <code>high</code>, roles handling actual implementation (code-writer, docs-writer) get <code>medium</code>, and standardized repetitive tasks (automation-engineer, etc.) get <code>low</code>. The actual <code>model</code> field is usually left as <code>inherit</code>, because each platform translates this tier value into its own model alias (<code>opus</code>/<code>sonnet</code>/<code>haiku</code>) at deployment time. In other words, the moment you clone the boilerplate, a new project already starts with "who works using which cost tier of model" already decided.</p>
+  <p>One of the things this boilerplate has already set up in advance is <strong>model assignment per agent role</strong>. Each agent definition file (<code>agents/*.md</code>) inside a variant has a <code>tier</code> field in its frontmatter, and this value assigns <code>high</code>/<code>medium</code>/<code>low</code> per platform (<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>/<code>codex</code>). Roles requiring heavy judgment (PM, Architect) get <code>high</code>, roles handling actual implementation (code-writer, docs-writer) get <code>medium</code>, and standardized repetitive tasks (automation-engineer, etc.) get <code>low</code>. The actual <code>model</code> field is usually left as <code>inherit</code>, because each platform translates this tier value into its own model alias (<code>opus</code>/<code>sonnet</code>/<code>haiku</code>) at deployment time. In other words, the moment you clone the boilerplate, a new project already starts with "who works using which cost tier of model" already decided.</p>
   <p>What actually goes wrong without this tiering? If every agent were uniformly assigned to the highest-performance model (high), even a role like automation-engineer that only repeats standardized script execution would incur unnecessarily expensive inference costs every time, making the whole team's operating cost pointlessly large. Conversely, if everything were unified onto the lowest-cost model (low), a role like PM — which needs to synthesize the output of multiple agents and make judgment calls — would frequently make poor coordination decisions from only shallow reasoning. Tiering is a mechanism that pre-balances cost and quality per role, matched to "how much depth of reasoning this role actually needs."</p>
   <div class="note">This <strong>model cost tier (high/medium/low)</strong> shares only the "tiered" feel of its name with the <strong>L0 → L1 → L2 → L3 4-tier</strong> (the layering of where files come from and how they flow) covered in Chapter 8 — they are otherwise different concepts. One is "which model to assign to an agent," and the other is "where the original of a file lives."</div>
 
   <h2 id="s4">Session-start checklist and scaffolding</h2>
   <p>CONSTITUTION.md defines the order every session must follow at startup. First, set the git hooks path with <code>git config core.hooksPath .githooks</code>, then read CONSTITUTION.md itself, then read <code>docs/context.md</code> (the project's configuration document) of the project you're working on. Next, check <code>AGENTS.md</code> (the agent roster) for the available agents, check whether context from a previous session remains in <code>memory/YYYY-MM-DD.md</code>, and finally load whatever skills <code>docs/context.md</code> specifies.</p>
-  <p>The flow for creating a new project is conceptually simple. Run the <code>bun scripts/new-project.ts</code> script with a project name and the desired variant, and the entire configuration of that variant is cloned into a fully independent git repository. This repository is separate from the workspace root, but it starts out having already inherited CONSTITUTION.md's shared standards from birth. The team then evolves the team by filling in the project's own <code>docs/context.md</code> and any project-level CLAUDE.md/GEMINI.md overrides.</p>
+  <p>The flow for creating a new project is conceptually simple. Run the <code>bun scripts/new-project.ts</code> script with a project name and the desired variant, and the entire configuration of that variant is cloned into a fully independent git repository. This repository is separate from the workspace root, but it starts out having already inherited CONSTITUTION.md's shared standards from birth. The team then evolves the team by filling in the project's own <code>docs/context.md</code> and any project-level CLAUDE.md/GEMINI.md/CODEX.md overrides.</p>
 
   <div class="tree-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0 24px;overflow-x:auto;">
     <div style="position:relative">

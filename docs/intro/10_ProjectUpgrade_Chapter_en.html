@@ -22,7 +22,7 @@
   <div class="nav-title">Chapter 10 - L3 Project Upgrade</div>
   <a href="#why">Why it's needed — the flip side of the fork model</a>
   <a href="#usage">How to use upgrade-project.ts</a>
-  <a href="#categories">The 8 file-handling categories</a>
+  <a href="#categories">The main file-handling categories</a>
   <a href="#safety">Safety nets — snapshots and rollback</a>
   <a href="#vs-promotion">How this differs from promotion</a>
   <div class="nav-section">Other chapters</div>
@@ -43,7 +43,7 @@
     <ul>
       <li>Why "upgrading" in the fork model is a command you run, not something that happens automatically</li>
       <li>Basic usage of <code>upgrade-project.ts</code> and the principle of running <code>--dry-run</code> first</li>
-      <li>The 8 file-handling modes: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE, and PRUNE</li>
+      <li>The main file-handling modes: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE, PRUNE, plus TEMPLATE TREE SYNC and ENV_SAMPLE SYNC</li>
       <li>The automatic git stash snapshot and the <code>--rollback</code> safety net</li>
       <li>How this is the exact opposite direction from the "promotion" covered in Chapter 11</li>
     </ul>
@@ -68,7 +68,7 @@
 </div>
   <p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly.</p>
 
-  <h2 id="categories">The 8 file-handling categories</h2>
+  <h2 id="categories">The main file-handling categories</h2>
   <p>The script treats files differently depending on their nature — it isn't a blanket "overwrite everything with the new version."</p>
   <div class="table-compare">
   <table>
@@ -86,6 +86,7 @@
     </tbody>
   </table>
   </div>
+  <div class="note">As of the 2026-09-20 upstream, the latest <code>upgrade-project.ts</code> adds newer passes on top of these traditional categories: <strong>TEMPLATE TREE SYNC</strong> for template files with no dedicated classifier, <strong>ENV_SAMPLE SYNC</strong> for country-aware <code>.env.sample</code> merging, <strong>CONTEXT_COMMONIZATION</strong> for pruning duplicate context sections, and <strong>GOVERNANCE FILES SYNC</strong> for add-if-missing governance files such as LICENSE/SECURITY. The Codex surface is also covered through <code>CODEX.md</code> MERGE and add-if-missing delivery of <code>.codex/config.toml</code>, and graft surfaces ride the same upgrade engine.</div>
   <p>Since v1.10.x, upgrades are also country-profile aware. Before running, the script reads the <code>country=</code> line from the project's <code>.claude/template-version.txt</code> (falling back to the jurisdiction noted in <code>docs/countries/ACTIVE.md</code>) to determine the target country, and preserves that line when it rewrites the file at the end — older versions dropped the line during the rewrite, erasing the project's country provenance. In addition, after all skill-sync passes finish, a registry-driven prune pass runs once more and deletes country-scoped skills (<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>) if they were re-injected into a project whose country doesn't match — preventing upgrades from undoing the pruning done at scaffold time. Forks deliberately modified locally, however, are kept with a <code>⚠️ CONFLICT</code> warning.</p>
   <p>If a SYNC_IF_NEWER target has been edited locally but the template's version is newer, the script marks it as <code>⚠️ CONFLICT</code> but still overwrites it with the template's content in the end. Keep in mind that this is "warn and proceed," not "ask before overwriting" — which is exactly why the safety net described below matters.</p>
 

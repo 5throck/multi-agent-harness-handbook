@@ -22,7 +22,7 @@
   <div class="nav-title">Capítulo 10 · Actualización de Proyecto L3</div>
   <a href="#why">Por qué es necesario — la otra cara del modelo de bifurcación</a>
   <a href="#usage">Cómo usar upgrade-project.ts</a>
-  <a href="#categories">Las 8 categorías de manejo de archivos</a>
+  <a href="#categories">Las categorías principales de manejo de archivos</a>
   <a href="#safety">Redes de seguridad — instantáneas y reversión</a>
   <a href="#vs-promotion">Cómo se diferencia de la promoción</a>
   <div class="nav-section">Otros capítulos</div>
@@ -68,7 +68,7 @@
 </div>
   <p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente.</p>
 
-  <h2 id="categories">Las 8 categorías de manejo de archivos</h2>
+  <h2 id="categories">Las categorías principales de manejo de archivos</h2>
   <p>El script trata los archivos de manera diferente según su naturaleza — no es un "sobrescribir todo con la nueva versión" indiscriminado.</p>
   <div class="table-compare">
   <table>
@@ -86,6 +86,7 @@
     </tbody>
   </table>
   </div>
+  <div class="note">A partir del upstream de 2026-09-20, el <code>upgrade-project.ts</code> más reciente añade pasadas nuevas sobre estas categorías tradicionales: <strong>TEMPLATE TREE SYNC</strong> para archivos de plantilla sin clasificador dedicado, <strong>ENV_SAMPLE SYNC</strong> para fusionar <code>.env.sample</code> con conciencia de país, <strong>CONTEXT_COMMONIZATION</strong> para podar secciones de contexto duplicadas, y <strong>GOVERNANCE FILES SYNC</strong> para archivos de gobernanza add-if-missing como LICENSE/SECURITY. La superficie de Codex también queda cubierta mediante MERGE de <code>CODEX.md</code> y entrega add-if-missing de <code>.codex/config.toml</code>, y las superficies de graft viajan por el mismo motor de actualización.</div>
   <p>Desde la v1.10.x, las actualizaciones también son conscientes del perfil de país. Antes de ejecutarse, el script lee la línea <code>country=</code> del <code>.claude/template-version.txt</code> del proyecto (con respaldo en la jurisdicción indicada en <code>docs/countries/ACTIVE.md</code>) para determinar el país objetivo, y conserva esa línea al reescribir el archivo al final — las versiones anteriores eliminaban la línea durante la reescritura, borrando la procedencia de país del proyecto. Además, después de terminar todas las pasadas de sincronización de habilidades, se ejecuta una pasada de prune basada en el registro que elimina las habilidades con alcance de país (<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>) si fueron reinyectadas en un proyecto cuyo país no coincide — evitando que cada actualización deshaga la limpieza realizada durante el scaffolding. Los forks modificados deliberadamente a nivel local, sin embargo, se conservan con una advertencia <code>⚠️ CONFLICT</code>.</p>
   <p>Si un objetivo SYNC_IF_NEWER ha sido editado localmente pero la versión de la plantilla es más reciente, el script lo marca como <code>⚠️ CONFLICT</code> pero aun así lo sobrescribe con el contenido de la plantilla al final. Ten en cuenta que esto es "advertir y continuar," no "preguntar antes de sobrescribir" — por eso la red de seguridad descrita a continuación es importante.</p>
 

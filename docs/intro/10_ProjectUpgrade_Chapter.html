@@ -22,7 +22,7 @@
   <div class="nav-title">10장 · L3 프로젝트 업그레이드</div>
   <a href="#why">왜 필요한가 — 포크 모델의 이면</a>
   <a href="#usage">upgrade-project.ts 사용법</a>
-  <a href="#categories">파일 처리 8분류</a>
+  <a href="#categories">주요 파일 처리 분류</a>
   <a href="#safety">안전장치 — 스냅샷과 롤백</a>
   <a href="#vs-promotion">승격과의 방향 차이</a>
   <div class="nav-section">다른 장</div>
@@ -43,7 +43,7 @@
     <ul>
       <li>포크 모델에서 "업그레이드"가 왜 자동이 아니라 명령을 실행해야 하는 작업인지</li>
       <li><code>upgrade-project.ts</code>의 기본 사용법과 <code>--dry-run</code> 우선 원칙</li>
-      <li>LOCKED·MERGE·DOCS_MERGE·VARIANT_DOCS_SYNC·COMMANDS_SYNC·SYNC_IF_NEWER·PRESERVE·PRUNE 8가지 파일 처리 방식</li>
+      <li>LOCKED·MERGE·DOCS_MERGE·VARIANT_DOCS_SYNC·COMMANDS_SYNC·SYNC_IF_NEWER·PRESERVE·PRUNE와 TEMPLATE TREE SYNC·ENV_SAMPLE SYNC 등 주요 파일 처리 방식</li>
       <li>자동 git stash 스냅샷과 <code>--rollback</code>으로 되돌리는 안전장치</li>
       <li>11장에서 다루는 "승격"과 방향이 정반대라는 점</li>
     </ul>
@@ -68,7 +68,7 @@
 </div>
   <p><code>--variant</code>는 프로젝트의 <code>.claude/template-version.txt</code>에 기록된 값을 자동으로 읽어오므로 대부분 생략해도 된다. 이 파일이 없는 오래된 프로젝트라면 실행 시 확인 프롬프트가 뜨고, <code>--variant</code>를 직접 지정해야 한다.</p>
 
-  <h2 id="categories">파일 처리 8분류</h2>
+  <h2 id="categories">주요 파일 처리 분류</h2>
   <p>스크립트는 파일을 성격에 따라 다르게 다룬다 — 전부 똑같이 "새 걸로 덮어쓰기"가 아니다.</p>
   <div class="table-compare">
   <table>
@@ -86,6 +86,7 @@
     </tbody>
   </table>
   </div>
+  <div class="note">2026-09-20 기준 최신 <code>upgrade-project.ts</code>는 위의 전통적 분류에 더해 <strong>TEMPLATE TREE SYNC</strong>(전담 분류가 없는 템플릿 파일을 기본 전달), <strong>ENV_SAMPLE SYNC</strong>(국가별 <code>.env.sample</code> 병합), <strong>CONTEXT_COMMONIZATION</strong>(중복 context 섹션 정리), <strong>GOVERNANCE FILES SYNC</strong>(LICENSE/SECURITY 등 add-if-missing)을 사용한다. Codex 표면도 <code>CODEX.md</code> MERGE와 <code>.codex/config.toml</code> add-if-missing 대상으로 포함되며, graft 관련 표면도 같은 업그레이드 엔진으로 전달된다.</div>
   <p>v1.10.x부터 업그레이드는 국가 프로필(국가 스코프 자산)도 인식한다. 실행 전 프로젝트의 <code>.claude/template-version.txt</code>에서 <code>country=</code> 줄을 읽어(없으면 <code>docs/countries/ACTIVE.md</code>의 관할 표기로 대체) 대상 국가를 파악하고, 마무리 시 이 줄을 그대로 보존한다 — 구버전은 이 파일을 재작성하면서 <code>country=</code> 줄을 지워버려 국가 소속 정보를 잃게 했다. 또한 스킬 동기화가 모두 끝난 뒤 레지스트리 기반 prune가 한 번 더 실행되어, 국가 스코프 스킬(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)이 해당 국가가 아닌 프로젝트에 다시 주입됐다면 삭제한다 — 스캐폴딩 시점의 정리 결과를 매번 업그레이드가 되돌리는 사태를 막기 위함이다. 단, 로컬에서 의도적으로 고친 포크는 <code>⚠️ CONFLICT</code> 경고와 함께 그대로 보존된다.</p>
   <p>SYNC_IF_NEWER 대상 파일을 로컬에서 직접 고쳐 쓴 상태인데 템플릿 쪽 버전이 더 높으면, 스크립트는 <code>⚠️ CONFLICT</code>로 표시하면서도 결국 템플릿 내용으로 덮어쓴다. "덮어쓰기 전에 물어봐 주는" 동작이 아니라 "경고만 하고 진행하는" 동작이라는 점을 기억해야 한다 — 그래서 아래 안전장치가 중요하다.</p>
 

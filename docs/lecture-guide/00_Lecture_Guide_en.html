@@ -89,14 +89,15 @@
 	      <tr><td>Ch. 11 (① new-creation D-1)</td><td>Building a co-retail Phase A prototype — create-l3-scaffold, defining domain agents (researcher, writer), updating the AGENTS.md roster, agent:verify</td><td>Hands-on (participants)</td><td>40 min</td></tr>
 	      <tr><td>Ch. 11 (② lecture)</td><td>Building from scratch (Phase A→B) vs. promoting an existing project, the differences between the two paths and criteria for choosing</td><td>Lecture</td><td>20 min</td></tr>
 		      <tr><td>Ch. 12 · New-variant promotion</td><td>Prototype validation (validate-templates, agent:verify), drafting the promotion checklist/manifest (participant exercise), running the actual promotion pipeline (instructor demo only)</td><td>Hands-on + demo mix</td><td>60 min</td></tr>
-		      <tr><td>Ch. 13 · Capstone exercise</td><td>Choosing your own recurring task and designing the 4 stages (problem definition, guardrail design, subagent implementation, verification retrospective) yourself</td><td>Hands-on (participants)</td><td>60 min</td></tr>
+		      <tr><td>Ch. 13 · Domain Operating Model</td><td>The executable-SOP structure of variant templates (ADR-0083·0084) — four core groups, phase vs stage, governed/core grades, validation commands</td><td>Lecture</td><td>20 min</td></tr>
+		      <tr><td>Ch. 14 · Capstone exercise</td><td>Choosing your own recurring task and designing the 4 stages (problem definition, guardrail design, subagent implementation, verification retrospective) yourself</td><td>Hands-on (participants)</td><td>60 min</td></tr>
       <tr><td>Capstone presentations</td><td>1–2 participants briefly share their own workflow, with participant feedback</td><td>Presentation</td><td>15 min</td></tr>
       <tr><td>Wrap-up</td><td>Retrospective on the full two days, Q&A, guidance to the glossary/FAQ, next-steps guidance</td><td>Discussion</td><td>15 min</td></tr>
-		      <tr class="schedule-total"><td colspan="3">Day 2 total</td><td>approx. 5 hr 40 min (excluding breaks)</td></tr>
+		      <tr class="schedule-total"><td colspan="3">Day 2 total</td><td>approx. 6 hr (excluding breaks)</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="note">Including two Day-2 breaks (10–15 min each), the total is <strong>approx. 6 hr – 6 hr 10 min</strong>. This is an IT-professional-focused session emphasizing hands-on work and design.</div>
+  <div class="note">Including two Day-2 breaks (10–15 min each), the total is <strong>approx. 6 hr 20 min – 6 hr 30 min</strong>. This is an IT-professional-focused session emphasizing hands-on work and design.</div>
 
   <h2 id="per-section">Chapter-by-Chapter Instructor Notes</h2>
 
@@ -157,7 +158,11 @@
   <span class="badge badge-demo">Instructor demo only</span> Actually running <code>l3-to-variant-pipeline.ts</code> is an irreversible operation that affects git history. Don't have every participant follow along — it's enough for the instructor to demonstrate it once via screen share. If participants want to try it themselves, guide them to do so after the lecture ends, in their own environment (a workshop-only clone folder).
   <span class="badge badge-do">Participant activity</span> Everyone can practice hands-on by checking the PROMOTION_CHECKLIST.md items and drafting the <code>variant.json</code> manifest.
 
-  <h3>Chapter 13: Capstone Exercise</h3>
+  <h3>Chapter 13: Domain Operating Model</h3>
+  <p>A theory chapter placed right after the Chapter 12 promotion lab and just before the capstone design. It answers "what does a promoted template gain" — the Domain Operating Model structure (ADR-0083·0084) where stages, RACI, and decision gates are declared as data.</p>
+  <span class="badge badge-do">Participant activity</span> Show the four-group table (Process·Governance·Execution·Graph) and ask "which of these does the co-retail variant you built in Chapter 11 already have, and which are missing?" — a 2-minute discussion connects straight back to the lab. The no-acronym rule (DOM/AOM collisions) lands well as a humorous example of terminology discipline.
+
+  <h3>Chapter 14: Capstone Exercise</h3>
   <p>This is the core exercise of Day 2. Combining the experience from Day 1 (using an existing variant) and Chapter 11 (creating a new variant), have participants directly design an application of a multi-agent team to their own real-world work.</p>
   <p>Make clear up front that there is no single correct answer for this chapter. If participants feel stuck on "what should I build," it's effective for the instructor to demonstrate their own example first (e.g., "organizing weekly meeting-minutes action items") to show the flow of questions. If time is tight, rather than completing all 4 stages, it's fine to have everyone finish at least stages 1–2 (problem definition, guardrail decisions) and leave stages 3–4 as homework.</p>
   <span class="badge badge-do">Participant activity</span> Use the completion checklist to have each participant mark how far they got themselves, and during the capstone presentation time, have 1–2 participants briefly share their own workflow.
@@ -282,14 +287,23 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">Chapter 13 · Capstone comprehension questions</div>
+    <div class="quiz-title">Chapter 13 · Domain Operating Model comprehension questions</div>
+    <ol>
+      <li>How does the procedure schema's <code>phase</code> (0–6) differ from the domain's <code>stage</code> axis?</li>
+      <li>What is the difference between a decision gate (<code>decisions/gates.yaml</code>) and a decision record (<code>DEC-*.md</code>)?</li>
+      <li>Is the "core" grade a lesser state than "governed", or does it mean something different?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Chapter 14 · Capstone comprehension questions</div>
     <ol>
       <li>Which of the three limitations from §2 (context overload / role conflict / lack of parallelism) made a team necessary for the recurring task you chose?</li>
       <li>Why did you decide on guardrails before building the subagent?</li>
     </ol>
   </div>
    <footer>
-    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · English Educational Materials<br>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

@@ -417,6 +417,7 @@
     <li><strong>カバレッジは (agent_key, phase) 単位</strong> — エージェントフロントマターの <code>phases:</code> が必要なペアを宣言すると、実際の手順段階がそのペアを覆うかを <code>scripts/procedure-coverage.ts</code> が報告する。ギャップは決して自動填充されず、<code>--tickets</code> が決定論的キー(<code>&lt;variant&gt;:&lt;agent_key&gt;:&lt;phase&gt;</code>)のガバナンスチケットを登録して人が判断する</li>
   </ul>
   <p>要するに、ワークフロー知識 — どのエージェントがどの段階で、どのスキルで、何を産出するか — が散文ではなく検証可能なデータになる。これがこの章のパターンと手順スキーマの違いだ。</p>
+  <p>2026年9月からは、この手順層の上に<strong>ドメインステージ軸</strong>が重なり、活動をドメイン業務フローの段階にまとめ、RACIと判断ゲートで責任と判断まで宣言するDomain Operating Model構造が整った。詳細は<a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html">第13章・Domain Operating Model</a>で扱う。</p>
 
   <h2 id="s4">ワークフロー選択ガイド</h2>
 
@@ -543,7 +544,7 @@
   </div>
 
   <div class="note">
-    本章のワークフロー事例は、<a href="../practice/04_Practice_Examples_A_ja.html">第4章演習</a>のD-1（順次パイプライン）とD-2（動的チーム編成）、および<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章演習</a>のG-1（co-consult）、G-2（co-deck）を通じて直接体験できます。<a href="../capstone/13_Capstone_ja.html">第13章のキャップストーン演習</a>では、本章の原則に基づいて「独自のワークフロー」を設計します。
+    本章のワークフロー事例は、<a href="../practice/04_Practice_Examples_A_ja.html">第4章演習</a>のD-1（順次パイプライン）とD-2（動的チーム編成）、および<a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章演習</a>のG-1（co-consult）、G-2（co-deck）を通じて直接体験できます。<a href="../capstone/14_Capstone_ja.html">第14章のキャップストーン演習</a>では、本章の原則に基づいて「独自のワークフロー」を設計します。
   </div>
 
   <div class="chapter-nav">
@@ -557,7 +558,7 @@
     </a>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 基準 · 日本語教材<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

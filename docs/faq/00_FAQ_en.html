@@ -110,7 +110,7 @@
 
   <div class="q">How do you verify that an agent team you designed and built yourself consistently performs at the intended quality in production?</div>
   <p class="faq-answer">You need to build an <strong>agent test bench</strong> to evaluate normal operation. First, define representative input requirements and expected outputs (a gold dataset). Second, run automated regression tests against that dataset every time you modify a prompt or agent rule. Third, for natural-language output that's hard to score quantitatively, set up a high-performing model as an LLM-as-a-Judge, evaluating against a pre-agreed quantitative score.</p>
-  <span class="see">Details: <a href="../capstone/13_Capstone_en.html">Chapter 13 §Capstone Project</a></span>
+  <span class="see">Details: <a href="../capstone/14_Capstone_en.html">Chapter 14 §Capstone Project</a></span>
 
   <h2 id="cost">Cost & Performance</h2>
 
@@ -132,7 +132,7 @@
   <p class="faq-answer">ai-workspace-standards scripts use the <code>path</code> module in the Node.js/Bun runtime to handle platform-specific paths, so they're compatible with both Windows and macOS/Linux by default. However, issues can arise if a PowerShell-style path (<code>C:\Users\...</code>) gets mixed in when you run <code>git clone</code> directly inside a Claude Code session instead of Git Bash. In Claude Code, always use <code>/</code>-style paths or Git Bash formatting, and it's recommended to clone the workspace root to a short, shallow location like <code>C:\git</code>.</p>
   <span class="see">Details: <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-1">Chapter 6 §1</a></span>
    <footer>
-    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · English Educational Materials<br>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

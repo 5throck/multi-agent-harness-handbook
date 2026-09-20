@@ -97,6 +97,26 @@
     <dt>スキル関係グラフ <span class="en">Skill Relationship Graph</span></dt>
     <dd>スキル・エージェント・ADR・意思決定記録の間の関係を機械が読める形で表現したプロジェクション(projection)。原典(SKILL.mdフロントマターの <code>prerequisites</code>/<code>relates_to</code>、エージェントの <code>required_skills</code>、<code>variant.json</code> など)から常に再生成され、それ自体は1次ストアではない(ADR-0060)。成果物は <code>docs/skill-graph.json</code> と人が読む <code>docs/skill-graph.md</code>。すべての関係エッジは助言的(advisory)であり、実行を強制的に妨げない。
       <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#s2-skill-graph">第8章 §2 · スキル関係グラフ</a></span></dd>
+
+    <dt>ドメインオペレーティングモデル <span class="en">Domain Operating Model</span></dt>
+    <dd>variantテンプレートが、自ドメインの業務フロー(ステージ)・責任体系(RACI)・判断地点(判断ゲート)をデータとして自ら宣言する構造。正式名称は必ずフルネームで書き、略称(DOM・AOM)は他の用語との衝突のため禁止される。Process・Governance・Execution・Graphの4グループで構成される(ADR-0083)。
+      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html">第13章・Domain Operating Model</a></span></dd>
+
+    <dt>ドメイン実行グラフ <span class="en">Domain Execution Graph</span></dt>
+    <dd>スキル関係グラフの上に重ねる語彙プロファイル(<code>graph_profile: "deg/v1"</code>)。ステージ・RACI・ゲートのデータを<code>in_stage</code>・<code>accountable_for</code>・<code>gated_by</code>などのエッジで結び、散らばった運用知識を一度のグラフ照会で答えられるようにする(ADR-0083)。
+      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s5">第13章 §5 · Graph</a></span></dd>
+
+    <dt>ステージ軸 <span class="en">Stage Axis</span></dt>
+    <dd>ドメイン業務が流れる段階の宣言(<code>process/stages.yaml</code>)。PMの作業実行軸<code>phase</code>(0–6)とは別の軸で、手順間の成果物受け渡しフローから導出される。phaseと区別できない場合(DEG-P-01)、機械ブートストラップではなく人の執筆が必要になる。
+      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s2">第13章 §2 · Process</a></span></dd>
+
+    <dt>RACIマトリクス <span class="en">RACI Matrix</span></dt>
+    <dd>各ステージの各活動について、Responsible(実行)・Accountable(最終責任)・Consulted(相談)・Informed(通知)を宣言する責任表。人が読む文書ではなく、<code>generate-raci.ts</code>が手順データから生成し<code>validate-raci.ts</code>が検証するデータである(<code>governance/raci.yaml</code>)。
+      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s3">第13章 §3 · Governance</a></span></dd>
+
+    <dt>判断ゲート <span class="en">Decision Gate</span></dt>
+    <dd>ワークフローの中で判断が必要な地点をgo/no-go形式で宣言したもの(<code>decisions/gates.yaml</code>)。実際に下された判断の記録である判断記録(<code>DEC-*.md</code>、参考B)と対応し、ゲートで出た判定は<code>record_kind: DEC</code>として記録に残る(ADR-0083)。
+      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s4">第13章 §4 · Execution</a></span></dd>
   </dl>
 
   <h2 id="team">マルチエージェントチーム構成要素</h2>
@@ -169,7 +189,7 @@
       <span class="see">詳細: <a href="../tools/00_Tools_Manual_ja.html#section-2">共通参考 §2</a></span></dd>
   </dl>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 基準 · 日本語教材<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

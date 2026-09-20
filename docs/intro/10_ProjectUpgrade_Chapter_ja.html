@@ -57,7 +57,7 @@
   <p>出力内容に問題がなければ、<code>--dry-run</code>を外して再度実行する。</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
-# 任意フラグ: --variant &lt;variant&gt;  --platform claude|antigravity|both
+# 任意フラグ: --variant &lt;variant&gt;  --platform claude|antigravity|codex|all
 #            --prune-removed  --rollback</pre>
   <button class="copy-btn">コピー</button>
 </div>
@@ -71,7 +71,7 @@
     <tbody>
       <tr><td><strong>LOCKED</strong></td><td>常にテンプレートの内容で上書きする</td><td><code>.githooks/*</code>(pre-commitルーティングなど)、<code>.gitattributes</code></td></tr>
       <tr><td><strong>LOCKED (merge-aware)</strong></td><td>LOCKEDと同様に常にテンプレートを採用するが、マージ認識型 — プロジェクトのみが持つ正規表現・許可リスト(<code>regexes</code>/<code>paths</code>)の項目は保持し、管理対象ルールだけを復元する(v1.10.0以降。以前の無条件上書きはプロジェクト固有の許可リストを失わせていた)</td><td><code>.gitleaks.toml</code>(<code>mergeGitleaksToml()</code>)</td></tr>
-      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code>マーカーで囲まれた区間のみをマージし、それ以外のローカル内容はそのまま保持する</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>による)、<code>.gitignore</code>、<code>agents/pm.md</code></td></tr>
+      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code>マーカーで囲まれた区間のみをマージし、それ以外のローカル内容はそのまま保持する</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>(<code>--platform</code>による)、<code>.gitignore</code>、<code>agents/pm.md</code></td></tr>
       <tr><td><strong>DOCS_MERGE</strong></td><td>ドキュメントにもMERGEと同じマーカー区間マージを適用 — マーカーのない文書だけ例外的に丸ごと上書きする(v1.7.0で追加)</td><td><code>AGENTS.md</code>、<code>docs/&lt;variant&gt;.context.md</code>、<code>docs/phase-definitions.md</code></td></tr>
       <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>ファイル内の<code>*&lt;ファイル名&gt; version: X.Y</code>脚注バージョン(なければハッシュ)がテンプレートより古い場合のみ更新する(v1.7.0で追加)</td><td><code>docs/context.md</code>(v1.9.0から)、<code>docs/engagement-orchestration.md</code>、<code>docs/team-configuration-guide.md</code></td></tr>
       <tr><td><strong>COMMANDS_SYNC</strong></td><td>ハッシュが異なる場合、プラットフォームのコマンドファイルをテンプレートの内容で同期する(v1.7.0で追加)</td><td><code>.claude/commands/*.md</code>、<code>.gemini/commands/*.md</code></td></tr>
@@ -110,7 +110,7 @@
     <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第11章・新規variantの作成</div></a>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 基準 · 日本語教材<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

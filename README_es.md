@@ -30,7 +30,7 @@ Consulta la [Guía de Instalación](https://5throck.github.io/multi-agent-harnes
 - **Cap. 10 · Actualización de Proyectos L3** — Expansión de capacidades de agentes en proyectos reales
 - **Cap. 11 · Creación de una Nueva Variante (Fase A)** — Diseño de harness personalizado
 - **Cap. 12 · Promoción de una Nueva Variante (Fase B)** — Despliegue en producción y validación
-- **Cap. 13 · Proyecto Capstone** — Diseñando su propio flujo de trabajo
+- **Cap. 14 · Proyecto Capstone** — Diseñando su propio flujo de trabajo
 - **Referencia Común** — Comparativa de herramientas: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
 - **Preguntas Frecuentes** — Errores comunes y soluciones
 - **Glosario** — Términos clave y definiciones usados en todo el manual

@@ -62,7 +62,7 @@
   <p>출력 내용에 문제가 없으면 <code>--dry-run</code>을 빼고 다시 실행한다.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
-# 선택 플래그: --variant &lt;variant&gt;  --platform claude|antigravity|both
+# 선택 플래그: --variant &lt;variant&gt;  --platform claude|antigravity|codex|all
 #            --prune-removed  --rollback</pre>
   <button class="copy-btn">복사</button>
 </div>
@@ -76,7 +76,7 @@
     <tbody>
       <tr><td><strong>LOCKED</strong></td><td>항상 템플릿 내용으로 덮어씀</td><td><code>.githooks/*</code>(pre-commit 라우팅 등), <code>.gitattributes</code></td></tr>
       <tr><td><strong>LOCKED (merge-aware)</strong></td><td>LOCKED처럼 항상 템플릿을 가져오되 병합 인식 — 프로젝트에만 있는 정규식·허용 목록(<code>regexes</code>/<code>paths</code>) 항목은 보존하고 관리 규칙만 복원한다(v1.10.0부터; 이전의 무조건 덮어쓰기는 프로젝트 전용 허용 목록을 유실시켰음)</td><td><code>.gitleaks.toml</code>(<code>mergeGitleaksToml()</code>)</td></tr>
-      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code> 마커로 감싼 구간만 병합, 나머지 로컬 내용은 그대로 보존</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>(<code>--platform</code>에 따라), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>MERGE</strong></td><td><code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code> 마커로 감싼 구간만 병합, 나머지 로컬 내용은 그대로 보존</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>(<code>--platform</code>에 따라), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
       <tr><td><strong>DOCS_MERGE</strong></td><td>문서에도 MERGE와 같은 마커 구간 병합을 적용 — 마커 없는 문서만 예외적으로 통째로 덮어씀(v1.7.0 추가)</td><td><code>AGENTS.md</code>, <code>docs/&lt;variant&gt;.context.md</code>, <code>docs/phase-definitions.md</code></td></tr>
       <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>파일 안의 <code>*&lt;파일명&gt; version: X.Y</code> 각주 버전(없으면 해시)이 템플릿보다 낮을 때만 갱신(v1.7.0 추가)</td><td><code>docs/context.md</code>(v1.9.0부터), <code>docs/engagement-orchestration.md</code>, <code>docs/team-configuration-guide.md</code></td></tr>
       <tr><td><strong>COMMANDS_SYNC</strong></td><td>해시가 다르면 플랫폼 명령 파일을 템플릿 내용으로 동기화(v1.7.0 추가)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.md</code></td></tr>
@@ -115,7 +115,7 @@
     <a href="../variant-advanced/11_VariantAdvanced_Chapter.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">11장 · 신규 variant 생성</div></a>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 기준 · 한국어 교육 자료<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

@@ -34,7 +34,7 @@
 <main>
  <article class="reading">
   <h1>講義進行ガイド</h1>
-  <p class="lead">本ハンドブック全体(第1〜13章+共通参考)を使って講義を行う講師のための資料である。</p>
+  <p class="lead">本ハンドブック全体(第1〜14章+共通参考)を使って講義を行う講師のための資料である。</p>
 
   <div class="note">本文書はハンドブック本文ではなく、講師専用の運営資料である。受講者に共有する必要はありません。</div>
   <div class="warn">校了前に全文をもう一度読み返し、<strong>誤字脱字、文脈にそぐわない表現、章/節番号の不一致</strong>がないか必ず確認してください。AIが生成した草案には誤字や不自然な文脈が残っている場合がある。</div>
@@ -89,14 +89,15 @@
 	      <tr><td>第11章(①新規作成D-1)</td><td>co-retail Phase Aプロトタイプの作成 — create-l3-scaffold、ドメインエージェント定義(researcher・writer)、AGENTS.mdロスターの更新、agent:verify</td><td>実習(参加者自身)</td><td>40分</td></tr>
 	      <tr><td>第11章(②講義)</td><td>最初から作る(Phase A→B) vs 既存プロジェクトの昇格、2つの経路の違いと選択基準</td><td>講義</td><td>20分</td></tr>
 		      <tr><td>第12章・新規variant昇格</td><td>プロトタイプの検証(validate-templates・agent:verify)、昇格チェックリスト/マニフェストの作成(参加者実習)、実際の昇格パイプライン実行(講師デモのみ)</td><td>実習+デモ混合</td><td>60分</td></tr>
-		      <tr><td>第13章・キャップストーン実習</td><td>自身の反復作業を選び、4段階(問題定義・ガードレール設計・サブエージェント実装・検証振り返り)を自ら設計</td><td>実習(参加者自身)</td><td>60分</td></tr>
+		      <tr><td>第13章・Domain Operating Model</td><td>variantテンプレートの実行可能SOP構造(ADR-0083・0084) — 4つの中核グループ、phaseとstageの違い、governed/core等級、検証コマンド</td><td>講義</td><td>20分</td></tr>
+		      <tr><td>第14章・キャップストーン実習</td><td>自身の反復作業を選び、4段階(問題定義・ガードレール設計・サブエージェント実装・検証振り返り)を自ら設計</td><td>実習(参加者自身)</td><td>60分</td></tr>
       <tr><td>キャップストーン発表</td><td>1〜2名が自身のワークフローを短く共有、参加者フィードバック</td><td>発表</td><td>15分</td></tr>
       <tr><td>まとめ</td><td>2日間全体の振り返り、Q&A、用語集/FAQ案内、次のステップ案内</td><td>ディスカッション</td><td>15分</td></tr>
-		      <tr class="schedule-total"><td colspan="3">2日目合計</td><td>約5時間40分(休憩除く)</td></tr>
+		      <tr class="schedule-total"><td colspan="3">2日目合計</td><td>約6時間(休憩除く)</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="note">2日目の休憩2回(各10〜15分)を含めると<strong>約6時間〜6時間10分</strong>である。IT専門家対象のセッションであり、実習と設計中心の構成である。</div>
+  <div class="note">2日目の休憩2回(各10〜15分)を含めると<strong>約6時間20分〜6時間30分</strong>である。IT専門家対象のセッションであり、実習と設計中心の構成である。</div>
 
   <h2 id="per-section">章別講師ノート</h2>
 
@@ -157,7 +158,11 @@
   <span class="badge badge-demo">講師デモ専用</span> 実際の<code>l3-to-variant-pipeline.ts</code>の実行は、git履歴に影響を与える非可逆的な作業である。参加者全員に真似させるのではなく、講師が画面共有で1回実行して見せるだけで十分である。参加者が自分で試してみたい場合は、講義終了後、個人環境(ワークショップ専用クローンフォルダ)で行うよう案内してください。
   <span class="badge badge-do">参加者アクティビティ</span> PROMOTION_CHECKLIST.md項目の確認と<code>variant.json</code>マニフェストの作成までは全員実習可能である。
 
-  <h3>第13章: キャップストーン実習</h3>
+  <h3>第13章: Domain Operating Model</h3>
+  <p>第12章の昇格実習の直後、キャップストーン設計の直前に置かれた理論章である。「昇格されたテンプレートには何が生まれるのか」への答え — ステージ・RACI・判断ゲートがデータとして宣言されるDomain Operating Model構造(ADR-0083・0084)を扱う。</p>
+  <span class="badge badge-do">参加者アクティビティ</span> 4グループの表(Process・Governance・Execution・Graph)を見せて「第11章で作ったco-retailには、このうち何がすでにあり、何が欠けているか?」を2分間のディスカッションにすると実習に直結する。略称禁止ルール(DOM/AOMの衝突)は、用語規律のユーモラスな例として取り上げると記憶に残る。
+
+  <h3>第14章: キャップストーン実習</h3>
   <p>2日目の中核実習である。1日目(既存variant活用)と第11章(新規variant作成)の経験を全て合わせ、参加者自身の実際の業務にマルチエージェントチームを適用する設計を直接行わせる。</p>
   <p>この章には正解がないことを先に明確にしてください。参加者が「何を作ればよいか」戸惑う場合は、講師が自身の例(例: 「毎週の会議録アクションアイテム整理」)を先にデモして質問の流れを見せるのが効果的である。時間が切迫していれば、4段階全てを実行するよりも、最低限1〜2段階(問題定義・ガードレール決定)までは全員が終え、3〜4段階は宿題として残してもよいです。</p>
   <span class="badge badge-do">参加者アクティビティ</span> 完了チェックリストを活用して各自どこまで終えたかを自分で示させ、キャップストーン発表の時間に1〜2名が自身のワークフローを短く共有するようにする。
@@ -282,14 +287,23 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第13章・キャップストーン確認質問</div>
+    <div class="quiz-title">第13章・Domain Operating Model確認質問</div>
+    <ol>
+      <li>手順スキーマの<code>phase</code>(0–6)とドメインの<code>stage</code>は、どんな軸が違うでしょうか?</li>
+      <li>判断ゲート(<code>decisions/gates.yaml</code>)と判断記録(<code>DEC-*.md</code>)の違いは何でしょうか?</li>
+      <li>「core」等級は「governed」より劣る状態でしょうか、それとも別の意味でしょうか?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">第14章・キャップストーン確認質問</div>
     <ol>
       <li>自身が選んだ反復作業は、§2の3つの限界(コンテキスト過負荷/役割衝突/並列性の欠如)のうちどれが原因でチームが必要でしたか?</li>
       <li>サブエージェントを作る前にガードレールから決めた理由は何ですか?</li>
     </ol>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 基準 · 日本語教材<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

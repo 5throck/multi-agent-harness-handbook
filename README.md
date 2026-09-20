@@ -31,7 +31,7 @@ See the [Setup Guide](https://5throck.github.io/multi-agent-harness-handbook/set
 - **Ch. 10 · L3 Project Upgrade** — Scaling up agent capabilities in real-world projects
 - **Ch. 11 · Creating a New Variant (Phase A)** — Customizing agent harnesses
 - **Ch. 12 · Promoting a New Variant (Phase B)** — Production rollout & validation
-- **Ch. 13 · Capstone Project** — Designing your own AI agent workflow
+- **Ch. 14 · Capstone Project** — Designing your own AI agent workflow
 - **Common Reference** — Tool comparison: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
 - **FAQ** — Common errors, fixes, and troubleshooting
 - **Glossary** — Key terms and definitions used throughout the handbook
@@ -40,7 +40,7 @@ See the [Setup Guide](https://5throck.github.io/multi-agent-harness-handbook/set
 - **Lecture Guide** — Day-by-day schedule, agenda, and facilitator notes
 
 ## 🎯 Target Versions
-- Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-08)
+- Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-09)
 
 ## 📜 License
 - **Handbook content**: [CC BY-NC-SA 4.0](LICENSE) (Attribution-NonCommercial-ShareAlike 4.0 International)

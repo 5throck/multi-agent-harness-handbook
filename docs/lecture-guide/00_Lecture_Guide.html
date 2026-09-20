@@ -34,7 +34,7 @@
 <main>
  <article class="reading">
   <h1>강의 진행 가이드</h1>
-  <p class="lead">이 핸드북 전체(1~13장 + 공통 참고)를 사용해 강의를 진행할 강사를 위한 자료이다.</p>
+  <p class="lead">이 핸드북 전체(1~14장 + 공통 참고)를 사용해 강의를 진행할 강사를 위한 자료이다.</p>
 
   <div class="note">이 문서는 핸드북 본문이 아니라 강사 전용 운영 자료이다. 학습자에게는 공유하지 않아도 된다.</div>
   <div class="warn">탈고 전에 전체 문장을 다시 읽으며 <strong>오탈자, 문맥에 어울리지 않는 표현, 장/절 번호 불일치</strong>가 없는지 반드시 확인하라. AI가 생성한 초안에 오자나 어색한 문맥이 남아 있을 수 있다.</div>
@@ -89,14 +89,15 @@
 	      <tr><td>11장 (① 신규 생성 D-1)</td><td>co-retail Phase A 프로토타입 만들기 — create-l3-scaffold, 도메인 에이전트 정의(researcher·writer), AGENTS.md 로스터 갱신, agent:verify</td><td>실습(참가자 직접)</td><td>40분</td></tr>
 	      <tr><td>11장 (② 강의)</td><td>처음부터 만들기(Phase A→B) vs 기존 프로젝트 승격, 두 경로의 차이와 선택 기준</td><td>강의</td><td>20분</td></tr>
 		      <tr><td>12장 · 신규 variant 승격</td><td>프로토타입 검증(validate-templates·agent:verify), 승격 체크리스트/매니페스트 작성(참가자 실습), 실제 승격 파이프라인 실행(강사 시연만)</td><td>실습+시연 혼합</td><td>60분</td></tr>
-		      <tr><td>13장 · 캡스톤 실습</td><td>본인의 반복 작업을 골라 4단계(문제 정의·가드레일 설계·서브에이전트 구현·검증 회고) 직접 설계</td><td>실습(참가자 직접)</td><td>60분</td></tr>
+		      <tr><td>13장 · Domain Operating Model</td><td>variant 템플릿의 실행 가능 SOP 구조(ADR-0083·0084) — 4개 구성 그룹, phase와 stage의 구분, governed/core 등급, 검증 커맨드</td><td>강의</td><td>20분</td></tr>
+		      <tr><td>14장 · 캡스톤 실습</td><td>본인의 반복 작업을 골라 4단계(문제 정의·가드레일 설계·서브에이전트 구현·검증 회고) 직접 설계</td><td>실습(참가자 직접)</td><td>60분</td></tr>
       <tr><td>캡스톤 발표</td><td>1~2명이 자기 워크플로우를 짧게 공유, 참가자 피드백</td><td>발표</td><td>15분</td></tr>
       <tr><td>마무리</td><td>이틀 전체 회고, Q&A, 용어집/FAQ 안내, 다음 단계 안내</td><td>토론</td><td>15분</td></tr>
-		      <tr class="schedule-total"><td colspan="3">2일차 합계</td><td>약 5시간 40분 (휴식 제외)</td></tr>
+		      <tr class="schedule-total"><td colspan="3">2일차 합계</td><td>약 6시간 (휴식 제외)</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="note">2일차 휴식 2회(각 10~15분)를 포함하면 <strong>약 6시간~6시간 10분</strong>이다. IT전문가 대상 세션으로 실습과 설계 중심의 구성이다.</div>
+  <div class="note">2일차 휴식 2회(각 10~15분)를 포함하면 <strong>약 6시간 20분~6시간 30분</strong>이다. IT전문가 대상 세션으로 실습과 설계 중심의 구성이다.</div>
 
   <h2 id="per-section">장별 강사 노트</h2>
 
@@ -157,7 +158,11 @@
   <span class="badge badge-demo">강사 시연 전용</span> 실제 <code>l3-to-variant-pipeline.ts</code> 실행은 git 이력에 영향을 주는 비가역적 작업이다. 참가자 전원이 따라 하게 하지 말고, 강사가 화면 공유로 한 번 실행하는 것을 보여주는 것으로 충분한다. 참가자가 직접 해보고 싶다면 강의 종료 후 개인 환경(워크숍 전용 클론 폴더)에서 해보도록 안내하라.
   <span class="badge badge-do">참가자 활동</span> PROMOTION_CHECKLIST.md 항목 확인과 <code>variant.json</code> manifest 작성까지는 전원 실습 가능한다.
 
-  <h3>13장: 캡스톤 실습</h3>
+  <h3>13장: Domain Operating Model</h3>
+  <p>12장 승격 실습 직후, 캡스톤 설계 직전에 배치된 이론 장이다. "승격된 템플릿에는 무엇이 생기는가"에 대한 답 — 스테이지·RACI·결정 게이트가 데이터로 선언되는 Domain Operating Model 구조(ADR-0083·0084)를 다룬다.</p>
+  <span class="badge badge-do">참가자 활동</span> 4그룹 표(Process·Governance·Execution·Graph)를 보여주고 "여러분이 11장에서 만든 co-retail에는 이 중 무엇이 이미 있고 무엇이 비어 있을까?"를 2분 토론으로 풀면 12장 실습과 즉시 연결된다. 약어 금지 규칙(DOM/AOM 충돌)은 용어 규율의 유머러스한 사례로 짚어주면 기억에 오래 남는다.
+
+  <h3>14장: 캡스톤 실습</h3>
   <p>2일차 핵심 실습이다. 1일차(기존 variant 활용)와 11장(신규 variant 생성)의 경험을 모두 합쳐, 참가자 본인의 실제 업무에 멀티 에이전트팀을 적용하는 설계를 직접 해보게 한다.</p>
   <p>이 장은 정답이 없다는 점을 먼저 분명히 하라. 참가자가 "무엇을 만들어야 하나" 막막해하면, 강사가 자기 예시(예: "매주 회의록 액션 아이템 정리")를 먼저 시연해 질문 흐름을 보여주는 것이 효과적이다. 시간이 촉박하면 4단계 전체를 다 실행하기보다, 최소한 1~2단계(문제 정의·가드레일 결정)까지는 전원이 끝내고 3~4단계는 숙제로 남겨도 좋다.</p>
   <span class="badge badge-do">참가자 활동</span> 완료 체크리스트를 활용해 각자 어디까지 마쳤는지 스스로 표시하게 하고, 캡스톤 발표 시간에 1~2명이 자기 워크플로우를 짧게 공유하도록 한다.
@@ -282,14 +287,23 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">13장 · 캡스톤 확인 질문</div>
+    <div class="quiz-title">13장 · Domain Operating Model 확인 질문</div>
+    <ol>
+      <li>절차 스키마의 <code>phase</code>(0–6)와 도메인의 <code>stage</code>는 무엇이 다른 축일까요?</li>
+      <li>결정 게이트(<code>decisions/gates.yaml</code>)와 결정 기록(<code>DEC-*.md</code>)의 차이는 무엇인가요?</li>
+      <li>"core" 등급은 "governed"보다 못한 상태일까요, 아니면 다른 의미인가요?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">14장 · 캡스톤 확인 질문</div>
     <ol>
       <li>본인이 고른 반복 작업이 §2의 세 가지 한계(컨텍스트 과부하/역할 충돌/병렬성 부재) 중 무엇 때문에 팀이 필요했나요?</li>
       <li>서브에이전트를 만들기 전에 가드레일부터 정한 이유는 무엇인가요?</li>
     </ol>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 기준 · 한국어 교육 자료<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

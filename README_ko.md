@@ -30,7 +30,7 @@ cd setup
 - **10장 · L3 프로젝트 업그레이드** — 실전 프로젝트 에이전트 기능 확장
 - **11장 · 신규 variant 생성 (Phase A)** — 커스텀 하네스 설계
 - **12장 · 신규 variant 승격 (Phase B)** — 프로덕션 배포 및 검증
-- **13장 · 캡스톤** — 나만의 워크플로우 설계하기
+- **14장 · 캡스톤** — 나만의 워크플로우 설계하기
 - **공통 참고** — 도구 비교 (Claude Code / Claude Desktop App / Antigravity CLI / Antigravity)
 - **FAQ** — 자주 나는 오류와 해결법
 - **용어집** — 핸드북 전반에서 사용하는 핵심 용어 정리
@@ -39,7 +39,7 @@ cd setup
 - **강의 진행 가이드** — 일자별 일정, 아젠다, 진행자 노트
 
 ## 🎯 대상 버전
-- Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-08)
+- Claude Code 2026-08 / Antigravity CLI 1.1.0+ / Antigravity 2.0 / `ai-workspace-standards` main (2026-09)
 
 ## 📜 License
 - **핸드북 콘텐츠**: [CC BY-NC-SA 4.0](LICENSE) (저작자표시-비영리-동일조건변경허락 4.0 국제)

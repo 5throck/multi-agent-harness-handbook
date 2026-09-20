@@ -62,7 +62,7 @@
   <p>If the output looks fine, run it again without <code>--dry-run</code>.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
-# Optional flags: --variant &lt;variant&gt;  --platform claude|antigravity|both
+# Optional flags: --variant &lt;variant&gt;  --platform claude|antigravity|codex|all
 #            --prune-removed  --rollback</pre>
   <button class="copy-btn">Copy</button>
 </div>
@@ -76,7 +76,7 @@
     <tbody>
       <tr><td><strong>LOCKED</strong></td><td>Always overwritten with the template's content</td><td><code>.githooks/*</code> (pre-commit routing, etc.), <code>.gitattributes</code></td></tr>
       <tr><td><strong>LOCKED (merge-aware)</strong></td><td>Like LOCKED — always takes the template — but merge-aware: regex and allowlist entries (<code>regexes</code>/<code>paths</code>) that exist only in the project are preserved while the managed rules are restored (since v1.10.0; the previous blind overwrite silently dropped project-specific allowlist entries)</td><td><code>.gitleaks.toml</code> (<code>mergeGitleaksToml()</code>)</td></tr>
-      <tr><td><strong>MERGE</strong></td><td>Only the sections wrapped in <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code> markers are merged; the rest of the local content is preserved as-is</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code> (depending on <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
+      <tr><td><strong>MERGE</strong></td><td>Only the sections wrapped in <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code> markers are merged; the rest of the local content is preserved as-is</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code> (depending on <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
       <tr><td><strong>DOCS_MERGE</strong></td><td>Applies the same managed-block merge to docs — only documents without markers are overwritten wholesale as an exception (added in v1.7.0)</td><td><code>AGENTS.md</code>, <code>docs/&lt;variant&gt;.context.md</code>, <code>docs/phase-definitions.md</code></td></tr>
       <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>Updated only when the file's inline <code>*&lt;filename&gt; version: X.Y</code> footer version (or hash, if absent) is older than the template's (added in v1.7.0)</td><td><code>docs/context.md</code> (since v1.9.0), <code>docs/engagement-orchestration.md</code>, <code>docs/team-configuration-guide.md</code></td></tr>
       <tr><td><strong>COMMANDS_SYNC</strong></td><td>Synchronizes platform command files with the template's content whenever their hashes differ (added in v1.7.0)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.md</code></td></tr>
@@ -115,7 +115,7 @@
     <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch.11 - Creating a New Variant</div></a>
   </div>
    <footer>
-    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · English Educational Materials<br>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!--
+  Plantilla de capítulo (narrativo) — para temas de "lectura" sin laboratorios prácticos. Ancho de
+  lectura de 720px, interlineado generoso, navegación entre capítulos. Centrado en el flujo del texto,
+  a diferencia de las páginas Manual (referencia) / Examples (práctica) con sus cajas de versión y
+  énfasis en código.
+  Lugares a editar: (1) <title>/número de capítulo/título/lead  (2) nav (secciones de este capítulo + otros)
+                    (3) 'puntos clave'  (4) secciones <h2 id>/<h3> y cuerpo  (5) enlaces anterior/siguiente
+  Los colores usan solo tokens de diseño — el tema reemplaza los colores de marca al desplegar.
+  Premisa del índice de búsqueda: las secciones del cuerpo deben mantener la estructura <h2 id="...">
+  (con <h3> cuando sea necesario).
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Capítulo 13 · Domain Operating Model — cómo las plantillas de variante se convierten en SOP ejecutables (ADR-0083·0084) - Material del Manual de Ingeniería de Arnes de Equipo Multiagente.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Capítulo 13 · Domain Operating Model — Cómo las Plantillas se Convierten en SOP Ejecutables</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
+  <div class="nav-title">Capítulo 13 · Domain Operating Model</div>
+  <a href="#s1">La plantilla como sistema operativo de dominio</a>
+  <a href="#s2">Process — el eje de etapas</a>
+  <a href="#s3">Governance — la matriz RACI</a>
+  <a href="#s4">Execution — artefactos y compuertas de decisión</a>
+  <a href="#s5">Graph — el Domain Execution Graph</a>
+  <a href="#s6">Extensiones — modelo de actores · backporting de evidencia · registro de deltas</a>
+  <a href="#s7">En la práctica — validación y nuevas variantes</a>
+  <div class="nav-section">Otros Capítulos</div>
+  <a href="../variant-advanced/12_VariantAdvanced_Examples_es.html">Capítulo 12 · Ejemplo de Ejercicio de Promoción de Nueva Variante</a>
+  <a href="../capstone/14_Capstone_es.html">Capítulo 14 · Ejercicio Integrador</a>
+  <a href="../appendix/B_Decision_System_es.html">Referencia B · Sistema de Decisiones</a>
+  <a href="../appendix/C_Skill_Graph_es.html">Referencia C · Grafo de Relaciones de Habilidades</a>
+  <a href="../glossary/00_Glossary_es.html">Glosario</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Capítulo 13</div>
+  <h1>Domain Operating Model — Cómo las Plantillas se Convierten en SOP Ejecutables</h1>
+  <p class="lead">Los capítulos 11 y 12 cubrieron cómo construir y promover una plantilla de variante. A partir de septiembre de 2026, las plantillas de variante oficiales se rigen por un nuevo estándar. Una plantilla ya no es solo "un paquete de agentes, habilidades y configuración": declara, en forma legible por máquina, <strong>qué ocurre y en qué orden (etapas), quién responde (RACI) y qué veredictos deben aprobarse antes de avanzar (compuertas de decisión)</strong>. El nombre oficial de esta estructura es <strong>Domain Operating Model</strong>, y su justificación de diseño vive en ADR-0083 y ADR-0084.</p>
+  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">Lo que cubre este capítulo</div>
+    <ul>
+      <li>Qué es el Domain Operating Model y por qué nunca se abrevia</li>
+      <li>Los cuatro grupos centrales (Process · Governance · Execution · Graph) y los archivos que cada uno posee</li>
+      <li>La diferencia entre el eje de ejecución de PM <code>phase</code> (0–6) y el eje de flujo de dominio <code>stage</code></li>
+      <li>Cómo la matriz RACI y las compuertas de decisión se conectan con los procedimientos y el grafo de habilidades</li>
+      <li>La diferencia entre plantillas "governed" y "core", y los comandos de validación</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">La plantilla como sistema operativo de dominio</h2>
+  <p>El propietario del workspace hizo cierta vez esta propuesta: "Hagamos que cada plantilla de variante se comporte como el <strong>sistema operativo</strong> de su dominio — reúne proceso, habilidades, equipo de agentes, rendición de cuentas, artefactos y reglas de decisión en un solo lugar, y añade un grafo que los conecte". Una pasada de verificación del 2026-09-19 confirmó algo interesante: gracias al Esquema de Procedimientos (ADR-0063) y al Grafo de Habilidades (ADR-0060), gran parte de la estructura propuesta ya estaba implementada. Las brechas reales eran más estrechas — un <strong>eje de etapas</strong> de dominio, el Consulted/Informed de RACI, modelos de artefactos y decisiones generalizados, y el vocabulario de grafo que los une. ADR-0083 ejecutó el relleno como un plan de cinco fases (P1–P5).</p>
+
+  <div class="pullquote">Una plantilla ya no es un paquete de archivos — es un sistema operativo que declara el flujo de trabajo, la rendición de cuentas y los veredictos de su dominio.
+    <span class="by">— la nueva definición de plantilla bajo ADR-0083</span></div>
+
+  <h3>El nombre siempre se escribe completo</h3>
+  <p>El nombre oficial del marco es <strong>Domain Operating Model</strong>, y el workspace prohíbe abreviarlo. Acortado a "DOM" colisiona con el Document Object Model del navegador — terminología viva para variantes como co-deck, co-design y co-game que manejan HTML y CSS. "AOM" también está prohibido: "Agent" ya denota a los agentes especialistas del PM Gateway, y un marco no debe recibir el nombre de uno de sus propios subcomponentes. No se permite ningún acrónimo en documentos, esquemas, scripts ni mensajes de commit. Es un buen ejemplo de la regla del Capítulo 2 — un término, un significado.</p>
+
+  <h3>Los cuatro grupos centrales</h3>
+  <p>El núcleo (Core) del Domain Operating Model tiene cuatro grupos. Cada grupo se corresponde con archivos específicos dentro de la plantilla.</p>
+  <table>
+    <thead><tr><th>Grupo</th><th>Qué cubre</th><th>Archivos</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Process</strong></td><td>Stage → Activity → Skill. Cómo fluye el trabajo en orden</td><td><code>process/stages.yaml</code>, <code>procedures/*/schema.yaml</code></td><td>Implementado (P2)</td></tr>
+      <tr><td><strong>Governance</strong></td><td>RACI. Quién responde y quién ejecuta, por etapa y actividad</td><td><code>governance/raci.yaml</code></td><td>Implementado (P4)</td></tr>
+      <tr><td><strong>Execution</strong></td><td>Artifact · Decision. Qué se produce y qué veredictos deben aprobarse</td><td><code>procedures/_output-types.yaml</code>, <code>decisions/gates.yaml</code></td><td>Implementado (P5)</td></tr>
+      <tr><td><strong>Graph</strong></td><td>Domain Execution Graph. La capa de relaciones que une a los otros tres</td><td>Perfil DEG de <code>docs/skill-graph.json</code></td><td>Implementado (P3)</td></tr>
+    </tbody>
+  </table>
+  <div class="note">El agente (Agent) no es uno de los cuatro grupos. Un agente es una <strong>referencia de actor</strong> dentro de RACI: cada ranura de rol contiene una clave de agente, y la estructura no impone una distinción humano-versus-IA (esa distinción es una extensión opcional manejada por el modelo de actores, que veremos más abajo).</div>
+
+  <p>La estratificación también es explícita. El AI Workspace posee esquemas y contratos (capas L0·L1), el Domain Operating Model define los principios operativos de cada dominio sobre ellos, una Template (<code>templates/co-*/</code>) empaqueta exactamente un dominio, y un Project (L3) lo instancia para trabajo real. Así se anidan la jerarquía L0→L1→L2→L3 del Capítulo 5 y el modelo de operación de dominio.</p>
+
+  <h2 id="s2">Process — el eje de etapas</h2>
+  <p>La primera brecha cubierta fue el <strong>eje de etapas (stage)</strong>. El esquema de procedimientos siempre tuvo un campo <code>phase</code>, pero ese es el eje de ejecución de trabajo del PM (0–6, desde la aprobación del diseño hasta la ejecución y el QA) — no el flujo del dominio. Un proyecto de consultoría que avanza "investigación → análisis → informe", o una presentación que fluye "research → storyline → build → export", no tenía dónde declarar su progresión específica del dominio. ADR-0083 declara este eje en <code>process/stages.yaml</code>.</p>
+  <div class="code-block">
+<pre><code># templates/co-deck/process/stages.yaml (extracto)
+schema_version: '1.0'
+variant: co-deck
+stages:
+  - id: S1
+    title: Deck Source Research
+    order: 1
+    owner_agent: version
+  - id: S2
+    title: Version Export Control
+    order: 2
+    owner_agent: version
+  - id: S3
+    title: Deck Publish and Versioning
+    order: 3
+    owner_agent: pdf-export</code></pre>
+<button type="button" class="copy-btn">Copiar</button>
+</div>
+  <h3>Primero la máquina, luego el refinamiento humano</h3>
+  <p>El eje de etapas lo produjo <code>bootstrap-stages.ts</code>, que agrupa los procedimientos analizando su <strong>flujo de entrega de artefactos</strong> — dónde la salida de un procedimiento se convierte en la entrada del siguiente — en lugar de agrupar ingenuamente por fase. La primera pasada de la máquina deja deliberadamente <code>purpose</code> y los criterios de entrada/salida como <code>PENDING_REVIEW</code>: la estructura se automatiza, el significado es humano. Esa es la división del trabajo consistente del workspace.</p>
+  <p>También hay una calificación mínima. El invariante <strong>DEG-P-01</strong> exige que el eje de etapas sea genuinamente distinto de la fase. Cuando el número de procedimientos, de fases y de etapas coincide todo (un mapeo 1:1), el "eje de etapas" es solo la fase renombrada. Las nueve variantes que pasan (co-abap, co-consult, co-deck, co-design, co-export, co-game, co-hr, co-price, co-security) obtienen el grado <code>governed</code>; las cuatro que fallan (co-develop, co-news, co-safety, co-work) permanecen en <code>core</code> hasta que una persona redacte sus etapas. La madurez se expresa como un grado, no se impone como una compuerta.</p>
+
+  <h2 id="s3">Governance — la matriz RACI</h2>
+  <p>El segundo grupo es la rendición de cuentas. <code>governance/raci.yaml</code> declara, para cada actividad (procedimiento) en cada etapa, quién es <strong>Accountable</strong> y quién es <strong>Responsible</strong>. RACI es una herramienta clásica de gestión de proyectos — Responsible, Accountable, Consulted, Informed — para responder "quién hace qué". Lo nuevo aquí es que la matriz no es un documento que la gente lee; es <strong>datos generados y validados</strong>.</p>
+  <div class="code-block">
+<pre><code># templates/co-deck/governance/raci.yaml (extracto)
+schema_version: '1.0'
+variant: co-deck
+generated_from: procedures/
+rows:
+  - stage: S2
+    activity: procedure.co-deck.deck-build-and-export
+    accountable: version
+    responsible:
+      - html-build
+      - measure
+      - pdf-export</code></pre>
+<button type="button" class="copy-btn">Copiar</button>
+</div>
+  <p><code>generate-raci.ts</code> deriva la matriz del <code>owner_agent</code> de cada procedimiento y de los datos de etapa. Fiel a los principios del workspace, no fabrica valores sin evidencia: Consulted e Informed están deliberadamente vacíos hoy porque no existen datos de origen — una brecha documentada para una pasada humana posterior, no un agujero que la máquina tapó. <code>validate-raci.ts</code> verifica el resultado de forma fail-closed, incluyendo si cada clave de rol declarada se resuelve a un archivo de agente real o al registro de roles humanos (DEG-R-04).</p>
+  <div class="note">ADR-0084 añade encima un <strong>modelo de actores</strong> como extensión opcional. Si cada clave de rol es humana o de agente (<code>actor_type: human|agent</code>) no se escribe a mano — el generador la <strong>deriva</strong> del registro <code>governance/_human-roles.yaml</code> y de la existencia de archivos de agente. Una regla complementaria (DEG-R-06) dice que una actividad cuya clave accountable sea de tipo humano debe tener una compuerta de decisión correspondiente — un punto de control humano debe declararse para cumplirse.</div>
+
+  <h2 id="s4">Execution — artefactos y compuertas de decisión</h2>
+  <p>El tercer grupo responde "qué sale, y qué debe aprobar". Dos piezas. Una es el <strong>modelo de artefactos</strong>: <code>procedures/_output-types.yaml</code>, la lista cerrada de tipos de salida que una variante puede producir, elevada al esquema 1.1 para que cada tipo registre qué procedimiento lo produce realmente (<code>owner_agent</code>, <code>description</code>). La otra es la <strong>compuerta de decisión</strong>: <code>decisions/gates.yaml</code> declara puntos de veredicto go/no-go en el flujo de trabajo.</p>
+  <div class="code-block">
+<pre><code># templates/co-deck/decisions/gates.yaml (extracto)
+schema_version: "1.0"
+variant: co-deck
+gates:
+  - id: DG-DECK-01
+    title: "Layout gate passes with zero violations before export."
+    stage: S2
+    decider_agent: version
+    inputs:
+      - pdf_deck
+    outcomes:
+      - proceed
+      - rework
+    record_kind: DEC</code></pre>
+<button type="button" class="copy-btn">Copiar</button>
+</div>
+  <p>Es fácil confundirla con los Decision Records (<code>DEC-*.md</code>) de la Referencia B. La relación: una <strong>compuerta es un punto de veredicto dentro del procedimiento</strong> (una regla declarada como "la verificación de diseño debe aprobarse antes de exportar"), mientras que un <strong>registro de decisión es el acta de un veredicto realmente emitido</strong> ("2026-09-20 veredicto: proceed"). <code>record_kind: DEC</code> es el puente entre ambos mundos — los veredictos producidos en compuertas dejan rastro como registros de decisión. Con esta migración, el campo en prosa <code>quality_gates</code> se eliminó por completo de los procedimientos de las nueve plantillas governed: los criterios de calidad dejaron de ser frases dispersas y se convirtieron en datos con nombre, decisor, entradas y resultados.</p>
+
+  <h2 id="s5">Graph — el Domain Execution Graph</h2>
+  <p>El cuarto grupo es la capa de relaciones. El grafo de relaciones de habilidades (<code>docs/skill-graph.json</code>) que conociste en la Referencia C es una proyección regenerada desde los archivos fuente en cada <code>/sync</code> — nunca un almacén primario. El Domain Execution Graph es un <strong>perfil de vocabulario</strong> superpuesto: el grafo gana un marcador <code>graph_profile: "deg/v1"</code> más nuevos tipos de nodos y aristas.</p>
+  <ul>
+    <li>Nodos <code>stage</code> con aristas <code>in_stage</code>·<code>stage_follows</code> — qué actividad pertenece a qué etapa, y el orden de las etapas</li>
+    <li><code>step_uses_skill</code>·<code>step_by_agent</code>·<code>produces</code> — qué habilidad usa un paso de procedimiento, quién lo ejecuta, qué produce (ya presente desde ADR-0060 Amendment 5)</li>
+    <li><code>accountable_for</code>·<code>consulted_on</code>·<code>informed_of</code> — aristas de rendición de cuentas derivadas de RACI</li>
+    <li>Nodos <code>decision_gate</code> con <code>gated_by</code>·<code>decides_on</code> — qué actividad espera el veredicto de qué compuerta</li>
+  </ul>
+  <p>La clave: datos que antes vivían en cuatro grupos separados se convierten en <strong>conocimiento ejecutable conectado</strong> en un solo grafo. "Esta actividad está en S2, la ejecuta html-build, usa la habilidad X, produce pdf_deck y debe pasar la compuerta DG-DECK-01" se vuelve respondible con una sola consulta al grafo. Los principios de la Referencia C — regenerado desde la fuente, consultivo — se heredan sin cambios. ADR-0084 añade encima un <strong>registro de deltas del grafo</strong>: registrar el diff estructural del grafo en cada /sync produce una traza cronológica de cómo evolucionó el propio modelo operativo.</p>
+
+  <h2 id="s6">Extensiones — modelo de actores · backporting de evidencia · registro de deltas</h2>
+  <p>ADR-0083 dejó candidatos a extensión como el modelo de actores, un modelo de evidencia más rico y el bucle de evolución SkillHone en estado "con nombre, sin diseño" (<em>named, not designed</em>). El ADR-0084 posterior implementó el modelo de actores y añadió dos rutas más: el backporting de evidencia y el registro de deltas del grafo.</p>
+  <ul>
+    <li><strong>Modelo de actores</strong> — la derivación de <code>actor_type</code> de la sección s3. Humano o agente se resuelve desde el registro y la existencia de archivos, nunca se registra a mano.</li>
+    <li><strong>Backporting de evidencia</strong> — un escáner de solo lectura (<code>evidence-backport-scan.ts</code>) que encuentra evidencia acumulada en proyectos (L3) con valor para devolver a las plantillas (L2). Esto añade "evidencia" como superficie nombrada de la revisión de backport selectiva del pipeline project-resync.</li>
+    <li><strong>Registro de deltas del grafo</strong> — el historial de cambios del grafo descrito en s5.</li>
+  </ul>
+  <p>Las extensiones restantes — un modelo de evidencia más rico y el bucle de evolución SkillHone — siguen sin diseñar hasta que datos reales demuestren la necesidad. "No construir por adelantado" es el mismo principio que la historia del roadmap del Capítulo 8.</p>
+
+  <h2 id="s7">En la práctica — validación y nuevas variantes</h2>
+  <p>Tocarás esta estructura en dos situaciones: inspeccionar o validar el modelo operativo de una plantilla governed existente, y promover una nueva variante construida en el Capítulo 11. Una plantilla oficial promovida ahora registra su estado de etapas/RACI/compuertas como un grado. Los comandos de validación, recopilados:</p>
+  <div class="code-block">
+<pre><code># Ejecutar desde la raíz del workspace
+bun scripts/validate-process.ts    # validación del eje de etapas (incl. DEG-P-01)
+bun scripts/validate-raci.ts       # validación de matriz RACI + modelo de actores (familia DEG-R)
+bun scripts/validate-procedures.ts # validación del esquema de procedimientos (ADR-0063, existente)
+bun scripts/verify-skill-graph.ts  # consistencia de regeneración del grafo (ADR-0060, existente)</code></pre>
+<button type="button" class="copy-btn">Copiar</button>
+</div>
+  <p>El sistema de grados, resumido:</p>
+  <table>
+    <thead><tr><th>Grado</th><th>Significado</th><th>Plantillas</th></tr></thead>
+    <tbody>
+      <tr><td><strong>governed</strong></td><td>Existe un eje de etapas genuinamente distinto de la fase, con RACI y compuertas en forma de datos</td><td>co-abap, co-consult, co-deck, co-design, co-export, co-game, co-hr, co-price, co-security (9)</td></tr>
+      <tr><td><strong>core</strong></td><td>Procedimientos, habilidades y grafo están en su lugar; el eje de etapas espera redacción humana (bootstrap mecánico imposible — no existe agrupación distinta)</td><td>co-develop, co-news, co-safety, co-work (4)</td></tr>
+    </tbody>
+  </table>
+  <p>"governed" no es superior a "core" — core es un marcador de estado honesto que significa "esperando redacción humana porque la máquina no pudo producir un eje distinto". El Capítulo 14 es el ejercicio final de este manual: diseñar tu propia tarea recurrente de principio a fin, desde la definición del problema hasta la verificación y la retrospectiva. El instinto que te pide practicar — fijar de antemano el orden (stage), la rendición de cuentas (RACI) y los veredictos (gate) — es exactamente el instinto del Domain Operating Model. Aplica a tu propio diseño lo que las plantillas te enseñaron.</p>
+
+  <div class="chapter-nav">
+    <a href="../variant-advanced/12_VariantAdvanced_Examples_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Capítulo 12 · Ejemplo de Ejercicio de Promoción de Nueva Variante</div></a>
+    <a href="../capstone/14_Capstone_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 14 · Ejercicio Integrador</div></a>
+  </div>
+   <footer>
+    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · Material educativo en español<br>
+    Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    El contenido de este manual está bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual 4.0 Internacional)</a>.
+  </footer>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

@@ -73,6 +73,7 @@
     <li><code>rules_applied</code> 形式(<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>)と <code>skills_used</code> の実在スキル解決</li>
   </ol>
   <p>この検証は <strong>fail-closed</strong> だ — errorレベルの問題が一つでもあれば exit 1。「警告だけ出るソフト検査」とは違い、壊れた決定記録のまま同期は進まない。</p>
+  <p>なお2026年9月から、governed等級のvariantテンプレートには判断ゲート(<code>decisions/gates.yaml</code>)が導入されている。ゲートは「どの地点でどの判定を通過すべきか」というルール宣言であり、判断記録は実際に下された判定の記録だ — ゲートで出た判定は<code>record_kind: DEC</code>として判断記録に残る。詳細は<a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html">第13章・Domain Operating Model</a>を参照。</p>
 
   <h2 id="c4-registry">スペックレジストリとE1–E5免除</h2>
   <p>決定の前段には設計(spec)がある。ADR-0055の <strong>スペックレジストリ</strong>(<code>docs/specs/registry.json</code>)は設計文書を id・タイトル・ファイル・状態(<code>proposed | approved | implemented</code>)・最終更新日で追跡する。</p>
@@ -128,8 +129,8 @@
     <a href="A_Governance_Enforcement_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">参照A · ガバナンス強制層</div></a>
     <a href="../glossary/00_Glossary_ja.html" class="next"><div class="dir">参考 →</div><div class="ttl">用語集</div></a>
   </div>
-  <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 基準 · 日本語教材<br>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

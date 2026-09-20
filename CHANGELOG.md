@@ -10,10 +10,12 @@ All notable changes to this handbook will be documented in this file.
 - Course overview's both-days total disagreed with the sum of its own blocks (said 11 h 15 m); all totals are now computed from the tables.
 
 ### Changed
+- **Day-2 teaching sequence reordered into chapter order** (was 8 → 10 → 9 → common → 7 → 11…, which read as an editing accident): now 복습 → **Ch. 7 → Ch. 8 §1/§2 → Ch. 9 → Ch. 10 → 공통 참고 → Ch. 11 → 12 → 13 → 14**. The unnumbered Common Reference (tool comparison, includes the exercise-tool selection guide) sits directly before the hands-on track as a bridge. Applied consistently to the lecture-guide Day-2 table, the chapter-by-chapter instructor notes (which had drifted: Ch. 6 after Ch. 10, Ch. 9 after Ch. 11), the course-overview Day-2 blocks, and its topics table — all 4 languages.
 - **Time rebalance** for the tightest blocks (all 4 languages; lecture guide and course overview kept in lockstep):
   - Day 1: Ch. 4 hands-on lab 80 → **90 min** (five scenarios across tool groups) — day total 5 h 35 → **5 h 45 min**.
   - Day 2: Ch. 9 lecture 15 → **20 min**; Ch. 11 hands-on (D-1) 40 → **50 min**; Ch. 13 lecture 20 → **25 min**; Ch. 14 capstone 60 → **70 min** — day total ≈6 h → **6 h 25 min**.
   - Break notes and the both-days total (now **12 h 10 min** excl. breaks) recomputed; the Day-2 note gained an explicit compression lever (Ch. 9/13 back to 15 min each → ≈6 h 15 min) for venues without a full day.
+- **Two more stale instructor-note strings fixed**: the Ch. 10 note's "5 classifications" → 8 (ko/en/ja/es), and the Ch. 11 note's "exercise (D-1) 40 min" → 50 min to match the rebalanced schedule.
 
 ## [2026-09-20] — Ch.13 Domain Operating Model: diagrams and readability pass
 

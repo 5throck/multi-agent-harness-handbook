@@ -2,6 +2,18 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-20] — Ch.13 Domain Operating Model: diagrams and readability pass
+
+### Added
+- **Ch.13 Domain Operating Model** (`docs/domain-model/13_DomainOperatingModel_Chapter.html`, ko/en/es/ja) — 3 new inline SVG diagrams matching the visual style already used elsewhere in the handbook (`diagram-frame` / `fig-caption`), addressing a chapter that had zero visuals compared to other chapters:
+  - **그림/Figure 13-1** — Process·Governance·Execution 세 그룹과 Graph의 관계도
+  - **그림/Figure 13-2** — PM `phase` 축(공통) vs 도메인 `stage` 축(variant별 상이) 대비도
+  - **그림/Figure 13-3** — Decision Gate(규칙 선언) ↔ Decision Record(실제 판정) 관계도
+- An assembly-line analogy paragraph in §1, matching the more narrative teaching style used in other chapters (e.g. Ch.2's cooking analogy).
+
+### Fixed
+- Figure 13-1 connector lines: Process/Governance → Graph arrows now originate from each box's side edge (vertical mid-point) rather than an off-center bottom point, for a balanced, symmetric layout.
+
 ## [2026-09-20] — check-authoring §11 mid-word-strong cleanup
 
 ### Fixed

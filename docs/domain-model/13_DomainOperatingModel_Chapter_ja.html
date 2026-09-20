@@ -79,6 +79,51 @@
   </table>
   <div class="note">エージェント(Agent)は4グループに含まれない。エージェントはRACIの中の<strong>アクター参照</strong>である。各役割の枠はエージェントキーを保持するだけで、実行主体が人間かAIかを構造が強制することはない(この区別は後述のアクターモデルがオプトインで扱う)。</div>
 
+  <p>たとえるなら組立ライン(assembly line)に近い。<strong>Process</strong>は工程がどの順序で並ぶかを決めるライン配置図であり、<strong>Governance</strong>は各工程の前に付く担当者の名札であり、<strong>Execution</strong>は各工程が作り出す部品と、次のラインへ進む前に通過しなければならない品質検査台だ。そして<strong>Graph</strong>はこのライン全体を見下ろし、「今どこに部品があり、誰が作り、どの検査を通過したか」を一目で答える管制塔である。下の図は、この4つのグループが一つのグラフへどう集約されるかを示している。</p>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="Domain Operating Modelの4つの構成グループとGraphへの接続を示す図" viewBox="0 0 660 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="deg-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Process (top-left) -->
+        <rect x="20" y="20" width="180" height="86" rx="10" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)" stroke-width="1.5"/>
+        <text x="110" y="44" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Process</text>
+        <text x="110" y="64" text-anchor="middle" font-size="10" fill="var(--text)">stages.yaml</text>
+        <text x="110" y="80" text-anchor="middle" font-size="10" fill="var(--text-dim)">Stage → Activity → Skill</text>
+        <text x="110" y="98" text-anchor="middle" font-size="9" fill="var(--text-dim)">業務の順序</text>
+
+        <!-- Governance (top-right) -->
+        <rect x="460" y="20" width="180" height="86" rx="10" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.5"/>
+        <text x="550" y="44" text-anchor="middle" font-size="12" fill="var(--badge-green-fg)" font-weight="700">Governance</text>
+        <text x="550" y="64" text-anchor="middle" font-size="10" fill="var(--text)">raci.yaml</text>
+        <text x="550" y="80" text-anchor="middle" font-size="10" fill="var(--text-dim)">Accountable / Responsible</text>
+        <text x="550" y="98" text-anchor="middle" font-size="9" fill="var(--text-dim)">責任体系</text>
+
+        <!-- Execution (bottom-center) -->
+        <rect x="240" y="174" width="180" height="86" rx="10" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.5"/>
+        <text x="330" y="198" text-anchor="middle" font-size="12" fill="var(--accent-purple)" font-weight="700">Execution</text>
+        <text x="330" y="218" text-anchor="middle" font-size="10" fill="var(--text)">_output-types.yaml · gates.yaml</text>
+        <text x="330" y="234" text-anchor="middle" font-size="10" fill="var(--text-dim)">Artifact / Decision Gate</text>
+        <text x="330" y="252" text-anchor="middle" font-size="9" fill="var(--text-dim)">成果物と判定</text>
+
+        <!-- Graph (center hub) -->
+        <rect x="255" y="80" width="150" height="60" rx="30" fill="var(--bg)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="330" y="106" text-anchor="middle" font-size="13" fill="var(--accent)" font-weight="700">Graph</text>
+        <text x="330" y="124" text-anchor="middle" font-size="9" fill="var(--text-dim)">skill-graph.json (deg/v1)</text>
+
+        <!-- arrows into graph -->
+        <line x1="200" y1="63" x2="262" y2="92" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#deg-arrow)"/>
+        <line x1="460" y1="63" x2="398" y2="92" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#deg-arrow)"/>
+        <line x1="330" y1="174" x2="330" y2="140" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#deg-arrow)"/>
+      </g>
+    </svg>
+  <p class="fig-caption">図13-1. Process・Governance・Executionの3グループのデータがGraphで一つのつながった実行知識に集約される。</p>
+  </div>
+
   <p>階層構造も明確だ。AI Workspaceがスキーマと契約を所有し(L0・L1層)、Domain Operating Modelがその上で各ドメインの運用原理を定義し、Template(<code>templates/co-*/</code>)がちょうど一つのドメインをパッケージし、Project(L3)がそれを実際の業務にインスタンス化する。第5章で見たL0→L1→L2→L3階層とドメイン運用モデルがどう重なり合うかを示すものである。</p>
 
   <h2 id="s2">Process — ステージ軸</h2>
@@ -102,6 +147,41 @@ stages:
     owner_agent: pdf-export</code></pre>
 <button type="button" class="copy-btn">コピー</button>
 </div>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="PMのphase軸とドメインのstage軸が異なる軸であることを示す図" viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="20" y="24" font-size="11" fill="var(--text-dim)" font-weight="700">PMのphase軸 — 全variant共通、実行順序</text>
+        <rect x="20" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="65" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 0</text>
+        <rect x="115" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="160" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 1</text>
+        <rect x="210" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="255" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 2</text>
+        <rect x="305" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="350" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 3</text>
+        <rect x="400" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="445" y="58" text-anchor="middle" font-size="11" fill="var(--text)">…</text>
+        <rect x="495" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="540" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 6</text>
+        <text x="20" y="97" font-size="10" fill="var(--text-dim)">設計承認 → 実装 → 検証・QA (PMが作業を実行する順序、第8章で扱った軸)</text>
+
+        <line x1="20" y1="120" x2="600" y2="120" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="330" y="116" text-anchor="middle" font-size="10" fill="var(--accent)">異なる軸 (DEG-P-01: 1:1対応なら違反)</text>
+
+        <text x="20" y="150" font-size="11" fill="var(--accent)" font-weight="700">ドメインのstage軸 — variantごとに異なる、業務フロー</text>
+        <rect x="20" y="160" width="170" height="40" rx="6" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)"/>
+        <text x="105" y="184" text-anchor="middle" font-size="11" fill="var(--accent-dark)" font-weight="600">S1 · Deck Source Research</text>
+        <rect x="200" y="160" width="200" height="40" rx="6" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)"/>
+        <text x="300" y="184" text-anchor="middle" font-size="11" fill="var(--accent-dark)" font-weight="600">S2 · Version Export Control</text>
+        <rect x="410" y="160" width="190" height="40" rx="6" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)"/>
+        <text x="505" y="184" text-anchor="middle" font-size="11" fill="var(--accent-dark)" font-weight="600">S3 · Publish and Versioning</text>
+        <text x="20" y="215" font-size="10" fill="var(--text-dim)">co-deck の例 — 境界はphaseときれいには噛み合わない</text>
+      </g>
+    </svg>
+  <p class="fig-caption">図13-2. phaseは全variant共通のPM実行順序、stageはvariantごとに異なるドメイン業務フロー — 二つの軸は互いに独立している。</p>
+  </div>
+
   <h3>機械が先に作り、人が仕上げる</h3>
   <p>ステージ軸は<code>bootstrap-stages.ts</code>が、手順間の<strong>成果物の受け渡しフロー</strong>(どの手順の成果物が次の手順の入力になるか)を分析してクラスタリングする方式で作られた。単にphaseごとにまとめるのではなく、実際に成果物の手が変わる地点を基準にする。ただし機械が作った一次結果は、<code>purpose</code>や開始・終了条件が<code>PENDING_REVIEW</code>のまま残る。構造は自動で、意味は人間が — それがワークスペースの一貫した分業方式だ。</p>
   <p>ここには最低限の適格条件もある。<strong>DEG-P-01</strong>不変式は「ステージがphaseとは異なるものとして区別できること」を要求する。手順数とphase数とステージ数がすべて同じで1:1対応なら、それは新しい軸ではなくphaseの名前を変えただけだ。この検査を通過した9つのvariant(co-abap、co-consult、co-deck、co-design、co-export、co-game、co-hr、co-price、co-security)は<code>governed</code>等級を与えられ、通過できなかった4つ(co-develop、co-news、co-safety、co-work)は人がステージを直接執筆するまで<code>core</code>にとどまる。強制ではなく等級で成熟度を表す方式だ。</p>
@@ -145,7 +225,36 @@ gates:
     record_kind: DEC</code></pre>
 <button type="button" class="copy-btn">コピー</button>
 </div>
-  <p>参考Bで扱ったDecision Record(<code>DEC-*.md</code>)と混同しやすい。両者の関係はこうだ。<strong>ゲートは手順の中の判断地点</strong>である(「出力前にレイアウト検査を通過すること」というルール宣言)。<strong>判断記録は実際に下された判断の記録</strong>である(「2026-09-20 判定: proceed」)。<code>record_kind: DEC</code>が二つの世界をつなぐ橋で、ゲートで出た判断は判断記録として残る。この移行により、9つのgovernedテンプレートの手順から散文的な<code>quality_gates</code>フィールドが完全に削除された。品質基準が文として散らばる代わりに、名前・判断者・入力・判定結果を持つデータになったのだ。</p>
+  <p>参考Bで扱ったDecision Record(<code>DEC-*.md</code>)と混同しやすい。両者の関係はこうだ。<strong>ゲートは手順の中の判断地点</strong>である(「出力前にレイアウト検査を通過すること」というルール宣言)。<strong>判断記録は実際に下された判断の記録</strong>である(「2026-09-20 判定: proceed」)。<code>record_kind: DEC</code>が二つの世界をつなぐ橋で、ゲートで出た判断は判断記録として残る。</p>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="Decision GateとDecision Recordの関係を示す図" viewBox="0 0 660 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="deg-arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="20" y="20" width="270" height="100" rx="10" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.5"/>
+        <text x="155" y="44" text-anchor="middle" font-size="12" fill="var(--accent-purple)" font-weight="700">Decision Gate</text>
+        <text x="155" y="62" text-anchor="middle" font-size="10" font-family="ui-monospace,Consolas,monospace" fill="var(--text)">decisions/gates.yaml</text>
+        <text x="155" y="82" text-anchor="middle" font-size="10" fill="var(--text-dim)">ルール宣言 (事前)</text>
+        <text x="155" y="100" text-anchor="middle" font-size="9" fill="var(--text-dim)">"出力前にレイアウト検査を通過すること"</text>
+
+        <line x1="290" y1="70" x2="365" y2="70" stroke="var(--accent)" stroke-width="1.8" marker-end="url(#deg-arrow2)"/>
+        <text x="327" y="62" text-anchor="middle" font-size="9" fill="var(--accent)">record_kind: DEC</text>
+
+        <rect x="370" y="20" width="270" height="100" rx="10" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)" stroke-width="1.5"/>
+        <text x="505" y="44" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Decision Record</text>
+        <text x="505" y="62" text-anchor="middle" font-size="10" font-family="ui-monospace,Consolas,monospace" fill="var(--text)">DEC-*.md (参考B)</text>
+        <text x="505" y="82" text-anchor="middle" font-size="10" fill="var(--text-dim)">実際に下された判断 (事後)</text>
+        <text x="505" y="100" text-anchor="middle" font-size="9" fill="var(--text-dim)">"2026-09-20 判定: proceed"</text>
+      </g>
+    </svg>
+  <p class="fig-caption">図13-3. ゲートは通過すべきルールの宣言であり、判断記録は実際に下されたその判断の痕跡である。</p>
+  </div>
+
+  <p>この移行により、9つのgovernedテンプレートの手順から散文的な<code>quality_gates</code>フィールドが完全に削除された。品質基準が文として散らばる代わりに、名前・判断者・入力・判定結果を持つデータになったのだ。</p>
 
   <h2 id="s5">Graph — Domain Execution Graph</h2>
   <p>第4のグループは関係層だ。参考Cで学んだスキル関係グラフ(<code>docs/skill-graph.json</code>)は毎回の<code>/sync</code>でソースファイルから再生成される投影(projection)であり、それ自体は一次ストアではない。Domain Execution Graphはこのグラフの上に重ねる<strong>語彙プロファイル</strong>だ — グラフに<code>graph_profile: "deg/v1"</code>マーカーが付き、新しいノードとエッジ型が追加される。</p>

@@ -79,6 +79,51 @@
   </table>
   <div class="note">에이전트(Agent)는 4그룹에 포함되지 않는다. 에이전트는 RACI 안의 <strong>행위자 참조</strong>다. 각 역할 칸은 에이전트 키를 담을 뿐, 실행 주체가 사람인지 AI인지는 구조가 강제하지 않는다(이 구분은 뒤에서 다루는 액터 모델이 옵트인으로 다룬다).</div>
 
+  <p>비유하면 조립 라인에 가깝다. <strong>Process</strong>는 공정이 어떤 순서로 늘어서 있는지 정한 라인 배치도이고, <strong>Governance</strong>는 각 공정 앞에 붙은 담당자 명패이며, <strong>Execution</strong>은 각 공정이 만들어내는 부품과 다음 라인으로 넘어가기 전 통과해야 하는 품질 검사대다. 그리고 <strong>Graph</strong>는 이 라인 전체를 내려다보며 "지금 부품이 어디에 있고, 누가 만들었고, 어떤 검사를 거쳤는지"를 한눈에 답해주는 관제탑이다. 아래 그림은 이 네 그룹이 어떻게 하나의 그래프로 모이는지 보여준다.</p>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="Domain Operating Model의 4개 구성 그룹과 Graph로의 연결 다이어그램" viewBox="0 0 660 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="deg-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Process (top-left) -->
+        <rect x="20" y="20" width="180" height="86" rx="10" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)" stroke-width="1.5"/>
+        <text x="110" y="44" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Process</text>
+        <text x="110" y="64" text-anchor="middle" font-size="10" fill="var(--text)">stages.yaml</text>
+        <text x="110" y="80" text-anchor="middle" font-size="10" fill="var(--text-dim)">Stage → Activity → Skill</text>
+        <text x="110" y="98" text-anchor="middle" font-size="9" fill="var(--text-dim)">업무 순서</text>
+
+        <!-- Governance (top-right) -->
+        <rect x="460" y="20" width="180" height="86" rx="10" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.5"/>
+        <text x="550" y="44" text-anchor="middle" font-size="12" fill="var(--badge-green-fg)" font-weight="700">Governance</text>
+        <text x="550" y="64" text-anchor="middle" font-size="10" fill="var(--text)">raci.yaml</text>
+        <text x="550" y="80" text-anchor="middle" font-size="10" fill="var(--text-dim)">Accountable / Responsible</text>
+        <text x="550" y="98" text-anchor="middle" font-size="9" fill="var(--text-dim)">책임 체계</text>
+
+        <!-- Execution (bottom-center) -->
+        <rect x="240" y="174" width="180" height="86" rx="10" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.5"/>
+        <text x="330" y="198" text-anchor="middle" font-size="12" fill="var(--accent-purple)" font-weight="700">Execution</text>
+        <text x="330" y="218" text-anchor="middle" font-size="10" fill="var(--text)">_output-types.yaml · gates.yaml</text>
+        <text x="330" y="234" text-anchor="middle" font-size="10" fill="var(--text-dim)">Artifact / Decision Gate</text>
+        <text x="330" y="252" text-anchor="middle" font-size="9" fill="var(--text-dim)">산출물과 판정</text>
+
+        <!-- Graph (center hub) -->
+        <rect x="255" y="80" width="150" height="60" rx="30" fill="var(--bg)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="330" y="106" text-anchor="middle" font-size="13" fill="var(--accent)" font-weight="700">Graph</text>
+        <text x="330" y="124" text-anchor="middle" font-size="9" fill="var(--text-dim)">skill-graph.json (deg/v1)</text>
+
+        <!-- arrows into graph -->
+        <line x1="200" y1="63" x2="262" y2="92" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#deg-arrow)"/>
+        <line x1="460" y1="63" x2="398" y2="92" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#deg-arrow)"/>
+        <line x1="330" y1="174" x2="330" y2="140" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#deg-arrow)"/>
+      </g>
+    </svg>
+  <p class="fig-caption">그림 13-1. Process·Governance·Execution 세 그룹의 데이터가 Graph에서 하나의 연결된 실행 지식으로 모인다.</p>
+  </div>
+
   <p>계층 구조도 명확하다. AI Workspace가 스키마와 계약을 소유하고(레이어 L0·L1), Domain Operating Model이 그 위에서 각 도메인의 운영 원리를 정의하며, Template(<code>templates/co-*/</code>)이 정확히 하나의 도메인을 패키징하고, Project(L3)가 그것을 실제 업무에 인스턴스화한다. 5장에서 본 L0→L1→L2→L3 계층과 도메인 운영 모델이 어떻게 포개지는지를 보여주는 것이다.</p>
 
   <h2 id="s2">Process — 스테이지 축</h2>
@@ -102,6 +147,41 @@ stages:
     owner_agent: pdf-export</code></pre>
 <button type="button" class="copy-btn">복사</button>
 </div>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="PM phase 축과 도메인 stage 축이 서로 다른 축임을 보여주는 다이어그램" viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="20" y="24" font-size="11" fill="var(--text-dim)" font-weight="700">PM phase 축 — 모든 variant에 공통, 실행 순서</text>
+        <rect x="20" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="65" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 0</text>
+        <rect x="115" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="160" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 1</text>
+        <rect x="210" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="255" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 2</text>
+        <rect x="305" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="350" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 3</text>
+        <rect x="400" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="445" y="58" text-anchor="middle" font-size="11" fill="var(--text)">…</text>
+        <rect x="495" y="34" width="90" height="40" rx="6" fill="var(--bg2)" stroke="var(--border)"/>
+        <text x="540" y="58" text-anchor="middle" font-size="11" fill="var(--text)">phase 6</text>
+        <text x="20" y="97" font-size="10" fill="var(--text-dim)">설계 승인 → 구현 → 검증·QA (PM이 작업을 실행하는 순서, 8장에서 다룬 축)</text>
+
+        <line x1="20" y1="120" x2="600" y2="120" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="330" y="116" text-anchor="middle" font-size="10" fill="var(--accent)">서로 다른 축 (DEG-P-01: 1:1 대응이면 위반)</text>
+
+        <text x="20" y="150" font-size="11" fill="var(--accent)" font-weight="700">도메인 stage 축 — variant마다 다름, 업무 흐름</text>
+        <rect x="20" y="160" width="170" height="40" rx="6" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)"/>
+        <text x="105" y="184" text-anchor="middle" font-size="11" fill="var(--accent-dark)" font-weight="600">S1 · Deck Source Research</text>
+        <rect x="200" y="160" width="200" height="40" rx="6" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)"/>
+        <text x="300" y="184" text-anchor="middle" font-size="11" fill="var(--accent-dark)" font-weight="600">S2 · Version Export Control</text>
+        <rect x="410" y="160" width="190" height="40" rx="6" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)"/>
+        <text x="505" y="184" text-anchor="middle" font-size="11" fill="var(--accent-dark)" font-weight="600">S3 · Publish and Versioning</text>
+        <text x="20" y="215" font-size="10" fill="var(--text-dim)">co-deck 예시 — 경계가 phase와 나란히 맞물리지 않는다</text>
+      </g>
+    </svg>
+  <p class="fig-caption">그림 13-2. phase는 모든 variant에 공통인 PM 실행 순서, stage는 variant마다 다른 도메인 업무 흐름 — 두 축은 서로 독립적이다.</p>
+  </div>
+
   <h3>기계가 먼저 만들고, 사람이 다듬는다</h3>
   <p>스테이지 축은 <code>bootstrap-stages.ts</code>가 절차 간 <strong>아티팩트 인계 흐름</strong>(어떤 절차의 산출물이 다음 절차의 입력이 되는지)을 분석해 자동으로 클러스터링하는 방식으로 만들어졌다. 단순히 phase별로 묶는 게 아니라 실제 산출물의 손이 바뀌는 지점을 기준으로 삼는다. 다만 기계가 만든 1차 결과는 <code>purpose</code>나 진입·종료 조건이 <code>PENDING_REVIEW</code>로 남아 있다. 구조는 자동으로, 의미는 사람이 — 워크스페이스의 일관된 분업 방식이다.</p>
   <p>여기에는 최소한의 자격 조건도 있다. <strong>DEG-P-01</strong> 불변식은 "스테이지가 phase와 다르게 구별되어야 한다"고 요구한다. 절차 수와 phase 수와 스테이지 수가 모두 같아 1:1 대응이라면, 그건 새로운 축이 아니라 phase의 이름을 바꾼 것에 불과하다. 이 검사를 통과한 9개 variant(co-abap, co-consult, co-deck, co-design, co-export, co-game, co-hr, co-price, co-security)는 <code>governed</code> 등급을 받았고, 통과하지 못한 4개(co-develop, co-news, co-safety, co-work)는 사람이 스테이지를 직접 작성할 때까지 <code>core</code>에 머문다. 강제가 아니라 등급으로 성숙도를 표현하는 방식이다.</p>
@@ -145,7 +225,36 @@ gates:
     record_kind: DEC</code></pre>
 <button type="button" class="copy-btn">복사</button>
 </div>
-  <p>참고 B에서 다룬 Decision Record(<code>DEC-*.md</code>)와 헷갈리기 쉽다. 둘의 관계는 이렇다. <strong>게이트는 절차 속의 판정 지점</strong>이다("출력 전에 레이아웃 검사를 통과해야 한다"라는 규칙 선언). <strong>결정 기록은 실제로 내려진 판정의 기록</strong>이다("2026-09-20 판정: proceed"). <code>record_kind: DEC</code>가 두 세계를 잇는 다리로, 게이트에서 나온 판정은 결정 기록으로 남는다. 이 마이그레이션으로 9개 governed 템플릿의 절차에서 서술형 <code>quality_gates</code> 필드가 완전히 제거됐다. 품질 기준이 문장으로 흩어져 있는 대신, 이름과 담당자·입력·판정 결과를 가진 데이터가 된 것이다.</p>
+  <p>참고 B에서 다룬 Decision Record(<code>DEC-*.md</code>)와 헷갈리기 쉽다. 둘의 관계는 이렇다. <strong>게이트는 절차 속의 판정 지점</strong>이다("출력 전에 레이아웃 검사를 통과해야 한다"라는 규칙 선언). <strong>결정 기록은 실제로 내려진 판정의 기록</strong>이다("2026-09-20 판정: proceed"). <code>record_kind: DEC</code>가 두 세계를 잇는 다리로, 게이트에서 나온 판정은 결정 기록으로 남는다.</p>
+
+  <div class="diagram-frame">
+    <svg role="img" aria-label="Decision Gate와 Decision Record의 관계 다이어그램" viewBox="0 0 660 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="deg-arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <rect x="20" y="20" width="270" height="100" rx="10" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.5"/>
+        <text x="155" y="44" text-anchor="middle" font-size="12" fill="var(--accent-purple)" font-weight="700">Decision Gate</text>
+        <text x="155" y="62" text-anchor="middle" font-size="10" font-family="ui-monospace,Consolas,monospace" fill="var(--text)">decisions/gates.yaml</text>
+        <text x="155" y="82" text-anchor="middle" font-size="10" fill="var(--text-dim)">규칙 선언 (사전)</text>
+        <text x="155" y="100" text-anchor="middle" font-size="9" fill="var(--text-dim)">"출력 전 레이아웃 검사를 통과해야 한다"</text>
+
+        <line x1="290" y1="70" x2="365" y2="70" stroke="var(--accent)" stroke-width="1.8" marker-end="url(#deg-arrow2)"/>
+        <text x="327" y="62" text-anchor="middle" font-size="9" fill="var(--accent)">record_kind: DEC</text>
+
+        <rect x="370" y="20" width="270" height="100" rx="10" fill="var(--badge-blue-bg)" stroke="var(--badge-blue-border)" stroke-width="1.5"/>
+        <text x="505" y="44" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">Decision Record</text>
+        <text x="505" y="62" text-anchor="middle" font-size="10" font-family="ui-monospace,Consolas,monospace" fill="var(--text)">DEC-*.md (참고 B)</text>
+        <text x="505" y="82" text-anchor="middle" font-size="10" fill="var(--text-dim)">실제 판정 기록 (사후)</text>
+        <text x="505" y="100" text-anchor="middle" font-size="9" fill="var(--text-dim)">"2026-09-20 판정: proceed"</text>
+      </g>
+    </svg>
+  <p class="fig-caption">그림 13-3. 게이트는 통과해야 할 규칙의 선언이고, 결정 기록은 실제로 내려진 그 판정의 흔적이다.</p>
+  </div>
+
+  <p>이 마이그레이션으로 9개 governed 템플릿의 절차에서 서술형 <code>quality_gates</code> 필드가 완전히 제거됐다. 품질 기준이 문장으로 흩어져 있는 대신, 이름과 담당자·입력·판정 결과를 가진 데이터가 된 것이다.</p>
 
   <h2 id="s5">Graph — Domain Execution Graph</h2>
   <p>네 번째 그룹은 관계층이다. 참고 C에서 배운 스킬 관계 그래프(<code>docs/skill-graph.json</code>)는 매 <code>/sync</code>마다 원천 파일에서 다시 생성되는 투영(projection)이며, 그 자체는 1차 저장소가 아니다. Domain Execution Graph는 이 그래프 위에 얹는 <strong>어휘 프로파일</strong>이다 — 그래프에 <code>graph_profile: "deg/v1"</code> 표식이 붙고, 새 노드와 엣지 유형이 추가된다.</p>

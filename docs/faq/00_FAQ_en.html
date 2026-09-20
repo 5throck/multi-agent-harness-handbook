@@ -116,7 +116,7 @@
 
   <div class="q">How much does running a multi-agent team cost in tokens?</div>
   <p class="faq-answer">Cost is determined by the number of agents × each agent's model tier × execution frequency. The model tiering (<code>tier: high/medium/low</code>) described in Chapter 5 is the key cost-control mechanism. For example, running all 10 agents of the co-consult variant on high can consume tens of thousands of tokens in a single session, but lowering the actual implementation roles to medium/low can cut costs by 40-60%. Claude Code's <code>/cost</code> command lets you check cumulative token usage for the current session in real time.</p>
-  <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §Templates and the 11 Variants</a></span>
+  <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §Templates and the 13 Variants</a></span>
 
   <div class="q">Agent responses suddenly become slow or time out.</div>
   <p class="faq-answer">When the context window fills up, model processing speed drops sharply. Claude Code lets you compress conversation length with the <code>/compact</code> command. Also, when running multiple agents in parallel, API requests can queue up and cause delays — in this case, switch to sequential execution or lower your WIP limit to reduce the number of concurrent runs.</p>
@@ -124,7 +124,7 @@
 
   <div class="q">Running a multi-agent loop or long workflow costs too many API tokens. How do I optimize it?</div>
   <p class="faq-answer">First, assign distinct **model tiers** per agent role. Use medium/low models for simple file writes or test execution, and reserve high-tier models for overall flow control or comprehensive design — this alone can cut costs by 40% or more. Second, keep the conversation context stable so prompt caching works — avoid changing the system prompt and maintain a continuous session. Third, set clear hard limits, such as <code>Max Turns</code>, so the conversation between the orchestrator and specialists doesn't spin indefinitely.</p>
-  <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §Templates and the 11 Variants</a></span>
+  <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §Templates and the 13 Variants</a></span>
 
   <h2 id="platform">Platform-Specific Issues</h2>
 

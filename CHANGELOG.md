@@ -2,6 +2,13 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-20] — Ch.8 Architecture Deep-Dive: graft Fleet Integration & Universal Design Gate
+
+### Added
+- **Ch.8 Architecture Deep-Dive** (`docs/intro/08_Intro_Advanced_Architecture.html`, ko/en/ja/es) — two new sections closing a content-drift gap against `ai-workspace-standards` upstream, inserted between "Platform Parity" and "Execution Plan Templates":
+  - **`graft — Repo Context Graph as a Multi-Platform Fleet Surface`** (`#graft-fleet-integration`) — what graft is, the per-host coverage gaps a 2026-09-12 fleet investigation found, and how **ADR-0076** closes them with a per-host MCP delivery matrix and policy-driven upgrade-engine delivery to the existing fleet.
+  - **`Universal Design Gate — Making the Spec Gate Uniform Across L0–L3`** (`#universal-design-gate`) — distinguishes **ADR-0068** ("Universal Design," a design-review-method extension above WCAG/ADR-0065) from **ADR-0074** ("Universal Design Gate," the decision making the existing spec-check sync gate apply uniformly across every tier L0–L3), cross-referencing the existing Design Gate (Row 0) content rather than duplicating it.
+
 ## [2026-09-20] — New Chapter 13: Domain Operating Model & Capstone Renumbered to Ch.14
 
 ### Added

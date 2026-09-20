@@ -97,6 +97,26 @@
     <dt>Grafo de Relaciones de Habilidades <span class="en">Skill Relationship Graph</span></dt>
     <dd>Una proyección legible por máquina de las relaciones entre habilidades, agentes, ADR y registros de decisión. Siempre se regenera a partir de fuentes de verdad (frontmatter de SKILL.md: <code>prerequisites</code>/<code>relates_to</code>, <code>required_skills</code> de los agentes, <code>variant.json</code>, etc.) y no es en sí mismo un almacén de datos primario (ADR-0060). Los resultados son <code>docs/skill-graph.json</code> y el <code>docs/skill-graph.md</code> legible por humanos. Todas las aristas de relación son consultivas (advisory) y nunca bloquean la ejecución de forma absoluta.
       <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#s2-skill-graph">Capítulo 8 §2 · Grafo de Relaciones de Habilidades</a></span></dd>
+
+    <dt>Modelo de Operación de Dominio <span class="en">Domain Operating Model</span></dt>
+    <dd>La estructura por la cual una plantilla de variante declara como datos el flujo de trabajo de su propio dominio (etapas), la rendición de cuentas (RACI) y los puntos de veredicto (compuertas de decisión). El nombre oficial siempre se escribe completo — las abreviaturas (DOM, AOM) están prohibidas por colisionar con otros términos. Se compone de cuatro grupos: Process, Governance, Execution, Graph (ADR-0083).
+      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html">Capítulo 13 · Domain Operating Model</a></span></dd>
+
+    <dt>Grafo de Ejecución de Dominio <span class="en">Domain Execution Graph</span></dt>
+    <dd>Un perfil de vocabulario superpuesto al grafo de relaciones de habilidades (<code>graph_profile: "deg/v1"</code>). Conecta los datos de etapas, RACI y compuertas mediante aristas como <code>in_stage</code>, <code>accountable_for</code> y <code>gated_by</code>, convirtiendo conocimiento operativo disperso en algo respondible con una sola consulta al grafo (ADR-0083).
+      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s5">Capítulo 13 §5 · Graph</a></span></dd>
+
+    <dt>Eje de Etapas <span class="en">Stage Axis</span></dt>
+    <dd>La declaración de las etapas por las que fluye el trabajo de un dominio (<code>process/stages.yaml</code>). Un eje distinto del eje de ejecución de PM <code>phase</code> (0–6), derivado del flujo de entrega de artefactos entre procedimientos. Si no puede distinguirse de la fase (DEG-P-01), se requiere redacción humana en lugar de un bootstrap mecánico.
+      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s2">Capítulo 13 §2 · Process</a></span></dd>
+
+    <dt>Matriz RACI <span class="en">RACI Matrix</span></dt>
+    <dd>Una tabla de rendición de cuentas que declara Responsible, Accountable, Consulted e Informed para cada actividad en cada etapa. No es un documento que la gente lee sino datos que <code>generate-raci.ts</code> deriva de los procedimientos y que <code>validate-raci.ts</code> valida (<code>governance/raci.yaml</code>).
+      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s3">Capítulo 13 §3 · Governance</a></span></dd>
+
+    <dt>Compuerta de Decisión <span class="en">Decision Gate</span></dt>
+    <dd>Un punto de control go/no-go declarado dentro de un flujo de trabajo (<code>decisions/gates.yaml</code>). Se corresponde con los registros de decisión (<code>DEC-*.md</code>, Referencia B) — el acta de los veredictos realmente emitidos — y un veredicto producido en una compuerta se registra con <code>record_kind: DEC</code> (ADR-0083).
+      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s4">Capítulo 13 §4 · Execution</a></span></dd>
   </dl>
 
   <h2 id="team">Componentes del Equipo Multiagente</h2>
@@ -169,7 +189,7 @@
       <span class="see">Detalles: <a href="../tools/00_Tools_Manual_es.html#section-2">Referencia Común §2</a></span></dd>
   </dl>
    <footer>
-    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · Material educativo en español<br>
+    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · Material educativo en español<br>
     Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

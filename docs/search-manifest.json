@@ -128,8 +128,13 @@
       "lang": "ko"
     },
     {
-      "path": "capstone/13_Capstone.html",
-      "title": "13장 · 캡스톤 실습 — 나만의 워크플로우 설계하기",
+      "path": "domain-model/13_DomainOperatingModel_Chapter.html",
+      "title": "13장 · Domain Operating Model — 템플릿이 실행 가능한 SOP가 되는 법",
+      "lang": "ko"
+    },
+    {
+      "path": "capstone/14_Capstone.html",
+      "title": "14장 · 캡스톤 실습 — 나만의 워크플로우 설계하기",
       "lang": "ko"
     },
     {
@@ -293,8 +298,13 @@
       "lang": "en"
     },
     {
-      "path": "capstone/13_Capstone_en.html",
-      "title": "Chapter 13 · Capstone Exercise — Designing Your Own Workflow",
+      "path": "domain-model/13_DomainOperatingModel_Chapter_en.html",
+      "title": "Chapter 13 · Domain Operating Model — How Templates Become Executable SOPs",
+      "lang": "en"
+    },
+    {
+      "path": "capstone/14_Capstone_en.html",
+      "title": "Chapter 14 · Capstone Exercise — Designing Your Own Workflow",
       "lang": "en"
     },
     {
@@ -458,8 +468,13 @@
       "lang": "ja"
     },
     {
-      "path": "capstone/13_Capstone_ja.html",
-      "title": "第13章・キャップストーン演習 — 自分だけのワークフローを設計する",
+      "path": "domain-model/13_DomainOperatingModel_Chapter_ja.html",
+      "title": "第13章・Domain Operating Model — テンプレートが実行可能なSOPになるしくみ",
+      "lang": "ja"
+    },
+    {
+      "path": "capstone/14_Capstone_ja.html",
+      "title": "第14章・キャップストーン演習 — 自分だけのワークフローを設計する",
       "lang": "ja"
     },
     {
@@ -623,8 +638,13 @@
       "lang": "es"
     },
     {
-      "path": "capstone/13_Capstone_es.html",
-      "title": "Capítulo 13 · Proyecto Final — Diseñar Tu Propio Flujo de Trabajo",
+      "path": "domain-model/13_DomainOperatingModel_Chapter_es.html",
+      "title": "Capítulo 13 · Domain Operating Model — Cómo las Plantillas se Convierten en SOP Ejecutables",
+      "lang": "es"
+    },
+    {
+      "path": "capstone/14_Capstone_es.html",
+      "title": "Capítulo 14 · Proyecto Final — Diseñar Tu Propio Flujo de Trabajo",
       "lang": "es"
     },
     {

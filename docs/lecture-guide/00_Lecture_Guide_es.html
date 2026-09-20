@@ -89,14 +89,15 @@
 	      <tr><td>Cap. 11 (① nueva creación D-1)</td><td>Construcción del prototipo Fase A de co-retail — create-l3-scaffold, definición de agentes de dominio (investigador, redactor), actualización del registro AGENTS.md, agent:verify</td><td>Práctica (participantes)</td><td>40 min</td></tr>
 	      <tr><td>Cap. 11 (② clase)</td><td>Construir desde cero (Fase A→B) vs. promover un proyecto existente, las diferencias entre las dos rutas y criterios para elegir</td><td>Clase</td><td>20 min</td></tr>
 		      <tr><td>Cap. 12 · Promoción de nueva variante</td><td>Validación del prototipo (validate-templates, agent:verify), redacción de la lista de verificación/manifesto de promoción (ejercicio del participante), ejecución real de la canalización de promoción (solo demostración del instructor)</td><td>Práctica + demostración</td><td>60 min</td></tr>
-		      <tr><td>Cap. 13 · Ejercicio integrador</td><td>Elegir su propia tarea recurrente y diseñar las 4 etapas (definición del problema, diseño de barreras de seguridad, implementación del subagente, retrospectiva de verificación) usted mismo</td><td>Práctica (participantes)</td><td>60 min</td></tr>
+		      <tr><td>Cap. 13 · Domain Operating Model</td><td>La estructura de SOP ejecutable de las plantillas de variante (ADR-0083·0084) — cuatro grupos centrales, fase vs etapa, grados governed/core, comandos de validación</td><td>Clase</td><td>20 min</td></tr>
+		      <tr><td>Cap. 14 · Ejercicio integrador</td><td>Elegir su propia tarea recurrente y diseñar las 4 etapas (definición del problema, diseño de barreras de seguridad, implementación del subagente, retrospectiva de verificación) usted mismo</td><td>Práctica (participantes)</td><td>60 min</td></tr>
       <tr><td>Presentaciones del proyecto integrador</td><td>1–2 participantes comparten brevemente su propio flujo de trabajo, con retroalimentación de los participantes</td><td>Presentación</td><td>15 min</td></tr>
       <tr><td>Cierre</td><td>Retrospectiva de los dos días completos, preguntas y respuestas, enlace al glosario/FAQ, guía de próximos pasos</td><td>Discusión</td><td>15 min</td></tr>
-			      <tr class="schedule-total"><td colspan="3">Total día 2</td><td>aprox. 5 h 40 min (sin descansos)</td></tr>
+			      <tr class="schedule-total"><td colspan="3">Total día 2</td><td>aprox. 6 h (sin descansos)</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="note">Incluyendo dos descansos del día 2 (10–15 min cada uno), el total es de <strong>aprox. 6 h – 6 h 10 min</strong>. Esta es una sesión enfocada en profesionales de TI que enfatiza el trabajo práctico y el diseño.</div>
+  <div class="note">Incluyendo dos descansos del día 2 (10–15 min cada uno), el total es de <strong>aprox. 6 h 20 min – 6 h 30 min</strong>. Esta es una sesión enfocada en profesionales de TI que enfatiza el trabajo práctico y el diseño.</div>
 
   <h2 id="per-section">Notas del instructor por capítulo</h2>
 
@@ -157,7 +158,11 @@
   <span class="badge badge-demo">Solo demostración del instructor</span> Ejecutar realmente <code>l3-to-variant-pipeline.ts</code> es una operación irreversible que afecta el historial de git. No haga que todos los participantes lo sigan — es suficiente que el instructor lo demuestre una vez por pantalla. Si los participantes quieren probarlo, guíelos para que lo hagan después de que termine la clase, en su propio entorno (una carpeta de clon exclusiva para el taller).
   <span class="badge badge-do">Actividad de los participantes</span> Todos pueden practicar verificando los elementos de PROMOTION_CHECKLIST.md y redactando el manifiesto <code>variant.json</code>.
 
-  <h3>Capítulo 13: Ejercicio integrador</h3>
+  <h3>Capítulo 13: Domain Operating Model</h3>
+  <p>Un capítulo teórico ubicado justo después del laboratorio de promoción del capítulo 12 y antes del diseño del ejercicio integrador. Responde a "qué gana una plantilla promovida" — la estructura del Domain Operating Model (ADR-0083·0084) donde etapas, RACI y compuertas de decisión se declaran como datos.</p>
+  <span class="badge badge-do">Actividad de los participantes</span> Muestre la tabla de cuatro grupos (Process·Governance·Execution·Graph) y pregunte "¿cuáles de estos tiene ya la variante co-retail que construyeron en el capítulo 11 y cuáles faltan?" — una discusión de 2 minutos conecta directamente con el laboratorio. La regla de no abreviar (las colisiones DOM/AOM) funciona bien como ejemplo humorístico de disciplina terminológica.
+
+  <h3>Capítulo 14: Ejercicio integrador</h3>
   <p>Este es el ejercicio central del día 2. Combinando la experiencia del día 1 (uso de una variante existente) y el capítulo 11 (creación de una nueva variante), haga que los participantes diseñen directamente la aplicación de un equipo multiagente a su propio trabajo real.</p>
   <p>Deje claro desde el principio que no hay una única respuesta correcta para este capítulo. Si los participantes se sienten bloqueados en "¿qué debería construir?", es efectivo que el instructor demuestre primero su propio ejemplo (p.ej. "organizar los elementos de acción de las actas de reuniones semanales") para mostrar el flujo de preguntas. Si el tiempo es escaso, en lugar de completar las 4 etapas, es suficiente que todos terminen al menos las etapas 1–2 (definición del problema, decisiones de barreras de seguridad) y dejen las etapas 3–4 como tarea.</p>
   <span class="badge badge-do">Actividad de los participantes</span> Use la lista de verificación de finalización para que cada participante marque hasta dónde llegó, y durante el tiempo de presentaciones del proyecto integrador, haga que 1–2 participantes compartan brevemente su propio flujo de trabajo.
@@ -282,14 +287,23 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">Preguntas de comprensión del capítulo 13 · Proyecto integrador</div>
+    <div class="quiz-title">Preguntas de comprensión del capítulo 13 · Domain Operating Model</div>
+    <ol>
+      <li>¿En qué difiere el <code>phase</code> (0–6) del esquema de procedimientos del eje <code>stage</code> del dominio?</li>
+      <li>¿Cuál es la diferencia entre una compuerta de decisión (<code>decisions/gates.yaml</code>) y un registro de decisión (<code>DEC-*.md</code>)?</li>
+      <li>¿El grado "core" es un estado inferior a "governed", o significa algo distinto?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 14 · Proyecto integrador</div>
     <ol>
       <li>¿Cuál de las tres limitaciones del §2 (sobrecarga de contexto / conflicto de roles / falta de paralelismo) hizo necesario un equipo para la tarea recurrente que eligió?</li>
       <li>¿Por qué decidió las barreras de seguridad antes de construir el subagente?</li>
     </ol>
   </div>
    <footer>
-    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · Material educativo en español<br>
+    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · Material educativo en español<br>
     Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

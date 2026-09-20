@@ -110,7 +110,7 @@
 
   <div class="q">自分で設計・構築したエージェントチームが、実運用で常に意図した品質で動作しているかをどう検証しますか?</div>
   <p class="faq-answer">正常動作を評価するために<strong>エージェントテストベンチ(Test Bench)</strong>を構築する必要があります。第一に、代表的な入力要件と期待される出力(Gold Dataset)を定義します。第二に、プロンプトやエージェントのルールを修正するたびに、データセットを投入して回帰テスト(Regression Test)を自動で実行します。第三に、定量評価が難しい自然言語出力については、高性能モデルを審判(LLM-as-a-Judge)として立て、事前に合意した定量スコアで評価するように実装します。</p>
-  <span class="see">詳細: <a href="../capstone/13_Capstone_ja.html">13章§キャップストーン実習</a></span>
+  <span class="see">詳細: <a href="../capstone/14_Capstone_ja.html">14章§キャップストーン実習</a></span>
 
   <h2 id="cost">コスト・パフォーマンス</h2>
 
@@ -132,7 +132,7 @@
   <p class="faq-answer">ai-workspace-standardsのスクリプトはNode.js/Bunランタイム上で<code>path</code>モジュールを使用してプラットフォームごとのパスを処理するため、基本的にWindowsとmacOS/Linuxの両方に対応しています。ただし、Claude Codeセッション内で<code>git clone</code>コマンドを直接実行する際に、Git BashではなくPowerShellのパス(<code>C:\Users\...</code>)が混ざると問題が発生することがあります。Claude Codeでは常に<code>/</code>形式のパスまたはGit Bash形式を使用し、ワークスペースのルートは<code>C:\git</code>のように短く階層の浅い場所にクローンすることを推奨します。</p>
   <span class="see">詳細: <a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-1">6章§1</a></span>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 基準 · 日本語教材<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

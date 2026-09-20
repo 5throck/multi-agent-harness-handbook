@@ -97,6 +97,26 @@
     <dt>Skill Relationship Graph <span class="en">Skill Relationship Graph</span></dt>
     <dd>A machine-readable projection of the relations between skills, agents, ADRs, and decision records. It is always regenerated from sources of truth (SKILL.md frontmatter <code>prerequisites</code>/<code>relates_to</code>, agent <code>required_skills</code>, <code>variant.json</code>, etc.) and is not itself a primary data store (ADR-0060). The outputs are <code>docs/skill-graph.json</code> and the human-readable <code>docs/skill-graph.md</code>. All relation edges are advisory and never hard-block execution.
       <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#s2-skill-graph">Chapter 8 §2 · Skill Relationship Graph</a></span></dd>
+
+    <dt>Domain Operating Model <span class="en">Domain Operating Model</span></dt>
+    <dd>The structure by which a variant template declares its own domain's workflow (stages), accountability (RACI), and verdict points (decision gates) as data. The official name is always spelled out — abbreviations (DOM, AOM) are banned due to collisions with other terms. Composed of four groups: Process, Governance, Execution, Graph (ADR-0083).
+      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html">Chapter 13 · Domain Operating Model</a></span></dd>
+
+    <dt>Domain Execution Graph <span class="en">Domain Execution Graph</span></dt>
+    <dd>A vocabulary profile layered on the skill relationship graph (<code>graph_profile: "deg/v1"</code>). It connects stage, RACI, and gate data through edges such as <code>in_stage</code>, <code>accountable_for</code>, and <code>gated_by</code>, making scattered operating knowledge answerable with a single graph query (ADR-0083).
+      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s5">Chapter 13 §5 · Graph</a></span></dd>
+
+    <dt>Stage Axis <span class="en">Stage Axis</span></dt>
+    <dd>The declaration of the stages a domain's work flows through (<code>process/stages.yaml</code>). A different axis from the PM execution axis <code>phase</code> (0–6), derived from artifact handoff flow between procedures. If it cannot be distinguished from phase (DEG-P-01), human authoring is required instead of a mechanical bootstrap.
+      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s2">Chapter 13 §2 · Process</a></span></dd>
+
+    <dt>RACI Matrix <span class="en">RACI Matrix</span></dt>
+    <dd>An accountability table declaring Responsible, Accountable, Consulted, and Informed for each activity in each stage. Not a document people read but data that <code>generate-raci.ts</code> derives from procedure data and <code>validate-raci.ts</code> validates (<code>governance/raci.yaml</code>).
+      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s3">Chapter 13 §3 · Governance</a></span></dd>
+
+    <dt>Decision Gate <span class="en">Decision Gate</span></dt>
+    <dd>A go/no-go checkpoint declared inside a workflow (<code>decisions/gates.yaml</code>). It corresponds to decision records (<code>DEC-*.md</code>, Reference B) — the log of verdicts actually made — and a verdict produced at a gate is recorded with <code>record_kind: DEC</code> (ADR-0083).
+      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s4">Chapter 13 §4 · Execution</a></span></dd>
   </dl>
 
   <h2 id="team">Multi-Agent Team Components</h2>
@@ -169,7 +189,7 @@
       <span class="see">Details: <a href="../tools/00_Tools_Manual_en.html#section-2">Common Reference §2</a></span></dd>
   </dl>
    <footer>
-    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · English Educational Materials<br>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

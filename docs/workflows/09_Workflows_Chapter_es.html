@@ -417,6 +417,7 @@
     <li><strong>La cobertura es por unidad (agent_key, phase)</strong> — el <code>phases:</code> del frontmatter del agente declara los pares requeridos, y <code>scripts/procedure-coverage.ts</code> informa si los pasos reales del procedimiento cubren cada par. Los huecos nunca se rellenan automáticamente: <code>--tickets</code> registra tickets de gobernanza con clave determinista (<code>&lt;variant&gt;:&lt;agent_key&gt;:&lt;phase&gt;</code>) para juicio humano</li>
   </ul>
   <p>En resumen, el conocimiento del flujo de trabajo — qué agente actúa en qué paso, con qué habilidad, produciendo qué — se convierte en datos verificables en lugar de prosa. Esa es la diferencia entre los patrones de este capítulo y el esquema de procedimientos.</p>
+  <p>A partir de septiembre de 2026, sobre esta capa de procedimientos se superpone un <strong>eje de etapas de dominio</strong> — la estructura del Domain Operating Model, que agrupa las actividades en las etapas del flujo del dominio y declara la rendición de cuentas y los veredictos mediante RACI y compuertas de decisión. Véase el <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html">Capítulo 13 · Domain Operating Model</a> para más detalles.</p>
 
   <h2 id="s4">Guía de Selección de Flujos de Trabajo</h2>
 
@@ -543,7 +544,7 @@
   </div>
 
   <div class="note">
-    Puede experimentar directamente los casos de flujo de trabajo de este capítulo a través de D-1 (pipeline secuencial) y D-2 (composición dinámica de equipos) en los <a href="../practice/04_Practice_Examples_A_es.html">ejercicios del Capítulo 4</a>, y G-1 (co-consult), G-2 (co-deck) en los <a href="../variant-practice/06_VariantPractice_Examples_es.html">ejercicios del Capítulo 6</a>. En el <a href="../capstone/13_Capstone_es.html">ejercicio de integración del Capítulo 13</a>, diseñará "su propio flujo de trabajo" basándose en los principios de este capítulo.
+    Puede experimentar directamente los casos de flujo de trabajo de este capítulo a través de D-1 (pipeline secuencial) y D-2 (composición dinámica de equipos) en los <a href="../practice/04_Practice_Examples_A_es.html">ejercicios del Capítulo 4</a>, y G-1 (co-consult), G-2 (co-deck) en los <a href="../variant-practice/06_VariantPractice_Examples_es.html">ejercicios del Capítulo 6</a>. En el <a href="../capstone/14_Capstone_es.html">ejercicio de integración del Capítulo 14</a>, diseñará "su propio flujo de trabajo" basándose en los principios de este capítulo.
   </div>
 
   <div class="chapter-nav">
@@ -557,7 +558,7 @@
     </a>
   </div>
    <footer>
-    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · Material educativo en español<br>
+    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · Material educativo en español<br>
     Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

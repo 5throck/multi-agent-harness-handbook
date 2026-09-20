@@ -2,6 +2,17 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-20] — New Chapter 13: Domain Operating Model & Capstone Renumbered to Ch.14
+
+### Added
+- **Chapter 13 · Domain Operating Model** (`docs/domain-model/13_DomainOperatingModel_Chapter.html`, ko/en/ja/es) — new narrative chapter covering the executable-SOP structure of variant templates per upstream **ADR-0083/0084**: the four core groups (Process · Governance · Execution · Graph), the domain stage axis (`process/stages.yaml`) vs the PM `phase` axis, RACI matrices (`governance/raci.yaml`), decision gates (`decisions/gates.yaml`) vs decision records (`DEC-*.md`), the Domain Execution Graph profile (`deg/v1`), the actor model / evidence backporting / graph delta log extensions, the governed vs core grade system (9 vs 4 variants), and validation commands. Wired into the chapter chain (12 → 13 → 14), index cards, search manifest, and nav sidebars.
+- **Glossary terms** (ko/en/ja/es): Domain Operating Model (with the no-acronym rule), Domain Execution Graph, Stage Axis, RACI Matrix, Decision Gate.
+
+### Changed
+- **Capstone renumbered Ch.13 → Ch.14** (`git mv` of all 4 language files; titles, nav, eyebrows, SVG labels, lecture-guide schedule/instructor notes/quizzes, course overview blocks, topic table, README curriculum, search manifest, and every cross-reference updated).
+- **Lecture guide & course overview** (all 4 languages): added Ch.13 schedule row (20-min lecture), instructor note, comprehension quiz, Day-2 schedule block, and topics-table row; Day-2 totals bumped to ≈6h (excl. breaks).
+- Synced handbook facts with `ai-workspace-standards` main (2026-09-20): footer baseline date bumped to 2026-09-20; README Target Versions `ai-workspace-standards` main (2026-09); Ch.10 `--platform claude|antigravity|codex|all` (upstream rename of `both` → `all`, now covering all three platforms) with `CODEX.md` added to the MERGE examples; Ch.9 procedure-schema section notes the new domain stage axis with a link to Ch.13; Reference B (Decision System) cross-references `decisions/gates.yaml`.
+
 ## [2026-08-24] — Workspace-State Sync & i18n Parity Gate
 
 ### Added

@@ -73,6 +73,7 @@
     <li><code>rules_applied</code> format (<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>) and <code>skills_used</code> resolving to real skills</li>
   </ol>
   <p>This validation is <strong>fail-closed</strong> — any error-level issue means exit 1. Unlike soft checks that only warn, sync does not proceed with a broken decision record.</p>
+  <p>Note that as of September 2026, governed-grade variant templates also carry decision gates (<code>decisions/gates.yaml</code>). A gate is a rule declaration — "which verdict must pass at which point" — while a decision record is the log of a verdict actually made; a verdict produced at a gate leaves the record as <code>record_kind: DEC</code>. See <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html">Chapter 13 · Domain Operating Model</a> for details.</p>
 
   <h2 id="c4-registry">Spec Registry and E1–E5 Exemptions</h2>
   <p>Before a decision comes its design (spec). The ADR-0055 <strong>spec registry</strong> (<code>docs/specs/registry.json</code>) tracks design documents by id, title, file, status (<code>proposed | approved | implemented</code>), and last-updated date.</p>
@@ -128,8 +129,8 @@
     <a href="A_Governance_Enforcement_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Reference A · Governance Enforcement Layers</div></a>
     <a href="../glossary/00_Glossary_en.html" class="next"><div class="dir">Reference →</div><div class="ttl">Glossary</div></a>
   </div>
-  <footer>
-    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) · English Educational Materials<br>
+   <footer>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

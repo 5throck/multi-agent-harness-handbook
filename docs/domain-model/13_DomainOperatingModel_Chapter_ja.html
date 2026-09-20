@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--
+  チャプター(解説)テンプレート — 実習のない「読み物」トピック用。読書幅(720px)・ゆとりある行間・章移動導線。
+  修正箇所: (1) <title>/章番号/タイトル/リード  (2) nav(この章の節 + 他の章)  (3) 「この章のポイント」
+            (4) <h2 id>/<h3> 節と本文  (5) 前/次の章リンク
+  色はデザイントークンのみ使用 — テーマはデプロイ時に references/apply-theme.sh が docs/ のブランド色を置換する。
+  検索インデックス前提: 本文の節は必ず <h2 id="..."> (必要に応じて <h3>) 構造を維持すること。
+-->
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第13章・Domain Operating Model — variantテンプレートが実行可能なSOPになるしくみ (ADR-0083・0084) - マルチエージェントチーム・ハーネスエンジニアリングハンドブック">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>第13章・Domain Operating Model — テンプレートが実行可能なSOPになるしくみ</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第13章・Domain Operating Model</div>
+  <a href="#s1">ドメインOSとしてのテンプレート</a>
+  <a href="#s2">Process — ステージ軸</a>
+  <a href="#s3">Governance — RACIマトリクス</a>
+  <a href="#s4">Execution — 成果物と判断ゲート</a>
+  <a href="#s5">Graph — Domain Execution Graph</a>
+  <a href="#s6">拡張 — アクターモデル・エビデンス・バックポート・デルタログ</a>
+  <a href="#s7">実践 — 検証と新しいvariant</a>
+  <div class="nav-section">他の章</div>
+  <a href="../variant-advanced/12_VariantAdvanced_Examples_ja.html">第12章・新規variant昇格演習例</a>
+  <a href="../capstone/14_Capstone_ja.html">第14章・キャップストーン演習</a>
+  <a href="../appendix/B_Decision_System_ja.html">参考B・意思決定システム</a>
+  <a href="../appendix/C_Skill_Graph_ja.html">参考C・スキル関係グラフ</a>
+  <a href="../glossary/00_Glossary_ja.html">用語集</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第13章</div>
+  <h1>Domain Operating Model — テンプレートが実行可能なSOPになるしくみ</h1>
+  <p class="lead">第11章と第12章では、variantテンプレートを作り昇格させる手順を学んだ。ところが2026年9月から、正規variantテンプレートには新しい基準が適用される。テンプレートは「エージェント・スキル・設定のファイル束」にとどまらず、<strong>何をどの順序で進め(ステージ)、誰が責任を負い(RACI)、どの判断を通過しないと次の段階に進めないか(判断ゲート)</strong>を、機械が読める形で自ら宣言する。この構造の正式名称は<strong>Domain Operating Model</strong>であり、設計の根拠はADR-0083とADR-0084にある。</p>
+  <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a></p>
+
+  <div class="keypoints">
+    <div class="kp-title">この章で扱うこと</div>
+    <ul>
+      <li>Domain Operating Modelとは何か、なぜ略称を使わないのか</li>
+      <li>4つの中核グループ(Process・Governance・Execution・Graph)と、それぞれが作るファイル</li>
+      <li>PMの作業実行軸<code>phase</code>(0–6)とドメイン業務フロー軸<code>stage</code>の違い</li>
+      <li>RACIマトリクスと判断ゲートが、手順やスキルグラフとどう接続されるか</li>
+      <li>「governed」テンプレートと「core」テンプレートの違い、そして検証コマンド</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">ドメインOSとしてのテンプレート</h2>
+  <p>ワークスペースのオーナーはかつてこう提案した。「各variantテンプレートを、そのドメインの<strong>オペレーティングシステム</strong>として動かそう。プロセスとスキル、エージェントチーム、責任体系、成果物、判断ルールをテンプレートの中に一か所に集め、それらをつなぐグラフまで備えよう」。2026-09-19の検証パスは興味深い事実を確認した。手順スキーマ(ADR-0063)とスキルグラフ(ADR-0060)のおかげで、提案された構造のかなりの部分がすでに実装済みであり、本当に欠けていた部分はずっと狭かった — ドメインの<strong>ステージ軸</strong>、RACIのC/I(相談・通知)、一般化された成果物・判断モデル、そしてそれらをつなぐグラフ語彙である。ADR-0083はこの欠落を5フェーズ計画(P1–P5)として実行した。</p>
+
+  <div class="pullquote">テンプレートはもはやファイル束ではない。ドメインの業務フロー・責任・判断を自ら宣言するオペレーティングシステムである。
+    <span class="by">— ADR-0083がもたらしたテンプレートの新しい定義</span></div>
+
+  <h3>名前は必ずフルネームで</h3>
+  <p>このフレームワークの正式名称は<strong>Domain Operating Model</strong>であり、ワークスペースは略称の使用を禁止している。「DOM」と略すとブラウザーのDocument Object Modelと衝突する。co-deck・co-design・co-gameのようにHTMLやCSSを扱うvariantにとって、DOMはすでに生きた用語だ。「AOM」も禁止である。「Agent」という言葉はすでにPMゲートウェイの専門エージェントを指しており、フレームワークを自分の下位構成要素の一つの名前で呼ぶことはできない。ドキュメント・スキーマ・スクリプト・コミットメッセージのどこでも略称は許されない。一つの用語が一つの意味だけを持つというルール(第2章の「用語は資産である」)の好例だ。</p>
+
+  <h3>4つの中核グループ</h3>
+  <p>Domain Operating Modelの中核(Core)は4つのグループで構成される。各グループはテンプレート内の特定のファイルと結びつく。</p>
+  <table>
+    <thead><tr><th>グループ</th><th>担当するもの</th><th>ファイル</th><th>状態</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Process</strong></td><td>Stage → Activity → Skill。業務がどの順序で流れるか</td><td><code>process/stages.yaml</code>、<code>procedures/*/schema.yaml</code></td><td>実装済み (P2)</td></tr>
+      <tr><td><strong>Governance</strong></td><td>RACI。ステージ・活動ごとに誰が責任を負い誰が実行するか</td><td><code>governance/raci.yaml</code></td><td>実装済み (P4)</td></tr>
+      <tr><td><strong>Execution</strong></td><td>Artifact・Decision。何が成果物になり、どの判断を通過するか</td><td><code>procedures/_output-types.yaml</code>、<code>decisions/gates.yaml</code></td><td>実装済み (P5)</td></tr>
+      <tr><td><strong>Graph</strong></td><td>Domain Execution Graph。上の3グループをつなぐ関係層</td><td><code>docs/skill-graph.json</code>のDEGプロファイル</td><td>実装済み (P3)</td></tr>
+    </tbody>
+  </table>
+  <div class="note">エージェント(Agent)は4グループに含まれない。エージェントはRACIの中の<strong>アクター参照</strong>である。各役割の枠はエージェントキーを保持するだけで、実行主体が人間かAIかを構造が強制することはない(この区別は後述のアクターモデルがオプトインで扱う)。</div>
+
+  <p>階層構造も明確だ。AI Workspaceがスキーマと契約を所有し(L0・L1層)、Domain Operating Modelがその上で各ドメインの運用原理を定義し、Template(<code>templates/co-*/</code>)がちょうど一つのドメインをパッケージし、Project(L3)がそれを実際の業務にインスタンス化する。第5章で見たL0→L1→L2→L3階層とドメイン運用モデルがどう重なり合うかを示すものである。</p>
+
+  <h2 id="s2">Process — ステージ軸</h2>
+  <p>最初に埋められた欠落は<strong>ステージ(stage)軸</strong>だ。手順スキーマには元々<code>phase</code>フィールドがあったが、これはPMが作業を実行する軸(0–6: 設計承認から実行・QAまで)であり、ドメイン業務の流れではない。コンサルティングプロジェクトが「調査 → 分析 → 報告」へ流れること、発表資料が「リサーチ → ストーリーライン → ビルド → 出力」へ流れること — そのドメイン固有の進行段階が宣言される場所がなかったのだ。ADR-0083はこの軸を<code>process/stages.yaml</code>に宣言する。</p>
+  <div class="code-block">
+<pre><code># templates/co-deck/process/stages.yaml (抜粋)
+schema_version: '1.0'
+variant: co-deck
+stages:
+  - id: S1
+    title: Deck Source Research
+    order: 1
+    owner_agent: version
+  - id: S2
+    title: Version Export Control
+    order: 2
+    owner_agent: version
+  - id: S3
+    title: Deck Publish and Versioning
+    order: 3
+    owner_agent: pdf-export</code></pre>
+<button type="button" class="copy-btn">コピー</button>
+</div>
+  <h3>機械が先に作り、人が仕上げる</h3>
+  <p>ステージ軸は<code>bootstrap-stages.ts</code>が、手順間の<strong>成果物の受け渡しフロー</strong>(どの手順の成果物が次の手順の入力になるか)を分析してクラスタリングする方式で作られた。単にphaseごとにまとめるのではなく、実際に成果物の手が変わる地点を基準にする。ただし機械が作った一次結果は、<code>purpose</code>や開始・終了条件が<code>PENDING_REVIEW</code>のまま残る。構造は自動で、意味は人間が — それがワークスペースの一貫した分業方式だ。</p>
+  <p>ここには最低限の適格条件もある。<strong>DEG-P-01</strong>不変式は「ステージがphaseとは異なるものとして区別できること」を要求する。手順数とphase数とステージ数がすべて同じで1:1対応なら、それは新しい軸ではなくphaseの名前を変えただけだ。この検査を通過した9つのvariant(co-abap、co-consult、co-deck、co-design、co-export、co-game、co-hr、co-price、co-security)は<code>governed</code>等級を与えられ、通過できなかった4つ(co-develop、co-news、co-safety、co-work)は人がステージを直接執筆するまで<code>core</code>にとどまる。強制ではなく等級で成熟度を表す方式だ。</p>
+
+  <h2 id="s3">Governance — RACIマトリクス</h2>
+  <p>第2のグループは責任体系だ。<code>governance/raci.yaml</code>は、各ステージの各活動(手順)について<strong>Accountable(最終責任)</strong>と<strong>Responsible(実行)</strong>が誰かを宣言する。RACIはもともとプロジェクト管理の古典的ツールだ — Responsible、Accountable、Consulted、Informedの4役割で「誰が何をするか」を整理する。新しいのは、これが人が読む文書ではなく<strong>生成され検証されるデータ</strong>だという点だ。</p>
+  <div class="code-block">
+<pre><code># templates/co-deck/governance/raci.yaml (抜粋)
+schema_version: '1.0'
+variant: co-deck
+generated_from: procedures/
+rows:
+  - stage: S2
+    activity: procedure.co-deck.deck-build-and-export
+    accountable: version
+    responsible:
+      - html-build
+      - measure
+      - pdf-export</code></pre>
+<button type="button" class="copy-btn">コピー</button>
+</div>
+  <p>マトリクスは<code>generate-raci.ts</code>が手順の<code>owner_agent</code>とステージデータから導出する。ワークスペースの原則どおり、根拠のない値を合成しない。ConsultedとInformedは今のところ根拠となるデータがないため、意図的に空のままにしてある。「後に人が埋める空白」を機械が無理に埋めないためであり、この空白は文書化されたギャップだ。作られたマトリクスは<code>validate-raci.ts</code>が検証し、宣言された役割キーが実際のエージェントファイルまたは人間役割レジストリとして解決できるか(DEG-R-04)をfail-closedで確認する。</p>
+  <div class="note">ADR-0084はここに<strong>アクターモデル</strong>をオプトイン拡張として重ねた。各役割キーが人間かエージェントか(<code>actor_type: human|agent</code>)は手で書くのではなく、<code>governance/_human-roles.yaml</code>レジストリとエージェントファイルの存在から<strong>生成器が導出</strong>する。責任者が人間の活動には対応する判断ゲートが必須というルール(DEG-R-06)も同時に来た — 人間の関門は宣言されてこそ守られる。</div>
+
+  <h2 id="s4">Execution — 成果物モデルと判断ゲート</h2>
+  <p>第3のグループは「何が出て、何を通過しなければならないか」だ。二つの部品がある。一つは<strong>成果物(アーティファクト)モデル</strong>。<code>procedures/_output-types.yaml</code>は各variantが作れる成果物タイプの閉じたリストで、スキーマが1.1に上がり、各成果物タイプを実際にどの手順が作るか(<code>owner_agent</code>、<code>description</code>)を記録するようになった。もう一つは<strong>判断ゲート</strong>。<code>decisions/gates.yaml</code>は進行中に判断が必要な地点をgo/no-go形式で宣言する。</p>
+  <div class="code-block">
+<pre><code># templates/co-deck/decisions/gates.yaml (抜粋)
+schema_version: "1.0"
+variant: co-deck
+gates:
+  - id: DG-DECK-01
+    title: "Layout gate passes with zero violations before export."
+    stage: S2
+    decider_agent: version
+    inputs:
+      - pdf_deck
+    outcomes:
+      - proceed
+      - rework
+    record_kind: DEC</code></pre>
+<button type="button" class="copy-btn">コピー</button>
+</div>
+  <p>参考Bで扱ったDecision Record(<code>DEC-*.md</code>)と混同しやすい。両者の関係はこうだ。<strong>ゲートは手順の中の判断地点</strong>である(「出力前にレイアウト検査を通過すること」というルール宣言)。<strong>判断記録は実際に下された判断の記録</strong>である(「2026-09-20 判定: proceed」)。<code>record_kind: DEC</code>が二つの世界をつなぐ橋で、ゲートで出た判断は判断記録として残る。この移行により、9つのgovernedテンプレートの手順から散文的な<code>quality_gates</code>フィールドが完全に削除された。品質基準が文として散らばる代わりに、名前・判断者・入力・判定結果を持つデータになったのだ。</p>
+
+  <h2 id="s5">Graph — Domain Execution Graph</h2>
+  <p>第4のグループは関係層だ。参考Cで学んだスキル関係グラフ(<code>docs/skill-graph.json</code>)は毎回の<code>/sync</code>でソースファイルから再生成される投影(projection)であり、それ自体は一次ストアではない。Domain Execution Graphはこのグラフの上に重ねる<strong>語彙プロファイル</strong>だ — グラフに<code>graph_profile: "deg/v1"</code>マーカーが付き、新しいノードとエッジ型が追加される。</p>
+  <ul>
+    <li><code>stage</code>ノードと<code>in_stage</code>・<code>stage_follows</code>エッジ — どの活動がどのステージに属し、ステージ同士はどの順序か</li>
+    <li><code>step_uses_skill</code>・<code>step_by_agent</code>・<code>produces</code> — 手順のステップがどのスキルを使い、誰が実行し、何を作るか(ADR-0060 Amendment 5で既存)</li>
+    <li><code>accountable_for</code>・<code>consulted_on</code>・<code>informed_of</code> — RACIから導出される責任関係</li>
+    <li><code>decision_gate</code>ノードと<code>gated_by</code>・<code>decides_on</code> — どの活動がどのゲートの判定を待つか</li>
+  </ul>
+  <p>要点は、ばらばらだった4グループのデータが一つのグラフの中で<strong>つながった実行可能な知識</strong>になることだ。「この活動はS2に属し(html-buildが実行し)、スキルXを使い、pdf_deckを作り、DG-DECK-01ゲートを通過しなければならない」が一度のグラフ照会で答えられる。参考Cの原則 — ソースから再生成され、助言的(advisory)である — はそのまま引き継がれる。ADR-0084はここに<strong>グラフデルタログ</strong>を加えた。毎回の/syncで再生成されるグラフの構造変化を記録すれば、運用モデルそのものがどう進化したかを時系列で追跡できる。</p>
+
+  <h2 id="s6">拡張 — アクターモデル・エビデンス・バックポート・デルタログ</h2>
+  <p>ADR-0083はアクターモデル、より豊かなエビデンスモデル、SkillHone進化ループといった拡張候補を「名前だけ決めて設計は後日」(<em>named, not designed</em>)のまま残した。続くADR-0084は、このうちアクターモデルを実装し、エビデンス・バックポートとグラフデルタログという二つの経路を新たに加えた。</p>
+  <ul>
+    <li><strong>アクターモデル</strong> — s3で見た<code>actor_type</code>の導出。人間かエージェントかはレジストリとファイルの存在から解決され、手では記録しない。</li>
+    <li><strong>エビデンス・バックポート</strong> — 各プロジェクト(L3)に蓄積された実行エビデンスをテンプレート(L2)へ戻す候補を見つける読み取り専用スキャナー(<code>evidence-backport-scan.ts</code>)。project-resyncパイプラインの「選択的バックポートレビュー」にエビデンスという表面が追加された。</li>
+    <li><strong>グラフデルタログ</strong> — s5のグラフ変化履歴の記録。</li>
+  </ul>
+  <p>残りの拡張 — より豊かなエビデンスモデルとSkillHone進化ループ — は、必要性が実際のデータで確認されるまで設計されないままだ。「先に作らない」という原則は、このハンドブック第8章のロードマップの話と同じ文脈だ。</p>
+
+  <h2 id="s7">実践 — 検証と新しいvariant</h2>
+  <p>この構造を直接扱う場面は大きく二つある。第一に、既存のgovernedテンプレートの運用モデルを確認・検証するとき。第二に、第11章で作った新しいvariantが昇格するときだ。昇格パイプラインを通過した正規テンプレートには、ステージ・RACI・ゲートの状態が等級として記録される。検証コマンドをまとめると次のとおり。</p>
+  <div class="code-block">
+<pre><code># ワークスペースルートで実行
+bun scripts/validate-process.ts    # ステージ軸の検証 (DEG-P-01を含む)
+bun scripts/validate-raci.ts       # RACIマトリクス + アクターモデルの検証 (DEG-R系)
+bun scripts/validate-procedures.ts # 手順スキーマの検証 (ADR-0063、既存)
+bun scripts/verify-skill-graph.ts  # グラフ再生成の一貫性 (ADR-0060、既存)</code></pre>
+<button type="button" class="copy-btn">コピー</button>
+</div>
+  <p>等級体系の意味を表にまとめると次のとおり。「governed」が「core」より優れているのではない。coreは「機械が代わりに作れず、人の執筆を待っている」という正直な状態表示だ。</p>
+  <table>
+    <thead><tr><th>等級</th><th>意味</th><th>テンプレート</th></tr></thead>
+    <tbody>
+      <tr><td><strong>governed</strong></td><td>ステージ軸がphaseと区別されて存在し、RACI・ゲートがデータとして揃っている</td><td>co-abap、co-consult、co-deck、co-design、co-export、co-game、co-hr、co-price、co-security(9種)</td></tr>
+      <tr><td><strong>core</strong></td><td>手順・スキル・グラフは揃っているが、ステージ軸は人の執筆待ち(区別が作れないため機械ブートストラップ不可)</td><td>co-develop、co-news、co-safety、co-work(4種)</td></tr>
+    </tbody>
+  </table>
+  <p>次の第14章はこのハンドブックの最終実習だ。自分の繰り返し業務を選び、問題定義から検証・振り返りまで自分で設計する。その設計で「順序(stage)、責任(RACI)、判断(gate)」を先に決める感覚 — それがまさにこの章で見たDomain Operating Modelの感覚でもある。テンプレートから学んだことを、自分の設計に応用してみよう。</p>
+
+  <div class="chapter-nav">
+    <a href="../variant-advanced/12_VariantAdvanced_Examples_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第12章・新規variant昇格演習例</div></a>
+    <a href="../capstone/14_Capstone_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第14章・キャップストーン演習</div></a>
+  </div>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

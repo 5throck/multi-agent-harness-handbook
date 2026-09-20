@@ -97,6 +97,26 @@
     <dt>스킬 관계 그래프 <span class="en">Skill Relationship Graph</span></dt>
     <dd>스킬·에이전트·ADR·의사결정 기록 사이의 관계를 기계가 읽을 수 있는 형태로 표현한 투영(projection). 원천(SKILL.md 프론트매터의 <code>prerequisites</code>/<code>relates_to</code>, 에이전트 <code>required_skills</code>, <code>variant.json</code> 등)에서 항상 다시 생성되며 그 자체는 1차 저장소가 아니다(ADR-0060). 결과물은 <code>docs/skill-graph.json</code>과 사람이 읽는 <code>docs/skill-graph.md</code>다. 모든 관계 엣지는 자문적(advisory)이며 실행을 강제로 막지 않는다.
       <span class="see">자세히: <a href="../intro/08_Intro_Advanced_Chapter.html#s2-skill-graph">8장 §2 · 스킬 관계 그래프</a></span></dd>
+
+    <dt>도메인 운영 모델 <span class="en">Domain Operating Model</span></dt>
+    <dd>variant 템플릿이 자기 도메인의 업무 흐름(스테이지), 책임 체계(RACI), 판정 지점(결정 게이트)을 데이터로 스스로 선언하는 구조. 공식 명칭은 반드시 풀네임으로 쓰며 약어(DOM·AOM)는 다른 용어와의 충돌 때문에 금지된다. 4개 그룹(Process·Governance·Execution·Graph)으로 구성된다(ADR-0083).
+      <span class="see">자세히: <a href="../domain-model/13_DomainOperatingModel_Chapter.html">13장 · Domain Operating Model</a></span></dd>
+
+    <dt>도메인 실행 그래프 <span class="en">Domain Execution Graph</span></dt>
+    <dd>스킬 관계 그래프 위에 얹히는 어휘 프로파일(<code>graph_profile: "deg/v1"</code>). 스테이지·RACI·게이트의 데이터를 <code>in_stage</code>·<code>accountable_for</code>·<code>gated_by</code> 같은 엣지로 연결해, 흩어진 운영 지식을 하나의 그래프 조회로 답할 수 있게 만든다(ADR-0083).
+      <span class="see">자세히: <a href="../domain-model/13_DomainOperatingModel_Chapter.html#s5">13장 §5 · Graph</a></span></dd>
+
+    <dt>스테이지 축 <span class="en">Stage Axis</span></dt>
+    <dd>도메인 업무가 흘러가는 단계의 선언(<code>process/stages.yaml</code>). PM 작업 실행 축인 <code>phase</code>(0–6)와는 다른 축으로, 절차 간 산출물 인계 흐름에서 도출된다. phase와 구별되지 못하면(DEG-P-01) 기계 부트스트랩이 아니라 사람의 작성이 필요하다.
+      <span class="see">자세히: <a href="../domain-model/13_DomainOperatingModel_Chapter.html#s2">13장 §2 · Process</a></span></dd>
+
+    <dt>RACI 매트릭스 <span class="en">RACI Matrix</span></dt>
+    <dd>각 스테이지의 각 활동에 대해 Responsible(실행)·Accountable(최종 책임)·Consulted(자문)·Informed(통보)를 선언하는 책임 표. 사람이 읽는 문서가 아니라 <code>generate-raci.ts</code>가 절차 데이터에서 생성하고 <code>validate-raci.ts</code>가 검증하는 데이터다(<code>governance/raci.yaml</code>).
+      <span class="see">자세히: <a href="../domain-model/13_DomainOperatingModel_Chapter.html#s3">13장 §3 · Governance</a></span></dd>
+
+    <dt>결정 게이트 <span class="en">Decision Gate</span></dt>
+    <dd>워크플로우 안에서 판정이 필요한 지점을 go/no-go 형식으로 선언한 것(<code>decisions/gates.yaml</code>). 실제 내려진 판정의 기록인 결정 기록(<code>DEC-*.md</code>, 참고 B)과 대응되며, 게이트의 판정은 <code>record_kind: DEC</code>로 기록에 남는다(ADR-0083).
+      <span class="see">자세히: <a href="../domain-model/13_DomainOperatingModel_Chapter.html#s4">13장 §4 · Execution</a></span></dd>
   </dl>
 
   <h2 id="team">멀티 에이전트팀 구성요소</h2>
@@ -169,7 +189,7 @@
       <span class="see">자세히: <a href="../tools/00_Tools_Manual.html#section-2">공통 참고 §2</a></span></dd>
   </dl>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 기준 · 한국어 교육 자료<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

@@ -73,6 +73,7 @@
     <li><code>rules_applied</code> 형식(<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>)과 <code>skills_used</code>의 실제 스킬 해결 가능 여부</li>
   </ol>
   <p>이 검증은 <strong>fail-closed</strong>다 — error 수준 문제가 하나라도 있으면 exit 1. "경고만 뜨는 소프트 검사"와 달리, 결정 기록이 깨진 채로는 동기화가 진행되지 않는다.</p>
+  <p>참고로 2026-09부터 governed 등급의 variant 템플릿에는 결정 게이트(<code>decisions/gates.yaml</code>)가 도입됐다. 게이트는 "어느 지점에서 어떤 판정을 통과해야 하는가"라는 규칙 선언이고, 결정 기록은 실제 내려진 판정의 기록이다 — 게이트에서 나온 판정이 <code>record_kind: DEC</code>로 결정 기록에 남는다. 자세한 내용은 <a href="../domain-model/13_DomainOperatingModel_Chapter.html">13장 · Domain Operating Model</a> 참조.</p>
 
   <h2 id="c4-registry">스펙 레지스트리와 E1–E5 면제</h2>
   <p>결정의 앞단에는 설계(spec)가 있다. ADR-0055의 <strong>스펙 레지스트리</strong>(<code>docs/specs/registry.json</code>)는 설계 문서를 id·제목·파일·상태(<code>proposed | approved | implemented</code>)·최종 갱신일로 추적한다.</p>
@@ -128,8 +129,8 @@
     <a href="A_Governance_Enforcement.html" class="prev"><div class="dir">← 이전</div><div class="ttl">참고 A · 거버넌스 강제 계층</div></a>
     <a href="../glossary/00_Glossary.html" class="next"><div class="dir">참고 →</div><div class="ttl">용어집</div></a>
   </div>
-  <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 기준 · 한국어 교육 자료<br>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

@@ -417,6 +417,7 @@
     <li><strong>커버리지는 (agent_key, phase) 단위</strong> — 에이전트 프론트매터의 <code>phases:</code>가 필요한 쌍을 선언하면, 실제 절차 단계가 그 쌍을 덮는지 <code>scripts/procedure-coverage.ts</code>가 보고한다. 갭은 절대 자동 채워지지 않고, <code>--tickets</code>로 결정적 키(<code>&lt;variant&gt;:&lt;agent_key&gt;:&lt;phase&gt;</code>)의 거버넌스 티켓이 등록돼 사람이 판단한다</li>
   </ul>
   <p>요컨대 워크플로우 지식 — 어느 에이전트가 어느 단계에서, 어떤 스킬로, 무엇을 산출하는가 — 가 산문이 아니라 검증 가능한 데이터가 된다. 이것이 9장의 패턴들과 절차 스키마의 차이다.</p>
+  <p>2026-09부터는 이 절차 계층 위에 <strong>도메인 스테이지 축</strong>이 얹혀, 활동들을 도메인 업무 흐름의 단계로 묶고 RACI와 결정 게이트로 책임과 판정까지 선언하는 Domain Operating Model 구조가 갖춰졌다. 자세한 내용은 <a href="../domain-model/13_DomainOperatingModel_Chapter.html">13장 · Domain Operating Model</a>에서 다룬다.</p>
 
   <h2 id="s4">워크플로우 선택 가이드</h2>
 
@@ -543,7 +544,7 @@
   </div>
 
   <div class="note">
-    이 장의 워크플로우 사례는 <a href="../practice/04_Practice_Examples_A.html">4장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="../variant-practice/06_VariantPractice_Examples.html">6장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="../capstone/13_Capstone.html">13장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
+    이 장의 워크플로우 사례는 <a href="../practice/04_Practice_Examples_A.html">4장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="../variant-practice/06_VariantPractice_Examples.html">6장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="../capstone/14_Capstone.html">14장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
   </div>
 
   <div class="chapter-nav">
@@ -557,7 +558,7 @@
     </a>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-12) 기준 · 한국어 교육 자료<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

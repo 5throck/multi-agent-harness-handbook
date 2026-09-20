@@ -57,7 +57,7 @@
   <p>Decision Record는 <code>docs/decisions/DEC-YYYYMMDD-NN.md</code> 파일로, Agent → Skill → Knowledge → Evidence → Rule → Decision의 체인을 닫는 문서다. 필수 프론트매터는 <code>id</code>, <code>date</code>, <code>agent</code>, <code>decision</code>, <code>alternatives</code>, <code>status</code>이고, 선택 배열로 <code>evidence_refs</code>, <code>knowledge_refs</code>, <code>rules_applied</code>, <code>skills_used</code>가 있다.</p>
   <ul>
     <li><strong>증거 장부</strong> — <code>docs/evidence/ledger.md</code>. (주장, 출처, URL/참조, 검증 방법, 상태)의 행을 가지며 행 ID는 <code>EV-YYYYMMDD-NN</code> 형식. 결정 기록의 <code>evidence_refs</code>는 이 장부의 행 ID만 가리킬 수 있다</li>
-    <li><strong>게이트 시점 기록</strong> — PM 에이전트는 게이트 순간의 결정(스페셜리스트 선정, 설계 승인 등)에 대해 배포가 계속되기 <strong>전에</strong> 기록을 남겨야 한다</li>
+    <li><strong>게이트 시점 기록</strong> — PM 에이전트는 게이트 순간의 결정(스페셜리스트 선정, 설계 승인 등)에 대해 <strong>배포가 계속되기 전에</strong> 기록을 남겨야 한다</li>
     <li><strong>supersession-only 변경 모델</strong> — 결정 기록은 지우지 않는다. 뒤집힌 결정은 새 기록이 옛 기록을 계승(supersede)한다. "결정의 역사"는 덧씌워지는 게 아니라 연결된다</li>
   </ul>
 
@@ -118,11 +118,11 @@
 
   <h2 id="c8-workflow">실전 — 결정 하나의 여정</h2>
   <ol>
-    <li><strong>설계</strong> — 변경이 사소하지 않다면 설계 문서를 쓰고 레지스트리에 등록한다(proposed → approved).</li>
+    <li><strong>설계 단계</strong> — 변경이 사소하지 않다면 설계 문서를 쓰고 레지스트리에 등록한다(proposed → approved).</li>
     <li><strong>구현+기록</strong> — 구현과 함께, 게이트 순간의 판단을 Decision Record로 남긴다. 증거는 장부에 먼저 적고 <code>EV-</code> ID로 참조.</li>
-    <li><strong>검증</strong> — <code>/sync</code>가 audit(스펙 관련성)·<code>validate-decisions.ts</code>·거버넌스 반영 검증을 통과시킨다. 하나라도 Fail이면 진행 불가.</li>
-    <li><strong>반영</strong> — 승인된 ADR은 거버넌스 문서에 연결돼야 한다. 연결 없이 두면 ADR-0059 검증이 잡아낸다.</li>
-    <li><strong>미루기</strong> — 지금 판단할 근거가 부족하면 백로그 티켓으로 <code>not_before</code>와 함께 예약한다. 기억이 아니라 티켓이 책임진다.</li>
+    <li><strong>검증 단계</strong> — <code>/sync</code>가 audit(스펙 관련성)·<code>validate-decisions.ts</code>·거버넌스 반영 검증을 통과시킨다. 하나라도 Fail이면 진행 불가.</li>
+    <li><strong>거버넌스 반영</strong> — 승인된 ADR은 거버넌스 문서에 연결돼야 한다. 연결 없이 두면 ADR-0059 검증이 잡아낸다.</li>
+    <li><strong>판단 미루기</strong> — 지금 판단할 근거가 부족하면 백로그 티켓으로 <code>not_before</code>와 함께 예약한다. 기억이 아니라 티켓이 책임진다.</li>
   </ol>
 
   <div class="chapter-nav">

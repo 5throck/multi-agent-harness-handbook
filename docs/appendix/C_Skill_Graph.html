@@ -54,7 +54,7 @@
   </div>
 
   <h2 id="a1-overview">개요 — 왜 그래프인가</h2>
-  <p>스킬·에이전트·ADR 사이의 관계("이 스킬은 저 스킬을 먼저 실행해야 한다", "이 에이전트는 저 스킬을 쓴다")를 자유 텍스트로 적어 두면 세 가지가 반드시 일어난다. 첫째, 원천이 바뀌어도 문서는 그대로 남아 <strong>낡는다</strong>. 둘째, 관계가 파일 여기저기 흩어져 <strong>검색이 안 된다</strong>. 셋째, 사람이 목록을 고유지 않는 한 <strong>검증도 안 된다</strong>.</p>
+  <p>스킬·에이전트·ADR 사이의 관계("이 스킬은 저 스킬을 먼저 실행해야 한다", "이 에이전트는 저 스킬을 쓴다")를 자유 텍스트로 적어 두면 세 가지가 반드시 일어난다. 첫째, 원천이 바뀌어도 문서는 <strong>그대로 남아 낡는다</strong>. 둘째, 관계가 파일 여기저기 흩어져 <strong>검색이 안 된다</strong>. 셋째, 사람이 목록을 고유지 않는 한 <strong>검증도 안 된다</strong>.</p>
   <p>스킬 관계 그래프는 이를 "직접 쓰지 않고 유도한다"로 풀었다. 관계의 원천은 이미 존재하는 구조화 데이터(SKILL.md 프론트매터, 에이전트 파일, variant 매니페스트)이고, 그래프는 그 투영(projection)이다. 그래프 파일은 언제 지워도 좋다 — 제너레이터를 다시 돌리면 정확히 같은 방식으로 다시 태어난다. ADR-0060이 이 원칙을 <em>Generated Projection</em>이라는 이름으로 못 박은 이유다.</p>
 
   <h2 id="a2-sources">데이터 원천과 우선순위</h2>
@@ -160,16 +160,16 @@
   <h2 id="a9-workflow">실전 워크플로우 — 관계 추가하기</h2>
   <p>실제로 관계 하나를 추가할 때의 최소 절차다.</p>
   <ol>
-    <li><strong>선언</strong> — 대상 스킬의 <code>SKILL.md</code> 프론트매터에 관계를 쓴다:
+    <li><strong>관계 선언</strong> — 대상 스킬의 <code>SKILL.md</code> 프론트매터에 관계를 쓴다:
 <div style="position:relative">
   <pre class="code-block">relates_to:
   - { skill: research, type: requires }
   - { skill: pdf-export, type: enables, note: "produces layout spec" }</pre>
   <button class="copy-btn">복사</button>
 </div></li>
-    <li><strong>검증</strong> — <code>bun scripts/validate-skills.ts</code>(관계 형식 검사) 후 <code>bun scripts/generate-skill-graph.ts</code> 실행.</li>
-    <li><strong>확인</strong> — <code>bun scripts/verify-skill-graph.ts</code>로 드리프트 없음 확인, <code>docs/skill-graph.md</code>에서 해당 스킬의 관계 표를 눈으로 확인.</li>
-    <li><strong>커밋</strong> — <code>/sync</code>가 4.65단계에서 전 스코프 재생성·검증을 대신 해 주므로, 커밋 전에 직접 그래프 파일을 고르지 않았는지만 확인하면 된다.</li>
+    <li><strong>형식 검증</strong> — <code>bun scripts/validate-skills.ts</code>(관계 형식 검사) 후 <code>bun scripts/generate-skill-graph.ts</code> 실행.</li>
+    <li><strong>드리프트 확인</strong> — <code>bun scripts/verify-skill-graph.ts</code>로 드리프트 없음 확인, <code>docs/skill-graph.md</code>에서 해당 스킬의 관계 표를 눈으로 확인.</li>
+    <li><strong>최종 커밋</strong> — <code>/sync</code>가 4.65단계에서 전 스코프 재생성·검증을 대신 해 주므로, 커밋 전에 직접 그래프 파일을 고르지 않았는지만 확인하면 된다.</li>
   </ol>
   <p>아직 확신이 없는 관계라면 프론트매터 대신 오버라이드 파일에 적는다. <code>reason</code>과 <code>since</code>를 남기면 90일 뒤 시스템이 "아직 관찰 중인가?"를 물어본다.</p>
 

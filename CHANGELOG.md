@@ -2,6 +2,11 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-20] — check-authoring §11 mid-word-strong cleanup
+
+### Fixed
+- **Appendix A/B/C** (`docs/appendix/A_Governance_Enforcement.html`, `B_Decision_System.html`, `C_Skill_Graph.html`) — 11 `check-authoring.ts` §11 warnings (`<strong>` wrapping only a 1–3 char Korean word-stem instead of the natural phrase, e.g. `<strong>강제</strong>한다`) fixed by expanding each `<strong>` span to cover the full natural phrase or word. `bun run check-authoring` now reports 0 warnings.
+
 ## [2026-09-20] — Ch.8 Architecture Deep-Dive: graft Fleet Integration & Universal Design Gate
 
 ### Added

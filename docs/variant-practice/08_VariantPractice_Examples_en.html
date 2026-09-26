@@ -114,7 +114,7 @@
     <div class="card-body">
 
       <div class="situation">
-        Using <code>co-consult</code>, the variant for strategy consulting, run an actual consulting project analyzing market-entry viability and the competitive landscape for "Physical AI" (AI operating in physical environments such as robotics, autonomous driving, and smart factories). The goal is to experience how the 7-stage consulting workflow — in which the PM (Engagement Leader) dispatches 10 specialist agents (Strategy Analyst, Industry Expert, SME, Change Management Partner, etc.) stage by stage — actually runs on a real project.
+        Using <code>co-consult</code>, the variant for strategy consulting, run an actual consulting project analyzing market-entry viability and the competitive landscape for "Physical AI" (AI operating in physical environments such as robotics, autonomous driving, and smart factories). The goal is to experience how the Phase 0-6 consulting workflow — in which the PM (Engagement Leader) dispatches 10 specialist agents (Strategy Analyst, Industry Expert, SME, Change Management Partner, etc.) stage by stage — actually runs on a real project.
       </div>
 
       <div class="cmd-list">
@@ -163,7 +163,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>Explore the scaffolded project structure</strong>
-            <p>Review the full structure of the generated project directory. Focus on the agent definition files, the Phase configuration in <code>docs/context.md</code>, and the roster in <code>AGENTS.md</code> to understand how co-consult builds its 7-stage consulting workflow.</p>
+            <p>Review the full structure of the generated project directory. Focus on the agent definition files, the Phase configuration in <code>docs/context.md</code>, and the roster in <code>AGENTS.md</code> to understand how co-consult builds its Phase 0-6 consulting workflow.</p>
             <div style="position:relative">
               <pre class="code-block">cd physical-ai-market-research
 find . -maxdepth 3 -type f | head -40</pre>
@@ -189,14 +189,15 @@ Step 4 — Define validation criteria: Source URLs included for every item, a nu
             <strong>Run the agent team on the Physical AI market research topic</strong>
             <p>Start a PM session inside the project and hand the defined consulting task to the PM to run the agent team. Watch which agent is active in each Phase and what output it produces as the process unfolds.</p>
             <div class="flow-box">
-              co-consult's 7-stage workflow runs just like a real consulting project.<br><br>
+              co-consult's Phase 0-6 workflow runs just like a real consulting project.<br><br>
               <strong>Phase 0 (Kickoff):</strong> PM receives the task and defines the project scope and schedule<br>
               <strong>Phase 1 (Market Analysis / Organizational Diagnosis):</strong> Strategy Analyst estimates the Physical AI market size and maps competitors; Industry Expert provides robotics/autonomous-driving domain technology trends; SME reinforces the practical perspective based on smart-factory deployment cases<br>
               <strong>Phase 1.5 (Cross-Validation):</strong> Multiple agents cross-review each other's outputs to secure information reliability<br>
               <strong>Phase 2 (Proposal Approval Gate):</strong> PM reviews the Phase 1 results and judges whether they are client-ready<br>
-              <strong>Phase 3 (Practical Solution Design):</strong> Change Management Partner establishes the adoption roadmap and change-management plan<br>
-              <strong>Phase 4 (Delivery):</strong> Final report (Markdown) is written — Executive Summary / Current-State Analysis / Opportunities & Threats / Strategic Recommendations / References<br>
-              <strong>Phase 5 (PR/Handoff):</strong> Client-facing deliverables are organized
+              <strong>Phase 3 (Content Creation):</strong> Communications Lead drafts the client-facing final report (Markdown) while Solutions Architect designs the technical solution in parallel — in this exercise the report with its five sections (Executive Summary / Current-State Analysis / Opportunities &amp; Threats / Strategic Recommendations / References) is completed at this stage<br>
+              <strong>Phase 4 (Platform Delivery):</strong> Delivery Manager coordinates stakeholder reviews and Technology Specialist implements the collaboration-platform workflows<br>
+              <strong>Phase 5 (QA &amp; Finalization):</strong> The PM (Engagement Leader) runs the audit scripts to validate that all deliverables meet quality standards<br>
+              <strong>Phase 6 (PR &amp; Handoff):</strong> The PM runs <code>/sync</code>, creates the PR, and hands the final output to the client
             </div>
 
             <div class="note">
@@ -235,24 +236,24 @@ Step 4 — Define validation criteria: Source URLs included for every item, a nu
                 <!-- Phase 3 종합 보고서 -->
                 <rect x="358" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="399" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 3</text>
-                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Solution Design</text>
+                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Content Creation</text>
                 <line x1="440" y1="58" x2="452" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 4 요약/발표 -->
                 <rect x="454" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 4</text>
-                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Delivery</text>
+                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Platform Delivery</text>
                 <line x1="536" y1="58" x2="548" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 5 핸드오프 -->
                 <rect x="550" y="38" width="82" height="40" rx="8" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1.5"/>
-                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 5</text>
-                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">Handoff</text>
+                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 5-6</text>
+                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">QA &amp; Handoff</text>
                 <!-- Phase labels top row -->
                 <text x="38" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Kickoff</text>
                 <text x="122" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Parallel Research</text>
                 <text x="209" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Build Trust</text>
                 <text x="303" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Quality Gate</text>
-                <text x="399" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Solution Design</text>
-                <text x="495" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Delivery</text>
+                <text x="399" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Content Creation</text>
+                <text x="495" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Platform Delivery</text>
                 <text x="591" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Client Handoff</text>
               </svg>
             </div>
@@ -435,7 +436,7 @@ Time: 15–20 minutes (approx. 12–15 slides)</div>
       </ol>
 
       <div class="tip-box">
-        Open <code>physical-ai-market-research/agents/</code> and <code>korean-cuisine-globalization/agents/</code> side by side and count the files — the difference is stark. co-consult is a 7-stage consulting workflow made up of 10 specialist agents, while co-deck is an 11-stage pipeline made up of specialist agents handling Research, Design, HTML Build, PDF Export, and more — so the agent count and the phase composition in <code>docs/context.md</code> differ substantially. You can directly compare "the real structural differences you couldn't guess from the variant name and badge alone" through the scaffolding output.
+        Open <code>physical-ai-market-research/agents/</code> and <code>korean-cuisine-globalization/agents/</code> side by side and count the files — the difference is stark. co-consult is a Phase 0-6 consulting workflow made up of 10 specialist agents, while co-deck is an 11-stage pipeline made up of specialist agents handling Research, Design, HTML Build, PDF Export, and more — so the agent count and the phase composition in <code>docs/context.md</code> differ substantially. You can directly compare "the real structural differences you couldn't guess from the variant name and badge alone" through the scaffolding output.
       </div>
       <div class="tip-box">
         <strong>It's also possible to feed G-1's co-consult output into G-2's co-deck as input.</strong> Handing the completed Markdown report from the Physical AI market research straight to co-deck lets it auto-generate a presentation deck with the same content. This is how the consulting pipeline (co-consult) and the presentation pipeline (co-deck) connect as a <strong>full pipeline</strong> — from topic input to a presentation-ready HTML deliverable in about 30–45 minutes.

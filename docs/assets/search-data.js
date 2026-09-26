@@ -42,8 +42,8 @@ var SEARCH_DATA = {
     { path: 'appendix/C_Skill_Graph.html', title: '스킬 관계 그래프 — 구조와 운영', lang: 'ko' },
     { path: 'appendix/A_Governance_Enforcement.html', title: '거버넌스 강제 계층', lang: 'ko' },
     { path: 'appendix/B_Decision_System.html', title: '의사결정 시스템', lang: 'ko' },
-    { path: 'design/04_Design_Foundation.html', title: '핵심 장 · Design Foundation과 UI 품질 게이트', lang: 'ko' },
-    { path: 'i18n/05_I18n_Operations.html', title: '핵심 장 · i18n 아키텍처와 다국어 운영', lang: 'ko' },
+    { path: 'design/04_Design_Foundation.html', title: '4장 · Design Foundation과 UI 품질 게이트', lang: 'ko' },
+    { path: 'i18n/05_I18n_Operations.html', title: '5장 · i18n 아키텍처와 다국어 운영', lang: 'ko' },
     { path: 'appendix/D_Hermes_Agents.html', title: '별첨 D · Hermes Agents 운영 가이드', lang: 'ko' },
 
     /* ── EN ── */
@@ -84,8 +84,8 @@ var SEARCH_DATA = {
     { path: 'appendix/C_Skill_Graph_en.html', title: 'Skill Relationship Graph — Structure and Operations', lang: 'en' },
     { path: 'appendix/A_Governance_Enforcement_en.html', title: 'Governance Enforcement Layers', lang: 'en' },
     { path: 'appendix/B_Decision_System_en.html', title: 'Decision System', lang: 'en' },
-    { path: 'design/04_Design_Foundation_en.html', title: 'Core chapter · Design Foundation and UI Quality Gates', lang: 'en' },
-    { path: 'i18n/05_I18n_Operations_en.html', title: 'Core chapter · i18n Architecture and Multilingual Operations', lang: 'en' },
+    { path: 'design/04_Design_Foundation_en.html', title: 'Chapter 4 · Design Foundation and UI Quality Gates', lang: 'en' },
+    { path: 'i18n/05_I18n_Operations_en.html', title: 'Chapter 5 · i18n Architecture and Multilingual Operations', lang: 'en' },
     { path: 'appendix/D_Hermes_Agents_en.html', title: 'Appendix D · Hermes Agents Operations Guide', lang: 'en' },
 
     /* ── JA ── */
@@ -126,8 +126,8 @@ var SEARCH_DATA = {
     { path: 'appendix/C_Skill_Graph_ja.html', title: 'スキル関係グラフ — 構造と運用', lang: 'ja' },
     { path: 'appendix/A_Governance_Enforcement_ja.html', title: 'ガバナンス強制層', lang: 'ja' },
     { path: 'appendix/B_Decision_System_ja.html', title: '意思決定システム', lang: 'ja' },
-    { path: 'design/04_Design_Foundation_ja.html', title: 'コア章 · Design FoundationとUI品質ゲート', lang: 'ja' },
-    { path: 'i18n/05_I18n_Operations_ja.html', title: 'コア章 · i18nアーキテクチャと多言語運用', lang: 'ja' },
+    { path: 'design/04_Design_Foundation_ja.html', title: '第4章 · Design FoundationとUI品質ゲート', lang: 'ja' },
+    { path: 'i18n/05_I18n_Operations_ja.html', title: '第5章 · i18nアーキテクチャと多言語運用', lang: 'ja' },
     { path: 'appendix/D_Hermes_Agents_ja.html', title: '別添 D · Hermes Agents運用ガイド', lang: 'ja' },
 
     /* ── ES ── */
@@ -168,8 +168,8 @@ var SEARCH_DATA = {
     { path: 'appendix/C_Skill_Graph_es.html', title: 'Grafo de Relaciones de Habilidades — Estructura y Operación', lang: 'es' },
     { path: 'appendix/A_Governance_Enforcement_es.html', title: 'Capas de Aplicación de Gobernanza', lang: 'es' },
     { path: 'appendix/B_Decision_System_es.html', title: 'Sistema de Decisión', lang: 'es' },
-    { path: 'design/04_Design_Foundation_es.html', title: 'Capítulo central · Design Foundation y puertas de calidad de UI', lang: 'es' },
-    { path: 'i18n/05_I18n_Operations_es.html', title: 'Capítulo central · Arquitectura de i18n y operaciones multilingües', lang: 'es' },
+    { path: 'design/04_Design_Foundation_es.html', title: 'Capítulo 4 · Design Foundation y puertas de calidad de UI', lang: 'es' },
+    { path: 'i18n/05_I18n_Operations_es.html', title: 'Capítulo 5 · Arquitectura de i18n y operaciones multilingües', lang: 'es' },
     { path: 'appendix/D_Hermes_Agents_es.html', title: 'Apéndice D · Guía operativa de Hermes Agents', lang: 'es' }
   ],
 

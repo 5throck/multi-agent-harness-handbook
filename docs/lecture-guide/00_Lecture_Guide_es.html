@@ -62,13 +62,13 @@
 	      <tr><td>Cap. 1 · Transformación del trabajo en la era de la IA</td><td>Por qué la IA ahora (estadísticas introductorias), las tres etapas de adopción de la IA (usuario → usuario avanzado → diseñador), la necesidad de la ingeniería de arnés (comparación con y sin arnés), principios multiagente (tabla comparativa single vs. multi), casos reales de ahorro de tiempo, ruta de este taller</td><td>Clase</td><td>30 min</td></tr>
 	      <tr><td>Cap. 2 · Ingeniería de Harness y conceptos de equipos multiagente</td><td>El flujo Prompt→Contexto→Arnés, definición de ingeniería de arnés, limitaciones de un solo agente, componentes del equipo multiagente (orquestador, especialistas, contratos de traspaso), subagentes (predefinidos vs. generados dinámicamente), los 5 patrones de orquestación más reintento/reversión/escalamiento, composición dinámica de equipos y combinación de flujos de trabajo, el estándar AGENTS.md</td><td>Clase + preguntas de comprensión</td><td>45 min</td></tr>
 		      <tr><td>Cap. 3 · Guardrails y ejecución segura</td><td>Por qué se necesitan barreras de seguridad, la clasificación de riesgo en 3 niveles (lectura/escritura/destructivo), el principio de privilegio mínimo (el campo de herramientas), puertas de aprobación humana, aislamiento (worktree, sandbox), registros de auditoría y observabilidad</td><td>Clase</td><td>20 min</td></tr>
-		      <tr><td>Ejercicio de calentamiento</td><td>Tetris (vibe-coding, sin arnés, 10 min) + Pac-Man (experimentar el fracaso con un solo prompt, luego ejercicio multiagente de 3 etapas planificar→desarrollar→QA, 25 min) + conclusiones (5 min)</td><td>Práctica (participantes)</td><td>40 min</td></tr>
+		      <tr id="color-system-schedule-row"><td>Cap. 4 · Fundamentos de diseño y accesibilidad</td><td>filosofía, principios, guías, color, tipografía, componentes/pantallas estándar, accesibilidad</td><td>Clase + revisión</td><td>35 min</td></tr><tr><td>Cap. 5 · Diseño de i18n y calidad de contenido</td><td>locale, perfil de país, formato, expansión de texto, validación de paridad</td><td>Clase + ejercicio</td><td>25 min</td></tr><tr><td>Ejercicio de calentamiento</td><td>Tetris (vibe-coding, sin arnés, 10 min) + Pac-Man (experimentar el fracaso con un solo prompt, luego ejercicio multiagente de 3 etapas planificar→desarrollar→QA, 25 min) + conclusiones (5 min)</td><td>Práctica (participantes)</td><td>40 min</td></tr>
 		      <tr><td>Cap. 6 · Práctica multiagente (§1 + §2)</td><td>En las cuatro herramientas (Claude Desktop App/Code, Antigravity Escritorio/CLI): definir e invocar subagentes, canalizaciones secuenciales, composición dinámica de equipos, ejecución en paralelo y ejercicios de comparación de niveles de modelos (G-1/D-1/D-2/P-1/P-2, Codex mediante el enfoque del <a href="../practice/06_Practice_Manual_C_es.html">Capítulo 6 §1-C</a>)</td><td>Práctica (participantes)</td><td>90 min</td></tr>
       <tr><td>Cap. 7 · Introducción a ai-workspace-standards</td><td>Panorama del repositorio ai-workspace-standards, los 4 archivos principales (AGENTS.md, CONSTITUTION.md, CLAUDE.md, GEMINI.md), qué es una variante, conceptos básicos de creación de un proyecto mediante andamiaje</td><td>Clase</td><td>20 min</td></tr>
       <tr><td>Cap. 8 · Uso de variante existente: co-consult (G-1)</td><td>Andamiaje y ejecución de un proyecto de investigación de mercado de IA física con co-consult — aplicar el marco de diseño de 4 etapas, ejecutar el flujo de consultoría de 7 etapas, revisar entregables y rastrear traspasos</td><td>Práctica (participantes)</td><td>40 min</td></tr>
 	      <tr><td>Cap. 8 · Uso de variante existente: co-deck (G-2)</td><td>Andamiaje y ejecución de una presentación de globalización de la cocina coreana con co-deck — definir el marco del tema de la presentación, ejecutar la canalización de 11 etapas, revisar y mejorar el entregable, configurar TTS y diapositivas automáticas</td><td>Práctica (participantes)</td><td>40 min</td></tr>
 	      <tr><td>Cierre del día 1</td><td>Resumen del aprendizaje del día, retrospectiva comparando las estructuras de las dos variantes (co-consult vs. co-deck), avance del día 2 (sesión para profesionales de TI)</td><td>Discusión</td><td>10 min</td></tr>
-				      <tr id="color-system-schedule-row"><td>Cap. 4 · Fundamentos de diseño y accesibilidad</td><td>filosofía, principios, guías, color, tipografía, componentes/pantallas estándar, accesibilidad</td><td>Clase + revisión</td><td>35 min</td></tr><tr><td>Cap. 5 · Diseño de i18n y calidad de contenido</td><td>locale, perfil de país, formato, expansión de texto, validación de paridad</td><td>Clase + ejercicio</td><td>25 min</td></tr><tr class="schedule-total"><td colspan="3">Total día 1</td><td>aprox. 6 h 45 min (sin descansos)</td></tr>
+				      <tr class="schedule-total"><td colspan="3">Total día 1</td><td>aprox. 6 h 45 min (sin descansos)</td></tr>
     </tbody>
   </table>
   </div>
@@ -113,6 +113,8 @@
   <h3>Capítulo 3: Barreras de seguridad y modelo de permisos</h3>
   <p>Hay una razón para ubicar esto justo antes del ejercicio del capítulo 6 §2: construye el hábito de decidir "qué permitir y qué bloquear" antes de construir realmente un subagente. Mostrar la tabla de clasificación de riesgo en 3 niveles y preguntar de antemano "¿En qué nivel caería el revisor que está a punto de construir?" conduce naturalmente al ejercicio del capítulo 6 §2.</p>
 
+  <h3 id="color-system-instructor-note">Capítulo 4 · Fundamentos de diseño y accesibilidad</h3><p>Explica el color como contrato de estado y acción, no como decoración. Comprueba que error, selección y siguiente acción se entienden en escala de grises.</p><h3>Capítulo 5 · Diseño de i18n y calidad de contenido</h3><p>Revisa claves, texto largo, formato de fecha y moneda, y estados de error además de la naturalidad del texto.</p>
+
   <h3>Ejercicio de calentamiento: De Tetris a Pac-Man</h3>
   <p>Ejecute esto justo después del descanso 1, antes de los ejercicios principales del capítulo 6. Use claude.ai o Claude Code; a diferencia del capítulo 6, donde los grupos usan diferentes herramientas, todos usan la misma plataforma aquí.</p>
   <p><strong>Tetris (10 min)</strong>: El instructor demuestra primero durante 1 minuto, luego los participantes siguen. Escribir "Construye un juego de Tetris con HTML Canvas" produce un resultado funcional inmediatamente, solo con vibe-coding. Las solicitudes de modificación (color de fondo, marcador, etc.) también se manejan sin problemas. En este punto, enfatice que "la complejidad a este nivel (~200 líneas) está bien incluso sin un arnés."</p>
@@ -139,7 +141,7 @@
   <h3>Capítulo 10: La arquitectura de ai-workspace-standards (Día 2)</h3>
   <p>El día 2 retoma donde dejó la introducción ligera del día 1, cubriendo en detalle la estructura de capas L0→L1→L2→L3, la estructura interna de las 11 plantillas/variantes, la jerarquía de modelos, la lista de verificación al inicio de sesión e incluso la hoja de ruta de avance aún no implementada (§5). Las actualizaciones de proyectos L3 se cubren por separado en el capítulo 12. No es necesario que los participantes memoricen todo — es suficiente que quede claro el motivo de "por qué se necesita esta estructura de capas".</p>
 
-  <h3 id="color-system-instructor-note">Capítulo 4 · Fundamentos de diseño y accesibilidad</h3><p>Explica el color como contrato de estado y acción, no como decoración. Comprueba que error, selección y siguiente acción se entienden en escala de grises.</p><h3>Capítulo 5 · Diseño de i18n y calidad de contenido</h3><p>Revisa claves, texto largo, formato de fecha y moneda, y estados de error además de la naturalidad del texto.</p><h3>Capítulo 11: Patrones de diseño de flujos de trabajo</h3>
+  <h3>Capítulo 11: Patrones de diseño de flujos de trabajo</h3>
   <p>Después de revisar los 5 patrones de orquestación, muestre estudios de caso reales de flujos de trabajo como revisión de código, investigación de mercado y presentaciones. Trabajen juntos en un árbol de decisión de "¿Qué patrón se ajusta a esta tarea?"</p>
 
   <h3>Capítulo 12: Actualizaciones de proyectos L3 (Día 2)</h3>
@@ -201,6 +203,7 @@
     </ol>
   </div>
 
+  <div class="quiz" id="design-chapter-check"><div class="quiz-title">Capítulo 4 · Fundamentos de diseño y accesibilidad: comprobación</div><ol><li>¿Cómo conectan filosofía, principios, guías y tokens de diseño con la implementación?</li><li>¿Por qué los colores de estado deben incluir texto, iconos y señales de foco?</li><li>¿Cómo mejoran los componentes y pantallas estándar la calidad de resultados multiagente?</li></ol></div><div class="quiz" id="i18n-chapter-check"><div class="quiz-title">Capítulo 5 · Diseño de i18n y calidad de contenido: comprobación</div><ol><li>¿Por qué separar el SSOT de mensajes de los archivos de traducción?</li><li>¿Qué estados de pantalla se revisan para textos largos y escrituras RTL/CJK?</li><li>¿Qué problemas distintos detectan la paridad automática y la revisión humana de pantalla?</li></ol></div>
   <div class="quiz">
     <div class="quiz-title">Preguntas de comprensión del ejercicio de calentamiento</div>
     <ol>
@@ -235,7 +238,7 @@
     </ol>
   </div>
 
-  <div class="quiz" id="design-chapter-check"><div class="quiz-title">Capítulo 4 · Fundamentos de diseño y accesibilidad: comprobación</div><ol><li>¿Cómo conectan filosofía, principios, guías y tokens de diseño con la implementación?</li><li>¿Por qué los colores de estado deben incluir texto, iconos y señales de foco?</li><li>¿Cómo mejoran los componentes y pantallas estándar la calidad de resultados multiagente?</li></ol></div><div class="quiz" id="i18n-chapter-check"><div class="quiz-title">Capítulo 5 · Diseño de i18n y calidad de contenido: comprobación</div><ol><li>¿Por qué separar el SSOT de mensajes de los archivos de traducción?</li><li>¿Qué estados de pantalla se revisan para textos largos y escrituras RTL/CJK?</li><li>¿Qué problemas distintos detectan la paridad automática y la revisión humana de pantalla?</li></ol></div>
+
   <h3>📅 Preguntas de comprensión del día 2</h3>
 
   <div class="quiz">

@@ -121,7 +121,7 @@
   <h2 id="s2">핵심 파일 다섯 가지</h2>
   <p>워크스페이스 루트에는 모든 프로젝트가 공통으로 참조하는 다섯 개의 핵심 파일이 있다.</p>
   <p><code>CONSTITUTION.md</code>는 마스터 공유 표준으로, 세션을 시작할 때 가장 먼저 읽어야 하는 문서다. 워크스페이스 전체의 거버넌스 규칙, PR 워크플로우, 멀티 에이전트 아키텍처 원칙이 여기에 정의되어 있다. <code>CLAUDE.md</code>는 Claude Code/App에서의 구체적 동작 방식(훅, 슬래시 커맨드, 에이전트 디스패치 규칙)을 담고, <code>GEMINI.md</code>는 Gemini/Antigravity CLI/Desktop에서의 동등한 동작을 정의하며, <code>CODEX.md</code>는 Codex CLI/Desktop App에서 같은 표준을 순차 역할 전환과 프롬프트 기반 실행으로 적용하는 방법을 정의한다. <code>AGENTS.md</code>는 워크스페이스 전체에서 사용 가능한 에이전트들의 정본 목록(roster) 역할을 한다. 이 파일명은 2장에서 소개한, Claude Code를 비롯한 30개 이상의 도구가 공통으로 읽는 개방형 AGENTS.md 표준과 같다. 다만 이 저장소에서는 "에이전트 레지스트리 및 오케스트레이션 레퍼런스"라는 더 구체적인 역할까지 겸한다. 파일 맨 위에 "이 파일은 AI 도구를 향한 지시문이 아니라 사람이 정의한 여러 역할의 등록부"라고 명시해 둘 정도다.</p>
-  <p>이 네 파일의 관계를 한 문장으로 요약하면, CONSTITUTION.md가 "무엇을 지켜야 하는가"를 정의하고 CLAUDE.md/GEMINI.md/CODEX.md는 "그것을 각 플랫폼에서 어떻게 실행하는가"를, AGENTS.md는 "누가 그 일을 하는가"를 정의한다.</p>
+  <p>이 다섯 파일의 관계를 한 문장으로 요약하면, CONSTITUTION.md가 "무엇을 지켜야 하는가"를 정의하고 CLAUDE.md/GEMINI.md/CODEX.md는 "그것을 각 플랫폼에서 어떻게 실행하는가"를, AGENTS.md는 "누가 그 일을 하는가"를 정의한다.</p>
 
   <p>AGENTS.md의 에이전트 항목은 다음과 같은 필드로 구성된다. <strong>구체적인 작성 가이드와 도구별 구현 매핑은 10장 §3 AGENTS.md 심화에서 다룬다.</strong></p>
   <div class="table-compare narrow-col-3">

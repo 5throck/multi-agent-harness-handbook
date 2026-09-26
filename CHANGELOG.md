@@ -1,6 +1,9 @@
 
 ## 2026-09-26
 
+### Fixed
+- Added visible Hermes Agents appendix cards to every localized home page.
+
 ### Changed
 - Promoted Design and i18n into numbered chapters; added Hermes Appendix D and operational standards updates.
 - Synced with `ai-workspace-standards` main (2026-09-26).

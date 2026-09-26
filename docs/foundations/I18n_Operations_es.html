@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Arquitectura de i18n y operaciones multilingües - Multi-Agent Harness Handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Capítulo central · Arquitectura de i18n y operaciones multilingües</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <a href="../index_es.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Capítulo central · Arquitectura de i18n y operaciones multilingües</div>
+  <a href="#s1">SSOT y alcance de locale</a>
+  <a href="#s2">División de roles</a>
+  <a href="#s3">Paridad y puertas de calidad</a>
+  <a href="#s4">Cambio y entrega</a>
+  <div class="nav-section">Related chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter_es.html">Previous</a>
+  <a href="../practice/04_Practice_Manual_es.html">Next</a>
+</nav>
+<main><article class="reading">
+  <div class="chapter-eyebrow">Capítulo central</div>
+  <h1>Arquitectura de i18n y operaciones multilingües</h1>
+  <p class="lead">Aprende a separar locale, traducción, revisión y entrega en un entorno multiagente.</p>
+  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>SSOT y alcance de locale</li><li>División de roles</li><li>Paridad y puertas de calidad</li><li>Cambio y entrega</li></ul></div>
+  <h2 id="s1">SSOT y alcance de locale</h2>
+  <p>Define la fuente para idiomas compatibles, idioma predeterminado y formatos de visualización. Mantén los perfiles de país separados de los ajustes de idioma.</p>
+  <h2 id="s2">División de roles</h2>
+  <p>Traducción transforma el contenido, revisión de i18n comprueba terminología, formato y omisiones, y revisión de UI comprueba el diseño. Un rol no aprueba por sí solo su propio resultado.</p>
+  <h2 id="s3">Paridad y puertas de calidad</h2>
+  <p>Comprueba automáticamente estructura, enlaces, código y tokens numéricos entre origen y traducciones; las personas revisan significado e idoneidad cultural.</p>
+  <h2 id="s4">Cambio y entrega</h2>
+  <p>Para un cambio de origen, identifica los locales afectados y registra juntos el estado de traducción, revisión, PR y entrega. Trata una traducción ausente como defecto previo al lanzamiento.</p>
+  <div class="tip-box"><strong>Practice:</strong> Record the decision, assign an owner, and verify the result before the next pipeline stage.</div>
+
+  <table><thead><tr><th>Check</th><th>Purpose</th></tr></thead><tbody><tr><td>Rule</td><td>Make the decision explicit.</td></tr><tr><td>Evidence</td><td>Verify the result before delivery.</td></tr></tbody></table>
+  <div class="chapter-nav"><a href="../index.html">← Handbook home</a><a href="../index.html">Back to contents →</a></div>
+</article></main>
+</div>
+
+<footer>
+    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · Material educativo en español<br>
+    Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    El contenido de este manual está bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual 4.0 Internacional)</a>.
+  </footer>
+</body>
+</html>

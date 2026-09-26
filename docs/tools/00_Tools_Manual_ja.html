@@ -49,7 +49,7 @@
     <div class="version-row"><span class="vlabel">改訂時に再確認すべき点</span><span class="vvalue">各ツールの実験的機能ラベルが安定版に昇格したか、デスクトップアプリの未対応フック範囲が縮小したか、Codexにネイティブなサブエージェントツールが追加されたか</span></div>
   </div>
 
-  <div class="warning-box">2026-06-18時点で、Googleは個人ユーザー（Free/Pro/Ultra）向けの<strong>Gemini CLIサービスを終了</strong>し、<strong>Antigravity CLI (<code>agy</code>)</strong>がその後継となりました。本ハンドブックは当初Geminiコマンドラインインターフェース（CLI）を前提に執筆されていましたが、現在の日付をもってAntigravityコマンドラインインターフェース（CLI）に完全に更新されています。古い資料で<code>gemini</code>コマンドや<code>.gemini/agents/</code>パスを見かけた場合は、後継バージョンに置き換えられたものとして扱ってください。</div>
+  <div class="tip-box">Google系では<strong>Gemini CLI</strong>と<strong>Antigravity CLI (<code>agy</code>)/デスクトップ</strong>の両方がサポートされています。本ハンドブックのGoogle系実習とツール比較はAntigravity CLI/デスクトップを基準としています。Gemini CLIはworkspaceの<code>GEMINI.md</code>ガイダンス、<code>.gemini/</code>の設定・コマンド・スキル、フック（BeforeTool/AfterTool）により引き続きサポートされているため、資料内で<code>gemini</code>コマンドや<code>.gemini/</code>パスを見かけても、過去のバージョンとは見なさないでください。</div>
 
   <h2 id="tree">6つのツールを一覧で把握する（Desktop優先、CLIは並列）</h2>
   <div class="tree-box"><div style="position:relative">
@@ -60,7 +60,7 @@ Anthropic family
 
 Google family
 ├── <span class="cmd">Antigravity (Desktop)</span> ★ デフォルト    <span class="desc">スタンドアロンデスクトップアプリ。Agent Managerがワークスペースごとに並列実行を管理</span>
-└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">ターミナルベース。Gemini CLIの後継 — オーケストレータが動的にサブエージェントを生成</span>
+└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">ターミナルベース — オーケストレータが動的にサブエージェントを生成</span>
 
 OpenAI family
 ├── <span class="cmd">Codex Desktop App</span>              <span class="desc">GUIベース。ネイティブなサブエージェントツールなし — PMが順次実行で役割を代行</span>

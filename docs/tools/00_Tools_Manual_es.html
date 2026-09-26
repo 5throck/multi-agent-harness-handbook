@@ -49,7 +49,7 @@
     <div class="version-row"><span class="vlabel">Para reverificar en revisión</span><span class="vvalue">Si las etiquetas de funciones experimentales de cada herramienta han pasado a estables, si el ámbito de hooks no soportados de la aplicación de escritorio se ha reducido, y si Codex ha ganado una herramienta nativa de subagentes</span></div>
   </div>
 
-  <div class="warning-box">A partir del 2026-06-18, Google <strong>discontinuó el servicio de Gemini CLI</strong> para usuarios individuales (Gratis/Pro/Ultra), y <strong>Antigravity CLI (<code>agy</code>)</strong> tomó su lugar. Este manual fue escrito originalmente alrededor de la interfaz de línea de comandos de Gemini antes de esa fecha, pero se ha actualizado completamente a la interfaz de línea de comandos de Antigravity a la fecha actual. Si encuentra el comando <code>gemini</code> o una ruta <code>.gemini/agents/</code> en material antiguo, trátelo como una referencia a una versión que ha sido reemplazada.</div>
+  <div class="tip-box">En la familia Google se admiten tanto <strong>Gemini CLI</strong> como <strong>Antigravity CLI (<code>agy</code>)/Escritorio</strong>. La práctica de la familia Google de este manual y las comparaciones de herramientas están escritas en torno a Antigravity CLI/Escritorio. Gemini CLI sigue siendo compatible mediante las directrices <code>GEMINI.md</code> del workspace, la configuración, comandos y skills de <code>.gemini/</code>, y sus hooks (BeforeTool/AfterTool) — así que si encuentra el comando <code>gemini</code> o una ruta <code>.gemini/</code> en el material, no lo trate como una versión reemplazada.</div>
 
   <h2 id="tree">Las Seis Herramientas en Resumen (Escritorio Primero, CLI en Paralelo)</h2>
   <div class="tree-box"><div style="position:relative">
@@ -60,7 +60,7 @@ Familia Anthropic
 
 Familia Google
 ├── <span class="cmd">Antigravity (Escritorio)</span> ★ Predeterminado    <span class="desc">Aplicación de escritorio independiente; el Administrador de Agentes supervisa el paralelismo por espacio de trabajo</span>
-└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">Basada en terminal, sucesor de Gemini CLI — el orquestador crea subagentes dinámicamente</span>
+└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">Basada en terminal — el orquestador crea subagentes dinámicamente</span>
 
 Familia OpenAI
 ├── <span class="cmd">Codex Desktop App</span>              <span class="desc">Basada en GUI, sin herramienta nativa de subagentes — el PM ejecuta roles de forma secuencial</span>

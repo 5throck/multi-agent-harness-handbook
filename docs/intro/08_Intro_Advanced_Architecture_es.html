@@ -112,7 +112,7 @@ tier:                          # alias de modelo específico de plataforma (trad
     </tbody>
   </table>
   </div>
-  <p>Esta asignación estática forma la línea base, pero en el tiempo de ejecución real el PM aplica <strong>Reglas de Ajuste de Nivel</strong> para optimizar dinámicamente el costo. Un agente con una línea base alta (architect, pm) necesita el modelo más fuerte porque debe hacer juicios de diseño complejos. automation-engineer, por otro lado, escribe scripts estandarizados según ADR-0036, por lo que el nivel bajo es suficiente — la única pregunta que importa es si se requiere "juicio pesado."</p>
+  <p>Esta asignación estática forma la línea base, pero en el tiempo de ejecución real el PM aplica <strong>Reglas de Ajuste de Nivel</strong> para optimizar dinámicamente el costo. Un agente con una línea base alta (architect) necesita el modelo más fuerte porque debe hacer juicios de diseño complejos. automation-engineer, por otro lado, escribe scripts estandarizados según ADR-0036, por lo que el nivel bajo es suficiente — la única pregunta que importa es si se requiere "juicio pesado."</p>
 
   <h3>Reglas de Ajuste de Nivel — Optimización de Costos en Tiempo de Ejecución</h3>
   <p>Cuando el PM construye un plan de ejecución, se permiten ajustes de nivel respecto a la línea base. Las reglas son simples.</p>
@@ -124,7 +124,7 @@ tier:                          # alias de modelo específico de plataforma (trad
   <p>El núcleo de esta regla es el principio de que <strong>"el techo de complejidad del rol de un agente está fijo, pero su piso puede ajustarse a la situación."</strong> El PM puede reducir el nivel a bajo para ahorrar costo, pero en el momento en que una tarea excede la capacidad de bajo, vuelve inmediatamente a la línea base. El impacto en el costo se puede sentir directamente en el ejercicio P-2 del Capítulo 6 §2-A.</p>
 
   <h3>Regla del Techo de Nivel</h3>
-  <p>La tabla de Determinación de Fase de AGENTS.md (§3.5) especifica el techo de nivel permitido para cada tipo de entregable. Por ejemplo, "implementación de script (con un plan aprobado ya en su lugar)" es Fase 4, y el agente responsable es automation-engineer (bajo) — asignar alto aquí sería una violación del Techo de Nivel. Por el contrario, "diseñar nuevos archivos, definir esquemas" es Fase 1-2, manejado por architect (alto).</p>
+  <p>La tabla de Determinación de Fase del documento de flujo de trabajo del gateway de PM (<code>docs/governance/agents/pm-gateway-workflow.md</code>) especifica el techo de nivel permitido para cada tipo de entregable. Por ejemplo, "implementación de script (con un plan aprobado ya en su lugar)" es Fase 4, y el agente responsable es automation-engineer (bajo) — asignar alto aquí sería una violación del Techo de Nivel. Por el contrario, "diseñar nuevos archivos, definir esquemas" es Fase 1-2, manejado por architect (alto).</p>
   <div class="pullquote">
     La Regla del Techo de Nivel no es "nunca asignar más del nivel mejor adaptado a esta tarea" — es "nunca usar más del nivel definido de este agente." Es basada en roles, no en tareas.
   </div>

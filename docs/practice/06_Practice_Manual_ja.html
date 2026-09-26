@@ -32,7 +32,7 @@
   <a href="#section-1">1. サブエージェントの定義 — 事前定義 vs 動的生成</a>
   <a href="#section-2">2. サブエージェントの呼び出し/委任</a>
   <div class="nav-section">並列・チーム協働</div>
-  <a href="#section-3">3. 並列実行 — 4つのツール比較</a>
+  <a href="#section-3">3. 並列実行 — 6つのツール比較</a>
   <a href="#section-4">4. 自動化/フック — 何が自動的に発火するか</a>
   <div class="nav-section">参考</div>
   <a href="#refs">参考リンク</a>
@@ -50,11 +50,11 @@
  <article class="reading">
   <div class="chapter-eyebrow">第6章 §1</div>
   <h1>第6章 §1 · ハーネスベースのマルチエージェントチーム活用</h1>
-  <p class="subtitle">Claude Code / Claude Desktop App / Antigravity CLI / Antigravity(Desktop) / Codex CLI / Codex Desktop Appの6つのツールでサブエージェント（またはそれに相当する作業）を定義し、遂行し、並列・自動化の単位に拡張する方法を並べて整理したリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager</a> · <a href="https://developers.openai.com/codex" target="_blank">Codex</a></p>
+  <p class="subtitle">Claude Code / Claude Desktop App / Antigravity CLI / Antigravity(Desktop) / Codex CLI / Codex Desktop Appの6つのツールでサブエージェント（またはそれに相当する作業）を定義し、遂行し、並列・自動化の単位に拡張する方法を並べて整理したリファレンス &nbsp;|&nbsp; 公式ドキュメント: <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using</a> · <a href="https://antigravity.google/docs/home" target="_blank">Antigravity — Agent Manager</a> · <a href="https://developers.openai.com/codex" target="_blank">Codex</a></p>
 
   <div class="version-box">
     <div class="version-row"><span class="vlabel">対象バージョン</span><span class="vvalue">Claude Code 2026-09リリース / Antigravity CLI (agy) 1.1.0+ / Antigravity 2.0 / Codex CLI・Desktop App</span></div>
-    <div class="version-row"><span class="vlabel">参照ドキュメントURL</span><span class="vvalue"><a href="https://code.claude.com/docs/en/sub-agents" target="_blank">code.claude.com/docs/en/sub-agents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">antigravity.google/docs/cli/getting-started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">antigravity.google/docs/cli/using</a> · <a href="https://code.claude.com/docs" target="_blank">Claude Code (Agent Manager)</a> · <a href="https://developers.openai.com/codex" target="_blank">developers.openai.com/codex</a></span></div>
+    <div class="version-row"><span class="vlabel">参照ドキュメントURL</span><span class="vvalue"><a href="https://code.claude.com/docs/en/sub-agents" target="_blank">code.claude.com/docs/en/sub-agents</a> · <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">antigravity.google/docs/cli/getting-started</a> · <a href="https://antigravity.google/docs/cli/using" target="_blank">antigravity.google/docs/cli/using</a> · <a href="https://antigravity.google/docs/home" target="_blank">Antigravity (Agent Manager)</a> · <a href="https://developers.openai.com/codex" target="_blank">developers.openai.com/codex</a></span></div>
     <div class="version-row"><span class="vlabel">資料収集日</span><span class="vvalue">2026-09-12</span></div>
     <div class="version-row"><span class="vlabel">バージョン確認方法</span><span class="vvalue">Claude Code/App: <code>claude --version</code> · Antigravity CLI: <code>agy --version</code> またはセッション内で <code>/usage</code> · Antigravity Desktop: アプリ内の情報画面 · Codex CLI: <code>codex --version</code> · Codex Desktop App: アプリ内の情報画面</span></div>
     <div class="version-row"><span class="vlabel">改訂時の確認事項</span><span class="vvalue">Claude Code Agent TeamsとAntigravity CLI/Agent Managerはいずれも急速に変化する機能のため、フラグ名・コマンド・UI構成がリリースごとに変わる可能性があるので最新のリリースノートを優先的に確認すること。Codexにネイティブなサブエージェントツールが追加されたかも再確認</span></div>
@@ -245,7 +245,7 @@
     <li>📖 <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Subagents 公式ドキュメント</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Getting Started 公式ドキュメント</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Using AGY CLI 公式ドキュメント</a></li>
-    <li>📖 <a href="https://code.claude.com/docs" target="_blank">Antigravity — Agent Manager 公式ドキュメント</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/home" target="_blank">Antigravity — Agent Manager 公式ドキュメント</a></li>
     <li>📖 <a href="https://developers.openai.com/codex" target="_blank">Codex — 公式ドキュメント</a></li>
     <li>⚙️ <a href="06_Practice_Examples_A_ja.html">第6章 §2 実習例 — 06_Practice_Examples_A_ja.html</a></li>
   </ul>

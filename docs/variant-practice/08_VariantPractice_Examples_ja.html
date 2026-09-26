@@ -114,7 +114,7 @@
     <div class="card-body">
 
       <div class="situation">
-        戦略コンサルティング用Variantである<code>co-consult</code>を使用して、「Physical AI」（ロボティクス、自動運転、スマートファクトリなど物理環境で動作するAI）の市場参入の妥当性と競争環境を分析する実際のコンサルティングプロジェクトを実行します。PM（Engagement Leader）が10人の専門エージェント（Strategy Analyst、Industry Expert、SME、Change Management Partnerなど）を各フェーズごとにディスパッチする7段階のコンサルティングワークフローが、実際のプロジェクトでどのように動作するかを体験することを目指します。
+        戦略コンサルティング用Variantである<code>co-consult</code>を使用して、「Physical AI」（ロボティクス、自動運転、スマートファクトリなど物理環境で動作するAI）の市場参入の妥当性と競争環境を分析する実際のコンサルティングプロジェクトを実行します。PM（Engagement Leader）が10人の専門エージェント（Strategy Analyst、Industry Expert、SME、Change Management Partnerなど）を各フェーズごとにディスパッチするPhase 0〜6のコンサルティングワークフローが、実際のプロジェクトでどのように動作するかを体験することを目指します。
       </div>
 
       <div class="cmd-list">
@@ -163,7 +163,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>スキャフォールドされたプロジェクト構造を探索する</strong>
-            <p>生成されたプロジェクトディレクトリの全体構造を確認します。エージェント定義ファイル、<code>docs/context.md</code>のPhase設定、<code>AGENTS.md</code>のロスターに注目して、co-consultがどのように7段階のコンサルティングワークフローを構築しているかを理解します。</p>
+            <p>生成されたプロジェクトディレクトリの全体構造を確認します。エージェント定義ファイル、<code>docs/context.md</code>のPhase設定、<code>AGENTS.md</code>のロスターに注目して、co-consultがどのようにPhase 0〜6のコンサルティングワークフローを構築しているかを理解します。</p>
             <div style="position:relative">
               <pre class="code-block">cd physical-ai-market-research
 find . -maxdepth 3 -type f | head -40</pre>
@@ -189,14 +189,15 @@ Step 4 — 検証基準の定義: すべての項目にソースURLが含まれ�
             <strong>Physical AI市場調査トピックでエージェントチームを実行する</strong>
             <p>プロジェクト内でPMセッションを開始し、定義したコンサルティングタスクをPMに渡してエージェントチームを実行します。各Phaseでどのエージェントがアクティブになり、どんな出力を生成するかを観察します。</p>
             <div class="flow-box">
-              co-consultの7段階ワークフローは、実際のコンサルティングプロジェクトと同じように実行されます。<br><br>
+              co-consultのPhase 0〜6ワークフローは、実際のコンサルティングプロジェクトと同じように実行されます。<br><br>
               <strong>Phase 0（キックオフ）:</strong> PMがタスクを受け取り、プロジェクトのスコープとスケジュールを定義<br>
               <strong>Phase 1（市場分析 / 組織診断）:</strong> Strategy AnalystがPhysical AIの市場規模を推定し競合マップを作成；Industry Expertがロボティクス/自動運転のドメイン技術トレンドを提供；SMEがスマートファクトリの導入事例に基づく実践的視点を補強<br>
               <strong>Phase 1.5（クロスバリデーション）:</strong> 複数のエージェントが相互に他のエージェントの出力をレビューし、情報の信頼性を確保<br>
               <strong>Phase 2（提案承認ゲート）:</strong> PMがPhase 1の結果をレビューし、クライアントに提示可能かを判定<br>
-              <strong>Phase 3（実践的ソリューション設計）:</strong> Change Management Partnerが導入ロードマップとチェンジマネジメント計画を策定<br>
-              <strong>Phase 4（納品）:</strong> 最終レポート（Markdown）が作成される — エグゼクティブサマリー / 現状分析 / 機会と脅威 / 戦略的提言 / 参考文献一覧<br>
-              <strong>Phase 5（PR/ハンドオフ）:</strong> クライアント向け納品物が整理される
+              <strong>Phase 3（コンテンツ作成）:</strong> Communications Leadがクライアント向け最終レポート（Markdown）の草案を執筆し、Solutions Architectが技術ソリューション設計を並行して担う。この演習では、エグゼクティブサマリー/現状分析/機会と脅威/戦略的提言/参考文献一覧の5セクション構成のレポートがこのフェーズで完成する<br>
+              <strong>Phase 4（プラットフォーム納品）:</strong> Delivery Managerがステークホルダーレビューを調整し、Technology Specialistがコラボレーションプラットフォームのワークフロー実装を担当する<br>
+              <strong>Phase 5（QA・最終チェック）:</strong> PM（Engagement Leader）がauditスクリプトを実行し、すべての納品物が品質基準を満たすか検証する<br>
+              <strong>Phase 6（PR・引継ぎ）:</strong> PMが<code>/sync</code>でPRを作成し、最終成果物をクライアントに引き渡す
             </div>
 
             <div class="note">
@@ -235,17 +236,17 @@ Step 4 — 検証基準の定義: すべての項目にソースURLが含まれ�
                 <!-- Phase 3 総合レポート -->
                 <rect x="358" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="399" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 3</text>
-                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">総合報告書</text>
+                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">コンテンツ作成</text>
                 <line x1="440" y1="58" x2="452" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 4 要約/発表 -->
                 <rect x="454" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 4</text>
-                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">要約・発表</text>
+                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">プラットフォーム納品</text>
                 <line x1="536" y1="58" x2="548" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 5 ハンドオフ -->
                 <rect x="550" y="38" width="82" height="40" rx="8" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1.5"/>
-                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 5</text>
-                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">引継ぎ</text>
+                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 5-6</text>
+                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">QA・引継ぎ</text>
                 <!-- Phase labels top row -->
                 <text x="38" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">キックオフ</text>
                 <text x="122" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">並列調査</text>
@@ -345,7 +346,7 @@ Time: 15〜20分（約12〜15スライド）</div>
               <strong>Storyline:</strong> プレゼンテーションのストーリーラインを構築 — 問題提起 → 現状分析 → 成功事例 → 市場参入戦略 → 結論/提言のセクション構成<br>
               <strong>Design:</strong> スライドのデザイン方向を設定 — テーマ/スタイルの選択による視覚的一貫性の確立<br>
               <strong>Image Curation + Diagram Generation（並列）:</strong> 韓食関連の画像をキュレーションし、市場構造と参入ロードマップの図表を自動生成<br>
-              <strong>HTML Build → Layout Measure → PDF Export:</strong> スライドのHTMLを生成し、レイアウトを測定/調整して、最終PDFをエク<svg role="img" aria-label="Variant practice example 2 workflow indicator" viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
+              <strong>HTML Build → Layout Measure → PDF Export:</strong> スライドのHTMLを生成し、レイアウトを測定/調整して、最終PDFをエクスポートする。<svg role="img" aria-label="Variant practice example 2 workflow indicator" viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
                 <defs>
                   <marker id="arrowD" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--text-dim)"/></marker>
                   <marker id="arrowDown" markerWidth="6" markerHeight="8" refX="3" refY="8" orient="auto"><polygon points="0 0,3 8,6 0" fill="var(--text-dim)"/></marker>
@@ -435,7 +436,7 @@ Time: 15〜20分（約12〜15スライド）</div>
       </ol>
 
       <div class="tip-box">
-        <code>physical-ai-market-research/agents/</code>と<code>korean-cuisine-globalization/agents/</code>を並べて開き、ファイル数を数えてみてください — 差は歴然です。co-consultは10人の専門エージェントからなる7段階のコンサルティングワークフローであり、co-deckはResearch、Design、HTML Build、PDF Exportなどを担当する専門エージェントからなる11段階パイプラインであるため、エージェント数と<code>docs/context.md</code>のフェーズ構成が大きく異なります。Variant名とバッジだけでは推測できない「実際の構造の違い」をスキャフォールドの出力を通じて直接比較できます。
+        <code>physical-ai-market-research/agents/</code>と<code>korean-cuisine-globalization/agents/</code>を並べて開き、ファイル数を数えてみてください — 差は歴然です。co-consultは10人の専門エージェントからなるPhase 0〜6のコンサルティングワークフローであり、co-deckはResearch、Design、HTML Build、PDF Exportなどを担当する専門エージェントからなる11段階パイプラインであるため、エージェント数と<code>docs/context.md</code>のフェーズ構成が大きく異なります。Variant名とバッジだけでは推測できない「実際の構造の違い」をスキャフォールドの出力を通じて直接比較できます。
       </div>
       <div class="tip-box">
         <strong>G-1のco-consultの出力をG-2のco-deckの入力として流し込むことも可能です。</strong>Physical AI市場調査で完成したMarkdownレポートをそのままco-deckに渡すことで、同じ内容のプレゼンテーションデッキを自動生成できます。これがコンサルティングパイプライン（co-consult）とプレゼンテーションパイプライン（co-deck）が<strong>フルパイプライン</strong>として接続される仕組みです — トピック入力からプレゼン可能なHTML納品物まで約30〜45分で完成します。

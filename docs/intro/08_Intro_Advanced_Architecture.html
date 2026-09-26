@@ -112,7 +112,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
     </tbody>
   </table>
   </div>
-  <p>이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다. 기준선이 high인 에이전트(architect, pm)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
+  <p>이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다. 기준선이 high인 에이전트(architect)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
 
   <h3>Tier Adjustment Rules — 실행 시 비용 최적화</h3>
   <p>PM이 실행 계획을 세울 때 기준선에서 벗어나는 티어 조정이 가능하다. 규칙은 간단하다.</p>
@@ -124,7 +124,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <p>이 규칙의 핵심은 <strong>"에이전트 역할의 복잡도 상한은 고정되지만, 하한은 상황에 맞춰 조정할 수 있다"</strong>는 원칙이다. PM은 비용 절감을 위해 low로 내릴 수 있지만, 그 작업이 low의 역량을 넘어서면 즉시 기준선으로 되돌아간다. 비용 영향에 대해서는 6장 §2-A P-2 실습에서 체감으로 확인할 수 있다.</p>
 
   <h3>Tier Ceiling Rule</h3>
-  <p>AGENTS.md의 Phase Determination 테이블(§3.5)은 각 산출물 유형에 허용된 티어 상한을 명시한다. 예를 들어 "스크립트 구현(승인된 계획 존재)"은 Phase 4이며 담당 에이전트는 automation-engineer(low)다 — 여기에 high를 배정하면 Tier Ceiling 위반이 된다. 반면 "새 파일 설계, 스키마 정의"는 Phase 1-2이며 architect(high)가 담당한다.</p>
+  <p>PM 게이트웨이 워크플로 문서(<code>docs/governance/agents/pm-gateway-workflow.md</code>)의 Phase Determination 표는 각 산출물 유형에 허용된 티어 상한을 명시한다. 예를 들어 "스크립트 구현(승인된 계획 존재)"은 Phase 4이며 담당 에이전트는 automation-engineer(low)다 — 여기에 high를 배정하면 Tier Ceiling 위반이 된다. 반면 "새 파일 설계, 스키마 정의"는 Phase 1-2이며 architect(high)가 담당한다.</p>
   <div class="pullquote">
     Tier Ceiling Rule은 "이 작업에 가장 적합한 티어 이상은 배정하지 마라"가 아니라 "이 에이전트의 정의된 티어 이상은 사용하지 마라"이다. 역할 기반이 작업 기반이다.
   </div>

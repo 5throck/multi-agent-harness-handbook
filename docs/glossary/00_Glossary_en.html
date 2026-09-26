@@ -79,7 +79,7 @@
       <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s1">Chapter 3 §1</a></span></dd>
 
     <dt>Hook <span class="en">Hook</span></dt>
-    <dd>A script that runs automatically before or after an agent calls a particular tool. Example: a <code>PostToolUse</code> hook that runs an automated audit check after a file edit. In Claude Code (CLI), hooks defined under <code>.claude/hooks/</code> fire as expected, but they do not fire in Claude Desktop App — so it's important to be aware of these per-tool behavioral differences. Codex does not support hooks — it substitutes CODEX.md instructions that the session executes on its own.
+    <dd>A script that runs automatically before or after an agent calls a particular tool. Example: a <code>PostToolUse</code> hook that runs an automated audit check after a file edit. In Claude Code (CLI), hooks in <code>scripts/hooks/</code>, wired via <code>.claude/settings.json</code>, fire as expected, but they do not fire in Claude Desktop App — so it's important to be aware of these per-tool behavioral differences. Codex does not support hooks — it substitutes CODEX.md instructions that the session executes on its own.
       <span class="see">Details: <a href="../guardrails/03_Guardrails_Chapter_en.html#s6">Chapter 3 §Audit Logs and Observability</a></span></dd>
 
     <dt>Kanban / WIP Limit <span class="en">Kanban / WIP Limit</span></dt>

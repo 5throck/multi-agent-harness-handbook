@@ -114,7 +114,7 @@
     <div class="card-body">
 
       <div class="situation">
-        Usando <code>co-consult</code>, la variante para consultoría estratégica, ejecute un proyecto de consultoría real analizando la viabilidad de entrada al mercado y el panorama competitivo para la "IA física" (IA que opera en entornos físicos como robótica, conducción autónoma y fábricas inteligentes). El objetivo es experimentar cómo funciona el flujo de trabajo de consultoría de 7 etapas — en el que el PM (Líder de compromiso) despacha a 10 agentes especialistas (Analista de estrategia, Experto en la industria, SME, Socio de gestión del cambio, etc.) etapa por etapa — en un proyecto real.
+        Usando <code>co-consult</code>, la variante para consultoría estratégica, ejecute un proyecto de consultoría real analizando la viabilidad de entrada al mercado y el panorama competitivo para la "IA física" (IA que opera en entornos físicos como robótica, conducción autónoma y fábricas inteligentes). El objetivo es experimentar cómo funciona el flujo de trabajo de consultoría de las fases 0 a 6 — en el que el PM (Líder de compromiso) despacha a 10 agentes especialistas (Analista de estrategia, Experto en la industria, SME, Socio de gestión del cambio, etc.) etapa por etapa — en un proyecto real.
       </div>
 
       <div class="cmd-list">
@@ -163,7 +163,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>Explorar la estructura del proyecto creado</strong>
-            <p>Revise la estructura completa del directorio del proyecto generado. Enfóquese en los archivos de definición de agentes, la configuración de Fases en <code>docs/context.md</code> y el registro en <code>AGENTS.md</code> para comprender cómo co-consult construye su flujo de trabajo de consultoría de 7 etapas.</p>
+            <p>Revise la estructura completa del directorio del proyecto generado. Enfóquese en los archivos de definición de agentes, la configuración de Fases en <code>docs/context.md</code> y el registro en <code>AGENTS.md</code> para comprender cómo co-consult construye su flujo de trabajo de consultoría de las fases 0 a 6.</p>
             <div style="position:relative">
               <pre class="code-block">cd physical-ai-market-research
 find . -maxdepth 3 -type f | head -40</pre>
@@ -189,14 +189,15 @@ Paso 4 — Definir criterios de validación: URLs de fuentes incluidas para cada
             <strong>Ejecutar el equipo de agentes sobre el tema de investigación de mercado de IA física</strong>
             <p> Inicie una sesión del PM dentro del proyecto y entregue la tarea de consultoría definida al PM para que ejecute el equipo de agentes. Observe qué agente está activo en cada Fase y qué salida produce a medida que se desarrolla el proceso.</p>
             <div class="flow-box">
-              El flujo de trabajo de 7 etapas de co-consult funciona como un proyecto de consultoría real.<br><br>
+              El flujo de trabajo de las fases 0 a 6 de co-consult funciona como un proyecto de consultoría real.<br><br>
               <strong>Fase 0 (Lanzamiento):</strong> El PM recibe la tarea y define el alcance y el cronograma del proyecto<br>
               <strong>Fase 1 (Análisis de mercado / Diagnóstico organizacional):</strong> El Analista de estrategia estima el tamaño del mercado de IA física y mapea los competidores; el Experto en la industria proporciona las tendencias tecnológicas del dominio de robótica/conducción autónoma; el SME refuerza la perspectiva práctica basada en casos de despliegue en fábricas inteligentes<br>
               <strong>Fase 1.5 (Validación cruzada):</strong> Múltiples agentes revisan cruzadamente las salidas de cada uno para garantizar la fiabilidad de la información<br>
               <strong>Fase 2 (Filtro de aprobación de propuesta):</strong> El PM revisa los resultados de la Fase 1 y juzga si están listos para el cliente<br>
-              <strong>Fase 3 (Diseño de solución práctica):</strong> El Socio de gestión del cambio establece la hoja de ruta de adopción y el plan de gestión del cambio<br>
-              <strong>Fase 4 (Entrega):</strong> Se escribe el informe final (Markdown) — Resumen ejecutivo / Análisis del estado actual / Oportunidades y amenazas / Recomendaciones estratégicas / Referencias<br>
-              <strong>Fase 5 (PR/Entrega):</strong> Se organizan los entregables orientados al cliente
+              <strong>Fase 3 (Creación de contenido):</strong> El Líder de comunicaciones redacta el informe final orientado al cliente (Markdown) mientras el Arquitecto de soluciones diseña la solución técnica en paralelo — en este ejercicio, el informe con sus cinco secciones (Resumen ejecutivo / Análisis del estado actual / Oportunidades y amenazas / Recomendaciones estratégicas / Referencias) se completa en esta fase<br>
+              <strong>Fase 4 (Entrega de plataforma):</strong> El Gerente de entrega coordina las revisiones de los interesados y el Especialista en tecnología implementa los flujos de trabajo de la plataforma de colaboración<br>
+              <strong>Fase 5 (QA y finalización):</strong> El PM (Líder de compromiso) ejecuta los scripts de auditoría para validar que todos los entregables cumplan los estándares de calidad<br>
+              <strong>Fase 6 (PR y entrega):</strong> El PM ejecuta <code>/sync</code>, crea el PR y entrega el resultado final al cliente
             </div>
 
             <div class="note">
@@ -235,25 +236,25 @@ Paso 4 — Definir criterios de validación: URLs de fuentes incluidas para cada
                 <!-- Phase 3 Diseño de solución -->
                 <rect x="358" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="399" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Fase 3</text>
-                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Diseño de solución</text>
+                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Creación de contenido</text>
                 <line x1="440" y1="58" x2="452" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 4 Entrega -->
                 <rect x="454" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Fase 4</text>
-                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Entrega</text>
+                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">Entrega de plataforma</text>
                 <line x1="536" y1="58" x2="548" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 5 Entrega al cliente -->
                 <rect x="550" y="38" width="82" height="40" rx="8" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1.5"/>
-                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Fase 5</text>
-                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">Entrega al cliente</text>
+                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Fase 5-6</text>
+                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">QA y entrega</text>
                 <!-- Phase labels top row -->
                 <text x="38" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Lanzamiento</text>
                 <text x="122" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Investigación paralela</text>
                 <text x="209" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Generar confianza</text>
                 <text x="303" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Filtro de calidad</text>
-                <text x="399" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Diseño de solución</text>
-                <text x="495" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Entrega</text>
-                <text x="591" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Entrega al cliente</text>
+                <text x="399" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Creación de contenido</text>
+                <text x="495" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">Entrega de plataforma</text>
+                <text x="591" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">QA y entrega</text>
               </svg>
             </div>
           </div>
@@ -345,7 +346,7 @@ Tiempo: 15–20 minutos (aprox. 12–15 diapositivas)</div>
               <strong>Línea argumental:</strong> Construye la línea argumental de la presentación — capítulos estructurados como planteamiento del problema → análisis del estado actual → casos de éxito → estrategia de entrada al mercado → conclusión/recomendaciones<br>
               <strong>Diseño:</strong> Establece la dirección del diseño de las diapositivas — asegura la coherencia visual mediante la selección de tema/estilo<br>
               <strong>Curación de imágenes + Generación de diagramas (en paralelo):</strong> Curación de imágenes relacionadas con la comida coreana y generación automática de diagramas de estructura de mercado y hoja de ruta de entrada<br>
-              <strong>Construcción HTML → Medición de diseño → Exportación a PDF:</strong> Genera el HTML de las diapositivas, luego mide/ajusta el diseño, luego exporta el PDF f<svg role="img" aria-label="Variant practice example 2 workflow indicator" viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
+              <strong>Construcción HTML → Medición de diseño → Exportación a PDF:</strong> Genera el HTML de las diapositivas, luego mide/ajusta el diseño, luego exporta el PDF final.<svg role="img" aria-label="Variant practice example 2 workflow indicator" viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
                 <defs>
                   <marker id="arrowD" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--text-dim)"/></marker>
                   <marker id="arrowDown" markerWidth="6" markerHeight="8" refX="3" refY="8" orient="auto"><polygon points="0 0,3 8,6 0" fill="var(--text-dim)"/></marker>
@@ -435,7 +436,7 @@ Tiempo: 15–20 minutos (aprox. 12–15 diapositivas)</div>
       </ol>
 
       <div class="tip-box">
-        Abra <code>physical-ai-market-research/agents/</code> y <code>korean-cuisine-globalization/agents/</code> lado a lado y cuente los archivos — la diferencia es notable. co-consult es un flujo de trabajo de consultoría de 7 etapas compuesto por 10 agentes especialistas, mientras que co-deck es un pipeline de 11 etapas compuesto por agentes especialistas que manejan Investigación, Diseño, Construcción HTML, Exportación a PDF y más — por lo que el número de agentes y la composición de fases en <code>docs/context.md</code> difieren sustancialmente. Puede comparar directamente "las diferencias estructurales reales que no se podían adivinar solo por el nombre y la insignia de la variante" a través del resultado del andamiaje.
+        Abra <code>physical-ai-market-research/agents/</code> y <code>korean-cuisine-globalization/agents/</code> lado a lado y cuente los archivos — la diferencia es notable. co-consult es un flujo de trabajo de consultoría de las fases 0 a 6 compuesto por 10 agentes especialistas, mientras que co-deck es un pipeline de 11 etapas compuesto por agentes especialistas que manejan Investigación, Diseño, Construcción HTML, Exportación a PDF y más — por lo que el número de agentes y la composición de fases en <code>docs/context.md</code> difieren sustancialmente. Puede comparar directamente "las diferencias estructurales reales que no se podían adivinar solo por el nombre y la insignia de la variante" a través del resultado del andamiaje.
       </div>
       <div class="tip-box">
         <strong>También es posible alimentar la salida de co-consult de G-1 como entrada al co-deck de G-2.</strong> Entregar directamente el informe Markdown completado de la investigación de mercado de IA física a co-deck le permite generar automáticamente una presentación con el mismo contenido. Así es como el pipeline de consultoría (co-consult) y el pipeline de presentaciones (co-deck) se conectan como un <strong>pipeline completo</strong> — desde la entrada del tema hasta un entregable HTML listo para presentar en aproximadamente 30–45 minutos.

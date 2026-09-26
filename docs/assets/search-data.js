@@ -98,7 +98,7 @@ var SEARCH_DATA = {
     { path: 'practice/06_Practice_Manual_A_ja.html', title: '第6章 §1-A・サブエージェント活用詳細 — Claude中心', lang: 'ja' },
     { path: 'practice/06_Practice_Manual_B_ja.html', title: '第6章 §1-B・サブエージェント活用詳細 — Antigravity中心', lang: 'ja' },
     { path: 'practice/06_Practice_Manual_C_ja.html', title: '第6章 §1-C・サブエージェント活用詳細 — Codex中心', lang: 'ja' },
-    { path: 'practice/06_Practice_Examples_A_ja.html', title: '4章 §2-A・マルチエージェントチーム実習 (Claude中心)', lang: 'ja' },
+    { path: 'practice/06_Practice_Examples_A_ja.html', title: '第6章 §2-A・マルチエージェントチーム実習 (Claude中心)', lang: 'ja' },
     { path: 'practice/06_Practice_Examples_B_ja.html', title: '第6章 §2-B・マルチエージェントチーム実習 — Antigravity中心シナリオ別学習ガイド', lang: 'ja' },
     { path: 'practice/06_Practice_Examples_C_ja.html', title: '第6章 §2-C・マルチエージェントチーム実習 — Codex中心シナリオ別学習ガイド', lang: 'ja' },
     { path: 'intro/05_Intro_Chapter_ja.html', title: '第7章 · ai-workspace-standards 紹介', lang: 'ja' },

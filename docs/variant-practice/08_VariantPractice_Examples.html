@@ -85,7 +85,7 @@
     <div class="version-row"><span class="vlabel">작성일</span><span class="vvalue">2026년 7월 16일</span></div>
   </div>
 
-  <div class="warning-box">이 문서는 이미 만들어진 베리언트(variant)를 프로젝트로 스캐폴딩해 실제 주제를 가지고 에이전트팀을 가동해보는 <strong>기존 variant 활용 실습</strong>이다. 신규 variant 생성(D-1)과 승격(P-1)은 2일차 13장·16장에서 다룬다.</div>
+  <div class="warning-box">이 문서는 이미 만들어진 베리언트(variant)를 프로젝트로 스캐폴딩해 실제 주제를 가지고 에이전트팀을 가동해보는 <strong>기존 variant 활용 실습</strong>이다. 신규 variant 생성(D-1)과 승격(P-1)은 2일차 13장·14장에서 다룬다.</div>
 
   <!-- ═══════════════════════════════════════════════════════════════════
        영역 1: 기존 variant 활용
@@ -114,7 +114,7 @@
     <div class="card-body">
 
       <div class="situation">
-        전략 컨설팅용 variant인 <code>co-consult</code>를 활용해, "Physical AI(로봇·자율주행·스마트 팩토리 등 물리적 환경에서 동작하는 AI)" 시장의 진입 가능성과 경쟁 현황을 분석하는 컨설팅 프로젝트를 실제로 진행해본다. PM(Engagement Leader)이 10명의 전문 에이전트(Strategy Analyst, Industry Expert, SME, Change Management Partner 등)를 단계별로 디스패치하는 7단계 컨설팅 워크플로우가 어떻게 실제 프로젝트에서 가동되는지 경험하는 것이 목표다.
+        전략 컨설팅용 variant인 <code>co-consult</code>를 활용해, "Physical AI(로봇·자율주행·스마트 팩토리 등 물리적 환경에서 동작하는 AI)" 시장의 진입 가능성과 경쟁 현황을 분석하는 컨설팅 프로젝트를 실제로 진행해본다. PM(Engagement Leader)이 10명의 전문 에이전트(Strategy Analyst, Industry Expert, SME, Change Management Partner 등)를 단계별로 디스패치하는 Phase 0~6 컨설팅 워크플로우가 어떻게 실제 프로젝트에서 가동되는지 경험하는 것이 목표다.
       </div>
 
       <div class="cmd-list">
@@ -163,7 +163,7 @@ bun scripts/list-template-versions.ts</pre>
         <li>
           <div class="step-content">
             <strong>스캐폴딩된 프로젝트 구조 살펴보기</strong>
-            <p>생성된 프로젝트 디렉토리의 전체 구조를 확인한다. 에이전트 정의 파일, <code>docs/context.md</code>의 Phase 구성, <code>AGENTS.md</code>의 로스터를 중심으로 co-consult가 어떻게 7단계 컨설팅 워크플로우를 구성하는지 파악한다.</p>
+            <p>생성된 프로젝트 디렉토리의 전체 구조를 확인한다. 에이전트 정의 파일, <code>docs/context.md</code>의 Phase 구성, <code>AGENTS.md</code>의 로스터를 중심으로 co-consult가 어떻게 Phase 0~6 컨설팅 워크플로우를 구성하는지 파악한다.</p>
             <div style="position:relative">
               <pre class="code-block">cd physical-ai-market-research
 find . -maxdepth 3 -type f | head -40</pre>
@@ -189,14 +189,15 @@ Step 4 — 검증 기준: 각 항목에 출처 URL 포함, 시사점 5개 이상
             <strong>Physical AI 시장조사 주제로 에이전트팀 가동</strong>
             <p>프로젝트 내에서 PM 세션을 시작하고, 정의한 컨설팅 과제를 PM에게 전달하여 에이전트팀을 가동한다. 각 Phase에서 어떤 에이전트가 활동하는지, 어떤 결과물이 산출되는지 관찰하면서 진행한다.</p>
             <div class="flow-box">
-              co-consult의 7단계 워크플로우가 실제 컨설팅 프로젝트처럼 가동된다.<br><br>
+              co-consult의 Phase 0~6 워크플로우가 실제 컨설팅 프로젝트처럼 가동된다.<br><br>
               <strong>Phase 0 (킥오프):</strong> PM이 과제를 받아 프로젝트 범위와 일정을 정의<br>
               <strong>Phase 1 (시장 분석·조직 진단):</strong> Strategy Analyst가 Physical AI 시장 규모 추정·경쟁사 매핑, Industry Expert가 로봇/자율주행 도메인 기술 트렌드 제공, SME가 스마트 팩토리 구축 사례 기반 실무 관점 보강<br>
               <strong>Phase 1.5 (교차 검증):</strong> 복수 에이전트가 서로 산출물을 교차 검토하여 정보의 신뢰성 확보<br>
               <strong>Phase 2 (제안 승인 게이트):</strong> PM이 Phase 1 결과를 검토, 클라이언트 제출 수준인지 승인 판단<br>
-              <strong>Phase 3 (실무 솔루션 설계):</strong> Change Management Partner가 도입 로드맵과 변화 관리 계획 수립<br>
-              <strong>Phase 4 (납품):</strong> 최종 보고서(마크다운) 작성 — 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료<br>
-              <strong>Phase 5 (PR/인도):</strong> 고객 전달용 결과물 정리
+              <strong>Phase 3 (콘텐츠 제작):</strong> Communications Lead가 고객 전달용 최종 보고서(마크다운) 초안을 작성하고, Solutions Architect가 기술 솔루션 설계를 병행한다. 실습에서는 핵심 요약/현황 분석/기회와 위협/전략적 제언/참고 자료 5개 섹션 구조의 보고서가 이 단계에서 완성된다<br>
+              <strong>Phase 4 (플랫폼 납품):</strong> Delivery Manager가 이해관계자 검토를 조율하고, Technology Specialist가 협업 플랫폼 워크플로우 구현을 담당한다<br>
+              <strong>Phase 5 (QA·최종 점검):</strong> PM(Engagement Leader)이 audit 스크립트로 모든 산출물의 품질 기준 충족 여부를 검증한다<br>
+              <strong>Phase 6 (PR·인도):</strong> PM이 <code>/sync</code>로 PR을 만들고 최종 결과물을 고객에게 인도한다
             </div>
 
             <div class="note">
@@ -235,17 +236,17 @@ Step 4 — 검증 기준: 각 항목에 출처 URL 포함, 시사점 5개 이상
                 <!-- Phase 3 종합 보고서 -->
                 <rect x="358" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="399" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 3</text>
-                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">종합 보고서</text>
+                <text x="399" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">콘텐츠 제작</text>
                 <line x1="440" y1="58" x2="452" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 4 요약/발표 -->
                 <rect x="454" y="38" width="82" height="40" rx="8" fill="var(--accent)" opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
                 <text x="495" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 4</text>
-                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">요약/발표</text>
+                <text x="495" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent)">플랫폼 납품</text>
                 <line x1="536" y1="58" x2="548" y2="58" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#arrowC)"/>
                 <!-- Phase 5 핸드오프 -->
                 <rect x="550" y="38" width="82" height="40" rx="8" fill="var(--accent-green)" opacity="0.15" stroke="var(--accent-green)" stroke-width="1.5"/>
-                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 5</text>
-                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">핸드오프</text>
+                <text x="591" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--text)" font-weight="700">Phase 5-6</text>
+                <text x="591" y="70" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-green)">QA·인도</text>
                 <!-- Phase labels top row -->
                 <text x="38" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">킥오프</text>
                 <text x="122" y="128" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="7.5" fill="var(--text-dim)">병렬 조사</text>
@@ -345,7 +346,7 @@ find . -maxdepth 3 -type f | head -40</pre>
               <strong>Storyline:</strong> 발표 스토리라인 구성 — 문제 제기→현황 분석→성공 사례→진출 전략→결론·제언의 흐름으로 챕터 구성<br>
               <strong>Design:</strong> 슬라이드 디자인 방향 설정 — 테마·스타일 선택에 따른 시각 일관성 확립<br>
               <strong>Image Curation + Diagram Generation (병렬):</strong> 한식 관련 이미지 큐레이션 및 시장 구조·진출 로드맵 다이어그램 자동 생성<br>
-              <strong>HTML Build → Layout Measure → PDF Export:</strong> 슬라이드 HTML 생성 후 레이아웃 측정·보정, 최종 PD<svg role="img" aria-label="Variant practice example 2 workflow indicator" viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
+              <strong>HTML Build → Layout Measure → PDF Export:</strong> 슬라이드 HTML 생성 후 레이아웃 측정·보정, 최종 PDF Export까지 자동화한다.<svg role="img" aria-label="Variant practice example 2 workflow indicator" viewBox="0 0 780 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:0 auto;">
                 <defs>
                   <marker id="arrowD" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="var(--text-dim)"/></marker>
                   <marker id="arrowDown" markerWidth="6" markerHeight="8" refX="3" refY="8" orient="auto"><polygon points="0 0,3 8,6 0" fill="var(--text-dim)"/></marker>
@@ -435,7 +436,7 @@ find . -maxdepth 3 -type f | head -40</pre>
       </ol>
 
       <div class="tip-box">
-        <code>physical-ai-market-research/agents/</code>와 <code>korean-cuisine-globalization/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 10명의 전문 에이전트로 구성된 7단계 컨설팅 워크플로우, co-deck은 Research·Design·HTML Build·PDF Export 등을 담당하는 전문 에이전트들로 구성된 11단계 파이프라인이라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. "variant 이름과 배지만으로는 짐작하기 어려운 실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
+        <code>physical-ai-market-research/agents/</code>와 <code>korean-cuisine-globalization/agents/</code>를 나란히 열어 파일 개수를 세어 보면 차이가 뚜렷하다 — co-consult는 10명의 전문 에이전트로 구성된 Phase 0~6 컨설팅 워크플로우, co-deck은 Research·Design·HTML Build·PDF Export 등을 담당하는 전문 에이전트들로 구성된 11단계 파이프라인이라 에이전트 수와 <code>docs/context.md</code>의 phase 구성이 서로 다르다. "variant 이름과 배지만으로는 짐작하기 어려운 실제 구조 차이"를 스캐폴딩 결과물로 직접 비교해볼 수 있다.
       </div>
       <div class="tip-box">
         <strong>G-1의 co-consult 산출물을 G-2의 co-deck 입력으로 연결하는 것도 가능하다.</strong> Physical AI 시장조사에서 완성된 마크다운 보고서를 그대로 co-deck에 넘기면, 동일한 내용의 발표자료를 자동 생성할 수 있다. 이것이 컨설팅 파이프라인(co-consult) + 프레젠테이션 파이프라인(co-deck)의 <strong>풀 파이프라인</strong> 연동 방식이다 — 주제 입력 후 약 30~45분이면 발표 가능한 HTML 완성물이 나온다.

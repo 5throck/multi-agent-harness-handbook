@@ -40,7 +40,7 @@
   <div class="chapter-eyebrow">Reference C</div>
   <h1>Skill Relationship Graph — Structure and Operations</h1>
   <p class="lead">Once skills number in the dozens, "which skill presupposes what" disappears from organizational memory. This document consolidates the concrete structure of the skill relationship graph introduced in Chapter 10 §2 — data sources, schema, relation vocabulary, generation pipeline, validation, and the operational workflow — into a single chapter.</p>
-  <p class="source-line">Source: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+  <p class="source-line">Source: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–8) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
 
   <div class="keypoints">
     <div class="kp-title">What This Reference Bovers</div>
@@ -101,7 +101,7 @@
   <p>Nodes carry <code>id</code>, <code>type</code>, and <code>layer</code>. Types include <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, and <code>output_type</code>; layers are <code>L0</code> (workspace root), <code>common</code> (shared template), <code>variant:&lt;name&gt;</code>, and <code>L3</code> (individual project).</p>
 
   <h2 id="a4-edges">Edge Types in Detail</h2>
-  <p>The full relation vocabulary grown across Amendments 1–6, with direction, symmetry, and source. All edges are <strong>advisory</strong> — they inform routing and planning but never hard-block execution.</p>
+  <p>The full relation vocabulary grown across Amendments 1–8, with direction, symmetry, and source. All edges are <strong>advisory</strong> — they inform routing and planning but never hard-block execution.</p>
   <table>
     <thead><tr><th>Edge</th><th>Meaning</th><th>Direction/Symmetry</th><th>Source</th></tr></thead>
     <tbody>

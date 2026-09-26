@@ -2,6 +2,9 @@
 ## 2026-09-26
 
 ### Fixed
+- Reordered Design and i18n chapter check questions to match the Day 1 teaching sequence.
+
+### Fixed
 - Added visible Hermes Agents appendix cards to every localized home page.
 
 ### Changed

@@ -16,6 +16,7 @@
   <div class="nav-title">Design Foundationと標準UIパターン</div>
   <a href="#system">デザインは装飾ではなく契約である</a>
   <a href="#principles">原則とトークンで手戻りを減らす</a>
+  <a href="#color-system">カラーシステムとアクセシビリティ</a>
   <a href="#components">標準コンポーネントと標準画面を同時に定義する</a>
   <a href="#review">AI出力は検証可能な下書きとして扱う</a>
   <div class="nav-section">関連する章</div>
@@ -26,7 +27,7 @@
   <div class="chapter-eyebrow">디자인</div>
   <h1>Design Foundationと標準UIパターン</h1>
   <p class="lead">AIが生成した画面を、再利用可能で検証できるプロダクト体験へ変える方法を学ぶ。</p>
-  <div class="keypoints"><div class="kp-title">この章で扱うこと</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li></ul></div>
+  <div class="keypoints"><div class="kp-title">この章で扱うこと</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li><li>カラーシステムとアクセシビリティ</li></ul></div>
   <h2 id="system">デザインは装飾ではなく契約である</h2><p>デザイン規則は、人とAIが共有する契約である。画面ごとに色、余白、文字、情報の優先順位を決め直すと、機能が同じでも体験は揺らぐ。デザインシステムは建築図面のように材料と寸法を先に決め、再現可能な結果を作る。</p><p>最初に利用者の目的、成功状態、失敗状態、確認する証拠を記録する。美しさより、利用者が次の行動を迷わず見つけられるかを確認する。</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="デザインは装飾ではなく契約である">
     <title>デザインは装飾ではなく契約である</title>
@@ -52,7 +53,33 @@ components:
 acceptance:
   - one-primary-action
   - keyboard-reachable
-  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="components">標準コンポーネントと標準画面を同時に定義する</h2><p>ボタン、入力欄、カード、表、通知は部品である。リスト、詳細、作成、確認、エラー、空状態は部品を組み合わせた画面パターンである。部品だけを標準化すると、読み込み、空、権限なし、保存失敗が不統一になる。</p><p>各部品には目的、変形、状態、アクセシブルな名前を記録する。各画面には開始条件、次の行動、成功・失敗・待機状態、証拠を記録する。</p><div class="diagram-frame">
+  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="color-system">カラーシステムとアクセシビリティ</h2>
+<p>カラーシステムはパレット集ではなく、意味を伝える契約である。原始パレットは色の段階だけを提供し、画面では`text`、`surface`、`border`、`action`、`success`、`warning`、`error`のような意味トークンを使う。これによりブランド色やダークモードが変わっても、画面ごとに失敗・警告・完了の意味を作り直さない。</p><p>アクセシビリティはカラーシステムの検証条件である。成功、エラー、選択を色だけで伝えず、文章、アイコン、枠線、パターンを組み合わせる。文字、アイコン、フォーカスリング、入力エラー境界をライト・ダーク両方で確認する。</p>
+<div class="diagram-frame"><svg viewBox="0 0 640 170" width="100%" role="img" aria-label="カラートークンとアクセシビリティ確認の流れ">
+<title>カラートークンとアクセシビリティ確認の流れ</title>
+<rect x="20" y="55" width="120" height="60" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="80" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Palette</text>
+<path d="M140 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="174" y="55" width="120" height="60" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="234" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Semantic</text>
+<path d="M294 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="328" y="55" width="120" height="60" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="388" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Component</text>
+<path d="M448 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="482" y="55" width="138" height="60" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="551" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Contrast</text><text x="551" y="99" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">+ Focus</text>
+<text x="20" y="32" font-size="13" font-weight="700" fill="var(--text)">カラートークンとアクセシビリティ確認の流れ</text>
+<defs><marker id="color-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+</svg></div>
+<table><thead><tr><th>Layer</th><th>Purpose</th></tr></thead><tbody><tr><td>原始パレット</td><td>色の段階だけを定義する。</td></tr><tr><td>意味トークン</td><td>文字、面、境界、行動、状態の役割を表す。</td></tr><tr><td>部品トークン</td><td>ボタン、入力欄、通知の状態を定義する。</td></tr><tr><td>アクセシビリティ確認</td><td>色以外の手掛かり、対比、フォーカスを確認する。</td></tr></tbody></table>
+<div class="flow-box"><strong>Standard:</strong> 原始パレット → 意味トークン → 部品状態 → ライト・ダーク確認</div>
+<h3>状態色の確認演習</h3><p>AIには生の色値ではなく意味トークンだけを使うよう依頼する。一画面で通常、hover、focus、disabled、errorを確認し、色を除いても状態と次の行動が分かるかを確認する。</p>
+<div class="code-block"><pre><code>{
+  "color": {
+    "brand": { "$value": "#0969da", "$type": "color" },
+    "action-primary": { "$value": "{color.brand}", "$type": "color" },
+    "status-error": { "$value": "#cf222e", "$type": "color" },
+    "focus-ring": { "$value": "{color.action-primary}", "$type": "color" }
+  }
+}</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="components">標準コンポーネントと標準画面を同時に定義する</h2><p>ボタン、入力欄、カード、表、通知は部品である。リスト、詳細、作成、確認、エラー、空状態は部品を組み合わせた画面パターンである。部品だけを標準化すると、読み込み、空、権限なし、保存失敗が不統一になる。</p><p>各部品には目的、変形、状態、アクセシブルな名前を記録する。各画面には開始条件、次の行動、成功・失敗・待機状態、証拠を記録する。</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="標準コンポーネントと標準画面を同時に定義する">
     <title>標準コンポーネントと標準画面を同時に定義する</title>
     <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · 標準コンポーネントと標準画面を同時に定義する</text>
@@ -70,7 +97,7 @@ acceptance:
       <li>タスク: 利用者が完了する行動</li><li>主要ボタン: 決定的な行動だけを強調する。</li><li>4. トークンと画面契約を守るか。</li>
     </ol></div>
   <div class="chapter-nav"><a class="prev" href="../guardrails/03_Guardrails_Chapter_ja.html"><div class="dir">← 前へ</div><div class="ttl">前へ</div></a><a class="next" href="../foundations/I18n_Operations_ja.html"><div class="dir">次へ →</div><div class="ttl">次へ</div></a></div>
-  <footer>
+   <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·

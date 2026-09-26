@@ -2,6 +2,12 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-26] — Design Color System and Accessibility Expansion
+
+### Changed
+- Added a dedicated Design color-system section in all language editions: raw palette, semantic and component token tiers, state colors, dark-mode review, contrast, non-color cues, and keyboard focus.
+- Extended the first-day schedule with Design Foundation·Accessibility (35 minutes) and i18n Design·Content Quality (25 minutes). The first-day core program is now 6 hours 45 minutes excluding breaks.
+
 ## [2026-09-26] — Substantive Design, i18n, and Hermes Revision
 
 ### Changed

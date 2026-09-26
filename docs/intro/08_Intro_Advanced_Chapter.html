@@ -11,10 +11,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="8장 §2 · 생애주기 관리 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="description" content="10장 §2 · 생애주기 관리 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>8장 §2 · 생애주기 관리</title>
+  <title>10장 §2 · 생애주기 관리</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,7 +26,7 @@
 
 <nav>
   <a href="../index.html" class="nav-home">← 핸드북 홈</a>
-  <div class="nav-title">8장 · 아키텍처 심화</div>
+  <div class="nav-title">10장 · 아키텍처 심화</div>
   <a href="08_Intro_Advanced_Deploy.html">§1 · 배포와 SSOT</a>
   <a href="#s2-lifecycle-why">생애주기 관리가 필요한 이유</a>
   <a href="#s2-agent-lifecycle">에이전트 생애주기</a>
@@ -39,14 +39,14 @@
   <a href="08_Intro_Advanced_Architecture.html">§4 · 아키텍처 심화</a>
   <a href="08_Intro_Advanced_Roadmap.html">§5 · 고도화 로드맵</a>
   <div class="nav-section">다른 장</div>
-  <a href="../intro/05_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
-  <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 기업 내부 멀티 에이전트팀 운영</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
+  <a href="../intro/05_Intro_Chapter.html">7장 · ai-workspace-standards 소개</a>
+  <a href="../enterprise/09_Enterprise_Chapter.html">9장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter.html">13장 · 신규 variant 생성</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">8장 §2</div>
+  <div class="chapter-eyebrow">10장 §2</div>
   <h1>생애주기 관리</h1>
   <p class="lead">에이전트, 스킬, 스크립트 각각이 생성부터 폐기까지 어떤 단계를 거치는지, 그리고 이 단계들이 실제 워크스페이스에서 어떻게 관리되는지 다룬다.</p>
 
@@ -430,7 +430,7 @@
     <li>상태는 특정 시점에 그 구성요소가 <strong>어디에 있는지</strong>를 나타내는 스냅샷이다. YAML frontmatter의 <code>status</code> 필드(<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>)가 바로 이 상태 값을 저장하는 메커니즘이다.</li>
   </ul>
   <p>비유하면 생애주기는 "지하철 노선도"이고 상태는 "현재 열차가 어느 역에 있는지"를 보여주는 실시간 표시판이다. 열차가 어디로 가야 하는지(노선)는 고정되어 있지만, 지금 어디에 있는지(역)는 시시각각 변한다.</p>
-  <div class="note">워크플로우 실행 차원의 상태 — 예를 들어 PM이 <a href="../workflows/09_Workflows_Chapter.html">9장</a>에서 정의하는 Phase Pipeline(Phase 0: 요청 수신 → Phase 1: 설계 → … → Phase 6: 동기화 완료) — 은 개별 구성요소의 <code>status</code> 필드와는 또 다른 차원의 상태다. 전자는 "작업이 어느 단계에 있는가"이고, 후자는 "이 구성요소 자체가 생애주기의 어디에 있는가"이다.</div>
+  <div class="note">워크플로우 실행 차원의 상태 — 예를 들어 PM이 <a href="../workflows/11_Workflows_Chapter.html">11장</a>에서 정의하는 Phase Pipeline(Phase 0: 요청 수신 → Phase 1: 설계 → … → Phase 6: 동기화 완료) — 은 개별 구성요소의 <code>status</code> 필드와는 또 다른 차원의 상태다. 전자는 "작업이 어느 단계에 있는가"이고, 후자는 "이 구성요소 자체가 생애주기의 어디에 있는가"이다.</div>
 
   <p>에이전트·스킬·스크립트의 생애주기는 각각 독립적으로 정의되어 있지만, 실제 워크스페이스에서는 밀접하게 연결되어 있다.</p>
 
@@ -471,8 +471,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Deploy.html" class="prev"><div class="dir">← 이전</div><div class="ttl">8장 §1 · 배포와 SSOT</div></a>
-    <a href="08_Intro_Advanced_AGENTS.html" class="next"><div class="dir">다음 →</div><div class="ttl">8장 §3 · AGENTS.md 심화</div></a>
+    <a href="08_Intro_Advanced_Deploy.html" class="prev"><div class="dir">← 이전</div><div class="ttl">10장 §1 · 배포와 SSOT</div></a>
+    <a href="08_Intro_Advanced_AGENTS.html" class="next"><div class="dir">다음 →</div><div class="ttl">10장 §3 · AGENTS.md 심화</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 기준 · 한국어 교육 자료<br>

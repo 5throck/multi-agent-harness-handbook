@@ -11,10 +11,10 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第8章 §4・アーキテクチャ深掘り - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブック">
+  <meta name="description" content="第10章 §4・アーキテクチャ深掘り - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>第8章 §4・アーキテクチャ深掘り</title>
+  <title>第10章 §4・アーキテクチャ深掘り</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,27 +26,27 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">第8章 §4・アーキテクチャ深掘り</div>
+  <div class="nav-title">第10章 §4・アーキテクチャ深掘り</div>
   <a href="#layout-reconstruction">Layout Reconstruction</a>
   <a href="#extends">extends フロントマターの解釈順序</a>
   <a href="#boilerplate-example">ボイラープレート戦略の実例</a>
   <a href="#tier-strategy-deep">3ティア戦略の深掘り</a>
   <a href="#platform-parity">プラットフォームパリティ</a>
   <a href="#execution-plan-templates">実行計画テンプレート</a>
-  <div class="nav-section">第8章の他の節</div>
-  <a href="08_Intro_Advanced_Deploy_ja.html">第8章 §1・デプロイとSSOT</a>
-  <a href="08_Intro_Advanced_Chapter_ja.html">第8章 §2・ライフサイクル管理</a>
-  <a href="08_Intro_Advanced_AGENTS_ja.html">第8章 §3・AGENTS.md深掘り</a>
-  <a href="08_Intro_Advanced_Roadmap_ja.html">第8章 §5・高度化ロードマップ</a>
+  <div class="nav-section">第10章の他の節</div>
+  <a href="08_Intro_Advanced_Deploy_ja.html">第10章 §1・デプロイとSSOT</a>
+  <a href="08_Intro_Advanced_Chapter_ja.html">第10章 §2・ライフサイクル管理</a>
+  <a href="08_Intro_Advanced_AGENTS_ja.html">第10章 §3・AGENTS.md深掘り</a>
+  <a href="08_Intro_Advanced_Roadmap_ja.html">第10章 §5・高度化ロードマップ</a>
   <div class="nav-section">他の章</div>
-  <a href="05_Intro_Chapter_ja.html">第5章・ai-workspace-standards紹介</a>
-  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章・企業内マルチエージェントチーム運用</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章・新規variant作成</a>
+  <a href="05_Intro_Chapter_ja.html">第7章・ai-workspace-standards紹介</a>
+  <a href="../enterprise/09_Enterprise_Chapter_ja.html">第9章・企業内マルチエージェントチーム運用</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_ja.html">第13章・新規variant作成</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">第8章 §4</div>
+  <div class="chapter-eyebrow">第10章 §4</div>
   <h1>アーキテクチャ深掘り</h1>
   <p class="lead">§1でL0→L1→L2の「何がどこからどこへ流れるか」を扱ったのに対し、この節ではその流れが<strong>実際にどのように実装されているか</strong>を掘り下げる — ファイルがそのままコピーされずに再生成される理由、継承フロントマターが解釈される順序、ボイラープレート・ティア戦略が実践でどのように適用されるかの具体例、そしてプラットフォームディレクトリ（.claude/.gemini/.agents/.codex）が構造的にずれないよう保たれる方法までを扱う。</p>
 
@@ -86,7 +86,7 @@
   <p>3つの例を並べて見ると分類基準が明確になる — <strong>変更されるとセキュリティ・ガバナンス事故につながるか（LOCKED）、組織ルールとプロジェクトの文脈が1つのファイル内で共存すべきか（MERGE）、プロジェクトのアイデンティティそのものか（PRESERVE）</strong>。この3つの問いを順に投げかけてみれば、この分類はほとんどすぐに判断できる。</p>
 
   <h2 id="tier-strategy-deep">3ティア戦略の深掘り — コスト最適化を実行時に適用する</h2>
-  <p>第5章で紹介したtier割り当ては<code>agents/*.md</code>のfrontmatterに静的に定義される。各エージェントファイルの<code>tier</code>フィールドはプラットフォームごとのモデルエイリアスに変換され、実行時に適用される。</p>
+  <p>第7章で紹介したtier割り当ては<code>agents/*.md</code>のfrontmatterに静的に定義される。各エージェントファイルの<code>tier</code>フィールドはプラットフォームごとのモデルエイリアスに変換され、実行時に適用される。</p>
 
   <h3>frontmatter例</h3>
   <div style="position:relative">
@@ -121,7 +121,7 @@ tier:                          # プラットフォームごとのモデルエ�
     <li><strong>アップグレードは禁止される</strong> — 逆に基準線より高いティアに上げることは<strong>常に禁止</strong>される。lowのautomation-engineerをhighに上げて複雑なアーキテクチャを設計させることはガバナンス違反である。</li>
     <li><strong>失敗時の復元</strong> — ダウングレードした作業が失敗した場合、PMは必ず該当エージェントの基準線ティアを復元して再試行しなければならない。</li>
   </ul>
-  <p>このルールの核心は<strong>「エージェント役割の複雑度の上限は固定だが、下限は状況に応じて調整できる」</strong>という原則である。PMはコスト削減のためにlowに下げることができるが、その作業がlowの能力を超えれば直ちに基準線に戻る。コストへの影響は第4章 §2-A P-2の実習で体感的に確認できる。</p>
+  <p>このルールの核心は<strong>「エージェント役割の複雑度の上限は固定だが、下限は状況に応じて調整できる」</strong>という原則である。PMはコスト削減のためにlowに下げることができるが、その作業がlowの能力を超えれば直ちに基準線に戻る。コストへの影響は第6章 §2-A P-2の実習で体感的に確認できる。</p>
 
   <h3>Tier Ceiling Rule</h3>
   <p>AGENTS.mdのPhase Determinationテーブル（§3.5）は、各成果物タイプに許可されたティアの上限を明示している。例えば「スクリプト実装（承認済み計画が存在する）」はPhase 4であり、担当エージェントはautomation-engineer（low）である — ここにhighを割り当てるとTier Ceiling違反となる。一方「新規ファイル設計、スキーマ定義」はPhase 1-2であり、architect（high）が担当する。</p>
@@ -131,16 +131,16 @@ tier:                          # プラットフォームごとのモデルエ�
 
   <h2 id="platform-parity">プラットフォームパリティ — .claude/・.gemini/・.agents/・.codex/を構造的に同一に保つ方法</h2>
   <p>このリポジトリは4つのプラットフォームを同時にサポートする — Claude Code（<code>.claude/</code>）、Gemini CLI（<code>.gemini/</code>）、Antigravity（<code>.agents/</code>）、Codex（<code>.codex/</code>）。プラットフォームディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。スキル層は<code>skills/</code>が単一の情報源（SSOT）であり、<code>sync-skills.ts</code>がこれを4つのプラットフォームディレクトリすべてへ配布する。構造的なずれを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
-  <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>とCodex用の<code>.codex/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「4プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第11章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。4つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
+  <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>とCodex用の<code>.codex/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「4プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第13章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。4つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
 
   <h2 id="graft-fleet-integration">graft — マルチプラットフォームフリートのためのリポジトリ文脈グラフ</h2>
   <p><strong>graft</strong>（<code>@nanonets/graft</code>）は、リポジトリ向けにあらかじめ構築しておく文脈グラフである。コードベースを、正確な<code>file:line</code>範囲を持つ小さく相互リンクされた<code>graft/</code>マークダウンカードへと索引化し、誰が何を呼び出すかのコールグラフも併せて生成する。狙いは速度である。大きなモノレポを探索するエージェントは<code>graft ask "&lt;question&gt;"</code>や<code>graft callers &lt;symbol&gt;</code>を尋ねるだけで、毎ターン同じ文脈を再構築するためにgrepを繰り返しファイル全体を開く代わりに、ソース範囲が埋め込まれた順位付け済みの事前計算された回答を得られる。graftは2026-09-06からワークスペースのルートで稼働していたが、<strong>ADR-0076</strong>以前は手作業で接続されており、Claude Code専用だった。</p>
   <p>2026-09-12のフリート調査（設計文書：<code>2026-09-12-graft-multiplatform-rollout-design.md</code>）により、実際のカバレッジは見た目よりはるかに狭いことが判明した。<code>templates/common</code>はgraftのスキルファイルとGemini MCPエントリしか配布しておらず、新しくスキャフォールドされたプロジェクトはGemini CLI/Antigravity向けのgraftしか得られず、同じプロジェクトのClaude Code側にはgraftのソースが一切なかった。11プロジェクトのフリート全体で事実上graftはゼロだった。これは<code>.claude/skills/**</code>が通常<code>sync-skills.ts</code>のプラットフォームミラールールに管理される領域である一方、graftのスキルは意図的にSSOTである<code>skills/</code>ディレクトリの外に置かれているため、どのアップグレードパスもこれを届けたことがなかったからである。さらに、同じMCPサーバーがどの設定ファイルを見るかによって<code>npx</code>・<code>bunx</code>・ネイティブバイナリという3つの異なる方法で起動されており、Codex/Antigravity/Claude Desktopに対するホストカバレッジは文書化されず暗黙のままだった。</p>
   <p><strong>ADR-0076</strong>はホストごとの配布マトリクスでこのギャップを埋める。プロジェクト単位の設定をサポートするホストにはリポジトリレベルのMCP登録を行い（Claude Codeの<code>.mcp.json</code>、Gemini/Antigravityの<code>.gemini/settings.json</code>、Codexの<code>.codex/config.toml</code>、OpenCodeの<code>opencode.json</code>）、<code>AGENTS.md</code>/<code>CLAUDE.md</code>/<code>GEMINI.md</code>に指示ブロックを追加し、プロジェクトスコープを持たないホストにはマシングローバル登録を用いる（Antigravityは<code>graft init --agents antigravity</code>によるグローバルレジストリ、Claude Desktopはこのホストが作業ディレクトリを渡せず絶対パスのリポジトリパスが必要なため、手書きの<code>claude_desktop_config.json</code>エントリ）。<code>bunx @nanonets/graft mcp</code>がすべてのプラットフォームで共通にコミットされる標準ランチャーとなり、マシングローバル設定ではネイティブバイナリも引き続き使用できる。</p>
-  <p>既存フリートへの配布は、一回限りの移行パスではなく、第8章§2で扱った同じポリシー駆動アップグレードエンジンに乗って行われる。<code>.mcp.json</code>/<code>opencode.json</code>は<code>JSON_MERGE_FILES</code>分類に加わり（そのためプロジェクト固有のMCPサーバーはマージ後も残る）、<code>.claude/skills/graft/**</code>は通常のプラットフォームミラールールより先に同期されるよう特別扱いされ（そのルールはそもそもSSOTの外にあるスキルには届かないため）、<code>.codex/**</code>は<code>ADD_IF_MISSING</code>としてシードされ、既に自前の<code>config.toml</code>を持つプロジェクトは既存の内容を維持する。graftスキル自体はSSOTへ移さずClaude専用のまま残り、ルートと<code>templates/common</code>の2箇所でバイト単位で同一のコピーを手動で維持する。SSOTへ移すと<code>sync-skills.ts</code>がそれをGemini/Antigravity自身のスキルディレクトリへミラーしてしまい、このツールについてワークスペースが意図的に固定しているシングルプラットフォーム設計を壊してしまうためである。鮮度（freshness）は意図的に手動のままにされている（graftのツールは回答前に自ら再更新し、CIやプッシュ前の鮮度ゲートは存在しない）。</p>
+  <p>既存フリートへの配布は、一回限りの移行パスではなく、第10章§2で扱った同じポリシー駆動アップグレードエンジンに乗って行われる。<code>.mcp.json</code>/<code>opencode.json</code>は<code>JSON_MERGE_FILES</code>分類に加わり（そのためプロジェクト固有のMCPサーバーはマージ後も残る）、<code>.claude/skills/graft/**</code>は通常のプラットフォームミラールールより先に同期されるよう特別扱いされ（そのルールはそもそもSSOTの外にあるスキルには届かないため）、<code>.codex/**</code>は<code>ADD_IF_MISSING</code>としてシードされ、既に自前の<code>config.toml</code>を持つプロジェクトは既存の内容を維持する。graftスキル自体はSSOTへ移さずClaude専用のまま残り、ルートと<code>templates/common</code>の2箇所でバイト単位で同一のコピーを手動で維持する。SSOTへ移すと<code>sync-skills.ts</code>がそれをGemini/Antigravity自身のスキルディレクトリへミラーしてしまい、このツールについてワークスペースが意図的に固定しているシングルプラットフォーム設計を壊してしまうためである。鮮度（freshness）は意図的に手動のままにされている（graftのツールは回答前に自ら再更新し、CIやプッシュ前の鮮度ゲートは存在しない）。</p>
 
   <h2 id="universal-design-gate">ユニバーサルデザインゲート — L0～L3全体でスペックゲートを均一にする</h2>
-  <p>第8章§4では、下記の<a href="#execution-plan-templates">実行計画テンプレート</a>においてL0/L1実行計画のデザインゲート（0番行）と、それを同期時のFATALブロッカーとして強制するスペックチェック（ADR-0055 Stage 2）をすでに紹介している。この節で扱う2つのADRは、同じガバナンス概念を異なる方向へ拡張するものであり、両者を区別しておく価値がある。</p>
+  <p>第10章§4では、下記の<a href="#execution-plan-templates">実行計画テンプレート</a>においてL0/L1実行計画のデザインゲート（0番行）と、それを同期時のFATALブロッカーとして強制するスペックチェック（ADR-0055 Stage 2）をすでに紹介している。この節で扱う2つのADRは、同じガバナンス概念を異なる方向へ拡張するものであり、両者を区別しておく価値がある。</p>
   <p><strong>ADR-0068（「ユニバーサルデザイン」）</strong>は同期時ゲートではなく、デザインレビューの方法論に関するものである。2026-09-06のレビューにより、ワークスペースはWCAG 2.1 AA準拠（ADR-0065）を技術的な最低基準として強制しているものの、どの層でも加齢・認知負荷・状況的障害・運動能力の差異といった、より広いユーザーの多様性に対してデザインを評価していないことが判明した。ADR-0068はユニバーサルデザインの古典的な7原則（公平な利用、柔軟な利用、単純で直感的な利用、認知可能な情報、エラーへの寛容性、少ない身体的負担、適切な大きさと空間）を、WCAGの<em>上位</em>に位置するレビュー語彙として採用し、Design Foundationの原則集合に認知負荷とエラー復旧という2つの新しい派生基準を追加し、ジャーニーマッピングの過程で多様性プロファイルレビューのステップ（加齢・認知・状況・運動制約の各プロファイルでジャーニーを一度ずつ歩く）を要求する。あるデザインがWCAGには合格しながらユニバーサルデザインには不合格となり得ること、そしてUDはトークン値・色・レイアウトの詳細ではなくレビュー方法論を規律するものであることが明示されている。</p>
   <p><strong>ADR-0074（「ユニバーサルデザインゲート」）</strong>は、名前は似ているが上記のデザインレビューの視点ではなく、同期時のスペックチェックゲートの適用範囲に関する別の、より後の決定である——つまり単純に「UDにゲートを付けた」ものではない。調査の結果、<code>docs/specs/registry.json</code>スペックゲートは新規スキャフォールドされたプロジェクトに構造的に存在せず（ADR-0073が<code>docs/specs</code>を<code>TEMPLATE_ONLY</code>に分類したため、スキャフォールド時に削除され、アップグレードでも届けられなかった）、既存11フリートプロジェクトのうち5つには完全に欠落していた。AGENTS.mdもL2/L3バリアントプロジェクトをデザインゲートから明示的に除外していた。ADR-0074はこのゲートを<strong>すべてのティア（L0～L3）で普遍的</strong>にする。同じ基盤となるスペックチェック機構が今やあらゆる場所に適用されるが、その儀式は異なる——L0/L1は既存の完全な0番行実行計画の提示方法を維持し、L2/L3プロジェクトはデザイン文書1つと<code>spec-register.ts</code>によるより軽量な慣習を用いる。<code>docs/specs</code>は<code>TEMPLATE_ONLY_DIRS</code>から除外され、add-if-missingシードとして再分類されることで、スキャフォールドとアップグレードの双方が実際にレジストリを届けられるようになり、既存のE1～E5除外カテゴリはすべてのティアで安全弁として変わらず機能し続ける。</p>
 
@@ -200,8 +200,8 @@ tier:                          # プラットフォームごとのモデルエ�
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_AGENTS_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §3・AGENTS.md深掘り</div></a>
-    <a href="08_Intro_Advanced_Roadmap_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第8章 §5・高度化ロードマップ</div></a>
+    <a href="08_Intro_Advanced_AGENTS_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第10章 §3・AGENTS.md深掘り</div></a>
+    <a href="08_Intro_Advanced_Roadmap_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第10章 §5・高度化ロードマップ</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>

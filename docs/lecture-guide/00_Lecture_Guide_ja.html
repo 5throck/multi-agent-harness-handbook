@@ -43,12 +43,12 @@
   <p>各章のsetup文書(<a href="../setup/SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>)に散在していた項目を、講義開始前に一度で確認できるようまとめました。講義開始の<strong>最低1日前</strong>に参加者へこのリストを告知し、現場でインストール問題により時間を浪費しないようにする。</p>
   <div class="chk">☐ 有効なClaude Pro/Maxサブスクリプション(APIキーではなくサブスクリプションアカウント)</div>
   <div class="chk">☐ Antigravity利用のためのGoogleアカウント</div>
-  <div class="chk">☐ <code>gh auth login</code>が可能なGitHubアカウント。アカウントがない参加者には<a href="../practice/04_Practice_Examples_A_ja.html#setup">第4章§2-A実習準備節</a>の登録案内に事前に従うよう告知</div>
+  <div class="chk">☐ <code>gh auth login</code>が可能なGitHubアカウント。アカウントがない参加者には<a href="../practice/06_Practice_Examples_A_ja.html#setup">第6章§2-A実習準備節</a>の登録案内に事前に従うよう告知</div>
   <div class="chk">☐ 最低5GBの空きディスク容量、管理者/sudo権限</div>
-  <div class="chk">☐ Claude Desktop App、Claude Code(CLI)、Antigravity(Desktop)、Antigravity CLI(<code>agy</code>)のインストール完了。<a href="../practice/04_Practice_Examples_A_ja.html#setup">第4章§2-A実習準備節</a>のOS別スクリプトで検証</div>
+  <div class="chk">☐ Claude Desktop App、Claude Code(CLI)、Antigravity(Desktop)、Antigravity CLI(<code>agy</code>)のインストール完了。<a href="../practice/06_Practice_Examples_A_ja.html#setup">第6章§2-A実習準備節</a>のOS別スクリプトで検証</div>
   <div class="chk">☐ <code>bun --version</code>、<code>git --version</code>が正常に出力されることを確認</div>
-  <div class="chk">☐ (第6章・第11章実習用) <code>git clone https://github.com/5throck/ai-workspace-standards.git</code>をワークスペースルート位置(Windows <code>C:\git</code>、macOS/Linux <code>~/git</code>)に事前にクローン</div>
-  <div class="warn">第11章の新規variant昇格実習のP-1シナリオは、実際のgit履歴とファイル構造に影響を与える昇格パイプラインを実行する。参加者全員に各自の環境で実行させるのではなく、下記「章別講師ノート」の案内に従ってください。</div>
+  <div class="chk">☐ (第8章・第13章実習用) <code>git clone https://github.com/5throck/ai-workspace-standards.git</code>をワークスペースルート位置(Windows <code>C:\git</code>、macOS/Linux <code>~/git</code>)に事前にクローン</div>
+  <div class="warn">第13章の新規variant昇格実習のP-1シナリオは、実際のgit履歴とファイル構造に影響を与える昇格パイプラインを実行する。参加者全員に各自の環境で実行させるのではなく、下記「章別講師ノート」の案内に従ってください。</div>
 
   <h2 id="agenda">全体時間配分表</h2>
   <p>全ての節を丁寧に扱い、実習は参加者自身がタイピング(またはコピー&ペースト)する時間を含めて算定しました。休憩時間は別途である。</p>
@@ -63,12 +63,12 @@
 	      <tr><td>第2章</td><td>Prompt→Context→Harnessの流れ、ハーネスエンジニアリングの定義、単一エージェントの限界、マルチエージェントチームの構成要素(オーケストレーター・スペシャリスト・ハンドオフ契約)、サブエージェント(事前定義 vs 動的生成)、オーケストレーションパターン5種と再試行・ロールバック・エスカレーション、動的チーム構成とワークフローの組み合わせ、AGENTS.md標準</td><td>講義+確認質問</td><td>45分</td></tr>
 		      <tr><td>第3章</td><td>ガードレールの必要性、危険作業の3段階分類(読み取り/書き込み/破壊的)、最小権限の原則(toolsフィールド)、人による承認ゲート、隔離(worktree・sandbox)、監査ログと可観測性</td><td>講義</td><td>20分</td></tr>
 		      <tr><td>ウォームアップ実習</td><td>テトリス(バイブコーディング、ハーネスなし10分)+パックマン(単一プロンプト失敗体験後、企画→開発→QAの3段階マルチエージェント25分)+気づきの整理(5分)</td><td>実習(参加者自身)</td><td>40分</td></tr>
-		      <tr><td>第4章§1+第4章§2</td><td>4つのツール(Claude Desktop App/Code、Antigravity Desktop/CLI)でのサブエージェント定義・呼び出し・逐次パイプライン・動的チーム構成・並列実行・モデルティア比較実習(G-1/D-1/D-2/P-1/P-2、Codexは<a href="../practice/04_Practice_Manual_C_ja.html">第4章§1-C</a>方式)</td><td>実習(参加者自身)</td><td>90分</td></tr>
-      <tr><td>第5章(軽め)</td><td>ai-workspace-standardsリポジトリ概要、コアファイル4種(AGENTS.md・CONSTITUTION.md・CLAUDE.md・GEMINI.md)、variantとは何か、スキャフォールディングによるプロジェクト作成の基本</td><td>講義</td><td>20分</td></tr>
-      <tr><td>第6章(①既存活用G-1)</td><td>co-consultでPhysical AI市場調査プロジェクトをスキャフォールディング・稼働 — 4段階設計フレームワークの適用、7段階コンサルティングワークフローの稼働、成果物レビュー・ハンドオフの追跡</td><td>実習(参加者自身)</td><td>40分</td></tr>
-	      <tr><td>第6章(②既存活用G-2)</td><td>co-deckで韓食世界化発表資料をスキャフォールディング・稼働 — 発表テーマフレームの設定、11段階パイプラインの稼働、成果物のレビュー・改善、TTS・自動スライド設定</td><td>実習(参加者自身)</td><td>40分</td></tr>
+		      <tr><td>第6章§1+第6章§2</td><td>4つのツール(Claude Desktop App/Code、Antigravity Desktop/CLI)でのサブエージェント定義・呼び出し・逐次パイプライン・動的チーム構成・並列実行・モデルティア比較実習(G-1/D-1/D-2/P-1/P-2、Codexは<a href="../practice/06_Practice_Manual_C_ja.html">第6章§1-C</a>方式)</td><td>実習(参加者自身)</td><td>90分</td></tr>
+      <tr><td>第7章(軽め)</td><td>ai-workspace-standardsリポジトリ概要、コアファイル4種(AGENTS.md・CONSTITUTION.md・CLAUDE.md・GEMINI.md)、variantとは何か、スキャフォールディングによるプロジェクト作成の基本</td><td>講義</td><td>20分</td></tr>
+      <tr><td>第8章(①既存活用G-1)</td><td>co-consultでPhysical AI市場調査プロジェクトをスキャフォールディング・稼働 — 4段階設計フレームワークの適用、7段階コンサルティングワークフローの稼働、成果物レビュー・ハンドオフの追跡</td><td>実習(参加者自身)</td><td>40分</td></tr>
+	      <tr><td>第8章(②既存活用G-2)</td><td>co-deckで韓食世界化発表資料をスキャフォールディング・稼働 — 発表テーマフレームの設定、11段階パイプラインの稼働、成果物のレビュー・改善、TTS・自動スライド設定</td><td>実習(参加者自身)</td><td>40分</td></tr>
 	      <tr><td>1日目まとめ</td><td>本日学んだ内容の要約、2つのvariant(co-consult vs co-deck)の構造比較の振り返り、2日目の予告(IT専門家セッション)</td><td>ディスカッション</td><td>10分</td></tr>
-			      <tr class="schedule-total"><td colspan="3">1日目合計</td><td>約5時間45分(休憩除く)</td></tr>
+			      <tr id="color-system-schedule-row"><td>第4章 · デザイン基盤とアクセシビリティ</td><td>哲学・原則・ガイド・カラー・フォント・標準部品・標準画面・アクセシビリティ</td><td>講義 + レビュー</td><td>35分</td></tr><tr><td>第5章 · i18n設計とコンテンツ品質</td><td>locale・国プロファイル・形式化・文字列拡張・同等性確認</td><td>講義 + 演習</td><td>25分</td></tr><tr class="schedule-total"><td colspan="3">1日目合計</td><td>約5時間45分(休憩除く)</td></tr>
 	    </tbody>
 	  </table>
   </div>
@@ -79,26 +79,25 @@
   <table>
     <thead><tr><th>区分</th><th>内容</th><th>形態</th><th>予想時間</th></tr></thead>
     <tbody>
-      <tr><td>1日目復習</td><td>コア概念の要約、第6章既存variant活用実習の成果共有</td><td>ディスカッション</td><td>10分</td></tr>
-      <tr><td>第7章</td><td>サービスチケットモデル、開発ツール+variantモデル、カンバンベース運用の必要性、両モデルの長短所比較</td><td>講義+ディスカッション</td><td>30分</td></tr>
-      <tr><td>第8章§1</td><td>L0→L1→L2→L3階層構造の詳細、フォークモデル、ファイル別SSOTの流れ</td><td>講義</td><td>15分</td></tr>
-      <tr><td>第8章§2</td><td>エージェント・スキル・スクリプトのライフサイクル管理</td><td>講義</td><td>15分</td></tr><tr id="color-system-schedule-row"><td>コア章 · Design Foundationとアクセシビリティ</td><td>Design Foundationとアクセシビリティ — トークン、カラー、標準画面、確認</td><td>Lecture + review</td><td>35 min</td></tr>
-<tr><td>コア章 · i18n設計とコンテンツ品質</td><td>i18n設計 — locale、国プロファイル、形式化、翻訳同等性</td><td>Lecture + exercise</td><td>25 min</td></tr>
-      <tr><td>第9章</td><td>ワークフロー構成要素、ドメイン別事例5種、サブエージェントロスターと役割境界マトリクス、PMフェーズパイプラインと手順スキーマ(ADR-0063)、パターン選択ガイド</td><td>講義</td><td>20分</td></tr>
-      <tr><td>第10章</td><td>L3プロジェクトアップグレードの使い方、主なファイル処理分類、スナップショット・ロールバック、昇格との方向性の違い</td><td>講義</td><td>15分</td></tr>
+      <tr><td>1日目復習</td><td>コア概念の要約、第8章既存variant活用実習の成果共有</td><td>ディスカッション</td><td>10分</td></tr>
+      <tr><td>第9章</td><td>サービスチケットモデル、開発ツール+variantモデル、カンバンベース運用の必要性、両モデルの長短所比較</td><td>講義+ディスカッション</td><td>30分</td></tr>
+      <tr><td>第10章§1</td><td>L0→L1→L2→L3階層構造の詳細、フォークモデル、ファイル別SSOTの流れ</td><td>講義</td><td>15分</td></tr>
+      <tr><td>第10章§2</td><td>エージェント・スキル・スクリプトのライフサイクル管理</td><td>講義</td><td>15分</td></tr>
+      <tr><td>第11章</td><td>ワークフロー構成要素、ドメイン別事例5種、サブエージェントロスターと役割境界マトリクス、PMフェーズパイプラインと手順スキーマ(ADR-0063)、パターン選択ガイド</td><td>講義</td><td>20分</td></tr>
+      <tr><td>第12章</td><td>L3プロジェクトアップグレードの使い方、主なファイル処理分類、スナップショット・ロールバック、昇格との方向性の違い</td><td>講義</td><td>15分</td></tr>
       <tr><td>共通参考</td><td>4つのツール構造の一覧、Claude Desktop App vs Code(サブエージェント定義、teammateMode)、Antigravity vs agy(Agent Manager、/goal・/agent・/agents)、マルチエージェント対応範囲比較表、実習ツール選択ガイド、AGENTS.md統合構造</td><td>講義</td><td>25分</td></tr>
-	      <tr><td>第11章(①新規作成D-1)</td><td>co-retail Phase Aプロトタイプの作成 — create-l3-scaffold、ドメインエージェント定義(researcher・writer)、AGENTS.mdロスターの更新、agent:verify</td><td>実習(参加者自身)</td><td>50分</td></tr>
-	      <tr><td>第11章(②講義)</td><td>最初から作る(Phase A→B) vs 既存プロジェクトの昇格、2つの経路の違いと選択基準</td><td>講義</td><td>20分</td></tr>
-		      <tr><td>第12章・新規variant昇格</td><td>プロトタイプの検証(validate-templates・agent:verify)、昇格チェックリスト/マニフェストの作成(参加者実習)、実際の昇格パイプライン実行(講師デモのみ)</td><td>実習+デモ混合</td><td>60分</td></tr>
-		      <tr><td>第13章・Domain Operating Model</td><td>variantテンプレートの実行可能SOP構造(ADR-0083・0084) — 4つの中核グループ、phaseとstageの違い、governed/core等級、検証コマンド</td><td>講義</td><td>25分</td></tr>
-		      <tr><td>第14章・キャップストーン実習</td><td>自身の反復作業を選び、4段階(問題定義・ガードレール設計・サブエージェント実装・検証振り返り)を自ら設計</td><td>実習(参加者自身)</td><td>70分</td></tr>
+	      <tr><td>第13章(①新規作成D-1)</td><td>co-retail Phase Aプロトタイプの作成 — create-l3-scaffold、ドメインエージェント定義(researcher・writer)、AGENTS.mdロスターの更新、agent:verify</td><td>実習(参加者自身)</td><td>50分</td></tr>
+	      <tr><td>第13章(②講義)</td><td>最初から作る(Phase A→B) vs 既存プロジェクトの昇格、2つの経路の違いと選択基準</td><td>講義</td><td>20分</td></tr>
+		      <tr><td>第14章・新規variant昇格</td><td>プロトタイプの検証(validate-templates・agent:verify)、昇格チェックリスト/マニフェストの作成(参加者実習)、実際の昇格パイプライン実行(講師デモのみ)</td><td>実習+デモ混合</td><td>60分</td></tr>
+		      <tr><td>第15章・Domain Operating Model</td><td>variantテンプレートの実行可能SOP構造(ADR-0083・0084) — 4つの中核グループ、phaseとstageの違い、governed/core等級、検証コマンド</td><td>講義</td><td>25分</td></tr>
+		      <tr><td>第16章・キャップストーン実習</td><td>自身の反復作業を選び、4段階(問題定義・ガードレール設計・サブエージェント実装・検証振り返り)を自ら設計</td><td>実習(参加者自身)</td><td>70分</td></tr>
       <tr><td>キャップストーン発表</td><td>1〜2名が自身のワークフローを短く共有、参加者フィードバック</td><td>発表</td><td>15分</td></tr>
       <tr><td>まとめ</td><td>2日間全体の振り返り、Q&A、用語集/FAQ案内、次のステップ案内</td><td>ディスカッション</td><td>15分</td></tr>
 		      <tr class="schedule-total"><td colspan="3">2日目合計</td><td>約6時間25分(休憩除く)</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="note">2日目の休憩2回(各10〜15分)を含めると<strong>約6時間45分〜6時間55分</strong>である。IT専門家対象のセッションであり、実習と設計中心の構成である。終日確保が難しければ、第9章・第13章をそれぞれ15分に圧縮して6時間15分頃に戻せる。</div>
+  <div class="note">2日目の休憩2回(各10〜15分)を含めると<strong>約6時間45分〜6時間55分</strong>である。IT専門家対象のセッションであり、実習と設計中心の構成である。終日確保が難しければ、第11章・第15章をそれぞれ15分に圧縮して6時間15分頃に戻せる。</div>
 
   <h2 id="per-section">章別講師ノート</h2>
 
@@ -112,59 +111,59 @@
   <span class="badge badge-do">参加者アクティビティ</span> §4の3つのパターン(ファンアウト/パイプライン/検証後適用)のうち1つを選び、「自分たちのチーム業務に適用するなら?」を隣の人と1分ずつ話し合わせることを推奨する。
 
   <h3>第3章: ガードレールと権限モデル</h3>
-  <p>第4章§2実習の直前に配置されている理由がある。サブエージェントを直接作る前に「何を許可し何を止めるか」を先に決める習慣をつけるためである。危険作業3段階分類表を見せながら、「あなたが今から作るreviewerはどの段階に該当しますか?」とあらかじめ問いかけると、第4章§2実習へ自然につながる。</p>
+  <p>第6章§2実習の直前に配置されている理由がある。サブエージェントを直接作る前に「何を許可し何を止めるか」を先に決める習慣をつけるためである。危険作業3段階分類表を見せながら、「あなたが今から作るreviewerはどの段階に該当しますか?」とあらかじめ問いかけると、第6章§2実習へ自然につながる。</p>
 
   <h3>ウォームアップ実習: テトリスからパックマンまで</h3>
-  <p>休憩1の直後、第4章の本格的な実習の前に行う。claude.aiまたはClaude Codeを使用し、第4章でグループごとにツールを分けるのとは異なり、全員が同じプラットフォームで進める。</p>
+  <p>休憩1の直後、第6章の本格的な実習の前に行う。claude.aiまたはClaude Codeを使用し、第6章でグループごとにツールを分けるのとは異なり、全員が同じプラットフォームで進める。</p>
   <p><strong>テトリス(10分)</strong>: 講師が先に1分間デモを行い、参加者がそれに続く。「HTML Canvasでテトリスゲームを作って」と入力すると、バイブコーディングだけで即座に動作する結果が得られる。修正要求(背景色、スコアボードなど)も問題なく反映される。この時点で「この程度の複雑さ(~200行)ならハーネスなしでも十分である」ことを強調する。</p>
 	  <p><strong>パックマン(25分)</strong>: まず単一プロンプト(「HTML Canvasでパックマンゲームを作って」)で試させ、2〜3分間失敗を体験させる — キャラクター移動・ゴーストAI・衝突判定・マップ設計が同時に入ると、コードが絡まって動作しない。その後、3ステッププロンプトを画面に表示する。Step 1企画エージェント(「パックマンの機能一覧とマップ構造を仕様書としてまとめる」)→Step 2開発エージェント(「上記仕様書に基づきHTMLパックマンコードを作成」)→Step 3 QAエージェント(「このコードのバグを見つけて修正」)。各ステップ約7〜8分。</p>
-  <p><strong>気づき(5分)</strong>: テトリス(~200行)とパックマン(~1,000〜1,500行)のコード量の違いを見せながら、第2章§2の単一エージェントの限界(コンテキスト過負荷)を直接体験したことを想起させる。「このウォームアップで感じたことを、続く第4章実習でツール別サブエージェントとしてさらに深く体験します」と第4章へつなぐ。</p>
+  <p><strong>気づき(5分)</strong>: テトリス(~200行)とパックマン(~1,000〜1,500行)のコード量の違いを見せながら、第2章§2の単一エージェントの限界(コンテキスト過負荷)を直接体験したことを想起させる。「このウォームアップで感じたことを、続く第6章実習でツール別サブエージェントとしてさらに深く体験します」と第6章へつなぐ。</p>
 
-  <h3>第4章§1/第4章§2: 実習</h3>
+  <h3>第6章§1/第6章§2: 実習</h3>
   <p>参加者を4グループ(Claude Desktop App/Claude Code/Antigravity Desktop/Antigravity CLI)に分け、それぞれ異なるツールで同じシナリオを進めさせると、最後に結果を比較する際に共通参考の「ツール比較」内容がはるかによく伝わります。</p>
   <span class="badge badge-do">参加者アクティビティ</span> G-1、D-1、D-2(動的チーム構成の観察)は全員実習。P-1(並列実行)・P-2(モデルティア比較)は時間が足りなければ講師の画面デモで代替可能。Agent Teams設定(`.claude/settings.json`)や<code>model</code>フィールドの入れ替えは、グループごとに1人だけ試しても概念は伝わる。
 
-  <h3>第5章(軽め): ai-workspace-standardsの紹介</h3>
-  <p>1日目では第6章実習に必要な最小限の概念のみを扱う。リポジトリとは何か、コアファイル4種の役割、variantとは何か、そしてスキャフォールディングによるプロジェクト作成の基本的な流れだけを伝えれば十分である。L0→L1→L2→L3階層構造やモデルティアリングなどは2日目の深掘りで扱う。</p>
+  <h3>第7章(軽め): ai-workspace-standardsの紹介</h3>
+  <p>1日目では第8章実習に必要な最小限の概念のみを扱う。リポジトリとは何か、コアファイル4種の役割、variantとは何か、そしてスキャフォールディングによるプロジェクト作成の基本的な流れだけを伝えれば十分である。L0→L1→L2→L3階層構造やモデルティアリングなどは2日目の深掘りで扱う。</p>
 
-  <h3>第6章: 既存variantの活用(1日目)</h3>
-  <p>この実習は第6章全体が既存variant活用に割り当てられる。<strong>G-1(co-consult Physical AI市場調査)</strong>は40分、<strong>G-2(co-deck韓食世界化発表資料)</strong>は40分で、2つの実習合計80分の十分な時間を確保した。これが2日間ワークショップの中核実習時間である。</p>
+  <h3>第8章: 既存variantの活用(1日目)</h3>
+  <p>この実習は第8章全体が既存variant活用に割り当てられる。<strong>G-1(co-consult Physical AI市場調査)</strong>は40分、<strong>G-2(co-deck韓食世界化発表資料)</strong>は40分で、2つの実習合計80分の十分な時間を確保した。これが2日間ワークショップの中核実習時間である。</p>
   <p><code>new-project.ts</code>の実行時に実際にGitHubクローンが長く時間がかかる場合があるため、この実習を始める<strong>前に</strong>あらかじめワークスペースをクローンしておくよう事前告知することが重要です(上記の事前準備物チェックリスト参照)。</p>
   <span class="badge badge-do">参加者アクティビティ</span> G-1では4段階設計フレームワーク(目標・入力・出力・検証基準)を直接適用し、エージェントチーム稼働後にハンドオフを追跡させる。G-2では発表テーマフレーム(聴衆・目的・時間)を直接設定し、完成したスライドをレビュー・改善し、TTSと自動スライド設定まで体験させる。2つのバリアント(variant)の構造の違いをG-1・G-2の成果物で直接比較するよう案内する。
   <span class="badge badge-do">参加者アクティビティ</span> 1日目まとめの時間(10分)に、G-1のレポート成果物とG-2の発表資料成果物を全員で共有させる。「co-consultのレポートをco-deckの入力として渡すとどうなりますか?」と質問すると、2日目の新規variant作成の動機が自然に形成される。
 
-  <h3>第7章: 2つのモデル比較+カンバン(2日目)</h3>
+  <h3>第9章: 2つのモデル比較+カンバン(2日目)</h3>
   <p>2日目に配置される。カンバン節は、実際に社内ヘルプデスク/サポートチームの運用経験がある参加者がいれば、その経験を先に聞いてから始めるのが効果的である。「なぜ必要か」を理論として説明する前に、「チケットが滞留した経験はありますか?」から始めると共感が早く形成されます。IT専門家対象であるため、GitHub Projects/Jira連携など実務的な実装方法まで言及するとよい。</p>
   <span class="badge badge-do">ディスカッション</span> 「自組織ならどちらのモデルが合うか?」を5分間の小グループディスカッション後、発表。
 
-  <h3>第8章: ai-workspace-standardsアーキテクチャ(2日目)</h3>
-  <p>2日目では1日目の軽い紹介を引き継ぎ、L0→L1→L2→L3階層構造、templates・variant 13種の内部構造、モデルティアリング、セッション開始チェックリスト、まだ実装されていない高度化ロードマップ(§5)まで詳しく扱う。L3プロジェクトアップグレードは独立した第10章で扱う。すべてを暗記させる必要はなく、「なぜこの階層構造が必要なのか」という動機さえ確実に伝われば十分である。</p>
+  <h3>第10章: ai-workspace-standardsアーキテクチャ(2日目)</h3>
+  <p>2日目では1日目の軽い紹介を引き継ぎ、L0→L1→L2→L3階層構造、templates・variant 13種の内部構造、モデルティアリング、セッション開始チェックリスト、まだ実装されていない高度化ロードマップ(§5)まで詳しく扱う。L3プロジェクトアップグレードは独立した第12章で扱う。すべてを暗記させる必要はなく、「なぜこの階層構造が必要なのか」という動機さえ確実に伝われば十分である。</p>
 
-  <h3 id="color-system-instructor-note">コア章 · Design Foundationとアクセシビリティ</h3><p>色を装飾ではなく状態と行動の契約として説明する。グレースケールでもエラー、選択、次の行動が分かるかを確認する。</p><h3>コア章 · i18n設計とコンテンツ品質</h3><p>自然な翻訳だけでなく、キー、長い文字列、日時・通貨、エラー状態を確認させる。</p><h3>第9章: ワークフローデザインパターン</h3>
+  <h3 id="color-system-instructor-note">コア章 · Design Foundationとアクセシビリティ</h3><p>色を装飾ではなく状態と行動の契約として説明する。グレースケールでもエラー、選択、次の行動が分かるかを確認する。</p><h3>コア章 · i18n設計とコンテンツ品質</h3><p>自然な翻訳だけでなく、キー、長い文字列、日時・通貨、エラー状態を確認させる。</p><h3>第11章: ワークフローデザインパターン</h3>
 <p>5つのオーケストレーションパターンを復習した後、コードレビュー・市場調査・プレゼンテーションなどの実際のワークフロー事例を見せる。「この業務にはどのパターンが合うか?」の意思決定ツリーを一緒に解いてみる。</p>
 
-  <h3>第10章: L3プロジェクトアップグレード(2日目)</h3>
-  <p>第8章§1で学んだフォークモデルの実際の活用編である。「L1テンプレートが変わっても自分のプロジェクトには自動的に反映されない」という点を想起させながら始める。LOCKED・MERGE・PRESERVE・SYNC_IF_NEWERにTEMPLATE TREE SYNCなどを加えた主要分類のうち、MERGEのワークスペース管理マーカー構造を視覚的に見せると理解度が高まる。<code>--dry-run</code>を先に実行する習慣を強調し、実際のスクリプト実行は講師がデモすることを推奨する。</p>
-  <span class="badge badge-do">参加者アクティビティ</span> 時間が許せば、参加者自身の第6章実習プロジェクト(G-1またはG-2)を対象に<code>--dry-run</code>を実行させると、より実感がわく。
+  <h3>第12章: L3プロジェクトアップグレード(2日目)</h3>
+  <p>第10章§1で学んだフォークモデルの実際の活用編である。「L1テンプレートが変わっても自分のプロジェクトには自動的に反映されない」という点を想起させながら始める。LOCKED・MERGE・PRESERVE・SYNC_IF_NEWERにTEMPLATE TREE SYNCなどを加えた主要分類のうち、MERGEのワークスペース管理マーカー構造を視覚的に見せると理解度が高まる。<code>--dry-run</code>を先に実行する習慣を強調し、実際のスクリプト実行は講師がデモすることを推奨する。</p>
+  <span class="badge badge-do">参加者アクティビティ</span> 時間が許せば、参加者自身の第8章実習プロジェクト(G-1またはG-2)を対象に<code>--dry-run</code>を実行させると、より実感がわく。
 
   <h3>共通参考: ツール比較(2日目)</h3>
-  <p>2日目に配置される。1日目の第4章§1/§2実習で参加者がツールを直接体験しているため、「先ほど使ったツールでこれがなぜこう動作したのか」という形で振り返りながら進めると、純粋な講義よりはるかに没入度が高くなります。IT専門家対象であるため、teammateMode(in-process vs tmux)、Agent Managerの内部構造など技術的詳細を深く扱うことができる。</p>
+  <p>2日目に配置される。1日目の第6章§1/§2実習で参加者がツールを直接体験しているため、「先ほど使ったツールでこれがなぜこう動作したのか」という形で振り返りながら進めると、純粋な講義よりはるかに没入度が高くなります。IT専門家対象であるため、teammateMode(in-process vs tmux)、Agent Managerの内部構造など技術的詳細を深く扱うことができる。</p>
 
-  <h3>第11章: 新規variant作成</h3>
+  <h3>第13章: 新規variant作成</h3>
   <p>この章は2日目に配置される。1日目に既存のバリアント(variant)を直接扱った経験を基に、今回は<strong>自分だけのバリアント(variant)を最初から作ってみる</strong>。実習(D-1)50分+講義20分で構成する。</p>
   <span class="badge badge-do">参加者アクティビティ</span> D-1(co-retail Phase Aプロトタイプを自ら作成)は全員実習。1日目のG-1でエージェント定義ファイルのfrontmatter構造をすでに見ているため、今回は直接researcher・writerを作ってみる。時間が厳しければ、ペア活動(1人がタイピング、1人が検証コマンドを実行)で進めてもよい。
 
-<h3>第12章: 新規variant昇格</h3>
-  <p>2日目後半に配置される。第11章で作ったco-retailプロトタイプを昇格準備する段階である。</p>
+<h3>第14章: 新規variant昇格</h3>
+  <p>2日目後半に配置される。第13章で作ったco-retailプロトタイプを昇格準備する段階である。</p>
   <span class="badge badge-demo">講師デモ専用</span> 実際の<code>l3-to-variant-pipeline.ts</code>の実行は、git履歴に影響を与える非可逆的な作業である。参加者全員に真似させるのではなく、講師が画面共有で1回実行して見せるだけで十分である。参加者が自分で試してみたい場合は、講義終了後、個人環境(ワークショップ専用クローンフォルダ)で行うよう案内してください。
   <span class="badge badge-do">参加者アクティビティ</span> PROMOTION_CHECKLIST.md項目の確認と<code>variant.json</code>マニフェストの作成までは全員実習可能である。
 
-  <h3>第13章: Domain Operating Model</h3>
-  <p>第12章の昇格実習の直後、キャップストーン設計の直前に置かれた理論章である。「昇格されたテンプレートには何が生まれるのか」への答え — ステージ・RACI・判断ゲートがデータとして宣言されるDomain Operating Model構造(ADR-0083・0084)を扱う。</p>
-  <span class="badge badge-do">参加者アクティビティ</span> 4グループの表(Process・Governance・Execution・Graph)を見せて「第11章で作ったco-retailには、このうち何がすでにあり、何が欠けているか?」を2分間のディスカッションにすると実習に直結する。略称禁止ルール(DOM/AOMの衝突)は、用語規律のユーモラスな例として取り上げると記憶に残る。
+  <h3>第15章: Domain Operating Model</h3>
+  <p>第14章の昇格実習の直後、キャップストーン設計の直前に置かれた理論章である。「昇格されたテンプレートには何が生まれるのか」への答え — ステージ・RACI・判断ゲートがデータとして宣言されるDomain Operating Model構造(ADR-0083・0084)を扱う。</p>
+  <span class="badge badge-do">参加者アクティビティ</span> 4グループの表(Process・Governance・Execution・Graph)を見せて「第13章で作ったco-retailには、このうち何がすでにあり、何が欠けているか?」を2分間のディスカッションにすると実習に直結する。略称禁止ルール(DOM/AOMの衝突)は、用語規律のユーモラスな例として取り上げると記憶に残る。
 
-  <h3>第14章: キャップストーン実習</h3>
-  <p>2日目の中核実習である。1日目(既存variant活用)と第11章(新規variant作成)の経験を全て合わせ、参加者自身の実際の業務にマルチエージェントチームを適用する設計を直接行わせる。</p>
+  <h3>第16章: キャップストーン実習</h3>
+  <p>2日目の中核実習である。1日目(既存variant活用)と第13章(新規variant作成)の経験を全て合わせ、参加者自身の実際の業務にマルチエージェントチームを適用する設計を直接行わせる。</p>
   <p>この章には正解がないことを先に明確にしてください。参加者が「何を作ればよいか」戸惑う場合は、講師が自身の例(例: 「毎週の会議録アクションアイテム整理」)を先にデモして質問の流れを見せるのが効果的である。時間が切迫していれば、4段階全てを実行するよりも、最低限1〜2段階(問題定義・ガードレール決定)までは全員が終え、3〜4段階は宿題として残してもよいです。</p>
   <span class="badge badge-do">参加者アクティビティ</span> 完了チェックリストを活用して各自どこまで終えたかを自分で示させ、キャップストーン発表の時間に1〜2名が自身のワークフローを短く共有するようにする。
 
@@ -211,7 +210,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第4章§1/第4章§2確認質問</div>
+    <div class="quiz-title">第6章§1/第6章§2確認質問</div>
     <ol>
       <li>writerとreviewerを並列で呼び出すと、なぜ失敗する可能性がありますか?</li>
       <li>Claude Desktop Appでフックが発火しないという事実を知らなかった場合、どのような事故が起こり得ますか?</li>
@@ -220,7 +219,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第5章(軽め)確認質問</div>
+    <div class="quiz-title">第7章(軽め)確認質問</div>
     <ol>
       <li>AGENTS.md、CONSTITUTION.md、CLAUDE.md、GEMINI.md — それぞれどのような役割を果たしますか?</li>
       <li>バリアント(variant)をスキャフォールディングすると、プロジェクトフォルダに何が生成されますか?</li>
@@ -228,7 +227,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第6章・既存variant活用確認質問</div>
+    <div class="quiz-title">第8章・既存variant活用確認質問</div>
     <ol>
       <li>co-consultの7段階コンサルティングワークフローにおいて、Phase 1.5(相互検証)がなぜ必要ですか?</li>
       <li>4段階設計フレームワークにおいて「検証基準」が数値で測定可能でなければならない理由は何ですか?</li>
@@ -239,7 +238,7 @@
   <h3>📅 2日目確認質問</h3>
 
   <div class="quiz">
-    <div class="quiz-title">第8章確認質問</div>
+    <div class="quiz-title">第10章確認質問</div>
     <ol>
       <li>CONSTITUTION.mdはどの階層の共有標準ですか? L0(ワークスペースルート)のSSOTは何ですか? L2/L3プロジェクトでcontext.mdはどのような役割を持ちますか?</li>
       <li>L1→L2が「フォーク」で終わる理由は何ですか?</li>
@@ -248,7 +247,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第10章確認質問</div>
+    <div class="quiz-title">第12章確認質問</div>
     <ol>
       <li>LOCKEDとMERGE分類の違いは何ですか?</li>
       <li>なぜ<code>--dry-run</code>を先に実行すべきですか?</li>
@@ -256,7 +255,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">共通参考/第7章確認質問</div>
+    <div class="quiz-title">共通参考/第9章確認質問</div>
     <ol>
       <li>teammateModeのin-processとtmuxの違いは?</li>
       <li>サービスチケットモデルにカンバンがないと、具体的にどのような問題が生じますか?(可視化されたキュー/WIP制限/優先順位のうち1つを選んで説明)</li>
@@ -264,7 +263,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第11章・新規variant作成確認質問</div>
+    <div class="quiz-title">第13章・新規variant作成確認質問</div>
     <ol>
       <li>Phase Aプロトタイプを<code>Projects/</code>に作る理由は何ですか?<code>templates/</code>に直接作ってはいけないのですか?</li>
       <li>エージェント定義の<code>handoff_to</code>と<code>handoff_from</code>が食い違うと、<code>agent:verify</code>ではどのように現れますか?</li>
@@ -272,7 +271,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第9章・ワークフローデザインパターン確認質問</div>
+    <div class="quiz-title">第11章・ワークフローデザインパターン確認質問</div>
     <ol>
       <li>コードレビューワークフローにおいて「検証後適用」パターンがなぜ必須ですか?</li>
       <li>5つのドメイン事例のうち、自身の業務と最も似ているパターンはどれですか?</li>
@@ -280,7 +279,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第12章・新規variant昇格確認質問</div>
+    <div class="quiz-title">第14章・新規variant昇格確認質問</div>
     <ol>
       <li>最初から作る経路と昇格経路のうち、「設計が使用に先立つ」という表現はどちらに該当しますか?</li>
       <li>reconcile段階と<code>_ORIGIN.md</code>の手動移管は、それぞれ何を処理しますか?</li>
@@ -288,7 +287,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第13章・Domain Operating Model確認質問</div>
+    <div class="quiz-title">第15章・Domain Operating Model確認質問</div>
     <ol>
       <li>手順スキーマの<code>phase</code>(0–6)とドメインの<code>stage</code>は、どんな軸が違うでしょうか?</li>
       <li>判断ゲート(<code>decisions/gates.yaml</code>)と判断記録(<code>DEC-*.md</code>)の違いは何でしょうか?</li>
@@ -297,7 +296,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">第14章・キャップストーン確認質問</div>
+    <div class="quiz-title">第16章・キャップストーン確認質問</div>
     <ol>
       <li>自身が選んだ反復作業は、§2の3つの限界(コンテキスト過負荷/役割衝突/並列性の欠如)のうちどれが原因でチームが必要でしたか?</li>
       <li>サブエージェントを作る前にガードレールから決めた理由は何ですか?</li>

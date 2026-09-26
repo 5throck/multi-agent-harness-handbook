@@ -11,10 +11,10 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第8章 §2 · ライフサイクル管理 - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブック">
+  <meta name="description" content="第10章 §2 · ライフサイクル管理 - マルチエージェントチーム・ハーネス・エンジニアリング・ハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>第8章 §2 · ライフサイクル管理</title>
+  <title>第10章 §2 · ライフサイクル管理</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,7 +26,7 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">第8章 · アーキテクチャ深掘り</div>
+  <div class="nav-title">第10章 · アーキテクチャ深掘り</div>
   <a href="08_Intro_Advanced_Deploy_ja.html">§1 · デプロイとSSOT</a>
   <a href="#s2-lifecycle-why">ライフサイクル管理が必要な理由</a>
   <a href="#s2-agent-lifecycle">エージェントのライフサイクル</a>
@@ -39,14 +39,14 @@
   <a href="08_Intro_Advanced_Architecture_ja.html">§4 · アーキテクチャ深掘り</a>
   <a href="08_Intro_Advanced_Roadmap_ja.html">§5 · 高度化ロードマップ</a>
   <div class="nav-section">他の章</div>
-  <a href="../intro/05_Intro_Chapter_ja.html">第5章 · ai-workspace-standards の紹介</a>
-  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 企業内マルチエージェントチームの運用</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variantの作成</a>
+  <a href="../intro/05_Intro_Chapter_ja.html">第7章 · ai-workspace-standards の紹介</a>
+  <a href="../enterprise/09_Enterprise_Chapter_ja.html">第9章 · 企業内マルチエージェントチームの運用</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_ja.html">第13章 · 新規variantの作成</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">第8章 §2</div>
+  <div class="chapter-eyebrow">第10章 §2</div>
   <h1>ライフサイクル管理</h1>
   <p class="lead">エージェント、スキル、スクリプトのそれぞれが生成から廃棄までどのような段階を経るのか、そしてこれらの段階が実際のワークスペースでどのように管理されているのかを扱います。</p>
 
@@ -430,7 +430,7 @@
     <li><strong>状態</strong>とは、特定の時点でそのコンポーネントが<strong>どこにあるか</strong>を示すスナップショットです。YAMLフロントマターの <code>status</code> フィールド（<code>draft</code>、<code>active</code>、<code>deprecated</code>、<code>retired</code>）が、まさにこの状態の値を保存する仕組みです。</li>
   </ul>
   <p>たとえるなら、ライフサイクルは「地下鉄の路線図」であり、状態は「現在、列車がどの駅にいるか」を示すリアルタイム表示板です。列車がどこへ向かうべきか（路線）は固定されていますが、今どこにいるか（駅）は刻々と変化します。</p>
-  <div class="note">ワークフロー実行レベルの状態 — 例えば、<a href="../workflows/09_Workflows_Chapter_ja.html">第9章</a>でPMが定義する Phase Pipeline（Phase 0: 要求受領 → Phase 1: 設計 → … → Phase 6: 同期完了）— は、個々のコンポーネントの <code>status</code> フィールドとはまた別の次元の状態です。前者は「作業がどの段階にあるか」であり、後者は「このコンポーネント自体がライフサイクルのどこにあるか」です。</div>
+  <div class="note">ワークフロー実行レベルの状態 — 例えば、<a href="../workflows/11_Workflows_Chapter_ja.html">第11章</a>でPMが定義する Phase Pipeline（Phase 0: 要求受領 → Phase 1: 設計 → … → Phase 6: 同期完了）— は、個々のコンポーネントの <code>status</code> フィールドとはまた別の次元の状態です。前者は「作業がどの段階にあるか」であり、後者は「このコンポーネント自体がライフサイクルのどこにあるか」です。</div>
 
   <p>エージェント・スキル・スクリプトのライフサイクルはそれぞれ独立して定義されていますが、実際のワークスペースでは密接に結びついています。</p>
 
@@ -471,8 +471,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Deploy_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §1 · デプロイとSSOT</div></a>
-    <a href="08_Intro_Advanced_AGENTS_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第8章 §3 · AGENTS.md 深掘り</div></a>
+    <a href="08_Intro_Advanced_Deploy_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第10章 §1 · デプロイとSSOT</div></a>
+    <a href="08_Intro_Advanced_AGENTS_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第10章 §3 · AGENTS.md 深掘り</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>

@@ -11,10 +11,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Capítulo 8 §5 · Hoja de Ruta Avanzada - una referencia del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="description" content="Capítulo 10 §5 · Hoja de Ruta Avanzada - una referencia del Manual de Ingeniería del Arnés Multiagente.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Capítulo 8 §5 · Hoja de Ruta Avanzada</title>
+  <title>Capítulo 10 §5 · Hoja de Ruta Avanzada</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -23,26 +23,26 @@
 
 <nav>
   <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
-  <div class="nav-title">Capítulo 8 §5 · Hoja de Ruta Avanzada</div>
+  <div class="nav-title">Capítulo 10 §5 · Hoja de Ruta Avanzada</div>
   <a href="#container">Integración de Servicios Basada en Contenedores</a>
   <a href="#memory">Agregación y Curación de Memoria</a>
   <a href="#variant-deploy">Evolución del Despliegue de Variantes</a>
   <a href="#boilerplate-strategy">Avance de la Estrategia de Plantilla Base</a>
   <a href="#tier-strategy">Avance de la Estrategia de Niveles de Modelo</a>
-  <div class="nav-section">Otras Secciones del Capítulo 8</div>
-  <a href="08_Intro_Advanced_Deploy_es.html">Cap.8 §1 · Despliegue y SSOT</a>
-  <a href="08_Intro_Advanced_Chapter_es.html">Cap.8 §2 · Gestión del Ciclo de Vida</a>
-  <a href="08_Intro_Advanced_AGENTS_es.html">Cap.8 §3 · AGENTS.md en Profundidad</a>
-  <a href="08_Intro_Advanced_Architecture_es.html">Cap.8 §4 · Arquitectura en Profundidad</a>
+  <div class="nav-section">Otras Secciones del Capítulo 10</div>
+  <a href="08_Intro_Advanced_Deploy_es.html">Cap.10 §1 · Despliegue y SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_es.html">Cap.10 §2 · Gestión del Ciclo de Vida</a>
+  <a href="08_Intro_Advanced_AGENTS_es.html">Cap.10 §3 · AGENTS.md en Profundidad</a>
+  <a href="08_Intro_Advanced_Architecture_es.html">Cap.10 §4 · Arquitectura en Profundidad</a>
   <div class="nav-section">Otros capítulos</div>
-  <a href="05_Intro_Chapter_es.html">Cap.5 · Introducción a ai-workspace-standards</a>
-  <a href="../enterprise/07_Enterprise_Chapter_es.html">Cap.7 · Ejecución de un Equipo Multiagente Dentro de una Empresa</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Cap.11 · Crear una Nueva Variante</a>
+  <a href="05_Intro_Chapter_es.html">Cap.7 · Introducción a ai-workspace-standards</a>
+  <a href="../enterprise/09_Enterprise_Chapter_es.html">Cap.9 · Ejecución de un Equipo Multiagente Dentro de una Empresa</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_es.html">Cap.13 · Crear una Nueva Variante</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Capítulo 8 §5</div>
+  <div class="chapter-eyebrow">Capítulo 10 §5</div>
   <h1>Hoja de Ruta Avanzada</h1>
   <p class="lead">Lo que el §1 a través del §4 han cubierto hasta ahora es la <strong>implementación actual</strong> de ai-workspace-standards. Esta sección cubre lo opuesto — cinco direcciones hacia las que se dirige el repositorio que aún no han sido implementadas. Se dividen en tres direcciones a nivel de infraestructura (integración de contenedores, agregación de memoria, automatización de despliegue de variantes) y dos direcciones a nivel de gobernanza (estrategia de plantilla base, estrategia de niveles de modelo).</p>
 
@@ -58,7 +58,7 @@
   </div>
 
   <div class="note">
-    <strong>Actualización 2026-08</strong> — partes de esta hoja de ruta ya se han implementado desde que se escribió esta sección. El reforzamiento a nivel de gobernanza se cubre en el <a href="../appendix/A_Governance_Enforcement_es.html">Referencia A · Capas de Aplicación de Gobernanza</a> y el <a href="../appendix/B_Decision_System_es.html">Referencia B · Sistema de Decisión</a>; la mecanización de la estructura del flujo de trabajo en el <a href="../appendix/C_Skill_Graph_es.html">Referencia C · Grafo de Relaciones de Habilidades</a> y la sección de esquema de procedimientos (ADR-0063) del Capítulo 9. Los demás puntos de esta sección (integración de contenedores, agregación de memoria, automatización de despliegue de variantes) siguen siendo direcciones activas.
+    <strong>Actualización 2026-08</strong> — partes de esta hoja de ruta ya se han implementado desde que se escribió esta sección. El reforzamiento a nivel de gobernanza se cubre en el <a href="../appendix/A_Governance_Enforcement_es.html">Referencia A · Capas de Aplicación de Gobernanza</a> y el <a href="../appendix/B_Decision_System_es.html">Referencia B · Sistema de Decisión</a>; la mecanización de la estructura del flujo de trabajo en el <a href="../appendix/C_Skill_Graph_es.html">Referencia C · Grafo de Relaciones de Habilidades</a> y la sección de esquema de procedimientos (ADR-0063) del Capítulo 11. Los demás puntos de esta sección (integración de contenedores, agregación de memoria, automatización de despliegue de variantes) siguen siendo direcciones activas.
   </div>
 
 
@@ -67,7 +67,7 @@
   <p>El núcleo de este avance es que un proyecto generado debería poder ejecutarse en un entorno Docker o Kubernetes, **conectado a un servicio frontend como Open WebUI para que pueda ser soportado por usuario**. En esa forma, cada usuario invoca su equipo de agentes asignado a través de una interfaz de navegador, revisa los resultados y conserva el contexto entre sesiones.</p>
 
   <h2 id="memory">Agregación y Curación de Memoria</h2>
-  <p>Hoy en día, cada proyecto L3 mantiene su propio archivo <code>memory/YYYY-MM-DD.md</code> independiente (cubierto en el Capítulo 5 §4). Este archivo registra el contexto entre sesiones para ese proyecto, pero a medida que crece el número de proyectos, los archivos de memoria se dispersan y <strong>se vuelve difícil ver las perspectivas a nivel del espacio de trabajo</strong>.</p>
+  <p>Hoy en día, cada proyecto L3 mantiene su propio archivo <code>memory/YYYY-MM-DD.md</code> independiente (cubierto en el Capítulo 7 §4). Este archivo registra el contexto entre sesiones para ese proyecto, pero a medida que crece el número de proyectos, los archivos de memoria se dispersan y <strong>se vuelve difícil ver las perspectivas a nivel del espacio de trabajo</strong>.</p>
   <p>El segundo eje de avance es la necesidad de una capacidad para **agregar y curar** archivos de memoria que de otro modo están dispersos en proyectos individuales. Por ejemplo, debería ser posible ejecutar análisis de tendencias a nivel del espacio de trabajo como "qué patrones de error encontraron los equipos de agentes en todos los proyectos con más frecuencia la semana pasada" o "qué combinaciones de roles se usaron con más frecuencia."</p>
 
   <h2 id="variant-deploy">Evolución del Despliegue de Variantes</h2>
@@ -155,8 +155,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Architecture_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Cap.8 §4 · Arquitectura en Profundidad</div></a>
-    <a href="../workflows/09_Workflows_Chapter_es.html" class="next"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Cap.9 · Patrones de Diseño de Flujos de Trabajo</div></a>
+    <a href="08_Intro_Advanced_Architecture_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Cap.10 §4 · Arquitectura en Profundidad</div></a>
+    <a href="../workflows/11_Workflows_Chapter_es.html" class="next"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Cap.11 · Patrones de Diseño de Flujos de Trabajo</div></a>
   </div>
    <footer>
     Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · Material educativo en español<br>

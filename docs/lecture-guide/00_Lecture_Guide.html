@@ -34,7 +34,7 @@
 <main>
  <article class="reading">
   <h1>강의 진행 가이드</h1>
-  <p class="lead">이 핸드북 전체(1~14장 + 공통 참고)를 사용해 강의를 진행할 강사를 위한 자료이다.</p>
+  <p class="lead">이 핸드북 전체(1~18장 + 공통 참고)를 사용해 강의를 진행할 강사를 위한 자료이다.</p>
 
   <div class="note">이 문서는 핸드북 본문이 아니라 강사 전용 운영 자료이다. 학습자에게는 공유하지 않아도 된다.</div>
   <div class="warn">탈고 전에 전체 문장을 다시 읽으며 <strong>오탈자, 문맥에 어울리지 않는 표현, 장/절 번호 불일치</strong>가 없는지 반드시 확인하라. AI가 생성한 초안에 오자나 어색한 문맥이 남아 있을 수 있다.</div>
@@ -43,12 +43,12 @@
   <p>각 장의 setup 문서(<a href="../setup/SETUP_CHECKLIST.html">사전 설치 체크리스트</a>)에 흩어져 있던 항목을 강의 시작 전 한 번에 확인할 수 있도록 모았다. 강의 시작 <strong>최소 하루 전</strong>에 참가자에게 이 목록을 공지해 현장에서 설치 문제로 시간을 낭비하지 않도록 한다.</p>
   <div class="chk">☐ 활성 상태의 Claude Pro/Max 구독 (API 키가 아니라 구독제 계정)</div>
   <div class="chk">☐ Antigravity 사용을 위한 Google 계정</div>
-  <div class="chk">☐ <code>gh auth login</code>이 가능한 GitHub 계정. 계정이 없는 참가자는 <a href="../practice/04_Practice_Examples_A.html#setup">4장 §2-A 실습 준비 절</a>의 가입 안내를 미리 따라오도록 공지</div>
+  <div class="chk">☐ <code>gh auth login</code>이 가능한 GitHub 계정. 계정이 없는 참가자는 <a href="../practice/06_Practice_Examples_A.html#setup">6장 §2-A 실습 준비 절</a>의 가입 안내를 미리 따라오도록 공지</div>
   <div class="chk">☐ 최소 5GB 여유 디스크 공간, 관리자/sudo 권한</div>
-  <div class="chk">☐ Claude Desktop App, Claude Code(CLI), Antigravity(Desktop), Antigravity CLI(<code>agy</code>) 설치 완료. <a href="../practice/04_Practice_Examples_A.html#setup">4장 §2-A 실습 준비 절</a>의 OS별 스크립트로 검증</div>
+  <div class="chk">☐ Claude Desktop App, Claude Code(CLI), Antigravity(Desktop), Antigravity CLI(<code>agy</code>) 설치 완료. <a href="../practice/06_Practice_Examples_A.html#setup">6장 §2-A 실습 준비 절</a>의 OS별 스크립트로 검증</div>
   <div class="chk">☐ <code>bun --version</code>, <code>git --version</code> 정상 출력 확인</div>
-  <div class="chk">☐ (6장·11장 실습용) <code>git clone https://github.com/5throck/ai-workspace-standards.git</code>을 워크스페이스 루트 위치(Windows <code>C:\git</code>, macOS/Linux <code>~/git</code>)에 미리 클론</div>
-  <div class="warn">11장 신규 variant 승격 실습의 P-1 시나리오는 실제 git 이력과 파일 구조에 영향을 주는 승격 파이프라인을 실행한다. 참가자 전원이 각자 환경에서 실행하게 하지 말고, 아래 "장별 강사 노트"의 안내를 따르세요.</div>
+  <div class="chk">☐ (8장·13장 실습용) <code>git clone https://github.com/5throck/ai-workspace-standards.git</code>을 워크스페이스 루트 위치(Windows <code>C:\git</code>, macOS/Linux <code>~/git</code>)에 미리 클론</div>
+  <div class="warn">13장 신규 variant 승격 실습의 P-1 시나리오는 실제 git 이력과 파일 구조에 영향을 주는 승격 파이프라인을 실행한다. 참가자 전원이 각자 환경에서 실행하게 하지 말고, 아래 "장별 강사 노트"의 안내를 따르세요.</div>
 
   <h2 id="agenda">전체 시간 배분표</h2>
   <p>모든 절을 꼼꼼히 다루고, 실습은 참가자가 직접 타이핑(또는 복붙)할 시간을 포함해 산정했다. 휴식 시간은 별도이다.</p>
@@ -63,42 +63,41 @@
 	      <tr><td>2장</td><td>Prompt→Context→Harness 흐름, 하네스 엔지니어링 정의, 단일 에이전트 한계, 멀티 에이전트팀 구성요소(오케스트레이터·스페셜리스트·핸드오프 계약), 서브에이전트(사전 정의 vs 동적 생성), 오케스트레이션 패턴 5종과 재시도·롤백·에스컬레이션, 동적 팀 구성과 워크플로우 조합, AGENTS.md 표준</td><td>강의 + 확인질문</td><td>45분</td></tr>
 		      <tr><td>3장</td><td>가드레일 필요성, 위험 작업 3단계 분류(읽기/쓰기/파괴적), 최소 권한 원칙(tools 필드), 사람 승인 게이트, 격리(worktree·sandbox), 감사 로그와 관측성</td><td>강의</td><td>20분</td></tr>
 		      <tr><td>워밍업 실습</td><td>테트리스(바이브코딩, 하네스 없이 10분) + 팩맨(단일 프롬프트 실패 체험 후 기획→개발→QA 3단계 멀티 에이전트 25분) + 시사점 정리(5분)</td><td>실습(참가자 직접)</td><td>40분</td></tr>
-		      <tr><td>4장 §1 + 4장 §2</td><td>네 도구(Claude Desktop App/Code, Antigravity Desktop/CLI)에서 서브에이전트 정의·호출·순차 파이프라인·동적 팀 구성·병렬 실행·모델 티어 비교 실습 (G-1/D-1/D-2/P-1/P-2, Codex는 <a href="../practice/04_Practice_Manual_C.html">4장 §1-C</a> 방식)</td><td>실습(참가자 직접)</td><td>90분</td></tr>
-      <tr><td>5장 (가볍게)</td><td>ai-workspace-standards 저장소 개요, 핵심 파일 4종(AGENTS.md·CONSTITUTION.md·CLAUDE.md·GEMINI.md), variant란 무엇인가, 스캐폴딩으로 프로젝트 만들기 기본</td><td>강의</td><td>20분</td></tr>
-      <tr><td>6장 (① 기존 활용 G-1)</td><td>co-consult로 Physical AI 시장조사 프로젝트 스캐폴딩·가동 — 4단계 설계 프레임워크 적용, 7단계 컨설팅 워크플로우 가동, 결과물 검토·핸드오프 추적</td><td>실습(참가자 직접)</td><td>40분</td></tr>
-	      <tr><td>6장 (② 기존 활용 G-2)</td><td>co-deck으로 한식 세계화 발표자료 스캐폴딩·가동 — 발표 주제 프레임 설정, 11단계 파이프라인 가동, 결과물 리뷰·개선, TTS·자동 슬라이드 설정</td><td>실습(참가자 직접)</td><td>40분</td></tr>
+		      <tr><td>6장 §1 + 6장 §2</td><td>네 도구(Claude Desktop App/Code, Antigravity Desktop/CLI)에서 서브에이전트 정의·호출·순차 파이프라인·동적 팀 구성·병렬 실행·모델 티어 비교 실습 (G-1/D-1/D-2/P-1/P-2, Codex는 <a href="../practice/06_Practice_Manual_C.html">6장 §1-C</a> 방식)</td><td>실습(참가자 직접)</td><td>90분</td></tr>
+      <tr><td>7장 (가볍게)</td><td>ai-workspace-standards 저장소 개요, 핵심 파일 4종(AGENTS.md·CONSTITUTION.md·CLAUDE.md·GEMINI.md), variant란 무엇인가, 스캐폴딩으로 프로젝트 만들기 기본</td><td>강의</td><td>20분</td></tr>
+      <tr><td>8장 (① 기존 활용 G-1)</td><td>co-consult로 Physical AI 시장조사 프로젝트 스캐폴딩·가동 — 4단계 설계 프레임워크 적용, 7단계 컨설팅 워크플로우 가동, 결과물 검토·핸드오프 추적</td><td>실습(참가자 직접)</td><td>40분</td></tr>
+	      <tr><td>8장 (② 기존 활용 G-2)</td><td>co-deck으로 한식 세계화 발표자료 스캐폴딩·가동 — 발표 주제 프레임 설정, 11단계 파이프라인 가동, 결과물 리뷰·개선, TTS·자동 슬라이드 설정</td><td>실습(참가자 직접)</td><td>40분</td></tr>
 	      <tr><td>1일차 마무리</td><td>오늘 배운 내용 요약, 두 variant(co-consult vs co-deck) 구조 비교 회고, 2일차 예고(IT전문가 세션)</td><td>토론</td><td>10분</td></tr>
-			      <tr class="schedule-total"><td colspan="3">1일차 합계</td><td>약 6시간 45분 (휴식 제외)</td></tr>
+			      <tr id="color-system-schedule-row"><td>4장 · 디자인 기반과 접근성</td><td>디자인 철학·원칙·가이드·색상·폰트·표준 컴포넌트·표준 화면·접근성</td><td>강의 + 검토</td><td>35분</td></tr><tr><td>5장 · i18n 설계와 콘텐츠 품질</td><td>locale·country profile·형식화·문자열 확장·동등성 검증</td><td>강의 + 실습</td><td>25분</td></tr><tr class="schedule-total"><td colspan="3">1일차 합계</td><td>약 6시간 45분 (휴식 제외)</td></tr>
 	    </tbody>
 	  </table>
   </div>
-		  <div class="note">1일차 휴식 2회(각 10~15분)를 포함하면 <strong>약 6시간 5분~6시간 15분</strong>이다.</div>
+		  <div class="note">1일차 휴식 2회(각 10~15분)를 포함하면 <strong>약 7시간 5분~7시간 15분</strong>이다.</div>
 
   <h3>📅 2일차 — IT전문가: 아키텍처·신규 생성·캡스톤</h3>
   <div class="table-schedule">
   <table>
     <thead><tr><th>구분</th><th>내용</th><th>형태</th><th>예상 시간</th></tr></thead>
     <tbody>
-      <tr><td>1일차 복습</td><td>핵심 개념 요약, 6장 기존 variant 활용 실습 성과 공유</td><td>토론</td><td>10분</td></tr>
-      <tr><td>7장</td><td>서비스 티켓 모델, 개발 도구+variant 모델, 칸반 기반 운영 필요성, 두 모델 장단점 비교</td><td>강의 + 토론</td><td>30분</td></tr>
-      <tr><td>8장 §1</td><td>L0→L1→L2→L3 계층 구조 상세, 포크 모델, 파일별 SSOT 흐름</td><td>강의</td><td>15분</td></tr>
-      <tr><td>8장 §2</td><td>에이전트·스킬·스크립트 생애주기 관리</td><td>강의</td><td>15분</td></tr><tr id="color-system-schedule-row"><td>핵심 장 · Design Foundation·Accessibility</td><td>Design Foundation·Accessibility — 토큰·색상 시스템·표준 화면·접근성 검토</td><td>Lecture + review</td><td>35분</td></tr>
-<tr><td>핵심 장 · i18n 설계와 콘텐츠 품질</td><td>i18n 설계 — locale·country profile·형식화·번역 동등성 검증</td><td>Lecture + exercise</td><td>25분</td></tr>
-      <tr><td>9장</td><td>워크플로우 구성요소, 도메인별 사례 5종, 서브에이전트 로스터와 역할 경계 매트릭스, PM 페이즈 파이프라인과 절차 스키마(ADR-0063), 패턴 선택 가이드</td><td>강의</td><td>20분</td></tr>
-      <tr><td>10장</td><td>L3 프로젝트 업그레이드 사용법, 주요 파일 처리 분류, 스냅샷·롤백, 승격과의 방향 차이</td><td>강의</td><td>15분</td></tr>
+      <tr><td>1일차 복습</td><td>핵심 개념 요약, 8장 기존 variant 활용 실습 성과 공유</td><td>토론</td><td>10분</td></tr>
+      <tr><td>9장</td><td>서비스 티켓 모델, 개발 도구+variant 모델, 칸반 기반 운영 필요성, 두 모델 장단점 비교</td><td>강의 + 토론</td><td>30분</td></tr>
+      <tr><td>10장 §1</td><td>L0→L1→L2→L3 계층 구조 상세, 포크 모델, 파일별 SSOT 흐름</td><td>강의</td><td>15분</td></tr>
+      <tr><td>10장 §2</td><td>에이전트·스킬·스크립트 생애주기 관리</td><td>강의</td><td>15분</td></tr>
+      <tr><td>11장</td><td>워크플로우 구성요소, 도메인별 사례 5종, 서브에이전트 로스터와 역할 경계 매트릭스, PM 페이즈 파이프라인과 절차 스키마(ADR-0063), 패턴 선택 가이드</td><td>강의</td><td>20분</td></tr>
+      <tr><td>12장</td><td>L3 프로젝트 업그레이드 사용법, 주요 파일 처리 분류, 스냅샷·롤백, 승격과의 방향 차이</td><td>강의</td><td>15분</td></tr>
       <tr><td>공통 참고</td><td>네 도구 구조 한눈에 보기, Claude Desktop App vs Code(서브에이전트 정의, teammateMode), Antigravity vs agy(Agent Manager, /goal·/agent·/agents), 멀티 에이전트 지원 범위 비교표, 실습 도구 선택 가이드, AGENTS.md 통합 구조</td><td>강의</td><td>25분</td></tr>
-	      <tr><td>11장 (① 신규 생성 D-1)</td><td>co-retail Phase A 프로토타입 만들기 — create-l3-scaffold, 도메인 에이전트 정의(researcher·writer), AGENTS.md 로스터 갱신, agent:verify</td><td>실습(참가자 직접)</td><td>50분</td></tr>
-	      <tr><td>11장 (② 강의)</td><td>처음부터 만들기(Phase A→B) vs 기존 프로젝트 승격, 두 경로의 차이와 선택 기준</td><td>강의</td><td>20분</td></tr>
-		      <tr><td>12장 · 신규 variant 승격</td><td>프로토타입 검증(validate-templates·agent:verify), 승격 체크리스트/매니페스트 작성(참가자 실습), 실제 승격 파이프라인 실행(강사 시연만)</td><td>실습+시연 혼합</td><td>60분</td></tr>
-		      <tr><td>13장 · Domain Operating Model</td><td>variant 템플릿의 실행 가능 SOP 구조(ADR-0083·0084) — 4개 구성 그룹, phase와 stage의 구분, governed/core 등급, 검증 커맨드</td><td>강의</td><td>25분</td></tr>
-		      <tr><td>14장 · 캡스톤 실습</td><td>본인의 반복 작업을 골라 4단계(문제 정의·가드레일 설계·서브에이전트 구현·검증 회고) 직접 설계</td><td>실습(참가자 직접)</td><td>70분</td></tr>
+	      <tr><td>13장 (① 신규 생성 D-1)</td><td>co-retail Phase A 프로토타입 만들기 — create-l3-scaffold, 도메인 에이전트 정의(researcher·writer), AGENTS.md 로스터 갱신, agent:verify</td><td>실습(참가자 직접)</td><td>50분</td></tr>
+	      <tr><td>13장 (② 강의)</td><td>처음부터 만들기(Phase A→B) vs 기존 프로젝트 승격, 두 경로의 차이와 선택 기준</td><td>강의</td><td>20분</td></tr>
+		      <tr><td>16장 · 신규 variant 승격</td><td>프로토타입 검증(validate-templates·agent:verify), 승격 체크리스트/매니페스트 작성(참가자 실습), 실제 승격 파이프라인 실행(강사 시연만)</td><td>실습+시연 혼합</td><td>60분</td></tr>
+		      <tr><td>17장 · Domain Operating Model</td><td>variant 템플릿의 실행 가능 SOP 구조(ADR-0083·0084) — 4개 구성 그룹, phase와 stage의 구분, governed/core 등급, 검증 커맨드</td><td>강의</td><td>25분</td></tr>
+		      <tr><td>18장 · 캡스톤 실습</td><td>본인의 반복 작업을 골라 4단계(문제 정의·가드레일 설계·서브에이전트 구현·검증 회고) 직접 설계</td><td>실습(참가자 직접)</td><td>70분</td></tr>
       <tr><td>캡스톤 발표</td><td>1~2명이 자기 워크플로우를 짧게 공유, 참가자 피드백</td><td>발표</td><td>15분</td></tr>
       <tr><td>마무리</td><td>이틀 전체 회고, Q&A, 용어집/FAQ 안내, 다음 단계 안내</td><td>토론</td><td>15분</td></tr>
 		      <tr class="schedule-total"><td colspan="3">2일차 합계</td><td>약 6시간 25분 (휴식 제외)</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="note">2일차 휴식 2회(각 10~15분)를 포함하면 <strong>약 6시간 45분~6시간 55분</strong>이다. IT전문가 대상 세션으로 실습과 설계 중심의 구성이다. 종일 확보가 어렵다면 9장·13장을 각 15분으로 압축해 6시간 15분께로 되돌릴 수 있다.</div>
+  <div class="note">2일차 휴식 2회(각 10~15분)를 포함하면 <strong>약 6시간 45분~6시간 55분</strong>이다. IT전문가 대상 세션으로 실습과 설계 중심의 구성이다. 종일 확보가 어렵다면 11장·17장을 각 15분으로 압축해 6시간 15분께로 되돌릴 수 있다.</div>
 
   <h2 id="per-section">장별 강사 노트</h2>
 
@@ -112,59 +111,59 @@
   <span class="badge badge-do">참가자 활동</span> §4의 세 패턴(팬아웃/파이프라인/검증-후-적용) 중 하나를 골라 "우리 팀 업무에 적용한다면?"을 1분씩 옆 사람과 이야기하게 하는 것을 권장한다.
 
   <h3>3장: 가드레일과 권한 모델</h3>
-  <p>4장 §2 실습 직전에 배치돼 있어야 하는 이유가 있다. 서브에이전트를 직접 만들기 전에 "무엇을 허용하고 무엇을 막을지"를 먼저 정하는 습관을 들이기 위함이다. 위험 작업 3단계 분류표를 보여주면서 "여러분이 방금 만들 예정인 reviewer는 어느 단계에 해당할까요?"라고 미리 물어보면 4장 §2 실습으로 자연스럽게 이어진다.</p>
+  <p>6장 §2 실습 직전에 배치돼 있어야 하는 이유가 있다. 서브에이전트를 직접 만들기 전에 "무엇을 허용하고 무엇을 막을지"를 먼저 정하는 습관을 들이기 위함이다. 위험 작업 3단계 분류표를 보여주면서 "여러분이 방금 만들 예정인 reviewer는 어느 단계에 해당할까요?"라고 미리 물어보면 6장 §2 실습으로 자연스럽게 이어진다.</p>
 
   <h3>워밍업 실습: 테트리스에서 팩맨까지</h3>
-  <p>휴식 1 직후, 4장 본격 실습에 앞서 진행한다. claude.ai 또는 Claude Code를 사용하며, 4장에서 그룹별로 도구를 나누는 것과 달리 전원이 동일한 플랫폼으로 진행한다.</p>
+  <p>휴식 1 직후, 6장 본격 실습에 앞서 진행한다. claude.ai 또는 Claude Code를 사용하며, 6장에서 그룹별로 도구를 나누는 것과 달리 전원이 동일한 플랫폼으로 진행한다.</p>
   <p><strong>테트리스(10분)</strong>: 강사가 먼저 1분 시연하고 참가자가 따라 한다. "HTML Canvas로 테트리스 게임을 만들어줘"를 입력하면 바이브코딩만으로 즉시 작동하는 결과물이 나온다. 수정 요청(배경 색, 점수판 등)도 문제없이 반영된다. 이 시점에서 "이 정도 복잡도(~200줄)는 하네스 없이도 충분하다"를 강조한다.</p>
 	  <p><strong>팩맨(25분)</strong>: 먼저 단일 프롬프트("HTML Canvas로 팩맨 게임을 만들어줘")로 시도하게 하여 2~3분 동안 실패를 체험하게 한다 — 캐릭터 이동·유령 AI·충돌 감지·맵 설계가 동시에 들어가면 코드가 뒤엉켜 작동하지 않는다. 그 후 3-step 프롬프트를 화면에 표시해 준다. Step 1 기획 에이전트("팩맨의 기능 목록과 맵 구조를 명세서로 작성") → Step 2 개발 에이전트("위 명세서 기반으로 HTML 팩맨 코드 작성") → Step 3 QA 에이전트("이 코드의 버그를 찾고 수정"). 각 step 약 7~8분.</p>
-  <p><strong>시사점(5분)</strong>: 테트리스(~200줄)와 팩맨(~1,000~1,500줄)의 코드량 차이를 보여주며, 2장 §2의 단일 에이전트 한계(컨텍스트 과부하)를 직접 체험했음을 환기한다. "이 웜밍업에서 느낀 것을 이어서 4장 실습에서 도구별 서브에이전트로 더 깊이 체험합니다"로 4장으로 연결한다.</p>
+  <p><strong>시사점(5분)</strong>: 테트리스(~200줄)와 팩맨(~1,000~1,500줄)의 코드량 차이를 보여주며, 2장 §2의 단일 에이전트 한계(컨텍스트 과부하)를 직접 체험했음을 환기한다. "이 웜밍업에서 느낀 것을 이어서 6장 실습에서 도구별 서브에이전트로 더 깊이 체험합니다"로 6장으로 연결한다.</p>
 
-  <h3>4장 §1 / 4장 §2: 실습</h3>
+  <h3>6장 §1 / 6장 §2: 실습</h3>
   <p>참가자를 4개 그룹(Claude Desktop App / Claude Code / Antigravity Desktop / Antigravity CLI)으로 나눠 각자 다른 도구로 같은 시나리오를 진행하게 하면, 마지막에 결과를 비교하며 공통 참고 "도구 비교" 내용이 훨씬 잘 와닿는다.</p>
   <span class="badge badge-do">참가자 활동</span> G-1, D-1, D-2(동적 팀 구성 관찰)는 전원 실습. P-1(병렬 실행)·P-2(모델 티어 비교)는 시간이 부족하면 강사 화면 시연으로 대체 가능. Agent Teams 설정(`.claude/settings.json`)이나 <code>model</code> 필드 교체는 그룹당 한 명만 해봐도 개념은 전달된다.
 
-  <h3>5장(가볍게): ai-workspace-standards 소개</h3>
-  <p>1일차에서는 6장 실습에 필요한 최소한의 개념만 다룬다. 저장소가 무엇인지, 핵심 파일 4종의 역할, variant란 무엇인지, 그리고 스캐폴딩으로 프로젝트를 만드는 기본 흐름만 전달하면 충분하다. L0→L1→L2→L3 계층 구조와 모델 티어링 등은 2일차 심화에서 다룬다.</p>
+  <h3>7장(가볍게): ai-workspace-standards 소개</h3>
+  <p>1일차에서는 8장 실습에 필요한 최소한의 개념만 다룬다. 저장소가 무엇인지, 핵심 파일 4종의 역할, variant란 무엇인지, 그리고 스캐폴딩으로 프로젝트를 만드는 기본 흐름만 전달하면 충분하다. L0→L1→L2→L3 계층 구조와 모델 티어링 등은 2일차 심화에서 다룬다.</p>
 
-  <h3>6장: 기존 variant 활용 (1일차)</h3>
-  <p>이 실습은 6장 전체가 기존 variant 활용에 할당된다. <strong>G-1(co-consult Physical AI 시장조사)</strong>은 40분, <strong>G-2(co-deck 한식 세계화 발표자료)</strong>은 40분으로, 두 실습 합계 80분의 충분한 시간을 확보했다. 이것이 이틀 워크숍의 핵심 실습 시간이다.</p>
+  <h3>8장: 기존 variant 활용 (1일차)</h3>
+  <p>이 실습은 8장 전체가 기존 variant 활용에 할당된다. <strong>G-1(co-consult Physical AI 시장조사)</strong>은 40분, <strong>G-2(co-deck 한식 세계화 발표자료)</strong>은 40분으로, 두 실습 합계 80분의 충분한 시간을 확보했다. 이것이 이틀 워크숍의 핵심 실습 시간이다.</p>
   <p><code>new-project.ts</code> 실행 시 실제로 GitHub 클론이 오래 걸릴 수 있으므로, 이 실습을 시작하기 전에 미리 워크스페이스를 클론해 두라고 사전 공지하는 것이 중요합니다(위 사전 준비물 체크리스트 참고).</p>
   <span class="badge badge-do">참가자 활동</span> G-1에서는 4단계 설계 프레임워크(목표·입력·출력·검증 기준)를 직접 적용하고, 에이전트팀 가동 후 핸드오프를 추적해보게 한다. G-2에서는 발표 주제 프레임(청중·목적·시간)을 직접 설정하고, 완성된 슬라이드를 리뷰·개선하며, TTS와 자동 슬라이드 설정까지 체험하게 한다. 두 베리언트(variant)의 구조 차이를 G-1·G-2 산출물로 직접 비교하도록 안내한다.
   <span class="badge badge-do">참가자 활동</span> 1일차 마무리 시간(10분)에 G-1의 보고서 결과물과 G-2의 발표자료 결과물을 전원 공유하도록 한다. "co-consult 보고서를 co-deck 입력으로 넘기면 어떻게 되나요?"를 질문하면 2일차 신규 variant 생성의 동기가 자연스럽게 형성된다.
 
-  <h3>7장: 두 모델 비교 + 칸반 (2일차)</h3>
+  <h3>9장: 두 모델 비교 + 칸반 (2일차)</h3>
   <p>2일차에 배치된다. 칸반 절은 실제 사내 헬프데스크/지원팀 운영 경험이 있는 참가자가 있다면 그 경험을 먼저 물어보고 시작하는 것이 효과적이다. "왜 필요한가"를 이론으로 설명하기 전에, "티켓이 밀렸던 경험 있나요?"로 시작하면 공감대가 빨리 형성된다. IT전문가 대상이므로 GitHub Projects/Jira 연동 등 실무 구현 방법까지 언급하면 좋다.</p>
   <span class="badge badge-do">토론</span> "우리 조직이라면 어느 모델이 맞을까?"를 5분 소그룹 토론 후 발표.
 
-  <h3>8장: ai-workspace-standards 아키텍처 (2일차)</h3>
-  <p>2일차에서 1일차의 가벼운 소개를 이어받아, L0→L1→L2→L3 계층 구조, templates·variant 13종의 내부 구조, 모델 티어링, 세션 시작 체크리스트, 아직 구현되지 않은 고도화 로드맵(§5)까지 상세히 다룬다. L3 프로젝트 업그레이드는 독립 10장에서 다룬다. 전부 암기시킬 필요는 없고, "왜 이런 계층 구조가 필요한가"라는 동기만 확실히 전달되면 충분하다.</p>
+  <h3>10장: ai-workspace-standards 아키텍처 (2일차)</h3>
+  <p>2일차에서 1일차의 가벼운 소개를 이어받아, L0→L1→L2→L3 계층 구조, templates·variant 13종의 내부 구조, 모델 티어링, 세션 시작 체크리스트, 아직 구현되지 않은 고도화 로드맵(§5)까지 상세히 다룬다. L3 프로젝트 업그레이드는 독립 12장에서 다룬다. 전부 암기시킬 필요는 없고, "왜 이런 계층 구조가 필요한가"라는 동기만 확실히 전달되면 충분하다.</p>
 
-  <h3 id="color-system-instructor-note">핵심 장 · Design Foundation·Accessibility</h3><p>색상은 장식이 아니라 상태와 행동을 전달하는 계약으로 설명한다. 화면을 회색조로 보았을 때도 오류·선택·다음 행동을 이해할 수 있는지 확인하게 한다.</p><h3>핵심 장 · i18n 설계와 콘텐츠 품질</h3><p>번역의 자연스러움뿐 아니라 메시지 키, 긴 문자열, 날짜·통화 형식, 오류 상태가 모든 언어에서 같은 과업을 지원하는지 검토하게 한다.</p><h3>9장: 워크플로우 디자인 패턴</h3>
+  <h3 id="color-system-instructor-note">4장 · 디자인 기반과 접근성</h3><p>색상은 장식이 아니라 상태와 행동을 전달하는 계약으로 설명한다. 화면을 회색조로 보았을 때도 오류·선택·다음 행동을 이해할 수 있는지 확인하게 한다.</p><h3>5장 · i18n 설계와 콘텐츠 품질</h3><p>번역의 자연스러움뿐 아니라 메시지 키, 긴 문자열, 날짜·통화 형식, 오류 상태가 모든 언어에서 같은 과업을 지원하는지 검토하게 한다.</p><h3>11장: 워크플로우 디자인 패턴</h3>
 <p>5가지 오케스트레이션 패턴을 복습한 뒤, 코드 리뷰·시장 조사·프레젠테이션 등 실제 워크플로우 사례를 보여준다. "이 업무에는 어떤 패턴이 맞을까?" 의사결정 나무를 함께 풀어본다.</p>
 
-  <h3>10장: L3 프로젝트 업그레이드 (2일차)</h3>
-  <p>8장 §1에서 배운 포크 모델의 실제 활용편이다. "L1 템플릿이 바뀌어도 내 프로젝트에는 자동으로 반영되지 않는다"는 점을 상기시키며 시작한다. LOCKED·MERGE·PRESERVE·SYNC_IF_NEWER 8분류 중 MERGE의 워크스페이스 관리 마커 구조를 시각적으로 보여주면 이해도가 높다. <code>--dry-run</code>을 먼저 실행하는 습관을 강조하고, 실제 스크립트 실행은 강사가 시연하는 것을 권장한다.</p>
-  <span class="badge badge-do">참가자 활동</span> 시간이 허락하면 참가자 자신의 6장 실습 프로젝트(G-1 또는 G-2)를 대상으로 <code>--dry-run</code>을 실행해보게 하면 실감이 더하다.
+  <h3>12장: L3 프로젝트 업그레이드 (2일차)</h3>
+  <p>10장 §1에서 배운 포크 모델의 실제 활용편이다. "L1 템플릿이 바뀌어도 내 프로젝트에는 자동으로 반영되지 않는다"는 점을 상기시키며 시작한다. LOCKED·MERGE·PRESERVE·SYNC_IF_NEWER 8분류 중 MERGE의 워크스페이스 관리 마커 구조를 시각적으로 보여주면 이해도가 높다. <code>--dry-run</code>을 먼저 실행하는 습관을 강조하고, 실제 스크립트 실행은 강사가 시연하는 것을 권장한다.</p>
+  <span class="badge badge-do">참가자 활동</span> 시간이 허락하면 참가자 자신의 8장 실습 프로젝트(G-1 또는 G-2)를 대상으로 <code>--dry-run</code>을 실행해보게 하면 실감이 더하다.
 
   <h3>공통 참고: 도구 비교 (2일차)</h3>
-  <p>2일차에 배치된다. 1일차 4장 §1/4장 §2 실습에서 참가자가 도구를 직접 경험했으므로, "방금 여러분이 쓴 도구에서 이게 왜 이렇게 동작했는지" 형태로 복기하면서 진행하면 순수 강의보다 훨씬 몰입도가 높다. IT전문가 대상이므로 teammateMode(in-process vs tmux), Agent Manager 내부 구조 등 기술적 세부 사항을 깊이 있게 다룰 수 있다.</p>
+  <p>2일차에 배치된다. 1일차 6장 §1/6장 §2 실습에서 참가자가 도구를 직접 경험했으므로, "방금 여러분이 쓴 도구에서 이게 왜 이렇게 동작했는지" 형태로 복기하면서 진행하면 순수 강의보다 훨씬 몰입도가 높다. IT전문가 대상이므로 teammateMode(in-process vs tmux), Agent Manager 내부 구조 등 기술적 세부 사항을 깊이 있게 다룰 수 있다.</p>
 
-  <h3>11장: 신규 variant 생성</h3>
+  <h3>13장: 신규 variant 생성</h3>
   <p>이 장은 2일차에 배치된다. 1일차에서 기존 베리언트(variant)를 직접 다뤄본 경험을 바탕으로, 이번에는 <strong>자신만의 베리언트(variant)를 처음부터 만들어본다</strong>. 실습(D-1) 50분 + 강의 20분으로 구성한다.</p>
   <span class="badge badge-do">참가자 활동</span> D-1(co-retail Phase A 프로토타입 직접 만들기)은 전원 실습. 1일차 G-1에서 에이전트 정의 파일의 frontmatter 구조를 이미 살펴봤으므로, 이번에는 직접 researcher·writer를 만들어본다. 시간이 빠듯하면 짝 활동(한 명이 타이핑, 한 명이 검증 명령 실행)으로 진행해도 좋다.
 
-<h3>12장: 신규 variant 승격</h3>
-  <p>2일차 후반에 배치된다. 11장에서 만든 co-retail 프로토타입을 승격 준비하는 단계다.</p>
+<h3>16장: 신규 variant 승격</h3>
+  <p>2일차 후반에 배치된다. 13장에서 만든 co-retail 프로토타입을 승격 준비하는 단계다.</p>
   <span class="badge badge-demo">강사 시연 전용</span> 실제 <code>l3-to-variant-pipeline.ts</code> 실행은 git 이력에 영향을 주는 비가역적 작업이다. 참가자 전원이 따라 하게 하지 말고, 강사가 화면 공유로 한 번 실행하는 것을 보여주는 것으로 충분한다. 참가자가 직접 해보고 싶다면 강의 종료 후 개인 환경(워크숍 전용 클론 폴더)에서 해보도록 안내하라.
   <span class="badge badge-do">참가자 활동</span> PROMOTION_CHECKLIST.md 항목 확인과 <code>variant.json</code> manifest 작성까지는 전원 실습 가능한다.
 
-  <h3>13장: Domain Operating Model</h3>
-  <p>12장 승격 실습 직후, 캡스톤 설계 직전에 배치된 이론 장이다. "승격된 템플릿에는 무엇이 생기는가"에 대한 답 — 스테이지·RACI·결정 게이트가 데이터로 선언되는 Domain Operating Model 구조(ADR-0083·0084)를 다룬다.</p>
-  <span class="badge badge-do">참가자 활동</span> 4그룹 표(Process·Governance·Execution·Graph)를 보여주고 "여러분이 11장에서 만든 co-retail에는 이 중 무엇이 이미 있고 무엇이 비어 있을까?"를 2분 토론으로 풀면 12장 실습과 즉시 연결된다. 약어 금지 규칙(DOM/AOM 충돌)은 용어 규율의 유머러스한 사례로 짚어주면 기억에 오래 남는다.
+  <h3>17장: Domain Operating Model</h3>
+  <p>16장 승격 실습 직후, 캡스톤 설계 직전에 배치된 이론 장이다. "승격된 템플릿에는 무엇이 생기는가"에 대한 답 — 스테이지·RACI·결정 게이트가 데이터로 선언되는 Domain Operating Model 구조(ADR-0083·0084)를 다룬다.</p>
+  <span class="badge badge-do">참가자 활동</span> 4그룹 표(Process·Governance·Execution·Graph)를 보여주고 "여러분이 13장에서 만든 co-retail에는 이 중 무엇이 이미 있고 무엇이 비어 있을까?"를 2분 토론으로 풀면 16장 실습과 즉시 연결된다. 약어 금지 규칙(DOM/AOM 충돌)은 용어 규율의 유머러스한 사례로 짚어주면 기억에 오래 남는다.
 
-  <h3>14장: 캡스톤 실습</h3>
-  <p>2일차 핵심 실습이다. 1일차(기존 variant 활용)와 11장(신규 variant 생성)의 경험을 모두 합쳐, 참가자 본인의 실제 업무에 멀티 에이전트팀을 적용하는 설계를 직접 해보게 한다.</p>
+  <h3>18장: 캡스톤 실습</h3>
+  <p>2일차 핵심 실습이다. 1일차(기존 variant 활용)와 13장(신규 variant 생성)의 경험을 모두 합쳐, 참가자 본인의 실제 업무에 멀티 에이전트팀을 적용하는 설계를 직접 해보게 한다.</p>
   <p>이 장은 정답이 없다는 점을 먼저 분명히 하라. 참가자가 "무엇을 만들어야 하나" 막막해하면, 강사가 자기 예시(예: "매주 회의록 액션 아이템 정리")를 먼저 시연해 질문 흐름을 보여주는 것이 효과적이다. 시간이 촉박하면 4단계 전체를 다 실행하기보다, 최소한 1~2단계(문제 정의·가드레일 결정)까지는 전원이 끝내고 3~4단계는 숙제로 남겨도 좋다.</p>
   <span class="badge badge-do">참가자 활동</span> 완료 체크리스트를 활용해 각자 어디까지 마쳤는지 스스로 표시하게 하고, 캡스톤 발표 시간에 1~2명이 자기 워크플로우를 짧게 공유하도록 한다.
 
@@ -211,7 +210,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">4장 §1/4장 §2 확인 질문</div>
+    <div class="quiz-title">6장 §1/6장 §2 확인 질문</div>
     <ol>
       <li>writer와 reviewer를 병렬로 호출하면 왜 실패할 수 있나요?</li>
       <li>Claude Desktop App에서 훅이 발화하지 않는다는 사실을 몰랐다면 어떤 사고가 날 수 있나요?</li>
@@ -220,7 +219,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">5장(가볍게) 확인 질문</div>
+    <div class="quiz-title">7장(가볍게) 확인 질문</div>
     <ol>
       <li>AGENTS.md, CONSTITUTION.md, CLAUDE.md, GEMINI.md — 각각 어떤 역할을 하나요?</li>
       <li>베리언트(variant)를 스캐폴딩하면 프로젝트 폴더에 어떤 것이 생성되나요?</li>
@@ -228,7 +227,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">6장 · 기존 variant 활용 확인 질문</div>
+    <div class="quiz-title">8장 · 기존 variant 활용 확인 질문</div>
     <ol>
       <li>co-consult의 7단계 컨설팅 워크플로우에서 Phase 1.5(교차 검증)이 왜 필요한가요?</li>
       <li>4단계 설계 프레임워크에서 "검증 기준"이 수치로 측정 가능해야 하는 이유는 무엇인가요?</li>
@@ -239,7 +238,7 @@
   <h3>📅 2일차 확인 질문</h3>
 
   <div class="quiz">
-    <div class="quiz-title">8장 확인 질문</div>
+    <div class="quiz-title">10장 확인 질문</div>
     <ol>
       <li>CONSTITUTION.md는 어느 계층의 공유 표준인가요? L0(워크스페이스 루트)의 SSOT는 무엇인가요? L2/L3 프로젝트에서 context.md는 어떤 역할을 하나요?</li>
       <li>L1→L2가 "포크"로 끝나는 이유는 무엇인가요?</li>
@@ -248,7 +247,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">10장 확인 질문</div>
+    <div class="quiz-title">12장 확인 질문</div>
     <ol>
       <li>LOCKED와 MERGE 분류의 차이는 무엇인가요?</li>
       <li>왜 <code>--dry-run</code>을 먼저 실행해야 하나요?</li>
@@ -256,7 +255,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">공통 참고/7장 확인 질문</div>
+    <div class="quiz-title">공통 참고/9장 확인 질문</div>
     <ol>
       <li>teammateMode의 in-process와 tmux 차이는?</li>
       <li>서비스 티켓 모델에 칸반이 없으면 구체적으로 어떤 문제가 생기나요? (가시화된 큐 / WIP 제한 / 우선순위, 셋 중 하나를 골라 설명)</li>
@@ -264,7 +263,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">11장 · 신규 variant 생성 확인 질문</div>
+    <div class="quiz-title">13장 · 신규 variant 생성 확인 질문</div>
     <ol>
       <li>Phase A 프로토타입을 <code>Projects/</code>에 만드는 이유는 무엇인가요? <code>templates/</code>에 바로 만들면 안 되나요?</li>
       <li>에이전트 정의의 <code>handoff_to</code>와 <code>handoff_from</code>가 어긋나면 <code>agent:verify</code>에서 어떻게 나오나요?</li>
@@ -272,7 +271,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">9장 · 워크플로우 디자인 패턴 확인 질문</div>
+    <div class="quiz-title">11장 · 워크플로우 디자인 패턴 확인 질문</div>
     <ol>
       <li>코드 리뷰 워크플로우에서 "검증-후-적용" 패턴이 왜 필수적인가요?</li>
       <li>5가지 도메인 사례 중, 본인의 업무와 가장 유사한 패턴은 어느 것인가요?</li>
@@ -280,7 +279,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">12장 · 신규 variant 승격 확인 질문</div>
+    <div class="quiz-title">16장 · 신규 variant 승격 확인 질문</div>
     <ol>
       <li>처음부터 만드는 경로와 승격 경로 중, "설계가 사용에 앞선다"는 표현은 어느 쪽에 해당하나요?</li>
       <li>reconcile 단계와 <code>_ORIGIN.md</code> 수동 이관은 각각 무엇을 처리하나요?</li>
@@ -288,7 +287,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">13장 · Domain Operating Model 확인 질문</div>
+    <div class="quiz-title">17장 · Domain Operating Model 확인 질문</div>
     <ol>
       <li>절차 스키마의 <code>phase</code>(0–6)와 도메인의 <code>stage</code>는 무엇이 다른 축일까요?</li>
       <li>결정 게이트(<code>decisions/gates.yaml</code>)와 결정 기록(<code>DEC-*.md</code>)의 차이는 무엇인가요?</li>
@@ -297,7 +296,7 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">14장 · 캡스톤 확인 질문</div>
+    <div class="quiz-title">18장 · 캡스톤 확인 질문</div>
     <ol>
       <li>본인이 고른 반복 작업이 §2의 세 가지 한계(컨텍스트 과부하/역할 충돌/병렬성 부재) 중 무엇 때문에 팀이 필요했나요?</li>
       <li>서브에이전트를 만들기 전에 가드레일부터 정한 이유는 무엇인가요?</li>

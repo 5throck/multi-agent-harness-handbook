@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Appendix D · Hermes Agents Operations - multi-agent-harness-handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Appendix D · Hermes Agents Operations</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook home</a>
+  <div class="nav-title">Appendix D · Hermes Agents Operations</div>
+  <a href="#surface">Hermes uses a fifth platform directory</a>
+  <a href="#trust">The user owns trust and context settings</a>
+  <a href="#governance">Why no HERMES.md is created</a>
+  <a href="#verify">Verify mirror, instruction, and safety boundaries</a>
+  <div class="nav-section">Related chapters</div>
+  <a href="../index_en.html">Previous</a>
+  <a href="../index_en.html">Next</a>
+</nav>
+<main><article class="reading">
+  <div class="chapter-eyebrow">Appendix D</div>
+  <h1>Appendix D · Hermes Agents Operations</h1>
+  <p class="lead">Use Hermes Agent inside the existing workspace governance model without creating a second source of instructions.</p>
+  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>Hermes platform surface</li><li>Trust and context budget</li><li>Skill mirrors and AGENTS.md</li><li>Verification and troubleshooting</li></ul></div>
+  <h2 id="surface">Hermes uses a fifth platform directory</h2><p>In the current standard Hermes Agent is a provider-neutral CLI harness. A project uses `.hermes/skills/` as its primary skill path. That directory must be a synchronized mirror of the `skills/` source of truth; pointing Hermes directly at the source would bypass security exclusions and country- or variant-scoped pruning.</p><p>Hermes discovers skills from directories and invokes them as <code>/skill-name</code>. It needs neither a command mirror nor a `skills.json` registration file.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Hermes uses a fifth platform directory">
+    <title>Hermes uses a fifth platform directory</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">SSOT · Hermes uses a fifth platform directory</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Review item</th><th>Intent</th></tr></thead><tbody><tr><td>Project skills</td><td> `.hermes/skills/` mirror</td></tr><tr><td>Invocation</td><td> `/skill-name`</td></tr><tr><td>Registration file</td><td> do not create one</td></tr><tr><td>Command/prompt mirror</td><td> do not create one</td></tr></tbody></table><div class="flow-box"><strong>Standard:</strong> skills/ SSOT → sync-skills → .hermes/skills → /skill-name</div><h2 id="trust">The user owns trust and context settings</h2><p>Hermes loads project skills only when the project root is listed in user-side `skills.trusted_project_dirs`. This is a prompt-injection defense, not a nuisance to bypass. Documentation should instruct a user to register a trusted path; the repository must not modify or evade the setting.</p><p>The default context-file limit can silently truncate a large AGENTS.md. The standard therefore makes AGENTS.md a thin dispatcher with pointers and a small safety floor. Check `context_file_max_chars` and Hermes logs, and move detailed policy to referenced governance documents.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="The user owns trust and context settings">
+    <title>The user owns trust and context settings</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Mirror · The user owns trust and context settings</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Review item</th><th>Intent</th></tr></thead><tbody><tr><td>Trust is user-owned configuration.</td><td>Trust is user-owned configuration.</td></tr><tr><td>AGENTS.md offers first-screen pointers and minimum safety rules.</td><td>AGENTS.md offers first-screen pointers and minimum safety rules.</td></tr><tr><td>Detailed policy stays in referenced documents.</td><td>Detailed policy stays in referenced documents.</td></tr><tr><td>Check truncation warnings before delivery.</td><td>Check truncation warnings before delivery.</td></tr></tbody></table><div class="flow-box"><strong>Standard:</strong> Trusted project → AGENTS.md pointers → selected governance files → skill execution</div><h3>Practice</h3><p>The default context-file limit can silently truncate a large AGENTS.md. The standard therefore makes AGENTS.md a thin dispatcher with pointers and a small safety floor. Check `context_file_max_chars` and Hermes logs, and move detailed policy to referenced governance documents.</p><div class="code-block"><pre><code># User-side Hermes onboarding
+hermes config set context_file_max_chars 100000
+
+# Then add the project root to skills.trusted_project_dirs
+# using the Hermes user configuration. Do not commit user configuration
+# or bypass the trust control from the project repository.</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="governance">Why no HERMES.md is created</h2><p>Hermes searches HERMES.md before AGENTS.md. Adding a HERMES.md twin would shadow the shared instruction source and create long-term divergence. The standard deliberately uses Hermes’ native AGENTS.md support instead.</p><p>For the same reason `.hermes/skills/` is a deployed mirror, not an independent editing area. Review changes in `skills/` and use synchronization to publish them.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Why no HERMES.md is created">
+    <title>Why no HERMES.md is created</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Trust · Why no HERMES.md is created</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Review item</th><th>Intent</th></tr></thead><tbody><tr><td>HERMES.md</td><td> do not create it; it would shadow AGENTS.md.</td></tr><tr><td>.hermes/skills</td><td> synchronized deployment copy.</td></tr><tr><td>AGENTS.md</td><td> thin dispatcher and pointer table.</td></tr><tr><td>Detailed governance</td><td> one source in separate documents.</td></tr></tbody></table><div class="flow-box"><strong>Standard:</strong> Single AGENTS.md instruction → pointer resolution → canonical policy → Hermes execution</div><h2 id="verify">Verify mirror, instruction, and safety boundaries</h2><p>Installation is not proof of safe operation. Confirm the mirror exists, prohibited skills are absent, AGENTS.md exposes the expected pointers, and the user has reviewed trust and context settings. Preserve synchronization and validation results as operational evidence.</p><p>When a skill is missing, inspect trust, mirror freshness, and context loading before rewriting prompts or changing models. A stale mirror or truncated instruction remains the root cause.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Verify mirror, instruction, and safety boundaries">
+    <title>Verify mirror, instruction, and safety boundaries</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Verify · Verify mirror, instruction, and safety boundaries</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Review item</th><th>Intent</th></tr></thead><tbody><tr><td>1. Is the root trusted by the user?</td><td>1. Is the root trusted by the user?</td></tr><tr><td>2. Is `.hermes/skills` synchronized with its SSOT?</td><td>2. Is `.hermes/skills` synchronized with its SSOT?</td></tr><tr><td>3. Does HERMES.md avoid shadowing AGENTS.md?</td><td>3. Does HERMES.md avoid shadowing AGENTS.md?</td></tr><tr><td>4. Are there no context-truncation or synchronization failures?</td><td>4. Are there no context-truncation or synchronization failures?</td></tr></tbody></table><div class="flow-box"><strong>Standard:</strong> Scaffold → trust registration → mirror check → context check → skill call → audit evidence</div><div class="quiz"><div class="quiz-title">Self-check</div><ol>
+      <li>Project skills: `.hermes/skills/` mirror</li><li>HERMES.md: do not create it; it would shadow AGENTS.md.</li><li>4. Are there no context-truncation or synchronization failures?</li>
+    </ol></div>
+  <h2 id="setup">Setup procedure and verification commands</h2><p>The repository never changes trust settings for the user. Explicitly trust the project root in Hermes settings, then verify the synchronized `.hermes/skills/` mirror and a thin `AGENTS.md`.</p><div class="diagram-frame"><svg viewBox="0 0 640 100" width="100%" role="img" aria-label="User trust → mirror → AGENTS.md → /skill-name"><title>User trust → mirror → AGENTS.md → /skill-name</title><rect x="18" y="35" width="604" height="36" rx="9" fill="var(--bg-success)" stroke="var(--border)"/><text x="320" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">User trust → mirror → AGENTS.md → /skill-name</text></svg></div><div class="code-block"><pre><code># User-owned configuration
+hermes config set context_file_max_chars 100000
+# Add the project root to skills.trusted_project_dirs in user configuration.
+# Do not commit user configuration or create HERMES.md.</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="troubleshoot">Troubleshooting: check load order before symptoms</h2><p>If skills are absent, check the trusted path and mirror. If rules are missing, check AGENTS.md size and pointers. If instructions conflict, first check for HERMES.md.</p><table><thead><tr><th>Symptom</th><th>First check</th></tr></thead><tbody><tr><td>Skill unavailable</td><td>trusted_project_dirs and .hermes/skills mirror</td></tr><tr><td>Rule missing</td><td>thin AGENTS.md and its pointer targets</td></tr><tr><td>Conflicting instruction</td><td>remove HERMES.md; retain AGENTS.md as SSOT</td></tr></tbody></table>
+  <div class="chapter-nav"><a class="prev" href="../index_en.html"><div class="dir">← Previous</div><div class="ttl">Previous</div></a><a class="next" href="../index_en.html"><div class="dir">Next →</div><div class="ttl">Next</div></a></div>
+   <footer>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>
+    Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    Handbook content is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International)</a>.
+  </footer>
+ </article></main>
+</div>
+<script src="../assets/inpage-search.js" defer></script><script src="../assets/copy-code.js"></script><script src="../assets/dark-mode-toggle.js"></script><script src="../assets/lang-switcher.js"></script>
+</body></html>

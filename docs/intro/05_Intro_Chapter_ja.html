@@ -1,20 +1,12 @@
 <!DOCTYPE html>
-<!--
-  チャプター(叙述型)テンプレート — 実習を伴わない「読み物」トピック向け。読みやすい幅(720px)・ゆったりした行間・章移動導線。
-  Manual(リファレンス)/Examples(実習)と異なり、バージョンボックスやコード強調ではなく本文の流れを中心に構成する。
-  編集箇所: (1) <title>/章番号/タイトル/リード  (2) nav(この章の節+他の章)  (3) 「この章で扱うこと」
-            (4) <h2 id>/<h3> 節と本文  (5) 前/次の章へのリンク
-  {{二重波括弧}}・[説明: ...] を実際の内容で埋める。リンクはすべて相対パス。
-  色はデザイントークンのみを使用 — テーマは配布時に references/apply-theme.sh が docs/ のブランドカラーを置換する。
-  検索インデックスの前提: 本文の節は必ず <h2 id="..."> (必要に応じて <h3>) 構造を維持する。
--->
+
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第5章 · ai-workspace-standards 紹介 - マルチエージェントチーム・ハーネスエンジニアリングハンドブック資料です。">
+  <meta name="description" content="第7章 · ai-workspace-standards 紹介 - マルチエージェントチーム・ハーネスエンジニアリングハンドブック資料です。">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>第5章 · ai-workspace-standards 紹介</title>
+  <title>第7章 · ai-workspace-standards 紹介</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,7 +18,7 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">第5章 · ai-workspace-standards 紹介</div>
+  <div class="nav-title">第7章 · ai-workspace-standards 紹介</div>
   <a href="#s1">リポジトリとは何か</a>
   <a href="#s1b">全体アーキテクチャを俯瞰する</a>
   <a href="#s2">4つの中核ファイル</a>
@@ -34,14 +26,14 @@
   <a href="#s4">セッション開始チェックリストとスキャフォールディング</a>
   <div class="nav-section">他の章</div>
   <a href="../guardrails/03_Guardrails_Chapter_ja.html">第3章 · ガードレールと権限モデル</a>
-  <a href="../intro/08_Intro_Advanced_Deploy_ja.html">第8章 · アーキテクチャ深掘り</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_ja.html">第10章 · アーキテクチャ深掘り</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">第5章</div>
+  <div class="chapter-eyebrow">第7章</div>
   <h1>ai-workspace-standards 紹介</h1>
-  <p class="lead">第7章で見る「開発ツール + variant」モデルを実際に実装したリポジトリがai-workspace-standardsである。本章では、このリポジトリが正確には何であり、どのようなファイルで構成され、どのようなプロジェクトテンプレートを提供するのかを順を追って紹介する。</p>
+  <p class="lead">第9章で見る「開発ツール + variant」モデルを実際に実装したリポジトリがai-workspace-standardsである。本章では、このリポジトリが正確には何であり、どのようなファイルで構成され、どのようなプロジェクトテンプレートを提供するのかを順を追って紹介する。</p>
   <p class="source-line">出典: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/adr/0031-l1-l2-fork-model.md" target="_blank">ADR-0031 L1–L2 Fork Model</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/constitution/00-ssot-architecture.md" target="_blank">CONSTITUTION.md §0 SSOT Architecture</a></p>
 
   <div class="keypoints">
@@ -114,7 +106,7 @@
     <li><strong>セッション開始。</strong> エージェントはCONSTITUTION.md → 現在のプロジェクトのdocs/context.md（プロジェクト設定） → AGENTS.md（エージェントロスター） → memory/YYYY-MM-DD.mdの順に読み込む(§4で扱う)。</li>
     <li><strong>ツール別の実行規則を適用。</strong> Claude Code/AppであればCLAUDE.mdと<code>.claude/</code>が、Gemini/Antigravity系であればGEMINI.mdと<code>.gemini/</code>が、CodexであればCODEX.mdと<code>.codex/</code>が詳細な実行方式を定める。</li>
     <li><strong>新規プロジェクトが必要な場合。</strong> <code>scripts/new-project.ts</code>が<code>templates/co-&lt;variant&gt;/</code>(L2)の構成全体を<code>Projects/&lt;name&gt;/</code>に複製し、L3のプロジェクト作業ディレクトリを作成する。このとき<code>templates/co-&lt;variant&gt;/</code>自体は、一世代前に<code>templates/common/</code>(L1)からスナップショットを受け取って作られた状態だった。</li>
-    <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/propagate-to-templates.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2やL3には自動的には伝播しない。これが第8章で扱う「フォーク」原則である。</li>
+    <li><strong>運用中にL0が変更された場合。</strong> <code>scripts/propagate-to-templates.ts</code>が<code>/sync</code>パイプラインの一部として、L0の変更をL1(<code>templates/common/</code>)に自動的かつ継続的に発行する。すでに生まれたL2やL3には自動的には伝播しない。これが第10章で扱う「フォーク」原則である。</li>
   </ol>
   <div class="note">一言で言えば: <strong>L0は「ルート直下」、L1は「templates/common/」、L2は「templates/co-*/」、L3は「Projects/*/、実際のプロジェクト作業ディレクトリ」</strong> — この4つの座標さえ覚えておけば、以降の節のすべての説明を実際のフォルダ位置に対応させながら追うことができる。</div>
 
@@ -123,7 +115,7 @@
   <p><code>CONSTITUTION.md</code>はマスター共有標準であり、セッション開始時に最初に読むべき文書である。ワークスペース全体のガバナンスルール、PRワークフロー、マルチエージェントアーキテクチャの原則がここに定義されている。<code>CLAUDE.md</code>はClaude Code/Appでの具体的な動作方式(フック、スラッシュコマンド、エージェントディスパッチ規則)を、<code>GEMINI.md</code>はGemini/Antigravity CLI/Desktopでの同等の動作を定義し、<code>CODEX.md</code>はCodex CLI/Desktop Appで同じ標準をプロンプトと順次ロール切替で適用する方法を定義する。<code>AGENTS.md</code>はワークスペース全体で利用可能なエージェント群の正本目録(ロスター)としての役割を果たす。このファイル名は、第2章で紹介したClaude Codeをはじめとする30以上のツールが共通して読み込む開放型AGENTS.md標準と同じである。ただしこのリポジトリでは、「エージェントレジストリ兼オーケストレーションリファレンス」というより具体的な役割まで兼ねている。ファイルの冒頭に「このファイルはAIツールへの指示文ではなく、人間が定義した複数の役割の登録簿である」と明記されているほどだ。</p>
   <p>この5つのファイルの関係を一文でまとめると、CONSTITUTION.mdが「何を守るべきか」を定義し、CLAUDE.md/GEMINI.md/CODEX.mdは「それを各プラットフォームでどう実行するか」を、AGENTS.mdは「誰がその作業を行うか」を定義している。</p>
 
-  <p>AGENTS.mdのエージェント項目は次のようなフィールドで構成される。<strong>具体的な作成ガイドとツール別の実装マッピングは第8章§3 AGENTS.md深掘りで扱う。</strong></p>
+  <p>AGENTS.mdのエージェント項目は次のようなフィールドで構成される。<strong>具体的な作成ガイドとツール別の実装マッピングは第10章§3 AGENTS.md深掘りで扱う。</strong></p>
   <div class="table-compare narrow-col-3">
   <table>
     <thead><tr><th>フィールド</th><th>意味</th><th>必須</th><th>例</th></tr></thead>
@@ -163,7 +155,7 @@
   <p><code>templates/</code>という名前が示すとおり、このリポジトリが配布するものは結局のところ<strong>ボイラープレート(boilerplate)</strong>である。プロジェクトごとに毎回一から書き直す必要があったPMの役割定義、ガバナンスパイプライン、プラットフォーム別のコマンド・スキル配線をあらかじめ備えた出発点である。ただし「コピーして各自で勝手に直す」ありふれたボイラープレートとは異なり、このリポジトリはその出発点が<em>どこから来て、どのように更新されるか</em>まで階層構造として明示する。それが次節のL0 → L1 → L2 → L3である。</p>
   <p>このボイラープレートがあらかじめ備えているものの1つが<strong>エージェントの役割別モデル割り当て</strong>である。variant内の各エージェント定義ファイル(<code>agents/*.md</code>)はfrontmatterに<code>tier</code>フィールドを持ち、この値はプラットフォーム別(<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>/<code>codex</code>)に<code>high</code>/<code>medium</code>/<code>low</code>のいずれかを指定する。判断が重い役割(PM・Architect)にはhigh、実際の実装を担当する役割(code-writer・docs-writer)にはmedium、定型化された反復作業(automation-engineerなど)にはlowを割り当てる形だ。実際の<code>model</code>フィールドは通常<code>inherit</code>のまま残されるが、これは各プラットフォームが配布時点でこのtier値を自プラットフォームのモデルエイリアス(<code>opus</code>/<code>sonnet</code>/<code>haiku</code>)に変換して割り当てるためである。つまりボイラープレートを複製した瞬間、新しいプロジェクトは「誰がどのコストのモデルで働くか」まですでに決まった状態で始まる。</p>
   <p>このティアリングがないと実際にどのような問題が生じるか。すべてのエージェントを画一的に最高性能モデル(high)に割り当てると、automation-engineerのように定型化されたスクリプト実行のみを繰り返す役割にも毎回不必要に高コストな推論コストがかかり、チーム全体の運用コストが無意味に膨らむ。逆に、すべてを最低コストモデル(low)に統一すると、PMのように複数のエージェントの成果物を総合して判断すべき役割が浅い推論しかできず、誤った調整判断を下すことが頻発する。ティアリングは「この役割が実際にどれだけ深い推論を必要とするか」に合わせて、コストと品質のバランスを役割単位であらかじめ整えておく仕組みである。</p>
-  <div class="note">この<strong>モデルコストティア(high/medium/low)</strong>は、第8章で扱う<strong>L0 → L1 → L2 → L3の4層</strong>(ファイルがどこから来て、どのように流れるかについての階層)と、名前の「層」という感覚が同じだけで、互いに異なる概念である。一方は「エージェントにどのモデルを割り当てるか」であり、もう一方は「ファイルの原本がどこにあるか」である。</div>
+  <div class="note">この<strong>モデルコストティア(high/medium/low)</strong>は、第10章で扱う<strong>L0 → L1 → L2 → L3の4層</strong>(ファイルがどこから来て、どのように流れるかについての階層)と、名前の「層」という感覚が同じだけで、互いに異なる概念である。一方は「エージェントにどのモデルを割り当てるか」であり、もう一方は「ファイルの原本がどこにあるか」である。</div>
 
   <h2 id="s4">セッション開始チェックリストとスキャフォールディング</h2>
   <p>CONSTITUTION.mdは、すべてのセッション開始時に従うべき順序を定義する。まず<code>git config core.hooksPath .githooks</code>でgitフックのパスを設定し、CONSTITUTION.md自体を読んだ後、作業中のプロジェクトの<code>docs/context.md</code>（プロジェクト設定文書）を読む。続いて<code>AGENTS.md</code>（エージェントロスター）で利用可能なエージェントを確認し、<code>memory/YYYY-MM-DD.md</code>に前回セッションの文脈が残っているかを点検した上で、docs/context.mdが指定するスキルを読み込む。</p>
@@ -176,7 +168,7 @@
 </div>
   </div>
 
-  <p>このコマンドの完全な構文と全オプション(<code>--platform</code>、<code>--version</code>)は<a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-2">第6章§1・プロジェクトスキャフォールディングコマンド</a>で実際に実習する。</p>
+  <p>このコマンドの完全な構文と全オプション(<code>--platform</code>、<code>--version</code>)は<a href="../variant-practice/08_VariantPractice_Manual_ja.html#section-2">第8章§1・プロジェクトスキャフォールディングコマンド</a>で実際に実習する。</p>
 
   <div class="note">
     <svg role="img" aria-label="Session startup file reading sequence diagram" viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
@@ -214,8 +206,8 @@
   <div class="note">ワークスペースルートのファイル(CONSTITUTION.md、CLAUDE.mdなど)と、スキャフォールディングされた個別プロジェクトのファイルは、それぞれ別のgitリポジトリに属する。両者を同じ作業の中で一緒に修正しないことが、このリポジトリの基本原則である。</div>
 
   <div class="chapter-nav">
-    <a href="../practice/04_Practice_Manual_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第4章 · ハーネスベースのマルチエージェントチーム活用</div></a>
-    <a href="../variant-practice/06_VariantPractice_Manual_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第6章 · 既存variantの活用</div></a>
+    <a href="../practice/06_Practice_Manual_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第6章 · ハーネスベースのマルチエージェントチーム活用</div></a>
+    <a href="../variant-practice/08_VariantPractice_Manual_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第8章 · 既存variantの活用</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>

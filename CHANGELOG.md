@@ -1,3 +1,10 @@
+
+## 2026-09-26
+
+### Changed
+- Promoted Design and i18n into numbered chapters; added Hermes Appendix D and operational standards updates.
+- Synced with `ai-workspace-standards` main (2026-09-26).
+
 # Changelog
 
 All notable changes to this handbook will be documented in this file.
@@ -24,22 +31,22 @@ All notable changes to this handbook will be documented in this file.
 ## [2026-09-20] — Lecture Schedule Review: Content Accuracy & Time Rebalance
 
 ### Fixed
-- **Stale "5-category" file-handling description** in the lecture guide and course overview (ko/en/ja/es): the Ch. 10 upgrade chapter teaches an **8-category** scheme; the schedule rows still said 5. Also removed the duplicated chapter label inside the Ch. 10 row's content cell (ko/ja) and restored the missing L3 in the en Ch. 8 §1 layer list (L0→L1→L2→L3).
-- **Ch. 9 schedule row content** (ko/en/ja/es) expanded to match the chapter as it now ships — workflow components, five domain cases, the subagent roster, the role boundary matrix, the PM phase pipeline, and the procedure schema (ADR-0063); the row only said "components, examples, selection guide".
+- **Stale "5-category" file-handling description** in the lecture guide and course overview (ko/en/ja/es): the Ch. 12 upgrade chapter teaches an **8-category** scheme; the schedule rows still said 5. Also removed the duplicated chapter label inside the Ch. 12 row's content cell (ko/ja) and restored the missing L3 in the en Ch. 10 §1 layer list (L0→L1→L2→L3).
+- **Ch. 11 schedule row content** (ko/en/ja/es) expanded to match the chapter as it now ships — workflow components, five domain cases, the subagent roster, the role boundary matrix, the PM phase pipeline, and the procedure schema (ADR-0063); the row only said "components, examples, selection guide".
 - Course overview's both-days total disagreed with the sum of its own blocks (said 11 h 15 m); all totals are now computed from the tables.
 
 ### Changed
-- **Day-2 teaching sequence reordered into chapter order** (was 8 → 10 → 9 → common → 7 → 11…, which read as an editing accident): now 복습 → **Ch. 7 → Ch. 8 §1/§2 → Ch. 9 → Ch. 10 → 공통 참고 → Ch. 11 → 12 → 13 → 14**. The unnumbered Common Reference (tool comparison, includes the exercise-tool selection guide) sits directly before the hands-on track as a bridge. Applied consistently to the lecture-guide Day-2 table, the chapter-by-chapter instructor notes (which had drifted: Ch. 6 after Ch. 10, Ch. 9 after Ch. 11), the course-overview Day-2 blocks, and its topics table — all 4 languages.
+- **Day-2 teaching sequence reordered into chapter order** (was 8 → 10 → 9 → common → 7 → 11…, which read as an editing accident): now 복습 → **Ch. 9 → Ch. 10 §1/§2 → Ch. 11 → Ch. 12 → 공통 참고 → Ch. 13 → 12 → 13 → 14**. The unnumbered Common Reference (tool comparison, includes the exercise-tool selection guide) sits directly before the hands-on track as a bridge. Applied consistently to the lecture-guide Day-2 table, the chapter-by-chapter instructor notes (which had drifted: Ch. 8 after Ch. 12, Ch. 11 after Ch. 13), the course-overview Day-2 blocks, and its topics table — all 4 languages.
 - **Time rebalance** for the tightest blocks (all 4 languages; lecture guide and course overview kept in lockstep):
-  - Day 1: Ch. 4 hands-on lab 80 → **90 min** (five scenarios across tool groups) — day total 5 h 35 → **5 h 45 min**.
-  - Day 2: Ch. 9 lecture 15 → **20 min**; Ch. 11 hands-on (D-1) 40 → **50 min**; Ch. 13 lecture 20 → **25 min**; Ch. 14 capstone 60 → **70 min** — day total ≈6 h → **6 h 25 min**.
-  - Break notes and the both-days total (now **12 h 10 min** excl. breaks) recomputed; the Day-2 note gained an explicit compression lever (Ch. 9/13 back to 15 min each → ≈6 h 15 min) for venues without a full day.
-- **Two more stale instructor-note strings fixed**: the Ch. 10 note's "5 classifications" → 8 (ko/en/ja/es), and the Ch. 11 note's "exercise (D-1) 40 min" → 50 min to match the rebalanced schedule.
+  - Day 1: Ch. 6 hands-on lab 80 → **90 min** (five scenarios across tool groups) — day total 5 h 35 → **5 h 45 min**.
+  - Day 2: Ch. 11 lecture 15 → **20 min**; Ch. 13 hands-on (D-1) 40 → **50 min**; Ch. 15 lecture 20 → **25 min**; Ch. 16 capstone 60 → **70 min** — day total ≈6 h → **6 h 25 min**.
+  - Break notes and the both-days total (now **12 h 10 min** excl. breaks) recomputed; the Day-2 note gained an explicit compression lever (Ch. 11/13 back to 15 min each → ≈6 h 15 min) for venues without a full day.
+- **Two more stale instructor-note strings fixed**: the Ch. 12 note's "5 classifications" → 8 (ko/en/ja/es), and the Ch. 13 note's "exercise (D-1) 40 min" → 50 min to match the rebalanced schedule.
 
-## [2026-09-20] — Ch.13 Domain Operating Model: diagrams and readability pass
+## [2026-09-20] — Ch.15 Domain Operating Model: diagrams and readability pass
 
 ### Added
-- **Ch.13 Domain Operating Model** (`docs/domain-model/13_DomainOperatingModel_Chapter.html`, ko/en/es/ja) — 3 new inline SVG diagrams matching the visual style already used elsewhere in the handbook (`diagram-frame` / `fig-caption`), addressing a chapter that had zero visuals compared to other chapters:
+- **Ch.15 Domain Operating Model** (`docs/domain-model/15_DomainOperatingModel_Chapter.html`, ko/en/es/ja) — 3 new inline SVG diagrams matching the visual style already used elsewhere in the handbook (`diagram-frame` / `fig-caption`), addressing a chapter that had zero visuals compared to other chapters:
   - **그림/Figure 13-1** — Process·Governance·Execution 세 그룹과 Graph의 관계도
   - **그림/Figure 13-2** — PM `phase` 축(공통) vs 도메인 `stage` 축(variant별 상이) 대비도
   - **그림/Figure 13-3** — Decision Gate(규칙 선언) ↔ Decision Record(실제 판정) 관계도
@@ -53,23 +60,23 @@ All notable changes to this handbook will be documented in this file.
 ### Fixed
 - **Appendix A/B/C** (`docs/appendix/A_Governance_Enforcement.html`, `B_Decision_System.html`, `C_Skill_Graph.html`) — 11 `check-authoring.ts` §11 warnings (`<strong>` wrapping only a 1–3 char Korean word-stem instead of the natural phrase, e.g. `<strong>강제</strong>한다`) fixed by expanding each `<strong>` span to cover the full natural phrase or word. `bun run check-authoring` now reports 0 warnings.
 
-## [2026-09-20] — Ch.8 Architecture Deep-Dive: graft Fleet Integration & Universal Design Gate
+## [2026-09-20] — Ch.10 Architecture Deep-Dive: graft Fleet Integration & Universal Design Gate
 
 ### Added
-- **Ch.8 Architecture Deep-Dive** (`docs/intro/08_Intro_Advanced_Architecture.html`, ko/en/ja/es) — two new sections closing a content-drift gap against `ai-workspace-standards` upstream, inserted between "Platform Parity" and "Execution Plan Templates":
+- **Ch.10 Architecture Deep-Dive** (`docs/intro/08_Intro_Advanced_Architecture.html`, ko/en/ja/es) — two new sections closing a content-drift gap against `ai-workspace-standards` upstream, inserted between "Platform Parity" and "Execution Plan Templates":
   - **`graft — Repo Context Graph as a Multi-Platform Fleet Surface`** (`#graft-fleet-integration`) — what graft is, the per-host coverage gaps a 2026-09-12 fleet investigation found, and how **ADR-0076** closes them with a per-host MCP delivery matrix and policy-driven upgrade-engine delivery to the existing fleet.
   - **`Universal Design Gate — Making the Spec Gate Uniform Across L0–L3`** (`#universal-design-gate`) — distinguishes **ADR-0068** ("Universal Design," a design-review-method extension above WCAG/ADR-0065) from **ADR-0074** ("Universal Design Gate," the decision making the existing spec-check sync gate apply uniformly across every tier L0–L3), cross-referencing the existing Design Gate (Row 0) content rather than duplicating it.
 
-## [2026-09-20] — New Chapter 13: Domain Operating Model & Capstone Renumbered to Ch.14
+## [2026-09-20] — New Chapter 15: Domain Operating Model & Capstone Renumbered to Ch.16
 
 ### Added
-- **Chapter 13 · Domain Operating Model** (`docs/domain-model/13_DomainOperatingModel_Chapter.html`, ko/en/ja/es) — new narrative chapter covering the executable-SOP structure of variant templates per upstream **ADR-0083/0084**: the four core groups (Process · Governance · Execution · Graph), the domain stage axis (`process/stages.yaml`) vs the PM `phase` axis, RACI matrices (`governance/raci.yaml`), decision gates (`decisions/gates.yaml`) vs decision records (`DEC-*.md`), the Domain Execution Graph profile (`deg/v1`), the actor model / evidence backporting / graph delta log extensions, the governed vs core grade system (9 vs 4 variants), and validation commands. Wired into the chapter chain (12 → 13 → 14), index cards, search manifest, and nav sidebars.
+- **Chapter 15 · Domain Operating Model** (`docs/domain-model/15_DomainOperatingModel_Chapter.html`, ko/en/ja/es) — new narrative chapter covering the executable-SOP structure of variant templates per upstream **ADR-0083/0084**: the four core groups (Process · Governance · Execution · Graph), the domain stage axis (`process/stages.yaml`) vs the PM `phase` axis, RACI matrices (`governance/raci.yaml`), decision gates (`decisions/gates.yaml`) vs decision records (`DEC-*.md`), the Domain Execution Graph profile (`deg/v1`), the actor model / evidence backporting / graph delta log extensions, the governed vs core grade system (9 vs 4 variants), and validation commands. Wired into the chapter chain (12 → 13 → 14), index cards, search manifest, and nav sidebars.
 - **Glossary terms** (ko/en/ja/es): Domain Operating Model (with the no-acronym rule), Domain Execution Graph, Stage Axis, RACI Matrix, Decision Gate.
 
 ### Changed
-- **Capstone renumbered Ch.13 → Ch.14** (`git mv` of all 4 language files; titles, nav, eyebrows, SVG labels, lecture-guide schedule/instructor notes/quizzes, course overview blocks, topic table, README curriculum, search manifest, and every cross-reference updated).
-- **Lecture guide & course overview** (all 4 languages): added Ch.13 schedule row (20-min lecture), instructor note, comprehension quiz, Day-2 schedule block, and topics-table row; Day-2 totals bumped to ≈6h (excl. breaks).
-- Synced handbook facts with `ai-workspace-standards` main (2026-09-20): footer baseline date bumped to 2026-09-20; README Target Versions `ai-workspace-standards` main (2026-09); Ch.10 `--platform claude|antigravity|codex|all` (upstream rename of `both` → `all`, now covering all three platforms) with `CODEX.md` added to the MERGE examples; Ch.9 procedure-schema section notes the new domain stage axis with a link to Ch.13; Reference B (Decision System) cross-references `decisions/gates.yaml`.
+- **Capstone renumbered Ch.15 → Ch.16** (`git mv` of all 4 language files; titles, nav, eyebrows, SVG labels, lecture-guide schedule/instructor notes/quizzes, course overview blocks, topic table, README curriculum, search manifest, and every cross-reference updated).
+- **Lecture guide & course overview** (all 4 languages): added Ch.15 schedule row (20-min lecture), instructor note, comprehension quiz, Day-2 schedule block, and topics-table row; Day-2 totals bumped to ≈6h (excl. breaks).
+- Synced handbook facts with `ai-workspace-standards` main (2026-09-20): footer baseline date bumped to 2026-09-20; README Target Versions `ai-workspace-standards` main (2026-09); Ch.12 `--platform claude|antigravity|codex|all` (upstream rename of `both` → `all`, now covering all three platforms) with `CODEX.md` added to the MERGE examples; Ch.11 procedure-schema section notes the new domain stage axis with a link to Ch.15; Reference B (Decision System) cross-references `decisions/gates.yaml`.
 
 ## [2026-08-24] — Workspace-State Sync & i18n Parity Gate
 
@@ -79,7 +86,7 @@ All notable changes to this handbook will be documented in this file.
 
 ### Changed
 - Synced handbook facts with `ai-workspace-standards` main (2026-08-24): 11 variants incl. **co-hr** everywhere; `l3-to-variant-pipeline.ts` CLI rewritten to `--l3-path/--name/--type/--description`; upgrade-project chapter re-pinned to **v1.10.1** (8 file-handling categories, merge-aware `.gitleaks.toml`, country-awareness); three-platform parity (.claude/.gemini/**.agents**); hook wiring corrected (`gateguard-fact-force.ts`, `agent-model-gate.ts`, `post-write-lifecycle-check.ts`, `audit.ts` on TaskCompleted); /sync FATAL gates documented (ADR-0055 spec registry); country-profile mechanism introduced; template PM tier baseline nuance.
-- README_ja/es: Ch.10 title L2→**L3** and missing curriculum tail entries restored; reference-video lists reconciled with the Korean edition.
+- README_ja/es: Ch.12 title L2→**L3** and missing curriculum tail entries restored; reference-video lists reconciled with the Korean edition.
 
 ### Fixed
 - README_ko dead link (`SETUP_ko.html`→`SETUP.html`); Day-2 total-hours math in ko/ja lecture guide (now ≈6h–6h10 matching the schedule table); Tools Manual version rows unified to 2026-08; Korean canonical ch11 `<title>`/`<h1>` translated; ja SVG label 「マージ」→`templates/`; Guardrails glossary entry added to ko/en/ja; **16 wrong-language internal links** retargeted; stray English in warm-up es.

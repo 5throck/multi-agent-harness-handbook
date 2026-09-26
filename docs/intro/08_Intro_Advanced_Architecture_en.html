@@ -11,10 +11,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Chapter 8 §4 · Advanced Architecture - Material from the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="description" content="Chapter 10 §4 · Advanced Architecture - Material from the Multi-Agent Team Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Chapter 8 §4 · Advanced Architecture</title>
+  <title>Chapter 10 §4 · Advanced Architecture</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,7 +26,7 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Chapter 8 §4 · Advanced Architecture</div>
+  <div class="nav-title">Chapter 10 §4 · Advanced Architecture</div>
   <a href="#layout-reconstruction">Layout Reconstruction</a>
   <a href="#extends">extends Frontmatter Resolution Order</a>
   <a href="#boilerplate-example">Boilerplate Strategy in Practice</a>
@@ -35,20 +35,20 @@
   <a href="#graft-fleet-integration">graft — Repo Context Graph</a>
   <a href="#universal-design-gate">Universal Design Gate</a>
   <a href="#execution-plan-templates">Execution Plan Templates</a>
-  <div class="nav-section">Other Sections in Chapter 8</div>
-  <a href="08_Intro_Advanced_Deploy_en.html">Ch. 8 §1 · Deployment & SSOT</a>
-  <a href="08_Intro_Advanced_Chapter_en.html">Ch. 8 §2 · Lifecycle Management</a>
-  <a href="08_Intro_Advanced_AGENTS_en.html">Ch. 8 §3 · AGENTS.md Deep Dive</a>
-  <a href="08_Intro_Advanced_Roadmap_en.html">Ch. 8 §5 · Advanced Roadmap</a>
+  <div class="nav-section">Other Sections in Chapter 10</div>
+  <a href="08_Intro_Advanced_Deploy_en.html">Ch. 10 §1 · Deployment & SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_en.html">Ch. 10 §2 · Lifecycle Management</a>
+  <a href="08_Intro_Advanced_AGENTS_en.html">Ch. 10 §3 · AGENTS.md Deep Dive</a>
+  <a href="08_Intro_Advanced_Roadmap_en.html">Ch. 10 §5 · Advanced Roadmap</a>
   <div class="nav-section">Other Chapters</div>
-  <a href="05_Intro_Chapter_en.html">Ch. 5 · Introducing ai-workspace-standards</a>
-  <a href="../enterprise/07_Enterprise_Chapter_en.html">Ch. 7 · Running Multi-Agent Teams Inside an Enterprise</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Ch. 11 · Creating a New Variant</a>
+  <a href="05_Intro_Chapter_en.html">Ch. 7 · Introducing ai-workspace-standards</a>
+  <a href="../enterprise/09_Enterprise_Chapter_en.html">Ch. 9 · Running Multi-Agent Teams Inside an Enterprise</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_en.html">Ch. 13 · Creating a New Variant</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Ch. 8 §4</div>
+  <div class="chapter-eyebrow">Ch. 10 §4</div>
   <h1>Advanced Architecture</h1>
   <p class="lead">Where §1 covered "what flows where" across L0→L1→L2, this section digs into <strong>how that flow is actually implemented</strong> — why files are regenerated rather than copied verbatim, the order in which inherited frontmatter is resolved, concrete examples of how boilerplate and tier strategy are applied in practice, and how the platform directories (.claude/.gemini/.agents/.codex) are kept from structurally drifting apart.</p>
 
@@ -88,7 +88,7 @@
   <p>Looking at the three examples side by side clarifies the classification criteria — <strong>would a change lead to a security/governance incident (LOCKED)? Must organizational rules and project context coexist in one file (MERGE)? Is it the project's identity itself (PRESERVE)?</strong> When adding a new file to this repository's boilerplate, asking these three questions in order will usually make the category obvious right away.</p>
 
   <h2 id="tier-strategy-deep">3-Tier Strategy Deep Dive — Applying Cost Optimization at Runtime</h2>
-  <p>The tier assignment introduced in Chapter 5 is statically defined in <code>agents/*.md</code> frontmatter. The <code>tier</code> field of each agent file is translated into a platform-specific model alias and applied at execution time.</p>
+  <p>The tier assignment introduced in Chapter 7 is statically defined in <code>agents/*.md</code> frontmatter. The <code>tier</code> field of each agent file is translated into a platform-specific model alias and applied at execution time.</p>
 
   <h3>Frontmatter Example</h3>
   <div style="position:relative">
@@ -123,7 +123,7 @@ tier:                          # platform-specific model alias (translated at ru
     <li><strong>Upgrades are forbidden</strong> — conversely, raising an agent above its baseline tier is <strong>always forbidden</strong>. Raising automation-engineer (low) to high to design complex architecture is a governance violation.</li>
     <li><strong>Restore on failure</strong> — if a downgraded task fails, the PM must restore the agent's baseline tier and retry.</li>
   </ul>
-  <p>The core of this rule is the principle that <strong>"an agent role's complexity ceiling is fixed, but its floor can be adjusted to the situation."</strong> The PM can lower the tier to low to save cost, but the moment a task exceeds low's capability, it immediately reverts to the baseline. The cost impact can be felt directly in the Chapter 4 §2-A P-2 exercise.</p>
+  <p>The core of this rule is the principle that <strong>"an agent role's complexity ceiling is fixed, but its floor can be adjusted to the situation."</strong> The PM can lower the tier to low to save cost, but the moment a task exceeds low's capability, it immediately reverts to the baseline. The cost impact can be felt directly in the Chapter 6 §2-A P-2 exercise.</p>
 
   <h3>Tier Ceiling Rule</h3>
   <p>AGENTS.md's Phase Determination table (§3.5) specifies the allowed tier ceiling for each deliverable type. For example, "script implementation (with an approved plan already in place)" is Phase 4, and the responsible agent is automation-engineer (low) — assigning high here would be a Tier Ceiling violation. By contrast, "designing new files, defining schemas" is Phase 1-2, handled by architect (high).</p>
@@ -133,16 +133,16 @@ tier:                          # platform-specific model alias (translated at ru
 
   <h2 id="platform-parity">Platform Parity — Keeping .claude/, .gemini/, .agents/, and .codex/ Structurally Identical</h2>
   <p>This repository supports four platforms simultaneously — Claude Code (<code>.claude/</code>), Gemini CLI (<code>.gemini/</code>), Antigravity (<code>.agents/</code>), and Codex (<code>.codex/</code>). If the platform directories drift apart over time (for example, if <code>.claude/agents/reviewer.md</code> exists but <code>.gemini/agents/reviewer.md</code> is missing), users of one tool end up unable to use a given feature. For skills, <code>skills/</code> is the single source of truth (SSOT), and <code>sync-skills.ts</code> distributes it to all four platform directories. The mechanism that guards against structural drift is the <strong>platform parity check</strong> in <code>validate-templates.ts</code>.</p>
-  <p>The checker scopes differ subtly. <code>validate-templates.ts</code> cross-references template structure such as commands only between the two directories <code>.claude/</code> and <code>.gemini/</code> (the Antigravity <code>.agents/</code> and Codex <code>.codex/</code> trees are maintained through their own sync paths), while skill content itself is validated at the SSOT by <code>validate-skills.ts</code>. In other words, "all four platforms expose the same features" is guaranteed by the combination of the distribution script and SSOT validation. The promotion pipeline covered in Chapter 11 also includes the parity check as a mandatory pre-promotion gate, so something built for one platform while another was forgotten can never become an official variant in the first place. Even though the four platforms use different execution mechanisms, the principle that <strong>the set of features provided must always be the same</strong> is enforced through structural checks.</p>
+  <p>The checker scopes differ subtly. <code>validate-templates.ts</code> cross-references template structure such as commands only between the two directories <code>.claude/</code> and <code>.gemini/</code> (the Antigravity <code>.agents/</code> and Codex <code>.codex/</code> trees are maintained through their own sync paths), while skill content itself is validated at the SSOT by <code>validate-skills.ts</code>. In other words, "all four platforms expose the same features" is guaranteed by the combination of the distribution script and SSOT validation. The promotion pipeline covered in Chapter 13 also includes the parity check as a mandatory pre-promotion gate, so something built for one platform while another was forgotten can never become an official variant in the first place. Even though the four platforms use different execution mechanisms, the principle that <strong>the set of features provided must always be the same</strong> is enforced through structural checks.</p>
 
   <h2 id="graft-fleet-integration">graft — Repo Context Graph as a Multi-Platform Fleet Surface</h2>
   <p><strong>graft</strong> (<code>@nanonets/graft</code>) is a prebuilt context graph for a repository: it indexes the codebase into small linked <code>graft/</code> markdown cards carrying exact <code>file:line</code> spans, plus a call graph of who calls what. The point is speed — an agent navigating a large monorepo can ask <code>graft ask "&lt;question&gt;"</code> or <code>graft callers &lt;symbol&gt;</code> and get ranked, precomputed answers with source spans inlined, instead of running repeated greps and opening whole files to reconstruct the same context turn after turn. graft has been running at the workspace root since 2026-09-06, but until <strong>ADR-0076</strong> it was wired up by hand and only for Claude Code.</p>
   <p>A 2026-09-12 fleet investigation (design doc: <code>2026-09-12-graft-multiplatform-rollout-design.md</code>) found the coverage was far narrower than it looked. <code>templates/common</code> shipped only the graft skill file and a Gemini MCP entry, so a freshly scaffolded project got graft for Gemini CLI/Antigravity only — Claude Code in that same project had no graft source at all. The 11-project fleet had effectively zero graft, because <code>.claude/skills/**</code> is normally claimed by the <code>sync-skills.ts</code> platform-mirror rule, and graft's skill deliberately lives outside the SSOT <code>skills/</code> directory — so no upgrade pass ever delivered it. On top of that, the same MCP server was being launched three different ways (<code>npx</code>, <code>bunx</code>, and a native binary) depending on which config file you looked at, and host coverage for Codex/Antigravity/Claude Desktop was implicit rather than documented.</p>
   <p><strong>ADR-0076</strong> closes this gap with a per-host delivery matrix: repo-level MCP registration wherever a host supports project config (Claude Code's <code>.mcp.json</code>, Gemini/Antigravity's <code>.gemini/settings.json</code>, Codex's <code>.codex/config.toml</code>, OpenCode's <code>opencode.json</code>), instruction blocks in <code>AGENTS.md</code>/<code>CLAUDE.md</code>/<code>GEMINI.md</code>, and machine-global registration for hosts with no project scope (Antigravity's global registry via <code>graft init --agents antigravity</code>, and a hand-written <code>claude_desktop_config.json</code> entry for Claude Desktop, since that host can't pass a working directory and needs an absolute repo path instead). <code>bunx @nanonets/graft mcp</code> becomes the one committed launcher standard across every platform; machine-global configs may still use the native binary.</p>
-  <p>Delivery to the existing fleet rides the same policy-driven upgrade engine covered in Chapter 8 §2 rather than a one-off migration pass: <code>.mcp.json</code>/<code>opencode.json</code> join the <code>JSON_MERGE_FILES</code> classification (so a project's own MCP servers survive the merge), <code>.claude/skills/graft/**</code> is special-cased to sync ahead of the normal platform-mirror rule (since that rule can never reach a skill living outside the SSOT), and <code>.codex/**</code> is seeded <code>ADD_IF_MISSING</code> so projects that already own a <code>config.toml</code> keep their existing content. The graft skill itself stays Claude-only and hand-maintained as two byte-identical copies (root and <code>templates/common</code>) rather than moving into the SSOT — moving it would cause <code>sync-skills.ts</code> to mirror it into Gemini/Antigravity's own skill directories, which would break the single-platform design the workspace intentionally pins for this tool. Freshness is deliberately left manual (graft tools self-refresh before answering; there is no CI or pre-push freshness gate).</p>
+  <p>Delivery to the existing fleet rides the same policy-driven upgrade engine covered in Chapter 10 §2 rather than a one-off migration pass: <code>.mcp.json</code>/<code>opencode.json</code> join the <code>JSON_MERGE_FILES</code> classification (so a project's own MCP servers survive the merge), <code>.claude/skills/graft/**</code> is special-cased to sync ahead of the normal platform-mirror rule (since that rule can never reach a skill living outside the SSOT), and <code>.codex/**</code> is seeded <code>ADD_IF_MISSING</code> so projects that already own a <code>config.toml</code> keep their existing content. The graft skill itself stays Claude-only and hand-maintained as two byte-identical copies (root and <code>templates/common</code>) rather than moving into the SSOT — moving it would cause <code>sync-skills.ts</code> to mirror it into Gemini/Antigravity's own skill directories, which would break the single-platform design the workspace intentionally pins for this tool. Freshness is deliberately left manual (graft tools self-refresh before answering; there is no CI or pre-push freshness gate).</p>
 
   <h2 id="universal-design-gate">Universal Design Gate — Making the Spec Gate Uniform Across L0–L3</h2>
-  <p>Chapter 8 §4 already introduces the Design Gate (Row 0) for L0/L1 execution plans below in <a href="#execution-plan-templates">Execution Plan Templates</a>, along with the spec-check that enforces it as a FATAL sync blocker (ADR-0055 Stage 2). Two ADRs extend that same governance concept in different directions, and it's worth telling them apart.</p>
+  <p>Chapter 10 §4 already introduces the Design Gate (Row 0) for L0/L1 execution plans below in <a href="#execution-plan-templates">Execution Plan Templates</a>, along with the spec-check that enforces it as a FATAL sync blocker (ADR-0055 Stage 2). Two ADRs extend that same governance concept in different directions, and it's worth telling them apart.</p>
   <p><strong>ADR-0068 ("Universal Design")</strong> is about the design-review method, not the sync-time gate. A 2026-09-06 review found that while the workspace enforces WCAG 2.1 AA conformance (ADR-0065) as a technical floor, nothing at any layer evaluated designs against the broader diversity of users — aging, cognitive load, situational impairment, motor variation. ADR-0068 adopts Universal Design's seven classic principles (equitable use, flexible use, simple/intuitive use, perceptible information, tolerance for error, low physical effort, appropriate size and space) as the review vocabulary sitting <em>above</em> WCAG, adds two new derivation criteria to the Design Foundation's principle set — cognitive load and error recovery — and requires a diversity-profile review step during journey mapping (walking the journey once each for aging, cognitive, situational, and motor-constraint profiles). It is explicit that a design can pass WCAG and still fail Universal Design, and that UD governs the review method, never token values, colors, or layout specifics.</p>
   <p><strong>ADR-0074 ("Universal Design Gate")</strong> is a separate, later decision about the sync-time spec-check gate's coverage rather than the design-review lens above — despite the similar name, it is not simply "UD, now gated." It found that the <code>docs/specs/registry.json</code> spec gate was structurally absent from newly scaffolded projects (because ADR-0073 classified <code>docs/specs</code> as <code>TEMPLATE_ONLY</code>, so scaffolds deleted it and upgrades never delivered it) and missing entirely from 5 of the 11 existing fleet projects. AGENTS.md had also explicitly exempted L2/L3 variant projects from the Design Gate. ADR-0074 makes the gate <strong>universal across every tier (L0–L3)</strong>: the same underlying spec-check mechanism now applies everywhere, though the ceremony differs — L0/L1 keep the full Row 0 execution-plan presentation, while L2/L3 projects use a lighter one-design-doc-plus-<code>spec-register.ts</code> convention. <code>docs/specs</code> is removed from <code>TEMPLATE_ONLY_DIRS</code> and reclassified as an add-if-missing seed so scaffolds and upgrades can actually deliver a registry, and the existing E1–E5 exemption categories continue to work unchanged as the relief valve at every tier.</p>
 
@@ -202,8 +202,8 @@ tier:                          # platform-specific model alias (translated at ru
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_AGENTS_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch. 8 §3 · AGENTS.md Deep Dive</div></a>
-    <a href="08_Intro_Advanced_Roadmap_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Ch. 8 §5 · Advanced Roadmap</div></a>
+    <a href="08_Intro_Advanced_AGENTS_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch. 10 §3 · AGENTS.md Deep Dive</div></a>
+    <a href="08_Intro_Advanced_Roadmap_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Ch. 10 §5 · Advanced Roadmap</div></a>
   </div>
    <footer>
     Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>

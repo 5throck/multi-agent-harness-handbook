@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第6章 §2-C・マルチエージェントチーム実習 — Codex中心シナリオ別学習ガイド - マルチエージェントチームハーネスエンジニアリングハンドブック">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>第6章 §2-C・Codex中心マルチエージェントチーム実習 — シナリオ別学習ガイド</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 状況'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ 内部動作'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 ヒント'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ 注意'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── サイドバー ── -->
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第6章 §2-C・Codex中心実習</div>
+  <a href="#setup">🛠 準備: 必要なプログラムのインストール</a>
+  <a href="#beginner"><span class="dot dot-g"></span>初級 (Getting Started)</a>
+
+  <div class="nav-group">初級シナリオ</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 最初の役割定義を読み込みPMがその役割を遂行する</a>
+
+  <div class="nav-group">中級シナリオ</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer 2段階の順次ロール切り替え</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 リクエストに応じて呼び出される役割・順序が変わる様子を観察する</a>
+
+  <div class="nav-group">上級シナリオ</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 独立タスクを複数ウィンドウに分けて実行する — セッション間並列</a>
+  <a href="#scenario-4"><span class="dot dot-p"></span>P-2 モデルティア比較でコスト感覚を身につける</a>
+  <a href="#cleanup">🧹 実習の後片付け</a>
+
+  <div class="nav-group">ショートカット</div>
+  <a href="06_Practice_Manual_ja.html">📖 第6章 §1 リファレンス →</a>
+  <a href="06_Practice_Examples_A_ja.html">🅐 第6章 §2-A Claude中心実習 →</a>
+  <a href="06_Practice_Examples_B_ja.html">🅑 第6章 §2-B Antigravity中心実習 →</a>
+</nav>
+
+<!-- ── 本文 ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">第6章 §2-C</div>
+  <h1>第6章 §2-C・Codex中心マルチエージェントチーム実習</h1>
+  <p class="subtitle">空の実習フォルダから始めてCodex Desktop App/Codex CLIを中心にシナリオを一つずつ実践していく実習ガイド — 両ツールは役割の定義・遂行方式に差がないため、この節ではまとめて案内する &nbsp;|&nbsp; <a href="06_Practice_Manual_ja.html">← 第6章 §1 リファレンス文書に戻る</a> &nbsp;|&nbsp; <a href="06_Practice_Examples_A_ja.html">第6章 §2-A Claude中心 →</a> &nbsp;|&nbsp; <a href="06_Practice_Examples_B_ja.html">第6章 §2-B Antigravity中心 →</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">対象バージョン/範囲</span><span class="vvalue">Codex CLI/Desktop App 2026-09リリース — Codexを中心に案内し、Claude・Antigravity対応は第6章 §2-A・§2-Bを参照</span></div>
+    <div class="version-row"><span class="vlabel">このファイルの目的</span><span class="vvalue">役割定義の読み込みと遂行、順次ロール切り替え、リクエストに応じて変わる役割呼び出し順序の観察、セッション間並列実行、モデルティア比較をCodex Desktop App/CLIで手を動かして実践する5段階の実習を提供</span></div>
+    <div class="version-row"><span class="vlabel">リファレンス文書</span><span class="vvalue"><a href="06_Practice_Manual_ja.html">第6章 §1 共通</a>・<a href="06_Practice_Manual_A_ja.html">第6章 §1-A Claude詳細</a>・<a href="06_Practice_Manual_B_ja.html">第6章 §1-B Antigravity詳細</a>・<a href="06_Practice_Manual_C_ja.html">第6章 §1-C Codex詳細</a> — 各シナリオからリンクで接続されます</span></div>
+    <div class="version-row"><span class="vlabel">作成日</span><span class="vvalue">2026年9月12日</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>この全課程が従う原則</strong> — 以下のすべてのシナリオは、まず役割をツール中立的な<code>AGENTS.md</code>仕様として書く。Codexではその仕様を<strong>あらかじめ定義済みのサブエージェントとして「実装」しない</strong>。代わりに、同じ仕様をワークスペース共通フォルダ<code>agents/&lt;name&gt;.md</code>にも書き写しておき、セッション中にPMがそのファイルを<strong>読み取り専用の役割コンテキスト</strong>として読み込み、「その役割のように考えながら」自ら作業を遂行する。定義は一つ、実行方式だけがツールごとに異なるという原則を手を動かして確認することが、この実習の中心的な目標である — Claude・Antigravityでの対応方法は<a href="06_Practice_Examples_A_ja.html">第6章 §2-A</a>・<a href="06_Practice_Examples_B_ja.html">第6章 §2-B</a>を参照する。
+  </div>
+
+  <div class="warning-box">
+    Codexにはサブエージェントをスポーンするツール自体が存在しない。この文書で「役割を呼び出す」という表現はすべて<strong>「PMがその役割の定義ファイルを読み込み、その役割を遂行する」</strong>という意味であり、「並列で実行する」という表現は、一つのセッション内ではなく<strong>複数のターミナル/ウィンドウにまたがる別々のセッション</strong>を意味する。この違いを常に意識しながら以下のシナリオを進める。
+  </div>
+
+  <!-- ══════════════════════════════ 実習前の準備 ══════════════════════════════ -->
+  <h2 id="setup">準備: 必要なプログラムのインストール</h2>
+  <p>以下の実習はCodex Desktop AppとCodex CLIを中心に進める。ローカル環境にこれらのツールがまだなければ、このハンドブックに同梱された環境設定自動化ツールである<a href="../setup/SETUP_ja.html">setupガイド</a>が、この章の実習に必要な構成を自動的にインストールしてくれる。案内に従ってスクリプトをダウンロードし、ローカルで実行すればよい。</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 インストール前の確認事項</div>
+    <p class="text-dim" style="margin-bottom:10px;">スクリプトを実行する前に<a href="../setup/SETUP_CHECKLIST_ja.html">事前インストールチェックリスト</a>を先に読んでおく。この文書には次の前提条件がまとめられている。</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>有効なOpenAIアカウントとCodex利用権限(サブスクリプション/アカウントベースのプラン、または組織のポリシーによってはAPIキー)</li>
+      <li><code>gh auth login</code>を実行できるGitHubアカウント</li>
+      <li>最低5GBの空きディスク容量</li>
+      <li>管理者(admin)またはsudo権限</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>GitHubアカウントをまだ持っていない場合</strong><br>
+    ① ブラウザで<a href="https://github.com/signup" target="_blank">github.com/signup</a>にアクセスする。<br>
+    ② メールアドレス、パスワード、ユーザー名を入力する — ユーザー名はリポジトリURL(<code>github.com/&lt;username&gt;/...</code>)にそのまま使われるので慎重に決める。<br>
+    ③ 自動登録防止のためのパズル/コード認証を通過する。<br>
+    ④ 登録時に入力したメールに届いた認証メールを開き<strong>メール認証</strong>を完了する — この手順を飛ばすと、後で<code>gh auth login</code>やリポジトリ作成がブロックされることがある。<br>
+    ⑤ 無料(Free)プランで登録すれば十分 — このハンドブックの実習・PR練習には有料プランは不要。<br>
+    登録が終わると<a href="https://cli.github.com/" target="_blank">GitHub CLI(<code>gh</code>)</a>が上記のインストールスクリプトに含まれて一緒にインストールされ、下記の<code>gh auth login</code>コマンドでターミナルをそのアカウントに接続する。
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# 案内に従って: GitHub.comを選択 → HTTPSを選択 → ブラウザでログイン(推奨)を選択
+# ブラウザが開いたら先ほど作成したアカウントでログインし、認証コードを確認する</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+  </div>
+
+  <h3>Windowsでのインストール</h3>
+  <p>このハンドブックのパス表記はWindows基準なので、Windowsユーザーは以下のコマンドで<a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a>リポジトリをクローンした後、PowerShellを<strong>管理者権限で</strong>実行して続くコマンドを実行する。</p>
+  <div class="tip-box">
+    <strong>PowerShellを管理者権限で開く方法</strong><br>
+    ① スタートメニューを開き<code>PowerShell</code>を検索する。<br>
+    ② 検索結果の「Windows PowerShell」を<strong>右クリック</strong>する。<br>
+    ③ 表示されるメニューから<strong>「管理者として実行」</strong>を選択する。<br>
+    ④ ユーザーアカウント制御(UAC)のウィンドウが表示されたら<strong>「はい」</strong>を押して承認する。<br>
+    ウィンドウのタイトルバーに<code>管理者: Windows PowerShell</code>のように「管理者」が付いていれば正しく開けている。wingetインストールなど一部の手順は管理者権限なしで実行するとエラーになったり、静かにスキップされたりすることがある。
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd ./setup
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
+# オプション: -WSL2, -WezTerm, -Docker, -Force (インストール済みツールも再インストール)</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+  <p>スクリプトが終わったらターミナルを完全に閉じてから開き直さないと、PATHの変更が反映されない。</p>
+
+  <h3>macOS / Linuxでのインストール</h3>
+  <p>以下のコマンドで<a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a>リポジトリをクローンして使う。macOSはsetup-mac.sh、Linuxはsetup-linux.shを実行し、両方とも<code>--wezterm</code>、<code>--docker</code>の任意フラグをサポートする。</p>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+
+# macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+
+  <h3>インストールの検証</h3>
+  <p>OSに関係なくsetup-common.tsを<code>bun</code>で実行すると、インストール状況を点検するチェックリスト表が出力される。すべての項目が✅で表示されれば、以下の実習を進める準備が整ったということ。</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn">コピー</button>
+</div>
+
+  <p>このプロジェクトがインストールするツールのうち、この章の実習に直接関わるのは次の通り。Codex Desktop App、<code>codex</code>(Codex CLI)、そしてワークスペース共通の<code>agents/*.md</code>参照に必要な<code>bun</code>、後の章で使う<code>gh</code>(GitHub CLI)も一緒にインストールされる。</p>
+
+  <div class="tip-box">
+    インストール中に問題が起きた場合、Windowsでは<code>%USERPROFILE%\workshop-setup-logs\</code>フォルダにログが残る。問題解決の際はまずこのログを確認する。
+  </div>
+
+  <!-- ══════════════════════════════ 初級 ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● 初級</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">役割定義を一つ読み込み、Codex Desktop AppのPMがその役割を遂行する最初のステップ</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">初級</span>
+      <strong class="card-title">最初の役割定義を読み込みPMがその役割を遂行する</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        ハーネスを初めて使う開発者が実習専用の空フォルダ<code>harness-lab/</code>を新しく作り、<code>reviewer</code>役割をツール中立的な<code>AGENTS.md</code>仕様としてまず書いた後、同じ内容を<code>agents/reviewer.md</code>にも書き写す。Codex Desktop AppでPMがこのファイルを読み取り専用の役割コンテキストとして読み込み、「レビュアーのように考えながら」直接検討を遂行する過程を観察する。このフォルダは実習専用なので、他のプロジェクトファイルと混ざらない。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用する要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s5">AGENTS.md (第2章)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_ja.html#section-1">役割を定義する (Codex)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_ja.html#section-2">役割を遂行/切り替える (Codex)</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップごとの実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① 実習フォルダの作成と移動</strong>
+            <p>現在のフォルダの下に<code>harness-lab</code>フォルダを新しく作り、その中に移動する。以降のすべてのコマンドはこのフォルダ内で実行する。</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn">コピー</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② 共通の役割仕様を書く — <code>AGENTS.md</code></strong>
+            <p>Claude、Antigravity、Codex、その他AGENTS.md標準をサポートするどのツールで開いても同じ意味で読めるよう、<code>reviewer</code>役割をツール依存の表現なしに純粋なテキストで書く。このファイル一つが「何をする役割か」の唯一の原本になる。macOS/Linux/Git Bashでは以下のコマンドをそのまま使う。</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+役割: テキストファイルの誤字、論理的な穴、改善点を検討する。
+入力: 検討対象のテキストファイルパス
+出力: 誤字・論理的な穴・改善点のリスト
+権限: 読み取り専用 — ファイルを直接修正しない。
+EOF</pre>
+              <button class="copy-btn">コピー</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong><code>cat</code>コマンド自体は<code>Get-Content</code>のエイリアスとしてファイル読み取りにそのまま使える。ただし<code>&lt;&lt; 'EOF'</code>のように複数行を直接入力するheredoc構文はサポートされないため、同じ内容を引用符付きのhere-string(<code>@'...'@</code>)で作って<code>Set-Content</code>でファイルに書き込む。</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+役割: テキストファイルの誤字、論理的な穴、改善点を検討する。
+入力: 検討対象のテキストファイルパス
+出力: 誤字・論理的な穴・改善点のリスト
+権限: 読み取り専用 — ファイルを直接修正しない。
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn">コピー</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>③ ワークスペース共通の役割ファイルに書き写す — <code>agents/reviewer.md</code></strong>
+            <p>Codexは<code>.claude/agents/</code>のようなプラットフォーム専用フォルダの代わりに、ワークスペースルートの<code>agents/&lt;name&gt;.md</code>を読み取り専用の役割コンテキストとして参照する。AGENTS.mdの仕様をそのままfrontmatter形式で書き写す。</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p agents
+cat > agents/reviewer.md << 'EOF'
+---
+name: reviewer
+description: テキストファイルの誤字、論理的な穴、改善点を検討する
+tools: Read, Grep
+tier:
+  codex: medium
+---
+
+## 役割
+テキストファイルの誤字、論理的な穴、改善点を検討する。
+
+## 入力
+検討対象のテキストファイルパス
+
+## 出力
+誤字・論理的な穴・改善点のリスト
+
+## 権限
+読み取り専用 — ファイルを直接修正しない。
+EOF</pre>
+              <button class="copy-btn">コピー</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — PMがagents/reviewer.mdを役割コンテキストとして読み込み直接検討する</div>
+        <p class="text-dim" style="margin-bottom:10px;">ターミナルや別のエディタで事前にファイルを作らない。以下の2つのステップをそのまま進める — グレーのコードボックスはすべて「コピー」ボタンでそのままコピーして貼り付ければよい内容である。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Codex Desktop Appでプロジェクトを開く</strong>
+              <p>Codex Desktop Appを起動し、先ほど作った<code>harness-lab/</code>フォルダをプロジェクトとして開く。</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 検討対象ファイルの作成 + 役割コンテキストでの検討依頼 — チャット欄に以下の文章をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">notes.txtファイルを作り「このプロジェクトはとても良い。これはとても良い。」と書き込んだ後、agents/reviewer.mdに定義されたreviewer役割を読み取り専用コンテキストとして読み込んで、その役割通りnotes.txtを検討して。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+              <div class="flow-box">
+                Codex Desktop AppのPMは別のサブエージェントをスポーンしない。代わりに<code>agents/reviewer.md</code>をReadツールで開き、「役割/入力/出力/権限」の仕様をコンテキストに読み込み、以後の応答をその役割の制約(読み取り専用、誤字・論理的な穴・改善点のみ報告)に合わせて生成する — ファイルを実際に修正しないことも自ら守らなければならない。画面にはサブエージェントのスポーン過程の代わりに、PMが<code>agents/reviewer.md</code>を読むツール呼び出しとそれに続く検討結果が、一つの連続したセッションとして表示される。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p class="text-dim" style="margin-top:10px;"><strong>Codex CLIでも完全に同じく</strong> — ターミナルで<code>codex</code>を実行した後、②の文章をそのままチャットに貼り付ければ、CLIも同じく<code>agents/reviewer.md</code>を読んでその役割通り応答する。Codex Desktop AppとCLIの間で役割の定義・遂行方式の違いはない — どちらも自動発火するフックもない。</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>結果の確認</strong> — 画面にPMが<code>agents/reviewer.md</code>を読むツール呼び出しが実際に表示されているか確認する。最後の応答には誤字・論理的な穴・改善点に分けたリストが表示されるのが正常 — PMが「修正しました」のような答えをしたり<code>notes.txt</code>を直接直したりした場合は、<code>agents/reviewer.md</code>の「読み取り専用」権限制約を自ら守らなかったということである(Codexにはこれを強制する<code>tools</code>制限の仕組みがない — 役割文書の指針をPM自身が守る構造である)。
+      </div>
+
+      <div class="warning-box">
+        <strong>よくある失敗</strong> — PMが<code>agents/reviewer.md</code>を読まずにそのままnotes.txtを検討してしまう場合、②のステップの文章に<code>agents/reviewer.mdに定義されたreviewer役割を読み取り専用コンテキストとして読み込んで</code>という表現が抜けている場合である。Claude系の「サブエージェント呼び出し」と違い、Codexは役割ファイルを明示的に参照するよう要求しないと、そのままデフォルトのPMペルソナで応答することがある。
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 中級 ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● 中級</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">PMが一つのセッション内でwriter役割とreviewer役割を順番に切り替えながら指揮する実務パターン</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">中級</span>
+      <strong class="card-title">writer → reviewer 2段階の順次ロール切り替え</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        G-1を終えた実務者が同じ<code>harness-lab/</code>フォルダで、2つ目の役割<code>writer</code>もG-1と同じ方式で<code>AGENTS.md</code>と<code>agents/writer.md</code>にまず明記する。Codex PMがwriter役割として先に下書きを書き、同じセッション内でreviewer役割に切り替えてその結果を批評する過程を、順序を守りながら観察する — 両方の役割とも同じPMが順番に「演じる」だけで、別のインスタンスがスポーンされないという点がClaude/Antigravityとの核心的な違いである。
+      </div>
+
+      <div class="note">
+        <svg role="img" aria-label="Practice example C workflow step indicator" viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="carrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="carrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+            <marker id="carrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="carrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+          </defs>
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="var(--bg)" stroke="var(--text-dim)" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="var(--text-dim)">ユーザー要求</text>
+          <line x1="115" y1="43" x2="150" y2="43" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#carrow1)"/>
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent)">PM → writer役割</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent)">下書き作成</text>
+          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#carrow1g)"/>
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="var(--accent-amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="var(--accent-amber)"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-amber)">修正要求時はwriter役割に戻る</text>
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-green)">PM → reviewer役割</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-green)">フィードバック/承認</text>
+          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-purple)" stroke-width="1.5" marker-end="url(#carrow1p)"/>
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-purple)">最終成果物</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-purple)">完成</text>
+        </svg>
+        <p class="text-dim" style="text-align:center;margin-top:8px;font-size:12px;">Claude/Antigravityはwriter.md/reviewer.mdそれぞれのインスタンスをスポーンするが、Codexは<strong>単一のPMセッションが役割だけ変えて順番に「演じる」</strong> — 4つのボックスすべて同じPMである。</p>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用する要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s5">AGENTS.md (第2章)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_ja.html#section-1">役割を定義する (Codex)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_ja.html#section-2">役割を遂行/切り替える (Codex)</a>
+        </div>
+      </div>
+
+      <div class="steps-title">ステップごとの実行</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>共通の役割仕様を追加 — <code>AGENTS.md</code>にwriter項目を書き足す</strong>
+            <p>G-1で作った同じ<code>AGENTS.md</code>に<code>writer</code>役割を書き足す。reviewer項目はそのままにして以下の内容だけを追加する。macOS/Linux/Git Bashでは以下のコマンドをそのまま使う。</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+役割: 与えられたテーマで3〜5文程度の短い下書きを作成する。
+入力: テーマ、保存するファイルパス
+出力: 下書きテキストファイル
+権限: 書き込み許可 — 指定されたファイルにのみ保存する。
+handoff_to: reviewer (下書き完了後、検討に引き継ぐ)
+EOF</pre>
+              <button class="copy-btn">コピー</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong>here-stringを<code>Add-Content</code>で追記する(<code>Set-Content</code>はファイルを上書きするため、reviewer項目が消えないよう必ず<code>Add-Content</code>を使う必要がある)。</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+役割: 与えられたテーマで3〜5文程度の短い下書きを作成する。
+入力: テーマ、保存するファイルパス
+出力: 下書きテキストファイル
+権限: 書き込み許可 — 指定されたファイルにのみ保存する。
+handoff_to: reviewer (下書き完了後、検討に引き継ぐ)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn">コピー</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>ワークスペース共通の役割ファイルを追加 — <code>agents/writer.md</code></strong>
+            <div style="position:relative">
+              <pre class="code-block">cat > agents/writer.md << 'EOF'
+---
+name: writer
+description: 与えられたテーマで3〜5文程度の短い下書きを作成する
+tools: Write, Read
+tier:
+  codex: medium
+---
+
+## 役割
+与えられたテーマで3〜5文程度の短い下書きを作成する。
+
+## 入力
+テーマ、保存するファイルパス
+
+## 出力
+下書きテキストファイル
+
+## 権限
+書き込み許可 — 指定されたファイルにのみ保存する。
+
+## handoff_to
+reviewer (下書き完了後、検討に引き継ぐ)
+EOF</pre>
+              <button class="copy-btn">コピー</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — 同じPMがwriter役割 → reviewer役割の順に切り替える</div>
+        <p class="text-dim" style="margin-bottom:10px;">G-1と同じくファイルを事前に準備しない。G-1で開いておいた同じ<code>harness-lab/</code>チャットで続けて進める。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① writer → reviewer順次切り替えの依頼 — チャット欄に以下の文章をそのまま貼り付けて送信</strong>
+              <div style="position:relative">
+                <pre class="code-block">agents/writer.mdに定義されたwriter役割を読み取り専用コンテキストとして読み込んで、その役割通りdraft.txtに「リモートワークの利点」というテーマの下書きを書いて。完了したらagents/reviewer.mdに定義されたreviewer役割に切り替えてdraft.txtを検討して。2つの段階を順番に進めて。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+              <div class="flow-box">
+                PMはまず<code>agents/writer.md</code>を読み、writer役割の制約(書き込み許可、下書きのみ作成)をコンテキストに読み込んで<code>draft.txt</code>を生成する。その作業が終わってから<code>agents/reviewer.md</code>を新たに読み、今度は読み取り専用のレビュアーとして「役割を着替え」てdraft.txtを検討する — 別のインスタンスがスポーンされるのではなく、<strong>同じセッション・同じPMが参照する役割ファイルだけが変わる</strong>のである。2つの役割の順序を調整するのもこのPM自身の仕事である。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          Codexには並列スポーン自体が存在しないため、「writerとreviewerを同時に実行して」というような要求はそもそも成立しない — PMはどのみち一つのセッション内で一度に一つの役割しか遂行できない。依存関係のある作業はもともと順次的にしか進行しないため、①のように「2つの段階を順番に進めて」と明示しなくても結果的には順次実行されるが、どの順序でどの役割を経るかは明確に指示するのがよい。
+        </div>
+        <div class="tip-box">
+          <strong>結果の確認</strong> — チャット画面に<code>agents/writer.md</code>の読み込み → draft.txt作成 → <code>agents/reviewer.md</code>の読み込み → 検討結果の順にツール呼び出しが表示されるのが正常。完了後<code>harness-lab/draft.txt</code>を開いて下書きが実際に保存されているかも確認する。
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Codex CLIでも完全に同じく</strong> — 同じ<code>agents/writer.md</code>/<code>agents/reviewer.md</code>をそのまま使い、ターミナルで①の文章をそのまま貼り付ければ同じく順次切り替わる。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">中級</span>
+      <strong class="card-title">リクエストに応じて呼び出される役割・順序が変わる様子を観察する</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        第2章 §4bで扱った「動的チーム構成」と「多様なワークフローの組み合わせ」をCodexでも直接目で確認するシナリオである。D-1で作った<code>agents/writer.md</code>・<code>agents/reviewer.md</code>はそのままにして、要求の性質だけを変えながら、同じPMが実際にどの役割を、何回、どの順序で参照するのかを観察する — 役割定義ファイルは一度も新しく作らないという点がポイントである。Codexには並列ファンアウト自体が存在しないため、「2つの観点を同時に検討」というような要求も、実際にはPMが1つの観点ずつ順次処理する。
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >動的ルーティング分岐図 — 同じ役割名簿、異なるリクエスト</div>
+        <svg role="img" aria-label="Practice example C configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="cdrArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="cdrArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+            <marker id="cdrArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+          </defs>
+
+          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">リクエストA</text>
+          <rect x="15" y="30" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">単純検討</text>
+          <line x1="95" y1="46" x2="145" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="30" width="110" height="32" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">1回切替</text>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="325" y="30" width="80" height="32" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">結果</text>
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">単一役割</text>
+
+          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">リクエストB</text>
+          <rect x="15" y="105" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">下書き+検討</text>
+          <line x1="95" y1="121" x2="145" y2="121" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="105" width="110" height="32" rx="6" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.2"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">PM=writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">1回切替</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-purple)" stroke-width="1.2" marker-end="url(#cdrArrowP)"/>
+          <rect x="325" y="105" width="110" height="32" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">1回切替</text>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="485" y="105" width="80" height="32" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">結果</text>
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-purple)" font-weight="600">順次2段階</text>
+
+          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">リクエストC</text>
+          <rect x="15" y="180" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">下書き+多重</text>
+          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">検討</text>
+          <line x1="95" y1="196" x2="145" y2="196" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="180" width="110" height="32" rx="6" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.2"/>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">PM=writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">1回</text>
+          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="315" y="170" width="110" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="370" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">文法観点(1回目)</text>
+          <rect x="315" y="206" width="110" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">論理観点(2回目)</text>
+          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <rect x="485" y="182" width="80" height="30" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">結果</text>
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">順次2回</text>
+
+          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 役割定義は1回 — PMがリクエストごとにどの役割を何回「演じる」かを順次決定(ファンアウトなし)</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用する要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_ja.html#s4b">動的チーム構成と多様なワークフロー</a>
+        </div>
+      </div>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — 同じ役割名簿、異なるリクエスト3回</div>
+        <p class="text-dim" style="margin-bottom:10px;">D-1を終えた同じチャットで続けて進める。毎回PMがどの役割ファイルを読み、何回切り替えるか、画面に表示されるツール呼び出しの過程に注目する。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 単純な要求 — reviewer役割が1回だけ必要な場合</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txtの誤字だけざっと見て。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+              <div class="flow-box">
+                PMは今回のリクエストにwriter役割への切り替えが不要だと判断し、<code>agents/reviewer.md</code>だけを参照して終える。同じ役割名簿(writer+reviewer)が定義されていても、実際にどの役割を「演じる」かはリクエストごとにPMがその都度決めるということを示す最も単純な例である。
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 複合的な要求 — writer役割とreviewer役割を2つの観点で順次組み合わせる</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft2.txtに「週4日勤務制」というテーマで新しい下書きを書いて。下書きが完了したら、その下書きを文法の観点と論理の観点の2つでそれぞれ検討して。Codexは同時実行をサポートしないので、1つの観点ずつ順番に進めて。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+              <div class="flow-box">
+                今回はPMが<code>agents/writer.md</code>を参照して下書きを書いた後、<code>agents/reviewer.md</code>に切り替えて「文法の観点」で1回、続けて「論理の観点」で再度1回 — 同じ役割を異なる指示で2回順次遂行する。Claude/Antigravityの「ファンアウト(同時並列検討)」とは異なり、Codexではこれが常に<strong>順次的な2回反復</strong>として現れる — 同じ2つの役割で①とはまったく異なる形のワークフローが作られたという点は同じである。
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          ①と②を並べて比較すると、「役割名簿(<code>agents/</code>にどの役割を定義しておいたか)」と「今回の作業に実際に使われる構成(どの役割を何回、どの順序で参照するか)」が異なる層であることがはっきりする。前者はワークスペースに事前に固定されているが、後者はリクエストごとにPMが新しく決定する — ただしCodexは常に順次的にしか決定できないという制約がある。
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Codex CLIでも完全に同じく</strong> — 同じ<code>agents/writer.md</code>/<code>agents/reviewer.md</code>をそのまま使い、ターミナルで①②の文章をそのまま貼り付ければ同じく動作する。</p>
+        <div class="warning-box">
+          <strong>よくある失敗</strong> — ②で「同時に検討して」と要求すると、PMが実際には順次処理しているにもかかわらず、「同時に」という表現のせいで結果を一括してまとめて報告することがある。Codexでは常に「順番に」「1つの観点ずつ」のような表現で順次性を明示することが、結果を予測可能にする。
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>あわせて読む:</strong> <a href="../concepts/02_Concepts_Chapter_ja.html#s4b">第2章 §4b — 動的チーム構成と多様なワークフロー</a>、<a href="06_Practice_Manual_C_ja.html#section-3">第6章 §1-C Codex詳細 — 並列実行</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 上級 ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● 上級</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">writer役割とreviewer役割を独立した2つのファイルに対して別々のターミナル/ウィンドウで同時に実行するセッション間並列運用</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">上級</span>
+      <strong class="card-title">独立タスクを複数ウィンドウに分けて実行する — セッション間並列</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        D-1まで終えた熟練者が、互いに依存しない2つの独立したタスク(<code>topic-a.txt</code>、<code>topic-b.txt</code>の下書き作成)を同時に進めたいと考える。Codexには一つのセッション内でチームメイトを並列スポーンする機能がないため、同じ<code>harness-lab/</code>フォルダを対象に<strong>ターミナルウィンドウ(またはCodex CLIセッション)を2つ別々に開いて</strong>、それぞれ独立してタスクを任せる — 「並列」の単位がチームメイトではなくセッション自体である。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用する要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="06_Practice_Manual_C_ja.html#section-3">並列実行 — セッション間並列 (Codex)</a>
+        </div>
+      </div>
+
+      <div class="platform-block codexcli">
+        <div class="platform-block-title"><span class="badge">Codex CLI</span> — ターミナル2つ、セッション2つ</div>
+        <p class="text-dim" style="margin-bottom:10px;">同じ<code>harness-lab/</code>フォルダを対象にターミナルウィンドウを2つ開く(tmuxなどの分割ウィンドウを使ってもよい — Codex CLI自体にはClaude Codeの<code>teammateMode: "tmux"</code>のような組み込みサポートがないため、ターミナルマルチプレクサはユーザーが自分で構成する)。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 1つ目のターミナル — writer役割でtopic-a.txtを作成</strong>
+              <p>1つ目のターミナルで<code>harness-lab/</code>に移動し<code>codex</code>を実行して、以下の文章を貼り付ける。</p>
+              <div style="position:relative">
+                <pre class="code-block">cd harness-lab
+codex</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">agents/writer.mdに定義されたwriter役割でtopic-a.txtに「リモートワーク」というテーマの下書きを書いて。完了したらagents/reviewer.mdのreviewer役割に切り替えて検討もして。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 2つ目のターミナル — 同時にwriter役割でtopic-b.txtを作成</strong>
+              <p>①とは別の2つ目のターミナルを新しく開き、同じ<code>harness-lab/</code>に移動して<code>codex</code>をもう一度実行する。このセッションは①のセッションと完全に独立している — 同じワークスペースを見ているだけで、会話の文脈も進行状態も共有しない。</p>
+              <div style="position:relative">
+                <pre class="code-block">cd harness-lab
+codex</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">agents/writer.mdに定義されたwriter役割でtopic-b.txtに「週4日勤務制」というテーマの下書きを書いて。完了したらagents/reviewer.mdのreviewer役割に切り替えて検討もして。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          2つのセッションは別々のプロセスとして実行されるため、実際に同時に進行する — ただしこれは「一つのオーケストレーターが2人のチームメイトを共有タスクリストで調整する」Claude Agent Teamsの並列とは性格が異なる。Codexの2つのセッションは互いの存在を知らず、共有タスクリストもなく、<code>SendMessage</code>のようなセッション間の直接通信手段もない。2つのセッションが同じファイル(例えば両方が<code>AGENTS.md</code>を修正しようとする)を同時に触ると、ファイルシステムレベルの競合がそのまま発生しうるため、<strong>完全に分離された対象ファイル</strong>を割り当てるのが安全だという点はClaude/Antigravityと同じである。
+        </div>
+        <div class="tip-box">
+          2つのセッションの進行状況を一目で見たい場合は、WezTermやtmuxのようなターミナルマルチプレクサでウィンドウを並べて分割しておくと便利 — これはCodex自体の機能ではなく、ターミナル環境設定の領域である。
+        </div>
+        <div class="warning-box">
+          <strong>よくある失敗</strong> — 2つのセッションが<code>agents/writer.md</code>自体を修正しようとすると(例えば「ティアを変えて」のような要求を両方から同時に送ると)ファイル書き込みの競合が発生し、片方の変更が上書きされることがある。並列で実行するときは「対象ファイル(topic-a.txt/topic-b.txt)」だけをそれぞれ触らせ、役割定義ファイル自体を変更する要求は並列セッションでは避ける。
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>あわせて読む:</strong> <a href="06_Practice_Manual_C_ja.html#section-3">第6章 §1-C Codex詳細 — 並列実行がない理由とセッション間の代替案</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-4">
+    <div class="card-header">
+      <span class="card-id">P-2</span>
+      <span class="badge badge-p">上級</span>
+      <strong class="card-title">モデルティア比較でコスト感覚を身につける</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        第10章で詳しく扱うモデルティア(high/medium/low)がCodexで実際にどのような体感差を生むか、数字で説明を聞く前に直接体験するシナリオである。同じreviewer役割をモデルだけ変えながら3回参照し、応答速度と結果の品質を目で比較する。Codexのモデルティア名はClaude系(haiku/sonnet/opus)とは異なる点に注意する。
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">使用する要素</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../intro/05_Intro_Chapter_ja.html#s3">モデルティア (第7章)</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >Codexモデルティア比較チャート</div>
+        <svg role="img" aria-label="Practice example C result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <rect x="0" y="0" width="520" height="30" rx="6" fill="var(--bg3)"/>
+          <text x="72" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">モデル</text>
+          <text x="198" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">速度</text>
+          <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">コスト</text>
+          <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">品質</text>
+
+          <!-- Row 1: gpt-5.6-luna (low) -->
+          <rect x="0" y="34" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent)">gpt-5.6-luna</text>
+          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">速い</text>
+          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
+          <text x="304" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">低い</text>
+          <rect x="400" y="46" width="65" height="16" rx="4" fill="var(--accent-amber)" opacity="0.6"/>
+          <text x="433" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">基本</text>
+          <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">定型作業</text>
+          <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">誤字検討</text>
+
+          <!-- Row 2: gpt-5.6-terra (medium) -->
+          <rect x="0" y="88" width="520" height="50" fill="var(--bg2)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-purple)">gpt-5.6-terra</text>
+          <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">中程度</text>
+          <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="315" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">中程度</text>
+          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-purple)" opacity="0.6"/>
+          <text x="450" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">良好</text>
+          <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">一般検討</text>
+          <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">コードレビュー</text>
+
+          <!-- Row 3: gpt-5.6-sol (high) -->
+          <rect x="0" y="142" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-red)">gpt-5.6-sol</text>
+          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
+          <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">遅い</text>
+          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
+          <text x="338" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">高い</text>
+          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="468" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">優秀</text>
+          <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">複雑な論理</text>
+          <text x="490" y="173" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">アーキテクチャ</text>
+
+          <text x="260" y="212" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 軽い役割=低いティア、重い判断=高いティア — 適材適所に配置</text>
+        </svg>
+      </div>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — 同じファイル、3つのモデルティアで検討依頼</div>
+        <p class="text-dim" style="margin-bottom:10px;">G-1の<code>notes.txt</code>より少し複雑で、論理的な穴のある文章を準備する。チャット欄に以下の文章をそのまま貼り付ける。</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 検討対象ファイルの準備</strong>
+              <div style="position:relative">
+                <pre class="code-block">argument.txtファイルを作り、次の内容を書いて: 「リモートワークは常にオフィス勤務より生産的だ。なぜならリモートワークをしている人々がリモートワークは良いと言っているからだ。したがってすべての会社はリモートワークのみにすべきだ。」</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② lowティア(gpt-5.6-luna)で検討</strong>
+              <p>チャット欄に以下の文章をそのまま貼り付ける。PMが<code>agents/reviewer.md</code>の<code>tier.codex</code>フィールドを<code>low</code>に変えた後、その役割で検討を遂行する。</p>
+              <div style="position:relative">
+                <pre class="code-block">agents/reviewer.mdのtier.codexフィールドをlowに変えて。そしてそのreviewer役割でargument.txtを検討して。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ mediumティア(gpt-5.6-terra)で同じ要求を繰り返す</strong>
+              <p>同じ方式で<code>tier.codex</code>を<code>medium</code>に変えてから検討する。循環論法のような論理的な穴を正確に指摘できるか、low結果と比較する。</p>
+              <div style="position:relative">
+                <pre class="code-block">agents/reviewer.mdのtier.codexフィールドをmediumに変えて。そしてそのreviewer役割でargument.txtを検討して。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ highティア(gpt-5.6-sol)で同じ要求を繰り返す</strong>
+              <p>同じ方式で<code>tier.codex</code>を<code>high</code>に変えてから検討する。応答時間と指摘の深さが②③とどう違うか記録する。</p>
+              <div style="position:relative">
+                <pre class="code-block">agents/reviewer.mdのtier.codexフィールドをhighに変えて。そしてそのreviewer役割でargument.txtを検討して。</pre>
+                <button class="copy-btn">コピー</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          単純な誤字検討であれば3つのティアの結果の差はほとんどないが、今回のような「論証構造の穴を指摘すべき」作業では、ティアが低いほど循環論法を循環論法だと正確に指摘できず、表面的な文章だけを指摘する傾向がはっきりする。逆に<code>gpt-5.6-luna</code>は3つの中で最も速く応答する — 第7章で説明する「判断が重い役割ほど高いティア、定型化された作業ほど低いティア」という原則がなぜ存在するのか、速度と深さのトレードオフを直接体験するとずっと明確になる。
+        </div>
+        <div class="tip-box">
+          毎回Codex Desktop Appに「tier.codexフィールドを変えて」と依頼すればよい — 定義ファイルを直接開く必要はなく、PMが自ら<code>agents/reviewer.md</code>を修正した後、その役割で検討を遂行する。
+        </div>
+        <div class="warning-box">
+          <strong>よくある失敗</strong> — <code>tier.codex</code>フィールドに存在しない値(<code>haiku</code>/<code>sonnet</code>/<code>opus</code>のようなClaude系の名前をそのまま使う間違いなど)が入ると、PMがその値を無視してデフォルトティアに黙って置き換えることがある。②③④が終わったら<code>agents/reviewer.md</code>を直接開いて、<code>tier.codex</code>の値が<code>low</code>/<code>medium</code>/<code>high</code>のうち意図した値と正確に一致しているか確認する。
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>あわせて読む:</strong> <a href="../intro/05_Intro_Chapter_ja.html#s3">第7章 §templatesとvariant — モデルティアリング</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 実習の後片付け ══════════════════════════════ -->
+  <h2 id="cleanup">実習の後片付け</h2>
+  <p>5つのシナリオをすべて終えたら、<code>harness-lab/</code>フォルダをどうするか決める。次の章(第7章)では新しい実習フォルダを使うので必ず残しておく必要はないが、これまで作った<code>AGENTS.md</code>・<code>agents/*.md</code>の定義を比較してみたければ、削除する前に一度目を通しておくことを勧める。</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">🧹 harness-labフォルダの整理</div>
+    <p class="text-dim" style="margin-bottom:10px;">もう必要ない場合はフォルダ全体を削除する。macOS/Linux/Git Bashでは以下のコマンドをそのまま使う。</p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+rm -rf harness-lab</pre>
+      <button class="copy-btn">コピー</button>
+    </div>
+    <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShellでは</strong></p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+Remove-Item -Recurse -Force harness-lab</pre>
+      <button class="copy-btn">コピー</button>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>保存しておきたい場合</strong> — フォルダを削除する代わりに<code>git init && git add -A && git commit -m "harness-lab実習記録"</code>でローカルコミットだけ残しておく方法もある。以後は参考資料として残しておき、次の章の実習は別の新しいフォルダで始めてもよい。
+  </div>
+
+  <div class="warning-box">
+    P-1で2つ目のターミナルに開いておいたCodex CLIセッションは、<code>harness-lab/</code>フォルダを削除すると次のコマンドでエラーになる。フォルダを整理する前に両方のセッションを終了(<code>Ctrl+C</code>または<code>exit</code>)したか確認する。
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">参考動画</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://developers.openai.com/codex" target="_blank">Codex — OpenAI Developers</a><span class="video-meta">(公式ドキュメント)</span> — Codex CLI/Desktop App公式紹介資料</li>
+  </ul>
+</div>
+
+  <hr>
+  <p class="text-dim" style="text-align: center;">
+    Codex CLI/App 2026-09基準 | 2026年9月12日作成<br>
+    <a href="06_Practice_Manual_ja.html">← 第6章 §1 マルチエージェントチーム活用リファレンス</a> &nbsp;·&nbsp; <a href="06_Practice_Examples_A_ja.html">第6章 §2-A Claude中心実習</a> &nbsp;·&nbsp; <a href="06_Practice_Examples_B_ja.html">第6章 §2-B Antigravity中心実習</a> &nbsp;·&nbsp; <a href="../intro/05_Intro_Chapter_ja.html">第7章 ai-workspace-standards紹介 →</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="06_Practice_Manual_C_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第6章 §1-C・Codex詳細</div></a>
+    <div class="branch">
+      <div class="branch-label">第6章 §2</div>
+      <a href="06_Practice_Examples_A_ja.html" >Claude (A)</a>
+      <a href="06_Practice_Examples_B_ja.html" >Antigravity (B)</a>
+      <a href="06_Practice_Examples_C_ja.html" >Codex (C)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第7章・ai-workspace-standards紹介</div></a>
+  </div>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+ </article>
+</main>
+
+</div>
+
+<script src="../assets/copy-code.js"></script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

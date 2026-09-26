@@ -11,10 +11,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="8장 §4 · 아키텍처 심화 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="description" content="10장 §4 · 아키텍처 심화 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>8장 §4 · 아키텍처 심화</title>
+  <title>10장 §4 · 아키텍처 심화</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,27 +26,27 @@
 
 <nav>
   <a href="../index.html" class="nav-home">← 핸드북 홈</a>
-  <div class="nav-title">8장 §4 · 아키텍처 심화</div>
+  <div class="nav-title">10장 §4 · 아키텍처 심화</div>
   <a href="#layout-reconstruction">Layout Reconstruction</a>
   <a href="#extends">extends 프론트매터 해석 순서</a>
   <a href="#boilerplate-example">보일러플레이트 전략 실전 예시</a>
   <a href="#tier-strategy-deep">3-티어 전략 심화</a>
   <a href="#platform-parity">플랫폼 패리티</a>
   <a href="#execution-plan-templates">실행 계획 템플릿</a>
-  <div class="nav-section">8장 다른 절</div>
-  <a href="08_Intro_Advanced_Deploy.html">8장 §1 · 배포와 SSOT</a>
-  <a href="08_Intro_Advanced_Chapter.html">8장 §2 · 생애주기 관리</a>
-  <a href="08_Intro_Advanced_AGENTS.html">8장 §3 · AGENTS.md 심화</a>
-  <a href="08_Intro_Advanced_Roadmap.html">8장 §5 · 고도화 로드맵</a>
+  <div class="nav-section">10장 다른 절</div>
+  <a href="08_Intro_Advanced_Deploy.html">10장 §1 · 배포와 SSOT</a>
+  <a href="08_Intro_Advanced_Chapter.html">10장 §2 · 생애주기 관리</a>
+  <a href="08_Intro_Advanced_AGENTS.html">10장 §3 · AGENTS.md 심화</a>
+  <a href="08_Intro_Advanced_Roadmap.html">10장 §5 · 고도화 로드맵</a>
   <div class="nav-section">다른 장</div>
-  <a href="05_Intro_Chapter.html">5장 · ai-workspace-standards 소개</a>
-  <a href="../enterprise/07_Enterprise_Chapter.html">7장 · 기업 내부 멀티 에이전트팀 운영</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter.html">11장 · 신규 variant 생성</a>
+  <a href="05_Intro_Chapter.html">7장 · ai-workspace-standards 소개</a>
+  <a href="../enterprise/09_Enterprise_Chapter.html">9장 · 기업 내부 멀티 에이전트팀 운영</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter.html">13장 · 신규 variant 생성</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">8장 §4</div>
+  <div class="chapter-eyebrow">10장 §4</div>
   <h1>아키텍처 심화</h1>
   <p class="lead">§1에서 L0→L1→L2가 "무엇이 어디서 어디로 흐르는가"를 다뤘다면, 이 절은 그 흐름이 <strong>실제로 어떻게 구현되는지</strong>를 파고든다 — 파일이 그대로 복사되지 않고 재생성되는 이유, 상속 프론트매터가 해석되는 순서, 보일러플레이트·티어 전략이 실전에서 어떻게 적용되는지의 구체적 예시, 그리고 플랫폼 디렉터리(.claude/.gemini/.agents/.codex)가 구조적으로 어긋나지 않게 유지되는 방법까지 다룬다.</p>
 
@@ -86,7 +86,7 @@
   <p>세 예시를 나란히 보면 분류 기준이 명확해진다 — <strong>바뀌면 보안·거버넌스 사고로 이어지는가(LOCKED), 조직 규칙과 프로젝트 맥락이 한 파일 안에 공존해야 하는가(MERGE), 프로젝트의 정체성 그 자체인가(PRESERVE)</strong>. 새 파일을 이 저장소의 boilerplate에 추가할 때도 이 세 질문을 순서대로 던져보면 어디에 속하는지 대부분 바로 판단된다.</p>
 
   <h2 id="tier-strategy-deep">3-티어 전략 심화 — 비용 최적화를 실행 시점에 적용하기</h2>
-  <p>5장에서 소개한 tier 배정은 <code>agents/*.md</code> frontmatter에 정적으로 정의된다. 각 에이전트 파일의 <code>tier</code> 필드는 플랫폼별 모델 별칭으로 번역되어 실행 시점에 적용된다.</p>
+  <p>7장에서 소개한 tier 배정은 <code>agents/*.md</code> frontmatter에 정적으로 정의된다. 각 에이전트 파일의 <code>tier</code> 필드는 플랫폼별 모델 별칭으로 번역되어 실행 시점에 적용된다.</p>
 
   <h3>frontmatter 예시</h3>
   <div style="position:relative">
@@ -121,7 +121,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
     <li><strong>업그레이드 금지</strong> — 반대로 기준선보다 높은 티어로 올리는 것은 <strong>항상 금지</strong>다. low인 automation-engineer를 high로 올려 복잡한 아키텍처를 설계하게 하는 것은 거버넌스 위반이다.</li>
     <li><strong>실패 시 복원</strong> — 다운그레이드한 작업이 실패하면, PM은 반드시 해당 에이전트의 기준선 티어를 복원하고 재시도해야 한다.</li>
   </ul>
-  <p>이 규칙의 핵심은 <strong>"에이전트 역할의 복잡도 상한은 고정되지만, 하한은 상황에 맞춰 조정할 수 있다"</strong>는 원칙이다. PM은 비용 절감을 위해 low로 내릴 수 있지만, 그 작업이 low의 역량을 넘어서면 즉시 기준선으로 되돌아간다. 비용 영향에 대해서는 4장 §2-A P-2 실습에서 체감으로 확인할 수 있다.</p>
+  <p>이 규칙의 핵심은 <strong>"에이전트 역할의 복잡도 상한은 고정되지만, 하한은 상황에 맞춰 조정할 수 있다"</strong>는 원칙이다. PM은 비용 절감을 위해 low로 내릴 수 있지만, 그 작업이 low의 역량을 넘어서면 즉시 기준선으로 되돌아간다. 비용 영향에 대해서는 6장 §2-A P-2 실습에서 체감으로 확인할 수 있다.</p>
 
   <h3>Tier Ceiling Rule</h3>
   <p>AGENTS.md의 Phase Determination 테이블(§3.5)은 각 산출물 유형에 허용된 티어 상한을 명시한다. 예를 들어 "스크립트 구현(승인된 계획 존재)"은 Phase 4이며 담당 에이전트는 automation-engineer(low)다 — 여기에 high를 배정하면 Tier Ceiling 위반이 된다. 반면 "새 파일 설계, 스키마 정의"는 Phase 1-2이며 architect(high)가 담당한다.</p>
@@ -131,16 +131,16 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
 
   <h2 id="platform-parity">플랫폼 패리티 — .claude/, .gemini/, .agents/, .codex/를 구조적으로 동일하게 유지하는 법</h2>
   <p>이 저장소는 네 플랫폼을 동시에 지원한다 — Claude Code(<code>.claude/</code>), Gemini CLI(<code>.gemini/</code>), Antigravity(<code>.agents/</code>), Codex(<code>.codex/</code>). 플랫폼 디렉터리들이 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 스킬 계층은 <code>skills/</code>가 단일 출처(SSOT)이며, <code>sync-skills.ts</code>가 이를 네 플랫폼 디렉터리 모두에 배포한다. 구조적 어긋남을 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
-  <p>다만 검사 스코프에는 미묘한 차이가 있다. <code>validate-templates.ts</code>는 커맨드 등 템플릿 구조를 <code>.claude/</code>와 <code>.gemini/</code> 두 디렉터리에 대해서만 대조하고(Antigravity용 <code>.agents/</code>와 Codex용 <code>.codex/</code> 트리는 별도 동기화 경로로 운영된다), 스킬 내용 자체는 SSOT인 <code>skills/</code>를 <code>validate-skills.ts</code>가 검사한다. 즉 "네 플랫폼이 같은 기능을 제공하는가"는 배포 스크립트와 SSOT 검증의 조합으로 보장된다. 11장에서 다루는 승격(promote) 파이프라인도 패리티 검사를 승격 전 필수 게이트로 포함하고 있어서, 한 플랫폼용으로만 만들고 다른 플랫폼을 깜빡한 상태로는 애초에 정식 베리언트(variant)가 될 수 없다. 네 플랫폼이 서로 다른 실행 방식을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
+  <p>다만 검사 스코프에는 미묘한 차이가 있다. <code>validate-templates.ts</code>는 커맨드 등 템플릿 구조를 <code>.claude/</code>와 <code>.gemini/</code> 두 디렉터리에 대해서만 대조하고(Antigravity용 <code>.agents/</code>와 Codex용 <code>.codex/</code> 트리는 별도 동기화 경로로 운영된다), 스킬 내용 자체는 SSOT인 <code>skills/</code>를 <code>validate-skills.ts</code>가 검사한다. 즉 "네 플랫폼이 같은 기능을 제공하는가"는 배포 스크립트와 SSOT 검증의 조합으로 보장된다. 13장에서 다루는 승격(promote) 파이프라인도 패리티 검사를 승격 전 필수 게이트로 포함하고 있어서, 한 플랫폼용으로만 만들고 다른 플랫폼을 깜빡한 상태로는 애초에 정식 베리언트(variant)가 될 수 없다. 네 플랫폼이 서로 다른 실행 방식을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
 
   <h2 id="graft-fleet-integration">graft — 다중 플랫폼 플릿을 위한 저장소 맥락 그래프</h2>
   <p><strong>graft</strong>(<code>@nanonets/graft</code>)는 저장소용으로 미리 만들어 두는 맥락 그래프다. 코드베이스를 정확한 <code>file:line</code> 범위를 담은 작고 서로 연결된 <code>graft/</code> 마크다운 카드들로 색인하고, 누가 무엇을 호출하는지에 대한 콜 그래프도 함께 만든다. 핵심은 속도다. 큰 모노레포를 탐색하는 에이전트가 <code>graft ask "&lt;question&gt;"</code>이나 <code>graft callers &lt;symbol&gt;</code>을 물으면, 매 턴마다 같은 맥락을 재구성하려고 grep을 반복하거나 파일 전체를 여는 대신 소스 범위가 함께 담긴 순위화된 사전 계산 답변을 받을 수 있다. graft는 2026-09-06부터 워크스페이스 루트에서 돌아가고 있었지만, <strong>ADR-0076</strong> 이전까지는 수작업으로 연결되어 있었고 Claude Code에서만 사용할 수 있었다.</p>
   <p>2026-09-12 플릿(fleet) 조사(설계 문서: <code>2026-09-12-graft-multiplatform-rollout-design.md</code>)에서 실제 커버리지가 겉보기보다 훨씬 좁다는 사실이 드러났다. <code>templates/common</code>은 graft 스킬 파일과 Gemini MCP 항목만 포함하고 있어서, 새로 스캐폴딩된 프로젝트는 Gemini CLI/Antigravity용 graft만 갖추었고 같은 프로젝트의 Claude Code 쪽에는 graft 소스가 전혀 없었다. 11개 프로젝트 플릿 전체가 사실상 graft를 갖고 있지 않았는데, 이는 <code>.claude/skills/**</code>가 보통 <code>sync-skills.ts</code>의 플랫폼 미러링 규칙이 관리하는 영역인 반면 graft의 스킬은 의도적으로 SSOT인 <code>skills/</code> 디렉터리 바깥에 위치하기 때문에, 어떤 업그레이드 패스도 이를 전달한 적이 없었기 때문이다. 여기에 더해 같은 MCP 서버가 어떤 설정 파일을 보느냐에 따라 <code>npx</code>, <code>bunx</code>, 네이티브 바이너리 등 세 가지 다른 방식으로 실행되고 있었고, Codex/Antigravity/Claude Desktop에 대한 호스트 커버리지는 문서화되지 않은 채 암묵적으로만 존재했다.</p>
   <p><strong>ADR-0076</strong>은 호스트별 전달 매트릭스로 이 공백을 메운다. 프로젝트 단위 설정을 지원하는 호스트에는 저장소 수준 MCP 등록을 배치하고(Claude Code의 <code>.mcp.json</code>, Gemini/Antigravity의 <code>.gemini/settings.json</code>, Codex의 <code>.codex/config.toml</code>, OpenCode의 <code>opencode.json</code>), <code>AGENTS.md</code>/<code>CLAUDE.md</code>/<code>GEMINI.md</code>에 안내 블록을 넣고, 프로젝트 스코프가 없는 호스트에는 머신 전역 등록을 사용한다(Antigravity는 <code>graft init --agents antigravity</code>를 통한 전역 레지스트리, Claude Desktop은 작업 디렉터리를 전달할 수 없어 절대 경로가 필요하므로 손으로 작성한 <code>claude_desktop_config.json</code> 항목). <code>bunx @nanonets/graft mcp</code>가 모든 플랫폼에서 공통으로 커밋되는 표준 실행기가 되며, 머신 전역 설정에서는 네이티브 바이너리도 계속 쓸 수 있다.</p>
-  <p>기존 플릿으로의 전달은 8장 §2에서 다룬 정책 기반 업그레이드 엔진을 그대로 타고 이루어지며, 일회성 마이그레이션 패스가 아니다. <code>.mcp.json</code>/<code>opencode.json</code>은 <code>JSON_MERGE_FILES</code> 분류에 합류해(그래야 프로젝트 고유의 MCP 서버가 병합 후에도 살아남는다) <code>.claude/skills/graft/**</code>는 일반 플랫폼 미러링 규칙보다 먼저 동기화되도록 특별 취급되고(그 규칙은 애초에 SSOT 밖에 있는 스킬에는 닿을 수 없으므로), <code>.codex/**</code>는 <code>ADD_IF_MISSING</code>으로 시딩되어 이미 자체 <code>config.toml</code>을 가진 프로젝트는 기존 내용을 유지한다. graft 스킬 자체는 SSOT로 옮기지 않고 Claude 전용으로 남기며 루트와 <code>templates/common</code> 두 곳에 바이트 단위로 동일한 사본을 손으로 유지한다. SSOT로 옮기면 <code>sync-skills.ts</code>가 이를 Gemini/Antigravity 자체 스킬 디렉터리로 미러링해 버려서, 이 도구에 대해 워크스페이스가 의도적으로 고정한 단일 플랫폼 설계가 깨지기 때문이다. 신선도(freshness)는 의도적으로 수동으로 남겨 둔다(graft 도구는 답하기 전에 스스로 새로고침하며, 별도의 CI나 푸시 전 신선도 게이트는 없다).</p>
+  <p>기존 플릿으로의 전달은 10장 §2에서 다룬 정책 기반 업그레이드 엔진을 그대로 타고 이루어지며, 일회성 마이그레이션 패스가 아니다. <code>.mcp.json</code>/<code>opencode.json</code>은 <code>JSON_MERGE_FILES</code> 분류에 합류해(그래야 프로젝트 고유의 MCP 서버가 병합 후에도 살아남는다) <code>.claude/skills/graft/**</code>는 일반 플랫폼 미러링 규칙보다 먼저 동기화되도록 특별 취급되고(그 규칙은 애초에 SSOT 밖에 있는 스킬에는 닿을 수 없으므로), <code>.codex/**</code>는 <code>ADD_IF_MISSING</code>으로 시딩되어 이미 자체 <code>config.toml</code>을 가진 프로젝트는 기존 내용을 유지한다. graft 스킬 자체는 SSOT로 옮기지 않고 Claude 전용으로 남기며 루트와 <code>templates/common</code> 두 곳에 바이트 단위로 동일한 사본을 손으로 유지한다. SSOT로 옮기면 <code>sync-skills.ts</code>가 이를 Gemini/Antigravity 자체 스킬 디렉터리로 미러링해 버려서, 이 도구에 대해 워크스페이스가 의도적으로 고정한 단일 플랫폼 설계가 깨지기 때문이다. 신선도(freshness)는 의도적으로 수동으로 남겨 둔다(graft 도구는 답하기 전에 스스로 새로고침하며, 별도의 CI나 푸시 전 신선도 게이트는 없다).</p>
 
   <h2 id="universal-design-gate">유니버설 디자인 게이트 — L0~L3 전반에서 스펙 게이트를 균일하게 만들기</h2>
-  <p>8장 §4는 아래 <a href="#execution-plan-templates">실행 계획 템플릿</a>에서 L0/L1 실행 계획의 디자인 게이트(0번 행)를, 그리고 이를 동기화 시 FATAL 차단 조건으로 강제하는 스펙 체크(ADR-0055 Stage 2)를 이미 소개한 바 있다. 이 절에서 다루는 두 ADR은 같은 거버넌스 개념을 서로 다른 방향으로 확장하는데, 둘을 구분해 둘 필요가 있다.</p>
+  <p>10장 §4는 아래 <a href="#execution-plan-templates">실행 계획 템플릿</a>에서 L0/L1 실행 계획의 디자인 게이트(0번 행)를, 그리고 이를 동기화 시 FATAL 차단 조건으로 강제하는 스펙 체크(ADR-0055 Stage 2)를 이미 소개한 바 있다. 이 절에서 다루는 두 ADR은 같은 거버넌스 개념을 서로 다른 방향으로 확장하는데, 둘을 구분해 둘 필요가 있다.</p>
   <p><strong>ADR-0068("유니버설 디자인")</strong>은 동기화 시점 게이트가 아니라 디자인 리뷰 방법론에 관한 것이다. 2026-09-06 리뷰에서, 워크스페이스가 WCAG 2.1 AA 준수(ADR-0065)를 기술적 최저 기준으로 강제하고는 있지만 어떤 계층에서도 노화, 인지 부하, 상황적 손상, 운동 능력 편차처럼 더 폭넓은 사용자 다양성에 대해서는 디자인을 평가하지 않는다는 사실이 드러났다. ADR-0068은 유니버설 디자인의 고전적인 7원칙(공평한 사용, 유연한 사용, 단순하고 직관적인 사용, 인지 가능한 정보, 오류에 대한 관용, 적은 신체적 노력, 적절한 크기와 공간)을 WCAG <em>위에</em> 놓이는 리뷰 어휘로 채택하고, Design Foundation의 원칙 집합에 인지 부하와 오류 복구라는 두 가지 새로운 파생 기준을 추가하며, 여정 지도 작성(journey mapping) 중에 다양성 프로파일 리뷰 단계(노화·인지·상황·운동 제약 프로파일 각각으로 여정을 한 번씩 걸어보는 것)를 요구한다. 어떤 디자인이 WCAG는 통과하면서도 유니버설 디자인은 통과하지 못할 수 있다는 점, 그리고 UD는 토큰 값이나 색상, 레이아웃 세부 사항이 아니라 리뷰 방법론을 규율한다는 점을 명시하고 있다.</p>
   <p><strong>ADR-0074("유니버설 디자인 게이트")</strong>는 이름은 비슷하지만 위의 디자인 리뷰 렌즈가 아니라 동기화 시점 스펙 체크 게이트의 적용 범위에 관한 별개의, 더 나중 결정이다 — 그래서 단순히 "UD에 게이트를 씌운 것"은 아니다. 조사 결과 <code>docs/specs/registry.json</code> 스펙 게이트는 새로 스캐폴딩된 프로젝트에는 구조적으로 아예 없었고(ADR-0073이 <code>docs/specs</code>를 <code>TEMPLATE_ONLY</code>로 분류해 스캐폴드 시 삭제되고 업그레이드로도 전달되지 않았기 때문), 기존 11개 플릿 프로젝트 중 5개에는 아예 존재하지 않았다. AGENTS.md 또한 L2/L3 베리언트 프로젝트를 디자인 게이트에서 명시적으로 예외 처리하고 있었다. ADR-0074는 이 게이트를 <strong>모든 티어(L0~L3)에 걸쳐 보편적으로</strong> 만든다. 동일한 스펙 체크 메커니즘이 이제 어디서나 적용되지만, 절차는 다르다 — L0/L1은 기존의 완전한 0번 행 실행 계획 방식을 유지하고, L2/L3 프로젝트는 디자인 문서 하나와 <code>spec-register.ts</code>로 이루어진 더 가벼운 방식을 쓴다. <code>docs/specs</code>는 <code>TEMPLATE_ONLY_DIRS</code>에서 제외되어 add-if-missing 시드로 재분류되어 스캐폴드와 업그레이드 모두에서 실제로 레지스트리를 전달할 수 있게 되며, 기존 E1~E5 예외 범주는 모든 티어에서 안전 밸브로 변함없이 작동한다.</p>
 
@@ -200,8 +200,8 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_AGENTS.html" class="prev"><div class="dir">← 이전</div><div class="ttl">8장 §3 · AGENTS.md 심화</div></a>
-    <a href="08_Intro_Advanced_Roadmap.html" class="next"><div class="dir">다음 →</div><div class="ttl">8장 §5 · 고도화 로드맵</div></a>
+    <a href="08_Intro_Advanced_AGENTS.html" class="prev"><div class="dir">← 이전</div><div class="ttl">10장 §3 · AGENTS.md 심화</div></a>
+    <a href="08_Intro_Advanced_Roadmap.html" class="next"><div class="dir">다음 →</div><div class="ttl">10장 §5 · 고도화 로드맵</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 기준 · 한국어 교육 자료<br>

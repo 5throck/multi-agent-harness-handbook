@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Apéndice D · Operaciones de Hermes Agents - multi-agent-harness-handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Apéndice D · Operaciones de Hermes Agents</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <a href="../index_es.html" class="nav-home">← Inicio del manual</a>
+  <div class="nav-title">Apéndice D · Operaciones de Hermes Agents</div>
+  <a href="#surface">Comprende la superficie de plataforma de Hermes</a>
+  <a href="#trust">El usuario administra confianza y presupuesto de contexto</a>
+  <a href="#governance">Por qué no se crea HERMES.md</a>
+  <a href="#verify">Verifica espejo, instrucciones y límites de seguridad</a>
+  <div class="nav-section">Capítulos relacionados</div>
+  <a href="../index_es.html">Anterior</a>
+  <a href="../index_es.html">Siguiente</a>
+</nav>
+<main><article class="reading">
+  <div class="chapter-eyebrow">Apéndice D</div>
+  <h1>Apéndice D · Operaciones de Hermes Agents</h1>
+  <p class="lead">Usa Hermes Agent dentro de la gobernanza existente sin crear una segunda fuente de instrucciones.</p>
+  <div class="keypoints"><div class="kp-title">En este capítulo</div><ul><li>Hermes platform surface</li><li>Trust and context budget</li><li>Skill mirrors and AGENTS.md</li><li>Verification and troubleshooting</li></ul></div>
+  <h2 id="surface">Comprende la superficie de plataforma de Hermes</h2><p>Hermes Agent es un arnés CLI independiente del proveedor. Un proyecto usa `.hermes/skills/` como ruta primaria de habilidades. Debe ser un espejo sincronizado de `skills/`, no un atajo directo que evada exclusiones de seguridad o alcance de país y variante.</p><p>Hermes descubre habilidades por directorios y las invoca con `/skill-name`; no necesita manifest ni espejo adicional de comandos.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Comprende la superficie de plataforma de Hermes">
+    <title>Comprende la superficie de plataforma de Hermes</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">SSOT · Comprende la superficie de plataforma de Hermes</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>Habilidades</td><td> espejo `.hermes/skills/`</td></tr><tr><td>Invocación</td><td> `/skill-name`</td></tr><tr><td>Manifest</td><td> no crear</td></tr><tr><td>Espejo de comandos</td><td> no crear</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> SSOT skills → sincronización → espejo Hermes → invocación</div><h2 id="trust">El usuario administra confianza y presupuesto de contexto</h2><p>Hermes carga habilidades del proyecto solo si la raíz está en `skills.trusted_project_dirs` del usuario. Es una defensa contra inyección de prompts y el repositorio no debe saltarla.</p><p>Un AGENTS.md grande puede truncarse de forma silenciosa. Mantén un dispatcher ligero con punteros y coloca la política detallada en documentos referenciados.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="El usuario administra confianza y presupuesto de contexto">
+    <title>El usuario administra confianza y presupuesto de contexto</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Mirror · El usuario administra confianza y presupuesto de contexto</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>La confianza pertenece al usuario.</td><td>La confianza pertenece al usuario.</td></tr><tr><td>AGENTS.md entrega reglas mínimas.</td><td>AGENTS.md entrega reglas mínimas.</td></tr><tr><td>La política detallada vive fuera.</td><td>La política detallada vive fuera.</td></tr><tr><td>Revisa avisos de truncamiento.</td><td>Revisa avisos de truncamiento.</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> Proyecto confiable → punteros de AGENTS → política → ejecución</div><h3>Práctica</h3><p>Un AGENTS.md grande puede truncarse de forma silenciosa. Mantén un dispatcher ligero con punteros y coloca la política detallada en documentos referenciados.</p><div class="code-block"><pre><code># User-side Hermes onboarding
+hermes config set context_file_max_chars 100000
+
+# Then add the project root to skills.trusted_project_dirs
+# using the Hermes user configuration. Do not commit user configuration
+# or bypass the trust control from the project repository.</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="governance">Por qué no se crea HERMES.md</h2><p>Hermes busca HERMES.md antes de AGENTS.md. Un archivo gemelo ocultaría la fuente compartida de instrucciones y generaría divergencia. El estándar usa directamente la compatibilidad nativa con AGENTS.md.</p><p>El espejo de habilidades tampoco es un lugar de edición independiente. Revisa cambios en el SSOT y publícalos con sincronización.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Por qué no se crea HERMES.md">
+    <title>Por qué no se crea HERMES.md</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Trust · Por qué no se crea HERMES.md</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>No crear HERMES.md.</td><td>No crear HERMES.md.</td></tr><tr><td>El espejo es copia de despliegue.</td><td>El espejo es copia de despliegue.</td></tr><tr><td>AGENTS.md es dispatcher ligero.</td><td>AGENTS.md es dispatcher ligero.</td></tr><tr><td>La política detallada tiene una fuente.</td><td>La política detallada tiene una fuente.</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> AGENTS.md → punteros → política canónica → ejecución</div><h2 id="verify">Verifica espejo, instrucciones y límites de seguridad</h2><p>La instalación no prueba operación segura. Confirma el espejo, las exclusiones, los punteros de AGENTS.md y la configuración de confianza y contexto.</p><p>Si falta una habilidad, revisa confianza, frescura del espejo y carga de contexto antes de cambiar prompts o modelos.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Verifica espejo, instrucciones y límites de seguridad">
+    <title>Verifica espejo, instrucciones y límites de seguridad</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Verify · Verifica espejo, instrucciones y límites de seguridad</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">SSOT</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Mirror</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Trust</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Verify</text>
+    <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>1. ¿La raíz es confiable?</td><td>1. ¿La raíz es confiable?</td></tr><tr><td>2. ¿El espejo está sincronizado?</td><td>2. ¿El espejo está sincronizado?</td></tr><tr><td>3. ¿HERMES.md no oculta AGENTS.md?</td><td>3. ¿HERMES.md no oculta AGENTS.md?</td></tr><tr><td>4. ¿No hay errores de truncamiento ni sincronización?</td><td>4. ¿No hay errores de truncamiento ni sincronización?</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> Scaffold → confianza → espejo → contexto → habilidad → evidencia</div><div class="quiz"><div class="quiz-title">Autoevaluación</div><ol>
+      <li>Habilidades: espejo `.hermes/skills/`</li><li>No crear HERMES.md.</li><li>4. ¿No hay errores de truncamiento ni sincronización?</li>
+    </ol></div>
+  <h2 id="setup">Procedimiento de configuración y comandos de verificación</h2><p>El repositorio nunca modifica la configuración de confianza del usuario. Confía explícitamente en la raíz del proyecto en Hermes y luego verifica el espejo sincronizado `.hermes/skills/` y un `AGENTS.md` ligero.</p><div class="diagram-frame"><svg viewBox="0 0 640 100" width="100%" role="img" aria-label="Confianza del usuario → espejo → AGENTS.md → /skill-name"><title>Confianza del usuario → espejo → AGENTS.md → /skill-name</title><rect x="18" y="35" width="604" height="36" rx="9" fill="var(--bg-success)" stroke="var(--border)"/><text x="320" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Confianza del usuario → espejo → AGENTS.md → /skill-name</text></svg></div><div class="code-block"><pre><code># User-owned configuration
+hermes config set context_file_max_chars 100000
+# Add the project root to skills.trusted_project_dirs in user configuration.
+# Do not commit user configuration or create HERMES.md.</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="troubleshoot">Solución de problemas: comprueba el orden de carga antes que los síntomas</h2><p>Si no aparecen skills, revisa la ruta de confianza y el espejo. Si faltan reglas, revisa el tamaño y los enlaces de AGENTS.md. Si hay conflicto, comprueba primero HERMES.md.</p><table><thead><tr><th>Symptom</th><th>First check</th></tr></thead><tbody><tr><td>Skill unavailable</td><td>trusted_project_dirs and .hermes/skills mirror</td></tr><tr><td>Rule missing</td><td>thin AGENTS.md and its pointer targets</td></tr><tr><td>Conflicting instruction</td><td>remove HERMES.md; retain AGENTS.md as SSOT</td></tr></tbody></table>
+  <div class="chapter-nav"><a class="prev" href="../index_es.html"><div class="dir">← Anterior</div><div class="ttl">Anterior</div></a><a class="next" href="../index_es.html"><div class="dir">Siguiente →</div><div class="ttl">Siguiente</div></a></div>
+   <footer>
+    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · Material educativo en español<br>
+    Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    El contenido de este manual está bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual 4.0 Internacional)</a>.
+  </footer>
+ </article></main>
+</div>
+<script src="../assets/inpage-search.js" defer></script><script src="../assets/copy-code.js"></script><script src="../assets/dark-mode-toggle.js"></script><script src="../assets/lang-switcher.js"></script>
+</body></html>

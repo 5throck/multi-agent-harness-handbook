@@ -56,7 +56,7 @@
 
     <dt>Dynamic Team Composition <span class="en">Dynamic Team Composition</span></dt>
     <dd>The orchestrator deciding, for each request, which subagents to actually deploy, how many times, and in what order. Even though the defined team roster is fixed, the actual deployment configuration varies task by task.
-      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s4b">Chapter 2 §4b</a> · Practice: <a href="../practice/04_Practice_Examples_A_en.html#scenario-2b">Chapter 4 D-2</a></span></dd>
+      <span class="see">Details: <a href="../concepts/02_Concepts_Chapter_en.html#s4b">Chapter 2 §4b</a> · Practice: <a href="../practice/06_Practice_Examples_A_en.html#scenario-2b">Chapter 6 D-2</a></span></dd>
 
     <dt>Orchestration Pattern <span class="en">Orchestration Pattern</span></dt>
     <dd>Anthropic's well-known set of five representative patterns: prompt chaining (sequential step-by-step processing), routing (classifying a request and dispatching it to the appropriate agent/model), parallelization (fan-out to run independent tasks concurrently, or voting to repeat the same task and take a majority), orchestrator-workers (dynamically decomposing subtasks rather than fixing them in advance), and evaluator-optimizer (independently verifying a draft before incorporating it — verify-then-apply). These can be freely combined within a single workflow.
@@ -68,11 +68,11 @@
 
     <dt>Frontmatter <span class="en">Frontmatter</span></dt>
     <dd>A metadata block written in YAML at the top of an agent definition file (<code>agents/*.md</code>). It defines things like the agent's name, role, allowed tools (<code>tools</code>), and model tier (<code>tier</code>) so they can be parsed mechanically. The <code>extends</code> field can be used to inherit from another agent file.
-      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and the SSOT</a></span></dd>
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Deploy_en.html#s1">Chapter 10 §1 Deployment and the SSOT</a></span></dd>
 
     <dt>Scaffolding <span class="en">Scaffolding</span></dt>
     <dd>The act of using <code>bun scripts/new-project.ts</code> to clone a variant template's entire configuration (agents, skills, commands, governance pipeline) into an independent git repository. The idea being: "you don't build a project from scratch — you start from a pre-designed skeleton."
-      <span class="see">Details: <a href="../variant-practice/06_VariantPractice_Manual_en.html#section-2">Chapter 6 §2</a></span></dd>
+      <span class="see">Details: <a href="../variant-practice/08_VariantPractice_Manual_en.html#section-2">Chapter 8 §2</a></span></dd>
 
     <dt>Guardrails <span class="en">Guardrails</span></dt>
     <dd>Safety mechanisms that enforce behavioral boundaries for agents — such as permission models, hooks, and audits.
@@ -88,35 +88,35 @@
 
     <dt>Service Ticket Model <span class="en">Service Ticket Model</span></dt>
     <dd>An operating model that uses AI purely as "a service that handles requests as they come in" — similar to a traditional IT organization's ticketing system. The user must direct every request explicitly, which limits the agent team's autonomy. This is the approach this handbook contrasts with its proposed "development tool + variant model."
-      <span class="see">Details: <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Comparing Enterprise Operating Strategies</a></span></dd>
+      <span class="see">Details: <a href="../enterprise/09_Enterprise_Chapter_en.html">Chapter 9 · Comparing Enterprise Operating Strategies</a></span></dd>
 
     <dt>Lifecycle / State <span class="en">Lifecycle / State</span></dt>
     <dd>Lifecycle refers to the entire sequence of stages an agent, skill, or script passes through (e.g., Create → Verify → Operate → Improve → Deprecate). State is a snapshot of which lifecycle stage that component is in at a given moment. The <code>status</code> field in the YAML frontmatter (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) stores the state value. Lifecycle can be thought of as a "subway map," and state as the sign showing "which station the current train is at."
-      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#state-vs-lifecycle">Chapter 8 §2 · Distinguishing State from Lifecycle</a></span></dd>
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#state-vs-lifecycle">Chapter 10 §2 · Distinguishing State from Lifecycle</a></span></dd>
 
     <dt>Skill Relationship Graph <span class="en">Skill Relationship Graph</span></dt>
     <dd>A machine-readable projection of the relations between skills, agents, ADRs, and decision records. It is always regenerated from sources of truth (SKILL.md frontmatter <code>prerequisites</code>/<code>relates_to</code>, agent <code>required_skills</code>, <code>variant.json</code>, etc.) and is not itself a primary data store (ADR-0060). The outputs are <code>docs/skill-graph.json</code> and the human-readable <code>docs/skill-graph.md</code>. All relation edges are advisory and never hard-block execution.
-      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#s2-skill-graph">Chapter 8 §2 · Skill Relationship Graph</a></span></dd>
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Chapter_en.html#s2-skill-graph">Chapter 10 §2 · Skill Relationship Graph</a></span></dd>
 
     <dt>Domain Operating Model <span class="en">Domain Operating Model</span></dt>
     <dd>The structure by which a variant template declares its own domain's workflow (stages), accountability (RACI), and verdict points (decision gates) as data. The official name is always spelled out — abbreviations (DOM, AOM) are banned due to collisions with other terms. Composed of four groups: Process, Governance, Execution, Graph (ADR-0083).
-      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html">Chapter 13 · Domain Operating Model</a></span></dd>
+      <span class="see">Details: <a href="../domain-model/15_DomainOperatingModel_Chapter_en.html">Chapter 15 · Domain Operating Model</a></span></dd>
 
     <dt>Domain Execution Graph <span class="en">Domain Execution Graph</span></dt>
     <dd>A vocabulary profile layered on the skill relationship graph (<code>graph_profile: "deg/v1"</code>). It connects stage, RACI, and gate data through edges such as <code>in_stage</code>, <code>accountable_for</code>, and <code>gated_by</code>, making scattered operating knowledge answerable with a single graph query (ADR-0083).
-      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s5">Chapter 13 §5 · Graph</a></span></dd>
+      <span class="see">Details: <a href="../domain-model/15_DomainOperatingModel_Chapter_en.html#s5">Chapter 15 §5 · Graph</a></span></dd>
 
     <dt>Stage Axis <span class="en">Stage Axis</span></dt>
     <dd>The declaration of the stages a domain's work flows through (<code>process/stages.yaml</code>). A different axis from the PM execution axis <code>phase</code> (0–6), derived from artifact handoff flow between procedures. If it cannot be distinguished from phase (DEG-P-01), human authoring is required instead of a mechanical bootstrap.
-      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s2">Chapter 13 §2 · Process</a></span></dd>
+      <span class="see">Details: <a href="../domain-model/15_DomainOperatingModel_Chapter_en.html#s2">Chapter 15 §2 · Process</a></span></dd>
 
     <dt>RACI Matrix <span class="en">RACI Matrix</span></dt>
     <dd>An accountability table declaring Responsible, Accountable, Consulted, and Informed for each activity in each stage. Not a document people read but data that <code>generate-raci.ts</code> derives from procedure data and <code>validate-raci.ts</code> validates (<code>governance/raci.yaml</code>).
-      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s3">Chapter 13 §3 · Governance</a></span></dd>
+      <span class="see">Details: <a href="../domain-model/15_DomainOperatingModel_Chapter_en.html#s3">Chapter 15 §3 · Governance</a></span></dd>
 
     <dt>Decision Gate <span class="en">Decision Gate</span></dt>
     <dd>A go/no-go checkpoint declared inside a workflow (<code>decisions/gates.yaml</code>). It corresponds to decision records (<code>DEC-*.md</code>, Reference B) — the log of verdicts actually made — and a verdict produced at a gate is recorded with <code>record_kind: DEC</code> (ADR-0083).
-      <span class="see">Details: <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html#s4">Chapter 13 §4 · Execution</a></span></dd>
+      <span class="see">Details: <a href="../domain-model/15_DomainOperatingModel_Chapter_en.html#s4">Chapter 15 §4 · Execution</a></span></dd>
   </dl>
 
   <h2 id="team">Multi-Agent Team Components</h2>
@@ -129,40 +129,40 @@
 
     <dt>Model Tier <span class="en">Model Tier</span></dt>
     <dd>The model cost tier (<code>high</code>/<code>medium</code>/<code>low</code>) assigned per agent role. Roles requiring heavy judgment are assigned high; standardized, repetitive work is assigned low — balancing cost and quality. It is specified via the <code>tier</code> field in <code>agents/*.md</code> frontmatter, and the platform translates it into an actual model name via <code>model: inherit</code>.
-      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §3</a>. Note: this is a different concept from the "3-tier" of L0→L1→L2 — don't confuse the two.</span></dd>
+      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 7 §3</a>. Note: this is a different concept from the "3-tier" of L0→L1→L2 — don't confuse the two.</span></dd>
   </dl>
 
   <h2 id="workspace">ai-workspace-standards Structure</h2>
   <dl>
     <dt>SSOT <span class="en">Single Source of Truth</span></dt>
     <dd>The principle that a given piece of information has its original copy in exactly one place. Example: CONSTITUTION.md is the SSOT for the entire workspace's rules; context.md is the configuration document for an individual project.
-      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s4">Chapter 5 §4</a></span></dd>
+      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s4">Chapter 7 §4</a></span></dd>
 
     <dt>L0 / L1 / L2 / L3</dt>
     <dd>The four-tier hierarchy running from the workspace root (L0, the sole original) → the common template snapshot (L1, <code>templates/common/</code>) → the variant template (L2, <code>templates/co-*/</code>) → the live project working directory (L3, <code>Projects/*/</code>, scaffolded from an L2 variant via <code>new-project.ts</code> — still inside the same workspace repository, not an external clone). The flow always moves top-down: L1→L2 is a "fork" that happens exactly once when a variant is scaffolded, and L2→L3 is a one-time scaffold at project-creation time.
-      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and the SSOT</a></span></dd>
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Deploy_en.html#s1">Chapter 10 §1 Deployment and the SSOT</a></span></dd>
 
     <dt>Fork Model <span class="en">Fork Model</span></dt>
     <dd>The approach whereby, once L2 branches off from L1, it evolves independently with no automatic reverse synchronization. Promoting it to an official template requires a human to explicitly run <code>l3-to-variant-pipeline.ts</code>.</dd>
 
     <dt>variant</dt>
     <dd>A complete multi-agent team configuration for a specific domain — living under <code>templates/</code> — bundling a PM, specialist agents, and a governance pipeline. co-develop, co-design, and co-work are examples.
-      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 5 §3</a></span></dd>
+      <span class="see">Details: <a href="../intro/05_Intro_Chapter_en.html#s3">Chapter 7 §3</a></span></dd>
 
     <dt>Phase A / Phase B</dt>
     <dd>The two stages of creating a new variant. Phase A is the stage of experimenting freely as an independent prototype under <code>Projects/</code>; Phase B is the stage of promoting it to an official <code>templates/</code> variant via <code>promote-variant</code>.
-      <span class="see">Details: <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 · Creating a New Variant</a></span></dd>
+      <span class="see">Details: <a href="../variant-advanced/13_VariantAdvanced_Chapter_en.html">Chapter 13 · Creating a New Variant</a></span></dd>
 
     <dt>Boilerplate <span class="en">Boilerplate</span></dt>
     <dd>A pre-built starting point — PM role definitions, governance pipeline, and command/skill wiring — that would otherwise need to be written from scratch for every project. This is the essence of what ai-workspace-standards distributes.</dd>
 
     <dt>Container Integration <span class="en">Container Integration</span></dt>
     <dd>One direction for advancing ai-workspace-standards: the requirement that a scaffolded project be able to integrate with services like Open WebUI in a Docker/Kubernetes environment and be supported on a per-individual basis. Currently only direct integration with local AI coding tools is supported.
-      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#container">Chapter 8 §5 Advancement Roadmap</a></span></dd>
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#container">Chapter 10 §5 Advancement Roadmap</a></span></dd>
 
     <dt>Memory Consolidation <span class="en">Memory Consolidation</span></dt>
     <dd>One direction for advancing ai-workspace-standards: a feature that gathers and organizes <code>memory/YYYY-MM-DD.md</code> files scattered across individual projects at the workspace level so that overall trends can be identified.
-      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#memory">Chapter 8 §5 Advancement Roadmap</a></span></dd>
+      <span class="see">Details: <a href="../intro/08_Intro_Advanced_Roadmap_en.html#memory">Chapter 10 §5 Advancement Roadmap</a></span></dd>
   </dl>
 
   <h2 id="tools">Tools &amp; Platforms</h2>
@@ -175,7 +175,7 @@
     <dd>The behavioral instruction file for the Codex family (CLI · Desktop App). In Codex, which has no hooks, this file is the basis of <strong>prompt self-enforcement</strong> — the PM perceives and executes the rules written here each session.</dd>
 
     <dt>Role Context <span class="en">Role Context</span></dt>
-    <dd>Codex's approach to implementing subagents. Without separate definition files, the PM reads the role definitions in AGENTS.md and CODEX.md and sequentially switches to the next role as each step completes. See <a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C</a>.</dd>
+    <dd>Codex's approach to implementing subagents. Without separate definition files, the PM reads the role definitions in AGENTS.md and CODEX.md and sequentially switches to the next role as each step completes. See <a href="../practice/06_Practice_Manual_C_en.html">Chapter 6 §1-C</a>.</dd>
 
     <dt>teammateMode</dt>
     <dd>The parallel execution mode for Agent Teams (an experimental feature). Claude Desktop App only supports <code>in-process</code>, while Claude Code (CLI) additionally supports <code>tmux</code> split-pane mode.

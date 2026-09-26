@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Chapter 6 §2-C · Multi-Agent Team Practice — A Codex-Focused Scenario-Based Learning Guide - Multi-Agent Team Harness Engineering Handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Chapter 6 §2-C · Codex-Focused Multi-Agent Team Practice — Scenario-Based Learning Guide</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 Situation'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ Under the Hood'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 Tip'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ Warning'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar ── -->
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Ch.6 §2-C · Codex-Focused Practice</div>
+  <a href="#setup">🛠 Setup: Installing the Required Tools</a>
+  <a href="#beginner"><span class="dot dot-g"></span>Beginner (Getting Started)</a>
+
+  <div class="nav-group">Beginner Scenario</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 Read a Role Definition and Let the PM Perform It</a>
+
+  <div class="nav-group">Intermediate Scenarios</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer Two-Stage Sequential Role Switching</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 Observing How the Roles and Order Called Vary by Request</a>
+
+  <div class="nav-group">Advanced Scenarios</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 Splitting Independent Work Across Windows — Cross-Session Parallelism</a>
+  <a href="#scenario-4"><span class="dot dot-p"></span>P-2 Building Cost Intuition by Comparing Model Tiers</a>
+  <a href="#cleanup">🧹 Wrapping Up the Practice</a>
+
+  <div class="nav-group">Shortcuts</div>
+  <a href="06_Practice_Manual_en.html">📖 Ch.6 §1 Reference →</a>
+  <a href="06_Practice_Examples_A_en.html">🅐 Ch.6 §2-A Claude-Focused Practice →</a>
+  <a href="06_Practice_Examples_B_en.html">🅑 Ch.6 §2-B Antigravity-Focused Practice →</a>
+</nav>
+
+<!-- ── Main content ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Ch.6 §2-C</div>
+  <h1>Chapter 6 §2-C · Codex-Focused Multi-Agent Team Practice</h1>
+  <p class="subtitle">A hands-on guide that starts from an empty practice folder and walks through scenarios centered on the Codex Desktop App/Codex CLI — the two tools have no difference in how roles are defined and performed, so this section covers both together &nbsp;|&nbsp; <a href="06_Practice_Manual_en.html">← Back to the Ch.6 §1 reference document</a> &nbsp;|&nbsp; <a href="06_Practice_Examples_A_en.html">Ch.6 §2-A Claude-Focused →</a> &nbsp;|&nbsp; <a href="06_Practice_Examples_B_en.html">Ch.6 §2-B Antigravity-Focused →</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target Version/Scope</span><span class="vvalue">Codex CLI/Desktop App 2026-09 release — focused on Codex; see Ch.6 §2-A/§2-B for Claude/Antigravity equivalents</span></div>
+    <div class="version-row"><span class="vlabel">Purpose of This File</span><span class="vvalue">A 5-step hands-on walkthrough on the Codex Desktop App/CLI covering: reading and performing a role definition, sequential role switching, observing how the role-call order varies by request, cross-session parallelism, and comparing model tiers</span></div>
+    <div class="version-row"><span class="vlabel">Reference Documents</span><span class="vvalue"><a href="06_Practice_Manual_en.html">Ch.6 §1 Common</a> · <a href="06_Practice_Manual_A_en.html">Ch.6 §1-A Claude Detail</a> · <a href="06_Practice_Manual_B_en.html">Ch.6 §1-B Antigravity Detail</a> · <a href="06_Practice_Manual_C_en.html">Ch.6 §1-C Codex Detail</a> — linked from each scenario</span></div>
+    <div class="version-row"><span class="vlabel">Written On</span><span class="vvalue">September 12, 2026</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>The Principle Behind This Whole Track</strong> — every scenario below first writes the role as a tool-neutral <code>AGENTS.md</code> specification, and on Codex that same specification is <strong>not "implemented" as a pre-defined subagent</strong>. Instead, the identical specification is copied into the workspace-common folder <code>agents/&lt;name&gt;.md</code>, and during the session the PM loads that file as <strong>read-only role context</strong> to "think as that role" and perform the work directly. The core goal of this practice is to confirm by hand that the definition stays single while only the execution mechanics differ by tool — see <a href="06_Practice_Examples_A_en.html">Ch.6 §2-A</a> and <a href="06_Practice_Examples_B_en.html">Ch.6 §2-B</a> for the Claude/Antigravity equivalents.
+  </div>
+
+  <div class="warning-box">
+    Codex has no tool for spawning subagents at all. Everywhere this document says "call a role," it means <strong>"the PM loads that role's definition file and performs the role"</strong>, and "run in parallel" means <strong>separate sessions spread across multiple terminals/windows</strong>, not something happening inside one session. Keep this distinction in mind as you work through the scenarios below.
+  </div>
+
+  <!-- ══════════════════════════════ Setup ══════════════════════════════ -->
+  <h2 id="setup">Setup: Installing the Required Tools</h2>
+  <p>The practice below focuses on the Codex Desktop App and Codex CLI. If you don't have these tools locally yet, the environment-setup automation bundled with this handbook — the <a href="../setup/SETUP_en.html">setup guide</a> — automatically installs exactly what this chapter's practice needs. Follow the instructions to download and run the script locally.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 Before You Run the Script</div>
+    <p class="text-dim" style="margin-bottom:10px;">Read the <a href="../setup/SETUP_CHECKLIST_en.html">pre-install checklist</a> first. It lists these prerequisites.</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>An active OpenAI account with Codex access (subscription/account-based plan or an API key — depends on organizational policy)</li>
+      <li>A GitHub account you can run <code>gh auth login</code> with</li>
+      <li>At least 5GB of free disk space</li>
+      <li>Administrator (admin) or sudo privileges</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>If you don't have a GitHub account yet</strong><br>
+    ① Go to <a href="https://github.com/signup" target="_blank">github.com/signup</a> in your browser.<br>
+    ② Enter your email address, password, and username — the username becomes part of your repository URL (<code>github.com/&lt;username&gt;/...</code>), so pick it carefully.<br>
+    ③ Pass the puzzle/code verification that prevents automated signups.<br>
+    ④ Open the verification email sent to the address you signed up with and complete <strong>email verification</strong> — skipping this can later block <code>gh auth login</code> or repository creation.<br>
+    ⑤ The Free plan is enough — this handbook's practice and PR exercises don't need a paid plan.<br>
+    Once signup is done, the <a href="https://cli.github.com/" target="_blank">GitHub CLI (<code>gh</code>)</a> is installed alongside the setup script above, and the <code>gh auth login</code> command below connects your terminal to that account.
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# Follow the prompts: choose GitHub.com → HTTPS → Login with a web browser (recommended)
+# When the browser opens, log in with the account you just created and confirm the auth code</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+  </div>
+
+  <h3>Installing on Windows</h3>
+  <p>Since this handbook's path notation follows Windows conventions, Windows users should clone the <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> repository with the command below, then run PowerShell <strong>as Administrator</strong> for the commands that follow.</p>
+  <div class="tip-box">
+    <strong>How to Open PowerShell as Administrator</strong><br>
+    ① Open the Start menu and search for <code>PowerShell</code>.<br>
+    ② <strong>Right-click</strong> "Windows PowerShell" in the search results.<br>
+    ③ Select <strong>"Run as administrator"</strong> from the menu.<br>
+    ④ Click <strong>"Yes"</strong> when the User Account Control (UAC) prompt appears.<br>
+    If the title bar shows something like <code>Administrator: Windows PowerShell</code>, you opened it correctly. Some steps, like winget installs, can error out or silently skip without admin rights.
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd ./setup
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
+# Optional flags: -WSL2, -WezTerm, -Docker, -Force (reinstall tools even if already present)</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+  <p>After the script finishes, fully close and reopen your terminal so the PATH changes take effect.</p>
+
+  <h3>Installing on macOS / Linux</h3>
+  <p>Clone the <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> repository with the command below. Run setup-mac.sh on macOS and setup-linux.sh on Linux; both support the optional <code>--wezterm</code> and <code>--docker</code> flags.</p>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+
+# macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+
+  <h3>Verifying the Installation</h3>
+  <p>Regardless of OS, running setup-common.ts with <code>bun</code> prints a checklist table showing the installation status. Once every item shows ✅, you're ready to start the practice below.</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+
+  <p>Among the tools this project installs, the ones directly relevant to this chapter's practice are: the Codex Desktop App, <code>codex</code> (Codex CLI), plus <code>bun</code> (needed to reference the workspace-common <code>agents/*.md</code> files) and <code>gh</code> (GitHub CLI), used in later chapters.</p>
+
+  <div class="tip-box">
+    If something goes wrong during installation, logs are left under <code>%USERPROFILE%\workshop-setup-logs\</code> on Windows. Check that log first when troubleshooting.
+  </div>
+
+  <!-- ══════════════════════════════ Beginner ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● Beginner</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">The first step: load one role definition and have the Codex Desktop App PM perform that role</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">Beginner</span>
+      <strong class="card-title">Read a Role Definition and Let the PM Perform It</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        A developer new to the harness creates a fresh, practice-only empty folder called <code>harness-lab/</code>, first writes a <code>reviewer</code> role as a tool-neutral <code>AGENTS.md</code> specification, then copies that same content into <code>agents/reviewer.md</code>. On the Codex Desktop App, they observe the PM load this file as read-only role context and "think like a reviewer" to perform the review directly. This folder is for practice only, so it stays separate from other project files.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Ch.2)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_en.html#section-1">Defining Roles (Codex)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_en.html#section-2">Performing/Switching Roles (Codex)</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Step by Step</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① Create the Practice Folder and Enter It</strong>
+            <p>Create a new <code>harness-lab</code> folder under your current directory and move into it. Every command afterward runs inside this folder.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② Write the Common Role Specification — <code>AGENTS.md</code></strong>
+            <p>Write the <code>reviewer</code> role as plain text with no tool-specific phrasing, so it reads the same whether opened in Claude, Antigravity, Codex, or any other tool that supports the AGENTS.md standard. This single file becomes the sole source of truth for "what this role does." On macOS/Linux/Git Bash, use the command below as-is.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement suggestions
+Permissions: Read-only — never modifies the file directly.
+EOF</pre>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell,</strong> the <code>cat</code> command itself is an alias for <code>Get-Content</code>, usable for reading files. However, the <code>&lt;&lt; 'EOF'</code> heredoc syntax for writing multiple lines directly isn't supported, so build the same content as a quoted here-string (<code>@'...'@</code>) and write it with <code>Set-Content</code>.</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+Role: Review text files for typos, logical gaps, and areas for improvement.
+Input: Path to the text file to review
+Output: A list of typos, logical gaps, and improvement suggestions
+Permissions: Read-only — never modifies the file directly.
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>③ Move It Into the Workspace-Common Role File — <code>agents/reviewer.md</code></strong>
+            <p>Instead of a platform-specific folder like <code>.claude/agents/</code>, Codex references <code>agents/&lt;name&gt;.md</code> at the workspace root as read-only role context. Copy the AGENTS.md specification verbatim into frontmatter format.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p agents
+cat > agents/reviewer.md << 'EOF'
+---
+name: reviewer
+description: Reviews text files for typos, logical gaps, and areas for improvement
+tools: Read, Grep
+tier:
+  codex: medium
+---
+
+## Role
+Review text files for typos, logical gaps, and areas for improvement.
+
+## Input
+Path to the text file to review
+
+## Output
+A list of typos, logical gaps, and improvement suggestions
+
+## Permissions
+Read-only — never modifies the file directly.
+EOF</pre>
+              <button class="copy-btn">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — The PM Loads agents/reviewer.md as Role Context and Reviews Directly</div>
+        <p class="text-dim" style="margin-bottom:10px;">Don't pre-create files in a terminal or separate editor. Follow the two steps below exactly — every gray code box can be pasted as-is via its "Copy" button.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Open the Project in the Codex Desktop App</strong>
+              <p>Launch the Codex Desktop App and open the <code>harness-lab/</code> folder you just created as a project.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Create the File to Review + Request the Review via Role Context — Paste the Text Below into the Chat and Send</strong>
+              <div style="position:relative">
+                <pre class="code-block">Create notes.txt with the text "This project is very good. This is very good.", then load the reviewer role defined in agents/reviewer.md as read-only context and review notes.txt according to that role.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="flow-box">
+                The Codex Desktop App's PM does not spawn a separate subagent. Instead, it opens <code>agents/reviewer.md</code> with the Read tool, loads the "role/input/output/permissions" specification into context, and shapes its subsequent response around that role's constraints (read-only, reporting only typos/logical gaps/improvements) — it must also uphold "never actually modify the file" on its own. Instead of a subagent-spawn sequence, the screen shows the PM's tool call reading <code>agents/reviewer.md</code> followed by the review result, all as one continuous session.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p class="text-dim" style="margin-top:10px;"><strong>Identical on Codex CLI</strong> — run <code>codex</code> in a terminal and paste the same sentence from step ② into the chat; the CLI reads <code>agents/reviewer.md</code> the same way and responds in that role. There is no difference between the Codex Desktop App and CLI in how roles are defined and performed — neither has any hooks that fire automatically either.</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>Verifying the Result</strong> — confirm the screen actually shows the PM's tool call reading <code>agents/reviewer.md</code>. The final response should be a list broken into typos, logical gaps, and improvements — if the PM responds with something like "I've fixed it" or edits <code>notes.txt</code> directly, it has failed to honor the "read-only" permission constraint in <code>agents/reviewer.md</code> on its own (Codex has no enforcement mechanism like Claude's <code>tools</code> restriction — the role document's guidance is upheld voluntarily by the PM).
+      </div>
+
+      <div class="warning-box">
+        <strong>Common Failure</strong> — if the PM reviews notes.txt directly without first reading <code>agents/reviewer.md</code>, the step ② request was probably missing the phrase "load the reviewer role defined in agents/reviewer.md as read-only context." Unlike Claude's explicit "subagent call," Codex will simply respond as its default PM persona unless you explicitly ask it to reference the role file.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Intermediate ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● Intermediate</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">A practical pattern where the PM switches, in order, between the writer role and the reviewer role within a single session</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">Intermediate</span>
+      <strong class="card-title">writer → reviewer Two-Stage Sequential Role Switching</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        Having finished G-1, a practitioner in the same <code>harness-lab/</code> folder first specifies a second role, <code>writer</code>, in <code>AGENTS.md</code> and <code>agents/writer.md</code> the same way as G-1. They observe the Codex PM first draft the text as the writer role, then switch — within the same session — to the reviewer role to critique the result, keeping the order intact. The key difference from Claude/Antigravity is that both roles are just "performed" sequentially by the same PM — no separate instance is ever spawned.
+      </div>
+
+      <div class="note">
+        <svg role="img" aria-label="Practice example C workflow step indicator" viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="carrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="carrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+            <marker id="carrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="carrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+          </defs>
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="var(--bg)" stroke="var(--text-dim)" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="var(--text-dim)">User request</text>
+          <line x1="115" y1="43" x2="150" y2="43" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#carrow1)"/>
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent)">PM → writer role</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent)">draft</text>
+          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#carrow1g)"/>
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="var(--accent-amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="var(--accent-amber)"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-amber)">back to writer role on revision requests</text>
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-green)">PM → reviewer role</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-green)">feedback/approval</text>
+          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-purple)" stroke-width="1.5" marker-end="url(#carrow1p)"/>
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-purple)">Final output</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-purple)">complete</text>
+        </svg>
+        <p class="text-dim" style="text-align:center;margin-top:8px;font-size:12px;">Claude/Antigravity spawn a separate instance for each of writer.md/reviewer.md, but Codex has <strong>a single PM session "performing" each role in turn</strong> — all four boxes are the same PM.</p>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s5">AGENTS.md (Ch.2)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_en.html#section-1">Defining Roles (Codex)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C_en.html#section-2">Performing/Switching Roles (Codex)</a>
+        </div>
+      </div>
+
+      <div class="steps-title">Step by Step</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>Add to the Common Role Specification — Append a writer Entry to <code>AGENTS.md</code></strong>
+            <p>Append the <code>writer</code> role to the same <code>AGENTS.md</code> from G-1. Leave the reviewer entry alone and add only the content below. On macOS/Linux/Git Bash, use the command below as-is.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+Role: Write a short 3-5 sentence draft on a given topic.
+Input: Topic, path to save the file
+Output: A draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (hands off to review once the draft is complete)
+EOF</pre>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell,</strong> append the here-string with <code>Add-Content</code> (using <code>Set-Content</code> instead would overwrite the file, so <code>Add-Content</code> is required to avoid wiping out the reviewer entry).</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+Role: Write a short 3-5 sentence draft on a given topic.
+Input: Topic, path to save the file
+Output: A draft text file
+Permissions: Write allowed — saves only to the specified file.
+handoff_to: reviewer (hands off to review once the draft is complete)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn">Copy</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Add the Workspace-Common Role File — <code>agents/writer.md</code></strong>
+            <div style="position:relative">
+              <pre class="code-block">cat > agents/writer.md << 'EOF'
+---
+name: writer
+description: Writes a short 3-5 sentence draft on a given topic
+tools: Write, Read
+tier:
+  codex: medium
+---
+
+## Role
+Write a short 3-5 sentence draft on a given topic.
+
+## Input
+Topic, path to save the file
+
+## Output
+A draft text file
+
+## Permissions
+Write allowed — saves only to the specified file.
+
+## handoff_to
+reviewer (hands off to review once the draft is complete)
+EOF</pre>
+              <button class="copy-btn">Copy</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — The Same PM Switches From the writer Role to the reviewer Role</div>
+        <p class="text-dim" style="margin-bottom:10px;">As in G-1, don't prepare files ahead of time. Continue in the same <code>harness-lab/</code> chat left open from G-1.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Request the writer → reviewer Sequential Switch — Paste the Text Below into the Chat and Send</strong>
+              <div style="position:relative">
+                <pre class="code-block">Load the writer role defined in agents/writer.md as read-only context, and write a draft on 'the benefits of remote work' into draft.txt in that role. Once that's done, switch to the reviewer role defined in agents/reviewer.md and review draft.txt. Do these two steps in order.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="flow-box">
+                The PM first reads <code>agents/writer.md</code>, loads the writer role's constraints (write allowed, draft only) into context, and generates <code>draft.txt</code>. Only after that finishes does it newly read <code>agents/reviewer.md</code> and "put on" the read-only reviewer role this time to review draft.txt — no separate instance is spawned; instead, <strong>only which role file the same session/same PM references changes</strong>. Coordinating the order between the two roles is also this PM's own job.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          Since Codex has no parallel spawning at all, a request like "run writer and reviewer at the same time" simply isn't valid — the PM can only perform one role at a time within a single session anyway. Dependent work is therefore always sequential by nature, so results come out sequential even without explicitly saying "do these two steps in order" as in ①, but it's still good practice to spell out exactly which order and which roles to pass through.
+        </div>
+        <div class="tip-box">
+          <strong>Verifying the Result</strong> — the chat should show tool calls in this order: reading <code>agents/writer.md</code> → writing draft.txt → reading <code>agents/reviewer.md</code> → review result. After completion, also open <code>harness-lab/draft.txt</code> to confirm the draft was actually saved.
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Identical on Codex CLI</strong> — using the same <code>agents/writer.md</code>/<code>agents/reviewer.md</code>, pasting the sentence from ① into a terminal switches through the same sequence.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">Intermediate</span>
+      <strong class="card-title">Observing How the Roles and Order Called Vary by Request</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        This scenario lets you see, on Codex too, the "dynamic team composition" and "varied workflow combinations" covered in Ch.2 §4b. Leave the <code>agents/writer.md</code>·<code>agents/reviewer.md</code> from D-1 untouched and vary only the nature of the request, observing which roles the same PM actually references, how many times, and in what order — the key point is that the role definition files are never re-created. Since Codex has no parallel fan-out, a request like "review from two perspectives at the same time" still ends up being handled by the PM one perspective at a time, sequentially.
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >Dynamic Routing Branch Diagram — Same Role Roster, Different Requests</div>
+        <svg role="img" aria-label="Practice example C configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="cdrArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="cdrArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+            <marker id="cdrArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+          </defs>
+
+          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">Request A</text>
+          <rect x="15" y="30" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">simple review</text>
+          <line x1="95" y1="46" x2="145" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="30" width="110" height="32" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">1 switch</text>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="325" y="30" width="80" height="32" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Result</text>
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">single role</text>
+
+          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">Request B</text>
+          <rect x="15" y="105" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">draft+review</text>
+          <line x1="95" y1="121" x2="145" y2="121" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="105" width="110" height="32" rx="6" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.2"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">PM=writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">1 switch</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-purple)" stroke-width="1.2" marker-end="url(#cdrArrowP)"/>
+          <rect x="325" y="105" width="110" height="32" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">1 switch</text>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="485" y="105" width="80" height="32" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Result</text>
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-purple)" font-weight="600">2-stage sequence</text>
+
+          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">Request C</text>
+          <rect x="15" y="180" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">draft+multi</text>
+          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">review</text>
+          <line x1="95" y1="196" x2="145" y2="196" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="180" width="110" height="32" rx="6" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.2"/>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">PM=writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--accent-purple)">1x</text>
+          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="315" y="170" width="110" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="370" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">grammar view (1st)</text>
+          <rect x="315" y="206" width="110" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--badge-green-fg)">logic view (2nd)</text>
+          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <rect x="485" y="182" width="80" height="30" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">Result</text>
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">2x sequential</text>
+
+          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ Role definitions written once — the PM decides sequentially, per request, which role to "perform" and how many times (no fan-out)</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter_en.html#s4b">Dynamic Team Composition and Varied Workflows</a>
+        </div>
+      </div>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — Same Role Roster, Three Different Requests</div>
+        <p class="text-dim" style="margin-bottom:10px;">Continue in the same chat from D-1. Pay attention each time to which role file the PM reads and how many times it switches, as shown in the tool-call output on screen.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① A Simple Request — Only One reviewer-Role Pass Needed</strong>
+              <div style="position:relative">
+                <pre class="code-block">Just scan draft.txt for typos.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="flow-box">
+                The PM decides there's no need to switch into the writer role for this request and only references <code>agents/reviewer.md</code>, then stops. This is the simplest example showing that even when the same role roster (writer+reviewer) is defined, the PM decides case-by-case, per request, which role to actually "perform."
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② A Compound Request — Combining the writer Role and the reviewer Role Sequentially From Two Angles</strong>
+              <div style="position:relative">
+                <pre class="code-block">Write a new draft in draft2.txt on the topic 'the four-day workweek.' Once the draft is done, review it once from a grammar angle and once from a logic angle. Since Codex doesn't support concurrent execution, go through one angle at a time in sequence.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="flow-box">
+                This time the PM references <code>agents/writer.md</code> to write the draft, then switches to <code>agents/reviewer.md</code> and performs it twice sequentially under different instructions — once as a "grammar angle" and once as a "logic angle." Unlike Claude/Antigravity's "fan-out" (simultaneous parallel review), on Codex this always shows up as a <strong>sequential 2x repetition</strong> — the same two roles still produce a workflow shape completely different from ①, just like the Claude/Antigravity case.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          Comparing ① and ② side by side makes clear that "the role roster (which roles are defined under <code>agents/</code>)" and "the composition actually used for this task (which role gets referenced how many times, in what order)" are two different layers. The former is fixed in the workspace ahead of time, but the latter is decided fresh by the PM for every request — with the constraint that on Codex it is always decided sequentially.
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Identical on Codex CLI</strong> — using the same <code>agents/writer.md</code>/<code>agents/reviewer.md</code>, pasting the sentences from ①② into a terminal behaves the same way.</p>
+        <div class="warning-box">
+          <strong>Common Failure</strong> — even when the PM handles ② sequentially under the hood, asking to "review them at the same time" can make it report the results lumped together as if done simultaneously. On Codex, explicit wording like "in order" or "one angle at a time" keeps the result predictable.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See Also:</strong> <a href="../concepts/02_Concepts_Chapter_en.html#s4b">Ch.2 §4b — Dynamic Team Composition and Varied Workflows</a>, <a href="06_Practice_Manual_C_en.html#section-3">Ch.6 §1-C Codex Detail — Parallel Execution</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Advanced ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● Advanced</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">Cross-session parallel operation — running the writer role and the reviewer role against two independent files at once, in separate terminals/windows</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">Advanced</span>
+      <strong class="card-title">Splitting Independent Work Across Windows — Cross-Session Parallelism</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        Having finished through D-1, an experienced user wants to work on two independent tasks that don't depend on each other (drafting <code>topic-a.txt</code> and <code>topic-b.txt</code>) at the same time. Since Codex has no feature for spawning teammates in parallel within a single session, they open <strong>two separate terminal windows (or Codex CLI sessions)</strong> targeting the same <code>harness-lab/</code> folder and hand off each task independently — the unit of "parallel" here is the session itself, not a teammate.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="06_Practice_Manual_C_en.html#section-3">Parallel Execution — Cross-Session Parallelism (Codex)</a>
+        </div>
+      </div>
+
+      <div class="platform-block codexcli">
+        <div class="platform-block-title"><span class="badge">Codex CLI</span> — Two Terminals, Two Sessions</div>
+        <p class="text-dim" style="margin-bottom:10px;">Open two terminal windows targeting the same <code>harness-lab/</code> folder (or use a split window via tmux or similar — Codex CLI itself has no built-in support like Claude Code's <code>teammateMode: "tmux"</code>, so you set up the terminal multiplexer yourself).</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① First Terminal — Draft topic-a.txt as the writer Role</strong>
+              <p>In the first terminal, move into <code>harness-lab/</code>, run <code>codex</code>, and paste the sentence below.</p>
+              <div style="position:relative">
+                <pre class="code-block">cd harness-lab
+codex</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">As the writer role defined in agents/writer.md, write a draft on 'remote work' into topic-a.txt. Once done, switch to the reviewer role in agents/reviewer.md and review it too.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Second Terminal — Draft topic-b.txt as the writer Role, at the Same Time</strong>
+              <p>Open a second terminal separate from ①, move into the same <code>harness-lab/</code>, and run <code>codex</code> again. This session is completely independent from ①'s — it merely looks at the same workspace, sharing neither conversation context nor progress state.</p>
+              <div style="position:relative">
+                <pre class="code-block">cd harness-lab
+codex</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">As the writer role defined in agents/writer.md, write a draft on 'the four-day workweek' into topic-b.txt. Once done, switch to the reviewer role in agents/reviewer.md and review it too.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          Because the two sessions run as separate processes, they genuinely proceed at the same time — but this is different in nature from Claude Agent Teams' parallelism, where a single orchestrator coordinates two teammates through a shared task list. Codex's two sessions have no awareness of each other, no shared task list, and no direct session-to-session communication channel like <code>SendMessage</code>. If both sessions touch the same file at once (for example, both trying to edit <code>AGENTS.md</code>), a plain filesystem-level conflict can occur — assigning <strong>completely separate target files</strong> is just as important a safety practice here as it is for Claude/Antigravity.
+        </div>
+        <div class="tip-box">
+          If you want to watch both sessions' progress at a glance, splitting the windows side by side with a terminal multiplexer like WezTerm or tmux helps — this is a matter of terminal-environment setup, not a Codex feature itself.
+        </div>
+        <div class="warning-box">
+          <strong>Common Failure</strong> — if both sessions try to modify <code>agents/writer.md</code> itself (for example, sending "change the tier" requests from both at once), a write race can occur and one side's change may get overwritten. When running in parallel, have each session touch only its own target file (topic-a.txt/topic-b.txt), and avoid requests that change the role definition file itself in a parallel session.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See Also:</strong> <a href="06_Practice_Manual_C_en.html#section-3">Ch.6 §1-C Codex Detail — Why There's No Parallel Execution, and the Cross-Session Alternative</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-4">
+    <div class="card-header">
+      <span class="card-id">P-2</span>
+      <span class="badge badge-p">Advanced</span>
+      <strong class="card-title">Building Cost Intuition by Comparing Model Tiers</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        This scenario lets you feel, firsthand and before being told the numbers, what real difference the model tiers (high/medium/low) covered in detail in Chapter 10 make on Codex. Reference the same reviewer role three times, changing only the model, and visually compare response speed and result quality. Note that Codex's model tier names differ from the Claude family's (haiku/sonnet/opus).
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">Elements Used</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../intro/05_Intro_Chapter_en.html#s3">Model Tiers (Ch.7)</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >Codex Model Tier Comparison Chart</div>
+        <svg role="img" aria-label="Practice example C result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <rect x="0" y="0" width="520" height="30" rx="6" fill="var(--bg3)"/>
+          <text x="72" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Model</text>
+          <text x="198" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Speed</text>
+          <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Cost</text>
+          <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Quality</text>
+
+          <!-- Row 1: gpt-5.6-luna (low) -->
+          <rect x="0" y="34" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent)">gpt-5.6-luna</text>
+          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">fast</text>
+          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
+          <text x="304" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">low</text>
+          <rect x="400" y="46" width="65" height="16" rx="4" fill="var(--accent-amber)" opacity="0.6"/>
+          <text x="433" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">basic</text>
+          <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">routine tasks</text>
+          <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">typo review</text>
+
+          <!-- Row 2: gpt-5.6-terra (medium) -->
+          <rect x="0" y="88" width="520" height="50" fill="var(--bg2)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-purple)">gpt-5.6-terra</text>
+          <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">medium</text>
+          <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="315" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">medium</text>
+          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-purple)" opacity="0.6"/>
+          <text x="450" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">good</text>
+          <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">general review</text>
+          <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">code review</text>
+
+          <!-- Row 3: gpt-5.6-sol (high) -->
+          <rect x="0" y="142" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-red)">gpt-5.6-sol</text>
+          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
+          <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">slow</text>
+          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
+          <text x="338" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">high</text>
+          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="468" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">excellent</text>
+          <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">complex logic</text>
+          <text x="490" y="173" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">architecture</text>
+
+          <text x="260" y="212" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ Light role = low tier, heavy judgment = high tier — assign the right tool for the job</text>
+        </svg>
+      </div>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — Same File, Requesting a Review at Three Model Tiers</div>
+        <p class="text-dim" style="margin-bottom:10px;">Prepare a passage with a logical gap, slightly more complex than G-1's <code>notes.txt</code>. Paste the text below into the chat as-is.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Prepare the File to Review</strong>
+              <div style="position:relative">
+                <pre class="code-block">Create argument.txt with the following text: "Remote work is always more productive than office work. This is because people who work remotely say remote work is good. Therefore, every company should be fully remote."</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② Review at the low Tier (gpt-5.6-luna)</strong>
+              <p>Paste the text below into the chat as-is. The PM changes the <code>tier.codex</code> field in <code>agents/reviewer.md</code> to <code>low</code> and then reviews in that role.</p>
+              <div style="position:relative">
+                <pre class="code-block">Change the tier.codex field in agents/reviewer.md to low. Then review argument.txt in that reviewer role.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ Repeat the Same Request at the medium Tier (gpt-5.6-terra)</strong>
+              <p>Change <code>tier.codex</code> to <code>medium</code> the same way and review again. Compare against the low result to see whether it pinpoints a logical gap like circular reasoning accurately.</p>
+              <div style="position:relative">
+                <pre class="code-block">Change the tier.codex field in agents/reviewer.md to medium. Then review argument.txt in that reviewer role.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ Repeat the Same Request at the high Tier (gpt-5.6-sol)</strong>
+              <p>Change <code>tier.codex</code> to <code>high</code> the same way and review again. Note how response time and depth of critique differ from ②③.</p>
+              <div style="position:relative">
+                <pre class="code-block">Change the tier.codex field in agents/reviewer.md to high. Then review argument.txt in that reviewer role.</pre>
+                <button class="copy-btn">Copy</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          For a simple typo check the three tiers barely differ, but for work like this — "spotting a flaw in an argument's structure" — the lower the tier, the more clearly it tends to miss calling out circular reasoning as circular reasoning and instead comment only on surface-level wording. Conversely, <code>gpt-5.6-luna</code> responds fastest of the three — going through the speed-versus-depth trade-off yourself makes much clearer why Chapter 7's principle exists: "heavier judgment calls for a higher tier, more routine tasks call for a lower one."
+        </div>
+        <div class="tip-box">
+          You can simply tell the Codex Desktop App "change the tier.codex field" each time — no need to open the definition file yourself; the PM edits <code>agents/reviewer.md</code> on its own, then reviews in that role.
+        </div>
+        <div class="warning-box">
+          <strong>Common Failure</strong> — if the <code>tier.codex</code> field gets a value that doesn't exist (a mistake like using Claude-family names such as <code>haiku</code>/<code>sonnet</code>/<code>opus</code>, for example), the PM may silently ignore it and fall back to a default tier. After finishing ②③④, open <code>agents/reviewer.md</code> yourself and confirm the <code>tier.codex</code> value exactly matches the intended one — <code>low</code>/<code>medium</code>/<code>high</code>.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>See Also:</strong> <a href="../intro/05_Intro_Chapter_en.html#s3">Ch.7 §templates and variant — Model Tiering</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ Wrap-up ══════════════════════════════ -->
+  <h2 id="cleanup">Wrapping Up the Practice</h2>
+  <p>Once you've completed all five scenarios, decide what to do with the <code>harness-lab/</code> folder. Since the next chapter (Chapter 7) uses a new practice folder, you don't have to keep it, but if you'd like to compare the <code>AGENTS.md</code>/<code>agents/*.md</code> definitions you built so far, it's worth reviewing them once before deleting.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">🧹 Cleaning Up the harness-lab Folder</div>
+    <p class="text-dim" style="margin-bottom:10px;">If you no longer need it, delete the whole folder. On macOS/Linux/Git Bash, use the command below as-is.</p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+rm -rf harness-lab</pre>
+      <button class="copy-btn">Copy</button>
+    </div>
+    <p class="text-dim" style="margin-top:10px;"><strong>On Windows PowerShell:</strong></p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+Remove-Item -Recurse -Force harness-lab</pre>
+      <button class="copy-btn">Copy</button>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>If You'd Like to Keep It</strong> — instead of deleting the folder, you can also just leave a local commit with <code>git init && git add -A && git commit -m "harness-lab practice record"</code>. Keep it as a reference afterward, and feel free to start the next chapter's practice in a separate new folder.
+  </div>
+
+  <div class="warning-box">
+    The second Codex CLI session opened in a separate terminal during P-1 will error on its next command if you delete <code>harness-lab/</code> out from under it. Make sure both sessions are terminated (<code>Ctrl+C</code> or <code>exit</code>) before cleaning up the folder.
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">Reference Videos</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://developers.openai.com/codex" target="_blank">Codex — OpenAI Developers</a><span class="video-meta">(official docs)</span> — official introduction to the Codex CLI/Desktop App</li>
+  </ul>
+</div>
+
+  <hr>
+  <p class="text-dim" style="text-align: center;">
+    Based on Codex CLI/App 2026-09 | Written September 12, 2026<br>
+    <a href="06_Practice_Manual_en.html">← Ch.6 §1 Multi-Agent Team Practice Reference</a> &nbsp;·&nbsp; <a href="06_Practice_Examples_A_en.html">Ch.6 §2-A Claude-Focused Practice</a> &nbsp;·&nbsp; <a href="06_Practice_Examples_B_en.html">Ch.6 §2-B Antigravity-Focused Practice</a> &nbsp;·&nbsp; <a href="../intro/05_Intro_Chapter_en.html">Ch.7 Introducing ai-workspace-standards →</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="06_Practice_Manual_C_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch.6 §1-C · Codex Detail</div></a>
+    <div class="branch">
+      <div class="branch-label">Ch.6 §2</div>
+      <a href="06_Practice_Examples_A_en.html" >Claude (A)</a>
+      <a href="06_Practice_Examples_B_en.html" >Antigravity (B)</a>
+      <a href="06_Practice_Examples_C_en.html" >Codex (C)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Ch.7 · Introducing ai-workspace-standards</div></a>
+  </div>
+   <footer>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>
+    Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    Handbook content is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International)</a>.
+  </footer>
+ </article>
+</main>
+
+</div>
+
+<script src="../assets/copy-code.js"></script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

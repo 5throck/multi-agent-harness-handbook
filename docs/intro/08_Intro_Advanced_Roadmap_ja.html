@@ -2,10 +2,10 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第8章 §5・高度化ロードマップ - マルチエージェントハーネスエンジニアリングハンドブック">
+  <meta name="description" content="第10章 §5・高度化ロードマップ - マルチエージェントハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>第8章 §5・高度化ロードマップ</title>
+  <title>第10章 §5・高度化ロードマップ</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -14,26 +14,26 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">第8章 §5・高度化ロードマップ</div>
+  <div class="nav-title">第10章 §5・高度化ロードマップ</div>
   <a href="#container">コンテナ基盤サービス連携</a>
   <a href="#memory">メモリの集約と整理</a>
   <a href="#variant-deploy">variant配布方式の進化</a>
   <a href="#boilerplate-strategy">ボイラープレート戦略の高度化</a>
   <a href="#tier-strategy">モデルティア戦略の高度化</a>
-  <div class="nav-section">第8章の他の節</div>
-  <a href="08_Intro_Advanced_Deploy_ja.html">第8章 §1・デプロイとSSOT</a>
-  <a href="08_Intro_Advanced_Chapter_ja.html">第8章 §2・ライフサイクル管理</a>
-  <a href="08_Intro_Advanced_AGENTS_ja.html">第8章 §3・AGENTS.md詳解</a>
-  <a href="08_Intro_Advanced_Architecture_ja.html">第8章 §4・アーキテクチャ詳解</a>
+  <div class="nav-section">第10章の他の節</div>
+  <a href="08_Intro_Advanced_Deploy_ja.html">第10章 §1・デプロイとSSOT</a>
+  <a href="08_Intro_Advanced_Chapter_ja.html">第10章 §2・ライフサイクル管理</a>
+  <a href="08_Intro_Advanced_AGENTS_ja.html">第10章 §3・AGENTS.md詳解</a>
+  <a href="08_Intro_Advanced_Architecture_ja.html">第10章 §4・アーキテクチャ詳解</a>
   <div class="nav-section">他の章</div>
-  <a href="05_Intro_Chapter_ja.html">第5章・ai-workspace-standards紹介</a>
-  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章・企業内マルチエージェントチーム運用</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章・新規variant作成</a>
+  <a href="05_Intro_Chapter_ja.html">第7章・ai-workspace-standards紹介</a>
+  <a href="../enterprise/09_Enterprise_Chapter_ja.html">第9章・企業内マルチエージェントチーム運用</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_ja.html">第13章・新規variant作成</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">第8章 §5</div>
+  <div class="chapter-eyebrow">第10章 §5</div>
   <h1>高度化ロードマップ</h1>
   <p class="lead">これまで§1〜§4で扱ってきたのは、ai-workspace-standardsの<strong>現在の実装</strong>である。本節はその逆――まだ実装されていないが、リポジトリが向かっている5つの方向を扱う。インフラレベル(コンテナ連携・メモリ集約・variant配布の自動化)の3つと、ガバナンスレベル(ボイラープレート戦略・モデルティア戦略)の2つに分かれる。</p>
 
@@ -49,7 +49,7 @@
   </div>
 
   <div class="note">
-    <strong>2026-08 更新</strong> — この節が書かれた後、ロードマップの一部はすでに実装された。ガバナンスレベルの強化は <a href="../appendix/A_Governance_Enforcement_ja.html">参照A · ガバナンス強制層</a> と <a href="../appendix/B_Decision_System_ja.html">参照B · 意思決定システム</a> で、ワークフロー構造の機械化は <a href="../appendix/C_Skill_Graph_ja.html">参照C · スキル関係グラフ</a> と第9章の手順スキーマ(ADR-0063)節で扱う。この節の残りの項目(コンテナ連携・メモリ集約・variantデプロイ自動化)は依然として進行中の方向だ。
+    <strong>2026-08 更新</strong> — この節が書かれた後、ロードマップの一部はすでに実装された。ガバナンスレベルの強化は <a href="../appendix/A_Governance_Enforcement_ja.html">参照A · ガバナンス強制層</a> と <a href="../appendix/B_Decision_System_ja.html">参照B · 意思決定システム</a> で、ワークフロー構造の機械化は <a href="../appendix/C_Skill_Graph_ja.html">参照C · スキル関係グラフ</a> と第11章の手順スキーマ(ADR-0063)節で扱う。この節の残りの項目(コンテナ連携・メモリ集約・variantデプロイ自動化)は依然として進行中の方向だ。
   </div>
 
 
@@ -58,7 +58,7 @@
   <p>高度化の核心は、スキャフォールディングされたプロジェクトがDockerまたはKubernetes環境で**Open WebUIのようなフロントエンドサービスと連携し、個人単位でサポートされる**必要があるという点である。各ユーザーが自分に割り当てられたエージェントチームをブラウザインターフェースを通じて呼び出し、結果を確認し、セッション間でコンテキストを維持できる形態である。</p>
 
   <h2 id="memory">メモリの集約と整理</h2>
-  <p>現在、各L3プロジェクトは独立した<code>memory/YYYY-MM-DD.md</code>ファイルを維持している(第5章§4で扱った)。このファイルは当該プロジェクトのセッション間コンテキストを記録するが、プロジェクトが増えるほどメモリファイルも散在し、<strong>ワークスペース全体レベルでのインサイトの把握が難しくなる</strong>。</p>
+  <p>現在、各L3プロジェクトは独立した<code>memory/YYYY-MM-DD.md</code>ファイルを維持している(第7章§4で扱った)。このファイルは当該プロジェクトのセッション間コンテキストを記録するが、プロジェクトが増えるほどメモリファイルも散在し、<strong>ワークスペース全体レベルでのインサイトの把握が難しくなる</strong>。</p>
   <p>高度化の第2の軸は、個別プロジェクト単位に散らばっているメモリファイルを**集約して整理できる機能**が必要だという点である。例えば「先週すべてのプロジェクトでエージェントチームがどのようなパターンのエラーに頻繁に遭遇したか」「どの役割の組み合わせが最も頻繁に使われたか」といったワークスペースレベルのトレンド分析が可能になるべきである。</p>
 
   <h2 id="variant-deploy">variant配布方式の進化</h2>
@@ -146,8 +146,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Architecture_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §4・アーキテクチャ詳解</div></a>
-    <a href="../workflows/09_Workflows_Chapter_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第9章・ワークフローデザインパターン</div></a>
+    <a href="08_Intro_Advanced_Architecture_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第10章 §4・アーキテクチャ詳解</div></a>
+    <a href="../workflows/11_Workflows_Chapter_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第11章・ワークフローデザインパターン</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>

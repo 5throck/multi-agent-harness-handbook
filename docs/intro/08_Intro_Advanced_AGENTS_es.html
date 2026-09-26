@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!--
-  Chapter 8 §3 · AGENTS.md en Profundidad — estructura de la especificación del registro de agentes, guía de redacción, mapeo de implementación por herramienta, vínculos de verificación y ciclo de vida
+  Chapter 10 §3 · AGENTS.md en Profundidad — estructura de la especificación del registro de agentes, guía de redacción, mapeo de implementación por herramienta, vínculos de verificación y ciclo de vida
 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Capítulo 8 §3 · AGENTS.md en Profundidad - material del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="description" content="Capítulo 10 §3 · AGENTS.md en Profundidad - material del Manual de Ingeniería del Arnés Multiagente.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Capítulo 8 §3 · AGENTS.md en Profundidad</title>
+  <title>Capítulo 10 §3 · AGENTS.md en Profundidad</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 	  <style>
@@ -19,28 +19,28 @@
 
 <nav>
   <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
-  <div class="nav-title">Capítulo 8 §3 · AGENTS.md en Profundidad</div>
+  <div class="nav-title">Capítulo 10 §3 · AGENTS.md en Profundidad</div>
   <a href="#spec-format" >Formato de la Especificación</a>
   <a href="#impl-mapping">Mapeo de Implementación por Herramienta</a>
   <a href="#authoring-guide">Guía de Redacción</a>
   <a href="#verify-lifecycle">Verificación y Ciclo de Vida</a>
-  <div class="nav-section">Otras Secciones del Capítulo 8</div>
+  <div class="nav-section">Otras Secciones del Capítulo 10</div>
   <a href="08_Intro_Advanced_Deploy_es.html">§1 · Despliegue y SSOT</a>
   <a href="08_Intro_Advanced_Chapter_es.html">§2 · Gestión del Ciclo de Vida</a>
   <a href="08_Intro_Advanced_Architecture_es.html">§4 · Arquitectura en Profundidad</a>
   <a href="08_Intro_Advanced_Roadmap_es.html">§5 · Hoja de Ruta Avanzada</a>
   <div class="nav-section">Otros capítulos</div>
-  <a href="05_Intro_Chapter_es.html">Capítulo 5 · Introducción a ai-workspace-standards</a>
-  <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Ejecución de un Equipo Multiagente Dentro de una Empresa</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 · Crear una Nueva Variante</a>
+  <a href="05_Intro_Chapter_es.html">Capítulo 7 · Introducción a ai-workspace-standards</a>
+  <a href="../enterprise/09_Enterprise_Chapter_es.html">Capítulo 9 · Ejecución de un Equipo Multiagente Dentro de una Empresa</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_es.html">Capítulo 13 · Crear una Nueva Variante</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Capítulo 8 §3</div>
+  <div class="chapter-eyebrow">Capítulo 10 §3</div>
   <h1>AGENTS.md en Profundidad</h1>
-  <p class="lead">Esta sección cubre el formato de especificación de AGENTS.md, cómo se implementa en diferentes herramientas, los principios de redacción y el proceso de verificación. Se basa en la introducción conceptual a AGENTS.md presentada en el Capítulo 5, adoptando una perspectiva de practicante.</p>
-  <p class="source-line">Especificación estándar: <a href="https://agents.md/" target="_blank">agents.md</a> · Ejemplos prácticos: <a href="../practice/04_Practice_Examples_A_es.html">Capítulo 4 §2-A</a> / <a href="../practice/04_Practice_Examples_B_es.html">Capítulo 4 §2-B</a></p>
+  <p class="lead">Esta sección cubre el formato de especificación de AGENTS.md, cómo se implementa en diferentes herramientas, los principios de redacción y el proceso de verificación. Se basa en la introducción conceptual a AGENTS.md presentada en el Capítulo 7, adoptando una perspectiva de practicante.</p>
+  <p class="source-line">Especificación estándar: <a href="https://agents.md/" target="_blank">agents.md</a> · Ejemplos prácticos: <a href="../practice/06_Practice_Examples_A_es.html">Capítulo 6 §2-A</a> / <a href="../practice/06_Practice_Examples_B_es.html">Capítulo 6 §2-B</a></p>
 
   <div class="keypoints">
     <div class="kp-title">Lo que cubre esta sección</div>
@@ -61,7 +61,7 @@
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Campo</th><th>Significado</th><th>¿Requerido?</th><th>Ejemplo de la Práctica del Capítulo 4</th></tr></thead>
+    <thead><tr><th>Campo</th><th>Significado</th><th>¿Requerido?</th><th>Ejemplo de la Práctica del Capítulo 6</th></tr></thead>
     <tbody>
       <tr>
         <td><code>## Agent: {nombre}</code></td>
@@ -104,7 +104,7 @@
   </div>
 
   <h3>Ejemplo Completo</h3>
-  <p>A continuación se muestra la imagen completa de un archivo AGENTS.md que contiene los dos agentes redactados en los ejercicios prácticos del Capítulo 4 (G-1, D-1).</p>
+  <p>A continuación se muestra la imagen completa de un archivo AGENTS.md que contiene los dos agentes redactados en los ejercicios prácticos del Capítulo 6 (G-1, D-1).</p>
   <div style="position:relative">
   <pre class="code-block">## Agent: reviewer
 
@@ -123,7 +123,7 @@ handoff_to: reviewer (procede a la revisión después de que el borrador esté c
   <button class="copy-btn">Copiar</button>
 </div>
 
-  <div class="note">AGENTS.md no es una instrucción dirigida a una herramienta de IA sino un <strong>registro de roles definidos por un humano</strong>. La familia Claude lee este registro y lo "traduce" a archivos de definición específicos de la herramienta (<code>.claude/agents/*.md</code>), la familia Antigravity tiene su orquestación que lee e interpreta el registro directamente, y la familia Codex — sin definiciones de subagente separadas — hace que el PM lea el registro como contexto de rol y lo interprete mediante transiciones secuenciales de rol (<a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C</a>).</div>
+  <div class="note">AGENTS.md no es una instrucción dirigida a una herramienta de IA sino un <strong>registro de roles definidos por un humano</strong>. La familia Claude lee este registro y lo "traduce" a archivos de definición específicos de la herramienta (<code>.claude/agents/*.md</code>), la familia Antigravity tiene su orquestación que lee e interpreta el registro directamente, y la familia Codex — sin definiciones de subagente separadas — hace que el PM lea el registro como contexto de rol y lo interprete mediante transiciones secuenciales de rol (<a href="../practice/06_Practice_Manual_C_es.html">Capítulo 6 §1-C</a>).</div>
 
   <!-- ═══════════════════════════════════════════════════════
        2. Tool-Specific Implementation Mapping
@@ -162,9 +162,9 @@ handoff_to: reviewer (procede a la revisión después de que el borrador esté c
       </tr>
       <tr>
         <td>Referencia detallada</td>
-        <td><a href="../practice/04_Practice_Manual_A_es.html">Capítulo 4 §1-A Centrado en Claude</a></td>
-        <td><a href="../practice/04_Practice_Manual_B_es.html">Capítulo 4 §1-B Centrado en Antigravity</a></td>
-        <td><a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C Centrado en Codex</a></td>
+        <td><a href="../practice/06_Practice_Manual_A_es.html">Capítulo 6 §1-A Centrado en Claude</a></td>
+        <td><a href="../practice/06_Practice_Manual_B_es.html">Capítulo 6 §1-B Centrado en Antigravity</a></td>
+        <td><a href="../practice/06_Practice_Manual_C_es.html">Capítulo 6 §1-C Centrado en Codex</a></td>
       </tr>
     </tbody>
   </table>
@@ -200,7 +200,7 @@ handoff_to: reviewer (procede a la revisión después de que el borrador esté c
       <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">El orquestador interpreta en tiempo real</text>
     </svg>
   </div>
-  <div class="note">La familia Codex, como Antigravity, interpreta el registro directamente sin archivos de definición — pero no mediante generación dinámica del orquestador, sino mediante la <strong>transición secuencial de contextos de rol por parte del PM</strong>. Véase <a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C</a>.</div>
+  <div class="note">La familia Codex, como Antigravity, interpreta el registro directamente sin archivos de definición — pero no mediante generación dinámica del orquestador, sino mediante la <strong>transición secuencial de contextos de rol por parte del PM</strong>. Véase <a href="../practice/06_Practice_Manual_C_es.html">Capítulo 6 §1-C</a>.</div>
 
   <!-- ═══════════════════════════════════════════════════════
        3. Authoring Guide
@@ -217,7 +217,7 @@ handoff_to: reviewer (procede a la revisión después de que el borrador esté c
   <p>El campo <code>Permissions</code> restringe el alcance de acceso a archivos. No seguir este principio puede permitir que un subagente sobreescriba accidentalmente archivos importantes. En la familia Claude, este permiso se traduce en el campo <code>tools</code> (<code>Read</code>, <code>Grep</code>, <code>Write</code>, etc.) de <code>.claude/agents/*.md</code>.</p>
 
   <div class="pullquote">Dado que el revisor no puede escribir en primer lugar, los errores simplemente no pueden ocurrir.
-    <span class="by">— Capítulo 4 §2-A, Principio de Mínimo Privilegio</span>
+    <span class="by">— Capítulo 6 §2-A, Principio de Mínimo Privilegio</span>
   </div>
 
   <h3>4. Declare el Orden con Entrega</h3>
@@ -247,7 +247,7 @@ Role: Finaliza el documento incorporando la retroalimentación.</pre>
        ═══════════════════════════════════════════════════════ -->
   <h2 id="verify-lifecycle">Verificación y Ciclo de Vida</h2>
 
-  <p>Registrar un agente en AGENTS.md corresponde a la <strong>fase de Creación del ciclo de vida</strong> (ver Capítulo 8 §2). Un agente registrado luego pasa por las siguientes etapas.</p>
+  <p>Registrar un agente en AGENTS.md corresponde a la <strong>fase de Creación del ciclo de vida</strong> (ver Capítulo 10 §2). Un agente registrado luego pasa por las siguientes etapas.</p>
 
   <div class="table-compare">
   <table>
@@ -284,13 +284,13 @@ Role: Finaliza el documento incorporando la retroalimentación.</pre>
 
   <p>Acostumbrarse a ejecutar <code>agent:verify</code> cada vez que crea o modifica un agente le permite detectar inconsistencias desde el principio — como "listado en el registro pero no existe un archivo de definición real" o "el agente al que apunta handoff_to ha sido eliminado."</p>
 
-  <p>Automatizar este flujo de verificación puede integrarse como un paso de <code>validate-templates.ts</code> en el pipeline de CI/CD cubierto en el Capítulo 8 §1 (Despliegue y SSOT).</p>
+  <p>Automatizar este flujo de verificación puede integrarse como un paso de <code>validate-templates.ts</code> en el pipeline de CI/CD cubierto en el Capítulo 10 §1 (Despliegue y SSOT).</p>
 
   <div class="note"><strong>FAQ:</strong> Si al ejecutar <code>bun run agent:verify</code> se produce un error como "la tabla de AGENTS.md y la lista real de archivos <code>agents/*.md</code> están desincronizadas", compare los nombres de agente en AGENTS.md con los nombres de archivo en la carpeta <code>.claude/agents/</code>, luego añada las entradas faltantes o elimine los archivos innecesarios. → <a href="../faq/00_FAQ_es.html">FAQ</a></div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Chapter_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 8 §2 · Gestión del Ciclo de Vida</div></a>
-    <a href="08_Intro_Advanced_Architecture_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 8 §4 · Arquitectura en Profundidad</div></a>
+    <a href="08_Intro_Advanced_Chapter_es.html" class="prev"><div class="dir">← Anterior</div><div class="ttl">Capítulo 10 §2 · Gestión del Ciclo de Vida</div></a>
+    <a href="08_Intro_Advanced_Architecture_es.html" class="next"><div class="dir">Siguiente →</div><div class="ttl">Capítulo 10 §4 · Arquitectura en Profundidad</div></a>
   </div>
    <footer>
     Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · Material educativo en español<br>

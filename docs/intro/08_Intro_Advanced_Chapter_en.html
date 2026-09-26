@@ -11,10 +11,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Chapter 8 §2 · Lifecycle Management - Material from the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="description" content="Chapter 10 §2 · Lifecycle Management - Material from the Multi-Agent Team Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Chapter 8 §2 · Lifecycle Management</title>
+  <title>Chapter 10 §2 · Lifecycle Management</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,7 +26,7 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Chapter 8 · Advanced Architecture</div>
+  <div class="nav-title">Chapter 10 · Advanced Architecture</div>
   <a href="08_Intro_Advanced_Deploy_en.html">§1 · Deployment and SSOT</a>
   <a href="#s2-lifecycle-why">Why Lifecycle Management Is Necessary</a>
   <a href="#s2-agent-lifecycle">Agent Lifecycle</a>
@@ -39,14 +39,14 @@
   <a href="08_Intro_Advanced_Architecture_en.html">§4 · Architecture Deep Dive</a>
   <a href="08_Intro_Advanced_Roadmap_en.html">§5 · Advanced Roadmap</a>
   <div class="nav-section">Other chapters</div>
-  <a href="../intro/05_Intro_Chapter_en.html">Chapter 5 · Introducing ai-workspace-standards</a>
-  <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Running a Multi-Agent Team Inside an Enterprise</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 · Creating a New Variant</a>
+  <a href="../intro/05_Intro_Chapter_en.html">Chapter 7 · Introducing ai-workspace-standards</a>
+  <a href="../enterprise/09_Enterprise_Chapter_en.html">Chapter 9 · Running a Multi-Agent Team Inside an Enterprise</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_en.html">Chapter 13 · Creating a New Variant</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Chapter 8 §2</div>
+  <div class="chapter-eyebrow">Chapter 10 §2</div>
   <h1>Lifecycle Management</h1>
   <p class="lead">This section covers the stages that agents, skills, and scripts each pass through from creation to retirement, and how these stages are actually managed within a real workspace.</p>
 
@@ -430,7 +430,7 @@
     <li><strong>State</strong> is a snapshot of <strong>where the component currently is</strong> at a given point in time. The <code>status</code> field in YAML frontmatter (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) is the mechanism that stores this state value.</li>
   </ul>
   <p>To use an analogy, the lifecycle is a "subway route map," and the state is the real-time display showing "which station the train is currently at." Where the train is headed (the route) is fixed, but where it currently is (the station) changes moment to moment.</p>
-  <div class="note">State at the level of workflow execution — for example, the Phase Pipeline defined by the PM in <a href="../workflows/09_Workflows_Chapter_en.html">Chapter 9</a> (Phase 0: request received → Phase 1: design → … → Phase 6: sync complete) — is a different dimension of state from an individual component's <code>status</code> field. The former is "what stage the work is at," while the latter is "where the component itself is in its lifecycle."</div>
+  <div class="note">State at the level of workflow execution — for example, the Phase Pipeline defined by the PM in <a href="../workflows/11_Workflows_Chapter_en.html">Chapter 11</a> (Phase 0: request received → Phase 1: design → … → Phase 6: sync complete) — is a different dimension of state from an individual component's <code>status</code> field. The former is "what stage the work is at," while the latter is "where the component itself is in its lifecycle."</div>
 
   <p>Although the lifecycles of agents, skills, and scripts are each defined independently, they are tightly interconnected in an actual workspace.</p>
 
@@ -470,8 +470,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Deploy_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 8 §1 · Deployment and SSOT</div></a>
-    <a href="08_Intro_Advanced_AGENTS_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 8 §3 · AGENTS.md Deep Dive</div></a>
+    <a href="08_Intro_Advanced_Deploy_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 10 §1 · Deployment and SSOT</div></a>
+    <a href="08_Intro_Advanced_AGENTS_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 10 §3 · AGENTS.md Deep Dive</div></a>
   </div>
    <footer>
     Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>

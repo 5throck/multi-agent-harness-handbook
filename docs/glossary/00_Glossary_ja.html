@@ -56,7 +56,7 @@
 
     <dt>動的チーム編成 <span class="en">Dynamic Team Composition</span></dt>
     <dd>オーケストレーターがリクエストのたびに、実際にどのサブエージェントを何回、どの順序で投入するかをその都度判断すること。定義されたチーム名簿は固定であっても、実際の投入構成はタスクごとに変化する。
-      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s4b">第2章 §4b</a> · 実習: <a href="../practice/04_Practice_Examples_A_ja.html#scenario-2b">第4章 D-2</a></span></dd>
+      <span class="see">詳細: <a href="../concepts/02_Concepts_Chapter_ja.html#s4b">第2章 §4b</a> · 実習: <a href="../practice/06_Practice_Examples_A_ja.html#scenario-2b">第6章 D-2</a></span></dd>
 
     <dt>オーケストレーションパターン <span class="en">Orchestration Pattern</span></dt>
     <dd>Anthropicが整理した5つの代表的パターン。プロンプトチェイニング(段階的な逐次処理)、ルーティング(リクエストを分類し適切なエージェント/モデルへ振り分け)、並列化(ファンアウトによる独立タスクの同時実行、または投票による同一タスクの反復実行と多数決)、オーケストレーター・ワーカー(サブタスクを事前に固定せず動的に分解)、評価者・最適化(下書きを独立に検証してからのみ反映する「検証してから適用」方式)がある。これらは一つのワークフローの中で自由に組み合わせて使うことができる。
@@ -68,11 +68,11 @@
 
     <dt>フロントマター <span class="en">Frontmatter</span></dt>
     <dd>エージェント定義ファイル(<code>agents/*.md</code>)の先頭にYAML形式で記述するメタデータブロック。エージェント名・役割・許可されたツール(<code>tools</code>)・モデルティア(<code>tier</code>)などを機械的にパースできるよう定義する。<code>extends</code>フィールドによって他のエージェントファイルを継承することもできる。
-      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></span></dd>
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第10章 §1 デプロイとSSOT</a></span></dd>
 
     <dt>スキャフォールディング <span class="en">Scaffolding</span></dt>
     <dd><code>bun scripts/new-project.ts</code>によって、variantテンプレートの全体構成(エージェント・スキル・コマンド・ガバナンスパイプライン)を独立したgitリポジトリとして複製する作業。「プロジェクトをゼロから作るのではなく、あらかじめ設計された骨組みの上から始める」という意味を持つ。
-      <span class="see">詳細: <a href="../variant-practice/06_VariantPractice_Manual_ja.html#section-2">第6章 §2</a></span></dd>
+      <span class="see">詳細: <a href="../variant-practice/08_VariantPractice_Manual_ja.html#section-2">第8章 §2</a></span></dd>
 
     <dt>ガードレール <span class="en">Guardrails</span></dt>
     <dd>許可モデル・フック・監査など、エージェントの行動境界を強制する安全装置。
@@ -88,35 +88,35 @@
 
     <dt>サービスチケットモデル <span class="en">Service Ticket Model</span></dt>
     <dd>AIを「リクエストを受けたら処理してくれるサービス」としてのみ利用する運用方式。既存のIT組織のチケットシステムに似ている。ユーザーが一つひとつリクエストの形で指示する必要があり、エージェントチームの自律性が制限される。本ハンドブックが提案する「開発ツール+variantモデル」と対比される考え方である。
-      <span class="see">詳細: <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 企業内運用戦略の比較</a></span></dd>
+      <span class="see">詳細: <a href="../enterprise/09_Enterprise_Chapter_ja.html">第9章 · 企業内運用戦略の比較</a></span></dd>
 
     <dt>ライフサイクル / 状態 <span class="en">Lifecycle / State</span></dt>
     <dd>ライフサイクルとは、エージェント・スキル・スクリプトが経る一連の段階全体(例: Create→Verify→Operate→Improve→Deprecate)を指す。状態とは、ある時点でその構成要素がライフサイクルのどの段階にあるかを示すスナップショットである。YAMLフロントマターの<code>status</code>フィールド(<code>draft</code>、<code>active</code>、<code>deprecated</code>、<code>retired</code>)が状態の値を保持する。ライフサイクルは「路線図」、状態は「今どの駅に列車がいるか」を示す表示板に例えられる。
-      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#state-vs-lifecycle">第8章 §2 · 状態とライフサイクルの区別</a></span></dd>
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#state-vs-lifecycle">第10章 §2 · 状態とライフサイクルの区別</a></span></dd>
 
     <dt>スキル関係グラフ <span class="en">Skill Relationship Graph</span></dt>
     <dd>スキル・エージェント・ADR・意思決定記録の間の関係を機械が読める形で表現したプロジェクション(projection)。原典(SKILL.mdフロントマターの <code>prerequisites</code>/<code>relates_to</code>、エージェントの <code>required_skills</code>、<code>variant.json</code> など)から常に再生成され、それ自体は1次ストアではない(ADR-0060)。成果物は <code>docs/skill-graph.json</code> と人が読む <code>docs/skill-graph.md</code>。すべての関係エッジは助言的(advisory)であり、実行を強制的に妨げない。
-      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#s2-skill-graph">第8章 §2 · スキル関係グラフ</a></span></dd>
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Chapter_ja.html#s2-skill-graph">第10章 §2 · スキル関係グラフ</a></span></dd>
 
     <dt>ドメインオペレーティングモデル <span class="en">Domain Operating Model</span></dt>
     <dd>variantテンプレートが、自ドメインの業務フロー(ステージ)・責任体系(RACI)・判断地点(判断ゲート)をデータとして自ら宣言する構造。正式名称は必ずフルネームで書き、略称(DOM・AOM)は他の用語との衝突のため禁止される。Process・Governance・Execution・Graphの4グループで構成される(ADR-0083)。
-      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html">第13章・Domain Operating Model</a></span></dd>
+      <span class="see">詳細: <a href="../domain-model/15_DomainOperatingModel_Chapter_ja.html">第15章・Domain Operating Model</a></span></dd>
 
     <dt>ドメイン実行グラフ <span class="en">Domain Execution Graph</span></dt>
     <dd>スキル関係グラフの上に重ねる語彙プロファイル(<code>graph_profile: "deg/v1"</code>)。ステージ・RACI・ゲートのデータを<code>in_stage</code>・<code>accountable_for</code>・<code>gated_by</code>などのエッジで結び、散らばった運用知識を一度のグラフ照会で答えられるようにする(ADR-0083)。
-      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s5">第13章 §5 · Graph</a></span></dd>
+      <span class="see">詳細: <a href="../domain-model/15_DomainOperatingModel_Chapter_ja.html#s5">第15章 §5 · Graph</a></span></dd>
 
     <dt>ステージ軸 <span class="en">Stage Axis</span></dt>
     <dd>ドメイン業務が流れる段階の宣言(<code>process/stages.yaml</code>)。PMの作業実行軸<code>phase</code>(0–6)とは別の軸で、手順間の成果物受け渡しフローから導出される。phaseと区別できない場合(DEG-P-01)、機械ブートストラップではなく人の執筆が必要になる。
-      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s2">第13章 §2 · Process</a></span></dd>
+      <span class="see">詳細: <a href="../domain-model/15_DomainOperatingModel_Chapter_ja.html#s2">第15章 §2 · Process</a></span></dd>
 
     <dt>RACIマトリクス <span class="en">RACI Matrix</span></dt>
     <dd>各ステージの各活動について、Responsible(実行)・Accountable(最終責任)・Consulted(相談)・Informed(通知)を宣言する責任表。人が読む文書ではなく、<code>generate-raci.ts</code>が手順データから生成し<code>validate-raci.ts</code>が検証するデータである(<code>governance/raci.yaml</code>)。
-      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s3">第13章 §3 · Governance</a></span></dd>
+      <span class="see">詳細: <a href="../domain-model/15_DomainOperatingModel_Chapter_ja.html#s3">第15章 §3 · Governance</a></span></dd>
 
     <dt>判断ゲート <span class="en">Decision Gate</span></dt>
     <dd>ワークフローの中で判断が必要な地点をgo/no-go形式で宣言したもの(<code>decisions/gates.yaml</code>)。実際に下された判断の記録である判断記録(<code>DEC-*.md</code>、参考B)と対応し、ゲートで出た判定は<code>record_kind: DEC</code>として記録に残る(ADR-0083)。
-      <span class="see">詳細: <a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html#s4">第13章 §4 · Execution</a></span></dd>
+      <span class="see">詳細: <a href="../domain-model/15_DomainOperatingModel_Chapter_ja.html#s4">第15章 §4 · Execution</a></span></dd>
   </dl>
 
   <h2 id="team">マルチエージェントチーム構成要素</h2>
@@ -129,40 +129,40 @@
 
     <dt>モデルティア <span class="en">Model Tier</span></dt>
     <dd>エージェントの役割ごとに割り当てるモデルのコスト等級(<code>high</code>/<code>medium</code>/<code>low</code>)。判断の重い役割にはhigh、定型的な反復作業にはlowを割り当て、コストと品質のバランスを取る。<code>agents/*.md</code>フロントマターの<code>tier</code>フィールドで指定し、実際のモデル名は<code>model: inherit</code>によってプラットフォームが変換する。
-      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">第5章 §3</a>。L0→L1→L2の「3層(3-tier)」とは別の概念なので混同に注意。</span></dd>
+      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">第7章 §3</a>。L0→L1→L2の「3層(3-tier)」とは別の概念なので混同に注意。</span></dd>
   </dl>
 
   <h2 id="workspace">ai-workspace-standards 構造</h2>
   <dl>
     <dt>SSOT <span class="en">Single Source of Truth</span></dt>
     <dd>ある情報の原本がただ一箇所にのみ存在するという原則。例: CONSTITUTION.mdはワークスペース全体のルールのSSOTであり、context.mdは個々のプロジェクトの設定文書である。
-      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s4">第5章 §4</a></span></dd>
+      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s4">第7章 §4</a></span></dd>
 
     <dt>L0 / L1 / L2 / L3</dt>
     <dd>ワークスペースルート(L0、唯一の原本)→共通テンプレートスナップショット(L1、<code>templates/common/</code>)→variantテンプレート(L2、<code>templates/co-*/</code>)→稼働中のプロジェクト作業ディレクトリ(L3、<code>Projects/*/</code>、<code>new-project.ts</code>によってL2 variantからスキャフォールディングされる — 外部クローンではなく同じワークスペースリポジトリ内にある)へと続く4層構造。流れは常に上から下へのみ進み、L1→L2はvariant作成時点で一度だけ行われる「フォーク」であり、L2→L3はプロジェクト作成時の一回限りのスキャフォールディングである。
-      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第8章 §1 デプロイとSSOT</a></span></dd>
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Deploy_ja.html#s1">第10章 §1 デプロイとSSOT</a></span></dd>
 
     <dt>フォークモデル <span class="en">Fork Model</span></dt>
     <dd>L1からL2が分岐したのちは、自動的な逆同期を行わず独立して進化していく方式。正式テンプレートへ昇格させるには、<code>l3-to-variant-pipeline.ts</code>を人が明示的に実行する必要がある。</dd>
 
     <dt>variant</dt>
     <dd><code>templates/</code>配下にある、特定のドメイン向けに完結したマルチエージェントチーム構成(PM・専門エージェント・ガバナンスパイプラインの一式)。co-develop、co-design、co-workなどが例である。
-      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">第5章 §3</a></span></dd>
+      <span class="see">詳細: <a href="../intro/05_Intro_Chapter_ja.html#s3">第7章 §3</a></span></dd>
 
     <dt>Phase A / Phase B</dt>
     <dd>新規variantを作成する際の2段階。Phase Aは<code>Projects/</code>配下で独立したプロトタイプとして自由に実験する段階、Phase Bは<code>promote-variant</code>によって正式な<code>templates/</code>variantへ昇格させる段階である。
-      <span class="see">詳細: <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variant作成</a></span></dd>
+      <span class="see">詳細: <a href="../variant-advanced/13_VariantAdvanced_Chapter_ja.html">第13章 · 新規variant作成</a></span></dd>
 
     <dt>ボイラープレート <span class="en">Boilerplate</span></dt>
     <dd>プロジェクトごとに最初から書き直す必要のあるPM役割定義・ガバナンスパイプライン・コマンド/スキル配線をあらかじめ揃えておいた出発点。ai-workspace-standardsが提供するものの本質である。</dd>
 
     <dt>コンテナ連携 <span class="en">Container Integration</span></dt>
     <dd>ai-workspace-standardsの高度化の方向性の一つ。スキャフォールディングされたプロジェクトが、Docker/Kubernetes環境でOpen WebUIのようなサービスと連携し、個人単位でサポートされるべきだという要求。現時点ではローカルのAIコーディングツールと直接連携する方式のみがサポートされている。
-      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#container">第8章 §5 高度化ロードマップ</a></span></dd>
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#container">第10章 §5 高度化ロードマップ</a></span></dd>
 
     <dt>メモリ統合 <span class="en">Memory Consolidation</span></dt>
     <dd>ai-workspace-standardsの高度化の方向性の一つ。個々のプロジェクトごとに散在する<code>memory/YYYY-MM-DD.md</code>ファイルをワークスペースレベルで統合・整理し、全体的な傾向を把握できるようにする機能。
-      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#memory">第8章 §5 高度化ロードマップ</a></span></dd>
+      <span class="see">詳細: <a href="../intro/08_Intro_Advanced_Roadmap_ja.html#memory">第10章 §5 高度化ロードマップ</a></span></dd>
   </dl>
 
   <h2 id="tools">ツール・プラットフォーム</h2>
@@ -175,7 +175,7 @@
     <dd>Codex系(CLI・Desktop App)の行動指示ファイル。フックのないCodexでは、このファイルに記載された規則をPMが毎セッション自ら認識して実行する<strong>プロンプト自己強制</strong>の根拠となる。</dd>
 
     <dt>役割コンテキスト <span class="en">Role Context</span></dt>
-    <dd>Codexのサブエージェント実装方式。別途の定義ファイルなしに、PMがAGENTS.mdとCODEX.mdの役割定義を読み込み、各段階が終わるごとに次の役割へ順次切り替える。詳しくは<a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C</a>。</dd>
+    <dd>Codexのサブエージェント実装方式。別途の定義ファイルなしに、PMがAGENTS.mdとCODEX.mdの役割定義を読み込み、各段階が終わるごとに次の役割へ順次切り替える。詳しくは<a href="../practice/06_Practice_Manual_C_ja.html">第6章 §1-C</a>。</dd>
 
     <dt>teammateMode</dt>
     <dd>Agent Teams(実験的機能)の並列実行モード。Claude Desktop Appは<code>in-process</code>のみをサポートし、Claude Code(CLI)は<code>tmux</code>分割ペインモードも追加でサポートする。

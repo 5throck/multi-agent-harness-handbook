@@ -73,7 +73,7 @@
     <li><code>rules_applied</code> format (<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>) and <code>skills_used</code> resolving to real skills</li>
   </ol>
   <p>This validation is <strong>fail-closed</strong> — any error-level issue means exit 1. Unlike soft checks that only warn, sync does not proceed with a broken decision record.</p>
-  <p>Note that as of September 2026, governed-grade variant templates also carry decision gates (<code>decisions/gates.yaml</code>). A gate is a rule declaration — "which verdict must pass at which point" — while a decision record is the log of a verdict actually made; a verdict produced at a gate leaves the record as <code>record_kind: DEC</code>. See <a href="../domain-model/13_DomainOperatingModel_Chapter_en.html">Chapter 13 · Domain Operating Model</a> for details.</p>
+  <p>Note that as of September 2026, governed-grade variant templates also carry decision gates (<code>decisions/gates.yaml</code>). A gate is a rule declaration — "which verdict must pass at which point" — while a decision record is the log of a verdict actually made; a verdict produced at a gate leaves the record as <code>record_kind: DEC</code>. See <a href="../domain-model/15_DomainOperatingModel_Chapter_en.html">Chapter 15 · Domain Operating Model</a> for details.</p>
 
   <h2 id="c4-registry">Spec Registry and E1–E5 Exemptions</h2>
   <p>Before a decision comes its design (spec). The ADR-0055 <strong>spec registry</strong> (<code>docs/specs/registry.json</code>) tracks design documents by id, title, file, status (<code>proposed | approved | implemented</code>), and last-updated date.</p>
@@ -92,7 +92,7 @@
   <p>Ad-hoc exemptions are forbidden, and <strong>using a non-existent exemption code is itself a hard fail</strong>. Abuse of exemptions is a governance violation.</p>
 
   <h2 id="c5-backlog">The Governance Backlog</h2>
-  <p>Not every decision must be made now. Things that "will need a judgment someday" are deferred as <strong>governance backlog</strong> tickets. Where a service ticket (Chapter 7) is a one-off work request, a governance backlog ticket is a <strong>future decision tracked in git</strong>.</p>
+  <p>Not every decision must be made now. Things that "will need a judgment someday" are deferred as <strong>governance backlog</strong> tickets. Where a service ticket (Chapter 9) is a one-off work request, a governance backlog ticket is a <strong>future decision tracked in git</strong>.</p>
   <ul>
     <li>Managed via <code>scripts/ticket.ts</code>, stored as git-tracked files in <code>tickets/governance/</code></li>
     <li>A <code>kind: manual</code> ticket with a <code>not_before</code> date stays hidden from <code>list --ready --kind manual</code> until that date passes — a <strong>soak reservation</strong></li>

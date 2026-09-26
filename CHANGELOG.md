@@ -2,6 +2,9 @@
 ## 2026-09-26
 
 ### Fixed
+- Aligned the Korean search-manifest chapter labels with the continuous Chapter 1–16 curriculum used by the home page, chapter titles, and lecture materials.
+
+### Fixed
 - Restored the Korean curriculum’s continuous Chapter 1–16 numbering across the affected chapter pages, schedule, instructor notes, and comprehension questions.
 
 ### Fixed

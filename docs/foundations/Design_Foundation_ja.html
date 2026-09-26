@@ -2,53 +2,83 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Design FoundationとUI品質ゲート - Multi-Agent Harness Handbook">
+  <meta name="description" content="Design Foundationと標準UIパターン - multi-agent-harness-handbook">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>コア章 · Design FoundationとUI品質ゲート</title>
+  <title>Design Foundationと標準UIパターン</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
 <body>
 <div class="layout">
 <nav>
-  <a href="../index_ja.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">コア章 · Design FoundationとUI品質ゲート</div>
-  <a href="#s1">デザインSSOT</a>
-  <a href="#s2">役割とハンドオフ</a>
-  <a href="#s3">コンポーネント・画面契約</a>
-  <a href="#s4">品質ゲートと証拠</a>
-  <div class="nav-section">Related chapters</div>
-  <a href="../guardrails/03_Guardrails_Chapter_ja.html">Previous</a>
-  <a href="../practice/04_Practice_Manual_ja.html">Next</a>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">Design Foundationと標準UIパターン</div>
+  <a href="#system">デザインは装飾ではなく契約である</a>
+  <a href="#principles">原則とトークンで手戻りを減らす</a>
+  <a href="#components">標準コンポーネントと標準画面を同時に定義する</a>
+  <a href="#review">AI出力は検証可能な下書きとして扱う</a>
+  <div class="nav-section">関連する章</div>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">前へ</a>
+  <a href="../foundations/I18n_Operations_ja.html">次へ</a>
 </nav>
 <main><article class="reading">
-  <div class="chapter-eyebrow">コア章</div>
-  <h1>Design FoundationとUI品質ゲート</h1>
-  <p class="lead">マルチエージェントチームが同じデザイン判断を再利用し、検証できる運用方法を扱います。</p>
-  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>デザインSSOT</li><li>役割とハンドオフ</li><li>コンポーネント・画面契約</li><li>品質ゲートと証拠</li></ul></div>
-  <h2 id="s1">デザインSSOT</h2>
-  <p>デザイントークン、コンポーネント規則、画面状態、判断根拠を一つの設計文書に記録します。実装前に判断の出所をそろえます。</p>
-  <h2 id="s2">役割とハンドオフ</h2>
-  <p>デザイン担当は規則と検収基準を定義し、実装担当はそれをコードに移し、QA担当は独立して結果を確認します。</p>
-  <h2 id="s3">コンポーネント・画面契約</h2>
-  <p>コンポーネントの入力、状態、アクセシビリティ要件、標準画面の読み込み・空・エラー状態を契約として明記します。</p>
-  <h2 id="s4">品質ゲートと証拠</h2>
-  <p>UI変更はアクセシビリティ検査とプレビュー確認を通過しなければなりません。スクリーンショットと検収記録を残し、後続のエージェントとレビュアーが根拠を追跡できるようにします。</p>
-  <div class="tip-box"><strong>Practice:</strong> Record the decision, assign an owner, and verify the result before the next pipeline stage.</div>
-
-  <table><thead><tr><th>Check</th><th>Purpose</th></tr></thead><tbody><tr><td>Rule</td><td>Make the decision explicit.</td></tr><tr><td>Evidence</td><td>Verify the result before delivery.</td></tr></tbody></table>
-  <div class="chapter-nav"><a href="../index.html">← Handbook home</a><a href="../index.html">Back to contents →</a></div>
-</article></main>
-</div>
-
-<footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
+  <div class="chapter-eyebrow">디자인</div>
+  <h1>Design Foundationと標準UIパターン</h1>
+  <p class="lead">AIが生成した画面を、再利用可能で検証できるプロダクト体験へ変える方法を学ぶ。</p>
+  <div class="keypoints"><div class="kp-title">この章で扱うこと</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li></ul></div>
+  <h2 id="system">デザインは装飾ではなく契約である</h2><p>デザイン規則は、人とAIが共有する契約である。画面ごとに色、余白、文字、情報の優先順位を決め直すと、機能が同じでも体験は揺らぐ。デザインシステムは建築図面のように材料と寸法を先に決め、再現可能な結果を作る。</p><p>最初に利用者の目的、成功状態、失敗状態、確認する証拠を記録する。美しさより、利用者が次の行動を迷わず見つけられるかを確認する。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="デザインは装飾ではなく契約である">
+    <title>デザインは装飾ではなく契約である</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Intent · デザインは装飾ではなく契約である</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>タスク</td><td> 利用者が完了する行動</td></tr><tr><td>階層</td><td> 読む順序</td></tr><tr><td>制約</td><td> アクセシビリティ、狭い画面、長い翻訳、失敗</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> 画面要求 → 利用者タスク → 標準パターン → 実装 → 状態確認</div><h2 id="principles">原則とトークンで手戻りを減らす</h2><p>原則は判断の方向を示し、トークンはその判断を再利用できる名前にする。意味を持つトークンは、コード、文書、ダークモードで同じ意図を保つ。</p><p>生の色や任意のピクセルではなく役割に名前を付ける。ブランド変更やアクセシビリティ修正では、画面ごとではなく定義を更新できる。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="原則とトークンで手戻りを減らす">
+    <title>原則とトークンで手戻りを減らす</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Rules · 原則とトークンで手戻りを減らす</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>一貫性</td><td> 同じ意味には同じ表現を使う。</td></tr><tr><td>明確性</td><td> 一画面の主要行動は一つにする。</td></tr><tr><td>アクセシビリティ</td><td> 色だけで状態を伝えない。</td></tr><tr><td>回復性</td><td> 危険な行動には確認または取り消しを置く。</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> 原則 → 意味トークン → コンポーネント規則 → 確認基準</div><h3>演習</h3><p>生の色や任意のピクセルではなく役割に名前を付ける。ブランド変更やアクセシビリティ修正では、画面ごとではなく定義を更新できる。</p><div class="code-block"><pre><code># design-contract.yaml
+screen: report-review
+primary_task: approve-or-return-a-report
+states: [default, loading, empty, error, forbidden]
+components:
+  - status-panel
+  - review-summary
+  - primary-action
+acceptance:
+  - one-primary-action
+  - keyboard-reachable
+  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="components">標準コンポーネントと標準画面を同時に定義する</h2><p>ボタン、入力欄、カード、表、通知は部品である。リスト、詳細、作成、確認、エラー、空状態は部品を組み合わせた画面パターンである。部品だけを標準化すると、読み込み、空、権限なし、保存失敗が不統一になる。</p><p>各部品には目的、変形、状態、アクセシブルな名前を記録する。各画面には開始条件、次の行動、成功・失敗・待機状態、証拠を記録する。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="標準コンポーネントと標準画面を同時に定義する">
+    <title>標準コンポーネントと標準画面を同時に定義する</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · 標準コンポーネントと標準画面を同時に定義する</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>主要ボタン</td><td> 決定的な行動だけを強調する。</td></tr><tr><td>フォーム</td><td> 必須とエラー理由を入力欄の近くに置く。</td></tr><tr><td>状態パネル</td><td> 次の行動を示す。</td></tr><tr><td>確認画面</td><td> 変更、影響、承認、戻しを分ける。</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> トークン → 部品 → 画面パターン → 利用者行動</div><h2 id="review">AI出力は検証可能な下書きとして扱う</h2><p>「きれいな画面」という依頼では解釈が毎回変わる。目的、許可する部品、禁止事項、状態一覧、アクセシビリティ、受入証拠を渡す。生成後は長い文字列、キーボード操作、失敗状態、ダークモードで確認する。</p><p>レビューでは、誰がどの状態でなぜ止まるかを記録する。修正前後の証拠を残し、次の担当者が同じ判断を使えるようにする。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="AI出力は検証可能な下書きとして扱う">
+    <title>AI出力は検証可能な下書きとして扱う</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Evidence · AI出力は検証可能な下書きとして扱う</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>1. タスクと主要行動が見えるか。</td><td>1. タスクと主要行動が見えるか。</td></tr><tr><td>2. 基本・読込・空・エラー・権限なしを扱うか。</td><td>2. 基本・読込・空・エラー・権限なしを扱うか。</td></tr><tr><td>3. 色以外の手掛かりとキーボード操作があるか。</td><td>3. 色以外の手掛かりとキーボード操作があるか。</td></tr><tr><td>4. トークンと画面契約を守るか。</td><td>4. トークンと画面契約を守るか。</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> 要求契約 → AI下書き → 状態プレビュー → 確認 → 証拠</div><div class="quiz"><div class="quiz-title">自己確認</div><ol>
+      <li>タスク: 利用者が完了する行動</li><li>主要ボタン: 決定的な行動だけを強調する。</li><li>4. トークンと画面契約を守るか。</li>
+    </ol></div>
+  <div class="chapter-nav"><a class="prev" href="../guardrails/03_Guardrails_Chapter_ja.html"><div class="dir">← 前へ</div><div class="ttl">前へ</div></a><a class="next" href="../foundations/I18n_Operations_ja.html"><div class="dir">次へ →</div><div class="ttl">次へ</div></a></div>
+  <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
     <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
     このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
   </footer>
-</body>
-</html>
+ </article></main>
+</div>
+<script src="../assets/inpage-search.js" defer></script><script src="../assets/copy-code.js"></script><script src="../assets/dark-mode-toggle.js"></script><script src="../assets/lang-switcher.js"></script>
+</body></html>

@@ -2,53 +2,83 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Design Foundation y puertas de calidad de UI - Multi-Agent Harness Handbook">
+  <meta name="description" content="Fundamentos de Diseño y Patrones de UI Estándar - multi-agent-harness-handbook">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Capítulo central · Design Foundation y puertas de calidad de UI</title>
+  <title>Fundamentos de Diseño y Patrones de UI Estándar</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
 <body>
 <div class="layout">
 <nav>
-  <a href="../index_es.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Capítulo central · Design Foundation y puertas de calidad de UI</div>
-  <a href="#s1">SSOT de diseño</a>
-  <a href="#s2">Roles y handoffs</a>
-  <a href="#s3">Contratos de componentes y pantallas</a>
-  <a href="#s4">Puertas de calidad y evidencia</a>
-  <div class="nav-section">Related chapters</div>
-  <a href="../guardrails/03_Guardrails_Chapter_es.html">Previous</a>
-  <a href="../practice/04_Practice_Manual_es.html">Next</a>
+  <a href="../index_es.html" class="nav-home">← Inicio del manual</a>
+  <div class="nav-title">Fundamentos de Diseño y Patrones de UI Estándar</div>
+  <a href="#system">El diseño es un contrato, no decoración</a>
+  <a href="#principles">Usa principios y tokens para reducir retrabajo</a>
+  <a href="#components">Define componentes y pantallas estándar juntos</a>
+  <a href="#review">Trata la salida de IA como borrador verificable</a>
+  <div class="nav-section">Capítulos relacionados</div>
+  <a href="../guardrails/03_Guardrails_Chapter_es.html">Anterior</a>
+  <a href="../foundations/I18n_Operations_es.html">Siguiente</a>
 </nav>
 <main><article class="reading">
-  <div class="chapter-eyebrow">Capítulo central</div>
-  <h1>Design Foundation y puertas de calidad de UI</h1>
-  <p class="lead">Aprende prácticas operativas para que un equipo multiagente reutilice y verifique las mismas decisiones de diseño.</p>
-  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>SSOT de diseño</li><li>Roles y handoffs</li><li>Contratos de componentes y pantallas</li><li>Puertas de calidad y evidencia</li></ul></div>
-  <h2 id="s1">SSOT de diseño</h2>
-  <p>Registra tokens de diseño, reglas de componentes, estados de pantalla y justificación de decisiones en un único documento de diseño. Alinea el origen de una decisión antes de implementar.</p>
-  <h2 id="s2">Roles y handoffs</h2>
-  <p>Diseño define reglas y criterios de revisión, implementación los convierte en código y QA comprueba el resultado de forma independiente.</p>
-  <h2 id="s3">Contratos de componentes y pantallas</h2>
-  <p>Especifica como contratos las entradas, estados y requisitos de accesibilidad de los componentes, además de los estados de carga, vacío y error de las pantallas estándar.</p>
-  <h2 id="s4">Puertas de calidad y evidencia</h2>
-  <p>Los cambios de UI deben superar comprobaciones de accesibilidad y revisión de vista previa. Conserva capturas y registros para que otros agentes y revisores sigan la evidencia.</p>
-  <div class="tip-box"><strong>Practice:</strong> Record the decision, assign an owner, and verify the result before the next pipeline stage.</div>
-
-  <table><thead><tr><th>Check</th><th>Purpose</th></tr></thead><tbody><tr><td>Rule</td><td>Make the decision explicit.</td></tr><tr><td>Evidence</td><td>Verify the result before delivery.</td></tr></tbody></table>
-  <div class="chapter-nav"><a href="../index.html">← Handbook home</a><a href="../index.html">Back to contents →</a></div>
-</article></main>
-</div>
-
-<footer>
-    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) · Material educativo en español<br>
+  <div class="chapter-eyebrow">디자인</div>
+  <h1>Fundamentos de Diseño y Patrones de UI Estándar</h1>
+  <p class="lead">Convierte un borrador de IA en una experiencia de producto reutilizable y verificable.</p>
+  <div class="keypoints"><div class="kp-title">En este capítulo</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li></ul></div>
+  <h2 id="system">El diseño es un contrato, no decoración</h2><p>Una regla de diseño es un contrato compartido por personas e IA. Si cada pantalla vuelve a decidir color, espacio, tipografía y prioridad de información, la función puede operar pero la experiencia se dispersa.</p><p>Un sistema de diseño se parece a un plano de arquitectura: fija materiales y dimensiones antes de construir. Empieza por la tarea, el éxito, el fallo y la evidencia que revisará una persona responsable.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="El diseño es un contrato, no decoración">
+    <title>El diseño es un contrato, no decoración</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Intent · El diseño es un contrato, no decoración</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>Tarea</td><td> acción que se debe completar</td></tr><tr><td>Jerarquía</td><td> orden de lectura</td></tr><tr><td>Restricciones</td><td> accesibilidad, pantallas estrechas, texto largo y fallos</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> Solicitud → tarea de usuario → patrón estándar → implementación → revisión</div><h2 id="principles">Usa principios y tokens para reducir retrabajo</h2><p>Los principios explican cómo decidir; los tokens dan a la decisión un nombre reutilizable. Un token semántico conserva la intención en código, documentación y modo oscuro.</p><p>Nombra un rol en lugar de un color bruto o píxeles arbitrarios. Un cambio de marca o accesibilidad actualizará una definición en vez de reparar cada pantalla.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Usa principios y tokens para reducir retrabajo">
+    <title>Usa principios y tokens para reducir retrabajo</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Rules · Usa principios y tokens para reducir retrabajo</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>Consistencia</td><td> un significado tiene un tratamiento.</td></tr><tr><td>Claridad</td><td> una acción principal por pantalla.</td></tr><tr><td>Accesibilidad</td><td> el color no es la única señal.</td></tr><tr><td>Recuperación</td><td> confirma o permite cancelar acciones riesgosas.</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> Principio → token semántico → regla de componente → criterio</div><h3>Práctica</h3><p>Nombra un rol en lugar de un color bruto o píxeles arbitrarios. Un cambio de marca o accesibilidad actualizará una definición en vez de reparar cada pantalla.</p><div class="code-block"><pre><code># design-contract.yaml
+screen: report-review
+primary_task: approve-or-return-a-report
+states: [default, loading, empty, error, forbidden]
+components:
+  - status-panel
+  - review-summary
+  - primary-action
+acceptance:
+  - one-primary-action
+  - keyboard-reachable
+  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="components">Define componentes y pantallas estándar juntos</h2><p>Botones, campos, tarjetas, tablas y avisos son piezas. Lista, detalle, creación, revisión, error y vacío son patrones compuestos. Estandarizar solo piezas deja inconsistentes carga, vacío, prohibido y fallo de guardado.</p><p>Para cada componente registra propósito, variantes, estados y nombre accesible. Para cada pantalla registra condición de entrada, siguiente acción, estados y evidencia.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Define componentes y pantallas estándar juntos">
+    <title>Define componentes y pantallas estándar juntos</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · Define componentes y pantallas estándar juntos</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>Acción principal</td><td> destaca una decisión.</td></tr><tr><td>Formulario</td><td> error y requisito cerca del campo.</td></tr><tr><td>Panel de estado</td><td> ofrece siguiente acción.</td></tr><tr><td>Revisión</td><td> separa resumen, impacto, aprobación y reversión.</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> Tokens → componentes → patrones de pantalla → acción</div><h2 id="review">Trata la salida de IA como borrador verificable</h2><p>Una petición de pantalla limpia cambia de interpretación cada vez. Proporciona tarea, componentes permitidos, prohibiciones, estados, accesibilidad y evidencia de aceptación. Revisa texto largo, teclado, errores y modo oscuro.</p><p>Registra qué usuario queda bloqueado, en qué estado y por qué. Conserva evidencia antes y después para que otra persona reutilice la decisión.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Trata la salida de IA como borrador verificable">
+    <title>Trata la salida de IA como borrador verificable</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Evidence · Trata la salida de IA como borrador verificable</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
+    <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>Elemento</th><th>Intención</th></tr></thead><tbody><tr><td>1. ¿Se ve la tarea y una acción?</td><td>1. ¿Se ve la tarea y una acción?</td></tr><tr><td>2. ¿Hay carga, vacío, error y prohibido?</td><td>2. ¿Hay carga, vacío, error y prohibido?</td></tr><tr><td>3. ¿Existen pistas no basadas en color y teclado?</td><td>3. ¿Existen pistas no basadas en color y teclado?</td></tr><tr><td>4. ¿Se respetan tokens y contratos?</td><td>4. ¿Se respetan tokens y contratos?</td></tr></tbody></table><div class="flow-box"><strong>Estándar:</strong> Contrato → borrador de IA → vista por estado → revisión → evidencia</div><div class="quiz"><div class="quiz-title">Autoevaluación</div><ol>
+      <li>Tarea: acción que se debe completar</li><li>Acción principal: destaca una decisión.</li><li>4. ¿Se respetan tokens y contratos?</li>
+    </ol></div>
+  <div class="chapter-nav"><a class="prev" href="../guardrails/03_Guardrails_Chapter_es.html"><div class="dir">← Anterior</div><div class="ttl">Anterior</div></a><a class="next" href="../foundations/I18n_Operations_es.html"><div class="dir">Siguiente →</div><div class="ttl">Siguiente</div></a></div>
+  <footer>
+    Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · Material educativo en español<br>
     Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
     <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
     El contenido de este manual está bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual 4.0 Internacional)</a>.
   </footer>
-</body>
-</html>
+ </article></main>
+</div>
+<script src="../assets/inpage-search.js" defer></script><script src="../assets/copy-code.js"></script><script src="../assets/dark-mode-toggle.js"></script><script src="../assets/lang-switcher.js"></script>
+</body></html>

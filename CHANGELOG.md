@@ -2,6 +2,13 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-26] — Substantive Design, i18n, and Hermes Revision
+
+### Changed
+- Rewrote the Design Foundation and i18n Operations foundation chapters in all four language editions with beginner-oriented concept explanations, decision tables, practical contracts, self-checks, and inline SVG flow diagrams that remain readable in light and dark modes.
+- Rewrote the Hermes Agents appendix from a placeholder into an operations guide covering the `.hermes/skills/` mirror, native `AGENTS.md` loading, the deliberate absence of `HERMES.md` and registration manifests, user-owned trust configuration, context-size risks, and verification evidence.
+- Synced the handbook footer baseline with `ai-workspace-standards` main (2026-09-26), rebuilt the search index, and preserved four-language structural parity.
+
 ## [2026-09-20] — Lecture Schedule Review: Content Accuracy & Time Rebalance
 
 ### Fixed

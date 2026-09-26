@@ -544,7 +544,7 @@
   </div>
 
   <div class="note">
-    이 장의 워크플로우 사례는 <a href="../practice/06_Practice_Examples_A.html">6장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="../variant-practice/08_VariantPractice_Examples.html">8장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="../capstone/16_Capstone.html">18장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
+이 장의 워크플로우 사례는 <a href="../practice/06_Practice_Examples_A.html">6장 실습</a>의 D-1(순차 파이프라인), D-2(동적 팀 구성), <a href="../variant-practice/08_VariantPractice_Examples.html">8장 실습</a>의 G-1(co-consult), G-2(co-deck)에서 직접 경험할 수 있다. <a href="../capstone/16_Capstone.html">16장 캡스톤 실습</a>에서는 이 장의 원칙을 바탕으로 "나만의 워크플로우"를 직접 설계한다.
   </div>
 
   <h2 id="standards-operations">표준 운영 원칙: 얇은 지시, 명확한 소유권, PR 기반 변경</h2><p>AGENTS.md는 전체 규칙을 복제하는 파일이 아니라 얇은 디스패처다. 핵심 금지 사항과 읽을 문서의 포인터만 두고, 상세 거버넌스는 단일 출처 문서로 분리한다. 스킬은 L0 표준, L1 템플릿, L2 프로젝트 소유권을 구분해 관리하며, L3 실행 스냅샷은 자동 동기화되지 않는 배포 결과로 취급한다.</p><p>브랜치는 <code>pr/&lt;timestamp&gt;-&lt;slug&gt;</code> 형식으로 만들고, <code>/sync</code>가 만든 변경도 반드시 PR로 검토·CI 검증·병합한다.</p><div class="diagram-frame"><svg viewBox="0 0 640 100" width="100%" role="img" aria-label="AGENTS.md → 포인터 문서 → L0/L1/L2 소유권 → L3 스냅샷 → PR"><title>AGENTS.md → 포인터 문서 → L0/L1/L2 소유권 → L3 스냅샷 → PR</title><rect x="18" y="35" width="604" height="36" rx="9" fill="var(--bg-info)" stroke="var(--border)"/><text x="320" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">AGENTS.md → 포인터 문서 → L0/L1/L2 소유권 → L3 스냅샷 → PR</text></svg></div><div class="keypoints"><div class="kp-title">Checklist</div><ul><li>AGENTS.md is a pointer, not a second policy source.</li><li>L3 snapshots need an explicit refresh.</li><li>Every shared change lands through a reviewed PR.</li></ul></div>

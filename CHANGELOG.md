@@ -2,6 +2,9 @@
 ## 2026-09-26
 
 ### Fixed
+- Completed the Korean Chapter 1–16 renumbering sweep: restored the missing Chapter 14–16 instructor-note labels and corrected stale chapter references in the curriculum cards, chapter pages, course overview, FAQ, glossary, prerequisite bridge, and SVG roadmap.
+
+### Fixed
 - Aligned the Korean search-manifest chapter labels with the continuous Chapter 1–16 curriculum used by the home page, chapter titles, and lecture materials.
 
 ### Fixed

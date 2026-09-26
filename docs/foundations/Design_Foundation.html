@@ -14,11 +14,13 @@
 <nav>
   <a href="../index.html" class="nav-home">← 핸드북 홈</a>
   <div class="nav-title">디자인 기반과 표준 UI 패턴</div>
-  <a href="#system">디자인은 화면 꾸미기가 아니라 계약이다</a>
-  <a href="#principles">원칙과 토큰으로 재작업을 줄인다</a>
+  <a href="#system">디자인 철학: 화면은 사용자 과업을 돕는 계약이다</a>
+  <a href="#principles">디자인 원칙: 일관성·명료성·회복성</a>
+  <a href="#design-guides">디자인 가이드</a>
   <a href="#color-system">색상 시스템과 접근성</a>
-  <a href="#components">표준 컴포넌트와 표준 화면을 함께 정의한다</a>
-  <a href="#review">AI 산출물은 결과가 아니라 검토 가능한 초안이다</a>
+  <a href="#typography">타이포그래피와 폰트</a>
+  <a href="#components">표준 컴포넌트와 표준 화면</a>
+  <a href="#review">접근성과 AI 산출물 검토</a>
   <div class="nav-section">다른 장</div>
   <a href="../guardrails/03_Guardrails_Chapter.html">이전</a>
   <a href="../foundations/I18n_Operations.html">다음</a>
@@ -28,17 +30,17 @@
   <h1>디자인 기반과 표준 UI 패턴</h1>
   <p class="lead">AI가 만든 화면을 ‘그럴듯한 시안’에서 재사용 가능한 제품 경험으로 바꾸는 방법을 배운다.</p>
   <div class="keypoints"><div class="kp-title">이 장에서 다루는 것</div><ul><li>디자인 시스템이 필요한 이유</li><li>원칙·토큰·결정 기록</li><li>표준 컴포넌트와 화면 상태</li><li>AI 산출물 검토와 개선 실습</li><li>색상 시스템과 접근성</li></ul></div>
-  <h2 id="system">디자인은 화면 꾸미기가 아니라 계약이다</h2><p>같은 제품을 여러 사람이 만들 때 디자인 규칙은 팀이 공유하는 계약이다. 색, 간격, 글자 크기, 정보의 우선순위를 매 화면마다 다시 정하면 기능은 같아도 사용 경험은 흔들린다. 디자인 시스템은 건축 도면처럼 재료와 치수를 먼저 정해 두어, 사람과 AI가 같은 결과를 반복하게 한다.</p><p>좋은 디자인 판단은 ‘예쁜가’보다 ‘사용자가 다음 행동을 바로 알 수 있는가’에서 시작한다. 따라서 화면을 만들기 전에는 사용자의 목표, 성공 상태, 실패 상태, 그리고 담당자가 확인할 증거를 한 문장씩 적는다.</p><div class="diagram-frame">
-  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="디자인은 화면 꾸미기가 아니라 계약이다">
-    <title>디자인은 화면 꾸미기가 아니라 계약이다</title>
-    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Intent · 디자인은 화면 꾸미기가 아니라 계약이다</text>
+  <h2 id="system">디자인 철학: 화면은 사용자 과업을 돕는 계약이다</h2><p>같은 제품을 여러 사람이 만들 때 디자인 규칙은 팀이 공유하는 계약이다. 색, 간격, 글자 크기, 정보의 우선순위를 매 화면마다 다시 정하면 기능은 같아도 사용 경험은 흔들린다. 디자인 시스템은 건축 도면처럼 재료와 치수를 먼저 정해 두어, 사람과 AI가 같은 결과를 반복하게 한다.</p><p>좋은 디자인 판단은 ‘예쁜가’보다 ‘사용자가 다음 행동을 바로 알 수 있는가’에서 시작한다. 따라서 화면을 만들기 전에는 사용자의 목표, 성공 상태, 실패 상태, 그리고 담당자가 확인할 증거를 한 문장씩 적는다.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="디자인 철학: 화면은 사용자 과업을 돕는 계약이다">
+    <title>디자인 철학: 화면은 사용자 과업을 돕는 계약이다</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Intent · 디자인 철학: 화면은 사용자 과업을 돕는 계약이다</text>
     <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
     <defs><marker id="a0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
   </svg>
-</div><table><thead><tr><th>검토 항목</th><th>의도</th></tr></thead><tbody><tr><td>과업</td><td> 사용자가 이 화면에서 끝내야 하는 행동</td></tr><tr><td>위계</td><td> 제목·설명·행동·보조 정보의 읽는 순서</td></tr><tr><td>제약</td><td> 접근성, 작은 화면, 긴 번역문, 오류 상황</td></tr></tbody></table><div class="flow-box"><strong>표준:</strong> 화면 요청 → 사용자 과업 → 표준 패턴 선택 → 구현 → 실제 상태 검토</div><h2 id="principles">원칙과 토큰으로 재작업을 줄인다</h2><p>원칙은 판단의 방향이고 토큰은 판단을 구현에 연결하는 이름이다. 예를 들어 ‘경고는 행동을 막지 말고 해결 방법을 함께 보여 준다’는 원칙이다. `--bg-warn`, `--border-warn`처럼 의미 있는 토큰은 그 원칙을 코드와 문서에서 일관되게 재사용하게 한다.</p><p>토큰에는 특정 색상값이나 임의의 픽셀값이 아니라 역할을 붙인다. 그래야 다크 모드, 브랜드 변경, 접근성 보정이 필요할 때 화면마다 고치는 대신 토큰 정의를 바꿀 수 있다.</p><div class="diagram-frame">
-  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="원칙과 토큰으로 재작업을 줄인다">
-    <title>원칙과 토큰으로 재작업을 줄인다</title>
-    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Rules · 원칙과 토큰으로 재작업을 줄인다</text>
+</div><table><thead><tr><th>검토 항목</th><th>의도</th></tr></thead><tbody><tr><td>과업</td><td> 사용자가 이 화면에서 끝내야 하는 행동</td></tr><tr><td>위계</td><td> 제목·설명·행동·보조 정보의 읽는 순서</td></tr><tr><td>제약</td><td> 접근성, 작은 화면, 긴 번역문, 오류 상황</td></tr></tbody></table><div class="flow-box"><strong>표준:</strong> 화면 요청 → 사용자 과업 → 표준 패턴 선택 → 구현 → 실제 상태 검토</div><h2 id="principles">디자인 원칙: 일관성·명료성·회복성</h2><p>원칙은 판단의 방향이고 토큰은 판단을 구현에 연결하는 이름이다. 예를 들어 ‘경고는 행동을 막지 말고 해결 방법을 함께 보여 준다’는 원칙이다. `--bg-warn`, `--border-warn`처럼 의미 있는 토큰은 그 원칙을 코드와 문서에서 일관되게 재사용하게 한다.</p><p>토큰에는 특정 색상값이나 임의의 픽셀값이 아니라 역할을 붙인다. 그래야 다크 모드, 브랜드 변경, 접근성 보정이 필요할 때 화면마다 고치는 대신 토큰 정의를 바꿀 수 있다.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="디자인 원칙: 일관성·명료성·회복성">
+    <title>디자인 원칙: 일관성·명료성·회복성</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Rules · 디자인 원칙: 일관성·명료성·회복성</text>
     <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
     <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
   </svg>
@@ -54,6 +56,10 @@ acceptance:
   - one-primary-action
   - keyboard-reachable
   - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="design-guides">디자인 가이드: 간격·위계·문구·반응형</h2><p>디자인 가이드는 개인 취향을 억제하는 규칙이 아니라, 같은 과업을 여러 화면과 여러 사람이 일관되게 완성하게 하는 작업 언어다. 간격은 내용의 관계를 드러내고, 제목·본문·보조문은 읽는 순서를 만든다. 문구는 행동을 먼저 말하고, 좁은 화면에서는 정보의 우선순위에 따라 재배치한다.</p><p>새 화면은 기존 규칙을 복사한 뒤 꼭 필요한 차이만 기록한다. 임의의 여백, 독립적인 아이콘 의미, 고정 폭, 모호한 버튼 문구는 검토 사유가 없으면 추가하지 않는다.</p><div class="diagram-frame"><svg viewBox="0 0 640 115" width="100%" role="img" aria-label="디자인 가이드: 간격·위계·문구·반응형"><title>디자인 가이드: 간격·위계·문구·반응형</title>
+<text x="20" y="26" font-size="13" font-weight="700" fill="var(--text)">사용자 과업 → 정보 위계 → 간격·문구 규칙 → 반응형 화면 검토</text>
+<rect x="20" y="48" width="600" height="38" rx="10" fill="var(--bg-info)" stroke="var(--border)"/>
+<text x="320" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">디자인 가이드: 간격·위계·문구·반응형</text></svg></div><table><thead><tr><th>Element</th><th>Rule</th></tr></thead><tbody><tr><td>간격</td><td>관계가 가까울수록 더 작은 간격을 사용한다.</td></tr><tr><td>위계</td><td>제목·본문·보조문은 역할별 크기와 굵기를 쓴다.</td></tr><tr><td>문구</td><td>행동과 결과를 먼저 말하고 모호한 표현을 피한다.</td></tr><tr><td>반응형</td><td>고정 폭보다 유연한 폭과 우선순위 재배치를 사용한다.</td></tr></tbody></table><div class="flow-box"><strong>Guide:</strong> 사용자 과업 → 정보 위계 → 간격·문구 규칙 → 반응형 화면 검토</div>
 <h2 id="color-system">색상 시스템과 접근성</h2>
 <p>색상 시스템은 팔레트 모음이 아니라 의미를 전달하는 계약이다. 원시 팔레트는 색상 단계만 제공하고, 화면은 `text`, `surface`, `border`, `action`, `success`, `warning`, `error`처럼 목적이 드러나는 의미 토큰을 사용한다. 이렇게 분리하면 브랜드 색이나 다크 모드가 바뀌어도 오류·경고·완료의 의미를 화면마다 다시 설계하지 않는다.</p><p>접근성은 색상 시스템의 검증 조건이다. 성공·오류·선택 상태를 색만으로 전달하지 않고, 문장·아이콘·테두리·패턴을 함께 제공한다. 텍스트, 아이콘, 포커스 링, 입력 오류 경계는 라이트·다크 모드 모두에서 대비와 키보드 포커스를 점검한다.</p>
 <div class="diagram-frame"><svg viewBox="0 0 640 170" width="100%" role="img" aria-label="색상 토큰과 접근성 검증 흐름">
@@ -79,17 +85,21 @@ acceptance:
     "focus-ring": { "$value": "{color.action-primary}", "$type": "color" }
   }
 }</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
-<h2 id="components">표준 컴포넌트와 표준 화면을 함께 정의한다</h2><p>버튼, 입력칸, 카드, 표, 알림은 부품이다. 목록, 상세, 생성, 검토, 오류, 빈 상태는 부품을 조합한 화면 패턴이다. 부품만 표준화하면 실제 사용 중 자주 누락되는 로딩·빈 상태·권한 없음·저장 실패 화면이 제각각 남는다.</p><p>각 컴포넌트에는 목적, 허용되는 변형, 상태, 접근성 이름을 기록한다. 각 화면에는 진입 조건, 사용자의 다음 행동, 성공·실패·대기 상태, 필요한 검증 증거를 기록한다. 이 두 계약을 프롬프트와 리뷰 기준에 넣으면 AI의 출력도 검토 가능한 산출물이 된다.</p><div class="diagram-frame">
-  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="표준 컴포넌트와 표준 화면을 함께 정의한다">
-    <title>표준 컴포넌트와 표준 화면을 함께 정의한다</title>
-    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · 표준 컴포넌트와 표준 화면을 함께 정의한다</text>
+<h2 id="typography">타이포그래피와 폰트 시스템</h2><p>폰트는 장식이 아니라 읽기 속도와 정보 위계를 만드는 인터페이스다. 본문·제목·보조문·코드의 역할을 나누고, font family, weight, size, line-height, letter-spacing을 토큰으로 관리한다. 한국어·영어·일본어·스페인어가 섞이는 제품은 글리프 지원과 fallback 순서를 함께 정한다.</p><p>특정 웹폰트가 늦게 로드되거나 실패해도 문서가 읽혀야 한다. 시스템 fallback, 코드용 고정폭 글꼴, 긴 번역문의 줄바꿈, 표와 버튼의 최소 읽기 크기를 실제 화면에서 확인한다.</p><div class="diagram-frame"><svg viewBox="0 0 640 115" width="100%" role="img" aria-label="타이포그래피와 폰트 시스템"><title>타이포그래피와 폰트 시스템</title>
+<text x="20" y="26" font-size="13" font-weight="700" fill="var(--text)">폰트 역할 → 타입 토큰 → 다국어 fallback → 실제 읽기 검토</text>
+<rect x="20" y="48" width="600" height="38" rx="10" fill="var(--bg-info)" stroke="var(--border)"/>
+<text x="320" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">타이포그래피와 폰트 시스템</text></svg></div><table><thead><tr><th>Element</th><th>Rule</th></tr></thead><tbody><tr><td>본문</td><td>읽기 쉬운 크기와 넉넉한 줄높이를 유지한다.</td></tr><tr><td>제목</td><td>단계별 크기·굵기로 구조를 드러낸다.</td></tr><tr><td>코드</td><td>고정폭 폰트와 줄바꿈 규칙을 적용한다.</td></tr><tr><td>fallback</td><td>언어별 글리프와 로딩 실패를 고려한다.</td></tr></tbody></table><div class="flow-box"><strong>Guide:</strong> 폰트 역할 → 타입 토큰 → 다국어 fallback → 실제 읽기 검토</div>
+<h2 id="components">표준 컴포넌트와 표준 화면</h2><p>버튼, 입력칸, 카드, 표, 알림은 부품이다. 목록, 상세, 생성, 검토, 오류, 빈 상태는 부품을 조합한 화면 패턴이다. 부품만 표준화하면 실제 사용 중 자주 누락되는 로딩·빈 상태·권한 없음·저장 실패 화면이 제각각 남는다.</p><p>각 컴포넌트에는 목적, 허용되는 변형, 상태, 접근성 이름을 기록한다. 각 화면에는 진입 조건, 사용자의 다음 행동, 성공·실패·대기 상태, 필요한 검증 증거를 기록한다. 이 두 계약을 프롬프트와 리뷰 기준에 넣으면 AI의 출력도 검토 가능한 산출물이 된다.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="표준 컴포넌트와 표준 화면">
+    <title>표준 컴포넌트와 표준 화면</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · 표준 컴포넌트와 표준 화면</text>
     <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
     <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
   </svg>
-</div><table><thead><tr><th>검토 항목</th><th>의도</th></tr></thead><tbody><tr><td>주요 버튼</td><td> 한 화면의 핵심 행동만 강조한다.</td></tr><tr><td>폼</td><td> 필수 여부와 오류 이유를 입력칸 가까이에 둔다.</td></tr><tr><td>상태 패널</td><td> 로딩·빈 결과·오류·권한 없음에 다음 행동을 제공한다.</td></tr><tr><td>검토 화면</td><td> 변경 내용, 영향 범위, 승인 또는 되돌림 행동을 분리한다.</td></tr></tbody></table><div class="flow-box"><strong>표준:</strong> 토큰 → 버튼·폼·상태 패널 → 목록·상세·검토 화면 → 사용자 행동</div><h2 id="review">AI 산출물은 결과가 아니라 검토 가능한 초안이다</h2><p>AI에게 ‘깔끔한 화면’을 요청하면 프로젝트마다 다른 해석이 나온다. 대신 목표, 표준 컴포넌트, 금지 사항, 상태 목록, 접근성 기준, 완료 증거를 함께 준다. 생성 뒤에는 코드의 모양이 아니라 실제 화면에서 긴 텍스트, 키보드 이동, 오류 상태, 다크 모드를 확인한다.</p><p>리뷰는 의견 모으기가 아니라 약속을 확인하는 절차다. 발견한 문제는 ‘어느 화면의 어떤 상태에서 어떤 사용자가 막히는가’로 기록한다. 수정 후에는 전후 화면과 검사 결과를 연결해 다음 작업자가 같은 판단을 재사용하게 한다.</p><div class="diagram-frame">
-  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="AI 산출물은 결과가 아니라 검토 가능한 초안이다">
-    <title>AI 산출물은 결과가 아니라 검토 가능한 초안이다</title>
-    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Evidence · AI 산출물은 결과가 아니라 검토 가능한 초안이다</text>
+</div><table><thead><tr><th>검토 항목</th><th>의도</th></tr></thead><tbody><tr><td>주요 버튼</td><td> 한 화면의 핵심 행동만 강조한다.</td></tr><tr><td>폼</td><td> 필수 여부와 오류 이유를 입력칸 가까이에 둔다.</td></tr><tr><td>상태 패널</td><td> 로딩·빈 결과·오류·권한 없음에 다음 행동을 제공한다.</td></tr><tr><td>검토 화면</td><td> 변경 내용, 영향 범위, 승인 또는 되돌림 행동을 분리한다.</td></tr></tbody></table><div class="flow-box"><strong>표준:</strong> 토큰 → 버튼·폼·상태 패널 → 목록·상세·검토 화면 → 사용자 행동</div><h2 id="review">접근성과 AI 산출물 검토</h2><p>AI에게 ‘깔끔한 화면’을 요청하면 프로젝트마다 다른 해석이 나온다. 대신 목표, 표준 컴포넌트, 금지 사항, 상태 목록, 접근성 기준, 완료 증거를 함께 준다. 생성 뒤에는 코드의 모양이 아니라 실제 화면에서 긴 텍스트, 키보드 이동, 오류 상태, 다크 모드를 확인한다.</p><p>리뷰는 의견 모으기가 아니라 약속을 확인하는 절차다. 발견한 문제는 ‘어느 화면의 어떤 상태에서 어떤 사용자가 막히는가’로 기록한다. 수정 후에는 전후 화면과 검사 결과를 연결해 다음 작업자가 같은 판단을 재사용하게 한다.</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="접근성과 AI 산출물 검토">
+    <title>접근성과 AI 산출물 검토</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Evidence · 접근성과 AI 산출물 검토</text>
     <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Intent</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Rules</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Components</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Evidence</text>
     <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
   </svg>

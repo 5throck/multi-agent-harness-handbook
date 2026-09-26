@@ -2,6 +2,12 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-26] — Design Foundation Structure
+
+### Changed
+- Reorganized Design Foundation into design philosophy, principles, guides, color system, typography and font system, standard components and screens, accessibility, and AI-output review.
+- Added four-language guide and typography visuals, decision tables, and implementation rules for spacing, responsive behavior, glyph fallback, code type, and readable text.
+
 ## [2026-09-26] — Design Color System and Accessibility Expansion
 
 ### Changed

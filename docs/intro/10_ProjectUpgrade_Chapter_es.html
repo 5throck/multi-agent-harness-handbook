@@ -7,10 +7,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Capítulo 10 · Actualización de Proyecto L3 — parte del Manual de Ingeniería del Arnés Multiagente.">
+  <meta name="description" content="Capítulo 12 · Actualización de Proyecto L3 — parte del Manual de Ingeniería del Arnés Multiagente.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Capítulo 10 · Actualización de Proyecto L3</title>
+  <title>Capítulo 12 · Actualización de Proyecto L3</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -19,24 +19,24 @@
 
 <nav>
   <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
-  <div class="nav-title">Capítulo 10 · Actualización de Proyecto L3</div>
+  <div class="nav-title">Capítulo 12 · Actualización de Proyecto L3</div>
   <a href="#why">Por qué es necesario — la otra cara del modelo de bifurcación</a>
   <a href="#usage">Cómo usar upgrade-project.ts</a>
   <a href="#categories">Las categorías principales de manejo de archivos</a>
   <a href="#safety">Redes de seguridad — instantáneas y reversión</a>
   <a href="#vs-promotion">Cómo se diferencia de la promoción</a>
   <div class="nav-section">Otros capítulos</div>
-  <a href="08_Intro_Advanced_Deploy_es.html">Cap.8 §1 - Despliegue y SSOT</a>
-  <a href="../workflows/09_Workflows_Chapter_es.html">Cap.9 - Patrones de Diseño de Flujos de Trabajo</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Cap.11 - Crear una Nueva Variante</a>
+  <a href="08_Intro_Advanced_Deploy_es.html">Cap.10 §1 - Despliegue y SSOT</a>
+  <a href="../workflows/11_Workflows_Chapter_es.html">Cap.11 - Patrones de Diseño de Flujos de Trabajo</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_es.html">Cap.13 - Crear una Nueva Variante</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Capítulo 10</div>
+  <div class="chapter-eyebrow">Capítulo 12</div>
   <h1>Actualización de Proyecto L3</h1>
-  <p class="lead">Una vez que has creado un proyecto L3, ¿qué ocurre cuando los estándares upstream (L0/L1) cambian? La respuesta es: "no ocurre absolutamente nada." Debido al modelo de bifurcación discutido en el Capítulo 8 §1, para incorporar realmente los cambios upstream nuevos a un proyecto L3 ya creado, una persona debe ejecutar explícitamente <code>upgrade-project.ts</code>. Este capítulo cubre ese procedimiento.</p>
-  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.10.1) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y SSOT</a></p>
+  <p class="lead">Una vez que has creado un proyecto L3, ¿qué ocurre cuando los estándares upstream (L0/L1) cambian? La respuesta es: "no ocurre absolutamente nada." Debido al modelo de bifurcación discutido en el Capítulo 10 §1, para incorporar realmente los cambios upstream nuevos a un proyecto L3 ya creado, una persona debe ejecutar explícitamente <code>upgrade-project.ts</code>. Este capítulo cubre ese procedimiento.</p>
+  <p class="source-line">Fuente: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (a partir de v1.10.1) - Relacionado: <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 10 §1 Despliegue y SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">Lo Que Cubre Este Capítulo</div>
@@ -45,12 +45,12 @@
       <li>Uso básico de <code>upgrade-project.ts</code> y el principio de ejecutar primero <code>--dry-run</code></li>
       <li>Los 8 modos de manejo de archivos: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE y PRUNE</li>
       <li>La instantánea automática con git stash y la red de seguridad de <code>--rollback</code></li>
-      <li>Cómo esto es exactamente la dirección opuesta a la "promoción" cubierta en el Capítulo 11</li>
+      <li>Cómo esto es exactamente la dirección opuesta a la "promoción" cubierta en el Capítulo 13</li>
     </ul>
   </div>
 
   <h2 id="why">Por qué es necesario — la otra cara del modelo de bifurcación</h2>
-  <p>Como se estableció en el <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1</a>, L1 entrega su contenido a un proyecto exactamente una vez — en el momento en que <code>new-project.ts</code> lo estructura. A partir de ese momento, L3 evoluciona de forma completamente independiente, y sin importar cuánto cambie L1 después, nada se refleja automáticamente en un proyecto L3 que ya existe.</p>
+  <p>Como se estableció en el <a href="08_Intro_Advanced_Deploy_es.html#s1">Capítulo 10 §1</a>, L1 entrega su contenido a un proyecto exactamente una vez — en el momento en que <code>new-project.ts</code> lo estructura. A partir de ese momento, L3 evoluciona de forma completamente independiente, y sin importar cuánto cambie L1 después, nada se refleja automáticamente en un proyecto L3 que ya existe.</p>
   <p>El problema es que, con el tiempo, los scripts de hooks se corrigen en el lado de L1, se añaden nuevas habilidades, y las configuraciones de seguridad se endurecen. Cuando deseas traer esos cambios a un proyecto L3 individual, comparar archivos manualmente uno por uno no es realista. <code>upgrade-project.ts</code> automatiza este proceso de reflexión mientras sigue respetando el principio fundamental del modelo de bifurcación — "nunca sobrescribir a ciegas las partes que L3 ha cambiado deliberadamente."</p>
 
   <h2 id="usage">Cómo usar upgrade-project.ts</h2>
@@ -100,9 +100,9 @@
   <p>Como paso final, <code>.claude/template-version.txt</code> se actualiza a la nueva versión — conservando su línea <code>country=</code> — y los elementos de arranque de seguridad — <code>.gitleaks.toml</code>, hooks de pre-commit, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (patrones .env), y <code>git core.hooksPath</code> — se verifican automáticamente (estos son los mismos elementos cubiertos por los principios de barreras de protección del Capítulo 3). Si <code>core.hooksPath</code> está mal configurado, el script lo corrige por sí solo.</p>
 
   <h2 id="vs-promotion">Cómo se diferencia de la promoción</h2>
-  <p>La "promoción" cubierta en el Capítulo 11 y la "actualización" de este capítulo suenan similares, pero se ejecutan en direcciones exactamente opuestas.</p>
+  <p>La "promoción" cubierta en el Capítulo 13 y la "actualización" de este capítulo suenan similares, pero se ejecutan en direcciones exactamente opuestas.</p>
   <ul>
-    <li><strong>Promoción</strong> (<code>l3-to-variant-pipeline.ts</code>, Capítulo 11) — <strong>L3 → L2</strong>. Eleva los cambios de un proyecto que creaste a la plantilla oficial de variante, convirtiéndolos en una variante que otros pueden usar.</li>
+    <li><strong>Promoción</strong> (<code>l3-to-variant-pipeline.ts</code>, Capítulo 13) — <strong>L3 → L2</strong>. Eleva los cambios de un proyecto que creaste a la plantilla oficial de variante, convirtiéndolos en una variante que otros pueden usar.</li>
     <li><strong>Actualización</strong> (<code>upgrade-project.ts</code>, este capítulo) — <strong>L1 → L3</strong>. Extrae los últimos cambios de la plantilla oficial a un proyecto que ya has creado.</li>
   </ul>
   <p>Los dos scripts simplemente mueven archivos en direcciones opuestas — ninguno reemplaza al otro. Si deseas contribuir de vuelta a la plantilla, usa la promoción; si deseas mantener un proyecto existente actualizado, usa la actualización.</p>
@@ -112,8 +112,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="../workflows/09_Workflows_Chapter_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Cap.9 - Patrones de Diseño de Flujos de Trabajo</div></a>
-    <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html" class="next"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Cap.11 - Crear una Nueva Variante</div></a>
+    <a href="../workflows/11_Workflows_Chapter_es.html" class="prev"><div class="dir">← Capítulo Anterior</div><div class="ttl">Cap.11 - Patrones de Diseño de Flujos de Trabajo</div></a>
+    <a href="../variant-advanced/13_VariantAdvanced_Chapter_es.html" class="next"><div class="dir">Siguiente Capítulo →</div><div class="ttl">Cap.13 - Crear una Nueva Variante</div></a>
   </div>
    <footer>
     Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · Material educativo en español<br>

@@ -7,10 +7,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Chapter 10 - L3 Project Upgrade - part of the Multi-Agent Team Harness Engineering Handbook.">
+  <meta name="description" content="Chapter 12 - L3 Project Upgrade - part of the Multi-Agent Team Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Chapter 10 - L3 Project Upgrade</title>
+  <title>Chapter 12 - L3 Project Upgrade</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -19,24 +19,24 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Chapter 10 - L3 Project Upgrade</div>
+  <div class="nav-title">Chapter 12 - L3 Project Upgrade</div>
   <a href="#why">Why it's needed — the flip side of the fork model</a>
   <a href="#usage">How to use upgrade-project.ts</a>
   <a href="#categories">The main file-handling categories</a>
   <a href="#safety">Safety nets — snapshots and rollback</a>
   <a href="#vs-promotion">How this differs from promotion</a>
   <div class="nav-section">Other chapters</div>
-  <a href="08_Intro_Advanced_Deploy_en.html">Ch.8 §1 - Deployment and SSOT</a>
-  <a href="../workflows/09_Workflows_Chapter_en.html">Ch.9 - Workflow Design Patterns</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Ch.11 - Creating a New Variant</a>
+  <a href="08_Intro_Advanced_Deploy_en.html">Ch.10 §1 - Deployment and SSOT</a>
+  <a href="../workflows/11_Workflows_Chapter_en.html">Ch.11 - Workflow Design Patterns</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_en.html">Ch.13 - Creating a New Variant</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Chapter 10</div>
+  <div class="chapter-eyebrow">Chapter 12</div>
   <h1>L3 Project Upgrade</h1>
-  <p class="lead">Once you've created an L3 project, what happens when the upstream standards (L0/L1) change? The answer is: "nothing happens at all." Because of the fork model discussed in Chapter 8 §1, actually bringing new upstream changes into an already-created L3 project requires a human to explicitly run <code>upgrade-project.ts</code>. This chapter covers that procedure.</p>
-  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.10.1) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1 Deployment and SSOT</a></p>
+  <p class="lead">Once you've created an L3 project, what happens when the upstream standards (L0/L1) change? The answer is: "nothing happens at all." Because of the fork model discussed in Chapter 10 §1, actually bringing new upstream changes into an already-created L3 project requires a human to explicitly run <code>upgrade-project.ts</code>. This chapter covers that procedure.</p>
+  <p class="source-line">Source: <a href="https://github.com/5throck/ai-workspace-standards/blob/main/scripts/upgrade-project.ts" target="_blank">ai-workspace-standards/scripts/upgrade-project.ts</a> (as of v1.10.1) - Related: <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 10 §1 Deployment and SSOT</a></p>
 
   <div class="keypoints">
     <div class="kp-title">What this chapter covers</div>
@@ -45,12 +45,12 @@
       <li>Basic usage of <code>upgrade-project.ts</code> and the principle of running <code>--dry-run</code> first</li>
       <li>The main file-handling modes: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE, PRUNE, plus TEMPLATE TREE SYNC and ENV_SAMPLE SYNC</li>
       <li>The automatic git stash snapshot and the <code>--rollback</code> safety net</li>
-      <li>How this is the exact opposite direction from the "promotion" covered in Chapter 11</li>
+      <li>How this is the exact opposite direction from the "promotion" covered in Chapter 13</li>
     </ul>
   </div>
 
   <h2 id="why">Why it's needed — the flip side of the fork model</h2>
-  <p>As established in <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 8 §1</a>, L1 delivers its content to a project exactly once — at the moment <code>new-project.ts</code> scaffolds it. From that point on, L3 evolves completely independently, and no matter how much L1 changes afterward, nothing is automatically reflected in an L3 project that already exists.</p>
+  <p>As established in <a href="08_Intro_Advanced_Deploy_en.html#s1">Chapter 10 §1</a>, L1 delivers its content to a project exactly once — at the moment <code>new-project.ts</code> scaffolds it. From that point on, L3 evolves completely independently, and no matter how much L1 changes afterward, nothing is automatically reflected in an L3 project that already exists.</p>
   <p>The problem is that, over time, hook scripts get fixed on the L1 side, new skills get added, and security settings get hardened. When you want to bring those changes into an individual L3 project, manually comparing files one by one isn't realistic. <code>upgrade-project.ts</code> automates this reflection process while still honoring the core principle of the fork model — "never blindly overwrite parts that L3 has deliberately changed."</p>
 
   <h2 id="usage">How to use upgrade-project.ts</h2>
@@ -100,9 +100,9 @@
   <p>As a final step, <code>.claude/template-version.txt</code> is updated to the new version — with its <code>country=</code> line preserved — and security bootstrap items — <code>.gitleaks.toml</code>, pre-commit hooks, <code>.gitattributes</code> (eol=lf), <code>.gitignore</code> (.env patterns), and <code>git core.hooksPath</code> — are automatically checked (these are the same items covered by the Chapter 3 guardrail principles). If <code>core.hooksPath</code> is misconfigured, the script fixes it on its own.</p>
 
   <h2 id="vs-promotion">How this differs from promotion</h2>
-  <p>The "promotion" covered in Chapter 11 and this chapter's "upgrade" sound similar, but they run in exactly opposite directions.</p>
+  <p>The "promotion" covered in Chapter 13 and this chapter's "upgrade" sound similar, but they run in exactly opposite directions.</p>
   <ul>
-    <li><strong>Promotion</strong> (<code>l3-to-variant-pipeline.ts</code>, Chapter 11) — <strong>L3 → L2</strong>. Elevates changes from a project you created into the official variant template, turning them into a variant others can use.</li>
+    <li><strong>Promotion</strong> (<code>l3-to-variant-pipeline.ts</code>, Chapter 13) — <strong>L3 → L2</strong>. Elevates changes from a project you created into the official variant template, turning them into a variant others can use.</li>
     <li><strong>Upgrade</strong> (<code>upgrade-project.ts</code>, this chapter) — <strong>L1 → L3</strong>. Pulls the latest changes from the official template into a project you've already created.</li>
   </ul>
   <p>The two scripts simply move files in opposite directions — neither replaces the other. If you want to contribute back to the template, use promotion; if you want to keep an existing project up to date, use upgrade.</p>
@@ -112,8 +112,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="../workflows/09_Workflows_Chapter_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Ch.9 - Workflow Design Patterns</div></a>
-    <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch.11 - Creating a New Variant</div></a>
+    <a href="../workflows/11_Workflows_Chapter_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Ch.11 - Workflow Design Patterns</div></a>
+    <a href="../variant-advanced/13_VariantAdvanced_Chapter_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch.13 - Creating a New Variant</div></a>
   </div>
    <footer>
     Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>

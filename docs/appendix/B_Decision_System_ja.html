@@ -73,7 +73,7 @@
     <li><code>rules_applied</code> 形式(<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>)と <code>skills_used</code> の実在スキル解決</li>
   </ol>
   <p>この検証は <strong>fail-closed</strong> だ — errorレベルの問題が一つでもあれば exit 1。「警告だけ出るソフト検査」とは違い、壊れた決定記録のまま同期は進まない。</p>
-  <p>なお2026年9月から、governed等級のvariantテンプレートには判断ゲート(<code>decisions/gates.yaml</code>)が導入されている。ゲートは「どの地点でどの判定を通過すべきか」というルール宣言であり、判断記録は実際に下された判定の記録だ — ゲートで出た判定は<code>record_kind: DEC</code>として判断記録に残る。詳細は<a href="../domain-model/13_DomainOperatingModel_Chapter_ja.html">第13章・Domain Operating Model</a>を参照。</p>
+  <p>なお2026年9月から、governed等級のvariantテンプレートには判断ゲート(<code>decisions/gates.yaml</code>)が導入されている。ゲートは「どの地点でどの判定を通過すべきか」というルール宣言であり、判断記録は実際に下された判定の記録だ — ゲートで出た判定は<code>record_kind: DEC</code>として判断記録に残る。詳細は<a href="../domain-model/15_DomainOperatingModel_Chapter_ja.html">第15章・Domain Operating Model</a>を参照。</p>
 
   <h2 id="c4-registry">スペックレジストリとE1–E5免除</h2>
   <p>決定の前段には設計(spec)がある。ADR-0055の <strong>スペックレジストリ</strong>(<code>docs/specs/registry.json</code>)は設計文書を id・タイトル・ファイル・状態(<code>proposed | approved | implemented</code>)・最終更新日で追跡する。</p>
@@ -92,7 +92,7 @@
   <p>場当たり的な免除は禁止で、<strong>存在しない免除コードを使うこと自体がハード失敗</strong>だ。免除の濫用はガバナンス違反だ。</p>
 
   <h2 id="c5-backlog">ガバナンスバックログ</h2>
-  <p>すべての決定が今下されるべきではない。「いつか判断する必要があるもの」は <strong>ガバナンスバックログ</strong> チケットとして先送りされる。サービスチケット(第7章)が一回限りの作業依頼なら、ガバナンスバックログチケットは <strong>gitで追跡される未来の決定</strong> だ。</p>
+  <p>すべての決定が今下されるべきではない。「いつか判断する必要があるもの」は <strong>ガバナンスバックログ</strong> チケットとして先送りされる。サービスチケット(第9章)が一回限りの作業依頼なら、ガバナンスバックログチケットは <strong>gitで追跡される未来の決定</strong> だ。</p>
   <ul>
     <li><code>scripts/ticket.ts</code> で管理され、<code>tickets/governance/</code> にgit追跡ファイルとして保存</li>
     <li><code>kind: manual</code> チケットに <code>not_before</code> 日付を付けると、その日が来るまで <code>list --ready --kind manual</code> に現れない — <strong>熟成(soak)予約</strong></li>

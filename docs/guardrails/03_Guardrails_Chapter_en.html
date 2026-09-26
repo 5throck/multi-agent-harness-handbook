@@ -23,7 +23,7 @@
   <a href="#s6">Audit Logs and Observability</a>
   <div class="nav-section">Other Chapters</div>
   <a href="../concepts/02_Concepts_Chapter_en.html">Chapter 2 · Understanding the Concepts</a>
-  <a href="../practice/04_Practice_Manual_en.html">Chapter 4 · Claude Code Hands-On</a>
+  <a href="../practice/06_Practice_Manual_en.html">Chapter 6 · Claude Code Hands-On</a>
   <a href="../glossary/00_Glossary_en.html">Glossary</a>
 </nav>
 
@@ -31,7 +31,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">Chapter 3</div>
   <h1>Guardrails and Permission Models</h1>
-  <p class="lead">You'll get hands-on practice creating and invoking subagents in Chapter 4. But before that, if you don't first decide "what this agent is allowed to do and what it isn't," you'll run into trouble both during practice and in production. This chapter covers how to actually design the "guardrails" briefly mentioned in Chapter 2.</p>
+  <p class="lead">You'll get hands-on practice creating and invoking subagents in Chapter 6. But before that, if you don't first decide "what this agent is allowed to do and what it isn't," you'll run into trouble both during practice and in production. This chapter covers how to actually design the "guardrails" briefly mentioned in Chapter 2.</p>
 
   <div class="keypoints">
     <div class="kp-title">What This Chapter Covers</div>
@@ -84,10 +84,10 @@
     </div>
   </div>
 
-  <p>This three-tier classification matches the actual rules of the workspace documentation this handbook is based on. The "Sensitive File Guard" from the <code>/sync</code> pipeline covered in Chapter 5 — which blocks sensitive files like <code>.pem</code>, <code>.key</code>, and <code>.env</code> right before a commit — and the rule explicitly forbidding force pushes and <code>--no-verify</code>, are both guardrails belonging to the destructive-operation tier.</p>
+  <p>This three-tier classification matches the actual rules of the workspace documentation this handbook is based on. The "Sensitive File Guard" from the <code>/sync</code> pipeline covered in Chapter 7 — which blocks sensitive files like <code>.pem</code>, <code>.key</code>, and <code>.env</code> right before a commit — and the rule explicitly forbidding force pushes and <code>--no-verify</code>, are both guardrails belonging to the destructive-operation tier.</p>
 
   <h2 id="s3">Principle of Least Privilege — the <code>tools</code> Field</h2>
-  <p>Recall the frontmatter of the <code>reviewer</code> subagent we created in the Chapter 4 §2 exercise. We explicitly listed the tools to allow, like <code>tools: Read, Grep</code>. This is the principle of least privilege applied at the subagent level. Since reviewer never has the <code>Write</code> tool to begin with, no matter how ambiguously the prompt is interpreted, there's simply no way for it to modify a file.</p>
+  <p>Recall the frontmatter of the <code>reviewer</code> subagent we created in the Chapter 6 §2 exercise. We explicitly listed the tools to allow, like <code>tools: Read, Grep</code>. This is the principle of least privilege applied at the subagent level. Since reviewer never has the <code>Write</code> tool to begin with, no matter how ambiguously the prompt is interpreted, there's simply no way for it to modify a file.</p>
   <p>Looking at a real incident scenario makes clear why this matters. If reviewer had been habitually granted <code>Write</code> permission as well, then a slightly ambiguous request like "review this file and improve it" might be interpreted by reviewer as "directly edit," overwriting the original. Narrowing permissions in advance via the <code>tools</code> field prevents this kind of interpretation gap from ever becoming an incident. It blocks the problem structurally, instead of relying on prompt quality.</p>
   <div class="note">Permissions should be set based on "what the minimum is that this role needs to function normally," not "what this role could possibly do at maximum." Widening permissions later when needed is easy, but narrowing permissions that were opened too broadly from the start, after an incident has already occurred, is too late.</div>
 
@@ -217,12 +217,12 @@
   </div>
 
   <h2 id="s5">Isolation — Worktrees and Sandboxes</h2>
-  <p>In the advanced scenario (P-1) in Chapter 4 §2, we warned that "assigning multiple agents to the same workspace can create cognitive overlap." This is also a form of guardrail. If multiple agents touch the same files and the same git history at once, one agent's mistake can contaminate another agent's working context.</p>
+  <p>In the advanced scenario (P-1) in Chapter 6 §2, we warned that "assigning multiple agents to the same workspace can create cognitive overlap." This is also a form of guardrail. If multiple agents touch the same files and the same git history at once, one agent's mistake can contaminate another agent's working context.</p>
   <p>Running each agent in a worktree (an isolated git working directory) or a separate sandbox environment means that even if one agent makes a wrong judgment, its impact doesn't leak outside its own workspace. When running multiple agents in parallel, you must always first decide: "should they share the same space, or be physically separated?"</p>
 
   <h2 id="s6">Audit Logs and Observability</h2>
-  <p>If guardrails are prevention, audit logs are after-the-fact tracing. No guardrail is perfect, so when an incident occurs, you absolutely need a minimal record that lets you retrace "when, which agent, with which tool, did what." If <code>memory/MEMORY.md</code> covered in Chapter 5 serves to record context across sessions, an audit script like <code>audit.ts</code>, run via the <code>TaskCompleted</code> hook, is an observability device that mechanically checks every time whether "a change violated the rules." For reference, this workspace's hook wiring (as of 2026-08-24) runs <code>gateguard-fact-force.ts</code> (Edit|Write|MultiEdit) and <code>agent-model-gate.ts</code> (Agent) on <code>PreToolUse</code>, and <code>post-write-lifecycle-check.ts</code> on <code>PostToolUse</code> (Write|Edit) plus <code>TeammateIdle</code>, while <code>audit.ts</code> fires at task completion (<code>TaskCompleted</code>).</p>
-  <div class="warn">In the Claude Desktop App, covered in Chapter 4, hooks like this do not fire. For teams working mainly in the Desktop app, a situation can actually arise where "we thought the audit log was running, but in fact none of it was running at all." Codex has no hook mechanism at all, so it substitutes CODEX.md instructions that the PM perceives and executes on its own each session (prompt self-enforcement). When designing guardrails, you must always verify "does this policy actually fire on the tool I'm using?"</div>
+  <p>If guardrails are prevention, audit logs are after-the-fact tracing. No guardrail is perfect, so when an incident occurs, you absolutely need a minimal record that lets you retrace "when, which agent, with which tool, did what." If <code>memory/MEMORY.md</code> covered in Chapter 7 serves to record context across sessions, an audit script like <code>audit.ts</code>, run via the <code>TaskCompleted</code> hook, is an observability device that mechanically checks every time whether "a change violated the rules." For reference, this workspace's hook wiring (as of 2026-08-24) runs <code>gateguard-fact-force.ts</code> (Edit|Write|MultiEdit) and <code>agent-model-gate.ts</code> (Agent) on <code>PreToolUse</code>, and <code>post-write-lifecycle-check.ts</code> on <code>PostToolUse</code> (Write|Edit) plus <code>TeammateIdle</code>, while <code>audit.ts</code> fires at task completion (<code>TaskCompleted</code>).</p>
+  <div class="warn">In the Claude Desktop App, covered in Chapter 6, hooks like this do not fire. For teams working mainly in the Desktop app, a situation can actually arise where "we thought the audit log was running, but in fact none of it was running at all." Codex has no hook mechanism at all, so it substitutes CODEX.md instructions that the PM perceives and executes on its own each session (prompt self-enforcement). When designing guardrails, you must always verify "does this policy actually fire on the tool I'm using?"</div>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div>Audit Log Structure and Audit Flow</div>
@@ -318,7 +318,7 @@
     </svg>
   </div>
 
-  <div class="note">In one sentence: guardrails are the combination of four habits — <strong>granting differentiated permissions based on risk level (§2·§3)</strong>, <strong>always requiring human confirmation before an irreversible point (§4)</strong>, <strong>physically isolating parallel work (§5)</strong>, and <strong>keeping records in case everything else fails (§6)</strong>. Starting in Chapter 4, we apply these principles directly within hands-on practice code.</div>
+  <div class="note">In one sentence: guardrails are the combination of four habits — <strong>granting differentiated permissions based on risk level (§2·§3)</strong>, <strong>always requiring human confirmation before an irreversible point (§4)</strong>, <strong>physically isolating parallel work (§5)</strong>, and <strong>keeping records in case everything else fails (§6)</strong>. Starting in Chapter 6, we apply these principles directly within hands-on practice code.</div>
 
   <div class="chapter-nav">
     <a href="../concepts/02_Concepts_Chapter_en.html" class="prev"><div class="dir">← Previous Chapter</div><div class="ttl">Chapter 2 · Harness Engineering and Multi-Agent Team Concepts</div></a>

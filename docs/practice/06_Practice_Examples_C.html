@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="6장 §2-C · 멀티 에이전트 팀 실습 — Codex 중심 시나리오별 학습 가이드 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>6장 §2-C · Codex-Focused Multi-Agent Team Practice — Scenario-Based Learning Guide</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides for practice examples */
+    .subtitle { margin-bottom: 24px; }
+    .situation::before {
+      content: '📌 상황'; display: block;
+      font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .step-list li { counter-increment: step-counter; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; list-style: none; }
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 26px; height: 26px;
+      background: var(--accent); color: var(--text-inverse);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content { flex: 1; min-width: 0; }
+    .step-content strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 14px; }
+    .step-content p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 8px; }
+    .cmd-chip {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      color: var(--accent-red); text-decoration: none;
+      transition: background .15s;
+    }
+    .cmd-chip:hover { background: var(--tag-bg); border-color: var(--border-info); color: var(--accent-dark); }
+    .platform-block .flow-box,
+    .platform-block .tip-box,
+    .platform-block .warning-box { margin-left: -10px; margin-right: -10px; }
+    .flow-box::before {
+      content: '⚙️ 내부 동작'; display: block;
+      font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;
+      font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .tip-box::before {
+      content: '💡 팁'; display: block; font-weight: 700; color: var(--accent-green);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .warning-box::before {
+      content: '⚠️ 주의'; display: block; font-weight: 700; color: var(--accent-amber);
+      margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .related-cmds { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── 사이드바 ── -->
+<nav>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
+  <div class="nav-title">6장 §2-C · Codex 중심 실습</div>
+  <a href="#setup">🛠 준비: 필요한 프로그램 설치</a>
+  <a href="#beginner"><span class="dot dot-g"></span>초급 (Getting Started)</a>
+
+  <div class="nav-group">초급 시나리오</div>
+  <a href="#scenario-1"><span class="dot dot-g"></span>G-1 첫 역할 정의를 읽고 PM이 그 역할을 수행하기</a>
+
+  <div class="nav-group">중급 시나리오</div>
+  <a href="#scenario-2"><span class="dot dot-b"></span>D-1 writer → reviewer 2단계 순차 역할 전환</a>
+  <a href="#scenario-2b"><span class="dot dot-b"></span>D-2 요청에 따라 호출되는 역할·순서가 달라지는 것 관찰하기</a>
+
+  <div class="nav-group">고급 시나리오</div>
+  <a href="#scenario-3"><span class="dot dot-p"></span>P-1 독립 작업을 여러 창으로 나눠 돌리기 — 세션 간 병렬</a>
+  <a href="#scenario-4"><span class="dot dot-p"></span>P-2 모델 티어 비교로 비용 감각 익히기</a>
+  <a href="#cleanup">🧹 실습 마무리 정리</a>
+
+  <div class="nav-group">바로가기</div>
+  <a href="06_Practice_Manual.html">📖 6장 §1 레퍼런스 →</a>
+  <a href="06_Practice_Examples_A.html">🅐 6장 §2-A Claude 중심 실습 →</a>
+  <a href="06_Practice_Examples_B.html">🅑 6장 §2-B Antigravity 중심 실습 →</a>
+</nav>
+
+<!-- ── 본문 ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">6장 §2-C</div>
+  <h1>6장 §2-C · Codex-Focused Multi-Agent Team Practice</h1>
+  <p class="subtitle">빈 실습 폴더에서 시작해 Codex Desktop App/Codex CLI 위주로 시나리오를 따라해보는 실습 가이드 — 두 도구는 역할 정의·수행 방식에 차이가 없으므로 한 절에서 함께 안내한다 &nbsp;|&nbsp; <a href="06_Practice_Manual.html">← 6장 §1 레퍼런스 문서로 돌아가기</a> &nbsp;|&nbsp; <a href="06_Practice_Examples_A.html">6장 §2-A Claude 중심 →</a> &nbsp;|&nbsp; <a href="06_Practice_Examples_B.html">6장 §2-B Antigravity 중심 →</a></p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">대상 버전/범위</span><span class="vvalue">Codex CLI/Desktop App 2026-09 릴리스 — Codex를 중심으로 안내하며, Claude·Antigravity 대응은 6장 §2-A·§2-B를 참조</span></div>
+    <div class="version-row"><span class="vlabel">이 파일의 목적</span><span class="vvalue">역할 정의 읽기·수행, 순차 역할 전환, 요청에 따라 달라지는 역할 호출 순서 관찰, 세션 간 병렬 실행, 모델 티어 비교를 Codex Desktop App/CLI에서 손으로 따라해보는 5단계 실습 제공</span></div>
+    <div class="version-row"><span class="vlabel">레퍼런스 문서</span><span class="vvalue"><a href="06_Practice_Manual.html">6장 §1 공통</a> · <a href="06_Practice_Manual_A.html">6장 §1-A Claude 상세</a> · <a href="06_Practice_Manual_B.html">6장 §1-B Antigravity 상세</a> · <a href="06_Practice_Manual_C.html">6장 §1-C Codex 상세</a> — 각 시나리오에서 링크로 연결됩니다</span></div>
+    <div class="version-row"><span class="vlabel">작성일</span><span class="vvalue">2026년 9월 12일</span></div>
+  </div>
+
+  <div class="note" >
+    <strong>이 과정 전체가 따르는 원칙</strong> — 아래 모든 시나리오는 먼저 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 적고, Codex에서는 그 명세를 <strong>사전 정의 서브에이전트로 "구현"하지 않는다</strong>. 대신 워크스페이스 공통 폴더 <code>agents/&lt;name&gt;.md</code>에 같은 명세를 옮겨두고, PM이 세션 중에 그 파일을 <strong>읽기 전용 역할 컨텍스트</strong>로 불러와 "그 역할처럼 사고하며" 직접 작업을 수행한다. 정의는 하나, 실행 방식만 도구별로 다르다는 원칙을 손으로 확인하는 것이 이 실습의 핵심 목표다 — Claude·Antigravity에서의 대응 방법은 <a href="06_Practice_Examples_A.html">6장 §2-A</a>·<a href="06_Practice_Examples_B.html">6장 §2-B</a>를 참조한다.
+  </div>
+
+  <div class="warning-box">
+    Codex에는 서브에이전트를 스폰하는 도구 자체가 없다. 이 문서에서 "역할을 호출한다"는 표현은 전부 <strong>"PM이 해당 역할의 정의 파일을 불러와 그 역할을 수행한다"</strong>는 뜻이고, "병렬로 실행한다"는 표현은 세션 하나 안에서가 아니라 <strong>여러 터미널/창에 걸친 별도 세션</strong>을 뜻한다. 이 차이를 계속 의식하면서 아래 시나리오를 따라간다.
+  </div>
+
+  <!-- ══════════════════════════════ 실습 전 준비 ══════════════════════════════ -->
+  <h2 id="setup">준비: 필요한 프로그램 설치</h2>
+  <p>아래 실습은 Codex Desktop App과 Codex CLI 위주로 진행된다. 로컬 환경에 이 도구들이 아직 없다면, 이 핸드북에 함께 담아 둔 환경 설정 자동화 도구인 <a href="../setup/SETUP.html">setup 가이드</a>가 이 장의 실습에 정확히 필요한 구성을 자동으로 설치해준다. 안내에 따라 스크립트를 내려받아 로컬에서 실행하면 된다.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">📦 설치 전 확인 사항</div>
+    <p class="text-dim" style="margin-bottom:10px;">스크립트를 실행하기 전에 <a href="../setup/SETUP_CHECKLIST.html">사전 설치 체크리스트</a>를 먼저 읽어본다. 이 문서에는 다음 전제 조건이 정리되어 있다.</p>
+    <ul style="margin:0 0 4px 20px;font-size:13.5px;color:var(--text);line-height:1.8;">
+      <li>활성 상태의 OpenAI 계정 및 Codex 사용 권한 (구독제/계정 기반 플랜 또는 API 키 — 조직 정책에 따라 다름)</li>
+      <li><code>gh auth login</code>을 진행할 수 있는 GitHub 계정</li>
+      <li>최소 5GB의 여유 디스크 공간</li>
+      <li>관리자(admin) 또는 sudo 권한</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>GitHub 계정이 아직 없다면</strong><br>
+    ① 브라우저에서 <a href="https://github.com/signup" target="_blank">github.com/signup</a>에 접속한다.<br>
+    ② 이메일 주소, 비밀번호, 사용자 이름(username)을 입력한다 — username은 나중에 저장소 URL(<code>github.com/&lt;username&gt;/...</code>)에 그대로 쓰이므로 신중히 정한다.<br>
+    ③ 자동 가입 방지를 위한 퍼즐/코드 인증을 통과한다.<br>
+    ④ 가입 시 입력한 이메일로 온 인증 메일을 열어 <strong>이메일 인증</strong>을 완료한다 — 이 단계를 건너뛰면 이후 <code>gh auth login</code>이나 저장소 생성이 막힐 수 있다.<br>
+    ⑤ 무료(Free) 플랜으로 가입하면 충분하다 — 이 핸드북의 실습·PR 연습에는 유료 플랜이 필요 없다.<br>
+    가입이 끝나면 <a href="https://cli.github.com/" target="_blank">GitHub CLI(<code>gh</code>)</a>가 위 설치 스크립트에 포함돼 함께 설치되고, 아래 <code>gh auth login</code> 명령으로 터미널을 그 계정과 연결한다.
+    <div style="position:relative">
+  <pre class="code-block" style="margin-top:10px;">gh auth login
+# 안내에 따라: GitHub.com 선택 → HTTPS 선택 → 브라우저로 로그인(권장) 선택
+# 브라우저가 열리면 방금 만든 계정으로 로그인하고 인증 코드를 확인한다</pre>
+  <button class="copy-btn">복사</button>
+</div>
+  </div>
+
+  <h3>Windows에서 설치하기</h3>
+  <p>이 핸드북의 경로 표기가 Windows 기준이므로, Windows 사용자는 아래 명령으로 <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> 저장소를 클론한 뒤, PowerShell을 <strong>관리자 권한으로</strong> 실행해서 이어지는 명령을 돌린다.</p>
+  <div class="tip-box">
+    <strong>PowerShell을 관리자 권한으로 여는 법</strong><br>
+    ① 시작 메뉴를 열고 <code>PowerShell</code>을 검색한다.<br>
+    ② 검색 결과의 "Windows PowerShell"을 <strong>마우스 우클릭</strong>한다.<br>
+    ③ 나오는 메뉴에서 <strong>"관리자 권한으로 실행"</strong>을 선택한다.<br>
+    ④ 사용자 계정 컨트롤(UAC) 창이 뜨면 <strong>"예"</strong>를 눌러 승인한다.<br>
+    창 제목 표시줄에 <code>관리자: Windows PowerShell</code>처럼 "관리자"가 붙어 있으면 제대로 연 것이다. winget 설치 등 일부 단계는 관리자 권한 없이 실행하면 오류가 나거나 조용히 건너뛰어질 수 있다.
+  </div>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+cd ./setup
+powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1
+# 선택 옵션: -WSL2, -WezTerm, -Docker, -Force (이미 설치된 도구도 재설치)</pre>
+  <button class="copy-btn">복사</button>
+</div>
+  <p>스크립트가 끝나면 터미널을 완전히 닫았다가 다시 열어야 PATH 변경 사항이 적용된다.</p>
+
+  <h3>macOS / Linux에서 설치하기</h3>
+  <p>아래 명령으로 <a href="https://github.com/5throck/setup" target="_blank">5throck/setup</a> 저장소를 클론해서 사용한다. macOS는 setup-mac.sh, Linux는 setup-linux.sh를 실행하며, 둘 다 <code>--wezterm</code>, <code>--docker</code> 선택 플래그를 지원한다.</p>
+  <div style="position:relative">
+  <pre class="code-block">git clone https://github.com/5throck/setup.git
+
+# macOS
+cd ./setup && bash setup-mac.sh
+
+# Linux
+cd ./setup && bash setup-linux.sh</pre>
+  <button class="copy-btn">복사</button>
+</div>
+
+  <h3>설치 검증하기</h3>
+  <p>운영체제와 무관하게 setup-common.ts를 <code>bun</code>으로 실행하면 설치 상태를 점검하는 체크리스트 표가 출력된다. 모든 항목이 ✅로 표시되면 아래 실습을 진행할 준비가 된 것이다.</p>
+  <div style="position:relative">
+  <pre class="code-block">cd ./setup && bun setup-common.ts</pre>
+  <button class="copy-btn">복사</button>
+</div>
+
+  <p>이 프로젝트가 설치하는 도구 중 이 장의 실습과 직접 관련된 것은 다음과 같다. Codex Desktop App, <code>codex</code>(Codex CLI), 그리고 워크스페이스 공통 <code>agents/*.md</code> 참조에 필요한 <code>bun</code>, 이후 장에서 쓰이는 <code>gh</code>(GitHub CLI)까지 함께 설치된다.</p>
+
+  <div class="tip-box">
+    설치 중 문제가 생기면 Windows 기준 <code>%USERPROFILE%\workshop-setup-logs\</code> 폴더에 로그가 남는다. 문제를 해결할 때 이 로그부터 확인한다.
+  </div>
+
+  <!-- ══════════════════════════════ 초급 ══════════════════════════════ -->
+  <div class="level-header" id="beginner">
+    <span class="badge badge-g">● 초급</span>
+    <span class="level-title level-title-g">Getting Started</span>
+    <span class="level-desc">역할 정의 하나를 읽어들여 Codex Desktop App PM이 그 역할처럼 작업을 수행하는 첫 단계</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-1">
+    <div class="card-header">
+      <span class="card-id">G-1</span>
+      <span class="badge badge-g">초급</span>
+      <strong class="card-title">첫 역할 정의를 읽고 PM이 그 역할을 수행하기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        하네스를 처음 써보는 개발자가 실습 전용 빈 폴더 <code>harness-lab/</code>를 새로 만들고, <code>reviewer</code> 역할을 도구 중립적인 <code>AGENTS.md</code> 명세로 먼저 적어 둔 뒤, 같은 내용을 <code>agents/reviewer.md</code>에도 옮겨 둔다. Codex Desktop App에서 PM이 이 파일을 읽기 전용 역할 컨텍스트로 불러와 "리뷰어처럼 사고하며" 직접 검토를 수행하는 과정을 관찰한다. 이 폴더는 실습 전용이므로 다른 프로젝트 파일과 섞이지 않는다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C.html#section-1">역할 정의하기 (Codex)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C.html#section-2">역할 수행/전환하기 (Codex)</a>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>① 실습 폴더 생성 및 진입</strong>
+            <p>현재 폴더 아래 <code>harness-lab</code> 폴더를 새로 만들고 그 안으로 이동한다. 이후 모든 명령은 이 폴더 안에서 실행한다.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p harness-lab
+cd harness-lab</pre>
+              <button class="copy-btn">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>② 공통 역할 명세 작성 — <code>AGENTS.md</code></strong>
+            <p>Claude나 Antigravity, Codex, 그 외 AGENTS.md 표준을 지원하는 어떤 도구로 열어도 같은 의미로 읽히도록, <code>reviewer</code> 역할을 도구 종속적인 표현 없이 순수 텍스트로 적는다. 이 파일 하나가 "무엇을 하는 역할인가"의 유일한 원본이 된다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat > AGENTS.md << 'EOF'
+## Agent: reviewer
+
+역할: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
+입력: 검토 대상 텍스트 파일 경로
+출력: 오탈자 · 논리적 허점 · 개선점 목록
+권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
+EOF</pre>
+              <button class="copy-btn">복사</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> <code>cat</code> 명령 자체는 <code>Get-Content</code>의 별칭으로 파일 읽기에 그대로 쓸 수 있다. 다만 <code>&lt;&lt; 'EOF'</code>처럼 여러 줄을 직접 넣는 heredoc 문법은 지원하지 않으므로, 같은 내용은 따옴표 있는 here-string(<code>@'...'@</code>)으로 만들어 <code>Set-Content</code>로 파일에 쓴다.</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+## Agent: reviewer
+
+역할: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
+입력: 검토 대상 텍스트 파일 경로
+출력: 오탈자 · 논리적 허점 · 개선점 목록
+권한: 읽기 전용 — 파일을 직접 수정하지 않는다.
+'@ | Set-Content AGENTS.md</pre>
+              <button class="copy-btn">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>③ 워크스페이스 공통 역할 파일로 옮기기 — <code>agents/reviewer.md</code></strong>
+            <p>Codex는 <code>.claude/agents/</code> 같은 플랫폼 전용 폴더 대신, 워크스페이스 루트의 <code>agents/&lt;name&gt;.md</code>를 읽기 전용 역할 컨텍스트로 참조한다. AGENTS.md의 명세를 그대로 frontmatter 형식으로 옮겨 적는다.</p>
+            <div style="position:relative">
+              <pre class="code-block">mkdir -p agents
+cat > agents/reviewer.md << 'EOF'
+---
+name: reviewer
+description: 텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다
+tools: Read, Grep
+tier:
+  codex: medium
+---
+
+## 역할
+텍스트 파일의 오탈자, 논리적 허점, 개선점을 검토한다.
+
+## 입력
+검토 대상 텍스트 파일 경로
+
+## 출력
+오탈자 · 논리적 허점 · 개선점 목록
+
+## 권한
+읽기 전용 — 파일을 직접 수정하지 않는다.
+EOF</pre>
+              <button class="copy-btn">복사</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — PM이 agents/reviewer.md를 역할 컨텍스트로 불러와 직접 검토</div>
+        <p class="text-dim" style="margin-bottom:10px;">터미널이나 별도 에디터에서 미리 파일을 만들지 않는다. 아래 두 단계를 그대로 따라간다 — 회색 코드 상자는 전부 "복사" 버튼으로 그대로 복사해서 붙여넣으면 되는 내용이다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① Codex Desktop App에서 프로젝트 열기</strong>
+              <p>Codex Desktop App을 실행하고, 방금 만든 <code>harness-lab/</code> 폴더를 프로젝트로 연다.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 검토 대상 파일 생성 + 역할 컨텍스트로 검토 요청 — 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">notes.txt 파일을 만들고 "이 프로젝트는 매우 좋다. 이것은 아주 좋다."라고 써넣은 뒤, agents/reviewer.md에 정의된 reviewer 역할을 읽기 전용 컨텍스트로 불러와서 그 역할대로 notes.txt를 검토해줘.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+              <div class="flow-box">
+                Codex Desktop App의 PM은 별도의 서브에이전트를 스폰하지 않는다. 대신 <code>agents/reviewer.md</code>를 Read 도구로 열어 "역할/입력/출력/권한" 명세를 컨텍스트에 적재하고, 이후 응답을 그 역할의 제약(읽기 전용, 오탈자·논리적 허점·개선점만 보고)에 맞춰 생성한다 — 파일을 실제로 수정하지 않는 것도 스스로 지켜야 한다. 화면에는 서브에이전트 스폰 과정 대신, PM이 <code>agents/reviewer.md</code>를 읽는 도구 호출과 그 뒤를 잇는 검토 결과가 하나의 연속된 세션으로 표시된다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <p class="text-dim" style="margin-top:10px;"><strong>Codex CLI에서도 완전히 동일하게</strong> — 터미널에서 <code>codex</code>를 실행한 뒤 ②의 문장을 그대로 채팅으로 붙여넣으면, CLI가 똑같이 <code>agents/reviewer.md</code>를 읽고 그 역할대로 응답한다. Codex Desktop App과 CLI 사이에 역할 정의·수행 방식의 차이는 없다 — 둘 다 자동 발화하는 훅도 없다.</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>결과 확인</strong> — 화면에 PM이 <code>agents/reviewer.md</code>를 읽는 도구 호출이 실제로 보이는지 확인한다. 마지막 응답에는 오탈자·논리적 허점·개선점을 나눈 목록이 보여야 정상이다 — PM이 "수정했습니다" 같은 답을 하거나 <code>notes.txt</code>를 직접 고쳤다면 <code>agents/reviewer.md</code>의 "읽기 전용" 권한 제약을 스스로 지키지 않은 것이다(Codex에는 이를 강제하는 <code>tools</code> 제한 메커니즘이 없다 — 역할 문서의 지침을 PM이 스스로 지키는 구조다).
+      </div>
+
+      <div class="warning-box">
+        <strong>흔한 실패</strong> — PM이 <code>agents/reviewer.md</code>를 읽지 않고 곧바로 notes.txt를 검토해버린다면, ② 단계 문장에 <code>agents/reviewer.md에 정의된 reviewer 역할을 읽기 전용 컨텍스트로 불러와서</code>라는 표현이 빠진 경우다. Claude 계열의 "서브에이전트 호출"과 달리, Codex는 역할 파일을 명시적으로 참조하라고 요청하지 않으면 그냥 기본 PM 페르소나로 응답할 수 있다.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 중급 ══════════════════════════════ -->
+  <div class="level-header" id="intermediate">
+    <span class="badge badge-b">● 중급</span>
+    <span class="level-title level-title-b">Daily Workflow</span>
+    <span class="level-desc">PM이 하나의 세션 안에서 writer 역할과 reviewer 역할을 순서대로 전환해가며 지휘하는 실무 패턴</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-2">
+    <div class="card-header">
+      <span class="card-id">D-1</span>
+      <span class="badge badge-b">중급</span>
+      <strong class="card-title">writer → reviewer 2단계 순차 역할 전환</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        G-1을 마친 실무자가 같은 <code>harness-lab/</code> 폴더에서, 두 번째 역할 <code>writer</code>도 G-1과 같은 방식으로 <code>AGENTS.md</code>와 <code>agents/writer.md</code>에 먼저 명세한다. Codex PM이 writer 역할로 먼저 초안을 쓰고, 같은 세션 안에서 reviewer 역할로 전환해 그 결과를 비평하는 과정을 순서를 지켜 관찰한다 — 두 역할 모두 같은 PM이 순차적으로 "연기"할 뿐, 별도의 인스턴스가 스폰되지 않는다는 점이 Claude/Antigravity와의 핵심 차이다.
+      </div>
+
+      <div class="note">
+        <svg role="img" aria-label="Practice example C workflow step indicator" viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="carrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="carrow1b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"/></marker>
+            <marker id="carrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+            <marker id="carrow1p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+          </defs>
+          <rect x="5" y="25" width="110" height="36" rx="8" fill="var(--bg)" stroke="var(--text-dim)" stroke-width="1.5"/>
+          <text x="60" y="48" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600" fill="var(--text-dim)">사용자 요청</text>
+          <line x1="115" y1="43" x2="150" y2="43" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#carrow1)"/>
+          <rect x="155" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="225" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent)">PM → writer 역할</text>
+          <text x="225" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent)">초안 작성</text>
+          <line x1="295" y1="43" x2="330" y2="43" stroke="var(--accent-green)" stroke-width="1.5" marker-end="url(#carrow1g)"/>
+          <path d="M340,61 Q340,82 270,82 Q200,82 200,61" fill="none" stroke="var(--accent-amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polygon points="197,63 200,55 203,63" fill="var(--accent-amber)"/>
+          <text x="270" y="78" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="9" fill="var(--accent-amber)">수정 요청 시 writer 역할로 되돌아감</text>
+          <rect x="335" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+          <text x="405" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-green)">PM → reviewer 역할</text>
+          <text x="405" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-green)">피드백/승인</text>
+          <line x1="475" y1="43" x2="510" y2="43" stroke="var(--accent-purple)" stroke-width="1.5" marker-end="url(#carrow1p)"/>
+          <rect x="515" y="25" width="140" height="36" rx="8" fill="var(--bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+          <text x="585" y="40" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="700" fill="var(--accent-purple)">최종 결과물</text>
+          <text x="585" y="55" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="var(--accent-purple)">완성</text>
+        </svg>
+        <p class="text-dim" style="text-align:center;margin-top:8px;font-size:12px;">Claude/Antigravity는 writer.md/reviewer.md 각각의 인스턴스를 스폰하지만, Codex는 <strong>단일 PM 세션이 역할만 바꿔 순서대로 "연기"한다</strong> — 상자 4개 전부 같은 PM이다.</p>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter.html#s5">AGENTS.md (2장)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C.html#section-1">역할 정의하기 (Codex)</a>
+          <a class="cmd-chip" href="06_Practice_Manual_C.html#section-2">역할 수행/전환하기 (Codex)</a>
+        </div>
+      </div>
+
+      <div class="steps-title">단계별 실행</div>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <strong>공통 역할 명세 추가 — <code>AGENTS.md</code>에 writer 항목 이어쓰기</strong>
+            <p>G-1에서 만든 같은 <code>AGENTS.md</code>에 <code>writer</code> 역할을 이어서 적는다. reviewer 항목은 그대로 두고 아래 내용만 추가한다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+            <div style="position:relative">
+              <pre class="code-block">cat >> AGENTS.md << 'EOF'
+
+## Agent: writer
+
+역할: 주어진 주제로 3~5문장 분량의 짧은 초안을 작성한다.
+입력: 주제, 저장할 파일 경로
+출력: 초안 텍스트 파일
+권한: 쓰기 허용 — 지정된 파일에만 저장한다.
+handoff_to: reviewer (초안 완료 후 검토로 이어짐)
+EOF</pre>
+              <button class="copy-btn">복사</button>
+            </div>
+            <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong> here-string을 <code>Add-Content</code>로 이어붙인다(<code>Set-Content</code>는 파일을 덮어쓰므로 반드시 <code>Add-Content</code>를 써야 reviewer 항목이 지워지지 않는다).</p>
+            <div style="position:relative">
+              <pre class="code-block">@'
+
+## Agent: writer
+
+역할: 주어진 주제로 3~5문장 분량의 짧은 초안을 작성한다.
+입력: 주제, 저장할 파일 경로
+출력: 초안 텍스트 파일
+권한: 쓰기 허용 — 지정된 파일에만 저장한다.
+handoff_to: reviewer (초안 완료 후 검토로 이어짐)
+'@ | Add-Content AGENTS.md</pre>
+              <button class="copy-btn">복사</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>워크스페이스 공통 역할 파일 추가 — <code>agents/writer.md</code></strong>
+            <div style="position:relative">
+              <pre class="code-block">cat > agents/writer.md << 'EOF'
+---
+name: writer
+description: 주어진 주제로 3~5문장 분량의 짧은 초안을 작성한다
+tools: Write, Read
+tier:
+  codex: medium
+---
+
+## 역할
+주어진 주제로 3~5문장 분량의 짧은 초안을 작성한다.
+
+## 입력
+주제, 저장할 파일 경로
+
+## 출력
+초안 텍스트 파일
+
+## 권한
+쓰기 허용 — 지정된 파일에만 저장한다.
+
+## handoff_to
+reviewer (초안 완료 후 검토로 이어짐)
+EOF</pre>
+              <button class="copy-btn">복사</button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — 같은 PM이 writer 역할 → reviewer 역할 순으로 전환</div>
+        <p class="text-dim" style="margin-bottom:10px;">G-1과 마찬가지로 파일을 미리 준비하지 않는다. G-1에서 열어 둔 같은 <code>harness-lab/</code> 채팅에서 이어서 진행한다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① writer → reviewer 순차 전환 요청 — 채팅창에 아래 문장을 그대로 붙여넣고 전송</strong>
+              <div style="position:relative">
+                <pre class="code-block">agents/writer.md에 정의된 writer 역할을 읽기 전용 컨텍스트로 불러와서, 그 역할대로 draft.txt에 '원격 근무의 장점' 주제 초안을 써줘. 완료되면 agents/reviewer.md에 정의된 reviewer 역할로 전환해서 draft.txt를 검토해줘. 두 단계를 순서대로 진행해.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+              <div class="flow-box">
+                PM은 먼저 <code>agents/writer.md</code>를 읽어 writer 역할의 제약(쓰기 허용, 초안만 작성)을 컨텍스트에 적재하고 <code>draft.txt</code>를 생성한다. 그 작업이 끝난 뒤에야 <code>agents/reviewer.md</code>를 새로 읽어 이번에는 읽기 전용 리뷰어로 "역할을 바꿔 입고" draft.txt를 검토한다 — 별도 인스턴스가 스폰되는 것이 아니라, <strong>같은 세션·같은 PM이 참조하는 역할 파일만 바뀌는 것</strong>이다. 두 역할 사이의 순서를 조율하는 것도 이 PM 자신의 몫이다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="warning-box">
+          Codex에는 병렬 스폰 자체가 없으므로 "writer와 reviewer를 동시에 실행해줘" 같은 요청은 성립하지 않는다 — PM은 어차피 한 세션 안에서 한 번에 한 역할만 수행할 수 있다. 의존 관계가 있는 작업은 원래부터 순차적으로만 진행되므로, ①처럼 "두 단계를 순서대로 진행해"라고 명시하지 않아도 결과적으로 순차 실행되지만, 어떤 순서로 어떤 역할을 거칠지는 명확히 지시하는 것이 좋다.
+        </div>
+        <div class="tip-box">
+          <strong>결과 확인</strong> — 채팅 화면에 <code>agents/writer.md</code> 읽기 → draft.txt 작성 → <code>agents/reviewer.md</code> 읽기 → 검토 결과 순서로 도구 호출이 표시되어야 정상이다. 완료 후 <code>harness-lab/draft.txt</code>를 열어 초안이 실제로 저장돼 있는지도 확인한다.
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Codex CLI에서도 완전히 동일하게</strong> — 같은 <code>agents/writer.md</code>/<code>agents/reviewer.md</code>를 그대로 쓰고, 터미널에서 ①의 문장을 그대로 붙여넣으면 동일하게 순차 전환된다.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-2b">
+    <div class="card-header">
+      <span class="card-id">D-2</span>
+      <span class="badge badge-b">중급</span>
+      <strong class="card-title">요청에 따라 호출되는 역할·순서가 달라지는 것 관찰하기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        2장 §4b에서 다룬 "동적 팀 구성"과 "다양한 워크플로우 조합"을 Codex에서도 직접 눈으로 확인하는 시나리오다. D-1에서 만든 <code>agents/writer.md</code>·<code>agents/reviewer.md</code>는 그대로 두고, 요청의 성격만 바꿔가며 같은 PM이 실제로 어떤 역할을, 몇 번, 어떤 순서로 참조하는지 관찰한다 — 역할 정의 파일은 한 번도 새로 만들지 않는다는 점이 핵심이다. Codex에는 병렬 팬아웃 자체가 없으므로, "두 관점 동시 검토" 같은 요청도 실제로는 PM이 한 관점씩 순차적으로 처리한다.
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >동적 라우팅 분기 흐름도 — 같은 역할 명단, 다른 요청</div>
+        <svg role="img" aria-label="Practice example C configuration diagram" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto;">
+          <defs>
+            <marker id="cdrArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--text-dim)"/></marker>
+            <marker id="cdrArrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-purple)"/></marker>
+            <marker id="cdrArrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="var(--accent-green)"/></marker>
+          </defs>
+
+          <text x="15" y="20" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 A</text>
+          <rect x="15" y="30" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">단순 검토</text>
+          <line x1="95" y1="46" x2="145" y2="46" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="30" width="110" height="32" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="205" y="43" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="205" y="55" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--badge-green-fg)">1회 전환</text>
+          <line x1="260" y1="46" x2="320" y2="46" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="325" y="30" width="80" height="32" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="365" y="48" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
+          <text x="420" y="50" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">단일 역할</text>
+
+          <text x="15" y="95" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 B</text>
+          <rect x="15" y="105" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">초안+검토</text>
+          <line x1="95" y1="121" x2="145" y2="121" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="105" width="110" height="32" rx="6" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.2"/>
+          <text x="205" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">PM=writer</text>
+          <text x="205" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-purple)">1회 전환</text>
+          <line x1="260" y1="121" x2="320" y2="121" stroke="var(--accent-purple)" stroke-width="1.2" marker-end="url(#cdrArrowP)"/>
+          <rect x="325" y="105" width="110" height="32" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="380" y="118" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="380" y="130" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--badge-green-fg)">1회 전환</text>
+          <line x1="435" y1="121" x2="480" y2="121" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="485" y="105" width="80" height="32" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="123" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
+          <text x="570" y="125" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-purple)" font-weight="600">순차 2단계</text>
+
+          <text x="15" y="170" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--text-dim)">요청 C</text>
+          <rect x="15" y="180" width="80" height="32" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="55" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">초안+다중</text>
+          <text x="55" y="207" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" font-weight="600" fill="var(--accent)">검토</text>
+          <line x1="95" y1="196" x2="145" y2="196" stroke="var(--text-dim)" stroke-width="1.2" marker-end="url(#cdrArrow)"/>
+          <rect x="150" y="180" width="110" height="32" rx="6" fill="var(--badge-purple-bg)" stroke="var(--badge-purple-border)" stroke-width="1.2"/>
+          <text x="205" y="193" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--accent-purple)">PM=writer</text>
+          <text x="205" y="205" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--accent-purple)">1회</text>
+          <line x1="260" y1="190" x2="310" y2="185" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <line x1="260" y1="202" x2="310" y2="218" stroke="var(--accent-green)" stroke-width="1.2" marker-end="url(#cdrArrowG)"/>
+          <rect x="315" y="170" width="110" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="370" y="183" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="370" y="195" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--badge-green-fg)">문법 관점(1st)</text>
+          <rect x="315" y="206" width="110" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1.2"/>
+          <text x="370" y="219" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="700" fill="var(--badge-green-fg)">PM=reviewer</text>
+          <text x="370" y="231" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--badge-green-fg)">논리 관점(2nd)</text>
+          <line x1="425" y1="185" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <line x1="425" y1="221" x2="480" y2="196" stroke="var(--accent-green)" stroke-width="1"/>
+          <rect x="485" y="182" width="80" height="30" rx="6" fill="var(--bg-info)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="525" y="200" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--accent)">결과</text>
+          <text x="570" y="200" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="10" fill="var(--accent-green)" font-weight="600">순차 2회</text>
+
+          <text x="320" y="255" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 역할 정의는 1회 — PM이 요청마다 어떤 역할을 몇 번 "연기"할지 순차적으로 결정 (팬아웃 없음)</text>
+        </svg>
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../concepts/02_Concepts_Chapter.html#s4b">동적 팀 구성과 다양한 워크플로우</a>
+        </div>
+      </div>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — 같은 역할 명단, 다른 요청 세 번</div>
+        <p class="text-dim" style="margin-bottom:10px;">D-1을 마친 같은 채팅에서 이어서 진행한다. 매번 PM이 어떤 역할 파일을 읽고, 몇 번 전환하는지 화면에 표시되는 도구 호출 과정을 눈여겨본다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 단순 요청 — reviewer 역할 한 번만 필요한 경우</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft.txt의 오탈자만 훑어봐줘.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+              <div class="flow-box">
+                PM은 이번 요청에 writer 역할로 전환할 필요가 없다고 판단해 <code>agents/reviewer.md</code>만 참조하고 끝낸다. 같은 역할 명단(writer+reviewer)이 정의돼 있어도, 실제로 어떤 역할을 "연기"할지는 요청마다 PM이 그때그때 결정한다는 것을 보여주는 가장 단순한 예다.
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 복합 요청 — writer 역할과 reviewer 역할을 두 관점으로 순차 조합</strong>
+              <div style="position:relative">
+                <pre class="code-block">draft2.txt에 '4일 근무제' 주제로 새 초안을 써줘. 초안이 완료되면, 그 초안을 문법 관점과 논리 관점 두 가지로 각각 검토해줘. Codex는 동시 실행을 지원하지 않으니 한 관점씩 순서대로 진행해.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+              <div class="flow-box">
+                이번에는 PM이 <code>agents/writer.md</code>를 참조해 초안을 쓴 뒤, <code>agents/reviewer.md</code>로 전환해 "문법 관점"으로 한 번, 이어서 다시 "논리 관점"으로 한 번 — 같은 역할을 서로 다른 지시로 두 차례 순차 수행한다. Claude/Antigravity의 "팬아웃(동시 병렬 검토)"과 달리, Codex에서는 이것이 항상 <strong>순차적인 2회 반복</strong>으로 나타난다 — 같은 두 역할로 ①과는 완전히 다른 모양의 워크플로우가 만들어졌다는 점은 동일하다.
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="tip-box">
+          ①과 ②를 나란히 비교하면 "역할 명단(어떤 역할을 <code>agents/</code>에 정의해 뒀는가)"과 "이번 작업에 실제로 쓰이는 구성(어떤 역할을 몇 번, 어떤 순서로 참조하는가)"이 서로 다른 층위라는 게 뚜렷해진다. 전자는 워크스페이스에 미리 고정돼 있지만, 후자는 매 요청마다 PM이 새로 결정한다 — 다만 Codex는 항상 순차적으로만 결정한다는 제약이 있다.
+        </div>
+        <p class="text-dim" style="margin-top:10px;"><strong>Codex CLI에서도 완전히 동일하게</strong> — 같은 <code>agents/writer.md</code>/<code>agents/reviewer.md</code>를 그대로 쓰고, 터미널에서 ①②의 문장을 그대로 붙여넣으면 동일하게 동작한다.</p>
+        <div class="warning-box">
+          <strong>흔한 실패</strong> — ②에서 "동시에 검토해줘"라고 요청하면 PM이 실제로는 순차 처리하면서도 "동시에"라는 표현 때문에 결과를 한 번에 뭉뚱그려 보고할 수 있다. Codex에서는 항상 "순서대로", "한 관점씩" 같은 표현으로 순차성을 명시하는 것이 결과를 예측 가능하게 만든다.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> <a href="../concepts/02_Concepts_Chapter.html#s4b">2장 §4b — 동적 팀 구성과 다양한 워크플로우</a>, <a href="06_Practice_Manual_C.html#section-3">6장 §1-C Codex 상세 — 병렬 실행</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 고급 ══════════════════════════════ -->
+  <div class="level-header" id="advanced">
+    <span class="badge badge-p">● 고급</span>
+    <span class="level-title level-title-p">Power User</span>
+    <span class="level-desc">writer 역할과 reviewer 역할을 독립적인 두 파일에 대해 서로 다른 터미널/창에서 동시에 돌리는 세션 간 병렬 운영</span>
+  </div>
+
+  <div class="scenario-card" id="scenario-3">
+    <div class="card-header">
+      <span class="card-id">P-1</span>
+      <span class="badge badge-p">고급</span>
+      <strong class="card-title">독립 작업을 여러 창으로 나눠 돌리기 — 세션 간 병렬</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        D-1까지 마친 숙련자가 서로 의존하지 않는 두 개의 독립적인 작업(<code>topic-a.txt</code>, <code>topic-b.txt</code> 초안 작성)을 동시에 진행하고 싶어한다. Codex에는 한 세션 안에서 팀메이트를 병렬 스폰하는 기능이 없으므로, 같은 <code>harness-lab/</code> 폴더를 대상으로 <strong>터미널 창(또는 Codex CLI 세션) 두 개를 따로 열어</strong> 각각 독립적으로 작업을 맡긴다 — "병렬"의 단위가 팀메이트가 아니라 세션 자체다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="06_Practice_Manual_C.html#section-3">병렬 실행 — 세션 간 병렬 (Codex)</a>
+        </div>
+      </div>
+
+      <div class="platform-block codexcli">
+        <div class="platform-block-title"><span class="badge">Codex CLI</span> — 터미널 두 개, 세션 두 개</div>
+        <p class="text-dim" style="margin-bottom:10px;">같은 <code>harness-lab/</code> 폴더를 대상으로 터미널 창을 두 개 연다(또는 tmux/tmux 유사 분할 창을 써도 된다 — Codex CLI 자체에는 Claude Code의 <code>teammateMode: "tmux"</code> 같은 내장 지원이 없으므로 터미널 멀티플렉서는 사용자가 직접 구성한다).</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 첫 번째 터미널 — writer 역할로 topic-a.txt 작성</strong>
+              <p>첫 번째 터미널에서 <code>harness-lab/</code>로 이동해 <code>codex</code>를 실행하고 아래 문장을 붙여넣는다.</p>
+              <div style="position:relative">
+                <pre class="code-block">cd harness-lab
+codex</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">agents/writer.md에 정의된 writer 역할로 topic-a.txt에 '재택근무' 주제 초안을 써줘. 완료되면 agents/reviewer.md의 reviewer 역할로 전환해서 검토도 해줘.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② 두 번째 터미널 — 동시에 writer 역할로 topic-b.txt 작성</strong>
+              <p>①과 별개인 두 번째 터미널을 새로 열고, 같은 <code>harness-lab/</code>로 이동해 <code>codex</code>를 또 실행한다. 이 세션은 ①의 세션과 완전히 독립적이다 — 같은 워크스페이스를 보고 있을 뿐, 대화 맥락도 진행 상태도 공유하지 않는다.</p>
+              <div style="position:relative">
+                <pre class="code-block">cd harness-lab
+codex</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+              <div style="position:relative">
+                <pre class="code-block">agents/writer.md에 정의된 writer 역할로 topic-b.txt에 '4일 근무제' 주제 초안을 써줘. 완료되면 agents/reviewer.md의 reviewer 역할로 전환해서 검토도 해줘.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          두 세션은 서로 다른 프로세스로 실행되기 때문에 실제로 동시에 진행된다 — 다만 이것은 "하나의 오케스트레이터가 두 팀메이트를 공유 작업 목록으로 조율하는" Claude Agent Teams의 병렬과는 성격이 다르다. Codex의 두 세션은 서로의 존재를 모르고, 공유 작업 목록도 없고, <code>SendMessage</code> 같은 세션 간 직접 통신 수단도 없다. 두 세션이 같은 파일(예: 둘 다 <code>AGENTS.md</code>를 수정하려 한다)을 동시에 건드리면 파일 시스템 수준의 충돌이 그대로 발생할 수 있으므로, <strong>완전히 분리된 대상 파일</strong>을 배정하는 것이 안전하다는 점은 Claude/Antigravity와 동일하다.
+        </div>
+        <div class="tip-box">
+          두 세션의 진행 상황을 한눈에 보고 싶다면 WezTerm이나 tmux 같은 터미널 멀티플렉서로 창을 나란히 분할해두면 편하다 — 이는 Codex 자체 기능이 아니라 터미널 환경 설정의 영역이다.
+        </div>
+        <div class="warning-box">
+          <strong>흔한 실패</strong> — 두 세션이 <code>agents/writer.md</code> 자체를 수정하려 시도하면(예: "티어를 바꿔줘" 같은 요청을 양쪽에서 동시에 보내면) 파일 쓰기 경쟁이 발생해 한쪽 변경이 덮어써질 수 있다. 병렬로 돌릴 때는 "대상 파일(topic-a.txt/topic-b.txt)"만 각자 건드리게 하고, 역할 정의 파일 자체를 변경하는 요청은 병렬 세션에서 피한다.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> <a href="06_Practice_Manual_C.html#section-3">6장 §1-C Codex 상세 — 병렬 실행이 없는 이유와 세션 간 대안</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="scenario-card" id="scenario-4">
+    <div class="card-header">
+      <span class="card-id">P-2</span>
+      <span class="badge badge-p">고급</span>
+      <strong class="card-title">모델 티어 비교로 비용 감각 익히기</strong>
+    </div>
+    <div class="card-body">
+
+      <div class="situation">
+        10장에서 상세히 다루는 모델 티어(high/medium/low)가 Codex에서 실제로 어떤 체감 차이를 만드는지, 숫자로 설명 듣기 전에 직접 겪어보는 시나리오다. 같은 reviewer 역할을 모델만 바꿔가며 세 번 참조하고, 응답 속도와 결과 품질을 눈으로 비교한다. Codex의 모델 티어 이름은 Claude 계열(haiku/sonnet/opus)과 다르다는 점에 유의한다.
+      </div>
+
+      <div class="cmd-list">
+        <div class="cmd-list-title">사용 요소</div>
+        <div class="cmd-chips">
+          <a class="cmd-chip" href="../intro/05_Intro_Chapter.html#s3">모델 티어 (7장)</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+        <div >Codex 모델 티어 비교 차트</div>
+        <svg role="img" aria-label="Practice example C result diagram" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+          <rect x="0" y="0" width="520" height="30" rx="6" fill="var(--bg3)"/>
+          <text x="72" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">모델</text>
+          <text x="198" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">속도</text>
+          <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">비용</text>
+          <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">품질</text>
+
+          <!-- Row 1: gpt-5.6-luna (low) -->
+          <rect x="0" y="34" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent)">gpt-5.6-luna</text>
+          <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">빠름</text>
+          <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
+          <text x="304" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">낮음</text>
+          <rect x="400" y="46" width="65" height="16" rx="4" fill="var(--accent-amber)" opacity="0.6"/>
+          <text x="433" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">기본</text>
+          <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">정형 작업</text>
+          <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">오탈자 검토</text>
+
+          <!-- Row 2: gpt-5.6-terra (medium) -->
+          <rect x="0" y="88" width="520" height="50" fill="var(--bg2)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-purple)">gpt-5.6-terra</text>
+          <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">중간</text>
+          <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
+          <text x="315" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">중간</text>
+          <rect x="400" y="100" width="100" height="16" rx="4" fill="var(--accent-purple)" opacity="0.6"/>
+          <text x="450" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">양호</text>
+          <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">일반 검토</text>
+          <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">코드 리뷰</text>
+
+          <!-- Row 3: gpt-5.6-sol (high) -->
+          <rect x="0" y="142" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
+          <text x="72" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-red)">gpt-5.6-sol</text>
+          <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
+          <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">느림</text>
+          <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
+          <text x="338" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">높음</text>
+          <rect x="400" y="154" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
+          <text x="468" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">우수</text>
+          <text x="490" y="161" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">복잡 논리</text>
+          <text x="490" y="173" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">아키텍처</text>
+
+          <text x="260" y="212" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-dim)">※ 가벼운 역할=낮은 티어, 무거운 판단=높은 티어 — 적재적소에 배정</text>
+        </svg>
+      </div>
+
+      <div class="platform-block codexapp">
+        <div class="platform-block-title"><span class="badge">Codex Desktop App</span> — 같은 파일, 세 가지 모델 티어로 검토 요청</div>
+        <p class="text-dim" style="margin-bottom:10px;">G-1의 <code>notes.txt</code>보다 조금 더 복잡한, 논리적 허점이 있는 글을 준비한다. 채팅창에 아래 문장을 그대로 붙여넣는다.</p>
+        <ol class="step-list">
+          <li>
+            <div class="step-content">
+              <strong>① 검토 대상 파일 준비</strong>
+              <div style="position:relative">
+                <pre class="code-block">argument.txt 파일을 만들고 다음 내용을 써줘: "재택근무는 항상 사무실 근무보다 생산적이다. 왜냐하면 재택근무를 하는 사람들이 재택근무가 좋다고 말하기 때문이다. 따라서 모든 회사는 재택근무만 해야 한다."</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>② low 티어(gpt-5.6-luna)로 검토</strong>
+              <p>채팅창에 아래 문장을 그대로 붙여넣는다. PM이 <code>agents/reviewer.md</code>의 <code>tier.codex</code> 필드를 <code>low</code>로 바꾼 뒤 그 역할로 검토를 수행한다.</p>
+              <div style="position:relative">
+                <pre class="code-block">agents/reviewer.md의 tier.codex 필드를 low로 바꿔줘. 그리고 그 reviewer 역할로 argument.txt를 검토해줘.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>③ medium 티어(gpt-5.6-terra)로 같은 요청 반복</strong>
+              <p>같은 방식으로 <code>tier.codex</code>를 <code>medium</code>으로 바꾼 뒤 검토한다. 순환 논증(circular reasoning) 같은 논리적 허점을 정확히 짚어내는지 low 결과와 비교한다.</p>
+              <div style="position:relative">
+                <pre class="code-block">agents/reviewer.md의 tier.codex 필드를 medium으로 바꿔줘. 그리고 그 reviewer 역할로 argument.txt를 검토해줘.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <strong>④ high 티어(gpt-5.6-sol)로 같은 요청 반복</strong>
+              <p>같은 방식으로 <code>tier.codex</code>를 <code>high</code>로 바꾼 뒤 검토한다. 응답 시간과 지적의 깊이가 ②③과 어떻게 다른지 기록한다.</p>
+              <div style="position:relative">
+                <pre class="code-block">agents/reviewer.md의 tier.codex 필드를 high로 바꿔줘. 그리고 그 reviewer 역할로 argument.txt를 검토해줘.</pre>
+                <button class="copy-btn">복사</button>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="flow-box">
+          간단한 오탈자 검토라면 세 티어의 결과 차이가 거의 없지만, 이번처럼 "논증 구조의 허점을 짚어야 하는" 작업에서는 티어가 낮을수록 순환 논증을 순환 논증이라고 정확히 짚지 못하고 표면적인 문장만 지적하는 경향이 뚜렷해진다. 반대로 <code>gpt-5.6-luna</code>는 셋 중 가장 빠르게 응답한다 — 7장에서 설명하는 "판단이 무거운 역할일수록 높은 티어, 정형화된 작업일수록 낮은 티어"라는 원칙이 왜 존재하는지, 속도와 깊이의 트레이드오프를 직접 겪어보면 훨씬 분명해진다.
+        </div>
+        <div class="tip-box">
+          매번 Codex Desktop App에 "tier.codex 필드를 바꿔줘"라고 요청하면 된다 — 정의 파일을 직접 열 필요 없고, PM이 알아서 <code>agents/reviewer.md</code>를 수정한 뒤 그 역할로 검토를 수행한다.
+        </div>
+        <div class="warning-box">
+          <strong>흔한 실패</strong> — <code>tier.codex</code> 필드에 존재하지 않는 값(<code>haiku</code>/<code>sonnet</code>/<code>opus</code> 같은 Claude 계열 이름을 그대로 쓰는 실수 등)이 들어가면 PM이 값을 무시하고 기본 티어로 조용히 대체할 수 있다. ②③④를 마친 뒤에는 <code>agents/reviewer.md</code>를 직접 열어 <code>tier.codex</code> 값이 <code>low</code>/<code>medium</code>/<code>high</code> 중 의도한 값과 정확히 일치하는지 확인한다.
+        </div>
+      </div>
+
+      <div class="related-cmds">
+        <strong>함께 보기:</strong> <a href="../intro/05_Intro_Chapter.html#s3">7장 §templates와 variant — 모델 티어링</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 실습 마무리 정리 ══════════════════════════════ -->
+  <h2 id="cleanup">실습 마무리 정리</h2>
+  <p>5개 시나리오를 모두 마쳤다면, <code>harness-lab/</code> 폴더를 어떻게 할지 정리한다. 다음 장(7장)에서 새 실습 폴더를 쓰기 때문에 반드시 남겨둘 필요는 없지만, 지금까지 만든 <code>AGENTS.md</code>·<code>agents/*.md</code> 정의를 비교해보고 싶다면 삭제 전에 한 번 훑어보는 것을 권장한다.</p>
+
+  <div class="platform-block" >
+    <div class="platform-block-title">🧹 harness-lab 폴더 정리</div>
+    <p class="text-dim" style="margin-bottom:10px;">더 이상 필요 없다면 폴더 전체를 삭제한다. macOS/Linux/Git Bash에서는 아래 명령을 그대로 쓴다.</p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+rm -rf harness-lab</pre>
+      <button class="copy-btn">복사</button>
+    </div>
+    <p class="text-dim" style="margin-top:10px;"><strong>Windows PowerShell에서는</strong></p>
+    <div style="position:relative">
+      <pre class="code-block">cd ..
+Remove-Item -Recurse -Force harness-lab</pre>
+      <button class="copy-btn">복사</button>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>보존하고 싶다면</strong> — 폴더를 지우는 대신 <code>git init && git add -A && git commit -m "harness-lab 실습 기록"</code>으로 로컬 커밋만 남겨두는 방법도 있다. 이후 참고자료로 두고, 다음 장 실습은 별도의 새 폴더에서 시작해도 된다.
+  </div>
+
+  <div class="warning-box">
+    P-1에서 두 번째 터미널에 열어 둔 Codex CLI 세션은 <code>harness-lab/</code> 폴더를 지우면 다음 명령에서 오류를 낸다. 폴더를 정리하기 전에 두 세션을 모두 종료(<code>Ctrl+C</code> 또는 <code>exit</code>)했는지 확인한다.
+  </div>
+
+<div class="video-refs">
+  <h3 id="videos">참고 영상</h3>
+  <ul>
+    <li><span class="video-badge en">EN</span><a href="https://developers.openai.com/codex" target="_blank">Codex — OpenAI Developers</a><span class="video-meta">(공식 문서)</span> — Codex CLI/Desktop App 공식 소개 자료</li>
+  </ul>
+</div>
+
+  <hr>
+  <p class="text-dim" style="text-align: center;">
+    Codex CLI/App 2026-09 기준 | 2026년 9월 12일 작성<br>
+    <a href="06_Practice_Manual.html">← 6장 §1 멀티 에이전트 팀 활용 레퍼런스</a> &nbsp;·&nbsp; <a href="06_Practice_Examples_A.html">6장 §2-A Claude 중심 실습</a> &nbsp;·&nbsp; <a href="06_Practice_Examples_B.html">6장 §2-B Antigravity 중심 실습</a> &nbsp;·&nbsp; <a href="../intro/05_Intro_Chapter.html">7장 ai-workspace-standards 소개 →</a>
+  </p>
+  <div class="chapter-nav">
+    <a href="06_Practice_Manual_C.html" class="prev"><div class="dir">← 이전</div><div class="ttl">6장 §1-C · Codex 상세</div></a>
+    <div class="branch">
+      <div class="branch-label">6장 §2</div>
+      <a href="06_Practice_Examples_A.html" >Claude (A)</a>
+      <a href="06_Practice_Examples_B.html" >Antigravity (B)</a>
+      <a href="06_Practice_Examples_C.html" >Codex (C)</a>
+    </div>
+    <a href="../intro/05_Intro_Chapter.html" class="next"><div class="dir">다음 →</div><div class="ttl">7장 · ai-workspace-standards 소개</div></a>
+  </div>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 기준 · 한국어 교육 자료<br>
+    공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    본 핸드북의 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (저작자표시-비영리-동일조건변경허락 4.0 국제)</a> 라이선스에 따라 이용할 수 있습니다.
+  </footer>
+ </article>
+</main>
+
+</div>
+
+<script src="../assets/copy-code.js"></script>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

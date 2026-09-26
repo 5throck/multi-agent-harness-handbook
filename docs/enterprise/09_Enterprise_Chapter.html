@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<!--
+  챕터(서술형) 템플릿 — 실습이 없는 "읽는 글" 주제용. 읽기 폭(720px)·넉넉한 행간·장 이동 동선.
+  Manual(레퍼런스)/Examples(실습)과 달리 버전 박스·코드 강조가 아니라 본문 흐름 중심이다.
+  수정할 곳: (1) <title>/장 번호/제목/리드  (2) nav(이 장의 절 + 다른 장)  (3) '이 장의 요점'
+            (4) <h2 id>/<h3> 절과 본문  (5) 이전/다음 장 링크
+  {{이중중괄호}}·[설명: ...] 를 실제 내용으로 채운다. 링크는 모두 상대경로.
+  색상은 디자인 토큰만 사용 — 테마는 배포 시 references/apply-theme.sh 가 docs/ 의 브랜드 색을 치환한다.
+  검색 색인 전제: 본문 절은 반드시 <h2 id="..."> (필요 시 <h3>) 구조를 유지한다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="9장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교 - 멀티 에이전트팀 하네스 엔지니어링 핸드북">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>9장 · 기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+	  <style>
+	  </style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <a href="../index.html" class="nav-home">← 핸드북 홈</a>
+  <div class="nav-title">9장 · 두 모델 비교</div>
+  <a href="#s1">서비스 티켓 모델</a>
+  <a href="#s1">↳ 왜 칸반 기반인가</a>
+  <a href="#s2">개발 도구 + variant 모델</a>
+  <a href="#s3">나란히 놓고 비교하기</a>
+  <a href="#s3b">두 모델의 장단점</a>
+  <div class="nav-section">다른 장</div>
+  <a href="../tools/00_Tools_Manual.html">공통 참고 · Harness 도구 레퍼런스</a>
+  <a href="../intro/08_Intro_Advanced_Deploy.html">10장 · 확장 읽기</a>
+</nav>
+
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">9장</div>
+  <h1>기업 내부 멀티 에이전트팀 운영, 두 가지 모델 비교</h1>
+  <p class="lead">멀티 에이전트 개발 환경을 도입하려는 조직은 대체로 두 갈래 길 중 하나를 고르게 된다. 하나는 중앙화된 하나의 팀이 요청을 티켓으로 받는 방식이고, 다른 하나는 팀마다 자기 팀을 스스로 만들 수 있는 도구를 나눠주는 방식이다. 이 장에서는 두 모델을 나란히 놓고 무엇이 다른지만 짚는다.</p>
+
+  <div class="keypoints">
+    <div class="kp-title">이 장에서 다루는 것</div>
+    <ul>
+      <li>서비스 티켓 모델이 무엇이고 어떻게 작동하는지를 간단히</li>
+      <li>서비스 티켓 모델이 칸반(Kanban) 기반으로 운영돼야 하는 이유</li>
+      <li>개발 도구 + variant 모델이 무엇이고 어떻게 작동하는지를 간단히</li>
+      <li>중앙화, 맥락 연속성, 셋업 비용, 거버넌스 부담, 적합한 사용 사례 기준으로 두 모델을 나란히 비교</li>
+    </ul>
+  </div>
+
+  <h2 id="s1">서비스 티켓 모델</h2>
+  <p>하나의 멀티 에이전트팀이 정해진 범위 안의 요청을 티켓으로 상시 받는다. PM 역할의 에이전트가 창구가 되어 Slack이나 사내 티켓팅 시스템으로 요청을 받고, 요청 성격에 맞는 전문 에이전트에게 작업을 나눠준 뒤 결과를 돌려준다. 사용자는 자기 컴퓨터에 아무것도 설치하지 않고 익숙한 사내 도구에 메시지만 남기면 된다.</p>
+  <p>여기서 "정해진 범위"가 항상 회사 전체를 뜻하지는 않는다. 조직 규모가 작다면 회사 전체가 이 팀 하나를 공유해도 무리가 없지만, 조직이 커지면 본부·사업부 단위로 각자의 티켓 창구를 따로 운영하는 편이 현실적이다. 마케팅본부는 마케팅본부 전용 에이전트팀을, 재무본부는 재무본부 전용 에이전트팀을 따로 두는 식이다. 어느 쪽이든 이 모델의 본질은 같다. <strong>그 범위 안에서는</strong> 요청이 여러 개의 팀이 아니라 하나의 창구로 모인다는 것이다.</p>
+  <p>구체적으로 그려보면 이렇다. 소규모 조직이라면 마케팅팀 A의 "이번 캠페인 랜딩페이지 문구를 다듬어줘"와 재무팀 B의 "지난달 지출 데이터를 정리해줘"가 같은 하나의 PM 에이전트/티켓 창구로 들어와, PM이 각각을 문서 작성 에이전트와 데이터 분석 에이전트에게 나눠 배정한다. 대규모 조직이라면 마케팅본부 소속 팀들의 요청은 마케팅본부 전용 창구로, 재무본부 소속 팀들의 요청은 재무본부 전용 창구로 각각 모인다. 본부마다 별도의 에이전트팀을 운영하되, 각 본부 내부에서는 여전히 "하나의 창구로 모은다"는 원칙을 지킨다. 요청자는 같은 창구를 쓰는 다른 요청자의 존재를 몰라도 되고, 그 범위 안에서는 에이전트팀을 하나만 운영·관리하면 된다는 게 이 모델의 매력이다.</p>
+
+  <h3>왜 칸반(Kanban) 기반으로 운영해야 하는가</h3>
+  <p>문제는 바로 그 "하나의 창구로 그 범위 안의 요청이 모두 몰린다"는 특성에서 생긴다. 요청이 서로 다른 팀·다른 성격으로 동시에 쏟아지는데 이를 순서 없이 받는 대로 처리하면, 급하지 않은 요청이 급한 요청을 밀어내고, 처리 중이던 작업이 새 요청에 밀려 중간에 끊기고, 지금 무엇이 처리되고 있고 무엇이 밀려 있는지 아무도 파악할 수 없는 상태가 된다. 사람이 운영하는 헬프데스크가 티켓 수가 늘어나면 무너지는 것과 똑같은 이유다.</p>
+  <p>칸반은 이 문제를 세 가지 장치로 해결한다. 첫째, <strong>가시화된 큐(대기열)</strong>다. 모든 요청을 "대기 → 진행 중 → 검토 → 완료" 같은 열로 나눠 보드에 올려 두면, 지금 몇 건이 밀려 있고 무엇이 오래 정체돼 있는지 누구나 한눈에 본다. 둘째, <strong>진행 중 작업 수 제한(WIP limit)</strong>이다. PM 에이전트(또는 그 뒤의 스페셜리스트 에이전트)가 동시에 처리하는 작업 수를 의도적으로 제한하면, 2장 §2에서 다룬 "컨텍스트 과부하" 문제가 조직 차원에서도 똑같이 재현되는 것을 막는다. 제한 없이 요청을 다 받아주면 에이전트가 여러 요청의 맥락을 오가며 뒤섞다가 품질이 떨어진다. 셋째, <strong>우선순위 기반 인출(pull)</strong>이다. 새 요청이 들어온 순서가 아니라 우선순위가 높은 항목부터 다음 작업으로 끌어오게 하면, 급한 재무 마감 요청이 급하지 않은 문구 다듬기 요청 뒤에 묻혀 며칠씩 방치되는 사고를 막는다.</p>
+  <p>결국 서비스 티켓 모델은 "단일 창구"라는 장점과 "그 범위 안 모든 팀의 요청이 한곳에 몰린다"는 위험을 동시에 갖고 있고, 칸반은 후자를 통제 가능한 상태로 유지해 주는 최소한의 운영 규율이다. 칸반 없이 티켓 모델만 도입하면, 초반에는 편리해 보여도 요청량이 늘어나는 순간 처리 지연·우선순위 뒤바뀜·컨텍스트 뒤섞임이라는 세 가지 실패 양상이 거의 필연적으로 나타난다.</p>
+
+  <h2 id="s2">개발 도구 + variant 모델</h2>
+  <p>회사가 모든 요청을 대신 처리해주는 대신, 각 팀에게 "자기 팀 전용 멀티 에이전트팀을 스스로 만들 수 있는 개발 도구"를 나눠준다. 팀은 준비된 프로젝트 템플릿(variant) 중 하나를 골라 자기 프로젝트를 스캐폴딩하고, 그렇게 만들어진 프로젝트는 독립된 저장소로 그 팀이 계속 소유하고 운영한다. ai-workspace-standards가 실제로 어떻게 이 모델을 구현하는지는 7장 §3에서 자세히 다룬다.</p>
+  <p>같은 예로 비교하면 차이가 뚜렷하다. 마케팅팀은 <code>co-work</code> 베리언트(variant)로 자기 팀 전용 프로젝트를 스캐폴딩해 그 안에서 캠페인 문구를 계속 다듬어 나가고, 재무팀은 <code>co-develop</code>이나 <code>co-consult</code> 베리언트(variant)로 자기 팀 전용 데이터 분석 파이프라인을 갖춘다. 두 팀 다 서로의 요청 큐를 공유하지 않고, 각자의 저장소·메모리 로그·에이전트 구성을 독립적으로 소유한다. 티켓 모델의 "단일 창구 대기열" 문제 자체가 애초에 발생하지 않는 대신, 팀마다 초기 셋업과 운영 부담을 스스로 져야 한다.</p>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg role="img" aria-label="Enterprise operating model comparison diagram" viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <marker id="arrowE" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text-dim)"/>
+        </marker>
+      </defs>
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <text x="150" y="18" text-anchor="middle" font-size="12.5" fill="var(--accent-dark)" font-weight="700">서비스 티켓 모델 — 중앙 집중</text>
+        <circle cx="150" cy="110" r="42" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="150" y="106" text-anchor="middle" font-size="10.5" fill="var(--accent-dark)" font-weight="700">PM /</text>
+        <text x="150" y="120" text-anchor="middle" font-size="10.5" fill="var(--accent-dark)" font-weight="700">에이전트팀</text>
+
+        <rect x="18" y="35" width="80" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--accent-green)"/>
+        <text x="58" y="54" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)">마케팅팀</text>
+        <line x1="70" y1="65" x2="115" y2="90" stroke="var(--text-dim)" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="18" y="150" width="80" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--accent-green)"/>
+        <text x="58" y="169" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)">재무팀</text>
+        <line x1="70" y1="150" x2="115" y2="128" stroke="var(--text-dim)" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="35" width="80" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--accent-green)"/>
+        <text x="242" y="54" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)">영업팀</text>
+        <line x1="230" y1="65" x2="185" y2="90" stroke="var(--text-dim)" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <rect x="202" y="150" width="80" height="30" rx="6" fill="var(--badge-green-bg)" stroke="var(--accent-green)"/>
+        <text x="242" y="169" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)">HR팀</text>
+        <line x1="230" y1="150" x2="185" y2="128" stroke="var(--text-dim)" stroke-width="1.3" marker-end="url(#arrowE)"/>
+
+        <text x="150" y="210" text-anchor="middle" font-size="10.5" fill="var(--text-dim)">모든 요청이 하나의 창구로</text>
+
+        <rect x="328" y="10" width="1" height="210" fill="var(--border)"/>
+
+        <text x="480" y="18" text-anchor="middle" font-size="12.5" fill="var(--accent-dark)" font-weight="700">개발 도구 + variant 모델 — 분산</text>
+
+        <rect x="345" y="60" width="90" height="70" rx="8" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
+        <text x="390" y="88" text-anchor="middle" font-size="10.5" fill="var(--badge-green-fg)" font-weight="700">마케팅팀</text>
+        <text x="390" y="104" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">co-work</text>
+        <text x="390" y="118" text-anchor="middle" font-size="9.5" fill="var(--badge-green-fg)">전용 에이전트팀</text>
+
+        <rect x="450" y="60" width="90" height="70" rx="8" fill="var(--badge-blue-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="495" y="88" text-anchor="middle" font-size="10.5" fill="var(--accent-dark)" font-weight="700">재무팀</text>
+        <text x="495" y="104" text-anchor="middle" font-size="9.5" fill="var(--accent-dark)">co-consult</text>
+        <text x="495" y="118" text-anchor="middle" font-size="9.5" fill="var(--accent-dark)">전용 에이전트팀</text>
+
+        <rect x="555" y="60" width="70" height="70" rx="8" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
+        <text x="590" y="88" text-anchor="middle" font-size="10.5" fill="var(--accent-purple)" font-weight="700">HR팀</text>
+        <text x="590" y="104" text-anchor="middle" font-size="9.5" fill="var(--accent-purple)">co-work</text>
+        <text x="590" y="118" text-anchor="middle" font-size="9.5" fill="var(--accent-purple)">전용 에이전트팀</text>
+
+        <text x="480" y="210" text-anchor="middle" font-size="10.5" fill="var(--text-dim)">팀마다 독립된 저장소·큐·구성</text>
+      </g>
+    </svg>
+  </div>
+
+  <h2 id="s3">나란히 놓고 비교하기</h2>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
+    <svg role="img" aria-label="Enterprise strategy comparison table" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <g font-family="-apple-system,Segoe UI,sans-serif">
+        <!-- Title -->
+        <text x="300" y="22" text-anchor="middle" font-size="12" fill="var(--accent-dark)" font-weight="700">도입 검사 매트릭스 — 두 모델 비교</text>
+
+        <!-- Header row -->
+        <rect x="10" y="34" width="580" height="30" rx="6" fill="var(--bg3)" stroke="var(--border)" stroke-width="1"/>
+        <text x="140" y="54" text-anchor="middle" font-size="11" fill="var(--text)" font-weight="700">평가 항목</text>
+        <text x="340" y="54" text-anchor="middle" font-size="11" fill="var(--text)" font-weight="700">티켓 모델</text>
+        <text x="510" y="54" text-anchor="middle" font-size="11" fill="var(--text)" font-weight="700">variant 모델</text>
+
+        <!-- Column dividers -->
+        <line x1="240" y1="34" x2="240" y2="238" stroke="var(--border)" stroke-width="1"/>
+        <line x1="430" y1="34" x2="430" y2="238" stroke="var(--border)" stroke-width="1"/>
+
+        <!-- Row 1: 초기 비용 — 낮음(green) vs 높음(orange) -->
+        <rect x="10" y="68" width="580" height="34" rx="0" fill="var(--bg)"/>
+        <line x1="10" y1="102" x2="590" y2="102" stroke="var(--border)" stroke-width="0.5"/>
+        <text x="30" y="90" font-size="11" fill="var(--text)" font-weight="600">초기 비용</text>
+        <rect x="290" y="76" width="52" height="20" rx="4" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1"/>
+        <text x="316" y="90" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)" font-weight="700">낮음</text>
+        <rect x="470" y="76" width="52" height="20" rx="4" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1"/>
+        <text x="496" y="90" text-anchor="middle" font-size="10" fill="var(--badge-amber-fg)" font-weight="700">높음</text>
+
+        <!-- Row 2: 운영 자율성 — 낮음(orange) vs 높음(green) -->
+        <rect x="10" y="104" width="580" height="34" rx="0" fill="var(--bg2)"/>
+        <line x1="10" y1="138" x2="590" y2="138" stroke="var(--border)" stroke-width="0.5"/>
+        <text x="30" y="126" font-size="11" fill="var(--text)" font-weight="600">운영 자율성</text>
+        <rect x="290" y="112" width="52" height="20" rx="4" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1"/>
+        <text x="316" y="126" text-anchor="middle" font-size="10" fill="var(--badge-amber-fg)" font-weight="700">낮음</text>
+        <rect x="470" y="112" width="52" height="20" rx="4" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1"/>
+        <text x="496" y="126" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)" font-weight="700">높음</text>
+
+        <!-- Row 3: 확장성 — 제한적(orange) vs 좋음(green) -->
+        <rect x="10" y="140" width="580" height="34" rx="0" fill="var(--bg)"/>
+        <line x1="10" y1="174" x2="590" y2="174" stroke="var(--border)" stroke-width="0.5"/>
+        <text x="30" y="162" font-size="11" fill="var(--text)" font-weight="600">확장성</text>
+        <rect x="276" y="148" width="72" height="20" rx="4" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1"/>
+        <text x="312" y="162" text-anchor="middle" font-size="10" fill="var(--badge-amber-fg)" font-weight="700">제한적</text>
+        <rect x="480" y="148" width="52" height="20" rx="4" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1"/>
+        <text x="506" y="162" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)" font-weight="700">좋음</text>
+
+        <!-- Row 4: 거버넌스 — 중앙 통제(green) vs 분산(orange) -->
+        <rect x="10" y="176" width="580" height="34" rx="0" fill="var(--bg2)"/>
+        <line x1="10" y1="210" x2="590" y2="210" stroke="var(--border)" stroke-width="0.5"/>
+        <text x="30" y="198" font-size="11" fill="var(--text)" font-weight="600">거버넌스</text>
+        <rect x="276" y="184" width="72" height="20" rx="4" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1"/>
+        <text x="312" y="198" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)" font-weight="700">중앙 통제</text>
+        <rect x="450" y="184" width="106" height="20" rx="4" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1"/>
+        <text x="503" y="198" text-anchor="middle" font-size="10" fill="var(--badge-amber-fg)" font-weight="700">분산(표준 필요)</text>
+
+        <!-- Row 5: 맥락 유지 — 끊김(orange) vs 깊음(green) -->
+        <rect x="10" y="212" width="580" height="34" rx="0" fill="var(--bg)"/>
+        <text x="30" y="234" font-size="11" fill="var(--text)" font-weight="600">맥락 유지</text>
+        <rect x="284" y="220" width="52" height="20" rx="4" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1"/>
+        <text x="310" y="234" text-anchor="middle" font-size="10" fill="var(--badge-amber-fg)" font-weight="700">끊김</text>
+        <rect x="480" y="220" width="52" height="20" rx="4" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="1"/>
+        <text x="506" y="234" text-anchor="middle" font-size="10" fill="var(--badge-green-fg)" font-weight="700">깊음</text>
+
+        <!-- Table outer border -->
+        <rect x="10" y="34" width="580" height="212" rx="6" fill="none" stroke="var(--border)" stroke-width="1"/>
+
+        <!-- Legend -->
+        <rect x="140" y="252" width="12" height="12" rx="3" fill="var(--badge-green-bg)" stroke="var(--badge-green-border)" stroke-width="0.5"/>
+        <text x="157" y="262" font-size="9" fill="var(--text-dim)">장점(우위)</text>
+        <rect x="240" y="252" width="12" height="12" rx="3" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="0.5"/>
+        <text x="257" y="262" font-size="9" fill="var(--text-dim)">트레이드오프</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4>서비스 티켓 모델</h4>
+      <ul>
+        <li><strong>중앙화:</strong> 단일 팀, 단일 창구. 소규모 조직은 회사 전체가, 대규모 조직은 본부/사업부 단위가 공유</li>
+        <li><strong>맥락 연속성:</strong> 요청 간 맥락이 자주 끊김, 무관한 프로젝트가 같은 큐를 통과</li>
+        <li><strong>셋업 비용:</strong> 낮음. 새 팀도 곧바로 같은 창구 사용</li>
+        <li><strong>거버넌스 부담:</strong> 낮음. 운영이 한곳에 집중돼 있어 통제가 쉬움</li>
+        <li><strong>적합한 사례:</strong> 좁고 반복적인 요청(사내 헬프데스크형)</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4>개발 도구 + variant 모델</h4>
+      <ul>
+        <li><strong>중앙화:</strong> 분산. 팀마다 자기 에이전트팀 소유</li>
+        <li><strong>맥락 연속성:</strong> 프로젝트 저장소·메모리 로그를 계속 참조해 우수함</li>
+        <li><strong>셋업 비용:</strong> 팀마다 초기 스캐폴딩·구성 비용 발생</li>
+        <li><strong>거버넌스 부담:</strong> 높음. 공유 표준(CONSTITUTION.md류)이 없으면 팀 간 표류</li>
+        <li><strong>적합한 사례:</strong> 팀이 자기 프로젝트를 장기간 깊이 있게 운영해야 하는 경우</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pullquote">두 모델을 가르는 진짜 기준은 요청이 얼마나 반복적인가가 아니라, 그 요청이 프로젝트 맥락을 얼마나 깊이 필요로 하는가다.
+    <span class="by">— 중앙 집중형과 분산형 운영의 근본적 차이</span></div>
+
+  <p>요청이 좁고 반복적이며 깊은 도메인 맥락이 필요 없다면 티켓 모델이 효율적이다. 반대로 각 팀이 자기 프로젝트를 오래 깊이 있게 운영해야 한다면, 초기 비용을 감수하더라도 팀별로 에이전트팀을 소유하는 쪽이 지속 가능하다.</p>
+  <div class="note">두 모델은 상호 배타적이지 않다. 조직 안에서도 헬프데스크성 업무는 티켓 모델로, 제품 개발 팀은 variant 모델로 병행 운영하는 것도 가능하다.</div>
+
+  <h2 id="s3b">두 모델의 장단점</h2>
+  <p>§3의 표가 "무엇이 다른가"를 속성별로 나열했다면, 여기서는 그 차이가 실제 운영에서 어떤 이득과 대가로 이어지는지를 장점/단점으로 정리한다.</p>
+
+  <h3>서비스 티켓 모델</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >장점</h4>
+      <ul>
+        <li><strong>진입 장벽이 낮다.</strong> 새 팀도 별도 셋업 없이 곧바로 같은 창구를 쓸 수 있다.</li>
+        <li><strong>거버넌스가 단순하다.</strong> 운영이 한 팀에 집중돼 있어 규칙 위반 여부를 한곳에서만 통제·감사하면 된다(3장의 감사 로그 원칙이 적용될 지점도 하나뿐이다).</li>
+        <li><strong>응답 품질이 표준화된다.</strong> 모든 요청이 같은 PM/에이전트팀을 거치므로 결과물의 형식과 수준이 균일하다.</li>
+        <li><strong>초기 도입 비용이 최소화된다.</strong> 적용 범위(회사 전체 또는 본부 단위) 안에 에이전트팀을 하나만 구축·운영하면 된다.</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >단점</h4>
+      <ul>
+        <li><strong>맥락이 매번 끊긴다.</strong> 요청자가 매번 배경을 다시 설명해야 하고, 깊은 도메인 지식이 쌓이지 않는다.</li>
+        <li><strong>병목이 구조적이다.</strong> 그 범위(회사 전체 또는 본부)가 커질수록 단일 창구가 처리 속도를 좌우한다. 본부 단위로 창구를 쪼개면 회사 전체가 하나의 창구를 쓸 때보다는 병목이 완화되지만, 각 본부 안에서는 여전히 같은 문제가 재현된다. §1의 칸반 없이는 이 병목이 훨씬 빨리, 훨씬 심하게 온다.</li>
+        <li><strong>팀의 소유권이 없다.</strong> 요청 팀이 워크플로우를 직접 다듬을 수 없고, 결과물에 대한 책임 소재도 흐려지기 쉽다.</li>
+        <li><strong>확장에 한계가 있다.</strong> 요청량이 팀원 수를 늘리는 속도보다 빠르게 늘면 큐가 감당하지 못한다.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>개발 도구 + variant 모델</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h4 >장점</h4>
+      <ul>
+        <li><strong>맥락이 깊게 유지된다.</strong> 프로젝트 저장소·메모리 로그를 계속 참조하므로 반복될수록 결과 품질이 오히려 좋아진다.</li>
+        <li><strong>팀 자율성이 높다.</strong> 자기 도메인에 맞는 워크플로우를 베리언트(variant)로 직접 설계·커스터마이징할 수 있다.</li>
+        <li><strong>확장성이 좋다.</strong> 팀이 늘어나도 서로의 큐를 공유하지 않으므로 조직 전체의 병목이 되지 않는다.</li>
+        <li><strong>재사용이 쉽다.</strong> 한 번 만든 베리언트(variant)를 다른 팀도 그대로 복제해 시작할 수 있다(7장 §3의 보일러플레이트 개념).</li>
+      </ul>
+    </div>
+    <div class="compare-col">
+      <h4 >단점</h4>
+      <ul>
+        <li><strong>초기 셋업 비용이 든다.</strong> 팀마다 스캐폴딩·에이전트 정의·거버넌스 파이프라인을 갖춰야 한다.</li>
+        <li><strong>거버넌스가 파편화될 위험이 있다.</strong> 공유 표준(CONSTITUTION.md)이 없거나 지켜지지 않으면 팀마다 다른 규칙으로 표류한다. 포크 모델(7장 §3)이 주는 자유의 대가다.</li>
+        <li><strong>인프라가 중복된다.</strong> 유사한 구성을 여러 프로젝트가 각자 유지해야 한다. L0→L1→L2→L3 구조가 이를 완화하지만 완전히 없애지는 못한다.</li>
+        <li><strong>숙련도를 요구한다.</strong> 팀원이 하네스 구성 자체(2장 §1·3장의 개념)를 어느 정도 이해하고 있어야 제대로 활용할 수 있다.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">결국 트레이드오프는 한 문장으로 압축된다. <strong>티켓 모델은 "낮은 진입 장벽과 단순한 통제"를 사고, 그 대가로 "맥락 단절과 확장 한계"를 지불한다. variant 모델은 "깊은 맥락과 확장성"을 사고, 그 대가로 "초기 비용과 숙련도 요구"를 지불한다.</strong> 어느 쪽이 "더 나은" 모델이 아니라, 조직이 지금 어떤 대가를 감당할 수 있는지의 문제다.</div>
+
+  <div class="chapter-nav">
+    <a href="../tools/00_Tools_Manual.html" class="prev"><div class="dir">← 이전</div><div class="ttl">공통 참고 · 도구 비교</div></a>
+    <a href="../intro/08_Intro_Advanced_Deploy.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">10장 §1 · 배포와 SSOT</div></a>
+  </div>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 기준 · 한국어 교육 자료<br>
+    공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    본 핸드북의 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (저작자표시-비영리-동일조건변경허락 4.0 국제)</a> 라이선스에 따라 이용할 수 있습니다.
+  </footer>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

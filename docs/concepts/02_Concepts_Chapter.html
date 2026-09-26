@@ -59,7 +59,7 @@
 
   <ul>
     <li><strong>목적 지속성:</strong> 에이전트는 "역할"로 정의된 목적을 가진다. 대화가 길어져도 자기 역할(리서처, 검토자, 작성자 등)을 잃지 않고 일관되게 행동한다.</li>
-    <li><strong>도구 사용:</strong> 에이전트는 텍스트 생성뿐 아니라 파일을 읽고, 코드를 검색하고, 명령을 실행할 수 있다. 4장에서 이 도구를 <code>tools</code> 필드로 제어하는 방법을 실습한다.</li>
+    <li><strong>도구 사용:</strong> 에이전트는 텍스트 생성뿐 아니라 파일을 읽고, 코드를 검색하고, 명령을 실행할 수 있다. 6장에서 이 도구를 <code>tools</code> 필드로 제어하는 방법을 실습한다.</li>
     <li><strong>자율적 행동:</strong> 에이전트는 단일 프롬프트에 대한 단일 응답이 아니라, 목적을 달성하기 위해 여러 단계를 자율적으로 수행할 수 있다. 조건 분기, 오류 재시도, 결과 검증까지 스스로 판단한다.</li>
   </ul>
 
@@ -182,7 +182,7 @@
       <!-- Layer 1: Workspace -->
       <rect x="40" y="10" width="600" height="48" rx="10" fill="var(--badge-purple-bg)" stroke="var(--accent-purple)" stroke-width="1.5"/>
       <text x="340" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="var(--accent-purple)">워크스페이스 (Workspace)</text>
-      <text x="610" y="40" text-anchor="end" font-size="10" fill="var(--text-dim)">5장, 8장, 10~12장</text>
+      <text x="610" y="40" text-anchor="end" font-size="10" fill="var(--text-dim)">7장, 10장, 10~16장</text>
       <!-- Arrow 1 -->
       <line x1="340" y1="58" x2="340" y2="78" stroke="var(--text-dim)" stroke-width="1.5" marker-end="url(#archArrow)"/>
       <!-- Layer 2: Harness (5 sub-layers) -->
@@ -215,9 +215,9 @@
       <text x="512" y="163" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">실행 추적·비용</text>
       <text x="512" y="175" text-anchor="middle" font-size="9.5" fill="var(--text-dim)">타임라인·재생</text>
       <!-- Chapter refs -->
-      <text x="114" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">4장</text>
-      <text x="216" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">4장, 9장</text>
-      <text x="322" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">8장 §2</text>
+      <text x="114" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">6장</text>
+      <text x="216" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">6장, 11장</text>
+      <text x="322" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">10장 §2</text>
       <text x="428" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">3장</text>
       <text x="512" y="195" text-anchor="middle" font-size="9" fill="var(--accent)">3장 §6</text>
       <!-- Sub-layer connectors -->
@@ -228,11 +228,11 @@
       <!-- Layer 3: Agent -->
       <rect x="40" y="272" width="285" height="48" rx="10" fill="var(--badge-green-bg)" stroke="var(--accent-green)" stroke-width="1.5"/>
       <text x="182" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="var(--badge-green-fg)">에이전트 (Agent)</text>
-      <text x="200" y="301" font-size="10" fill="var(--text-dim)">  2장, 4장, 8장 §3</text>
+      <text x="200" y="301" font-size="10" fill="var(--text-dim)">  2장, 6장, 10장 §3</text>
       <!-- Layer 4: Tool (right side) -->
       <rect x="355" y="272" width="285" height="48" rx="10" fill="var(--badge-amber-bg)" stroke="var(--badge-amber-border)" stroke-width="1.5"/>
       <text x="497" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="var(--badge-amber-fg)">도구 (Tool)</text>
-      <text x="510" y="301" font-size="10" fill="var(--text-dim)">  4장, AGENTS.md</text>
+      <text x="510" y="301" font-size="10" fill="var(--text-dim)">  6장, AGENTS.md</text>
       <!-- Bidirectional arrow between Agent and Tool -->
       <line x1="325" y1="296" x2="355" y2="296" stroke="var(--text-dim)" stroke-width="1.5" marker-start="url(#archArrow)" marker-end="url(#archArrow)"/>
       <!-- Arrow 3 down from Agent -->
@@ -382,11 +382,11 @@
   <h3>사전 정의 vs 동적 생성 vs 역할 컨텍스트</h3>
   <p>서브에이전트를 다루는 방식은 도구마다 다르다. Claude Code/App은 <strong>사전 정의</strong> 방식을 쓴다. <code>.claude/agents/</code> 아래에 <code>이름.md</code> 파일을 두고, YAML frontmatter로 <code>name</code>(호출 시 참조하는 식별자), <code>description</code>(언제 이 서브에이전트를 쓸지), <code>tools</code>(허용할 도구 목록으로 권한을 최소화), <code>model</code>(어떤 모델로 실행할지)을 명시한다. 메인 세션은 이 정의를 <code>Agent</code>(Task) 툴로 <code>subagent_type="이름"</code> 호출해 스폰한다.</p>
   <p>반면 Antigravity는 <strong>동적 생성</strong>에 가깝다. 사전에 파일을 만들어 두지 않고, 오케스트레이터에게 목표를 자연어로 주면 그 순간 필요한 역할을 즉석에서 구성해 처리한다. "reviewer라는 서브에이전트를 호출했다"기보다는, 에이전트가 작업에 맞는 역할을 그때그때 만들어 쓰는 쪽에 가깝다. 두 접근 모두 결과적으로는 "좁은 책임의 작업을 격리된 컨텍스트에서 처리한다"는 같은 목표를 달성하지만, 사전 정의는 재사용성과 권한 통제가 강하고 동적 생성은 유연성이 강하다는 차이가 있다.</p>
-  <p>Codex는 <strong>역할 컨텍스트 순차 전환</strong> 방식을 쓴다. 별도의 서브에이전트 정의 파일이나 동적 스폰 없이, PM이 <code>AGENTS.md</code>·<code>CODEX.md</code>의 역할 정의를 컨텍스트로 읽고 한 단계가 끝날 때마다 다음 역할로 전환하며 작업한다. 병렬로 여러 서브에이전트가 존재하는 것이 아니라 한 세션 안에서 역할이 순차적으로 갈아입는 방식이라, 격리된 컨텍스트라기보다 "한 세션 안의 역할 전환"에 가깝다. 도구별 확장 기능 의존도가 가장 낮다는 것이 강점이다(<a href="../practice/04_Practice_Manual_C.html">4장 §1-C</a>).</p>
+  <p>Codex는 <strong>역할 컨텍스트 순차 전환</strong> 방식을 쓴다. 별도의 서브에이전트 정의 파일이나 동적 스폰 없이, PM이 <code>AGENTS.md</code>·<code>CODEX.md</code>의 역할 정의를 컨텍스트로 읽고 한 단계가 끝날 때마다 다음 역할로 전환하며 작업한다. 병렬로 여러 서브에이전트가 존재하는 것이 아니라 한 세션 안에서 역할이 순차적으로 갈아입는 방식이라, 격리된 컨텍스트라기보다 "한 세션 안의 역할 전환"에 가깝다. 도구별 확장 기능 의존도가 가장 낮다는 것이 강점이다(<a href="../practice/06_Practice_Manual_C.html">6장 §1-C</a>).</p>
 
   <h3>언제 서브에이전트를 쓰는가</h3>
   <p>모든 작업을 서브에이전트로 쪼갤 필요는 없다. 경계가 분명하고(무엇을 받아 무엇을 내놓는지 명확) 반복적이거나 병렬화가 가능한 작업. 코드 리뷰, 테스트 실행, 문서 검토 같은 것이 좋은 후보다. 반대로 메인 세션과 계속 맥락을 주고받아야 하는 탐색적 작업은 서브에이전트로 분리하면 오히려 핸드오프 비용만 늘어난다.</p>
-  <div class="note">서브에이전트는 스페셜리스트라는 "역할" 개념을 실제 도구에서 실행 가능하게 만드는 "구현"이다. 4장에서는 이 정의 방식과 호출 방법을 Claude Desktop App·Antigravity·Codex를 중심으로 직접 손으로 만들어본다.</div>
+  <div class="note">서브에이전트는 스페셜리스트라는 "역할" 개념을 실제 도구에서 실행 가능하게 만드는 "구현"이다. 6장에서는 이 정의 방식과 호출 방법을 Claude Desktop App·Antigravity·Codex를 중심으로 직접 손으로 만들어본다.</div>
 
   <h2 id="s4">오케스트레이션 패턴</h2>
   <p>Anthropic이 2024년 12월 "Building Effective Agents"에서 정리한 다섯 가지 워크플로 패턴이 실무에서 가장 널리 쓰인다. 프롬프트 체이닝(파이프라인), 라우팅, 병렬화(팬아웃·투표), 오케스트레이터-워커, 평가자-최적화(검증-후-적용)다. 다섯 패턴은 서로 대체 관계가 아니라, "작업 사이에 의존 관계가 있는가", "미리 하위 작업을 예측할 수 있는가", "검증이 필요한가"에 따라 골라 쓰거나 조합하는 도구 상자다.</p>
@@ -483,7 +483,7 @@
 
   <ul>
     <li><strong>프롬프트 체이닝 / 파이프라인(Prompt Chaining).</strong> 한 작업을 순서가 정해진 여러 단계로 쪼개고, 각 단계 사이에 검증 게이트를 둔다. 여러 항목을 동시에 흘려보내면 항목 간에는 서로 기다리지 않는 파이프라인이 된다. 항목 A가 3단계에 있는 동안 항목 B는 아직 1단계에 있을 수 있어 전체 처리량이 늘어난다. <br><span style="color:var(--text-dim);font-size:14px;">예: 공장의 조립 라인과 같다. 제품 A가 도색 단계를 지나는 동안 제품 B는 이미 조립 단계에 있다. 문서 3개를 "초안 작성 → 검토 → 교정" 3단계로 처리한다면, 문서 1이 검토 단계로 넘어가자마자 문서 2가 초안 작성을 시작할 수 있다.</span></li>
-    <li><strong>라우팅(Routing).</strong> 들어온 요청을 먼저 분류한 뒤, 그 성격에 맞는 전문 에이전트나 모델로 갈라 보낸다. 5장에서 다루는 모델 티어링이 대표적인 예다. 쉬운 질문은 저비용 모델(haiku)로, 어렵고 드문 질문은 고성능 모델(opus)로 보내 비용과 품질의 균형을 맞춘다. <br><span style="color:var(--text-dim);font-size:14px;">예: 고객 문의가 들어오면 먼저 "단순 FAQ인가, 복잡한 기술 문의인가"를 분류하는 에이전트가 판단하고, 전자는 정형화된 응답 에이전트로, 후자는 더 깊이 조사할 수 있는 에이전트로 넘긴다.</span></li>
+    <li><strong>라우팅(Routing).</strong> 들어온 요청을 먼저 분류한 뒤, 그 성격에 맞는 전문 에이전트나 모델로 갈라 보낸다. 7장에서 다루는 모델 티어링이 대표적인 예다. 쉬운 질문은 저비용 모델(haiku)로, 어렵고 드문 질문은 고성능 모델(opus)로 보내 비용과 품질의 균형을 맞춘다. <br><span style="color:var(--text-dim);font-size:14px;">예: 고객 문의가 들어오면 먼저 "단순 FAQ인가, 복잡한 기술 문의인가"를 분류하는 에이전트가 판단하고, 전자는 정형화된 응답 에이전트로, 후자는 더 깊이 조사할 수 있는 에이전트로 넘긴다.</span></li>
     <li><strong>병렬화(Parallelization).</strong> 두 갈래로 나뉜다. <strong>섹셔닝(팬아웃)</strong>은 서로 독립적인 여러 하위 작업(예: 4가지 관점의 코드 리뷰)을 동시에 여러 에이전트에게 맡기고 결과를 한데 모은다. 소요 시간은 가장 느린 하나의 작업 시간에 수렴한다. <strong>투표(Voting)</strong>는 반대로 <em>같은</em> 작업을 여러 에이전트에게 독립적으로 반복시킨 뒤 다수결이나 합의로 하나의 답을 고른다. <br><span style="color:var(--text-dim);font-size:14px;">섹셔닝 예: "이 코드를 성능·보안·가독성·테스트 커버리지 네 관점에서 동시에 리뷰해줘." 투표 예: 같은 버그 원인 분석을 세 에이전트에게 각각 독립적으로 시킨 뒤, 두 곳 이상이 같은 원인을 지목하면 그 결론을 채택한다. 한 에이전트의 착각을 다수결로 걸러낸다.</span></li>
     <li><strong>오케스트레이터-워커(Orchestrator-Workers).</strong> §3에서 설명한 팀 구조 자체가 이 패턴이다. 중앙의 오케스트레이터가 작업을 어떻게 쪼갤지 미리 정해 두지 않고, 입력을 보고 그때그때 동적으로 결정해 워커(스페셜리스트)에게 위임하고 결과를 종합한다. 하위 작업을 미리 예측할 수 없는 복잡한 작업(여러 파일에 걸친 코드 변경, 여러 출처를 종합해야 하는 리서치)에 특히 적합하다. §4b에서 다루는 "동적 팀 구성"이 바로 이 패턴의 다른 이름이다.</li>
     <li><strong>평가자-최적화 / 검증-후-적용(Evaluator-Optimizer).</strong> 한 에이전트가 초안을 만들면, 독립된 다른 에이전트(또는 여러 에이전트의 합의)가 그 초안을 반박·검증한 뒤에만 실제 반영한다. 그럴듯하지만 틀린 결과가 그대로 통과되는 것을 막는 장치다. <br><span style="color:var(--text-dim);font-size:14px;">예: 코드를 수정하기 전에 "이 수정이 정말 안전한가?"를 독립된 에이전트가 반박 관점에서 재검토하고, 문제가 없다고 판단될 때만 실제로 파일을 수정한다. 초안을 쓴 사람이 자기 글을 스스로 교정 보면 놓치는 오류를, 다른 사람이 검토하면 잡아내는 것과 같은 원리다. 다만 평가자 자신이 좋은 결과와 나쁜 결과를 구분하지 못하면 이 루프가 공회전할 수 있다는 한계도 있다.</span></li>
@@ -622,15 +622,15 @@
   <p>이 유연성은 <a href="#s3b">§3b</a>에서 다룬 서브에이전트의 세 구현 방식과도 맞닿아 있다. 사전 정의 방식(Claude Code/App)에서도 "정의된 서브에이전트 중 무엇을 이번에 호출할지"는 오케스트레이터가 매번 동적으로 고르고, 동적 생성 방식(Antigravity)에서는 한 발 더 나아가 서브에이전트의 존재 자체가 그 순간 필요에 맞춰 즉석에서 만들어진다. 역할 컨텍스트 전환 방식(Codex)에서도 PM이 매 단계 필요한 역할을 골라 수행한다. 세 경우 모두 "팀 구성은 작업이 결정한다"는 원칙은 같다.</p>
 
   <h3>같은 하네스 위에서 다양한 워크플로우를 구현할 수 있다</h3>
-  <p>하네스 엔지니어링이 정해 두는 것은 "오케스트레이터가 있고, 스페셜리스트를 부르고, 핸드오프로 정보를 넘긴다"는 <em>뼈대</em>뿐이다. 그 뼈대 위에 몇 단계짜리 파이프라인을 몇 명으로 구성할지는 도메인마다 완전히 다르게 설계할 수 있다. 5장에서 다룰 ai-workspace-standards의 variant들이 이를 실증한다. 같은 하네스 원리로 만들어졌는데도 <code>co-develop</code>은 PM·Architect·Designer·Code Writer·Test Runner·Security Monitor가 참여하는 6단계 거버넌스 파이프라인이고, <code>co-design</code>은 5단계 반복 워크플로우, <code>co-deck</code>은 11단계 워크플로우로 완전히 다른 모양을 하고 있다. 하나의 "정답 워크플로우"를 강요하지 않고, 도메인이 요구하는 단계 수·참여자·검증 강도에 맞춰 워크플로우 자체를 새로 설계할 수 있다는 것이 하네스 엔지니어링의 핵심 장점이다.</p>
+  <p>하네스 엔지니어링이 정해 두는 것은 "오케스트레이터가 있고, 스페셜리스트를 부르고, 핸드오프로 정보를 넘긴다"는 <em>뼈대</em>뿐이다. 그 뼈대 위에 몇 단계짜리 파이프라인을 몇 명으로 구성할지는 도메인마다 완전히 다르게 설계할 수 있다. 7장에서 다룰 ai-workspace-standards의 variant들이 이를 실증한다. 같은 하네스 원리로 만들어졌는데도 <code>co-develop</code>은 PM·Architect·Designer·Code Writer·Test Runner·Security Monitor가 참여하는 6단계 거버넌스 파이프라인이고, <code>co-design</code>은 5단계 반복 워크플로우, <code>co-deck</code>은 11단계 워크플로우로 완전히 다른 모양을 하고 있다. 하나의 "정답 워크플로우"를 강요하지 않고, 도메인이 요구하는 단계 수·참여자·검증 강도에 맞춰 워크플로우 자체를 새로 설계할 수 있다는 것이 하네스 엔지니어링의 핵심 장점이다.</p>
   <p>이는 §4의 다섯 오케스트레이션 패턴(프롬프트 체이닝·라우팅·병렬화·오케스트레이터-워커·평가자-최적화)이 서로 배타적이지 않고 <strong>한 워크플로우 안에서 자유롭게 조합</strong>될 수 있다는 뜻이기도 하다. 예를 들어 코드 리뷰 워크플로우는 먼저 라우팅으로 변경 규모가 작은지 큰지 분류하고, 큰 변경이면 오케스트레이터-워커가 영향받는 파일들을 동적으로 나눠 각각 팬아웃으로 네 관점을 동시에 검토한 뒤, 그 결과를 순서대로 파이프라인 처리하며 문서화하고, 마지막에는 평가자-최적화(검증-후-적용)로 실제 반영 여부를 결정하는 식으로 다섯 패턴을 한 흐름 안에 섞어 쓸 수 있다.</p>
-  <div class="note">동적 팀 구성과 워크플로우 다양성은 결국 같은 원칙의 두 얼굴이다. 하네스는 "무엇을 지킬지"만 고정하고, "누가 언제 어떻게 움직일지"는 작업과 도메인이 결정하게 비워 둔다. 이 유연성이 없었다면 variant마다 처음부터 완전히 다른 자동화 시스템을 새로 짜야 했을 것이다. 이 내용을 직접 손으로 확인해보고 싶다면 <a href="../practice/04_Practice_Examples_A.html#scenario-2b">4장 §2 실습의 D-2 시나리오</a>에서 같은 서브에이전트 팀으로 요청만 바꿔가며 팀 구성과 워크플로우가 실제로 달라지는 것을 관찰한다.</div>
+  <div class="note">동적 팀 구성과 워크플로우 다양성은 결국 같은 원칙의 두 얼굴이다. 하네스는 "무엇을 지킬지"만 고정하고, "누가 언제 어떻게 움직일지"는 작업과 도메인이 결정하게 비워 둔다. 이 유연성이 없었다면 variant마다 처음부터 완전히 다른 자동화 시스템을 새로 짜야 했을 것이다. 이 내용을 직접 손으로 확인해보고 싶다면 <a href="../practice/06_Practice_Examples_A.html#scenario-2b">6장 §2 실습의 D-2 시나리오</a>에서 같은 서브에이전트 팀으로 요청만 바꿔가며 팀 구성과 워크플로우가 실제로 달라지는 것을 관찰한다.</div>
 
   <h2 id="s5">도구를 넘나드는 하네스 — AGENTS.md</h2>
   <p>지금까지 설명한 오케스트레이터·스페셜리스트·핸드오프는 특정 도구에 종속된 개념이 아니다. 문제는 그동안 도구마다 이 하네스를 설정하는 방식이 제각각이었다는 점이다. Claude Code는 <code>CLAUDE.md</code>를, Cursor는 <code>.cursorrules</code>를, GitHub Copilot은 <code>.github/copilot-instructions.md</code>를 읽는 식이어서, 여러 도구를 함께 쓰는 팀은 같은 내용을 파일마다 중복해서 유지해야 했다.</p>
   <p>같은 내용(예: "테스트는 항상 <code>npm test</code>로 실행하고, <code>src/legacy/</code> 폴더는 절대 수정하지 마라")을 팀원이 쓰는 도구 수만큼(CLAUDE.md, .cursorrules, copilot-instructions.md...) 복사해 두면, 규칙이 바뀔 때마다 파일을 전부 찾아 고쳐야 하고 하나라도 빠뜨리면 그 도구를 쓰는 사람만 다른 규칙으로 일하게 된다. 여러 나라 말로 같은 계약서를 따로따로 번역해 보관하다가, 한쪽만 조항을 고치는 바람에 버전이 어긋나는 것과 같은 문제다.</p>
   <p><strong>AGENTS.md</strong>는 이 문제를 풀기 위해 2025년 8월 OpenAI 주도로 Google·Cursor·Factory 등이 참여해 만든 개방형 표준이고, 2025년 12월 리눅스 재단 산하 Agentic AI Foundation에 기증됐다. 저장소 루트에 AGENTS.md 하나만 두면 Codex, Claude Code(가져오기 방식), GitHub Copilot, Cursor, Google Jules, Antigravity 계열을 포함해 30개가 넘는 도구가 세션 시작 시 이를 읽어 빌드·테스트 명령, 코드 스타일, 손대면 안 되는 영역 같은 공통 규칙을 공유한다.</p>
-  <p>이 핸드북이 계속 강조하는 "네 도구 모두 지원"이라는 원칙도 결국 같은 문제의식에서 나온다. 팀이 Claude Desktop App을 쓰든 Antigravity 데스크톱(Desktop)을 쓰든, 저장소 루트의 공유 규칙(AGENTS.md)과 도구별 세부 설정(<code>CLAUDE.md</code>, <code>GEMINI.md</code> 등)을 나눠 두면 도구를 바꾸거나 섞어 써도 하네스 자체는 흔들리지 않는다. 5장에서 살펴볼 ai-workspace-standards 저장소는 이 원칙을 실제로 구현한 사례다. 루트의 <code>AGENTS.md</code> 파일이 워크스페이스 전체 에이전트의 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적(engine-agnostic) 커맨드·스킬을 담는다.</p>
+  <p>이 핸드북이 계속 강조하는 "네 도구 모두 지원"이라는 원칙도 결국 같은 문제의식에서 나온다. 팀이 Claude Desktop App을 쓰든 Antigravity 데스크톱(Desktop)을 쓰든, 저장소 루트의 공유 규칙(AGENTS.md)과 도구별 세부 설정(<code>CLAUDE.md</code>, <code>GEMINI.md</code> 등)을 나눠 두면 도구를 바꾸거나 섞어 써도 하네스 자체는 흔들리지 않는다. 7장에서 살펴볼 ai-workspace-standards 저장소는 이 원칙을 실제로 구현한 사례다. 루트의 <code>AGENTS.md</code> 파일이 워크스페이스 전체 에이전트의 정본 목록(SSOT) 역할을 하고, <code>.agents/</code> 폴더가 <code>.claude/</code>·<code>.gemini/</code>와 나란히 도구-불가지론적(engine-agnostic) 커맨드·스킬을 담는다.</p>
   <div class="diagram-frame">
     <svg role="img" aria-label="Diagram 9" viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <defs>
@@ -682,8 +682,9 @@
 
   <div class="note">AGENTS.md는 "무엇을 지켜야 하는가"를 도구 중립적으로 정의하고, CLAUDE.md/GEMINI.md 같은 도구별 파일은 "그것을 이 도구에서 어떻게 실행하는가"만 추가로 정의한다. 중복을 줄이는 계층 분리다.</div>
 
-  <p>다음 장으로 넘어가기 전에, 이 팀에게 실제로 도구를 쥐여 줄 때 지켜야 할 안전장치부터 짚어야 한다. 3장은 서브에이전트에게 무엇을 허용하고 무엇을 막을지, 사람이 반드시 확인해야 하는 지점은 어디인지를 다룬다. 그 뒤 4장에서 이 개념들을 실제로 Claude Desktop App/Antigravity 데스크톱(Desktop)을 중심으로 만들어 보면서(Claude Code·Antigravity CLI 절차도 함께), 오케스트레이터·스페셜리스트·핸드오프가 도구마다 어떻게 표현되는지 확인한다.</p>
+  <p>다음 장으로 넘어가기 전에, 이 팀에게 실제로 도구를 쥐여 줄 때 지켜야 할 안전장치부터 짚어야 한다. 3장은 서브에이전트에게 무엇을 허용하고 무엇을 막을지, 사람이 반드시 확인해야 하는 지점은 어디인지를 다룬다. 그 뒤 6장에서 이 개념들을 실제로 Claude Desktop App/Antigravity 데스크톱(Desktop)을 중심으로 만들어 보면서(Claude Code·Antigravity CLI 절차도 함께), 오케스트레이터·스페셜리스트·핸드오프가 도구마다 어떻게 표현되는지 확인한다.</p>
 
+  <h2 id="standards-operations">표준 운영 원칙: 얇은 지시, 명확한 소유권, PR 기반 변경</h2><p>AGENTS.md는 전체 규칙을 복제하는 파일이 아니라 얇은 디스패처다. 핵심 금지 사항과 읽을 문서의 포인터만 두고, 상세 거버넌스는 단일 출처 문서로 분리한다. 스킬은 L0 표준, L1 템플릿, L2 프로젝트 소유권을 구분해 관리하며, L3 실행 스냅샷은 자동 동기화되지 않는 배포 결과로 취급한다.</p><p>브랜치는 <code>pr/&lt;timestamp&gt;-&lt;slug&gt;</code> 형식으로 만들고, <code>/sync</code>가 만든 변경도 반드시 PR로 검토·CI 검증·병합한다.</p><div class="diagram-frame"><svg viewBox="0 0 640 100" width="100%" role="img" aria-label="AGENTS.md → 포인터 문서 → L0/L1/L2 소유권 → L3 스냅샷 → PR"><title>AGENTS.md → 포인터 문서 → L0/L1/L2 소유권 → L3 스냅샷 → PR</title><rect x="18" y="35" width="604" height="36" rx="9" fill="var(--bg-info)" stroke="var(--border)"/><text x="320" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">AGENTS.md → 포인터 문서 → L0/L1/L2 소유권 → L3 스냅샷 → PR</text></svg></div><div class="keypoints"><div class="kp-title">Checklist</div><ul><li>AGENTS.md is a pointer, not a second policy source.</li><li>L3 snapshots need an explicit refresh.</li><li>Every shared change lands through a reviewed PR.</li></ul></div>
   <div class="chapter-nav">
     <a href="../intro/01_Why_AI_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">1장 · 도입</div></a>
     <a href="../guardrails/03_Guardrails_Chapter.html" class="next" style="margin-left:auto;"><div class="dir">다음 장 →</div><div class="ttl">3장 · 가드레일과 권한 모델</div></a>

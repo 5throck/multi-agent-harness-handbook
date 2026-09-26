@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!--
-  第8章 §3 · AGENTS.md 詳解 — エージェントロスター仕様の構造、作成ガイド、ツール別実装マッピング、検証とライフサイクルの連携
+  第10章 §3 · AGENTS.md 詳解 — エージェントロスター仕様の構造、作成ガイド、ツール別実装マッピング、検証とライフサイクルの連携
 -->
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第8章 §3 · AGENTS.md 詳解 - マルチエージェントハーネスエンジニアリングハンドブック">
+  <meta name="description" content="第10章 §3 · AGENTS.md 詳解 - マルチエージェントハーネスエンジニアリングハンドブック">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>第8章 §3 · AGENTS.md 詳解</title>
+  <title>第10章 §3 · AGENTS.md 詳解</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 	  <style>
@@ -19,28 +19,28 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">第8章 §3 · AGENTS.md 詳解</div>
+  <div class="nav-title">第10章 §3 · AGENTS.md 詳解</div>
   <a href="#spec-format" >仕様フォーマット</a>
   <a href="#impl-mapping">ツール別実装マッピング</a>
   <a href="#authoring-guide">作成ガイド</a>
   <a href="#verify-lifecycle">検証とライフサイクル</a>
-  <div class="nav-section">第8章の他の節</div>
+  <div class="nav-section">第10章の他の節</div>
   <a href="08_Intro_Advanced_Deploy_ja.html">§1 · デプロイとSSOT</a>
   <a href="08_Intro_Advanced_Chapter_ja.html">§2 · ライフサイクル管理</a>
   <a href="08_Intro_Advanced_Architecture_ja.html">§4 · アーキテクチャ詳解</a>
   <a href="08_Intro_Advanced_Roadmap_ja.html">§5 · 高度化ロードマップ</a>
   <div class="nav-section">他の章</div>
-  <a href="05_Intro_Chapter_ja.html">第5章 · ai-workspace-standards 紹介</a>
-  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 企業内マルチエージェントチーム運用</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variant作成</a>
+  <a href="05_Intro_Chapter_ja.html">第7章 · ai-workspace-standards 紹介</a>
+  <a href="../enterprise/09_Enterprise_Chapter_ja.html">第9章 · 企業内マルチエージェントチーム運用</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_ja.html">第13章 · 新規variant作成</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">第8章 §3</div>
+  <div class="chapter-eyebrow">第10章 §3</div>
   <h1>AGENTS.md 詳解</h1>
-  <p class="lead">AGENTS.mdの仕様フォーマット、ツール別の実装方式、作成原則、検証手順を整理する。第5章で概念的に紹介したAGENTS.mdを実務の観点から詳しく掘り下げる。</p>
-  <p class="source-line">標準仕様: <a href="https://agents.md/" target="_blank">agents.md</a> · 実習例: <a href="../practice/04_Practice_Examples_A_ja.html">第4章 §2-A</a> / <a href="../practice/04_Practice_Examples_B_ja.html">第4章 §2-B</a></p>
+  <p class="lead">AGENTS.mdの仕様フォーマット、ツール別の実装方式、作成原則、検証手順を整理する。第7章で概念的に紹介したAGENTS.mdを実務の観点から詳しく掘り下げる。</p>
+  <p class="source-line">標準仕様: <a href="https://agents.md/" target="_blank">agents.md</a> · 実習例: <a href="../practice/06_Practice_Examples_A_ja.html">第6章 §2-A</a> / <a href="../practice/06_Practice_Examples_B_ja.html">第6章 §2-B</a></p>
 
   <div class="keypoints">
     <div class="kp-title">この節で扱うこと</div>
@@ -61,7 +61,7 @@
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>フィールド</th><th>意味</th><th>必須かどうか</th><th>第4章実習例</th></tr></thead>
+    <thead><tr><th>フィールド</th><th>意味</th><th>必須かどうか</th><th>第6章実習例</th></tr></thead>
     <tbody>
       <tr>
         <td><code>## Agent: {名前}</code></td>
@@ -104,7 +104,7 @@
   </div>
 
   <h3>完成例</h3>
-  <p>第4章の実習(G-1、D-1)で作成した2つのエージェントを含むAGENTS.md全体の姿である。</p>
+  <p>第6章の実習(G-1、D-1)で作成した2つのエージェントを含むAGENTS.md全体の姿である。</p>
   <div style="position:relative">
   <pre class="code-block">## Agent: reviewer
 
@@ -123,7 +123,7 @@ handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
   <button class="copy-btn">コピー</button>
 </div>
 
-  <div class="note">AGENTS.mdはAIツールに向けた指示文ではなく、<strong>人間が定義した複数の役割の登録簿</strong>である。Claude系はこの登録簿を読み込み、ツール別の定義ファイル(<code>.claude/agents/*.md</code>)に「翻訳」し、Antigravity系は登録簿そのものをオーケストレーションが直接読み取り解釈し、Codex系は別途サブエージェント定義なしにPMが登録簿を役割コンテキストとして読み込み、順次切り替えながら解釈する(<a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C</a>)。</div>
+  <div class="note">AGENTS.mdはAIツールに向けた指示文ではなく、<strong>人間が定義した複数の役割の登録簿</strong>である。Claude系はこの登録簿を読み込み、ツール別の定義ファイル(<code>.claude/agents/*.md</code>)に「翻訳」し、Antigravity系は登録簿そのものをオーケストレーションが直接読み取り解釈し、Codex系は別途サブエージェント定義なしにPMが登録簿を役割コンテキストとして読み込み、順次切り替えながら解釈する(<a href="../practice/06_Practice_Manual_C_ja.html">第6章 §1-C</a>)。</div>
 
   <!-- ═══════════════════════════════════════════════════════
        2. ツール別実装マッピング
@@ -162,9 +162,9 @@ handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
       </tr>
       <tr>
         <td>詳細参照</td>
-        <td><a href="../practice/04_Practice_Manual_A_ja.html">第4章 §1-A Claude中心</a></td>
-        <td><a href="../practice/04_Practice_Manual_B_ja.html">第4章 §1-B Antigravity中心</a></td>
-        <td><a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C Codex中心</a></td>
+        <td><a href="../practice/06_Practice_Manual_A_ja.html">第6章 §1-A Claude中心</a></td>
+        <td><a href="../practice/06_Practice_Manual_B_ja.html">第6章 §1-B Antigravity中心</a></td>
+        <td><a href="../practice/06_Practice_Manual_C_ja.html">第6章 §1-C Codex中心</a></td>
       </tr>
     </tbody>
   </table>
@@ -200,7 +200,7 @@ handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
       <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">オーケストレーターがリアルタイムで解釈</text>
     </svg>
   </div>
-  <div class="note">Codex系はAntigravityと同様に定義ファイルなしで登録簿を直接解釈する側だが、オーケストレーターの動的生成ではなく、<strong>PMが役割コンテキストを順次切り替える</strong>方式だ — 詳細は<a href="../practice/04_Practice_Manual_C_ja.html">第4章 §1-C</a>。</div>
+  <div class="note">Codex系はAntigravityと同様に定義ファイルなしで登録簿を直接解釈する側だが、オーケストレーターの動的生成ではなく、<strong>PMが役割コンテキストを順次切り替える</strong>方式だ — 詳細は<a href="../practice/06_Practice_Manual_C_ja.html">第6章 §1-C</a>。</div>
 
   <!-- ═══════════════════════════════════════════════════════
        3. 作成ガイド
@@ -217,7 +217,7 @@ handoff_to: reviewer(草稿完成後にレビューへ引き継ぐ)</pre>
   <p><code>権限</code>フィールドはファイルアクセスの範囲を制限する。この原則を守らないと、サブエージェントが誤って重要なファイルを上書きしてしまう可能性がある。Claude系では、この権限は<code>.claude/agents/*.md</code>の<code>tools</code>フィールド(<code>Read, Grep</code>、<code>Write</code>など)に変換される。</p>
 
   <div class="pullquote">reviewerはそもそも書き込みができないため、ミスは発生しない。
-    <span class="by">— 第4章 §2-A 最小権限の原則</span>
+    <span class="by">— 第6章 §2-A 最小権限の原則</span>
   </div>
 
   <h3>4. handoffで前後関係を宣言する</h3>
@@ -247,7 +247,7 @@ handoff_to: editor(レビュー完了後に最終編集へ引き継ぐ)
        ═══════════════════════════════════════════════════════ -->
   <h2 id="verify-lifecycle">検証とライフサイクル</h2>
 
-  <p>AGENTS.mdにエージェントを登録することは、<strong>ライフサイクルのCreate段階</strong>に該当する(第8章§2参照)。登録されたエージェントは以下の段階を経る。</p>
+  <p>AGENTS.mdにエージェントを登録することは、<strong>ライフサイクルのCreate段階</strong>に該当する(第10章§2参照)。登録されたエージェントは以下の段階を経る。</p>
 
   <div class="table-compare">
   <table>
@@ -284,13 +284,13 @@ handoff_to: editor(レビュー完了後に最終編集へ引き継ぐ)
 
   <p>エージェントを新規作成または変更するたびに<code>agent:verify</code>を実行することを習慣化すれば、「ロスターにはあるが実際の定義ファイルが存在しない」や「handoff_toが指すエージェントが削除されている」といった不整合を早期に発見できる。</p>
 
-  <p>この検証フローの自動化は、第8章§1(デプロイとSSOT)で扱うCI/CDパイプラインに<code>validate-templates.ts</code>のステップとして統合できる。</p>
+  <p>この検証フローの自動化は、第10章§1(デプロイとSSOT)で扱うCI/CDパイプラインに<code>validate-templates.ts</code>のステップとして統合できる。</p>
 
   <div class="note"><strong>FAQ:</strong> <code>bun run agent:verify</code>実行時に「AGENTS.mdの表と実際の<code>agents/*.md</code>ファイル一覧が食い違っている」というエラーが出た場合、AGENTS.mdのエージェント名と<code>.claude/agents/</code>フォルダのファイル名を照合し、不足している項目を追加するか不要なファイルを削除する。→ <a href="../faq/00_FAQ_ja.html">FAQ</a></div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Chapter_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第8章 §2 · ライフサイクル管理</div></a>
-    <a href="08_Intro_Advanced_Architecture_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第8章 §4 · アーキテクチャ詳解</div></a>
+    <a href="08_Intro_Advanced_Chapter_ja.html" class="prev"><div class="dir">← 前へ</div><div class="ttl">第10章 §2 · ライフサイクル管理</div></a>
+    <a href="08_Intro_Advanced_Architecture_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第10章 §4 · アーキテクチャ詳解</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>

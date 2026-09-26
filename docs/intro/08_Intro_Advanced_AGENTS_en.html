@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!--
-  Chapter 8 §3 · AGENTS.md In Depth — structure of the agent roster specification, authoring guide, tool-specific implementation mapping, verification and lifecycle links
+  Chapter 10 §3 · AGENTS.md In Depth — structure of the agent roster specification, authoring guide, tool-specific implementation mapping, verification and lifecycle links
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Chapter 8 §3 · AGENTS.md In Depth - material from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="description" content="Chapter 10 §3 · AGENTS.md In Depth - material from the Multi-Agent Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Chapter 8 §3 · AGENTS.md In Depth</title>
+  <title>Chapter 10 §3 · AGENTS.md In Depth</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 	  <style>
@@ -19,28 +19,28 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Chapter 8 §3 · AGENTS.md In Depth</div>
+  <div class="nav-title">Chapter 10 §3 · AGENTS.md In Depth</div>
   <a href="#spec-format" >Spec Format</a>
   <a href="#impl-mapping">Tool-Specific Implementation Mapping</a>
   <a href="#authoring-guide">Authoring Guide</a>
   <a href="#verify-lifecycle">Verification and Lifecycle</a>
-  <div class="nav-section">Other Sections in Chapter 8</div>
+  <div class="nav-section">Other Sections in Chapter 10</div>
   <a href="08_Intro_Advanced_Deploy_en.html">§1 · Deployment and SSOT</a>
   <a href="08_Intro_Advanced_Chapter_en.html">§2 · Lifecycle Management</a>
   <a href="08_Intro_Advanced_Architecture_en.html">§4 · Architecture In Depth</a>
   <a href="08_Intro_Advanced_Roadmap_en.html">§5 · Advancement Roadmap</a>
   <div class="nav-section">Other Chapters</div>
-  <a href="05_Intro_Chapter_en.html">Chapter 5 · Introducing ai-workspace-standards</a>
-  <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Running a Multi-Agent Team Inside an Enterprise</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Chapter 11 · Creating a New Variant</a>
+  <a href="05_Intro_Chapter_en.html">Chapter 7 · Introducing ai-workspace-standards</a>
+  <a href="../enterprise/09_Enterprise_Chapter_en.html">Chapter 9 · Running a Multi-Agent Team Inside an Enterprise</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_en.html">Chapter 13 · Creating a New Variant</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Chapter 8 §3</div>
+  <div class="chapter-eyebrow">Chapter 10 §3</div>
   <h1>AGENTS.md In Depth</h1>
-  <p class="lead">This section covers the specification format of AGENTS.md, how it is implemented across tools, authoring principles, and the verification process. It builds on the conceptual introduction to AGENTS.md given in Chapter 5, taking a practitioner's perspective.</p>
-  <p class="source-line">Standard spec: <a href="https://agents.md/" target="_blank">agents.md</a> · Hands-on examples: <a href="../practice/04_Practice_Examples_A_en.html">Chapter 4 §2-A</a> / <a href="../practice/04_Practice_Examples_B_en.html">Chapter 4 §2-B</a></p>
+  <p class="lead">This section covers the specification format of AGENTS.md, how it is implemented across tools, authoring principles, and the verification process. It builds on the conceptual introduction to AGENTS.md given in Chapter 7, taking a practitioner's perspective.</p>
+  <p class="source-line">Standard spec: <a href="https://agents.md/" target="_blank">agents.md</a> · Hands-on examples: <a href="../practice/06_Practice_Examples_A_en.html">Chapter 6 §2-A</a> / <a href="../practice/06_Practice_Examples_B_en.html">Chapter 6 §2-B</a></p>
 
   <div class="keypoints">
     <div class="kp-title">What this section covers</div>
@@ -61,7 +61,7 @@
 
   <div class="table-compare">
   <table>
-    <thead><tr><th>Field</th><th>Meaning</th><th>Required?</th><th>Example from Chapter 4 Hands-On</th></tr></thead>
+    <thead><tr><th>Field</th><th>Meaning</th><th>Required?</th><th>Example from Chapter 6 Hands-On</th></tr></thead>
     <tbody>
       <tr>
         <td><code>## Agent: {name}</code></td>
@@ -104,7 +104,7 @@
   </div>
 
   <h3>Complete Example</h3>
-  <p>Below is the full picture of an AGENTS.md file containing the two agents authored in the Chapter 4 hands-on exercises (G-1, D-1).</p>
+  <p>Below is the full picture of an AGENTS.md file containing the two agents authored in the Chapter 6 hands-on exercises (G-1, D-1).</p>
   <div style="position:relative">
   <pre class="code-block">## Agent: reviewer
 
@@ -123,7 +123,7 @@ handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
   <button class="copy-btn">Copy</button>
 </div>
 
-  <div class="note">AGENTS.md is not an instruction directed at an AI tool but a <strong>registry of roles defined by a human</strong>. The Claude family reads this registry and "translates" it into tool-specific definition files (<code>.claude/agents/*.md</code>), the Antigravity family has its orchestration read and interpret the registry directly, and the Codex family — without separate subagent definitions — has the PM read the registry as role context and interpret it through sequential role switching (<a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C</a>).</div>
+  <div class="note">AGENTS.md is not an instruction directed at an AI tool but a <strong>registry of roles defined by a human</strong>. The Claude family reads this registry and "translates" it into tool-specific definition files (<code>.claude/agents/*.md</code>), the Antigravity family has its orchestration read and interpret the registry directly, and the Codex family — without separate subagent definitions — has the PM read the registry as role context and interpret it through sequential role switching (<a href="../practice/06_Practice_Manual_C_en.html">Chapter 6 §1-C</a>).</div>
 
   <!-- ═══════════════════════════════════════════════════════
        2. Tool-Specific Implementation Mapping
@@ -162,9 +162,9 @@ handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
       </tr>
       <tr>
         <td>Detailed reference</td>
-        <td><a href="../practice/04_Practice_Manual_A_en.html">Chapter 4 §1-A Claude-Centric</a></td>
-        <td><a href="../practice/04_Practice_Manual_B_en.html">Chapter 4 §1-B Antigravity-Centric</a></td>
-        <td><a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C Codex-Centric</a></td>
+        <td><a href="../practice/06_Practice_Manual_A_en.html">Chapter 6 §1-A Claude-Centric</a></td>
+        <td><a href="../practice/06_Practice_Manual_B_en.html">Chapter 6 §1-B Antigravity-Centric</a></td>
+        <td><a href="../practice/06_Practice_Manual_C_en.html">Chapter 6 §1-C Codex-Centric</a></td>
       </tr>
     </tbody>
   </table>
@@ -200,7 +200,7 @@ handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
       <text x="420" y="176" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="var(--accent-purple)">Orchestrator interprets in real time</text>
     </svg>
   </div>
-  <div class="note">The Codex family, like Antigravity, interprets the registry directly without definition files — but not through orchestrator-driven dynamic generation; instead the <strong>PM switches role contexts sequentially</strong>. See <a href="../practice/04_Practice_Manual_C_en.html">Chapter 4 §1-C</a>.</div>
+  <div class="note">The Codex family, like Antigravity, interprets the registry directly without definition files — but not through orchestrator-driven dynamic generation; instead the <strong>PM switches role contexts sequentially</strong>. See <a href="../practice/06_Practice_Manual_C_en.html">Chapter 6 §1-C</a>.</div>
 
   <!-- ═══════════════════════════════════════════════════════
        3. Authoring Guide
@@ -217,7 +217,7 @@ handoff_to: reviewer (proceeds to review after the draft is complete)</pre>
   <p>The <code>Permissions</code> field restricts the scope of file access. Failing to follow this principle can allow a subagent to accidentally overwrite important files. In the Claude family, this permission is translated into the <code>tools</code> field (<code>Read</code>, <code>Grep</code>, <code>Write</code>, etc.) of <code>.claude/agents/*.md</code>.</p>
 
   <div class="pullquote">Since the reviewer cannot write in the first place, mistakes simply cannot happen.
-    <span class="by">— Chapter 4 §2-A, Principle of Least Privilege</span>
+    <span class="by">— Chapter 6 §2-A, Principle of Least Privilege</span>
   </div>
 
   <h3>4. Declare Order with Handoff</h3>
@@ -247,7 +247,7 @@ Role: Finalizes the document by incorporating feedback.</pre>
        ═══════════════════════════════════════════════════════ -->
   <h2 id="verify-lifecycle">Verification and Lifecycle</h2>
 
-  <p>Registering an agent in AGENTS.md corresponds to the <strong>Create phase of the lifecycle</strong> (see Chapter 8 §2). A registered agent then passes through the following stages.</p>
+  <p>Registering an agent in AGENTS.md corresponds to the <strong>Create phase of the lifecycle</strong> (see Chapter 10 §2). A registered agent then passes through the following stages.</p>
 
   <div class="table-compare">
   <table>
@@ -284,13 +284,13 @@ Role: Finalizes the document by incorporating feedback.</pre>
 
   <p>Making it a habit to run <code>agent:verify</code> whenever you create or change an agent lets you catch inconsistencies early — such as "listed in the roster but no actual definition file exists" or "the agent pointed to by handoff_to has been deleted."</p>
 
-  <p>Automating this verification flow can be integrated as a <code>validate-templates.ts</code> step in the CI/CD pipeline covered in Chapter 8 §1 (Deployment and SSOT).</p>
+  <p>Automating this verification flow can be integrated as a <code>validate-templates.ts</code> step in the CI/CD pipeline covered in Chapter 10 §1 (Deployment and SSOT).</p>
 
   <div class="note"><strong>FAQ:</strong> If running <code>bun run agent:verify</code> produces an error such as "the AGENTS.md table and the actual list of <code>agents/*.md</code> files are out of sync," compare the agent names in AGENTS.md against the filenames in the <code>.claude/agents/</code> folder, then add any missing entries or remove unnecessary files. → <a href="../faq/00_FAQ_en.html">FAQ</a></div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Chapter_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 8 §2 · Lifecycle Management</div></a>
-    <a href="08_Intro_Advanced_Architecture_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 8 §4 · Architecture In Depth</div></a>
+    <a href="08_Intro_Advanced_Chapter_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Chapter 10 §2 · Lifecycle Management</div></a>
+    <a href="08_Intro_Advanced_Architecture_en.html" class="next"><div class="dir">Next →</div><div class="ttl">Chapter 10 §4 · Architecture In Depth</div></a>
   </div>
    <footer>
     Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>

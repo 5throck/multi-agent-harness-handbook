@@ -11,10 +11,10 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="第8章 §1 · デプロイとSSOT - マルチエージェントチーム ハーネスエンジニアリングハンドブック資料です。">
+  <meta name="description" content="第10章 §1 · デプロイとSSOT - マルチエージェントチーム ハーネスエンジニアリングハンドブック資料です。">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>第8章 §1 · デプロイとSSOT</title>
+  <title>第10章 §1 · デプロイとSSOT</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -26,21 +26,21 @@
 
 <nav>
   <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
-  <div class="nav-title">第8章 · アーキテクチャ発展編</div>
+  <div class="nav-title">第10章 · アーキテクチャ発展編</div>
   <a href="#s1" >§1 · デプロイとSSOT</a>
   <a href="08_Intro_Advanced_Chapter_ja.html">§2 · ライフサイクル管理</a>
   <a href="08_Intro_Advanced_AGENTS_ja.html">§3 · AGENTS.md 発展編</a>
   <a href="08_Intro_Advanced_Architecture_ja.html">§4 · アーキテクチャ発展編</a>
   <a href="08_Intro_Advanced_Roadmap_ja.html">§5 · 高度化ロードマップ</a>
   <div class="nav-section">他の章</div>
-  <a href="05_Intro_Chapter_ja.html">第5章 · ai-workspace-standards 紹介</a>
-  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 企業内マルチエージェントチーム運用</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_ja.html">第11章 · 新規variantの作成</a>
+  <a href="05_Intro_Chapter_ja.html">第7章 · ai-workspace-standards 紹介</a>
+  <a href="../enterprise/09_Enterprise_Chapter_ja.html">第9章 · 企業内マルチエージェントチーム運用</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_ja.html">第13章 · 新規variantの作成</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">第8章 §1</div>
+  <div class="chapter-eyebrow">第10章 §1</div>
   <h1>デプロイとSSOT</h1>
   <p class="lead">本節では、ai-workspace-standardsのL0→L1→L2→L3の4層構造、フォークモデルの設計理由、そしてファイル単位のSSOT（Single Source of Truth）の流れを扱う。原本は常に上から下へのみ流れ、逆方向にさかのぼる自動同期は存在しない。</p>
 
@@ -121,7 +121,7 @@ L3 — Projects/&lt;name&gt;/（稼働中のプロジェクト作業ディレク
   </div>
 
   <h3>L1 → L2が「フォーク」で終わる理由</h3>
-  <p>初期にはL1が変わるたびに、すでに作られたすべてのL2バリアント（variant）へ自動的に反映する方式を試みたが、3つの問題が繰り返し起きた。バリアント（variant）が意図的に異なる形へ修正しておいた部分を、L1の変更が静かに上書きしてしまうこと、新しいバリアント（variant）を追加するたびに伝播スクリプトにハードコードされたvariant一覧をいちいち手直ししなければならないこと、そして「意図した違い」と「同期を逃したことで生じた違い」を区別する方法がなかったことである。そのため現在は<strong>フォークモデル（Fork Model）</strong>を採用している。L1はバリアント（variant）を作るスキャフォールディングの時点で一度だけ内容を渡し、それ以降L2は完全に独立して進化する。L2の変更を公式テンプレートに反映するには、自動ではなく<code>l3-to-variant-pipeline.ts</code>を人が明示的に実行する必要がある（第11章でこの昇格手順を直接扱う）。一方、<code>propagate-to-templates.ts --check-drift</code>がL1と各L2の差分を定期的に報告することはあるが、この報告は読み取り専用であり、決して自動的に値を上書きすることはない。逆方向 — すでに作られたL3プロジェクトにL1の最新の変更を実際に反映する手順は、<a href="10_ProjectUpgrade_Chapter_ja.html">第10章 · L3プロジェクトのアップグレード</a>で扱う。</p>
+  <p>初期にはL1が変わるたびに、すでに作られたすべてのL2バリアント（variant）へ自動的に反映する方式を試みたが、3つの問題が繰り返し起きた。バリアント（variant）が意図的に異なる形へ修正しておいた部分を、L1の変更が静かに上書きしてしまうこと、新しいバリアント（variant）を追加するたびに伝播スクリプトにハードコードされたvariant一覧をいちいち手直ししなければならないこと、そして「意図した違い」と「同期を逃したことで生じた違い」を区別する方法がなかったことである。そのため現在は<strong>フォークモデル（Fork Model）</strong>を採用している。L1はバリアント（variant）を作るスキャフォールディングの時点で一度だけ内容を渡し、それ以降L2は完全に独立して進化する。L2の変更を公式テンプレートに反映するには、自動ではなく<code>l3-to-variant-pipeline.ts</code>を人が明示的に実行する必要がある（第13章でこの昇格手順を直接扱う）。一方、<code>propagate-to-templates.ts --check-drift</code>がL1と各L2の差分を定期的に報告することはあるが、この報告は読み取り専用であり、決して自動的に値を上書きすることはない。逆方向 — すでに作られたL3プロジェクトにL1の最新の変更を実際に反映する手順は、<a href="10_ProjectUpgrade_Chapter_ja.html">第12章 · L3プロジェクトのアップグレード</a>で扱う。</p>
 
   <h3>ファイル単位のSSOT — 何がどこからどこへ流れるか</h3>
   <div class="table-compare">
@@ -145,26 +145,26 @@ L3 — Projects/&lt;name&gt;/（稼働中のプロジェクト作業ディレク
   <div class="note">L0→L1→L2→L3を一文で表すと: <strong>原本は上でのみ直す。下位の層は原本のスナップショットであるか、スキャフォールディング時点のコピーである。流れは常に上から下へのみ進む。</strong> この原則に反する代表的な誤りが「新しいプロジェクト（L3）でエージェントファイルを直しておきながら、ワークスペースルート（L0）には反映しないこと」である — L3からL0へさかのぼる逆方向の流れはそもそも存在しないため、その修正はそのプロジェクト内でのみ有効であり、他の場所には永遠に反映されない。</div>
 
   <h3>ボイラープレート戦略 — 何を固定し、何を開放するか</h3>
-  <p>第5章では、ボイラープレートを「プロジェクトごとに書き直す必要がないよう、あらかじめ用意しておいた出発点」と定義した。アーキテクチャの観点から見ると、この定義は直ちに実務的な問いへつながる — <strong>L1がL2に渡すもののうち、どこまでをプロジェクトが自由に修正できるようにするか</strong>という問いである。このリポジトリはこの問いに対して、ファイル単位で異なる答えを用意している。§5で扱う<code>upgrade-project.ts</code>の5分類（LOCKED・MERGE・PRESERVE・SYNC_IF_NEWER・PRUNE）は、実質的にこの戦略をコードとして固定したものである。</p>
+  <p>第7章では、ボイラープレートを「プロジェクトごとに書き直す必要がないよう、あらかじめ用意しておいた出発点」と定義した。アーキテクチャの観点から見ると、この定義は直ちに実務的な問いへつながる — <strong>L1がL2に渡すもののうち、どこまでをプロジェクトが自由に修正できるようにするか</strong>という問いである。このリポジトリはこの問いに対して、ファイル単位で異なる答えを用意している。§5で扱う<code>upgrade-project.ts</code>の5分類（LOCKED・MERGE・PRESERVE・SYNC_IF_NEWER・PRUNE）は、実質的にこの戦略をコードとして固定したものである。</p>
   <ul>
     <li><strong>LOCKEDで固定するもの</strong>（<code>.githooks/*</code>、<code>.gitattributes</code>、<code>.gitleaks.toml</code>） — 第3章のガードレールにおける最低限のセキュリティラインに相当するファイル群である。プロジェクトごとに異なる理由がなく、むしろ異なればセキュリティ事故につながるため、カスタマイズの余地をそもそも与えない。</li>
     <li><strong>MERGEで半分だけ開放するもの</strong>（<code>CLAUDE.md</code>/<code>GEMINI.md</code>、<code>.gitignore</code>、<code>agents/pm.md</code>） — <code>WORKSPACE-MANAGED</code>マーカーで囲まれた区間のみをL1が引き続き管理し、マーカーの外側はプロジェクトが自由に書く。「共通ルールは上から、プロジェクトの文脈は下から」を一つのファイルの中で同時に満たす折衷案である。</li>
     <li><strong>PRESERVEで完全に開放するもの</strong>（<code>README.md</code>、<code>docs/context.md</code>、<code>src/</code>） — L1はこれらのファイルの存在だけを確認し、内容には関与しない。プロジェクトの独自性を担う領域だからである。</li>
   </ul>
-  <p>新しいバリアント（variant）を設計する際（第6章・第11章）、この3つの範疇のうちどこに新しいファイルを配置するかをあらかじめ決めておけば、後になって「なぜこのファイルはアップグレードのたびに上書きされるのか」といった疑問がそもそも生じない。判断基準は単純である — <strong>セキュリティ・ガバナンスのように組織全体で必ず同一でなければならないものはLOCKED、組織のルールとプロジェクトの文脈が共存すべきものはMERGE、プロジェクト固有のものはPRESERVE</strong>に分類する。</p>
+  <p>新しいバリアント（variant）を設計する際（第8章・第13章）、この3つの範疇のうちどこに新しいファイルを配置するかをあらかじめ決めておけば、後になって「なぜこのファイルはアップグレードのたびに上書きされるのか」といった疑問がそもそも生じない。判断基準は単純である — <strong>セキュリティ・ガバナンスのように組織全体で必ず同一でなければならないものはLOCKED、組織のルールとプロジェクトの文脈が共存すべきものはMERGE、プロジェクト固有のものはPRESERVE</strong>に分類する。</p>
 
   <h3>モデルティア戦略 — 組織規模でティアを運用する方法</h3>
-  <p>第5章では、<code>tier: high/medium/low</code>が個々のエージェント役割にどう割り当てられるかを見た。ここでは、その割り当てを<strong>変更し維持していく流れ</strong>をアーキテクチャの観点から見ていく。tierの値は<code>agents/*.md</code>のフロントマターにあり、このファイルは上記のSSOT表で見たようにL0が原本であり、§5の<code>upgrade-project.ts</code>が<strong>SYNC_IF_NEWER</strong>として管理する — つまり、tier戦略そのものもL0→L1→L2の原則に忠実に従う。</p>
+  <p>第7章では、<code>tier: high/medium/low</code>が個々のエージェント役割にどう割り当てられるかを見た。ここでは、その割り当てを<strong>変更し維持していく流れ</strong>をアーキテクチャの観点から見ていく。tierの値は<code>agents/*.md</code>のフロントマターにあり、このファイルは上記のSSOT表で見たようにL0が原本であり、§5の<code>upgrade-project.ts</code>が<strong>SYNC_IF_NEWER</strong>として管理する — つまり、tier戦略そのものもL0→L1→L2の原則に忠実に従う。</p>
   <ul>
     <li><strong>基本の割り当てはL0で一度定める。</strong> Architect系はhigh、code-writer・docs-writer系はmedium、automation-engineer系はlowという原則をワークスペースルートの<code>agents/*.md</code>で確定すれば、すべてのバリアント（variant）のL1テンプレートがこれを継承する。ただしPMだけは例外的な二重構造である — L0の<code>agents/pm.md</code>はhighを維持し、L1/L2テンプレート（<code>templates/common/agents/pm.md</code>）はPR #623（2026-08-23）からmediumをデフォルトとしつつ、高度なオーケストレーションが必要な場合にhighへ上げられるescape hatchを備える。</li>
-    <li><strong>ティア基準が変わればバージョンを上げる。</strong>「この役割はもうmediumではなくhighであるべきだ」といった組織レベルの再判断は、L0の<code>agents/*.md</code>を直し<code>@version</code>（またはフロントマターの<code>version:</code>）を上げる形で行われる。すでに作られたL3プロジェクトには自動的には反映されず、各プロジェクトが<code>upgrade-project.ts</code>を実行して初めて新しいティアを受け取る（第10章） — ティアの変更も例外なくフォークモデルに従う。</li>
+    <li><strong>ティア基準が変わればバージョンを上げる。</strong>「この役割はもうmediumではなくhighであるべきだ」といった組織レベルの再判断は、L0の<code>agents/*.md</code>を直し<code>@version</code>（またはフロントマターの<code>version:</code>）を上げる形で行われる。すでに作られたL3プロジェクトには自動的には反映されず、各プロジェクトが<code>upgrade-project.ts</code>を実行して初めて新しいティアを受け取る（第12章） — ティアの変更も例外なくフォークモデルに従う。</li>
     <li><strong>プロジェクトごとの例外はL2にのみ残す。</strong> 特定のバリアント（variant）の特定の役割だけ異なるティアが必要な場合（例: 特に複雑なドメインロジックを扱うcode-writerをmediumではなくhighにする）、そのプロジェクトの<code>agents/*.md</code>をローカルで直接修正する。ただしこのファイルはSYNC_IF_NEWERの対象であるため、次回のアップグレード時にL1側のバージョンがより高ければ<code>⚠️ CONFLICT</code>警告とともに上書きされる可能性がある点を考慮する必要がある（§5の安全装置を参照）。</li>
   </ul>
   <div class="note">ボイラープレート戦略とティア戦略は、結局同じ問いに対する2つの答えである — <strong>「組織全体で同一でなければならないものはL0/L1で強制し、プロジェクトごとに異なってよいものはL2に委ねる。」</strong> 両戦略には、その境界をファイル単位（LOCKED/MERGE/PRESERVE）とフィールド単位（tier）でそれぞれ明示的に引いているという共通点がある。</div>
 
   <div class="chapter-nav">
-    <a href="../enterprise/07_Enterprise_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第7章 · 企業内マルチエージェントチーム運用</div></a>
-    <a href="08_Intro_Advanced_Chapter_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第8章 §2 · ライフサイクル管理</div></a>
+    <a href="../enterprise/09_Enterprise_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第9章 · 企業内マルチエージェントチーム運用</div></a>
+    <a href="08_Intro_Advanced_Chapter_ja.html" class="next"><div class="dir">次へ →</div><div class="ttl">第10章 §2 · ライフサイクル管理</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>

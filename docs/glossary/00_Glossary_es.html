@@ -56,7 +56,7 @@
 
     <dt>Composición Dinámica del Equipo <span class="en">Dynamic Team Composition</span></dt>
     <dd>El orquestador decide, para cada solicitud, qué subagentes desplegar realmente, cuántas veces y en qué orden. Aunque la plantilla del equipo definida es fija, la configuración de despliegue real varía de tarea en tarea.
-      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s4b">Capítulo 2 §4b</a> · Práctica: <a href="../practice/04_Practice_Examples_A_es.html#scenario-2b">Capítulo 4 D-2</a></span></dd>
+      <span class="see">Detalles: <a href="../concepts/02_Concepts_Chapter_es.html#s4b">Capítulo 2 §4b</a> · Práctica: <a href="../practice/06_Practice_Examples_A_es.html#scenario-2b">Capítulo 6 D-2</a></span></dd>
 
     <dt>Patrón de Orquestación <span class="en">Orchestration Pattern</span></dt>
     <dd>El conocido conjunto de cinco patrones representativos de Anthropic: encadenamiento de prompts (procesamiento secuencial paso a paso), enrutamiento (clasificar una solicitud y despacharla al agente/modelo apropiado), paralelización (distribución para ejecutar tareas independientes concurrentemente, o votación para repetir la misma tarea y tomar la mayoría), orquestador-trabajadores (descomponer dinámicamente subtareas en lugar de fijarlas de antemano), y evaluador-optimizador (verificar independientemente un borrador antes de incorporarlo — verificar y luego aplicar). Estos pueden combinarse libremente dentro de un solo flujo de trabajo.
@@ -68,11 +68,11 @@
 
     <dt>Frontmatter <span class="en">Frontmatter</span></dt>
     <dd>Un bloque de metadatos escrito en YAML en la parte superior de un archivo de definición de agente (<code>agents/*.md</code>). Define cosas como el nombre del agente, rol, herramientas permitidas (<code>tools</code>) y nivel de modelo (<code>tier</code>) para que puedan analizarse mecánicamente. El campo <code>extends</code> puede usarse para heredar de otro archivo de agente.
-      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y el SSOT</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Deploy_es.html#s1">Capítulo 10 §1 Despliegue y el SSOT</a></span></dd>
 
     <dt>Scaffolding <span class="en">Scaffolding</span></dt>
     <dd>El acto de usar <code>bun scripts/new-project.ts</code> para clonar la configuración completa de una plantilla de variante (agentes, habilidades, comandos, pipeline de gobernanza) en un repositorio git independiente. La idea es: "no se construye un proyecto desde cero — se comienza a partir de un esqueleto pre-diseñado."
-      <span class="see">Detalles: <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-2">Capítulo 6 §2</a></span></dd>
+      <span class="see">Detalles: <a href="../variant-practice/08_VariantPractice_Manual_es.html#section-2">Capítulo 8 §2</a></span></dd>
 
     <dt>Guardarraíles <span class="en">Guardrails</span></dt>
     <dd>El conjunto de reglas, límites de permisos, clasificación de riesgo, aprobaciones humanas y mecanismos de registro que determinan qué puede y qué no puede hacer un subagente. Cuanta más autonomía se otorgue, mayor es el radio de explosión de un error — por eso el sistema de guardarraíles se diseña antes de la práctica.
@@ -88,35 +88,35 @@
 
     <dt>Modelo de Ticket de Servicio <span class="en">Service Ticket Model</span></dt>
     <dd>Un modelo operativo que usa la IA puramente como "un servicio que maneja solicitudes conforme llegan" — similar al sistema de tickets de una organización de TI tradicional. El usuario debe dirigir cada solicitud explícitamente, lo que limita la autonomía del equipo de agentes. Este es el enfoque que este manual contrasta con su modelo propuesto de "herramienta de desarrollo + modelo de variante."
-      <span class="see">Detalles: <a href="../enterprise/07_Enterprise_Chapter_es.html">Capítulo 7 · Comparando Estrategias Operativas Empresariales</a></span></dd>
+      <span class="see">Detalles: <a href="../enterprise/09_Enterprise_Chapter_es.html">Capítulo 9 · Comparando Estrategias Operativas Empresariales</a></span></dd>
 
     <dt>Ciclo de Vida / Estado <span class="en">Lifecycle / State</span></dt>
     <dd>Ciclo de vida se refiere a la secuencia completa de etapas por las que pasa un agente, habilidad o script (por ejemplo, Crear → Verificar → Operar → Mejorar → Deprecar). Estado es una instantánea de en qué etapa del ciclo de vida se encuentra ese componente en un momento dado. El campo <code>status</code> en el frontmatter YAML (<code>draft</code>, <code>active</code>, <code>deprecated</code>, <code>retired</code>) almacena el valor del estado. El ciclo de vida puede pensarse como un "mapa del metro," y el estado como el letrero que muestra "en qué estación está el tren actual."
-      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#state-vs-lifecycle">Capítulo 8 §2 · Distinguiendo Estado de Ciclo de Vida</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#state-vs-lifecycle">Capítulo 10 §2 · Distinguiendo Estado de Ciclo de Vida</a></span></dd>
 
     <dt>Grafo de Relaciones de Habilidades <span class="en">Skill Relationship Graph</span></dt>
     <dd>Una proyección legible por máquina de las relaciones entre habilidades, agentes, ADR y registros de decisión. Siempre se regenera a partir de fuentes de verdad (frontmatter de SKILL.md: <code>prerequisites</code>/<code>relates_to</code>, <code>required_skills</code> de los agentes, <code>variant.json</code>, etc.) y no es en sí mismo un almacén de datos primario (ADR-0060). Los resultados son <code>docs/skill-graph.json</code> y el <code>docs/skill-graph.md</code> legible por humanos. Todas las aristas de relación son consultivas (advisory) y nunca bloquean la ejecución de forma absoluta.
-      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#s2-skill-graph">Capítulo 8 §2 · Grafo de Relaciones de Habilidades</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Chapter_es.html#s2-skill-graph">Capítulo 10 §2 · Grafo de Relaciones de Habilidades</a></span></dd>
 
     <dt>Modelo de Operación de Dominio <span class="en">Domain Operating Model</span></dt>
     <dd>La estructura por la cual una plantilla de variante declara como datos el flujo de trabajo de su propio dominio (etapas), la rendición de cuentas (RACI) y los puntos de veredicto (compuertas de decisión). El nombre oficial siempre se escribe completo — las abreviaturas (DOM, AOM) están prohibidas por colisionar con otros términos. Se compone de cuatro grupos: Process, Governance, Execution, Graph (ADR-0083).
-      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html">Capítulo 13 · Domain Operating Model</a></span></dd>
+      <span class="see">Detalles: <a href="../domain-model/15_DomainOperatingModel_Chapter_es.html">Capítulo 15 · Domain Operating Model</a></span></dd>
 
     <dt>Grafo de Ejecución de Dominio <span class="en">Domain Execution Graph</span></dt>
     <dd>Un perfil de vocabulario superpuesto al grafo de relaciones de habilidades (<code>graph_profile: "deg/v1"</code>). Conecta los datos de etapas, RACI y compuertas mediante aristas como <code>in_stage</code>, <code>accountable_for</code> y <code>gated_by</code>, convirtiendo conocimiento operativo disperso en algo respondible con una sola consulta al grafo (ADR-0083).
-      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s5">Capítulo 13 §5 · Graph</a></span></dd>
+      <span class="see">Detalles: <a href="../domain-model/15_DomainOperatingModel_Chapter_es.html#s5">Capítulo 15 §5 · Graph</a></span></dd>
 
     <dt>Eje de Etapas <span class="en">Stage Axis</span></dt>
     <dd>La declaración de las etapas por las que fluye el trabajo de un dominio (<code>process/stages.yaml</code>). Un eje distinto del eje de ejecución de PM <code>phase</code> (0–6), derivado del flujo de entrega de artefactos entre procedimientos. Si no puede distinguirse de la fase (DEG-P-01), se requiere redacción humana en lugar de un bootstrap mecánico.
-      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s2">Capítulo 13 §2 · Process</a></span></dd>
+      <span class="see">Detalles: <a href="../domain-model/15_DomainOperatingModel_Chapter_es.html#s2">Capítulo 15 §2 · Process</a></span></dd>
 
     <dt>Matriz RACI <span class="en">RACI Matrix</span></dt>
     <dd>Una tabla de rendición de cuentas que declara Responsible, Accountable, Consulted e Informed para cada actividad en cada etapa. No es un documento que la gente lee sino datos que <code>generate-raci.ts</code> deriva de los procedimientos y que <code>validate-raci.ts</code> valida (<code>governance/raci.yaml</code>).
-      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s3">Capítulo 13 §3 · Governance</a></span></dd>
+      <span class="see">Detalles: <a href="../domain-model/15_DomainOperatingModel_Chapter_es.html#s3">Capítulo 15 §3 · Governance</a></span></dd>
 
     <dt>Compuerta de Decisión <span class="en">Decision Gate</span></dt>
     <dd>Un punto de control go/no-go declarado dentro de un flujo de trabajo (<code>decisions/gates.yaml</code>). Se corresponde con los registros de decisión (<code>DEC-*.md</code>, Referencia B) — el acta de los veredictos realmente emitidos — y un veredicto producido en una compuerta se registra con <code>record_kind: DEC</code> (ADR-0083).
-      <span class="see">Detalles: <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html#s4">Capítulo 13 §4 · Execution</a></span></dd>
+      <span class="see">Detalles: <a href="../domain-model/15_DomainOperatingModel_Chapter_es.html#s4">Capítulo 15 §4 · Execution</a></span></dd>
   </dl>
 
   <h2 id="team">Componentes del Equipo Multiagente</h2>
@@ -129,40 +129,40 @@
 
     <dt>Nivel de Modelo <span class="en">Model Tier</span></dt>
     <dd>El nivel de costo del modelo (<code>high</code>/<code>medium</code>/<code>low</code>) asignado por rol de agente. Los roles que requieren mucho juicio se asignan como high; el trabajo estandarizado y repetitivo se asigna como low — equilibrando costo y calidad. Se especifica a través del campo <code>tier</code> en el frontmatter de <code>agents/*.md</code>, y la plataforma lo traduce a un nombre de modelo real mediante <code>model: inherit</code>.
-      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §3</a>. Nota: este es un concepto diferente al "3 niveles" de L0→L1→L2 — no los confunda.</span></dd>
+      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 7 §3</a>. Nota: este es un concepto diferente al "3 niveles" de L0→L1→L2 — no los confunda.</span></dd>
   </dl>
 
   <h2 id="workspace">Estructura de ai-workspace-standards</h2>
   <dl>
     <dt>SSOT <span class="en">Single Source of Truth</span></dt>
     <dd>El principio de que una pieza de información dada tiene su copia original en exactamente un lugar. Ejemplo: CONSTITUTION.md es el SSOT para las reglas de todo el espacio de trabajo; context.md es el documento de configuración para un proyecto individual.
-      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s4">Capítulo 5 §4</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s4">Capítulo 7 §4</a></span></dd>
 
     <dt>L0 / L1 / L2 / L3</dt>
     <dd>La jerarquía de cuatro niveles que va desde la raíz del espacio de trabajo (L0, la única original) → la instantánea de la plantilla común (L1, <code>templates/common/</code>) → la plantilla de variante (L2, <code>templates/co-*/</code>) → el directorio de trabajo del proyecto activo (L3, <code>Projects/*/</code>, generado a partir de una variante L2 mediante <code>new-project.ts</code> — sigue estando dentro del mismo repositorio del espacio de trabajo, no es un clon externo). El flujo siempre se mueve de arriba hacia abajo: la transferencia L1→L2 es una "bifurcación" que ocurre exactamente una vez al crear la variante, y L2→L3 es un scaffolding único en el momento de la creación del proyecto.
-      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Deploy_es.html#s1">Capítulo 8 §1 Despliegue y el SSOT</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Deploy_es.html#s1">Capítulo 10 §1 Despliegue y el SSOT</a></span></dd>
 
     <dt>Modelo de Bifurcación <span class="en">Fork Model</span></dt>
     <dd>El enfoque por el cual, una vez que L2 se ramifica de L1, evoluciona independientemente sin sincronización inversa automática. Para promoverlo a una plantilla oficial se requiere que un humano ejecute explícitamente <code>l3-to-variant-pipeline.ts</code>.</dd>
 
     <dt>variante</dt>
     <dd>Una configuración completa de equipo multiagente para un dominio específico — que reside bajo <code>templates/</code> — que agrupa un PM, agentes especialistas y un pipeline de gobernanza. co-develop, co-design y co-work son ejemplos.
-      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 5 §3</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/05_Intro_Chapter_es.html#s3">Capítulo 7 §3</a></span></dd>
 
     <dt>Fase A / Fase B</dt>
     <dd>Las dos etapas de creación de una nueva variante. La Fase A es la etapa de experimentar libremente como un prototipo independiente bajo <code>Projects/</code>; la Fase B es la etapa de promoverlo a una variante oficial <code>templates/</code> mediante <code>promote-variant</code>.
-      <span class="see">Detalles: <a href="../variant-advanced/11_VariantAdvanced_Chapter_es.html">Capítulo 11 · Crear una Nueva Variante</a></span></dd>
+      <span class="see">Detalles: <a href="../variant-advanced/13_VariantAdvanced_Chapter_es.html">Capítulo 13 · Crear una Nueva Variante</a></span></dd>
 
     <dt>Plantilla Base <span class="en">Boilerplate</span></dt>
     <dd>Un punto de partida pre-construido — definiciones de rol PM, pipeline de gobernanza y cableado de comandos/habilidades — que de otro modo tendrían que escribirse desde cero para cada proyecto. Esta es la esencia de lo que distribuye ai-workspace-standards.</dd>
 
     <dt>Integración con Contenedores <span class="en">Container Integration</span></dt>
     <dd>Una dirección para el avance de ai-workspace-standards: el requisito de que un proyecto con scaffolding pueda integrarse con servicios como Open WebUI en un entorno Docker/Kubernetes y ser soportado por usuario individual. Actualmente solo se soporta la integración directa con herramientas locales de codificación con IA.
-      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#container">Capítulo 8 §5 Hoja de Ruta de Avance</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#container">Capítulo 10 §5 Hoja de Ruta de Avance</a></span></dd>
 
     <dt>Consolidación de Memoria <span class="en">Memory Consolidation</span></dt>
     <dd>Una dirección para el avance de ai-workspace-standards: una función que reúne y organiza los archivos <code>memory/YYYY-MM-DD.md</code> dispersos en proyectos individuales a nivel del espacio de trabajo para que puedan identificarse las tendencias generales.
-      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#memory">Capítulo 8 §5 Hoja de Ruta de Avance</a></span></dd>
+      <span class="see">Detalles: <a href="../intro/08_Intro_Advanced_Roadmap_es.html#memory">Capítulo 10 §5 Hoja de Ruta de Avance</a></span></dd>
   </dl>
 
   <h2 id="tools">Herramientas y Plataformas</h2>
@@ -175,7 +175,7 @@
     <dd>El archivo de instrucciones de comportamiento de la familia Codex (CLI · Desktop App). En Codex, que no tiene hooks, este archivo es la base de la <strong>auto-aplicación por prompt</strong> — el PM percibe y ejecuta las reglas escritas aquí en cada sesión.</dd>
 
     <dt>Contexto de Rol <span class="en">Role Context</span></dt>
-    <dd>El enfoque de Codex para implementar subagentes. Sin archivos de definición separados, el PM lee las definiciones de rol de AGENTS.md y CODEX.md y cambia secuencialmente al siguiente rol a medida que cada paso se completa. Véase <a href="../practice/04_Practice_Manual_C_es.html">Capítulo 4 §1-C</a>.</dd>
+    <dd>El enfoque de Codex para implementar subagentes. Sin archivos de definición separados, el PM lee las definiciones de rol de AGENTS.md y CODEX.md y cambia secuencialmente al siguiente rol a medida que cada paso se completa. Véase <a href="../practice/06_Practice_Manual_C_es.html">Capítulo 6 §1-C</a>.</dd>
 
     <dt>teammateMode</dt>
     <dd>El modo de ejecución paralela para Agent Teams (una función experimental). Claude Desktop App (Escritorio) solo soporta <code>in-process</code>, mientras que Claude Code (CLI) adicionalmente soporta el modo panel dividido <code>tmux</code>.

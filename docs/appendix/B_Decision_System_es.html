@@ -73,7 +73,7 @@
     <li>Formato de <code>rules_applied</code> (<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>) y resolución de <code>skills_used</code> a habilidades reales</li>
   </ol>
   <p>Esta validación es <strong>fail-closed</strong> — cualquier problema de nivel error significa exit 1. A diferencia de comprobaciones suaves que solo advierten, la sincronización no avanza con un registro de decisión roto.</p>
-  <p>Ten en cuenta que a partir de septiembre de 2026, las plantillas de variante de grado governed también llevan compuertas de decisión (<code>decisions/gates.yaml</code>). Una compuerta es una declaración de regla — "qué veredicto debe aprobarse en qué punto" — mientras que un registro de decisión es el acta de un veredicto realmente emitido; un veredicto producido en una compuerta deja la constancia como <code>record_kind: DEC</code>. Véase el <a href="../domain-model/13_DomainOperatingModel_Chapter_es.html">Capítulo 13 · Domain Operating Model</a> para más detalles.</p>
+  <p>Ten en cuenta que a partir de septiembre de 2026, las plantillas de variante de grado governed también llevan compuertas de decisión (<code>decisions/gates.yaml</code>). Una compuerta es una declaración de regla — "qué veredicto debe aprobarse en qué punto" — mientras que un registro de decisión es el acta de un veredicto realmente emitido; un veredicto producido en una compuerta deja la constancia como <code>record_kind: DEC</code>. Véase el <a href="../domain-model/15_DomainOperatingModel_Chapter_es.html">Capítulo 15 · Domain Operating Model</a> para más detalles.</p>
 
   <h2 id="c4-registry">Registro de Especificaciones y Exenciones E1–E5</h2>
   <p>Antes de una decisión viene su diseño (spec). El <strong>registro de especificaciones</strong> de ADR-0055 (<code>docs/specs/registry.json</code>) rastrea los documentos de diseño por id, título, archivo, estado (<code>proposed | approved | implemented</code>) y fecha de última actualización.</p>
@@ -92,7 +92,7 @@
   <p>Las exenciones ad-hoc están prohibidas, y <strong>usar un código de exención inexistente es en sí mismo un fallo duro</strong>. El abuso de exenciones es una violación de gobernanza.</p>
 
   <h2 id="c5-backlog">El Backlog de Gobernanza</h2>
-  <p>No toda decisión debe tomarse ahora. Lo que "algún día requerirá un juicio" se difiere como tickets del <strong>backlog de gobernanza</strong>. Donde un ticket de servicio (Capítulo 7) es una solicitud de trabajo puntual, un ticket del backlog de gobernanza es una <strong>decisión futura rastreada en git</strong>.</p>
+  <p>No toda decisión debe tomarse ahora. Lo que "algún día requerirá un juicio" se difiere como tickets del <strong>backlog de gobernanza</strong>. Donde un ticket de servicio (Capítulo 9) es una solicitud de trabajo puntual, un ticket del backlog de gobernanza es una <strong>decisión futura rastreada en git</strong>.</p>
   <ul>
     <li>Gestionado vía <code>scripts/ticket.ts</code>, almacenado como archivos rastreados por git en <code>tickets/governance/</code></li>
     <li>Un ticket <code>kind: manual</code> con fecha <code>not_before</code> permanece oculto de <code>list --ready --kind manual</code> hasta que esa fecha pase — una <strong>reserva de maduración (soak)</strong></li>

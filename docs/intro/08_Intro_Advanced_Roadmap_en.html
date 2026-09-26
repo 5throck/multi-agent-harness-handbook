@@ -10,10 +10,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Chapter 8 §5 · Advanced Roadmap - a reference from the Multi-Agent Harness Engineering Handbook.">
+  <meta name="description" content="Chapter 10 §5 · Advanced Roadmap - a reference from the Multi-Agent Harness Engineering Handbook.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Chapter 8 §5 · Advanced Roadmap</title>
+  <title>Chapter 10 §5 · Advanced Roadmap</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -22,26 +22,26 @@
 
 <nav>
   <a href="../index_en.html" class="nav-home">← Handbook Home</a>
-  <div class="nav-title">Chapter 8 §5 · Advanced Roadmap</div>
+  <div class="nav-title">Chapter 10 §5 · Advanced Roadmap</div>
   <a href="#container">Container-Based Service Integration</a>
   <a href="#memory">Memory Aggregation and Curation</a>
   <a href="#variant-deploy">Evolution of Variant Deployment</a>
   <a href="#boilerplate-strategy">Advancing the Boilerplate Strategy</a>
   <a href="#tier-strategy">Advancing the Model Tier Strategy</a>
-  <div class="nav-section">Other Sections in Chapter 8</div>
-  <a href="08_Intro_Advanced_Deploy_en.html">Ch.8 §1 · Deployment and SSOT</a>
-  <a href="08_Intro_Advanced_Chapter_en.html">Ch.8 §2 · Lifecycle Management</a>
-  <a href="08_Intro_Advanced_AGENTS_en.html">Ch.8 §3 · AGENTS.md In Depth</a>
-  <a href="08_Intro_Advanced_Architecture_en.html">Ch.8 §4 · Architecture In Depth</a>
+  <div class="nav-section">Other Sections in Chapter 10</div>
+  <a href="08_Intro_Advanced_Deploy_en.html">Ch.10 §1 · Deployment and SSOT</a>
+  <a href="08_Intro_Advanced_Chapter_en.html">Ch.10 §2 · Lifecycle Management</a>
+  <a href="08_Intro_Advanced_AGENTS_en.html">Ch.10 §3 · AGENTS.md In Depth</a>
+  <a href="08_Intro_Advanced_Architecture_en.html">Ch.10 §4 · Architecture In Depth</a>
   <div class="nav-section">Other Chapters</div>
-  <a href="05_Intro_Chapter_en.html">Ch.5 · Introducing ai-workspace-standards</a>
-  <a href="../enterprise/07_Enterprise_Chapter_en.html">Ch.7 · Running a Multi-Agent Team Inside an Enterprise</a>
-  <a href="../variant-advanced/11_VariantAdvanced_Chapter_en.html">Ch.11 · Creating a New Variant</a>
+  <a href="05_Intro_Chapter_en.html">Ch.7 · Introducing ai-workspace-standards</a>
+  <a href="../enterprise/09_Enterprise_Chapter_en.html">Ch.9 · Running a Multi-Agent Team Inside an Enterprise</a>
+  <a href="../variant-advanced/13_VariantAdvanced_Chapter_en.html">Ch.13 · Creating a New Variant</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Chapter 8 §5</div>
+  <div class="chapter-eyebrow">Chapter 10 §5</div>
   <h1>Advanced Roadmap</h1>
   <p class="lead">What §1 through §4 covered so far is the <strong>current implementation</strong> of ai-workspace-standards. This section covers the opposite — five directions the repository is heading in that have not yet been implemented. They split into three infrastructure-level directions (container integration, memory aggregation, variant deployment automation) and two governance-level directions (boilerplate strategy, model tier strategy).</p>
 
@@ -57,7 +57,7 @@
   </div>
 
   <div class="note">
-    <strong>2026-08 update</strong> — parts of this roadmap have since been implemented. Governance-level hardening is covered in <a href="../appendix/A_Governance_Enforcement_en.html">Reference A · Governance Enforcement Layers</a> and <a href="../appendix/B_Decision_System_en.html">Reference B · Decision System</a>; the mechanization of workflow structure in <a href="../appendix/C_Skill_Graph_en.html">Reference C · Skill Relationship Graph</a> and the procedure schema (ADR-0063) section of Chapter 9. The remaining items here (container integration, memory aggregation, variant deployment automation) are still active directions.
+    <strong>2026-08 update</strong> — parts of this roadmap have since been implemented. Governance-level hardening is covered in <a href="../appendix/A_Governance_Enforcement_en.html">Reference A · Governance Enforcement Layers</a> and <a href="../appendix/B_Decision_System_en.html">Reference B · Decision System</a>; the mechanization of workflow structure in <a href="../appendix/C_Skill_Graph_en.html">Reference C · Skill Relationship Graph</a> and the procedure schema (ADR-0063) section of Chapter 11. The remaining items here (container integration, memory aggregation, variant deployment automation) are still active directions.
   </div>
 
 
@@ -66,7 +66,7 @@
   <p>The core of this advancement is that a scaffolded project should be able to run in a Docker or Kubernetes environment, **connected to a frontend service such as Open WebUI so it can be supported on a per-user basis**. In that form, each user invokes their assigned agent team through a browser interface, reviews results, and retains context across sessions.</p>
 
   <h2 id="memory">Memory Aggregation and Curation</h2>
-  <p>Today, each L3 project maintains its own independent <code>memory/YYYY-MM-DD.md</code> file (covered in Chapter 5 §4). This file records cross-session context for that project, but as the number of projects grows, memory files become scattered and <strong>it becomes difficult to see workspace-wide insights</strong>.</p>
+  <p>Today, each L3 project maintains its own independent <code>memory/YYYY-MM-DD.md</code> file (covered in Chapter 7 §4). This file records cross-session context for that project, but as the number of projects grows, memory files become scattered and <strong>it becomes difficult to see workspace-wide insights</strong>.</p>
   <p>The second axis of advancement is the need for a capability to **aggregate and curate** memory files that are otherwise scattered across individual projects. For example, it should become possible to run workspace-level trend analyses such as "what error patterns did agent teams across all projects run into most often last week" or "which role combinations were used most frequently."</p>
 
   <h2 id="variant-deploy">Evolution of Variant Deployment</h2>
@@ -154,8 +154,8 @@
   </div>
 
   <div class="chapter-nav">
-    <a href="08_Intro_Advanced_Architecture_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch.8 §4 · Architecture In Depth</div></a>
-    <a href="../workflows/09_Workflows_Chapter_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch.9 · Workflow Design Patterns</div></a>
+    <a href="08_Intro_Advanced_Architecture_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch.10 §4 · Architecture In Depth</div></a>
+    <a href="../workflows/11_Workflows_Chapter_en.html" class="next"><div class="dir">Next Chapter →</div><div class="ttl">Ch.11 · Workflow Design Patterns</div></a>
   </div>
    <footer>
     Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>

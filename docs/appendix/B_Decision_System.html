@@ -73,7 +73,7 @@
     <li><code>rules_applied</code> 형식(<code>&lt;PREFIX&gt;-R&lt;N&gt;</code>)과 <code>skills_used</code>의 실제 스킬 해결 가능 여부</li>
   </ol>
   <p>이 검증은 <strong>fail-closed</strong>다 — error 수준 문제가 하나라도 있으면 exit 1. "경고만 뜨는 소프트 검사"와 달리, 결정 기록이 깨진 채로는 동기화가 진행되지 않는다.</p>
-  <p>참고로 2026-09부터 governed 등급의 variant 템플릿에는 결정 게이트(<code>decisions/gates.yaml</code>)가 도입됐다. 게이트는 "어느 지점에서 어떤 판정을 통과해야 하는가"라는 규칙 선언이고, 결정 기록은 실제 내려진 판정의 기록이다 — 게이트에서 나온 판정이 <code>record_kind: DEC</code>로 결정 기록에 남는다. 자세한 내용은 <a href="../domain-model/13_DomainOperatingModel_Chapter.html">13장 · Domain Operating Model</a> 참조.</p>
+  <p>참고로 2026-09부터 governed 등급의 variant 템플릿에는 결정 게이트(<code>decisions/gates.yaml</code>)가 도입됐다. 게이트는 "어느 지점에서 어떤 판정을 통과해야 하는가"라는 규칙 선언이고, 결정 기록은 실제 내려진 판정의 기록이다 — 게이트에서 나온 판정이 <code>record_kind: DEC</code>로 결정 기록에 남는다. 자세한 내용은 <a href="../domain-model/15_DomainOperatingModel_Chapter.html">17장 · Domain Operating Model</a> 참조.</p>
 
   <h2 id="c4-registry">스펙 레지스트리와 E1–E5 면제</h2>
   <p>결정의 앞단에는 설계(spec)가 있다. ADR-0055의 <strong>스펙 레지스트리</strong>(<code>docs/specs/registry.json</code>)는 설계 문서를 id·제목·파일·상태(<code>proposed | approved | implemented</code>)·최종 갱신일로 추적한다.</p>
@@ -92,7 +92,7 @@
   <p>임의 면제는 금지고, <strong>존재하지 않는 면제 코드를 쓰는 것 자체가 하드 실패</strong>다. 면제의 남용은 거버넌스 위반이다.</p>
 
   <h2 id="c5-backlog">거버넌스 백로그</h2>
-  <p>모든 결정이 지금 내려져야 하는 것은 아니다. "언젠가 판단할 필요가 있는 것"은 <strong>거버넌스 백로그</strong> 티켓으로 미뤄진다. 서비스 티켓(7장)이 일회성 작업 요청이라면, 거버넌스 백로그 티켓은 <strong>git에 추적되는 미래의 결정</strong>이다.</p>
+  <p>모든 결정이 지금 내려져야 하는 것은 아니다. "언젠가 판단할 필요가 있는 것"은 <strong>거버넌스 백로그</strong> 티켓으로 미뤄진다. 서비스 티켓(9장)이 일회성 작업 요청이라면, 거버넌스 백로그 티켓은 <strong>git에 추적되는 미래의 결정</strong>이다.</p>
   <ul>
     <li><code>scripts/ticket.ts</code>로 관리되며 <code>tickets/governance/</code>에 git 추적 파일로 저장</li>
     <li><code>kind: manual</code> 티켓에 <code>not_before</code> 날짜를 달면, 그 날짜가 지나기 전엔 <code>list --ready --kind manual</code>에 나오지 않는다 — <strong>숙성(soak) 예약</strong></li>

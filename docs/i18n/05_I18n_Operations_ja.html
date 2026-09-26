@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="第10章 · i18n設計とコンテンツ品質 - multi-agent-harness-handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>第10章 · i18n設計とコンテンツ品質</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <a href="../index_ja.html" class="nav-home">← ハンドブックホーム</a>
+  <div class="nav-title">第10章 · i18n設計とコンテンツ品質</div>
+  <a href="#scope">i18nの対象を分けて考える</a>
+  <a href="#ssot">文章と構造の単一ソースを維持する</a>
+  <a href="#layout">長い文字列と地域形式を設計入力にする</a>
+  <a href="#operate">利用者の仕事が同じかで同等性を確認する</a>
+  <div class="nav-section">関連する章</div>
+  <a href="../design/04_Design_Foundation_ja.html">前へ</a>
+  <a href="../practice/06_Practice_Manual_ja.html">次へ</a>
+</nav>
+<main><article class="reading">
+  <div class="chapter-eyebrow">第10章</div>
+  <h1>第10章 · i18n設計とコンテンツ品質</h1>
+  <p class="lead">翻訳ファイルの追加ではなく、言語・国・形式・画面状態を含む製品契約としてi18nを設計する。</p>
+  <div class="keypoints"><div class="kp-title">この章で扱うこと</div><ul><li>Separate locales from country profiles</li><li>Translatable assets and SSOT</li><li>Layouts for length, format, and state</li><li>Parity validation and operations</li></ul></div>
+  <h2 id="scope">i18nの対象を分けて考える</h2><p>i18nは翻訳ファイルを増やす作業ではない。利用者が異なる言語と地域でも同じ仕事を完了できるようにする製品設計である。localeは文字列、日付、数値、並び順に関係し、country profileは規制、通貨、データ提供者、公開範囲に関係する。</p><p>二つを一つの設定として扱うと、表示文の変更が業務規則の変更になる。言語は読み方、国プロファイルは適用する規則として、責任者と検証を分ける。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="i18nの対象を分けて考える">
+    <title>i18nの対象を分けて考える</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Canonical · i18nの対象を分けて考える</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Canonical</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Locale</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Preview</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a0)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Parity</text>
+    <defs><marker id="a0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>locale</td><td> 文章と形式</td></tr><tr><td>country profile</td><td> 規制とデータ</td></tr><tr><td>コンテンツ</td><td> 表示文と代替文</td></tr><tr><td>識別子</td><td> コード・URL・パスは翻訳しない</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> 利用者選択 → locale形式 / 国プロファイル規則</div><h2 id="ssot">文章と構造の単一ソースを維持する</h2><p>翻訳を画面に直接散らすと、ある言語だけでボタン、エラー、ヘルプ、空状態が欠ける。基準言語をSSOTにし、メッセージキー、画面構造、状態一覧、用語集を一緒に管理する。</p><p>キーは単なる実装名ではなく意味の契約である。画面構造を先に複製し、可視の文章だけを翻訳すると、実習とリンクも同じ形で保てる。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="文章と構造の単一ソースを維持する">
+    <title>文章と構造の単一ソースを維持する</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Locale · 文章と構造の単一ソースを維持する</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Canonical</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Locale</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Preview</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a1)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Parity</text>
+    <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>基準言語</td><td> 構造の基準</td></tr><tr><td>キー</td><td> 安定した意味の名前</td></tr><tr><td>用語集</td><td> 一概念一表現</td></tr><tr><td>変更記録</td><td> 文章と構造を区別</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> 基準コンテンツ → キー・用語集 → 翻訳 → 構造確認</div><h3>演習</h3><p>キーは単なる実装名ではなく意味の契約である。画面構造を先に複製し、可視の文章だけを翻訳すると、実習とリンクも同じ形で保てる。</p><div class="code-block"><pre><code>{
+  &quot;review&quot;: {
+    &quot;approve&quot;: &quot;승인&quot;,
+    &quot;returnForChanges&quot;: &quot;수정 요청&quot;,
+    &quot;empty&quot;: &quot;검토할 보고서가 없습니다.&quot;
+  },
+  &quot;errors&quot;: {
+    &quot;network&quot;: &quot;연결을 확인한 뒤 다시 시도하세요.&quot;
+  }
+}</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="layout">長い文字列と地域形式を設計入力にする</h2><p>言語によって文の長さは変わる。固定幅のボタンと表は文章を切ったり画面外へ押し出したりする。日付と数値は文字列結合ではなくlocale対応の形式化を使い、実際の言語版で改行を確認する。</p><p>通常画面だけでなく、空、エラー、権限なし、読み込み中も翻訳する。長い名前、0件、通信失敗を各言語で確認する。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="長い文字列と地域形式を設計入力にする">
+    <title>長い文字列と地域形式を設計入力にする</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Preview · 長い文字列と地域形式を設計入力にする</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Canonical</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Locale</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Preview</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a2)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Parity</text>
+    <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>柔軟な幅を使う。</td><td>柔軟な幅を使う。</td></tr><tr><td>locale形式化を使う。</td><td>locale形式化を使う。</td></tr><tr><td>長くなる表とボタンを確認する。</td><td>長くなる表とボタンを確認する。</td></tr><tr><td>解決行動と代替文を翻訳する。</td><td>解決行動と代替文を翻訳する。</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> メッセージ・形式 → 柔軟な部品 → 状態表示 → 言語プレビュー</div><h2 id="operate">利用者の仕事が同じかで同等性を確認する</h2><p>自然な翻訳でも、ある版で保存、警告、リンク、実習手順が欠ければ同等ではない。自動検査は見出し、コード、リンク、検索登録を比べ、人の確認は用語、文体、切れ、国規則を確認する。</p><p>基準言語を先に確定し、すべての言語版を同じ変更セットで更新する。配布前には言語切替、空・エラー状態、日時・通貨、アクセシブルな名前を確認する。</p><div class="diagram-frame">
+  <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="利用者の仕事が同じかで同等性を確認する">
+    <title>利用者の仕事が同じかで同等性を確認する</title>
+    <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Parity · 利用者の仕事が同じかで同等性を確認する</text>
+    <rect x="22" y="48" width="118" height="56" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="81" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Canonical</text><path d="M142 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="172" y="48" width="118" height="56" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="231" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Locale</text><path d="M292 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="322" y="48" width="118" height="56" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="381" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Preview</text><path d="M442 76h20" stroke="var(--accent)" stroke-width="2" marker-end="url(#a3)"/><rect x="472" y="48" width="118" height="56" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="531" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Parity</text>
+    <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+  </svg>
+</div><table><thead><tr><th>確認項目</th><th>意図</th></tr></thead><tbody><tr><td>1. 見出し・実習・リンクは同じか。</td><td>1. 見出し・実習・リンクは同じか。</td></tr><tr><td>2. コードとURLは変わらないか。</td><td>2. コードとURLは変わらないか。</td></tr><tr><td>3. 長文と解決行動が見えるか。</td><td>3. 長文と解決行動が見えるか。</td></tr><tr><td>4. 国設定が言語を変えないか。</td><td>4. 国設定が言語を変えないか。</td></tr></tbody></table><div class="flow-box"><strong>標準:</strong> 基準変更 → 翻訳 → 自動比較 → 画面確認 → 承認</div><div class="quiz"><div class="quiz-title">自己確認</div><ol>
+      <li>locale: 文章と形式</li><li>柔軟な幅を使う。</li><li>4. 国設定が言語を変えないか。</li>
+    </ol></div>
+  <div class="chapter-nav"><a class="prev" href="../design/04_Design_Foundation_ja.html"><div class="dir">← 前へ</div><div class="ttl">前へ</div></a><a class="next" href="../practice/06_Practice_Manual_ja.html"><div class="dir">次へ →</div><div class="ttl">次へ</div></a></div>
+   <footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+ </article></main>
+</div>
+<script src="../assets/inpage-search.js" defer></script><script src="../assets/copy-code.js"></script><script src="../assets/dark-mode-toggle.js"></script><script src="../assets/lang-switcher.js"></script>
+</body></html>

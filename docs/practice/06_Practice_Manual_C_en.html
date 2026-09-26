@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Ch.6 §1-C · Sub-Agent Usage Details — Codex-Focused - Multi-Agent Team Harness Engineering Handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Ch.6 §1-C · Sub-Agent Usage Details — Codex-Focused</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+  <style>
+    /* Page-specific overrides */
+    .tree-box pre { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre; }
+    .tree-box pre .cmd { color: var(--accent); font-weight: 600; }
+    .tree-box pre .desc { color: var(--text-dim); }
+    .mode-table td:first-child { font-family: monospace; color: var(--accent-red); font-size: var(--font-size-label); }
+    .platform-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 20px; }
+    @media (max-width: 760px) { .platform-pair { grid-template-columns: 1fr; } }
+    .platform-col { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+    .platform-col pre.code-block { max-width: 100%; }
+    .platform-col.codexapp { border-top: 3px solid var(--accent-purple); }
+    .platform-col.codexcli { border-top: 3px dashed var(--accent-purple); }
+    .platform-col h3 { margin-top: 0; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+    .chapter-nav .branch { flex: 0 0 auto; text-align: center; min-width: 120px; }
+    .chapter-nav .branch a { display: block; font-size: 12px; margin-bottom: 6px; padding: 10px 14px; }
+    .chapter-nav .branch-label { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar navigation ── -->
+<nav>
+  <a href="../index_en.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">Ch.6 §1-C · Codex-Focused Details</div>
+  <a href="#section-1">1. Defining Roles</a>
+  <a href="#section-2">2. Performing/Switching Roles</a>
+  <a href="#section-3">3. Parallel Execution</a>
+  <a href="#section-4">4. Automation/Hooks</a>
+  <div class="nav-section">References</div>
+  <a href="#refs">Reference Links</a>
+  <div class="nav-section">Sibling Documents</div>
+  <a href="06_Practice_Manual_en.html">Ch.6 §1 · Common Reference</a>
+  <a href="06_Practice_Manual_A_en.html">Ch.6 §1-A · Claude-Focused</a>
+  <a href="06_Practice_Manual_B_en.html">Ch.6 §1-B · Antigravity-Focused</a>
+  <div class="nav-section">Other Chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter_en.html">Ch.3 · Guardrails and Permission Model</a>
+  <a href="../intro/05_Intro_Chapter_en.html">Ch.7 · Adoption</a>
+</nav>
+
+<!-- ── Body ── -->
+<main>
+ <article class="reading">
+  <div class="chapter-eyebrow">Ch.6 §1-C</div>
+  <h1>Sub-Agent Usage Details — Codex-Focused</h1>
+  <p class="subtitle">A detailed document, limited to the Codex family, covering how to perform, sequence, and scale to automation the work that corresponds to "subagents" in Codex CLI / Codex Desktop App &nbsp;|&nbsp; Shared concepts are covered in the <a href="06_Practice_Manual_en.html">Ch.6 §1 reference</a>, the Claude family in <a href="06_Practice_Manual_A_en.html">Ch.6 §1-A</a>, and the Antigravity family in <a href="06_Practice_Manual_B_en.html">Ch.6 §1-B</a>.</p>
+
+  <div class="version-box">
+    <div class="version-row"><span class="vlabel">Target version</span><span class="vvalue">Codex CLI / Codex Desktop App — see <a href="06_Practice_Manual_A_en.html">§1-A</a> for the Claude counterpart, <a href="06_Practice_Manual_B_en.html">§1-B</a> for Antigravity</span></div>
+    <div class="version-row"><span class="vlabel">Reference doc URL</span><span class="vvalue"><a href="https://developers.openai.com/codex" target="_blank">developers.openai.com/codex</a></span></div>
+    <div class="version-row"><span class="vlabel">Docs collected on</span><span class="vvalue">2026-09-12</span></div>
+    <div class="version-row"><span class="vlabel">How to check version</span><span class="vvalue">Codex CLI: <code>codex --version</code> · Codex Desktop App: the app's About screen</span></div>
+  </div>
+
+  <div class="warning-box">Codex has <strong>no native subagent tool.</strong> That's why this document uses the term <strong>"role"</strong> throughout instead of "subagent" — a subagent as described in the Claude/Antigravity documents is an independent entity with its own process and context window, but a role the PM "takes on" in Codex is just a shift in thinking that continues within the same session. See <a href="../tools/00_Tools_Manual_en.html#section-3">Tool Comparison §3</a> for the full background.</div>
+
+  <hr>
+
+  <!-- ── Section 1 ── -->
+  <h2 id="section-1">1. Defining Roles</h2>
+
+  <p>Codex CLI and Codex Desktop App <strong>require no definition file to be created in advance</strong>. Instead, the PM reads the existing definition file for each specialist agent from <code>agents/&lt;name&gt;.md</code> at the workspace root when the session starts, and uses it as role context. The format resembles the Claude family's <code>.claude/agents/*.md</code>, but the purpose differs — in Claude it's an "executable definition" referenced by <code>subagent_type</code> at invocation time, whereas in Codex it's <strong>material the PM loads for reference, to think like that role</strong>.</p>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> agents/&lt;name&gt;.md — Read-Only Role Context</h3>
+    <p>In Codex Desktop App, the PM loads a file like the workspace's <code>agents/reviewer.md</code> directly mid-conversation and declares "I will work the way this role defines." The file itself may share the same frontmatter format as the Claude family, but Codex does not spawn it as an executable subagent — it's just a referenced document. <strong>Codex CLI uses the exact same file in the exact same way</strong> — there is no difference in how roles are defined between the two.</p>
+    <div style="position:relative">
+  <pre class="code-block">Contents of agents/reviewer.md (may share
+the same format as the Claude version):
+---
+name: reviewer
+description: Reviews text files for typos
+  and logical gaps.
+---
+
+You are acting as a reviewer. Read the
+given file and report a list of improvements.</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — Same agents/&lt;name&gt;.md as Codex Desktop App</h3>
+    <p>References the exact same <code>agents/&lt;name&gt;.md</code> file used in Codex Desktop App. There is no difference in role-definition method between the Desktop App and the CLI.</p>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Comparison item</th><th>Claude family (.claude/agents)</th><th>Codex family (agents/&lt;name&gt;.md)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>File location</td>
+        <td><code>.claude/agents/*.md</code> (platform-specific folder)</td>
+        <td><code>agents/&lt;name&gt;.md</code> (workspace-common folder — no platform-specific copy)</td>
+      </tr>
+      <tr>
+        <td>Purpose</td>
+        <td>Executable subagent definition — invoked via <code>subagent_type</code></td>
+        <td>Read-only role context — the PM references it to think like that role</td>
+      </tr>
+      <tr>
+        <td>Invocation mechanism</td>
+        <td><code>Agent</code>/<code>Task</code> tool</td>
+        <td>None — the PM simply reads the file and declares "I will perform this role"</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 2 ── -->
+  <h2 id="section-2">2. Performing/Switching Roles</h2>
+
+  <p>Neither Codex CLI nor Codex Desktop App spawns a subagent with its own context. Instead, <strong>the PM changes roles within the same session</strong> — stepping through work in order, e.g. "analyze this file as the designer role now, then write the code as the implementer role next."</p>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> — Sequential Role-Switching by the PM</h3>
+    <p>When you ask the PM in Codex Desktop App for work that needs multiple areas of expertise, the PM loads the relevant role's definition file at each stage, works from that role's perspective, then moves on to the next role. Multiple roles never exist in parallel; each stage picks up the previous stage's results. <strong>Codex CLI runs the exact same sequential-switching approach</strong> — making the same request in a terminal instead of a chat window is handled identically.</p>
+    <div style="position:relative">
+  <pre class="code-block">User: "Review the session-expiry logic in
+src/auth/login.ts and fix any bugs you find."
+
+PM's internal progression (sequential,
+within one session):
+1. Loads agents/reviewer.md as role context
+   to review the code
+2. Summarizes the issues found
+3. Switches role to agents/automation-
+   engineer.md to implement the fix</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — Same Sequential Switching as Codex Desktop App</h3>
+    <p>The exact same sequential role-switching approach as Codex Desktop App. Making the same natural-language request in a terminal is handled the same way, with the PM changing roles as it works.</p>
+  </div>
+
+  <div class="warning-box">Copying the Claude/Antigravity examples verbatim and saying "Codex invokes the reviewer subagent" for this exercise would be inaccurate. The Codex "intro exercise" isn't about invoking a subagent — it's about <strong>giving the PM work that needs several roles and observing it switch roles sequentially</strong>.</div>
+
+  <hr>
+
+  <!-- ── Section 3 ── -->
+  <h2 id="section-3">3. Parallel Execution</h2>
+
+  <p>The Codex family <strong>does not support within-session parallel execution.</strong> Every role switch happens in order, inside a single linear session.</p>
+
+  <div class="warning-box">Codex has nothing corresponding to Claude's Agent Teams or Antigravity's Agent Manager/dynamic subagents — no "within-session parallelism." To run multiple things at once, you have to <strong>open several terminals (or windows) and separate the sessions themselves</strong> — this is closer to placing several independent sessions side by side than to parallel execution proper.</div>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> — Cross-Session Parallelism via Multiple Windows</h3>
+    <p>To work on different tasks at the same time in Codex Desktop App, open several app windows (or tabs), each as a separate session. As long as multiple sessions don't touch the same file at once, there's no conflict. <strong>Codex CLI implements cross-session parallelism the same way, by opening multiple terminals.</strong></p>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — Cross-Session Parallelism via Multiple Terminals</h3>
+    <p>The exact same principle as Codex Desktop App. If one <code>codex</code> session is refactoring the API layer while another writes tests, they won't conflict as long as they don't touch the same files.</p>
+  </div>
+
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Item</th><th>Codex Desktop App</th><th>Codex CLI</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Parallel execution unit</td>
+        <td>No within-session parallelism / cross-session parallelism via multiple windows only</td>
+        <td>No within-session parallelism / cross-session parallelism via multiple terminals only</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr>
+
+  <!-- ── Section 4 ── -->
+  <h2 id="section-4">4. Automation/Hooks</h2>
+
+  <p>In the Codex family, automation and hooks show no difference between the Desktop App and CLI — <strong>neither runs the workspace hook suite at all.</strong></p>
+
+  <div class="platform-block codexapp">
+    <h3><span class="badge">Codex Desktop App</span> — No Hooks, Self-Enforced via the Prompt</h3>
+    <p>Codex Desktop App has nothing corresponding to Claude Code's auto-firing events like <code>PostToolUse</code>/<code>TeammateIdle</code>/<code>TaskCompleted</code>. Governance — running audit scripts, enforcing gate rules — instead relies on the PM <strong>recognizing and carrying out the instructions in <code>CODEX.md</code> itself, every session</strong> (prompt self-enforcement). <strong>Codex CLI is identical</strong> — there's no hook mechanism at all.</p>
+  </div>
+
+  <div class="platform-block codexcli">
+    <h3><span class="badge">Codex CLI</span> — Same Lack of Hooks as Codex Desktop App</h3>
+    <p>Exactly the same as Codex Desktop App. The PM must recognize and carry out instructions written in <code>CODEX.md</code> itself within the session (e.g., "always run <code>bun scripts/audit.ts</code> after modifying a file") — there's no mechanism that fires automatically in response to an event.</p>
+    <div style="position:relative">
+  <pre class="code-block"># Example instruction in CODEX.md (not
+# auto-fired — the PM recognizes and runs
+# it directly):
+# "Always run bun scripts/audit.ts after
+#  writing/editing a file."
+
+bun scripts/audit.ts</pre>
+  <button class="copy-btn">Copy</button>
+</div>
+  </div>
+
+  <div class="warning-box">When following this handbook's multi-agent exercises with Codex, always read "invoke a subagent" as <strong>"the PM loads that role's definition file and performs the role,"</strong> and "the hook fires automatically" as <strong>"the PM recognizes and carries out the CODEX.md instructions itself."</strong></div>
+
+  <hr>
+
+  <!-- ── Reference Links ── -->
+  <h2 id="refs">Reference Links</h2>
+  <ul class="flat-list">
+    <li>📖 <a href="https://developers.openai.com/codex" target="_blank">Codex — Official Documentation</a></li>
+    <li>⚙️ <a href="06_Practice_Manual_en.html">Ch.6 §1 Common Reference — 06_Practice_Manual_en.html</a></li>
+    <li>⚙️ <a href="06_Practice_Manual_A_en.html">Ch.6 §1-A Claude-Focused — 06_Practice_Manual_A_en.html</a></li>
+    <li>⚙️ <a href="06_Practice_Manual_B_en.html">Ch.6 §1-B Antigravity-Focused — 06_Practice_Manual_B_en.html</a></li>
+    <li>⚙️ <a href="../tools/00_Tools_Manual_en.html#section-3">Tool Comparison §3 — Codex Desktop App vs Codex CLI</a></li>
+  </ul>
+
+  <hr>
+  <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">Based on Codex CLI/Desktop App | September 2026</p>
+  <div class="chapter-nav">
+    <a href="06_Practice_Manual_en.html" class="prev"><div class="dir">← Previous</div><div class="ttl">Ch.6 §1 · Reference</div></a>
+    <div class="branch">
+      <div class="branch-label">Ch.6 §1</div>
+      <a href="06_Practice_Manual_A_en.html" >Claude (A)</a>
+      <a href="06_Practice_Manual_B_en.html" >Antigravity (B)</a>
+      <a href="06_Practice_Manual_C_en.html" >Codex (C)</a>
+    </div>
+  </div>
+   <footer>
+    Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>
+    Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    Handbook content is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International)</a>.
+  </footer>
+ </article>
+</main>
+
+</div>
+  <script src="../assets/inpage-search.js" defer></script>
+
+<script src="../assets/copy-code.js"></script>
+
+<script src="../assets/dark-mode-toggle.js"></script>
+<script src="../assets/lang-switcher.js"></script>
+</body>
+</html>

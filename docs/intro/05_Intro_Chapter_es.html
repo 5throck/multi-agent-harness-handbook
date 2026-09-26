@@ -10,10 +10,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Capítulo 5 · Introducción a ai-workspace-standards - Material del Manual de Ingeniería de Arneses de Equipos Multiagente.">
+  <meta name="description" content="Capítulo 7 · Introducción a ai-workspace-standards - Material del Manual de Ingeniería de Arneses de Equipos Multiagente.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Capítulo 5 · Introducción a ai-workspace-standards</title>
+  <title>Capítulo 7 · Introducción a ai-workspace-standards</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
   <style>
@@ -25,7 +25,7 @@
 
 <nav>
   <a href="../index_es.html" class="nav-home">← Inicio del Manual</a>
-  <div class="nav-title">Capítulo 5 · Introducción a ai-workspace-standards</div>
+  <div class="nav-title">Capítulo 7 · Introducción a ai-workspace-standards</div>
   <a href="#s1">Qué es el repositorio</a>
   <a href="#s1b">La arquitectura general de un vistazo</a>
   <a href="#s2">Los cinco archivos principales</a>
@@ -33,14 +33,14 @@
   <a href="#s4">Lista de verificación de inicio de sesión y andamiaje</a>
   <div class="nav-section">Otros capítulos</div>
   <a href="../guardrails/03_Guardrails_Chapter_es.html">Capítulo 3 · Barreras de seguridad y el modelo de permisos</a>
-  <a href="../intro/08_Intro_Advanced_Deploy_es.html">Capítulo 8 · Profundización en la arquitectura</a>
+  <a href="../intro/08_Intro_Advanced_Deploy_es.html">Capítulo 10 · Profundización en la arquitectura</a>
 </nav>
 
 <main>
  <article class="reading">
-  <div class="chapter-eyebrow">Capítulo 5</div>
+  <div class="chapter-eyebrow">Capítulo 7</div>
   <h1>Introducción a ai-workspace-standards</h1>
-  <p class="lead">ai-workspace-standards es el repositorio que implementa realmente el modelo "herramientas de desarrollo + variante" presentado en el Capítulo 7. Este capítulo explica exactamente qué es este repositorio, de qué archivos consta y qué plantillas de proyecto proporciona.</p>
+  <p class="lead">ai-workspace-standards es el repositorio que implementa realmente el modelo "herramientas de desarrollo + variante" presentado en el Capítulo 9. Este capítulo explica exactamente qué es este repositorio, de qué archivos consta y qué plantillas de proyecto proporciona.</p>
   <p class="source-line">Fuentes: <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards (GitHub)</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/adr/0031-l1-l2-fork-model.md" target="_blank">ADR-0031 Modelo de bifurcación L1–L2</a>, <a href="https://github.com/5throck/ai-workspace-standards/blob/main/docs/constitution/00-ssot-architecture.md" target="_blank">CONSTITUTION.md §0 Arquitectura SSOT</a></p>
 
   <div class="keypoints">
@@ -113,7 +113,7 @@
     <li><strong>Inicio de sesión.</strong> El agente lee, en orden: CONSTITUTION.md → el docs/context.md del proyecto actual (configuración del proyecto) → AGENTS.md (registro de agentes) → memory/YYYY-MM-DD.md (cubierto en §4).</li>
     <li><strong>Se aplican las reglas de ejecución específicas de la herramienta.</strong> Para Claude Code/App, CLAUDE.md y <code>.claude/</code> gobiernan la ejecución detallada; para Gemini/Antigravity, lo hacen GEMINI.md y <code>.gemini/</code>; para Codex, CODEX.md y <code>.codex/</code>.</li>
     <li><strong>Cuando se necesita un nuevo proyecto.</strong> <code>scripts/new-project.ts</code> clona toda la configuración de <code>templates/co-&lt;variante&gt;/</code> (L2) en <code>Projects/&lt;nombre&gt;/</code>, creando un directorio de trabajo de proyecto L3. En este punto, <code>templates/co-&lt;variante&gt;/</code> ya se había creado una generación antes al tomar una instantánea de <code>templates/common/</code> (L1).</li>
-    <li><strong>Cuando L0 cambia durante la operación.</strong> <code>scripts/propagate-to-templates.ts</code>, como parte del pipeline <code>/sync</code>, publica automáticamente y de forma continua los cambios de L0 a L1 (<code>templates/common/</code>). Esto no se propaga automáticamente a las instancias L2 ni L3 que ya han nacido. Este es el principio de "bifurcación" cubierto en el Capítulo 8.</li>
+    <li><strong>Cuando L0 cambia durante la operación.</strong> <code>scripts/propagate-to-templates.ts</code>, como parte del pipeline <code>/sync</code>, publica automáticamente y de forma continua los cambios de L0 a L1 (<code>templates/common/</code>). Esto no se propaga automáticamente a las instancias L2 ni L3 que ya han nacido. Este es el principio de "bifurcación" cubierto en el Capítulo 10.</li>
   </ol>
   <div class="note">En una frase: <strong>L0 es "justo debajo de la raíz," L1 es "templates/common/," L2 es "templates/co-*/," y L3 es "Projects/*/, el directorio de trabajo del proyecto activo"</strong> — recordar solo estas cuatro coordenadas permite seguir cada explicación del resto de este capítulo contra las ubicaciones reales de las carpetas.</div>
 
@@ -122,7 +122,7 @@
   <p><code>CONSTITUTION.md</code> es el estándar compartido maestro, el documento que debe leerse primero al inicio de cualquier sesión. Define las reglas de gobernanza, el flujo de trabajo de PR y los principios de arquitectura multiagente para todo el espacio de trabajo. <code>CLAUDE.md</code> contiene el comportamiento concreto para Claude Code/App (ganchos, comandos de barra, reglas de despacho de agentes), <code>GEMINI.md</code> define el comportamiento equivalente para Gemini/Antigravity CLI/Escritorio, y <code>CODEX.md</code> define cómo Codex CLI/Desktop App aplica el mismo estándar mediante prompts y cambio secuencial de roles. <code>AGENTS.md</code> sirve como el registro canónico de agentes disponibles en todo el espacio de trabajo. Este nombre de archivo es el mismo que el estándar abierto AGENTS.md introducido en el Capítulo 2, que se lee en común por más de 30 herramientas incluyendo Claude Code — aunque en este repositorio también hace las veces de un "registro de agentes y referencia de orquestación" más específico. La parte superior del archivo indica explícitamente que "este archivo no es una instrucción dirigida a herramientas de IA, sino un registro de roles definidos por humanos."</p>
   <p>Para resumir la relación entre estos cinco archivos en una frase: CONSTITUTION.md define "qué debe seguirse," CLAUDE.md/GEMINI.md/CODEX.md definen "cómo se ejecuta eso en cada plataforma," y AGENTS.md define "quién hace el trabajo."</p>
 
-  <p>Una entrada de agente en AGENTS.md consta de los siguientes campos. <strong>La guía concreta de redacción y la asignación de implementación específica por herramienta se cubren en el Capítulo 8 §3, Profundización en AGENTS.md.</strong></p>
+  <p>Una entrada de agente en AGENTS.md consta de los siguientes campos. <strong>La guía concreta de redacción y la asignación de implementación específica por herramienta se cubren en el Capítulo 10 §3, Profundización en AGENTS.md.</strong></p>
   <div class="table-compare narrow-col-3">
   <table>
     <thead><tr><th>Campo</th><th>Significado</th><th>Obligatorio</th><th>Ejemplo</th></tr></thead>
@@ -162,7 +162,7 @@
   <p>Como sugiere el nombre <code>templates/</code>, lo que este repositorio distribuye en última instancia es <strong>plantilla base</strong> — un punto de partida que ya tiene las definiciones del rol de PM, el pipeline de gobernanza y la conexión de comandos/habilidades específicos de plataforma que de otro modo tendría que escribir desde cero para cada proyecto. Pero a diferencia de la plantilla base habitual de "cópiala y cada uno la adapta a su manera," este repositorio expone explícitamente, como una estructura en capas, <em>de dónde proviene ese punto de partida y cómo se actualiza</em>. Ese es el modelo L0 → L1 → L2 → L3 cubierto en la siguiente sección.</p>
   <p>Una de las cosas que esta plantilla base ya ha configurado de antemano es la <strong>asignación de modelo por rol de agente</strong>. Cada archivo de definición de agente (<code>agents/*.md</code>) dentro de una variante tiene un campo <code>tier</code> en su frontmatter, y este valor asigna <code>high</code>/<code>medium</code>/<code>low</code> por plataforma (<code>claude</code>/<code>gemini</code>/<code>antigravity</code>/<code>gemini-cli</code>/<code>codex</code>). Los roles que requieren juicio pesado (PM, Arquitecto) obtienen <code>high</code>, los roles que manejan la implementación real (code-writer, docs-writer) obtienen <code>medium</code>, y las tareas estandarizadas repetitivas (automation-engineer, etc.) obtienen <code>low</code>. El campo <code>model</code> real generalmente se deja como <code>inherit</code>, porque cada plataforma traduce este valor de tier a su propio alias de modelo (<code>opus</code>/<code>sonnet</code>/<code>haiku</code>) en el momento del despliegue. En otras palabras, en el momento en que clona la plantilla base, un nuevo proyecto ya comienza con "quién trabaja usando qué nivel de costo de modelo" ya decidido.</p>
   <p>¿Qué sale realmente mal sin esta jerarquización? Si cada agente se asignara uniformemente al modelo de mayor rendimiento (high), incluso un rol como automation-engineer que solo repite la ejecución estandarizada de scripts incurriría en costos de inferencia innecesariamente caros cada vez, haciendo que el costo operativo de todo el equipo sea pointlessemente grande. Por el contrario, si todo se unificara en el modelo de menor costo (low), un rol como PM — que necesita sintetizar la salida de múltiples agentes y tomar decisiones de juicio — frecuentemente tomaría malas decisiones de coordinación a partir de un razonamiento superficial. La jerarquización es un mecanismo que equilibra previamente el costo y la calidad por rol, ajustado a "cuánta profundidad de razonamiento necesita realmente este rol."</p>
-  <div class="note">Este <strong>nivel de costo de modelo (high/medium/low)</strong> comparte solo la sensación de "niveles" de su nombre con el <strong>L0 → L1 → L2 → L3 de 4 niveles</strong> (la jerarquización de de dónde provienen los archivos y cómo fluyen) cubierto en el Capítulo 8 — por lo demás son conceptos diferentes. Uno es "qué modelo asignar a un agente," y el otro es "dónde vive el original de un archivo."</div>
+  <div class="note">Este <strong>nivel de costo de modelo (high/medium/low)</strong> comparte solo la sensación de "niveles" de su nombre con el <strong>L0 → L1 → L2 → L3 de 4 niveles</strong> (la jerarquización de de dónde provienen los archivos y cómo fluyen) cubierto en el Capítulo 10 — por lo demás son conceptos diferentes. Uno es "qué modelo asignar a un agente," y el otro es "dónde vive el original de un archivo."</div>
 
   <h2 id="s4">Lista de verificación de inicio de sesión y andamiaje</h2>
   <p>CONSTITUTION.md define el orden que toda sesión debe seguir al inicio. Primero, establecer la ruta de los ganchos de git con <code>git config core.hooksPath .githooks</code>, luego leer el propio CONSTITUTION.md, luego leer el <code>docs/context.md</code> (documento de configuración del proyecto) del proyecto en el que se está trabajando. A continuación, verificar <code>AGENTS.md</code> (registro de agentes) para los agentes disponibles, comprobar si queda contexto de una sesión anterior en <code>memory/YYYY-MM-DD.md</code>, y finalmente cargar las habilidades que especifique docs/context.md.</p>
@@ -175,7 +175,7 @@
 </div>
   </div>
 
-  <p>La sintaxis completa y todas las opciones (<code>--platform</code>, <code>--version</code>) se practican de forma práctica en <a href="../variant-practice/06_VariantPractice_Manual_es.html#section-2">Capítulo 6 §1 · Comandos de andamiaje de proyecto</a>.</p>
+  <p>La sintaxis completa y todas las opciones (<code>--platform</code>, <code>--version</code>) se practican de forma práctica en <a href="../variant-practice/08_VariantPractice_Manual_es.html#section-2">Capítulo 8 §1 · Comandos de andamiaje de proyecto</a>.</p>
 
   <div class="note">
     <svg role="img" aria-label="Session startup file reading sequence diagram" viewBox="0 0 700 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;display:block;margin:0 auto;">
@@ -213,8 +213,8 @@
   <div class="note">Los archivos en la raíz del espacio de trabajo (CONSTITUTION.md, CLAUDE.md, etc.) y los archivos en los proyectos individuales creados pertenecen a repositorios git separados. Es un principio fundamental de este repositorio que los dos nunca se modifiquen juntos en la misma pieza de trabajo.</div>
 
   <div class="chapter-nav">
-    <a href="../practice/04_Practice_Manual_es.html" class="prev"><div class="dir">← Capítulo anterior</div><div class="ttl">Capítulo 4 · Uso de un equipo multiagente basado en arnés</div></a>
-    <a href="../variant-practice/06_VariantPractice_Manual_es.html" class="next"><div class="dir">Capítulo siguiente →</div><div class="ttl">Capítulo 6 · Trabajo con una variante existente</div></a>
+    <a href="../practice/06_Practice_Manual_es.html" class="prev"><div class="dir">← Capítulo anterior</div><div class="ttl">Capítulo 6 · Uso de un equipo multiagente basado en arnés</div></a>
+    <a href="../variant-practice/08_VariantPractice_Manual_es.html" class="next"><div class="dir">Capítulo siguiente →</div><div class="ttl">Capítulo 8 · Trabajo con una variante existente</div></a>
   </div>
    <footer>
     Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · Material educativo en español<br>

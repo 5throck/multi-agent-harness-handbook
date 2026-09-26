@@ -2,6 +2,9 @@
 ## 2026-09-26
 
 ### Fixed
+- Restored the Korean curriculum’s continuous Chapter 1–16 numbering across the affected chapter pages, schedule, instructor notes, and comprehension questions.
+
+### Fixed
 - Reordered instructor notes and comprehension questions to match the Day 1 and Day 2 teaching sequence; split the merged Chapter 9/common-reference quiz into separate blocks.
 
 ### Fixed

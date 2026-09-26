@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="10장 · i18n 설계와 콘텐츠 품질 - multi-agent-harness-handbook">
+  <meta name="description" content="5장 · i18n 설계와 콘텐츠 품질 - multi-agent-harness-handbook">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>10장 · i18n 설계와 콘텐츠 품질</title>
+  <title>5장 · i18n 설계와 콘텐츠 품질</title>
   <link rel="stylesheet" href="../assets/css/handbook-variables.css">
   <link rel="stylesheet" href="../assets/css/handbook-components.css">
 </head>
@@ -13,7 +13,7 @@
 <div class="layout">
 <nav>
   <a href="../index.html" class="nav-home">← 핸드북 홈</a>
-  <div class="nav-title">10장 · i18n 설계와 콘텐츠 품질</div>
+  <div class="nav-title">5장 · i18n 설계와 콘텐츠 품질</div>
   <a href="#scope">i18n은 언어 선택 기능보다 넓다</a>
   <a href="#ssot">문구와 구조의 단일 출처를 만든다</a>
   <a href="#layout">긴 번역문과 지역 형식을 화면의 입력으로 취급한다</a>
@@ -24,7 +24,7 @@
 </nav>
 <main><article class="reading">
   <div class="chapter-eyebrow">10장</div>
-  <h1>10장 · i18n 설계와 콘텐츠 품질</h1>
+  <h1>5장 · i18n 설계와 콘텐츠 품질</h1>
   <p class="lead">번역 파일을 늘리는 작업이 아니라, 언어·국가·형식·화면 상태가 함께 유지되는 제품 계약으로 i18n을 설계한다.</p>
   <div class="keypoints"><div class="kp-title">이 장에서 다루는 것</div><ul><li>locale과 국가 프로필 구분</li><li>번역 가능한 자산과 SSOT</li><li>길이·형식·상태를 고려한 화면</li><li>동등성 검증과 운영 실습</li></ul></div>
   <h2 id="scope">i18n은 언어 선택 기능보다 넓다</h2><p>국제화(i18n)는 여러 언어와 지역에서 같은 제품 과업을 완수하도록 설계하는 일이다. 언어(locale)는 문장, 날짜, 숫자, 정렬 방식에 영향을 준다. 국가 프로필은 법규, 통화, 데이터 출처, 공개 범위처럼 지역별 업무 규칙에 영향을 준다. 둘을 같은 설정으로 취급하면 번역을 바꾼 일이 업무 규칙까지 바꾸는 위험이 생긴다.</p><p>여행 가방에 비유하면 locale은 안내문을 읽는 언어와 현지 표기법이고, 국가 프로필은 반입 규칙과 사용할 화폐다. 둘은 함께 선택될 수 있지만 각각의 변경 책임과 검증 방법이 다르다.</p><div class="diagram-frame">

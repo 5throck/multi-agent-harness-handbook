@@ -16,6 +16,7 @@
   <div class="nav-title">디자인 기반과 표준 UI 패턴</div>
   <a href="#system">디자인은 화면 꾸미기가 아니라 계약이다</a>
   <a href="#principles">원칙과 토큰으로 재작업을 줄인다</a>
+  <a href="#color-system">색상 시스템과 접근성</a>
   <a href="#components">표준 컴포넌트와 표준 화면을 함께 정의한다</a>
   <a href="#review">AI 산출물은 결과가 아니라 검토 가능한 초안이다</a>
   <div class="nav-section">다른 장</div>
@@ -26,7 +27,7 @@
   <div class="chapter-eyebrow">디자인</div>
   <h1>디자인 기반과 표준 UI 패턴</h1>
   <p class="lead">AI가 만든 화면을 ‘그럴듯한 시안’에서 재사용 가능한 제품 경험으로 바꾸는 방법을 배운다.</p>
-  <div class="keypoints"><div class="kp-title">이 장에서 다루는 것</div><ul><li>디자인 시스템이 필요한 이유</li><li>원칙·토큰·결정 기록</li><li>표준 컴포넌트와 화면 상태</li><li>AI 산출물 검토와 개선 실습</li></ul></div>
+  <div class="keypoints"><div class="kp-title">이 장에서 다루는 것</div><ul><li>디자인 시스템이 필요한 이유</li><li>원칙·토큰·결정 기록</li><li>표준 컴포넌트와 화면 상태</li><li>AI 산출물 검토와 개선 실습</li><li>색상 시스템과 접근성</li></ul></div>
   <h2 id="system">디자인은 화면 꾸미기가 아니라 계약이다</h2><p>같은 제품을 여러 사람이 만들 때 디자인 규칙은 팀이 공유하는 계약이다. 색, 간격, 글자 크기, 정보의 우선순위를 매 화면마다 다시 정하면 기능은 같아도 사용 경험은 흔들린다. 디자인 시스템은 건축 도면처럼 재료와 치수를 먼저 정해 두어, 사람과 AI가 같은 결과를 반복하게 한다.</p><p>좋은 디자인 판단은 ‘예쁜가’보다 ‘사용자가 다음 행동을 바로 알 수 있는가’에서 시작한다. 따라서 화면을 만들기 전에는 사용자의 목표, 성공 상태, 실패 상태, 그리고 담당자가 확인할 증거를 한 문장씩 적는다.</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="디자인은 화면 꾸미기가 아니라 계약이다">
     <title>디자인은 화면 꾸미기가 아니라 계약이다</title>
@@ -52,7 +53,33 @@ components:
 acceptance:
   - one-primary-action
   - keyboard-reachable
-  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="components">표준 컴포넌트와 표준 화면을 함께 정의한다</h2><p>버튼, 입력칸, 카드, 표, 알림은 부품이다. 목록, 상세, 생성, 검토, 오류, 빈 상태는 부품을 조합한 화면 패턴이다. 부품만 표준화하면 실제 사용 중 자주 누락되는 로딩·빈 상태·권한 없음·저장 실패 화면이 제각각 남는다.</p><p>각 컴포넌트에는 목적, 허용되는 변형, 상태, 접근성 이름을 기록한다. 각 화면에는 진입 조건, 사용자의 다음 행동, 성공·실패·대기 상태, 필요한 검증 증거를 기록한다. 이 두 계약을 프롬프트와 리뷰 기준에 넣으면 AI의 출력도 검토 가능한 산출물이 된다.</p><div class="diagram-frame">
+  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="color-system">색상 시스템과 접근성</h2>
+<p>색상 시스템은 팔레트 모음이 아니라 의미를 전달하는 계약이다. 원시 팔레트는 색상 단계만 제공하고, 화면은 `text`, `surface`, `border`, `action`, `success`, `warning`, `error`처럼 목적이 드러나는 의미 토큰을 사용한다. 이렇게 분리하면 브랜드 색이나 다크 모드가 바뀌어도 오류·경고·완료의 의미를 화면마다 다시 설계하지 않는다.</p><p>접근성은 색상 시스템의 검증 조건이다. 성공·오류·선택 상태를 색만으로 전달하지 않고, 문장·아이콘·테두리·패턴을 함께 제공한다. 텍스트, 아이콘, 포커스 링, 입력 오류 경계는 라이트·다크 모드 모두에서 대비와 키보드 포커스를 점검한다.</p>
+<div class="diagram-frame"><svg viewBox="0 0 640 170" width="100%" role="img" aria-label="색상 토큰과 접근성 검증 흐름">
+<title>색상 토큰과 접근성 검증 흐름</title>
+<rect x="20" y="55" width="120" height="60" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="80" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Palette</text>
+<path d="M140 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="174" y="55" width="120" height="60" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="234" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Semantic</text>
+<path d="M294 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="328" y="55" width="120" height="60" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="388" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Component</text>
+<path d="M448 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="482" y="55" width="138" height="60" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="551" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Contrast</text><text x="551" y="99" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">+ Focus</text>
+<text x="20" y="32" font-size="13" font-weight="700" fill="var(--text)">색상 토큰과 접근성 검증 흐름</text>
+<defs><marker id="color-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+</svg></div>
+<table><thead><tr><th>Layer</th><th>Purpose</th></tr></thead><tbody><tr><td>원시 팔레트</td><td>색상 단계만 정의하고 화면에서 직접 쓰지 않는다.</td></tr><tr><td>의미 토큰</td><td>텍스트·표면·경계·행동·상태의 역할을 표현한다.</td></tr><tr><td>컴포넌트 토큰</td><td>버튼·입력칸·알림의 상태별 토큰을 정의한다.</td></tr><tr><td>접근성 검증</td><td>색 이외의 단서, 대비, 포커스를 함께 확인한다.</td></tr></tbody></table>
+<div class="flow-box"><strong>Standard:</strong> 원시 팔레트 → 의미 토큰 → 컴포넌트 상태 → 라이트·다크 모드 접근성 검증</div>
+<h3>상태 색상 검토 실습</h3><p>AI에게는 특정 색상값을 직접 쓰지 말고 의미 토큰만 사용하도록 요청한다. 정상, hover, focus, disabled, error 상태를 한 화면에서 미리 보고, 색을 제거해도 상태와 다음 행동을 알 수 있는지 확인한다.</p>
+<div class="code-block"><pre><code>{
+  "color": {
+    "brand": { "$value": "#0969da", "$type": "color" },
+    "action-primary": { "$value": "{color.brand}", "$type": "color" },
+    "status-error": { "$value": "#cf222e", "$type": "color" },
+    "focus-ring": { "$value": "{color.action-primary}", "$type": "color" }
+  }
+}</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="components">표준 컴포넌트와 표준 화면을 함께 정의한다</h2><p>버튼, 입력칸, 카드, 표, 알림은 부품이다. 목록, 상세, 생성, 검토, 오류, 빈 상태는 부품을 조합한 화면 패턴이다. 부품만 표준화하면 실제 사용 중 자주 누락되는 로딩·빈 상태·권한 없음·저장 실패 화면이 제각각 남는다.</p><p>각 컴포넌트에는 목적, 허용되는 변형, 상태, 접근성 이름을 기록한다. 각 화면에는 진입 조건, 사용자의 다음 행동, 성공·실패·대기 상태, 필요한 검증 증거를 기록한다. 이 두 계약을 프롬프트와 리뷰 기준에 넣으면 AI의 출력도 검토 가능한 산출물이 된다.</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="표준 컴포넌트와 표준 화면을 함께 정의한다">
     <title>표준 컴포넌트와 표준 화면을 함께 정의한다</title>
     <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · 표준 컴포넌트와 표준 화면을 함께 정의한다</text>
@@ -70,7 +97,7 @@ acceptance:
       <li>과업: 사용자가 이 화면에서 끝내야 하는 행동</li><li>주요 버튼: 한 화면의 핵심 행동만 강조한다.</li><li>4. 토큰·표준 컴포넌트·화면 계약을 지켰는가?</li>
     </ol></div>
   <div class="chapter-nav"><a class="prev" href="../guardrails/03_Guardrails_Chapter.html"><div class="dir">← 이전</div><div class="ttl">이전</div></a><a class="next" href="../foundations/I18n_Operations.html"><div class="dir">다음 →</div><div class="ttl">다음</div></a></div>
-  <footer>
+   <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·

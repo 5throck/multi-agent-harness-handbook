@@ -16,6 +16,7 @@
   <div class="nav-title">Fundamentos de Diseño y Patrones de UI Estándar</div>
   <a href="#system">El diseño es un contrato, no decoración</a>
   <a href="#principles">Usa principios y tokens para reducir retrabajo</a>
+  <a href="#color-system">Sistema de color y accesibilidad</a>
   <a href="#components">Define componentes y pantallas estándar juntos</a>
   <a href="#review">Trata la salida de IA como borrador verificable</a>
   <div class="nav-section">Capítulos relacionados</div>
@@ -26,7 +27,7 @@
   <div class="chapter-eyebrow">디자인</div>
   <h1>Fundamentos de Diseño y Patrones de UI Estándar</h1>
   <p class="lead">Convierte un borrador de IA en una experiencia de producto reutilizable y verificable.</p>
-  <div class="keypoints"><div class="kp-title">En este capítulo</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li></ul></div>
+  <div class="keypoints"><div class="kp-title">En este capítulo</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li><li>Sistema de color y accesibilidad</li></ul></div>
   <h2 id="system">El diseño es un contrato, no decoración</h2><p>Una regla de diseño es un contrato compartido por personas e IA. Si cada pantalla vuelve a decidir color, espacio, tipografía y prioridad de información, la función puede operar pero la experiencia se dispersa.</p><p>Un sistema de diseño se parece a un plano de arquitectura: fija materiales y dimensiones antes de construir. Empieza por la tarea, el éxito, el fallo y la evidencia que revisará una persona responsable.</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="El diseño es un contrato, no decoración">
     <title>El diseño es un contrato, no decoración</title>
@@ -52,7 +53,33 @@ components:
 acceptance:
   - one-primary-action
   - keyboard-reachable
-  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="components">Define componentes y pantallas estándar juntos</h2><p>Botones, campos, tarjetas, tablas y avisos son piezas. Lista, detalle, creación, revisión, error y vacío son patrones compuestos. Estandarizar solo piezas deja inconsistentes carga, vacío, prohibido y fallo de guardado.</p><p>Para cada componente registra propósito, variantes, estados y nombre accesible. Para cada pantalla registra condición de entrada, siguiente acción, estados y evidencia.</p><div class="diagram-frame">
+  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="color-system">Sistema de Color y Accesibilidad</h2>
+<p>Un sistema de color es un contrato de significado, no una colección de paletas. La paleta base solo ofrece escalas; las pantallas usan tokens semánticos como `text`, `surface`, `border`, `action`, `success`, `warning` y `error`. Así, un cambio de marca o modo oscuro no redefine fallo, advertencia y finalización en cada pantalla.</p><p>La accesibilidad es una condición de validación del sistema de color. No comuniques éxito, error o selección solo con color: añade texto, iconos, bordes o patrones. Revisa contraste y foco de teclado para texto, iconos, anillos de foco y límites de error en modo claro y oscuro.</p>
+<div class="diagram-frame"><svg viewBox="0 0 640 170" width="100%" role="img" aria-label="Flujo de validación de tokens de color y accesibilidad">
+<title>Flujo de validación de tokens de color y accesibilidad</title>
+<rect x="20" y="55" width="120" height="60" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="80" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Palette</text>
+<path d="M140 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="174" y="55" width="120" height="60" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="234" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Semantic</text>
+<path d="M294 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="328" y="55" width="120" height="60" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="388" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Component</text>
+<path d="M448 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="482" y="55" width="138" height="60" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="551" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Contrast</text><text x="551" y="99" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">+ Focus</text>
+<text x="20" y="32" font-size="13" font-weight="700" fill="var(--text)">Flujo de validación de tokens de color y accesibilidad</text>
+<defs><marker id="color-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+</svg></div>
+<table><thead><tr><th>Layer</th><th>Purpose</th></tr></thead><tbody><tr><td>Paleta base</td><td>Define escalas; la pantalla no la usa directamente.</td></tr><tr><td>Token semántico</td><td>Expresa el rol de texto, superficie, borde, acción y estado.</td></tr><tr><td>Token de componente</td><td>Define estados de botones, campos y avisos.</td></tr><tr><td>Revisión de accesibilidad</td><td>Comprueba pistas no cromáticas, contraste y foco.</td></tr></tbody></table>
+<div class="flow-box"><strong>Standard:</strong> Paleta base → tokens semánticos → estados de componente → revisión clara/oscura</div>
+<h3>Práctica de revisión de estados de color</h3><p>Pide a la IA usar tokens semánticos y no valores de color directos. Revisa estados normal, hover, focus, disabled y error en una pantalla; después verifica que el estado y la siguiente acción sigan claros sin color.</p>
+<div class="code-block"><pre><code>{
+  "color": {
+    "brand": { "$value": "#0969da", "$type": "color" },
+    "action-primary": { "$value": "{color.brand}", "$type": "color" },
+    "status-error": { "$value": "#cf222e", "$type": "color" },
+    "focus-ring": { "$value": "{color.action-primary}", "$type": "color" }
+  }
+}</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="components">Define componentes y pantallas estándar juntos</h2><p>Botones, campos, tarjetas, tablas y avisos son piezas. Lista, detalle, creación, revisión, error y vacío son patrones compuestos. Estandarizar solo piezas deja inconsistentes carga, vacío, prohibido y fallo de guardado.</p><p>Para cada componente registra propósito, variantes, estados y nombre accesible. Para cada pantalla registra condición de entrada, siguiente acción, estados y evidencia.</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Define componentes y pantallas estándar juntos">
     <title>Define componentes y pantallas estándar juntos</title>
     <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · Define componentes y pantallas estándar juntos</text>
@@ -70,7 +97,7 @@ acceptance:
       <li>Tarea: acción que se debe completar</li><li>Acción principal: destaca una decisión.</li><li>4. ¿Se respetan tokens y contratos?</li>
     </ol></div>
   <div class="chapter-nav"><a class="prev" href="../guardrails/03_Guardrails_Chapter_es.html"><div class="dir">← Anterior</div><div class="ttl">Anterior</div></a><a class="next" href="../foundations/I18n_Operations_es.html"><div class="dir">Siguiente →</div><div class="ttl">Siguiente</div></a></div>
-  <footer>
+   <footer>
     Basado en Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · Material educativo en español<br>
     Recursos oficiales: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·

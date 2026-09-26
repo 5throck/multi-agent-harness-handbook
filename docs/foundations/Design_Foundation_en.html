@@ -16,6 +16,7 @@
   <div class="nav-title">Design Foundations and Standard UI Patterns</div>
   <a href="#system">Design is a contract, not decoration</a>
   <a href="#principles">Use principles and tokens to reduce rework</a>
+  <a href="#color-system">Color system and accessibility</a>
   <a href="#components">Define standard components and standard screens together</a>
   <a href="#review">Treat AI output as a reviewable draft</a>
   <div class="nav-section">Related chapters</div>
@@ -26,7 +27,7 @@
   <div class="chapter-eyebrow">디자인</div>
   <h1>Design Foundations and Standard UI Patterns</h1>
   <p class="lead">Turn an AI-generated mock-up into a reusable product experience with explicit design contracts.</p>
-  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li></ul></div>
+  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>Why design needs a system</li><li>Principles, tokens, and recorded decisions</li><li>Standard components and screen states</li><li>Reviewing and improving AI output</li><li>Color system and accessibility</li></ul></div>
   <h2 id="system">Design is a contract, not decoration</h2><p>A design rule is a shared contract for people and AI. If color, spacing, type, and information priority are chosen again for every screen, the feature may work but the experience drifts. A design system is like an architectural drawing: it fixes the materials and dimensions before construction so the result can be repeated.</p><p>Start with a user task, the success state, the failure state, and the evidence an owner will inspect. The first question is not whether a screen looks attractive. It is whether a user can identify the next action without guessing.</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Design is a contract, not decoration">
     <title>Design is a contract, not decoration</title>
@@ -52,7 +53,33 @@ components:
 acceptance:
   - one-primary-action
   - keyboard-reachable
-  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div><h2 id="components">Define standard components and standard screens together</h2><p>Buttons, fields, cards, tables, and notices are parts. List, detail, create, review, error, and empty states are patterns made from those parts. Component-only standards leave loading, empty, forbidden, and save-failure screens inconsistent.</p><p>For each component, record its purpose, allowed variants, states, and accessible name. For each screen, record its entry condition, next action, success/failure/waiting states, and required evidence.</p><div class="diagram-frame">
+  - semantic-tokens-only</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="color-system">Color System and Accessibility</h2>
+<p>A color system is a contract for meaning, not a palette. Raw palette tokens provide color steps only; screens use semantic tokens such as `text`, `surface`, `border`, `action`, `success`, `warning`, and `error`. This separation prevents a brand or dark-mode change from redefining the meaning of failure, warning, and completion on every screen.</p><p>Accessibility is a validation condition for the color system. Do not communicate success, error, or selection with color alone: pair it with wording, icons, borders, or patterns. Review text, icons, focus rings, and input-error boundaries for contrast and keyboard focus in both light and dark modes.</p>
+<div class="diagram-frame"><svg viewBox="0 0 640 170" width="100%" role="img" aria-label="Color-token and accessibility validation flow">
+<title>Color-token and accessibility validation flow</title>
+<rect x="20" y="55" width="120" height="60" rx="10" fill="var(--bg-info)" stroke="var(--border)"/><text x="80" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Palette</text>
+<path d="M140 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="174" y="55" width="120" height="60" rx="10" fill="var(--bg-success)" stroke="var(--border)"/><text x="234" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Semantic</text>
+<path d="M294 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="328" y="55" width="120" height="60" rx="10" fill="var(--bg-note)" stroke="var(--border)"/><text x="388" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Component</text>
+<path d="M448 85h34" stroke="var(--accent)" stroke-width="2" marker-end="url(#color-arrow)"/>
+<rect x="482" y="55" width="138" height="60" rx="10" fill="var(--bg-warn)" stroke="var(--border)"/><text x="551" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">Contrast</text><text x="551" y="99" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">+ Focus</text>
+<text x="20" y="32" font-size="13" font-weight="700" fill="var(--text)">Color-token and accessibility validation flow</text>
+<defs><marker id="color-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/></marker></defs>
+</svg></div>
+<table><thead><tr><th>Layer</th><th>Purpose</th></tr></thead><tbody><tr><td>Raw palette</td><td>Defines color steps; screens do not use it directly.</td></tr><tr><td>Semantic token</td><td>Expresses the role of text, surface, border, action, and state.</td></tr><tr><td>Component token</td><td>Defines state tokens for buttons, fields, and notices.</td></tr><tr><td>Accessibility review</td><td>Checks non-color cues, contrast, and focus together.</td></tr></tbody></table>
+<div class="flow-box"><strong>Standard:</strong> Raw palette → semantic tokens → component states → light/dark accessibility review</div>
+<h3>State-color review practice</h3><p>Ask AI to use semantic tokens rather than raw color values. Preview default, hover, focus, disabled, and error states on one screen, then verify that state and next action remain clear when color is removed.</p>
+<div class="code-block"><pre><code>{
+  "color": {
+    "brand": { "$value": "#0969da", "$type": "color" },
+    "action-primary": { "$value": "{color.brand}", "$type": "color" },
+    "status-error": { "$value": "#cf222e", "$type": "color" },
+    "focus-ring": { "$value": "{color.action-primary}", "$type": "color" }
+  }
+}</code></pre><button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<h2 id="components">Define standard components and standard screens together</h2><p>Buttons, fields, cards, tables, and notices are parts. List, detail, create, review, error, and empty states are patterns made from those parts. Component-only standards leave loading, empty, forbidden, and save-failure screens inconsistent.</p><p>For each component, record its purpose, allowed variants, states, and accessible name. For each screen, record its entry condition, next action, success/failure/waiting states, and required evidence.</p><div class="diagram-frame">
   <svg viewBox="0 0 640 145" width="100%" role="img" aria-label="Define standard components and standard screens together">
     <title>Define standard components and standard screens together</title>
     <text x="22" y="27" font-size="13" font-weight="700" fill="var(--text)">Components · Define standard components and standard screens together</text>
@@ -70,7 +97,7 @@ acceptance:
       <li>Task: the action a user must finish</li><li>Primary action: emphasize one decisive action.</li><li>4. Are tokens, components, and screen contracts respected?</li>
     </ol></div>
   <div class="chapter-nav"><a class="prev" href="../guardrails/03_Guardrails_Chapter_en.html"><div class="dir">← Previous</div><div class="ttl">Previous</div></a><a class="next" href="../foundations/I18n_Operations_en.html"><div class="dir">Next →</div><div class="ttl">Next</div></a></div>
-  <footer>
+   <footer>
     Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) · English Educational Materials<br>
     Official Docs: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·

@@ -68,7 +68,7 @@
       <tr><td>6장 (① 기존 활용 G-1)</td><td>co-consult로 Physical AI 시장조사 프로젝트 스캐폴딩·가동 — 4단계 설계 프레임워크 적용, 7단계 컨설팅 워크플로우 가동, 결과물 검토·핸드오프 추적</td><td>실습(참가자 직접)</td><td>40분</td></tr>
 	      <tr><td>6장 (② 기존 활용 G-2)</td><td>co-deck으로 한식 세계화 발표자료 스캐폴딩·가동 — 발표 주제 프레임 설정, 11단계 파이프라인 가동, 결과물 리뷰·개선, TTS·자동 슬라이드 설정</td><td>실습(참가자 직접)</td><td>40분</td></tr>
 	      <tr><td>1일차 마무리</td><td>오늘 배운 내용 요약, 두 variant(co-consult vs co-deck) 구조 비교 회고, 2일차 예고(IT전문가 세션)</td><td>토론</td><td>10분</td></tr>
-			      <tr class="schedule-total"><td colspan="3">1일차 합계</td><td>약 5시간 45분 (휴식 제외)</td></tr>
+			      <tr class="schedule-total"><td colspan="3">1일차 합계</td><td>약 6시간 45분 (휴식 제외)</td></tr>
 	    </tbody>
 	  </table>
   </div>
@@ -82,7 +82,8 @@
       <tr><td>1일차 복습</td><td>핵심 개념 요약, 6장 기존 variant 활용 실습 성과 공유</td><td>토론</td><td>10분</td></tr>
       <tr><td>7장</td><td>서비스 티켓 모델, 개발 도구+variant 모델, 칸반 기반 운영 필요성, 두 모델 장단점 비교</td><td>강의 + 토론</td><td>30분</td></tr>
       <tr><td>8장 §1</td><td>L0→L1→L2→L3 계층 구조 상세, 포크 모델, 파일별 SSOT 흐름</td><td>강의</td><td>15분</td></tr>
-      <tr><td>8장 §2</td><td>에이전트·스킬·스크립트 생애주기 관리</td><td>강의</td><td>15분</td></tr>
+      <tr><td>8장 §2</td><td>에이전트·스킬·스크립트 생애주기 관리</td><td>강의</td><td>15분</td></tr><tr id="color-system-schedule-row"><td>핵심 장 · Design Foundation·Accessibility</td><td>Design Foundation·Accessibility — 토큰·색상 시스템·표준 화면·접근성 검토</td><td>Lecture + review</td><td>35분</td></tr>
+<tr><td>핵심 장 · i18n 설계와 콘텐츠 품질</td><td>i18n 설계 — locale·country profile·형식화·번역 동등성 검증</td><td>Lecture + exercise</td><td>25분</td></tr>
       <tr><td>9장</td><td>워크플로우 구성요소, 도메인별 사례 5종, 서브에이전트 로스터와 역할 경계 매트릭스, PM 페이즈 파이프라인과 절차 스키마(ADR-0063), 패턴 선택 가이드</td><td>강의</td><td>20분</td></tr>
       <tr><td>10장</td><td>L3 프로젝트 업그레이드 사용법, 주요 파일 처리 분류, 스냅샷·롤백, 승격과의 방향 차이</td><td>강의</td><td>15분</td></tr>
       <tr><td>공통 참고</td><td>네 도구 구조 한눈에 보기, Claude Desktop App vs Code(서브에이전트 정의, teammateMode), Antigravity vs agy(Agent Manager, /goal·/agent·/agents), 멀티 에이전트 지원 범위 비교표, 실습 도구 선택 가이드, AGENTS.md 통합 구조</td><td>강의</td><td>25분</td></tr>
@@ -139,7 +140,7 @@
   <h3>8장: ai-workspace-standards 아키텍처 (2일차)</h3>
   <p>2일차에서 1일차의 가벼운 소개를 이어받아, L0→L1→L2→L3 계층 구조, templates·variant 13종의 내부 구조, 모델 티어링, 세션 시작 체크리스트, 아직 구현되지 않은 고도화 로드맵(§5)까지 상세히 다룬다. L3 프로젝트 업그레이드는 독립 10장에서 다룬다. 전부 암기시킬 필요는 없고, "왜 이런 계층 구조가 필요한가"라는 동기만 확실히 전달되면 충분하다.</p>
 
-  <h3>9장: 워크플로우 디자인 패턴</h3>
+  <h3 id="color-system-instructor-note">핵심 장 · Design Foundation·Accessibility</h3><p>색상은 장식이 아니라 상태와 행동을 전달하는 계약으로 설명한다. 화면을 회색조로 보았을 때도 오류·선택·다음 행동을 이해할 수 있는지 확인하게 한다.</p><h3>핵심 장 · i18n 설계와 콘텐츠 품질</h3><p>번역의 자연스러움뿐 아니라 메시지 키, 긴 문자열, 날짜·통화 형식, 오류 상태가 모든 언어에서 같은 과업을 지원하는지 검토하게 한다.</p><h3>9장: 워크플로우 디자인 패턴</h3>
 <p>5가지 오케스트레이션 패턴을 복습한 뒤, 코드 리뷰·시장 조사·프레젠테이션 등 실제 워크플로우 사례를 보여준다. "이 업무에는 어떤 패턴이 맞을까?" 의사결정 나무를 함께 풀어본다.</p>
 
   <h3>10장: L3 프로젝트 업그레이드 (2일차)</h3>

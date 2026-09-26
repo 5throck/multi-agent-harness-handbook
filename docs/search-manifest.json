@@ -741,6 +741,66 @@
       "path": "appendix/B_Decision_System_es.html",
       "title": "Sistema de Decisión",
       "lang": "es"
+    },
+    {
+      "path": "foundations/Design_Foundation.html",
+      "title": "핵심 장 · Design Foundation과 UI 품질 게이트",
+      "lang": "ko"
+    },
+    {
+      "path": "foundations/Design_Foundation_en.html",
+      "title": "Core chapter · Design Foundation and UI Quality Gates",
+      "lang": "en"
+    },
+    {
+      "path": "foundations/Design_Foundation_es.html",
+      "title": "Capítulo central · Design Foundation y puertas de calidad de UI",
+      "lang": "es"
+    },
+    {
+      "path": "foundations/Design_Foundation_ja.html",
+      "title": "コア章 · Design FoundationとUI品質ゲート",
+      "lang": "ja"
+    },
+    {
+      "path": "foundations/I18n_Operations.html",
+      "title": "핵심 장 · i18n 아키텍처와 다국어 운영",
+      "lang": "ko"
+    },
+    {
+      "path": "foundations/I18n_Operations_en.html",
+      "title": "Core chapter · i18n Architecture and Multilingual Operations",
+      "lang": "en"
+    },
+    {
+      "path": "foundations/I18n_Operations_es.html",
+      "title": "Capítulo central · Arquitectura de i18n y operaciones multilingües",
+      "lang": "es"
+    },
+    {
+      "path": "foundations/I18n_Operations_ja.html",
+      "title": "コア章 · i18nアーキテクチャと多言語運用",
+      "lang": "ja"
+    },
+    {
+      "path": "appendix/Hermes_Agents.html",
+      "title": "별첨 D · Hermes Agents 운영 가이드",
+      "lang": "ko"
+    },
+    {
+      "path": "appendix/Hermes_Agents_en.html",
+      "title": "Appendix D · Hermes Agents Operations Guide",
+      "lang": "en"
+    },
+    {
+      "path": "appendix/Hermes_Agents_es.html",
+      "title": "Apéndice D · Guía operativa de Hermes Agents",
+      "lang": "es"
+    },
+    {
+      "path": "appendix/Hermes_Agents_ja.html",
+      "title": "別添 D · Hermes Agents運用ガイド",
+      "lang": "ja"
     }
   ]
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="i18nアーキテクチャと多言語運用 - Multi-Agent Harness Handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>コア章 · i18nアーキテクチャと多言語運用</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <a href="../index_ja.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">コア章 · i18nアーキテクチャと多言語運用</div>
+  <a href="#s1">Locale SSOTと範囲</a>
+  <a href="#s2">役割分担</a>
+  <a href="#s3">Parityと品質ゲート</a>
+  <a href="#s4">変更と配布</a>
+  <div class="nav-section">Related chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter_ja.html">Previous</a>
+  <a href="../practice/04_Practice_Manual_ja.html">Next</a>
+</nav>
+<main><article class="reading">
+  <div class="chapter-eyebrow">コア章</div>
+  <h1>i18nアーキテクチャと多言語運用</h1>
+  <p class="lead">マルチエージェント環境でlocale、翻訳、検収、配布を分離して運用する方法を扱います。</p>
+  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>Locale SSOTと範囲</li><li>役割分担</li><li>Parityと品質ゲート</li><li>変更と配布</li></ul></div>
+  <h2 id="s1">Locale SSOTと範囲</h2>
+  <p>対応言語、既定言語、表示形式の出所を明確にします。国プロファイルは言語設定と分離します。</p>
+  <h2 id="s2">役割分担</h2>
+  <p>翻訳担当は内容を変換し、i18n検収担当は用語、形式、抜けを確認し、UI担当はレイアウトを確認します。一つの役割が自分の成果を単独で承認しません。</p>
+  <h2 id="s3">Parityと品質ゲート</h2>
+  <p>原文と翻訳の構造、リンク、コード、数値トークンを自動検査し、人は意味と文化的妥当性を確認します。</p>
+  <h2 id="s4">変更と配布</h2>
+  <p>原文変更では影響するlocaleを特定し、翻訳、検収、PR、配布の状態を一緒に記録します。翻訳漏れはリリース前の欠陥として扱います。</p>
+  <div class="tip-box"><strong>Practice:</strong> Record the decision, assign an owner, and verify the result before the next pipeline stage.</div>
+
+  <table><thead><tr><th>Check</th><th>Purpose</th></tr></thead><tbody><tr><td>Rule</td><td>Make the decision explicit.</td></tr><tr><td>Evidence</td><td>Verify the result before delivery.</td></tr></tbody></table>
+  <div class="chapter-nav"><a href="../index.html">← Handbook home</a><a href="../index.html">Back to contents →</a></div>
+</article></main>
+</div>
+
+<footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 基準 · 日本語教材<br>
+    公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    このハンドブックのコンテンツは <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (表示 - 非営利 - 継承 4.0 国際)</a> ライセンスの下で提供されています。
+  </footer>
+</body>
+</html>

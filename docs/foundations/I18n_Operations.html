@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="i18n 아키텍처와 다국어 운영 - Multi-Agent Harness Handbook">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>핵심 장 · i18n 아키텍처와 다국어 운영</title>
+  <link rel="stylesheet" href="../assets/css/handbook-variables.css">
+  <link rel="stylesheet" href="../assets/css/handbook-components.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <a href="../index.html" class="nav-home">← Handbook Home</a>
+  <div class="nav-title">핵심 장 · i18n 아키텍처와 다국어 운영</div>
+  <a href="#s1">Locale SSOT와 범위</a>
+  <a href="#s2">역할 분담</a>
+  <a href="#s3">Parity와 품질 게이트</a>
+  <a href="#s4">변경과 배포</a>
+  <div class="nav-section">Related chapters</div>
+  <a href="../guardrails/03_Guardrails_Chapter.html">Previous</a>
+  <a href="../practice/04_Practice_Manual.html">Next</a>
+</nav>
+<main><article class="reading">
+  <div class="chapter-eyebrow">핵심 장</div>
+  <h1>i18n 아키텍처와 다국어 운영</h1>
+  <p class="lead">멀티 에이전트 환경에서 locale, 번역, 검수, 배포를 분리해 운영하는 방식을 다룹니다.</p>
+  <div class="keypoints"><div class="kp-title">In this chapter</div><ul><li>Locale SSOT와 범위</li><li>역할 분담</li><li>Parity와 품질 게이트</li><li>변경과 배포</li></ul></div>
+  <h2 id="s1">Locale SSOT와 범위</h2>
+  <p>지원 언어와 기본 언어, 표시 형식의 출처를 명확히 정합니다. 국가 프로필은 언어 설정과 분리합니다.</p>
+  <h2 id="s2">역할 분담</h2>
+  <p>번역 담당은 내용 변환을, i18n 검수 담당은 용어·형식·누락을, UI 담당은 레이아웃을 확인합니다. 한 역할이 자신의 결과를 단독 승인하지 않습니다.</p>
+  <h2 id="s3">Parity와 품질 게이트</h2>
+  <p>원문과 번역의 구조·링크·코드·숫자 토큰을 자동 검사하고, 사람은 의미와 문화적 적절성을 검토합니다.</p>
+  <h2 id="s4">변경과 배포</h2>
+  <p>원문 변경은 영향을 받은 locale을 식별하고, 번역·검수·PR·배포 상태를 함께 기록합니다. 번역 누락은 출시 전 결함으로 취급합니다.</p>
+  <div class="tip-box"><strong>Practice:</strong> Record the decision, assign an owner, and verify the result before the next pipeline stage.</div>
+
+  <table><thead><tr><th>Check</th><th>Purpose</th></tr></thead><tbody><tr><td>Rule</td><td>Make the decision explicit.</td></tr><tr><td>Evidence</td><td>Verify the result before delivery.</td></tr></tbody></table>
+  <div class="chapter-nav"><a href="../index.html">← Handbook home</a><a href="../index.html">Back to contents →</a></div>
+</article></main>
+</div>
+<footer>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-20) 기준 · 한국어 교육 자료<br>
+    공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
+    <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
+    <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
+    <a href="https://github.com/5throck/ai-workspace-standards" target="_blank">ai-workspace-standards</a><br>
+    본 핸드북의 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 (저작자표시-비영리-동일조건변경허락 4.0 국제)</a> 라이선스에 따라 이용할 수 있습니다.
+  </footer>
+</body>
+</html>

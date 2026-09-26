@@ -113,7 +113,11 @@
   <h3>Capítulo 3: Barreras de seguridad y modelo de permisos</h3>
   <p>Hay una razón para ubicar esto justo antes del ejercicio del capítulo 6 §2: construye el hábito de decidir "qué permitir y qué bloquear" antes de construir realmente un subagente. Mostrar la tabla de clasificación de riesgo en 3 niveles y preguntar de antemano "¿En qué nivel caería el revisor que está a punto de construir?" conduce naturalmente al ejercicio del capítulo 6 §2.</p>
 
-  <h3 id="color-system-instructor-note">Capítulo 4 · Fundamentos de diseño y accesibilidad</h3><p>Explica el color como contrato de estado y acción, no como decoración. Comprueba que error, selección y siguiente acción se entienden en escala de grises.</p><h3>Capítulo 5 · Diseño de i18n y calidad de contenido</h3><p>Revisa claves, texto largo, formato de fecha y moneda, y estados de error además de la naturalidad del texto.</p>
+  <h3 id="color-system-instructor-note">Capítulo 4 · Fundamentos de diseño y accesibilidad</h3>
+  <p>Explica el color como contrato de estado y acción, no como decoración. Comprueba que error, selección y siguiente acción se entienden en escala de grises.</p>
+
+  <h3>Capítulo 5 · Diseño de i18n y calidad de contenido</h3>
+  <p>Revisa claves, texto largo, formato de fecha y moneda, y estados de error además de la naturalidad del texto.</p>
 
   <h3>Ejercicio de calentamiento: De Tetris a Pac-Man</h3>
   <p>Ejecute esto justo después del descanso 1, antes de los ejercicios principales del capítulo 6. Use claude.ai o Claude Code; a diferencia del capítulo 6, donde los grupos usan diferentes herramientas, todos usan la misma plataforma aquí.</p>
@@ -203,7 +207,9 @@
     </ol>
   </div>
 
-  <div class="quiz" id="design-chapter-check"><div class="quiz-title">Capítulo 4 · Fundamentos de diseño y accesibilidad: comprobación</div><ol><li>¿Cómo conectan filosofía, principios, guías y tokens de diseño con la implementación?</li><li>¿Por qué los colores de estado deben incluir texto, iconos y señales de foco?</li><li>¿Cómo mejoran los componentes y pantallas estándar la calidad de resultados multiagente?</li></ol></div><div class="quiz" id="i18n-chapter-check"><div class="quiz-title">Capítulo 5 · Diseño de i18n y calidad de contenido: comprobación</div><ol><li>¿Por qué separar el SSOT de mensajes de los archivos de traducción?</li><li>¿Qué estados de pantalla se revisan para textos largos y escrituras RTL/CJK?</li><li>¿Qué problemas distintos detectan la paridad automática y la revisión humana de pantalla?</li></ol></div>
+  <div class="quiz" id="design-chapter-check"><div class="quiz-title">Capítulo 4 · Fundamentos de diseño y accesibilidad: comprobación</div><ol><li>¿Cómo conectan filosofía, principios, guías y tokens de diseño con la implementación?</li><li>¿Por qué los colores de estado deben incluir texto, iconos y señales de foco?</li><li>¿Cómo mejoran los componentes y pantallas estándar la calidad de resultados multiagente?</li></ol></div>
+
+  <div class="quiz" id="i18n-chapter-check"><div class="quiz-title">Capítulo 5 · Diseño de i18n y calidad de contenido: comprobación</div><ol><li>¿Por qué separar el SSOT de mensajes de los archivos de traducción?</li><li>¿Qué estados de pantalla se revisan para textos largos y escrituras RTL/CJK?</li><li>¿Qué problemas distintos detectan la paridad automática y la revisión humana de pantalla?</li></ol></div>
   <div class="quiz">
     <div class="quiz-title">Preguntas de comprensión del ejercicio de calentamiento</div>
     <ol>
@@ -238,8 +244,14 @@
     </ol>
   </div>
 
-
   <h3>📅 Preguntas de comprensión del día 2</h3>
+
+    <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 9</div>
+    <ol>
+      <li>¿Qué problemas específicos surgen si el modelo de tickets de servicio no tiene kanban? (Explique eligiendo uno: cola visible, límites WIP o priorización)</li>
+    </ol>
+  </div>
 
   <div class="quiz">
     <div class="quiz-title">Preguntas de comprensión del capítulo 10</div>
@@ -247,6 +259,14 @@
       <li>¿Para qué capa es CONSTITUTION.md el estándar compartido? ¿Cuál es el SSOT en L0 (raíz del espacio de trabajo)? ¿Qué papel juega context.md en los proyectos L2/L3?</li>
       <li>¿Por qué L1→L2 termina con una "bifurcación"?</li>
       <li>¿Qué problemas surgen si no hay jerarquía de modelos por rol de agente?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Preguntas de comprensión del capítulo 11 · Patrones de diseño de flujos de trabajo</div>
+    <ol>
+      <li>¿Por qué el patrón "verificar-luego-aplicar" es esencial en un flujo de trabajo de revisión de código?</li>
+      <li>Entre los 5 estudios de caso por dominio, ¿cuál se asemeja más a su propio trabajo?</li>
     </ol>
   </div>
 
@@ -259,10 +279,9 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">Preguntas de comprensión de la Referencia común/Capítulo 9</div>
+    <div class="quiz-title">Preguntas de comprensión de la Referencia común · Comparación de herramientas</div>
     <ol>
       <li>¿Cuál es la diferencia entre el modo en proceso y tmux de teammateMode?</li>
-      <li>¿Qué problemas específicos surgen si el modelo de tickets de servicio no tiene kanban? (Explique eligiendo uno: cola visible, límites WIP o priorización)</li>
     </ol>
   </div>
 
@@ -271,14 +290,6 @@
     <ol>
       <li>¿Por qué el prototipo de la fase A se construye en <code>Projects/</code>? ¿Por qué no construirlo directamente en <code>templates/</code>?</li>
       <li>Si el <code>handoff_to</code> y el <code>handoff_from</code> de una definición de agente no coinciden, ¿cómo se manifiesta en <code>agent:verify</code>?</li>
-    </ol>
-  </div>
-
-  <div class="quiz">
-    <div class="quiz-title">Preguntas de comprensión del capítulo 11 · Patrones de diseño de flujos de trabajo</div>
-    <ol>
-      <li>¿Por qué el patrón "verificar-luego-aplicar" es esencial en un flujo de trabajo de revisión de código?</li>
-      <li>Entre los 5 estudios de caso por dominio, ¿cuál se asemeja más a su propio trabajo?</li>
     </ol>
   </div>
 

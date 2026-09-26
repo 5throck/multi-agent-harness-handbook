@@ -49,7 +49,7 @@
     <div class="version-row"><span class="vlabel">To re-verify at revision time</span><span class="vvalue">Whether each tool's experimental-feature labels have graduated to stable, whether the Desktop App's unsupported-hook scope has narrowed, and whether Codex has gained a native subagent tool</span></div>
   </div>
 
-  <div class="warning-box">As of 2026-06-18, Google <strong>discontinued the Gemini CLI service</strong> for individual (Free/Pro/Ultra) users, and <strong>Antigravity CLI (<code>agy</code>)</strong> took its place. This handbook was originally written around the Gemini command-line interface (CLI) before that date, but has since been fully updated to the Antigravity command-line interface (CLI) as of the current date. If you encounter the <code>gemini</code> command or a <code>.gemini/agents/</code> path in older material, treat it as referring to a since-superseded version.</div>
+  <div class="tip-box">Both <strong>Gemini CLI</strong> and <strong>Antigravity CLI (<code>agy</code>)/Desktop</strong> are supported in the Google family. This handbook's Google-family practice and tool comparisons are written around Antigravity CLI/Desktop. Gemini CLI continues to be supported via the workspace's <code>GEMINI.md</code> guidance, <code>.gemini/</code> configuration, commands, and skills, and hooks (BeforeTool/AfterTool) — so if you encounter a <code>gemini</code> command or a <code>.gemini/</code> path in the material, don't treat it as a superseded version.</div>
 
   <h2 id="tree">The Six Tools at a Glance (Desktop First, CLI in Parallel)</h2>
   <div class="tree-box"><div style="position:relative">
@@ -60,7 +60,7 @@ Anthropic family
 
 Google family
 ├── <span class="cmd">Antigravity (Desktop)</span> ★ Default    <span class="desc">Standalone desktop app; Agent Manager supervises parallelism per workspace</span>
-└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">Terminal-based, successor to Gemini CLI — orchestrator dynamically spawns subagents</span>
+└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">Terminal-based — orchestrator dynamically spawns subagents</span>
 
 OpenAI family
 ├── <span class="cmd">Codex Desktop App</span>              <span class="desc">GUI-based, no native subagent tool — the PM runs roles sequentially instead</span>

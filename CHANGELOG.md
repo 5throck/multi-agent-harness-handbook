@@ -2,6 +2,9 @@
 ## 2026-09-26
 
 ### Fixed
+- Reordered instructor notes and comprehension questions to match the Day 1 and Day 2 teaching sequence; split the merged Chapter 9/common-reference quiz into separate blocks.
+
+### Fixed
 - Repaired the Design and i18n schedule integration: placed Chapters 4–5 in the Day 1 teaching order, added them to every course-overview schedule and topics table, and recomputed Day 2 and two-day totals.
 
 ### Fixed

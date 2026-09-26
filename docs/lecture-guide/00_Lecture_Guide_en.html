@@ -113,7 +113,11 @@
   <h3>Chapter 3: Guardrails and the Permission Model</h3>
   <p>There's a reason this must be placed right before the Chapter 6 §2 exercise: it builds the habit of deciding "what to allow and what to block" before actually building a subagent. Showing the 3-tier risk classification table and asking in advance, "Which tier would the reviewer you're about to build fall into?" leads naturally into the Chapter 6 §2 exercise.</p>
 
-  <h3 id="color-system-instructor-note">Chapter 4 · Design Foundations and Accessibility</h3><p>Teach color as a contract for state and action, not decoration. Ask participants whether error, selection, and next action are clear in grayscale.</p><h3>Chapter 5 · i18n Design and Content Quality</h3><p>Have participants review message keys, long strings, date and currency formatting, and error states as well as natural wording.</p>
+  <h3 id="color-system-instructor-note">Chapter 4 · Design Foundations and Accessibility</h3>
+  <p>Teach color as a contract for state and action, not decoration. Ask participants whether error, selection, and next action are clear in grayscale.</p>
+
+  <h3>Chapter 5 · i18n Design and Content Quality</h3>
+  <p>Have participants review message keys, long strings, date and currency formatting, and error states as well as natural wording.</p>
 
   <h3>Warm-up exercise: From Tetris to Pac-Man</h3>
   <p>Run this right after Break 1, before the main Chapter 6 exercises. Use claude.ai or Claude Code; unlike Chapter 6, where groups use different tools, everyone uses the same platform here.</p>
@@ -203,7 +207,9 @@
     </ol>
   </div>
 
-  <div class="quiz" id="design-chapter-check"><div class="quiz-title">Chapter 4 · Design Foundations and Accessibility Check</div><ol><li>How do design philosophy, principles, guides, and tokens connect to implementation?</li><li>Why must status colors include text, icon, and focus cues?</li><li>How do standard components and screens improve multi-agent output quality?</li></ol></div><div class="quiz" id="i18n-chapter-check"><div class="quiz-title">Chapter 5 · i18n Design and Content Quality Check</div><ol><li>Why separate a message SSOT from translation files?</li><li>Which screen states should be reviewed for long translations and RTL/CJK scripts?</li><li>What different problems do parity checks and human screen review find?</li></ol></div>
+  <div class="quiz" id="design-chapter-check"><div class="quiz-title">Chapter 4 · Design Foundations and Accessibility Check</div><ol><li>How do design philosophy, principles, guides, and tokens connect to implementation?</li><li>Why must status colors include text, icon, and focus cues?</li><li>How do standard components and screens improve multi-agent output quality?</li></ol></div>
+
+  <div class="quiz" id="i18n-chapter-check"><div class="quiz-title">Chapter 5 · i18n Design and Content Quality Check</div><ol><li>Why separate a message SSOT from translation files?</li><li>Which screen states should be reviewed for long translations and RTL/CJK scripts?</li><li>What different problems do parity checks and human screen review find?</li></ol></div>
   <div class="quiz">
     <div class="quiz-title">Warm-up exercise comprehension questions</div>
     <ol>
@@ -238,8 +244,14 @@
     </ol>
   </div>
 
-
   <h3>📅 Day 2 Comprehension Questions</h3>
+
+    <div class="quiz">
+    <div class="quiz-title">Chapter 9 comprehension questions</div>
+    <ol>
+      <li>What specific problems arise if the service-ticket model has no kanban? (Explain by choosing one of: visible queue, WIP limits, or prioritization)</li>
+    </ol>
+  </div>
 
   <div class="quiz">
     <div class="quiz-title">Chapter 10 comprehension questions</div>
@@ -247,6 +259,14 @@
       <li>Which layer is CONSTITUTION.md the shared standard for? What is the SSOT at L0 (workspace root)? What role does context.md play in L2/L3 projects?</li>
       <li>Why does L1→L2 end with a "fork"?</li>
       <li>What problems arise if there's no model tiering by agent role?</li>
+    </ol>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-title">Chapter 11 · Workflow design patterns comprehension questions</div>
+    <ol>
+      <li>Why is the "verify-then-apply" pattern essential in a code-review workflow?</li>
+      <li>Among the 5 domain case studies, which pattern most closely resembles your own work?</li>
     </ol>
   </div>
 
@@ -259,10 +279,9 @@
   </div>
 
   <div class="quiz">
-    <div class="quiz-title">Common Reference/Chapter 9 comprehension questions</div>
+    <div class="quiz-title">Common Reference · Tool comparison comprehension questions</div>
     <ol>
       <li>What's the difference between teammateMode's in-process and tmux?</li>
-      <li>What specific problems arise if the service-ticket model has no kanban? (Explain by choosing one of: visible queue, WIP limits, or prioritization)</li>
     </ol>
   </div>
 
@@ -271,14 +290,6 @@
     <ol>
       <li>Why is the Phase A prototype built in <code>Projects/</code>? Why not build it directly in <code>templates/</code>?</li>
       <li>If an agent definition's <code>handoff_to</code> and <code>handoff_from</code> don't line up, how does that show up in <code>agent:verify</code>?</li>
-    </ol>
-  </div>
-
-  <div class="quiz">
-    <div class="quiz-title">Chapter 11 · Workflow design patterns comprehension questions</div>
-    <ol>
-      <li>Why is the "verify-then-apply" pattern essential in a code-review workflow?</li>
-      <li>Among the 5 domain case studies, which pattern most closely resembles your own work?</li>
     </ol>
   </div>
 

@@ -40,7 +40,7 @@
   <div class="chapter-eyebrow">参照C</div>
   <h1>スキル関係グラフ — 構造と運用</h1>
   <p class="lead">スキルが数十を超えると「どのスキルが何を前提とするか」は組織の記憶の外へ消えていく。この文書は、第10章 §2で紹介したスキル関係グラフの具体的構造 — データ原典、スキーマ、関係語彙、生成パイプライン、検証と運用ワークフロー — を一つの章としてまとめる。</p>
-  <p class="source-line">出典: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+  <p class="source-line">出典: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–8) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
 
   <div class="keypoints">
     <div class="kp-title">この文書で扱うこと</div>
@@ -101,7 +101,7 @@
   <p>ノードは <code>id</code>・<code>type</code>・<code>layer</code> を持つ。型は <code>skill</code>、<code>agent</code>、<code>adr</code>、<code>decision</code>、<code>procedure</code>、<code>output_type</code> などで、レイヤーは <code>L0</code>(ワークスペースルート)、<code>common</code>(共通テンプレート)、<code>variant:&lt;name&gt;</code>、<code>L3</code>(個別プロジェクト)だ。</p>
 
   <h2 id="a4-edges">エッジ型の詳細</h2>
-  <p>Amendment 1–6にわたって育った関係語彙の全体。方向と対称性、原典を併せて整理する。すべてのエッジは <strong>助言的(advisory)</strong> — ルーティングと計画に情報を与えるが、実行を強制的に妨げない。</p>
+  <p>Amendment 1–8にわたって育った関係語彙の全体。方向と対称性、原典を併せて整理する。すべてのエッジは <strong>助言的(advisory)</strong> — ルーティングと計画に情報を与えるが、実行を強制的に妨げない。</p>
   <table>
     <thead><tr><th>エッジ</th><th>意味</th><th>方向/対称</th><th>原典</th></tr></thead>
     <tbody>

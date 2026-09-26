@@ -40,7 +40,7 @@
   <div class="chapter-eyebrow">참고 C</div>
   <h1>스킬 관계 그래프 — 구조와 운영</h1>
   <p class="lead">스킬이 수십 개를 넘어서면 "어떤 스킬이 무엇을 전제로 하는가"가 조직의 기억 밖으로 사라진다. 이 문서는 10장 §2에서 소개한 스킬 관계 그래프의 구체적 구조 — 데이터 원천, 스키마, 관계 어휘, 생성 파이프라인, 검증과 운영 워크플로우 — 를 하나의 장으로 정리한다.</p>
-  <p class="source-line">출처: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–6) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
+  <p class="source-line">출처: ai-workspace-standards ADR-0060 <em>Skill Relationship Graph as Generated Projection</em> (Amendments 1–8) · ADR-0061 <em>Decision Record Standard</em> · <code>scripts/generate-skill-graph.ts</code> v1.7.1</p>
 
   <div class="keypoints">
     <div class="kp-title">이 문서에서 다루는 것</div>
@@ -101,7 +101,7 @@
   <p>노드는 <code>id</code>·<code>type</code>·<code>layer</code>를 갖는다. 타입은 <code>skill</code>, <code>agent</code>, <code>adr</code>, <code>decision</code>, <code>procedure</code>, <code>output_type</code> 등이고, 계층은 <code>L0</code>(워크스페이스 루트), <code>common</code>(공통 템플릿), <code>variant:&lt;name&gt;</code>, <code>L3</code>(개별 프로젝트)다.</p>
 
   <h2 id="a4-edges">엣지 타입 상세</h2>
-  <p>Amendment 1–6에 걸쳐 자란 관계 어휘 전체다. 방향과 대칭성, 원천을 함께 정리한다. 모든 엣지는 <strong>자문적(advisory)</strong> — 라우팅과 계획에 정보를 주지만 실행을 강제로 막지는 않는다.</p>
+  <p>Amendment 1–8에 걸쳐 자란 관계 어휘 전체다. 방향과 대칭성, 원천을 함께 정리한다. 모든 엣지는 <strong>자문적(advisory)</strong> — 라우팅과 계획에 정보를 주지만 실행을 강제로 막지는 않는다.</p>
   <table>
     <thead><tr><th>엣지</th><th>의미</th><th>방향/대칭</th><th>원천</th></tr></thead>
     <tbody>

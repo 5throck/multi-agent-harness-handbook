@@ -112,7 +112,7 @@ tier:                          # プラットフォームごとのモデルエ�
     </tbody>
   </table>
   </div>
-  <p>この静的な割り当てが基準線（ベースライン）となるが、実際の実行時にはPMが<strong>Tier Adjustment Rules</strong>を適用して動的にコストを最適化する。基準線がhighのエージェント（architect、pm）は複雑な設計判断を下す必要があるため、最も強力なモデルが必要となる。一方automation-engineerはADR-0036に基づく定型化されたスクリプトを書く役割であるため、lowティアで十分である — 「重い判断」が必要かどうかだけを見ればよいためだ。</p>
+  <p>この静的な割り当てが基準線（ベースライン）となるが、実際の実行時にはPMが<strong>Tier Adjustment Rules</strong>を適用して動的にコストを最適化する。基準線がhighのエージェント（architect）は複雑な設計判断を下す必要があるため、最も強力なモデルが必要となる。一方automation-engineerはADR-0036に基づく定型化されたスクリプトを書く役割であるため、lowティアで十分である — 「重い判断」が必要かどうかだけを見ればよいためだ。</p>
 
   <h3>Tier Adjustment Rules — 実行時のコスト最適化</h3>
   <p>PMが実行計画を立てる際、基準線から外れるティア調整が可能である。ルールは単純だ。</p>
@@ -124,7 +124,7 @@ tier:                          # プラットフォームごとのモデルエ�
   <p>このルールの核心は<strong>「エージェント役割の複雑度の上限は固定だが、下限は状況に応じて調整できる」</strong>という原則である。PMはコスト削減のためにlowに下げることができるが、その作業がlowの能力を超えれば直ちに基準線に戻る。コストへの影響は第6章 §2-A P-2の実習で体感的に確認できる。</p>
 
   <h3>Tier Ceiling Rule</h3>
-  <p>AGENTS.mdのPhase Determinationテーブル（§3.5）は、各成果物タイプに許可されたティアの上限を明示している。例えば「スクリプト実装（承認済み計画が存在する）」はPhase 4であり、担当エージェントはautomation-engineer（low）である — ここにhighを割り当てるとTier Ceiling違反となる。一方「新規ファイル設計、スキーマ定義」はPhase 1-2であり、architect（high）が担当する。</p>
+  <p>PMゲートウェイワークフロー文書（<code>docs/governance/agents/pm-gateway-workflow.md</code>）のPhase Determination表は、各成果物タイプに許可されたティアの上限を明示している。例えば「スクリプト実装（承認済み計画が存在する）」はPhase 4であり、担当エージェントはautomation-engineer（low）である — ここにhighを割り当てるとTier Ceiling違反となる。一方「新規ファイル設計、スキーマ定義」はPhase 1-2であり、architect（high）が担当する。</p>
   <div class="pullquote">
     Tier Ceiling Ruleは「この作業に最も適したティア以上を割り当てるな」ではなく、「このエージェントの定義されたティア以上を使うな」である。役割ベースであって作業ベースではない。
   </div>

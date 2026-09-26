@@ -79,7 +79,7 @@
       <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s1">第3章 §1</a></span></dd>
 
     <dt>フック <span class="en">Hook</span></dt>
-    <dd>エージェントが特定のツールを呼び出す前後に自動実行されるスクリプト。例: <code>PostToolUse</code>フックによるファイル修正後の自動監査(audit)チェック。Claude Code(CLI)では<code>.claude/hooks/</code>に定義されたフックが発火するが、Claude Desktop Appでは動作しないため、ツールごとの挙動の違いに注意する必要がある。Codexはフック未対応 — CODEX.mdの指示をセッションが自ら実行する方式で代用する。
+    <dd>エージェントが特定のツールを呼び出す前後に自動実行されるスクリプト。例: <code>PostToolUse</code>フックによるファイル修正後の自動監査(audit)チェック。Claude Code(CLI)では<code>scripts/hooks/</code>のフックが<code>.claude/settings.json</code>経由で接続されて発火するが、Claude Desktop Appでは動作しないため、ツールごとの挙動の違いに注意する必要がある。Codexはフック未対応 — CODEX.mdの指示をセッションが自ら実行する方式で代用する。
       <span class="see">詳細: <a href="../guardrails/03_Guardrails_Chapter_ja.html#s6">第3章 §監査ログと可観測性</a></span></dd>
 
     <dt>かんばん / WIP制限 <span class="en">Kanban / WIP Limit</span></dt>

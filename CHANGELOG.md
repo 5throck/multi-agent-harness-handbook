@@ -2,6 +2,9 @@
 ## 2026-09-26
 
 ### Fixed
+- Repaired the Design and i18n schedule integration: placed Chapters 4–5 in the Day 1 teaching order, added them to every course-overview schedule and topics table, and recomputed Day 2 and two-day totals.
+
+### Fixed
 - Reordered Design and i18n chapter check questions to match the Day 1 teaching sequence.
 
 ### Fixed

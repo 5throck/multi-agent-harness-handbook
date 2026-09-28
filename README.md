@@ -22,16 +22,16 @@ See the [Setup Guide](https://5throck.github.io/multi-agent-harness-handbook/set
 - **Ch. 1 · Introduction** — Why AI agent teams & modern AI workspace paradigms
 - **Ch. 2 · Harness Engineering** — Core concepts of multi-agent team orchestration
 - **Ch. 3 · Guardrails & Governance** — Permission models and security guardrails
-- **Ch. 4 · Multi-Agent Practice** — Hands-on with Claude Code, Claude Desktop App, Antigravity CLI, and Antigravity Desktop
-- **Ch. 5 · Introduction to `ai-workspace-standards`** — Standardization for AI agent environments
-- **Ch. 6 · Working with Existing Variants** — Reference patterns & practice
-- **Ch. 7 · Enterprise Operating Strategies** — Comparing rollout & governance strategies
-- **Ch. 8 · `ai-workspace-standards` Deep Dive** — Deployment/SSOT, lifecycle, AGENTS.md, architecture & roadmap
-- **Ch. 9 · Workflow Design Patterns** — Multi-agent cooperation patterns
-- **Ch. 10 · L3 Project Upgrade** — Scaling up agent capabilities in real-world projects
-- **Ch. 11 · Creating a New Variant (Phase A)** — Customizing agent harnesses
-- **Ch. 12 · Promoting a New Variant (Phase B)** — Production rollout & validation
-- **Ch. 14 · Capstone Project** — Designing your own AI agent workflow
+- **Ch. 6 · Multi-Agent Practice** — Hands-on with Claude Code, Claude Desktop App, Antigravity CLI, and Antigravity Desktop
+- **Ch. 7 · Introduction to `ai-workspace-standards`** — Standardization for AI agent environments
+- **Ch. 8 · Working with Existing Variants** — Reference patterns & practice
+- **Ch. 9 · Enterprise Operating Strategies** — Comparing rollout & governance strategies
+- **Ch. 10 · `ai-workspace-standards` Deep Dive** — Deployment/SSOT, lifecycle, AGENTS.md, architecture & roadmap
+- **Ch. 11 · Workflow Design Patterns** — Multi-agent cooperation patterns
+- **Ch. 12 · L3 Project Upgrade** — Scaling up agent capabilities in real-world projects
+- **Ch. 13 · Creating a New Variant (Phase A)** — Customizing agent harnesses
+- **Ch. 14 · Promoting a New Variant (Phase B)** — Production rollout & validation
+- **Ch. 16 · Capstone Project** — Designing your own AI agent workflow
 - **Common Reference** — Tool comparison: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
 - **FAQ** — Common errors, fixes, and troubleshooting
 - **Glossary** — Key terms and definitions used throughout the handbook

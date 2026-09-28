@@ -21,16 +21,16 @@ Consulta la [Guía de Instalación](https://5throck.github.io/multi-agent-harnes
 - **Cap. 1 · Introducción** — Por qué equipos de agentes de IA y paradigmas de AI Workspace
 - **Cap. 2 · Ingeniería de Harness** — Conceptos clave de orquestación de equipos multi-agente
 - **Cap. 3 · Guardarraíles y Modelos de Permisos** — Gobernanza y control de acceso de agentes
-- **Cap. 4 · Uso de Equipos Multi-Agente Basados en Harness** — Referencia y práctica con Claude / Antigravity
-- **Cap. 5 · Introducción a `ai-workspace-standards`** — Marco de estandarización para AI Workspace
-- **Cap. 6 · Uso de Variantes Existentes** — Patrones de referencia y práctica
-- **Cap. 7 · Comparación de Estrategias Operativas Empresariales** — Análisis de gobernanza y despliegue
-- **Cap. 8 · Profundización en la Arquitectura de `ai-workspace-standards`** — Despliegue, SSOT, ciclo de vida, AGENTS.md y hoja de ruta
-- **Cap. 9 · Patrones de Diseño de Flujo de Trabajo** — Patrones de cooperación entre agentes
-- **Cap. 10 · Actualización de Proyectos L3** — Expansión de capacidades de agentes en proyectos reales
-- **Cap. 11 · Creación de una Nueva Variante (Fase A)** — Diseño de harness personalizado
-- **Cap. 12 · Promoción de una Nueva Variante (Fase B)** — Despliegue en producción y validación
-- **Cap. 14 · Proyecto Capstone** — Diseñando su propio flujo de trabajo
+- **Cap. 6 · Uso de Equipos Multi-Agente Basados en Harness** — Referencia y práctica con Claude / Antigravity
+- **Cap. 7 · Introducción a `ai-workspace-standards`** — Marco de estandarización para AI Workspace
+- **Cap. 8 · Uso de Variantes Existentes** — Patrones de referencia y práctica
+- **Cap. 9 · Comparación de Estrategias Operativas Empresariales** — Análisis de gobernanza y despliegue
+- **Cap. 10 · Profundización en la Arquitectura de `ai-workspace-standards`** — Despliegue, SSOT, ciclo de vida, AGENTS.md y hoja de ruta
+- **Cap. 11 · Patrones de Diseño de Flujo de Trabajo** — Patrones de cooperación entre agentes
+- **Cap. 12 · Actualización de Proyectos L3** — Expansión de capacidades de agentes en proyectos reales
+- **Cap. 13 · Creación de una Nueva Variante (Fase A)** — Diseño de harness personalizado
+- **Cap. 14 · Promoción de una Nueva Variante (Fase B)** — Despliegue en producción y validación
+- **Cap. 16 · Proyecto Capstone** — Diseñando su propio flujo de trabajo
 - **Referencia Común** — Comparativa de herramientas: Claude Code / Claude Desktop App / Antigravity CLI / Antigravity
 - **Preguntas Frecuentes** — Errores comunes y soluciones
 - **Glosario** — Términos clave y definiciones usados en todo el manual

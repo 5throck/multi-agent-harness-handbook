@@ -23,7 +23,7 @@
   <a href="#s6">監査ログと可観測性</a>
   <div class="nav-section">他の章</div>
   <a href="../concepts/02_Concepts_Chapter_ja.html">第2章 · 概念の理解</a>
-  <a href="../practice/04_Practice_Manual_ja.html">第4章 · Claude Code実習</a>
+  <a href="../practice/06_Practice_Manual_ja.html">第6章 · Claude Code実習</a>
   <a href="../glossary/00_Glossary_ja.html">用語集</a>
 </nav>
 
@@ -31,7 +31,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">第3章</div>
   <h1>ガードレールと権限モデル</h1>
-  <p class="lead">サブエージェントを作成し呼び出す方法は第4章で実際に手を動かしながら習得する。しかしその前に、「このエージェントは何をしてよく、何をしてはいけないか」を先に定めておかなければ、実習中も実務でも事故が起きる。本章では、第2章で少し触れた「ガードレール」を実際にどう設計するかを扱う。</p>
+  <p class="lead">サブエージェントを作成し呼び出す方法は第6章で実際に手を動かしながら習得する。しかしその前に、「このエージェントは何をしてよく、何をしてはいけないか」を先に定めておかなければ、実習中も実務でも事故が起きる。本章では、第2章で少し触れた「ガードレール」を実際にどう設計するかを扱う。</p>
 
   <div class="keypoints">
     <div class="kp-title">本章で扱う内容</div>
@@ -84,10 +84,10 @@
     </div>
   </div>
 
-  <p>この3段階分類は、本ハンドブックが参照したワークスペース文書の実際の規則とも一致する。第5章で扱った<code>/sync</code>パイプラインが<code>.pem</code>・<code>.key</code>・<code>.env</code>のような機微なファイルをコミット直前に遮断する「Sensitive File Guard」や、強制プッシュ・<code>--no-verify</code>を明示的に禁止する規則が、まさに破壊的作業段階に当たるガードレールである。</p>
+  <p>この3段階分類は、本ハンドブックが参照したワークスペース文書の実際の規則とも一致する。第7章で扱った<code>/sync</code>パイプラインが<code>.pem</code>・<code>.key</code>・<code>.env</code>のような機微なファイルをコミット直前に遮断する「Sensitive File Guard」や、強制プッシュ・<code>--no-verify</code>を明示的に禁止する規則が、まさに破壊的作業段階に当たるガードレールである。</p>
 
   <h2 id="s3">最小権限の原則 — <code>tools</code>フィールド</h2>
-  <p>第4章§2の実習で作成した<code>reviewer</code>サブエージェントのfrontmatterを思い出してみよう。<code>tools: Read, Grep</code>のように、許可するツールを明示的に列挙した。これがサブエージェント単位の最小権限の原則である。reviewerにはそもそも<code>Write</code>ツールがないため、プロンプトがどれほど曖昧に解釈されても、ファイルを修正する手段自体が存在しない。</p>
+  <p>第6章§2の実習で作成した<code>reviewer</code>サブエージェントのfrontmatterを思い出してみよう。<code>tools: Read, Grep</code>のように、許可するツールを明示的に列挙した。これがサブエージェント単位の最小権限の原則である。reviewerにはそもそも<code>Write</code>ツールがないため、プロンプトがどれほど曖昧に解釈されても、ファイルを修正する手段自体が存在しない。</p>
   <p>この原則を実際の事故シナリオで見てみると、なぜ重要なのかが明確になる。もしreviewerに<code>Write</code>権限まで習慣的に開放していたとすると、「このファイルをレビューして改善して」というやや曖昧な依頼を受けた際に、reviewerが「改善」を「直接修正」と解釈し、原本を上書きしてしまう可能性もある。<code>tools</code>フィールドで権限をあらかじめ狭めておけば、こうした解釈の食い違いがそもそも事故につながらない。プロンプトの品質に頼るのではなく、構造的に防ぐのである。</p>
   <div class="note">権限は「この役割が最大でどこまでできるか」ではなく、「この役割が正常に機能するために最小限何が必要か」を基準に定める。後で必要になったときに広げるのは簡単だが、最初から広く開けておいた権限を事故が起きた後で狭めるのはすでに手遅れである。</div>
 
@@ -217,12 +217,12 @@
   </div>
 
   <h2 id="s5">分離 — worktreeとsandbox</h2>
-  <p>第4章§2の上級シナリオ(P-1)で、「同じWorkspaceに複数のエージェントを割り当てると認知的重複(cognitive overlap)が生じうる」と警告した。これもガードレールの一形態である。複数のエージェントが同じファイル・同じgit履歴を同時に触ると、一つのエージェントのミスが他のエージェントの作業コンテキストまで汚染しかねない。</p>
+  <p>第6章§2の上級シナリオ(P-1)で、「同じWorkspaceに複数のエージェントを割り当てると認知的重複(cognitive overlap)が生じうる」と警告した。これもガードレールの一形態である。複数のエージェントが同じファイル・同じgit履歴を同時に触ると、一つのエージェントのミスが他のエージェントの作業コンテキストまで汚染しかねない。</p>
   <p>worktree(分離されたgit作業ディレクトリ)や別のsandbox環境で各エージェントを実行すれば、たとえ一つのエージェントが誤った判断をしても、その影響が自分の作業空間の外に漏れ出ることはない。複数のエージェントを並列で動かすときは、「同じ空間を共有させるか、物理的に分けるか」を常に先に決めておかなければならない。</p>
 
   <h2 id="s6">監査ログと可観測性</h2>
-  <p>ガードレールが事前予防だとすれば、監査ログは事後追跡である。完璧なガードレールは存在しないため、事故が起きたときに「いつ、どのエージェントが、どのツールで、何をしたか」を遡って確認できる最小限の記録が必ず必要となる。第5章で扱った<code>memory/MEMORY.md</code>がセッション間のコンテキストを記録する用途であれば、<code>TaskCompleted</code>フックで実行される<code>audit.ts</code>のような監査スクリプトは、「規則に反する変更がなかったか」を毎回機械的に検査する可観測性の装置である。参考までに、このワークスペースのフック配線（2026-08-24時点）を整理すると、<code>PreToolUse</code>では<code>gateguard-fact-force.ts</code>（Edit|Write|MultiEdit）と<code>agent-model-gate.ts</code>（Agent）が、<code>PostToolUse</code>（Write|Edit）と<code>TeammateIdle</code>では<code>post-write-lifecycle-check.ts</code>が動作し、<code>audit.ts</code>はタスク完了時点（<code>TaskCompleted</code>）で実行される。</p>
-  <div class="warn">第4章で扱うClaude Desktop Appでは、このようなフックは発火しない。Desktopアプリ中心で作業するチームの場合、監査ログが「動いていると思っていたら実は一つも動いていなかった」という状況が実際に起こりうる。Codexはフック機構そのものがないため、CODEX.mdの指示をPMが毎セッション自ら認識して実行する方式（プロンプト自己強制）で代用する。ガードレールを設計する際は、必ず「このポリシーが自分の使うツールで実際に発動するか」まで確認しなければならない。</div>
+  <p>ガードレールが事前予防だとすれば、監査ログは事後追跡である。完璧なガードレールは存在しないため、事故が起きたときに「いつ、どのエージェントが、どのツールで、何をしたか」を遡って確認できる最小限の記録が必ず必要となる。第7章で扱った<code>memory/MEMORY.md</code>がセッション間のコンテキストを記録する用途であれば、<code>TaskCompleted</code>フックで実行される<code>audit.ts</code>のような監査スクリプトは、「規則に反する変更がなかったか」を毎回機械的に検査する可観測性の装置である。参考までに、このワークスペースのフック配線（2026-08-24時点）を整理すると、<code>PreToolUse</code>では<code>gateguard-fact-force.ts</code>（Edit|Write|MultiEdit）と<code>agent-model-gate.ts</code>（Agent）が、<code>PostToolUse</code>（Write|Edit）と<code>TeammateIdle</code>では<code>post-write-lifecycle-check.ts</code>が動作し、<code>audit.ts</code>はタスク完了時点（<code>TaskCompleted</code>）で実行される。</p>
+  <div class="warn">第6章で扱うClaude Desktop Appでは、このようなフックは発火しない。Desktopアプリ中心で作業するチームの場合、監査ログが「動いていると思っていたら実は一つも動いていなかった」という状況が実際に起こりうる。Codexはフック機構そのものがないため、CODEX.mdの指示をPMが毎セッション自ら認識して実行する方式（プロンプト自己強制）で代用する。ガードレールを設計する際は、必ず「このポリシーが自分の使うツールで実際に発動するか」まで確認しなければならない。</div>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div>監査ログの構造と監査フロー</div>
@@ -318,7 +318,7 @@
     </svg>
   </div>
 
-  <div class="note">一文でまとめると: ガードレールとは、<strong>リスクに応じて権限を差別化して付与し(§2·§3)</strong>、<strong>取り返しのつかない地点の手前では必ず人が確認し(§4)</strong>、<strong>並列作業は物理的に分離し(§5)</strong>、<strong>すべてが失敗したときのために記録を残しておく(§6)</strong>という4つの習慣である。第4章からは、この原則を実際の実習コードの中に適用しながら進めていく。</div>
+  <div class="note">一文でまとめると: ガードレールとは、<strong>リスクに応じて権限を差別化して付与し(§2·§3)</strong>、<strong>取り返しのつかない地点の手前では必ず人が確認し(§4)</strong>、<strong>並列作業は物理的に分離し(§5)</strong>、<strong>すべてが失敗したときのために記録を残しておく(§6)</strong>という4つの習慣である。第6章からは、この原則を実際の実習コードの中に適用しながら進めていく。</div>
 
   <div class="chapter-nav">
     <a href="../concepts/02_Concepts_Chapter_ja.html" class="prev"><div class="dir">← 前の章</div><div class="ttl">第2章 · ハーネスエンジニアリングとマルチエージェントチームの概念</div></a>

@@ -15,6 +15,7 @@
     "check-a11y": "bun run scripts/check-a11y.ts --docs-dir docs",
     "check-spell": "bun run scripts/check-spell.ts --docs-dir docs",
     "check-lint": "bun run scripts/check-lint.ts --docs-dir docs",
+    "check-generated-content": "bun run scripts/check-generated-content.ts --docs-dir docs",
     "check-external-links": "bun run scripts/check-external-links.ts --docs-dir docs",
     "build-search-index": "bun run scripts/build-search-index.ts --docs-dir docs",
     "deploy": "bun run scripts/deploy-handbook.ts --project . --output .",
@@ -23,6 +24,6 @@
     "check-i18n": "bun run scripts/check-i18n-parity.ts --docs-dir docs",
     "check-labels": "bun run scripts/check-labels.ts --docs-dir docs",
     "check-search": "bun run scripts/check-search.ts --docs-dir docs",
-    "ci": "bun run validate-handbook && bun run check-symmetry && bun run check-links && bun run check-labels && bun run check-authoring && bun run doctor && bun run check-a11y && bun run check-spell && bun run check-lint && bun run check-external-links && bun run check-search"
+    "ci": "bun run validate-handbook && bun run check-symmetry && bun run check-links && bun run check-labels && bun run check-authoring && bun run doctor && bun run check-a11y && bun run check-spell && bun run check-lint && bun run check-generated-content && bun run check-external-links && bun run check-search"
   }
 }

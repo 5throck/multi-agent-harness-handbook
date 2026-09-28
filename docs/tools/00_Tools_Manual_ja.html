@@ -31,8 +31,8 @@
   <div class="nav-section">参考文献</div>
   <a href="#refs">参考リンク</a>
   <div class="nav-section">その他の章</div>
-  <a href="../variant-practice/06_VariantPractice_Examples_ja.html">第6章 · バリアント実践例</a>
-  <a href="../enterprise/07_Enterprise_Chapter_ja.html">第7章 · 2つのモデルの比較</a>
+  <a href="../variant-practice/08_VariantPractice_Examples_ja.html">第8章 · バリアント実践例</a>
+  <a href="../enterprise/09_Enterprise_Chapter_ja.html">第9章 · 2つのモデルの比較</a>
 </nav>
 
 <main>
@@ -49,7 +49,7 @@
     <div class="version-row"><span class="vlabel">改訂時に再確認すべき点</span><span class="vvalue">各ツールの実験的機能ラベルが安定版に昇格したか、デスクトップアプリの未対応フック範囲が縮小したか、Codexにネイティブなサブエージェントツールが追加されたか</span></div>
   </div>
 
-  <div class="warning-box">2026-06-18時点で、Googleは個人ユーザー（Free/Pro/Ultra）向けの<strong>Gemini CLIサービスを終了</strong>し、<strong>Antigravity CLI (<code>agy</code>)</strong>がその後継となりました。本ハンドブックは当初Geminiコマンドラインインターフェース（CLI）を前提に執筆されていましたが、現在の日付をもってAntigravityコマンドラインインターフェース（CLI）に完全に更新されています。古い資料で<code>gemini</code>コマンドや<code>.gemini/agents/</code>パスを見かけた場合は、後継バージョンに置き換えられたものとして扱ってください。</div>
+  <div class="tip-box">Google系では<strong>Gemini CLI</strong>と<strong>Antigravity CLI (<code>agy</code>)/デスクトップ</strong>の両方がサポートされています。本ハンドブックのGoogle系実習とツール比較はAntigravity CLI/デスクトップを基準としています。Gemini CLIはworkspaceの<code>GEMINI.md</code>ガイダンス、<code>.gemini/</code>の設定・コマンド・スキル、フック（BeforeTool/AfterTool）により引き続きサポートされているため、資料内で<code>gemini</code>コマンドや<code>.gemini/</code>パスを見かけても、過去のバージョンとは見なさないでください。</div>
 
   <h2 id="tree">6つのツールを一覧で把握する（Desktop優先、CLIは並列）</h2>
   <div class="tree-box"><div style="position:relative">
@@ -60,7 +60,7 @@ Anthropic family
 
 Google family
 ├── <span class="cmd">Antigravity (Desktop)</span> ★ デフォルト    <span class="desc">スタンドアロンデスクトップアプリ。Agent Managerがワークスペースごとに並列実行を管理</span>
-└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">ターミナルベース。Gemini CLIの後継 — オーケストレータが動的にサブエージェントを生成</span>
+└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">ターミナルベース — オーケストレータが動的にサブエージェントを生成</span>
 
 OpenAI family
 ├── <span class="cmd">Codex Desktop App</span>              <span class="desc">GUIベース。ネイティブなサブエージェントツールなし — PMが順次実行で役割を代行</span>
@@ -435,7 +435,7 @@ OpenAI family
     </tbody>
   </table>
   </div>
-  <p >💡 <strong>重要ポイント:</strong> 第5章 §1で紹介したai-workspace-standardsリポジトリはまさにこの構造を実装しています。ルートの<code>AGENTS.md</code>がエージェント名簿の単一情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>・<code>.gemini/</code>・<code>.codex/</code>と並んでツール非依存のコマンドとスキルを保持しています。</p>
+  <p >💡 <strong>重要ポイント:</strong> 第7章 §1で紹介したai-workspace-standardsリポジトリはまさにこの構造を実装しています。ルートの<code>AGENTS.md</code>がエージェント名簿の単一情報源（SSOT）として機能し、<code>.agents/</code>フォルダが<code>.claude/</code>・<code>.gemini/</code>・<code>.codex/</code>と並んでツール非依存のコマンドとスキルを保持しています。</p>
 
   <hr>
 
@@ -444,7 +444,7 @@ OpenAI family
     <li>📖 <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — 公式サブエージェントドキュメント</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — 公式入門ドキュメント</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — 公式AGY CLI使用ドキュメント</a></li>
-    <li>📖 <a href="https://code.claude.com/docs" target="_blank">Antigravity — 公式Agent Managerドキュメント</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/home" target="_blank">Antigravity — 公式Agent Managerドキュメント</a></li>
     <li>📖 <a href="https://agents.md/" target="_blank">AGENTS.md — 公式オープン標準サイト</a></li>
     <li>📖 <a href="https://developers.openai.com/codex" target="_blank">Codex — 公式ドキュメント</a></li>
   </ul>
@@ -462,8 +462,8 @@ OpenAI family
   </div>
 
   <div class="chapter-nav">
-    <a href="../variant-practice/06_VariantPractice_Examples_ja.html" class="prev"><div class="dir">← 第6章</div><div class="ttl">バリアント実践例</div></a>
-    <a href="../enterprise/07_Enterprise_Chapter_ja.html" class="next"><div class="dir">第7章 →</div><div class="ttl">エンタープライズ内でのマルチエージェントチーム運用</div></a>
+    <a href="../variant-practice/08_VariantPractice_Examples_ja.html" class="prev"><div class="dir">← 第8章</div><div class="ttl">バリアント実践例</div></a>
+    <a href="../enterprise/09_Enterprise_Chapter_ja.html" class="next"><div class="dir">第9章 →</div><div class="ttl">エンタープライズ内でのマルチエージェントチーム運用</div></a>
   </div>
    <footer>
     Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / Hermes Agent / ai-workspace-standards main (2026-09-28) 基準 · 日本語教材<br>

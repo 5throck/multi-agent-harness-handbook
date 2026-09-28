@@ -31,8 +31,8 @@
   <div class="nav-section">References</div>
   <a href="#refs">Reference Links</a>
   <div class="nav-section">Other Chapters</div>
-  <a href="../variant-practice/06_VariantPractice_Examples_en.html">Chapter 6 · Variant Practice Examples</a>
-  <a href="../enterprise/07_Enterprise_Chapter_en.html">Chapter 7 · Comparing the Two Models</a>
+  <a href="../variant-practice/08_VariantPractice_Examples_en.html">Chapter 8 · Variant Practice Examples</a>
+  <a href="../enterprise/09_Enterprise_Chapter_en.html">Chapter 9 · Comparing the Two Models</a>
 </nav>
 
 <main>
@@ -49,7 +49,7 @@
     <div class="version-row"><span class="vlabel">To re-verify at revision time</span><span class="vvalue">Whether each tool's experimental-feature labels have graduated to stable, whether the Desktop App's unsupported-hook scope has narrowed, and whether Codex has gained a native subagent tool</span></div>
   </div>
 
-  <div class="warning-box">As of 2026-06-18, Google <strong>discontinued the Gemini CLI service</strong> for individual (Free/Pro/Ultra) users, and <strong>Antigravity CLI (<code>agy</code>)</strong> took its place. This handbook was originally written around the Gemini command-line interface (CLI) before that date, but has since been fully updated to the Antigravity command-line interface (CLI) as of the current date. If you encounter the <code>gemini</code> command or a <code>.gemini/agents/</code> path in older material, treat it as referring to a since-superseded version.</div>
+  <div class="tip-box">Both <strong>Gemini CLI</strong> and <strong>Antigravity CLI (<code>agy</code>)/Desktop</strong> are supported in the Google family. This handbook's Google-family practice and tool comparisons are written around Antigravity CLI/Desktop. Gemini CLI continues to be supported via the workspace's <code>GEMINI.md</code> guidance, <code>.gemini/</code> configuration, commands, and skills, and hooks (BeforeTool/AfterTool) — so if you encounter a <code>gemini</code> command or a <code>.gemini/</code> path in the material, don't treat it as a superseded version.</div>
 
   <h2 id="tree">The Six Tools at a Glance (Desktop First, CLI in Parallel)</h2>
   <div class="tree-box"><div style="position:relative">
@@ -60,7 +60,7 @@ Anthropic family
 
 Google family
 ├── <span class="cmd">Antigravity (Desktop)</span> ★ Default    <span class="desc">Standalone desktop app; Agent Manager supervises parallelism per workspace</span>
-└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">Terminal-based, successor to Gemini CLI — orchestrator dynamically spawns subagents</span>
+└── <span class="cmd">Antigravity CLI (agy)</span>           <span class="desc">Terminal-based — orchestrator dynamically spawns subagents</span>
 
 OpenAI family
 ├── <span class="cmd">Codex Desktop App</span>              <span class="desc">GUI-based, no native subagent tool — the PM runs roles sequentially instead</span>
@@ -435,7 +435,7 @@ OpenAI family
     </tbody>
   </table>
   </div>
-  <p >💡 <strong>Key takeaway:</strong> The ai-workspace-standards repository covered in Chapter 5 §1 implements exactly this structure. The root <code>AGENTS.md</code> serves as the single source of truth (SSOT) for the agent roster, and the <code>.agents/</code> folder sits alongside <code>.claude/</code>·<code>.gemini/</code>·<code>.codex/</code>, holding tool-agnostic commands and skills.</p>
+  <p >💡 <strong>Key takeaway:</strong> The ai-workspace-standards repository covered in Chapter 7 §1 implements exactly this structure. The root <code>AGENTS.md</code> serves as the single source of truth (SSOT) for the agent roster, and the <code>.agents/</code> folder sits alongside <code>.claude/</code>·<code>.gemini/</code>·<code>.codex/</code>, holding tool-agnostic commands and skills.</p>
 
   <hr>
 
@@ -444,7 +444,7 @@ OpenAI family
     <li>📖 <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">Claude Code — Official Subagents Documentation</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli/getting-started" target="_blank">Antigravity CLI — Official Getting Started Documentation</a></li>
     <li>📖 <a href="https://antigravity.google/docs/cli/using" target="_blank">Antigravity CLI — Official Using AGY CLI Documentation</a></li>
-    <li>📖 <a href="https://code.claude.com/docs" target="_blank">Antigravity — Official Agent Manager Documentation</a></li>
+    <li>📖 <a href="https://antigravity.google/docs/home" target="_blank">Antigravity — Official Agent Manager Documentation</a></li>
     <li>📖 <a href="https://agents.md/" target="_blank">AGENTS.md — Official Open Standard Site</a></li>
     <li>📖 <a href="https://developers.openai.com/codex" target="_blank">Codex — Official Documentation</a></li>
   </ul>
@@ -461,8 +461,8 @@ OpenAI family
   </div>
 
   <div class="chapter-nav">
-    <a href="../variant-practice/06_VariantPractice_Examples_en.html" class="prev"><div class="dir">← Chapter 6</div><div class="ttl">Variant Practice Examples</div></a>
-    <a href="../enterprise/07_Enterprise_Chapter_en.html" class="next"><div class="dir">Chapter 7 →</div><div class="ttl">Running a Multi-Agent Team Inside an Enterprise</div></a>
+    <a href="../variant-practice/08_VariantPractice_Examples_en.html" class="prev"><div class="dir">← Chapter 8</div><div class="ttl">Variant Practice Examples</div></a>
+    <a href="../enterprise/09_Enterprise_Chapter_en.html" class="next"><div class="dir">Chapter 9 →</div><div class="ttl">Running a Multi-Agent Team Inside an Enterprise</div></a>
   </div>
    <footer>
     Based on Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / Hermes Agent / ai-workspace-standards main (2026-09-28) · English Educational Materials<br>

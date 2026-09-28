@@ -23,7 +23,7 @@
   <a href="#s6">감사 로그와 관측성</a>
   <div class="nav-section">다른 장</div>
   <a href="../concepts/02_Concepts_Chapter.html">2장 · 개념 이해</a>
-  <a href="../practice/04_Practice_Manual.html">4장 · Claude Code 실습</a>
+  <a href="../practice/06_Practice_Manual.html">6장 · Claude Code 실습</a>
   <a href="../glossary/00_Glossary.html">용어집</a>
 </nav>
 
@@ -31,7 +31,7 @@
  <article class="reading">
   <div class="chapter-eyebrow">3장</div>
   <h1>가드레일과 권한 모델</h1>
-  <p class="lead">서브에이전트를 만들고 호출하는 법은 4장에서 손으로 익히게 된다. 그 전에, "이 에이전트가 무엇을 해도 되고 무엇은 안 되는가"를 먼저 정하지 않으면 실습 중에도 실무에서도 사고가 난다. 이 장은 2장에서 잠깐 언급했던 "가드레일"을 실제로 어떻게 설계하는지 다룬다.</p>
+  <p class="lead">서브에이전트를 만들고 호출하는 법은 6장에서 손으로 익히게 된다. 그 전에, "이 에이전트가 무엇을 해도 되고 무엇은 안 되는가"를 먼저 정하지 않으면 실습 중에도 실무에서도 사고가 난다. 이 장은 2장에서 잠깐 언급했던 "가드레일"을 실제로 어떻게 설계하는지 다룬다.</p>
 
   <div class="keypoints">
     <div class="kp-title">이 장에서 다루는 것</div>
@@ -84,10 +84,10 @@
     </div>
   </div>
 
-  <p>이 3단계 분류는 이 핸드북이 참고한 워크스페이스 문서의 실제 규칙과도 일치한다. 5장에서 다룬 <code>/sync</code> 파이프라인이 <code>.pem</code>·<code>.key</code>·<code>.env</code> 같은 민감 파일을 커밋 직전에 가로막는 "Sensitive File Guard"나, 강제 푸시·<code>--no-verify</code>를 명시적으로 금지하는 규칙이 바로 파괴적 작업 단계에 해당하는 가드레일이다.</p>
+  <p>이 3단계 분류는 이 핸드북이 참고한 워크스페이스 문서의 실제 규칙과도 일치한다. 7장에서 다룬 <code>/sync</code> 파이프라인이 <code>.pem</code>·<code>.key</code>·<code>.env</code> 같은 민감 파일을 커밋 직전에 가로막는 "Sensitive File Guard"나, 강제 푸시·<code>--no-verify</code>를 명시적으로 금지하는 규칙이 바로 파괴적 작업 단계에 해당하는 가드레일이다.</p>
 
   <h2 id="s3">최소 권한 원칙 — <code>tools</code> 필드</h2>
-  <p>4장 §2 실습에서 만든 <code>reviewer</code> 서브에이전트의 frontmatter를 다시 떠올려 보자. <code>tools: Read, Grep</code>처럼 허용할 도구를 명시적으로 나열했다. 이것이 서브에이전트 단위의 최소 권한 원칙이다. reviewer는 애초에 <code>Write</code> 도구가 없으므로, 프롬프트가 아무리 애매하게 해석돼도 파일을 수정할 방법 자체가 없다.</p>
+  <p>6장 §2 실습에서 만든 <code>reviewer</code> 서브에이전트의 frontmatter를 다시 떠올려 보자. <code>tools: Read, Grep</code>처럼 허용할 도구를 명시적으로 나열했다. 이것이 서브에이전트 단위의 최소 권한 원칙이다. reviewer는 애초에 <code>Write</code> 도구가 없으므로, 프롬프트가 아무리 애매하게 해석돼도 파일을 수정할 방법 자체가 없다.</p>
   <p>이 원칙을 실제 사고 시나리오로 보면 왜 중요한지 분명해진다. 만약 reviewer에게 <code>Write</code> 권한까지 습관적으로 열어 뒀다면, "이 파일을 검토하고 개선해줘"처럼 살짝 모호한 요청을 받았을 때 reviewer가 "개선"을 "직접 수정"으로 해석해 원본을 덮어쓸 수도 있다. <code>tools</code> 필드로 권한을 미리 좁혀 두면, 이런 해석 차이가 애초에 사고로 이어지지 않는다. 프롬프트 품질에 기대는 대신 구조적으로 막는 것이다.</p>
   <div class="note">권한은 "이 역할이 최대로 무엇까지 할 수 있는가"가 아니라 "이 역할이 정상 작동하는 데 최소로 무엇이 필요한가"를 기준으로 정한다. 나중에 필요해지면 넓히는 것은 쉽지만, 처음부터 넓게 열어 둔 권한을 사고 이후에 좁히는 것은 이미 늦다.</div>
 
@@ -217,12 +217,12 @@
   </div>
 
   <h2 id="s5">격리 — worktree와 sandbox</h2>
-  <p>4장 §2의 고급 시나리오(P-1)에서 "같은 Workspace에 에이전트 여러 개를 배정하면 인지적 중첩(cognitive overlap)이 생길 수 있다"고 경고했다. 이것도 가드레일의 한 형태다. 여러 에이전트가 같은 파일·같은 git 이력을 동시에 건드리면, 한 에이전트의 실수가 다른 에이전트의 작업 맥락까지 오염시킬 수 있다.</p>
+  <p>6장 §2의 고급 시나리오(P-1)에서 "같은 Workspace에 에이전트 여러 개를 배정하면 인지적 중첩(cognitive overlap)이 생길 수 있다"고 경고했다. 이것도 가드레일의 한 형태다. 여러 에이전트가 같은 파일·같은 git 이력을 동시에 건드리면, 한 에이전트의 실수가 다른 에이전트의 작업 맥락까지 오염시킬 수 있다.</p>
   <p>worktree(격리된 git 작업 디렉터리)나 별도 sandbox 환경에서 각 에이전트를 실행하면, 설령 한 에이전트가 잘못된 판단을 하더라도 그 영향이 자기 작업 공간 밖으로 새어 나가지 않는다. 병렬로 여러 에이전트를 굴릴 때는 "같은 공간을 공유하게 둘 것인가, 물리적으로 나눌 것인가"를 항상 먼저 결정해야 한다.</p>
 
   <h2 id="s6">감사 로그와 관측성</h2>
-  <p>가드레일이 사전 예방이라면, 감사 로그는 사후 추적이다. 완벽한 가드레일은 없으므로, 사고가 났을 때 "언제, 어떤 에이전트가, 어떤 도구로, 무엇을 했는지"를 되짚어볼 수 있는 최소한의 기록이 반드시 필요하다. 5장에서 다룬 <code>memory/MEMORY.md</code>가 세션 간 맥락을 기록하는 용도라면, <code>TaskCompleted</code> 훅으로 실행되는 <code>audit.ts</code> 같은 감사 스크립트는 "규칙을 어긴 변경이 있었는지"를 매번 기계적으로 검사하는 관측성 장치다. 참고로 이 워크스페이스의 훅 배선(2026-08-24 기준)을 정리하면, <code>PreToolUse</code>에서는 <code>gateguard-fact-force.ts</code>(Edit|Write|MultiEdit)와 <code>agent-model-gate.ts</code>(Agent)가, <code>PostToolUse</code>(Write|Edit)와 <code>TeammateIdle</code>에서는 <code>post-write-lifecycle-check.ts</code>가 동작하고, <code>audit.ts</code>는 작업 완료 시점(<code>TaskCompleted</code>)에 실행된다.</p>
-  <div class="warn">4장에서 다룰 Claude Desktop App에서는 이런 훅이 발화하지 않는다. Desktop 앱 위주로 작업하는 팀이라면, 감사 로그가 "돌고 있는 줄 알았는데 사실 하나도 안 돌고 있었다"는 상황이 실제로 생길 수 있다. Codex는 훅 메커니즘 자체가 없으므로, CODEX.md 지침을 PM이 매 세션 스스로 인지하고 실행하는 방식(프롬프트 자체 강제)으로 대체한다. 가드레일을 설계할 때는 반드시 "이 정책이 내가 쓰는 도구에서 실제로 발동하는가"까지 확인해야 한다.</div>
+  <p>가드레일이 사전 예방이라면, 감사 로그는 사후 추적이다. 완벽한 가드레일은 없으므로, 사고가 났을 때 "언제, 어떤 에이전트가, 어떤 도구로, 무엇을 했는지"를 되짚어볼 수 있는 최소한의 기록이 반드시 필요하다. 7장에서 다룬 <code>memory/MEMORY.md</code>가 세션 간 맥락을 기록하는 용도라면, <code>TaskCompleted</code> 훅으로 실행되는 <code>audit.ts</code> 같은 감사 스크립트는 "규칙을 어긴 변경이 있었는지"를 매번 기계적으로 검사하는 관측성 장치다. 참고로 이 워크스페이스의 훅 배선(2026-08-24 기준)을 정리하면, <code>PreToolUse</code>에서는 <code>gateguard-fact-force.ts</code>(Edit|Write|MultiEdit)와 <code>agent-model-gate.ts</code>(Agent)가, <code>PostToolUse</code>(Write|Edit)와 <code>TeammateIdle</code>에서는 <code>post-write-lifecycle-check.ts</code>가 동작하고, <code>audit.ts</code>는 작업 완료 시점(<code>TaskCompleted</code>)에 실행된다.</p>
+  <div class="warn">6장에서 다룰 Claude Desktop App에서는 이런 훅이 발화하지 않는다. Desktop 앱 위주로 작업하는 팀이라면, 감사 로그가 "돌고 있는 줄 알았는데 사실 하나도 안 돌고 있었다"는 상황이 실제로 생길 수 있다. Codex는 훅 메커니즘 자체가 없으므로, CODEX.md 지침을 PM이 매 세션 스스로 인지하고 실행하는 방식(프롬프트 자체 강제)으로 대체한다. 가드레일을 설계할 때는 반드시 "이 정책이 내가 쓰는 도구에서 실제로 발동하는가"까지 확인해야 한다.</div>
 
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0 28px;">
     <div >감사 로그 구조와 감사 흐름</div>
@@ -318,7 +318,7 @@
     </svg>
   </div>
 
-  <div class="note">한 문장으로 요약하면: 가드레일은 <strong>위험도에 따라 권한을 차등 부여(§2·§3)</strong>하고, <strong>돌이킬 수 없는 지점 앞에서는 반드시 사람이 확인(§4)</strong>하며, <strong>병렬 작업은 물리적으로 격리(§5)</strong>하고, <strong>모든 것이 실패했을 때를 대비해 기록을 남기는(§6)</strong> 네 가지 습관이다. 4장부터는 이 원칙을 실제 실습 코드 안에 적용해 가며 진행한다.</div>
+  <div class="note">한 문장으로 요약하면: 가드레일은 <strong>위험도에 따라 권한을 차등 부여(§2·§3)</strong>하고, <strong>돌이킬 수 없는 지점 앞에서는 반드시 사람이 확인(§4)</strong>하며, <strong>병렬 작업은 물리적으로 격리(§5)</strong>하고, <strong>모든 것이 실패했을 때를 대비해 기록을 남기는(§6)</strong> 네 가지 습관이다. 6장부터는 이 원칙을 실제 실습 코드 안에 적용해 가며 진행한다.</div>
 
   <div class="chapter-nav">
     <a href="../concepts/02_Concepts_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</div></a>

@@ -2,6 +2,15 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-28] — Upstream Sync: Five Platform Surfaces, Hermes Appendix
+
+### Fixed
+- **Ch. 5** (ko/en/ja/es): platform asset folders are now five surfaces (`.hermes/` added, ADR-0088); the retired `/meeting` command example replaced with `/changelog`, and the nonexistent `audit-workspace` skill replaced with `upgrade-project`.
+
+### Changed
+- **Appendix · Hermes Agents** (ko/en/ja/es): replaced the placeholder stub with eight sections — fifth platform directory (ADR-0088), `Hermes.md` (ADR-0093), `.hermes/skills` mirror, `trusted_project_dirs`, AGENTS.md thin dispatcher (ADR-0090), the co-workspace service (ADR-0092), other same-period changes (`new-project` skill, `skill-graph-analyst`, ADR-0091 KR profile, `/meeting` retirement), and upgrade delivery. The four-tool workshop scope is stated explicitly.
+- Footer baseline bumped to `ai-workspace-standards` main (2026-09-28) and now lists Hermes Agent; search index rebuilt.
+
 ## [2026-09-20] — Lecture Schedule Review: Content Accuracy & Time Rebalance
 
 ### Fixed

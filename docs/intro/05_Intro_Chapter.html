@@ -138,7 +138,7 @@
   </table>
   </div>
   <p>구체적인 규칙 하나를 예로 이 관계를 따라가 보자. "PR 제목과 본문은 반드시 영어로 쓴다"는 규칙이 있다고 하면, 이 규칙 자체는 <code>CONSTITUTION.md</code>에 한 번만 적힌다. <code>CLAUDE.md</code>는 이 규칙을 Claude Code에서 <em>어떻게</em> 강제할지를 정의한다. 예를 들어 <code>/sync</code> 커맨드의 언어 게이트(language-guard.ts)가 커밋 전에 이 규칙을 자동 검사하도록 명시하는 식이다. <code>GEMINI.md</code>는 같은 규칙을 Gemini/Antigravity 쪽 파이프라인에서 강제하는 방법을 정의하고, <code>CODEX.md</code>는 Codex 세션이 동일한 규칙을 프롬프트와 수동 게이트로 실행하는 방식을 정의한다. 그리고 이 검사를 실제로 수행하는 것이 "누구"인지, 즉 어떤 에이전트가 이 게이트를 담당하는지는 <code>AGENTS.md</code>의 로스터에 등록돼 있다. 규칙 하나가 다섯 파일에 각자 다른 각도로 나타나는 셈이다. 이것은 중복이 아니라 "무엇을 · 어떻게 · 누가"라는 세 질문에 대한 서로 다른 답이다.</p>
-  <p>다섯 파일 아래에는 실행 가능한 자산을 담는 폴더가 있다. 커맨드·스킬·프롬프트는 네 곳에 나뉘어 있는데, <code>.claude/</code>는 Claude Code/App 전용, <code>.gemini/</code>는 Gemini/Antigravity CLI/Desktop 전용, <code>.codex/</code>는 Codex CLI/Desktop App 전용, 그리고 <code>.agents/</code>는 어느 한 도구에 묶이지 않는 <strong>도구-불가지론적(engine-agnostic)</strong> 커맨드·스킬을 담는다. 예를 들어 <code>/sync</code>·<code>/meeting</code> 같은 커맨드나 <code>create-variant</code>·<code>audit-workspace</code> 같은 스킬은 플랫폼별 표면에 같은 이름으로 존재하되, 각자 자기 플랫폼의 도구 규칙(Claude Code의 <code>Agent</code> 도구 문법, Antigravity의 서브에이전트 방식, Codex의 프롬프트/순차 역할 전환 방식 등)에 맞춰 구현이 조금씩 다르다. AGENTS.md 표준을 지원하는 외부 도구(Codex, Cursor 등)는 공통 규칙과 <code>.agents/</code> 자산을 함께 참조할 수 있다.</p>
+  <p>다섯 파일 아래에는 실행 가능한 자산을 담는 폴더가 있다. 커맨드·스킬·프롬프트는 다섯 곳에 나뉘어 있는데, <code>.claude/</code>는 Claude Code/App 전용, <code>.gemini/</code>는 Gemini/Antigravity CLI/Desktop 전용, <code>.codex/</code>는 Codex CLI/Desktop App 전용, <code>.hermes/</code>는 Hermes Agent 전용, 그리고 <code>.agents/</code>는 어느 한 도구에 묶이지 않는 <strong>도구-불가지론적(engine-agnostic)</strong> 커맨드·스킬을 담는다. 예를 들어 <code>/sync</code>·<code>/changelog</code> 같은 커맨드나 <code>create-variant</code>·<code>upgrade-project</code> 같은 스킬은 플랫폼별 표면에 같은 이름으로 존재하되, 각자 자기 플랫폼의 도구 규칙(Claude Code의 <code>Agent</code> 도구 문법, Antigravity의 서브에이전트 방식, Codex의 프롬프트/순차 역할 전환 방식 등)에 맞춰 구현이 조금씩 다르다. AGENTS.md 표준을 지원하는 외부 도구(Codex, Cursor 등)는 공통 규칙과 <code>.agents/</code> 자산을 함께 참조할 수 있다.</p>
 
   <h2 id="s3">templates와 variant 13종</h2>
   <p><code>templates/</code> 디렉터리는 버전이 관리되는 프로젝트 템플릿 "variant"들의 모음이다. 각 베리언트(variant)는 특정 도메인을 위한 완결된 멀티 에이전트팀 구성을 담고 있다. PM, 전문 에이전트들, 단계별 거버넌스 파이프라인이 여기에 포함된다. 저장소가 제공하는 베리언트(variant)는 다음과 같다.</p>
@@ -218,7 +218,7 @@
     <a href="../variant-practice/08_VariantPractice_Manual.html" class="next"><div class="dir">다음 장 →</div><div class="ttl">8장 · 기존 variant 활용</div></a>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / ai-workspace-standards main (2026-09-26) 기준 · 한국어 교육 자료<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / Hermes Agent / ai-workspace-standards main (2026-09-28) 기준 · 한국어 교육 자료<br>
     공식 자료: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·

@@ -30,6 +30,16 @@
 
 All notable changes to this handbook will be documented in this file.
 
+## [2026-09-28] — Upstream Sync: Five Platform Surfaces, Hermes.md, Recent Workspace Changes
+
+### Fixed
+- **Intro chapter** (`intro/05_Intro_Chapter`, ko/en/ja/es): platform asset folders are now five surfaces (`.hermes/` added, ADR-0088); the retired `/meeting` command example replaced with `/changelog`, and the nonexistent `audit-workspace` skill replaced with `upgrade-project`.
+- **Appendix D · Hermes Agents** (ko/en/ja/es): the "why no HERMES.md" section contradicted ADR-0093 (2026-09-27), which introduced a thin `Hermes.md` instruction file (<19,000 chars) at L0/L1/L2. Rewrote that section and the matching checklist item, self-check question, setup comment, and troubleshooting row.
+
+### Changed
+- **Appendix D** (ko/en/ja/es): added sections on the co-workspace service (ADR-0092) and same-period changes (`new-project` skill, `skill-graph-analyst`, ADR-0091 KR profile / LLM config standard, `/meeting` retirement).
+- Footer baseline bumped to `ai-workspace-standards` main (2026-09-28) and now lists Hermes Agent; search index rebuilt.
+
 ## [2026-09-26] — Design Foundation Structure
 
 ### Changed

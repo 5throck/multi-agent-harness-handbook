@@ -45,6 +45,7 @@ var SEARCH_DATA = {
     { path: 'design/04_Design_Foundation.html', title: '4장 · Design Foundation과 UI 품질 게이트', lang: 'ko' },
     { path: 'i18n/05_I18n_Operations.html', title: '5장 · i18n 아키텍처와 다국어 운영', lang: 'ko' },
     { path: 'appendix/D_Hermes_Agents.html', title: '별첨 D · Hermes Agents 운영 가이드', lang: 'ko' },
+    { path: 'appendix/E_Workspace_Architecture.html', title: '별첨 E · 통합 아키텍처 지도', lang: 'ko' },
 
     /* ── EN ── */
     { path: 'intro/00_Prerequisite_Bridge_en.html', title: 'Guide for Graduates · Skip Map for Introductory Course Graduates', lang: 'en' },
@@ -87,6 +88,7 @@ var SEARCH_DATA = {
     { path: 'design/04_Design_Foundation_en.html', title: 'Chapter 4 · Design Foundation and UI Quality Gates', lang: 'en' },
     { path: 'i18n/05_I18n_Operations_en.html', title: 'Chapter 5 · i18n Architecture and Multilingual Operations', lang: 'en' },
     { path: 'appendix/D_Hermes_Agents_en.html', title: 'Appendix D · Hermes Agents Operations Guide', lang: 'en' },
+    { path: 'appendix/E_Workspace_Architecture_en.html', title: 'Appendix E · Integrated Architecture Map', lang: 'en' },
 
     /* ── JA ── */
     { path: 'intro/00_Prerequisite_Bridge_ja.html', title: '修了者ガイド · 入門コース修了者のためのスキップマップ', lang: 'ja' },
@@ -129,6 +131,7 @@ var SEARCH_DATA = {
     { path: 'design/04_Design_Foundation_ja.html', title: '第4章 · Design FoundationとUI品質ゲート', lang: 'ja' },
     { path: 'i18n/05_I18n_Operations_ja.html', title: '第5章 · i18nアーキテクチャと多言語運用', lang: 'ja' },
     { path: 'appendix/D_Hermes_Agents_ja.html', title: '別添 D · Hermes Agents運用ガイド', lang: 'ja' },
+    { path: 'appendix/E_Workspace_Architecture_ja.html', title: '付録E · 統合アーキテクチャ地図', lang: 'ja' },
 
     /* ── ES ── */
     { path: 'intro/00_Prerequisite_Bridge_es.html', title: 'Guía para Egresados · Mapa de Omisión para Egresados del Curso Introductorio', lang: 'es' },
@@ -170,7 +173,8 @@ var SEARCH_DATA = {
     { path: 'appendix/B_Decision_System_es.html', title: 'Sistema de Decisión', lang: 'es' },
     { path: 'design/04_Design_Foundation_es.html', title: 'Capítulo 4 · Design Foundation y puertas de calidad de UI', lang: 'es' },
     { path: 'i18n/05_I18n_Operations_es.html', title: 'Capítulo 5 · Arquitectura de i18n y operaciones multilingües', lang: 'es' },
-    { path: 'appendix/D_Hermes_Agents_es.html', title: 'Apéndice D · Guía operativa de Hermes Agents', lang: 'es' }
+    { path: 'appendix/D_Hermes_Agents_es.html', title: 'Apéndice D · Guía operativa de Hermes Agents', lang: 'es' },
+    { path: 'appendix/E_Workspace_Architecture_es.html', title: 'Apéndice E · Mapa de arquitectura integrada', lang: 'es' }
   ],
 
   LABELS: {

@@ -1,3 +1,8 @@
+## 2026-10-02
+
+### Added
+- **Appendix E · Integrated Architecture Map** (ko/en/es/ja): one-page workspace diagram (L0–L3 distribution and upgrade, backporting, upstream requests, tickets, co-workspace) with a flow-color reading guide and eight easy-to-miss points; added `docs/assets/img/workspace-architecture.svg`, home-page cards, and previous/next links.
+
 
 ## 2026-09-26
 

@@ -801,6 +801,26 @@
       "path": "appendix/D_Hermes_Agents_ja.html",
       "title": "別添 D · Hermes Agents運用ガイド",
       "lang": "ja"
+    },
+    {
+      "path": "appendix/E_Workspace_Architecture.html",
+      "title": "별첨 E · 통합 아키텍처 지도",
+      "lang": "ko"
+    },
+    {
+      "path": "appendix/E_Workspace_Architecture_en.html",
+      "title": "Appendix E · Integrated Architecture Map",
+      "lang": "en"
+    },
+    {
+      "path": "appendix/E_Workspace_Architecture_es.html",
+      "title": "Apéndice E · Mapa de arquitectura integrada",
+      "lang": "es"
+    },
+    {
+      "path": "appendix/E_Workspace_Architecture_ja.html",
+      "title": "付録E · 統合アーキテクチャ地図",
+      "lang": "ja"
     }
   ]
 }

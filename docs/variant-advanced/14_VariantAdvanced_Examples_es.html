@@ -281,7 +281,7 @@
               <pre class="code-block">bun run agent:verify</pre>
               <button class="copy-btn">Copiar</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Verificación del manifiesto de habilidades</strong> — confirme que las habilidades referenciadas por la variante realmente existen y están desplegadas uniformemente en las cuatro plataformas (.claude/.gemini/.agents/.codex).</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Verificación del manifiesto de habilidades</strong> — confirme que las habilidades referenciadas por la variante realmente existen y están desplegadas uniformemente en las cinco plataformas (.claude/.gemini/.agents/.codex/.hermes).</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
               <button class="copy-btn">Copiar</button>
@@ -401,7 +401,7 @@
         <li>
           <div class="step-content">
             <strong>Confirme manualmente la paridad de plataforma</strong>
-            <p>Use diff para confirmar que los listados de directorios de comandos/habilidades/prompts en <code>.claude/</code>, <code>.gemini/</code>, <code>.agents/</code> y <code>.codex/</code> corresponden entre sí (paridad de cuatro plataformas: Claude/Gemini/Antigravity/Codex).</p>
+            <p>Use diff para confirmar que los listados de directorios de comandos/habilidades/prompts en <code>.claude/</code>, <code>.gemini/</code>, <code>.agents/</code> y <code>.codex/</code> corresponden entre sí (paridad de cinco plataformas: Claude/Gemini/Antigravity/Codex/Hermes &mdash; Hermes se une mediante su espejo <code>.hermes/skills/</code>).</p>
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
 diff &lt;(ls templates/co-retail/.gemini/commands/) &lt;(ls templates/co-retail/.agents/commands/)

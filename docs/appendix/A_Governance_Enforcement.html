@@ -55,8 +55,8 @@
     <thead><tr><th>계층</th><th>수단</th><th>강도</th><th>커버리지</th></tr></thead>
     <tbody>
       <tr><td>1. 훅(Hook)</td><td>결정론적 스크립트(Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>최강 — 게이트를 통과하기 전엔 진행 불가</td><td>Claude Code CLI·Gemini CLI 전 지원, Desktop App 조건부, Antigravity·Codex 미지원</td></tr>
-      <tr><td>2. 프롬프트(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>에 내장된 시스템 지시</td><td>중간 — 에이전트 자기 준수에 의존</td><td>네 플랫폼 모두</td></tr>
-      <tr><td>3. 스킬(Skill)</td><td><code>/gateguard</code> 등 온디맨드 수동 호출</td><td>최약(선택적) — 사람이 실행</td><td>네 플랫폼 모두</td></tr>
+      <tr><td>2. 프롬프트(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>/<code>HERMES.md</code>에 내장된 시스템 지시</td><td>중간 — 에이전트 자기 준수에 의존</td><td>다섯 플랫폼 모두</td></tr>
+      <tr><td>3. 스킬(Skill)</td><td><code>/gateguard</code> 등 온디맨드 수동 호출</td><td>최약(선택적) — 사람이 실행</td><td>다섯 플랫폼 모두</td></tr>
     </tbody>
   </table>
   <p>설계 의도는 명확하다. 가장 강한 훅이 플랫폼마다 지원 편차가 크므로, 훅이 없는 환경에서도 프롬프트 계층이 최소한의 방어를 하고, 스킬 계층이 사람 주도 점검 수단을 남긴다. 한 계층의 실패가 전체 실패가 아니다.</p>

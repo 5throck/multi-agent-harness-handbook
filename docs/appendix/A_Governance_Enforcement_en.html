@@ -55,8 +55,8 @@
     <thead><tr><th>Layer</th><th>Means</th><th>Strength</th><th>Coverage</th></tr></thead>
     <tbody>
       <tr><td>1. Hook</td><td>Deterministic scripts (Claude <code>PreToolUse</code>, Gemini <code>BeforeTool</code>)</td><td>Strongest — cannot proceed until the gate passes</td><td>Claude Code CLI and Gemini CLI full support; Desktop App conditional; Antigravity and Codex unsupported</td></tr>
-      <tr><td>2. Prompt</td><td>System instructions embedded in <code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code></td><td>Medium — relies on agent self-compliance</td><td>All four platforms</td></tr>
-      <tr><td>3. Skill</td><td>On-demand manual invocation such as <code>/gateguard</code></td><td>Weakest (optional) — human-initiated</td><td>All four platforms</td></tr>
+      <tr><td>2. Prompt</td><td>System instructions embedded in <code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>/<code>HERMES.md</code></td><td>Medium — relies on agent self-compliance</td><td>All five platforms</td></tr>
+      <tr><td>3. Skill</td><td>On-demand manual invocation such as <code>/gateguard</code></td><td>Weakest (optional) — human-initiated</td><td>All five platforms</td></tr>
     </tbody>
   </table>
   <p>The design intent is clear. The strongest layer, hooks, has uneven platform support — so where hooks are missing, the prompt layer provides minimum defense, and the skill layer leaves a human-driven inspection tool. The failure of one layer is not the failure of the whole.</p>

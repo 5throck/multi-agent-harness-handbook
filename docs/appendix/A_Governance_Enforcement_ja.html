@@ -55,8 +55,8 @@
     <thead><tr><th>層</th><th>手段</th><th>強度</th><th>カバレッジ</th></tr></thead>
     <tbody>
       <tr><td>1. フック(Hook)</td><td>決定論的スクリプト(Claude <code>PreToolUse</code>、Gemini <code>BeforeTool</code>)</td><td>最強 — ゲートを通過するまで進行不可</td><td>Claude Code CLI・Gemini CLIは完全対応、Desktop Appは条件付き、Antigravity・Codexは未対応</td></tr>
-      <tr><td>2. プロンプト(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>に組み込まれたシステム指示</td><td>中 — エージェントの自己遵守に依存</td><td>4プラットフォームすべて</td></tr>
-      <tr><td>3. スキル(Skill)</td><td><code>/gateguard</code> などのオンデマンド手動呼び出し</td><td>最弱(任意) — 人が実行</td><td>4プラットフォームすべて</td></tr>
+      <tr><td>2. プロンプト(Prompt)</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code>/<code>HERMES.md</code>に組み込まれたシステム指示</td><td>中 — エージェントの自己遵守に依存</td><td>5プラットフォームすべて</td></tr>
+      <tr><td>3. スキル(Skill)</td><td><code>/gateguard</code> などのオンデマンド手動呼び出し</td><td>最弱(任意) — 人が実行</td><td>5プラットフォームすべて</td></tr>
     </tbody>
   </table>
   <p>設計意図は明確だ。最も強いフックはプラットフォームごとの対応差が大きいため、フックのない環境ではプロンプト層が最低限の防御を担い、スキル層が人主導の点検手段を残す。一つの層の失敗が全体の失敗ではない。</p>

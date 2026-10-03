@@ -281,7 +281,7 @@
               <pre class="code-block">bun run agent:verify</pre>
               <button class="copy-btn">Copy</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Skill manifest check</strong> — confirm that the skills referenced by the variant actually exist and are evenly deployed across all four platforms (.claude/.gemini/.agents/.codex).</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② Skill manifest check</strong> — confirm that the skills referenced by the variant actually exist and are evenly deployed across all five platforms (.claude/.gemini/.agents/.codex/.hermes).</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
               <button class="copy-btn">Copy</button>
@@ -401,7 +401,7 @@
         <li>
           <div class="step-content">
             <strong>Manually confirm platform parity</strong>
-            <p>Use diff to confirm that the commands/skills/prompts directory listings across <code>.claude/</code>, <code>.gemini/</code>, <code>.agents/</code>, and <code>.codex/</code> correspond to each other (four-platform parity: Claude/Gemini/Antigravity/Codex).</p>
+            <p>Use diff to confirm that the commands/skills/prompts directory listings across <code>.claude/</code>, <code>.gemini/</code>, <code>.agents/</code>, and <code>.codex/</code> correspond to each other (five-platform parity: Claude/Gemini/Antigravity/Codex/Hermes &mdash; Hermes joins via its <code>.hermes/skills/</code> mirror).</p>
             <div style="position:relative">
               <pre class="code-block">diff <(ls templates/co-retail/.claude/commands/) <(ls templates/co-retail/.gemini/commands/)
 diff <(ls templates/co-retail/.gemini/commands/) <(ls templates/co-retail/.agents/commands/)

@@ -281,7 +281,7 @@
               <pre class="code-block">bun run agent:verify</pre>
               <button class="copy-btn">Copy</button>
             </div>
-            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② スキルマニフェストチェック</strong> — variantが参照するスキルが実際に存在し、4つのプラットフォーム（.claude/.gemini/.agents/.codex）に均等にデプロイされていることを確認する。</p>
+            <p style="font-size:13.5px;color:var(--text-dim);margin:12px 0 6px;"><strong>② スキルマニフェストチェック</strong> — variantが参照するスキルが実際に存在し、5つのプラットフォーム（.claude/.gemini/.agents/.codex/.hermes）に均等にデプロイされていることを確認する。</p>
             <div style="position:relative">
               <pre class="code-block">bun scripts/validate-skills.ts</pre>
               <button class="copy-btn">Copy</button>
@@ -401,7 +401,7 @@
         <li>
           <div class="step-content">
             <strong>プラットフォームパリティを手動で確認する</strong>
-            <p>diffを使用して、<code>.claude/</code>・<code>.gemini/</code>・<code>.agents/</code>・<code>.codex/</code>のcommands/skills/promptsディレクトリ一覧が対応していることを確認する（Claude/Gemini/Antigravity/Codexの4プラットフォームパリティ）。</p>
+            <p>diffを使用して、<code>.claude/</code>・<code>.gemini/</code>・<code>.agents/</code>・<code>.codex/</code>のcommands/skills/promptsディレクトリ一覧が対応していることを確認する（Claude/Gemini/Antigravity/Codex/Hermesの5プラットフォームパリティ &mdash; Hermesは<code>.hermes/skills/</code>ミラーで参加）。</p>
             <div style="position:relative">
               <pre class="code-block">diff &lt;(ls templates/co-retail/.claude/commands/) &lt;(ls templates/co-retail/.gemini/commands/)
 diff &lt;(ls templates/co-retail/.gemini/commands/) &lt;(ls templates/co-retail/.agents/commands/)

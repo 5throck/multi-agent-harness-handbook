@@ -93,7 +93,7 @@
   <pre class="code-block">---
 name: pm                       # pm, code-writer, automation-engineer ...
 tier:                          # プラットフォームごとのモデルエイリアス（実行時に変換される）
-  claude: high                 #   high = claude-opus-5-0
+  claude: high                 #   high = claude-opus-5-5
   antigravity: high            #   high = gemini-3.1-pro
   codex: high                  #   high = gpt-5.6-sol
 ---</pre>
@@ -106,9 +106,9 @@ tier:                          # プラットフォームごとのモデルエ�
   <table>
     <thead><tr><th>ティア</th><th>目的</th><th>Claude系の例</th><th>Antigravity系の例</th><th>Codex系の例</th></tr></thead>
     <tbody>
-      <tr><td><strong>High</strong></td><td>複雑な推論、アーキテクチャ設計、計画立案</td><td>claude-opus-5-0</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
-      <tr><td><strong>Medium</strong></td><td>コードレビュー、テスト、PRレビュー、品質ゲート</td><td>claude-sonnet-5-0</td><td>gemini-3.7-flash</td><td>gpt-5.6-terra</td></tr>
-      <tr><td><strong>Low</strong></td><td>高速で反復的なコーディング、スクリプト保守</td><td>claude-haiku-4-5</td><td>gemini-3.7-flash</td><td>gpt-5.6-luna</td></tr>
+      <tr><td><strong>High</strong></td><td>複雑な推論、アーキテクチャ設計、計画立案</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
+      <tr><td><strong>Medium</strong></td><td>コードレビュー、テスト、PRレビュー、品質ゲート</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td></tr>
+      <tr><td><strong>Low</strong></td><td>高速で反復的なコーディング、スクリプト保守</td><td>claude-haiku-4-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
     </tbody>
   </table>
   </div>
@@ -129,15 +129,15 @@ tier:                          # プラットフォームごとのモデルエ�
     Tier Ceiling Ruleは「この作業に最も適したティア以上を割り当てるな」ではなく、「このエージェントの定義されたティア以上を使うな」である。役割ベースであって作業ベースではない。
   </div>
 
-  <h2 id="platform-parity">プラットフォームパリティ — .claude/・.gemini/・.agents/・.codex/を構造的に同一に保つ方法</h2>
-  <p>このリポジトリは4つのプラットフォームを同時にサポートする — Claude Code（<code>.claude/</code>）、Gemini CLI（<code>.gemini/</code>）、Antigravity（<code>.agents/</code>）、Codex（<code>.codex/</code>）。プラットフォームディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。スキル層は<code>skills/</code>が単一の情報源（SSOT）であり、<code>sync-skills.ts</code>がこれを4つのプラットフォームディレクトリすべてへ配布する。構造的なずれを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
-  <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>とCodex用の<code>.codex/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「4プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第13章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。4つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
+  <h2 id="platform-parity">プラットフォームパリティ — .claude/・.gemini/・.agents/・.codex/・.hermes/を構造的に同一に保つ方法</h2>
+  <p>このリポジトリは5つのプラットフォームを同時にサポートする — Claude Code（<code>.claude/</code>）、Gemini CLI（<code>.gemini/</code>）、Antigravity（<code>.agents/</code>）、Codex（<code>.codex/</code>）、Hermes（<code>.hermes/</code>）。プラットフォームディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。スキル層は<code>skills/</code>が単一の情報源（SSOT）であり、<code>sync-skills.ts</code>がこれを5つのプラットフォームディレクトリすべてへ配布する。構造的なずれを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
+  <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>とCodex用の<code>.codex/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「5プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第13章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。5つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
 
   <h2 id="graft-fleet-integration">graft — マルチプラットフォームフリートのためのリポジトリ文脈グラフ</h2>
   <p><strong>graft</strong>（<code>@nanonets/graft</code>）は、リポジトリ向けにあらかじめ構築しておく文脈グラフである。コードベースを、正確な<code>file:line</code>範囲を持つ小さく相互リンクされた<code>graft/</code>マークダウンカードへと索引化し、誰が何を呼び出すかのコールグラフも併せて生成する。狙いは速度である。大きなモノレポを探索するエージェントは<code>graft ask "&lt;question&gt;"</code>や<code>graft callers &lt;symbol&gt;</code>を尋ねるだけで、毎ターン同じ文脈を再構築するためにgrepを繰り返しファイル全体を開く代わりに、ソース範囲が埋め込まれた順位付け済みの事前計算された回答を得られる。graftは2026-09-06からワークスペースのルートで稼働していたが、<strong>ADR-0076</strong>以前は手作業で接続されており、Claude Code専用だった。</p>
   <p>2026-09-12のフリート調査（設計文書：<code>2026-09-12-graft-multiplatform-rollout-design.md</code>）により、実際のカバレッジは見た目よりはるかに狭いことが判明した。<code>templates/common</code>はgraftのスキルファイルとGemini MCPエントリしか配布しておらず、新しくスキャフォールドされたプロジェクトはGemini CLI/Antigravity向けのgraftしか得られず、同じプロジェクトのClaude Code側にはgraftのソースが一切なかった。11プロジェクトのフリート全体で事実上graftはゼロだった。これは<code>.claude/skills/**</code>が通常<code>sync-skills.ts</code>のプラットフォームミラールールに管理される領域である一方、graftのスキルは意図的にSSOTである<code>skills/</code>ディレクトリの外に置かれているため、どのアップグレードパスもこれを届けたことがなかったからである。さらに、同じMCPサーバーがどの設定ファイルを見るかによって<code>npx</code>・<code>bunx</code>・ネイティブバイナリという3つの異なる方法で起動されており、Codex/Antigravity/Claude Desktopに対するホストカバレッジは文書化されず暗黙のままだった。</p>
   <p><strong>ADR-0076</strong>はホストごとの配布マトリクスでこのギャップを埋める。プロジェクト単位の設定をサポートするホストにはリポジトリレベルのMCP登録を行い（Claude Codeの<code>.mcp.json</code>、Gemini/Antigravityの<code>.gemini/settings.json</code>、Codexの<code>.codex/config.toml</code>、OpenCodeの<code>opencode.json</code>）、<code>AGENTS.md</code>/<code>CLAUDE.md</code>/<code>GEMINI.md</code>に指示ブロックを追加し、プロジェクトスコープを持たないホストにはマシングローバル登録を用いる（Antigravityは<code>graft init --agents antigravity</code>によるグローバルレジストリ、Claude Desktopはこのホストが作業ディレクトリを渡せず絶対パスのリポジトリパスが必要なため、手書きの<code>claude_desktop_config.json</code>エントリ）。<code>bunx @nanonets/graft mcp</code>がすべてのプラットフォームで共通にコミットされる標準ランチャーとなり、マシングローバル設定ではネイティブバイナリも引き続き使用できる。</p>
-  <p>既存フリートへの配布は、一回限りの移行パスではなく、第10章§2で扱った同じポリシー駆動アップグレードエンジンに乗って行われる。<code>.mcp.json</code>/<code>opencode.json</code>は<code>JSON_MERGE_FILES</code>分類に加わり（そのためプロジェクト固有のMCPサーバーはマージ後も残る）、<code>.claude/skills/graft/**</code>は通常のプラットフォームミラールールより先に同期されるよう特別扱いされ（そのルールはそもそもSSOTの外にあるスキルには届かないため）、<code>.codex/**</code>は<code>ADD_IF_MISSING</code>としてシードされ、既に自前の<code>config.toml</code>を持つプロジェクトは既存の内容を維持する。graftスキル自体はSSOTへ移さずClaude専用のまま残り、ルートと<code>templates/common</code>の2箇所でバイト単位で同一のコピーを手動で維持する。SSOTへ移すと<code>sync-skills.ts</code>がそれをGemini/Antigravity自身のスキルディレクトリへミラーしてしまい、このツールについてワークスペースが意図的に固定しているシングルプラットフォーム設計を壊してしまうためである。鮮度（freshness）は意図的に手動のままにされている（graftのツールは回答前に自ら再更新し、CIやプッシュ前の鮮度ゲートは存在しない）。</p>
+  <p>既存フリートへの配布は、一回限りの移行パスではなく、第10章§2で扱った同じポリシー駆動アップグレードエンジンに乗って行われる。<code>.mcp.json</code>/<code>opencode.json</code>は<code>JSON_MERGE_FILES</code>分類に加わり（そのためプロジェクト固有のMCPサーバーはマージ後も残る）、<code>.claude/skills/graft/**</code>は通常のプラットフォームミラールールより先に同期されるよう特別扱いされ（そのルールはそもそもSSOTの外にあるスキルには届かないため）、<code>.codex/**</code>は<code>ADD_IF_MISSING</code>としてシードされ、既に自前の<code>config.toml</code>を持つプロジェクトは既存の内容を維持する。ロールアウト時点では、graftスキル自体はSSOTへ移さずClaude専用のまま残し、ルートと<code>templates/common</code>の2箇所でバイト単位で同一のコピーを手動で維持していた。移すと<code>sync-skills.ts</code>がそれをGemini/Antigravity自身のスキルディレクトリへミラーしてしまい、当時このツールについてワークスペースが固定していたシングルプラットフォーム設計を壊してしまうためである。<strong>更新（2026-10-01、ADR-0076修正1）</strong>：この例外は廃止された — 現在<code>skills/graft/SKILL.md</code>は通常のSSOTスキルとして<code>sync-skills.ts</code>が5つのプラットフォームディレクトリすべてへミラーし、graft専用の特別扱い（テンプレートツリー同期ルール、パリティスイープ除外、バイト同一性検査）は削除された。鮮度（freshness）は意図的に手動のままにされている（graftのツールは回答前に自ら再更新し、CIやプッシュ前の鮮度ゲートは存在しない）。</p>
 
   <h2 id="universal-design-gate">ユニバーサルデザインゲート — L0～L3全体でスペックゲートを均一にする</h2>
   <p>第10章§4では、下記の<a href="#execution-plan-templates">実行計画テンプレート</a>においてL0/L1実行計画のデザインゲート（0番行）と、それを同期時のFATALブロッカーとして強制するスペックチェック（ADR-0055 Stage 2）をすでに紹介している。この節で扱う2つのADRは、同じガバナンス概念を異なる方向へ拡張するものであり、両者を区別しておく価値がある。</p>

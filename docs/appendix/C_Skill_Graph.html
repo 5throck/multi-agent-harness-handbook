@@ -133,7 +133,7 @@
   <h2 id="a6-pipeline">생성 파이프라인</h2>
   <p>그래프는 네 지점에서 파이프라인과 맞물린다.</p>
   <ul>
-    <li><code>scripts/generate-skill-graph.ts</code> — 원천을 훑어 <code>skill-graph.json</code>/<code>.md</code>를 생성. <code>--scope &lt;name&gt;</code>으로 템플릿별 범위 그래프를 만든다(공통 + 각 variant, 총 14개 스코프).</li>
+    <li><code>scripts/generate-skill-graph.ts</code> — 원천을 훑어 <code>skill-graph.json</code>/<code>.md</code>를 생성. 그래프는 스키마 v2이며 노드 id에 스코프가 포함된다(예: <code>skill:co-abap/abap-dev</code>). <code>--scope &lt;name&gt;</code>으로 템플릿별 범위 그래프를 만든다(공통 + 각 variant, 총 15개 스코프).</li>
     <li><code>scripts/verify-skill-graph.ts</code> — 커밋된 그래프가 원천과 일치하는지(드리프트)와 불변식을 검증.</li>
     <li><code>dev-sync.ts</code> 4.65단계 — 매 <code>/sync</code>마다 전 스코프 그래프를 재생성하고 드리프트를 확인. "그래프를 고르는 작업"이 커밋 흐름에 녹아 있다.</li>
     <li><code>new-project.ts</code> 7.6단계 — 새 프로젝트 스캐폴딩 시점에 그 프로젝트의 <code>docs/skill-graph.json</code>을 즉시 생성. 첫 <code>/sync</code>를 기다리게 하지 않는다.</li>

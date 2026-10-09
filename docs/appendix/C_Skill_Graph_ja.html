@@ -133,7 +133,7 @@
   <h2 id="a6-pipeline">生成パイプライン</h2>
   <p>グラフは四つの場所でパイプラインと噛み合う。</p>
   <ul>
-    <li><code>scripts/generate-skill-graph.ts</code> — 原典を走査して <code>skill-graph.json</code>/<code>.md</code> を生成。<code>--scope &lt;name&gt;</code> でテンプレート別スコープグラフを作る(共通+各variant、計14スコープ)。</li>
+    <li><code>scripts/generate-skill-graph.ts</code> — 原典を走査して <code>skill-graph.json</code>/<code>.md</code> を生成。グラフはスキーマv2で、ノードidはスコープ込み（例: <code>skill:co-abap/abap-dev</code>）。<code>--scope &lt;name&gt;</code> でテンプレート別スコープグラフを作る(共通+各variant、計15スコープ)。</li>
     <li><code>scripts/verify-skill-graph.ts</code> — コミット済みグラフが原典と一致するか(ドリフト)と不変式を検証。</li>
     <li><code>dev-sync.ts</code> ステップ4.65 — <code>/sync</code> のたびに全スコープのグラフを再生成しドリフト確認。「グラフを最新に保つ作業」がコミットフローに組み込まれている。</li>
     <li><code>new-project.ts</code> ステップ7.6 — 新規プロジェクトのスキャフォールディング時に、そのプロジェクトの <code>docs/skill-graph.json</code> を即座に生成。最初の <code>/sync</code> を待たせない。</li>

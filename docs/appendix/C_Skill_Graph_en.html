@@ -133,7 +133,7 @@
   <h2 id="a6-pipeline">Generation Pipeline</h2>
   <p>The graph interlocks with the pipeline at four points.</p>
   <ul>
-    <li><code>scripts/generate-skill-graph.ts</code> — scans sources and produces <code>skill-graph.json</code>/<code>.md</code>. <code>--scope &lt;name&gt;</code> creates a per-template scoped graph (common + each variant, 14 scopes in total).</li>
+    <li><code>scripts/generate-skill-graph.ts</code> — scans sources and produces <code>skill-graph.json</code>/<code>.md</code>. The graph is schema v2 &mdash; node ids are scope-qualified (e.g. <code>skill:co-abap/abap-dev</code>). <code>--scope &lt;name&gt;</code> creates a per-template scoped graph (common + each variant, 15 scopes in total).</li>
     <li><code>scripts/verify-skill-graph.ts</code> — verifies the committed graph against its sources (drift) and invariants.</li>
     <li><code>dev-sync.ts</code> step 4.65 — regenerates and drift-checks all scope graphs on every <code>/sync</code>. Keeping the graph current is baked into the commit flow.</li>
     <li><code>new-project.ts</code> step 7.6 — generates the project's <code>docs/skill-graph.json</code> at scaffold time, without waiting for the first <code>/sync</code>.</li>

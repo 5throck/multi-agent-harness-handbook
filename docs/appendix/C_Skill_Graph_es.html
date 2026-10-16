@@ -133,7 +133,7 @@
   <h2 id="a6-pipeline">Pipeline de Generación</h2>
   <p>El grafo se engarza con el pipeline en cuatro puntos.</p>
   <ul>
-    <li><code>scripts/generate-skill-graph.ts</code> — escanea las fuentes y produce <code>skill-graph.json</code>/<code>.md</code>. <code>--scope &lt;name&gt;</code> crea un grafo de ámbito por plantilla (común + cada variante, 14 ámbitos en total).</li>
+    <li><code>scripts/generate-skill-graph.ts</code> — escanea las fuentes y produce <code>skill-graph.json</code>/<code>.md</code>. El grafo usa el esquema v2 &mdash; los ids de nodo incluyen el ámbito (p. ej. <code>skill:co-abap/abap-dev</code>). <code>--scope &lt;name&gt;</code> crea un grafo de ámbito por plantilla (común + cada variante, 15 ámbitos en total).</li>
     <li><code>scripts/verify-skill-graph.ts</code> — verifica el grafo confirmado contra sus fuentes (deriva) y las invariantes.</li>
     <li><code>dev-sync.ts</code> paso 4.65 — regenera y comprueba la deriva de todos los grafos de ámbito en cada <code>/sync</code>. Mantener el grafo al día está integrado en el flujo de commits.</li>
     <li><code>new-project.ts</code> paso 7.6 — genera el <code>docs/skill-graph.json</code> del proyecto en el momento del scaffolding, sin esperar al primer <code>/sync</code>.</li>

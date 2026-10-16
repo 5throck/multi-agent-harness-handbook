@@ -62,11 +62,12 @@
   <p>If the output looks fine, run it again without <code>--dry-run</code>.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
-# Optional flags: --variant &lt;variant&gt;  --platform claude|antigravity|codex|all
+# Optional flags: --variant &lt;variant&gt;  --platform all|claude|antigravity|codex|hermes (comma list ok)
 #            --prune-removed  --rollback</pre>
   <button class="copy-btn">Copy</button>
 </div>
-  <p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly.</p>
+  <p><code>--platform</code> follows ADR-0100 (2026-10-10): it takes <code>all</code> (default), a single profile (<code>claude</code>, <code>antigravity</code>, <code>codex</code>, <code>hermes</code>), or a comma-separated list such as <code>claude,codex</code>, and keeps the union of the selected profiles' files while pruning the rest. The breaking change to know: a single <code>codex</code> no longer keeps <code>CLAUDE.md</code>/<code>GEMINI.md</code> — pass <code>codex,claude,antigravity</code> for that (the legacy <code>both</code> value is treated as <code>all</code> with a warning).</p>
+<p><code>--variant</code> is usually unnecessary since it's read automatically from the value recorded in the project's <code>.claude/template-version.txt</code>. For older projects that lack this file, the script prompts for confirmation at runtime and you'll need to specify <code>--variant</code> directly.</p>
 
   <h2 id="categories">The main file-handling categories</h2>
   <p>The script treats files differently depending on their nature — it isn't a blanket "overwrite everything with the new version."</p>
@@ -79,7 +80,7 @@
       <tr><td><strong>MERGE</strong></td><td>Only the sections wrapped in <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code> markers are merged; the rest of the local content is preserved as-is</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code> (depending on <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
       <tr><td><strong>DOCS_MERGE</strong></td><td>Applies the same managed-block merge to docs — only documents without markers are overwritten wholesale as an exception (added in v1.7.0)</td><td><code>AGENTS.md</code>, <code>docs/&lt;variant&gt;.context.md</code>, <code>docs/phase-definitions.md</code></td></tr>
       <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>Updated only when the file's inline <code>*&lt;filename&gt; version: X.Y</code> footer version (or hash, if absent) is older than the template's (added in v1.7.0)</td><td><code>docs/context.md</code> (since v1.9.0), <code>docs/engagement-orchestration.md</code>, <code>docs/team-configuration-guide.md</code></td></tr>
-      <tr><td><strong>COMMANDS_SYNC</strong></td><td>Synchronizes platform command files with the template's content whenever their hashes differ (added in v1.7.0)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.md</code></td></tr>
+      <tr><td><strong>COMMANDS_SYNC</strong></td><td>Synchronizes platform command files with the template's content whenever their hashes differ (added in v1.7.0)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.toml</code> (rendered by <code>bun scripts/render-commands.ts</code>)</td></tr>
       <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copied only when the template version is newer than the project's version</td><td><code>scripts/*.ts</code> (<code>@version</code> comment, including JSDoc headers), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
       <tr><td><strong>PRESERVE</strong></td><td>Listed only, never touched</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>src/</code></td></tr>
       <tr><td><strong>PRUNE (optional)</strong></td><td>When <code>--prune-removed</code> is specified, scripts/agents/skills files that were removed from the template are also removed from the project</td><td>Same directories as the SYNC_IF_NEWER targets above</td></tr>

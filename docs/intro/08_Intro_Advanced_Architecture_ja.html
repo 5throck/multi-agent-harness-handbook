@@ -108,7 +108,7 @@ tier:                          # プラットフォームごとのモデルエ�
     <tbody>
       <tr><td><strong>High</strong></td><td>複雑な推論、アーキテクチャ設計、計画立案</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
       <tr><td><strong>Medium</strong></td><td>コードレビュー、テスト、PRレビュー、品質ゲート</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td></tr>
-      <tr><td><strong>Low</strong></td><td>高速で反復的なコーディング、スクリプト保守</td><td>claude-haiku-4-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
+      <tr><td><strong>Low</strong></td><td>高速で反復的なコーディング、スクリプト保守</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
     </tbody>
   </table>
   </div>
@@ -132,6 +132,8 @@ tier:                          # プラットフォームごとのモデルエ�
   <h2 id="platform-parity">プラットフォームパリティ — .claude/・.gemini/・.agents/・.codex/・.hermes/を構造的に同一に保つ方法</h2>
   <p>このリポジトリは5つのプラットフォームを同時にサポートする — Claude Code（<code>.claude/</code>）、Gemini CLI（<code>.gemini/</code>）、Antigravity（<code>.agents/</code>）、Codex（<code>.codex/</code>）、Hermes（<code>.hermes/</code>）。プラットフォームディレクトリが時間の経過とともにずれると（例えば<code>.claude/agents/reviewer.md</code>は存在するのに<code>.gemini/agents/reviewer.md</code>が欠けていると）、片方のツールを使うユーザーだけが特定の機能を使えなくなる問題が生じる。スキル層は<code>skills/</code>が単一の情報源（SSOT）であり、<code>sync-skills.ts</code>がこれを5つのプラットフォームディレクトリすべてへ配布する。構造的なずれを防ぐ仕組みが<code>validate-templates.ts</code>の<strong>プラットフォームパリティ検査</strong>である。</p>
   <p>ただし検査のスコープには微妙な違いがある。<code>validate-templates.ts</code>はコマンドなどのテンプレート構造を<code>.claude/</code>と<code>.gemini/</code>の2ディレクトリに対してのみ照合し（Antigravity用の<code>.agents/</code>とCodex用の<code>.codex/</code>ツリーは独自の同期経路で管理される）、スキルの内容そのものはSSOTである<code>skills/</code>を<code>validate-skills.ts</code>が検証する。つまり「5プラットフォームが同じ機能を提供するか」は、配布スクリプトとSSOT検証の組み合わせで保証される。第13章で扱う昇格（promote）パイプラインもパリティ検査を昇格前の必須ゲートとして含むため、一部のプラットフォーム用だけ作って他を見忘れた状態では、そもそも正式なvariant（バリアント）になれない。5つのプラットフォームが異なる実行方式を使っていても、<strong>提供する機能一覧そのものは常に同じでなければならない</strong>という原則を構造検査によって強制しているのである。</p>
+
+  <p><strong>最新情報（2026-10）</strong> &mdash; コマンドパリティのGemini側は、手書きではなく生成されるようになりました。Gemini CLIが読み込むのはTOMLコマンドのみのため、<code>.gemini/commands/&lt;name&gt;.toml</code> ファイルは <code>.claude/commands/&lt;name&gt;.md</code> のSSOTから <code>bun scripts/render-commands.ts</code> で生成され、<code>bun scripts/render-commands.ts --check</code> がドリフトを検出するとCIが失敗します（旧 <code>.md</code> コピーはテンプレートから削除されました）。</p>
 
   <h2 id="graft-fleet-integration">graft — マルチプラットフォームフリートのためのリポジトリ文脈グラフ</h2>
   <p><strong>graft</strong>（<code>@nanonets/graft</code>）は、リポジトリ向けにあらかじめ構築しておく文脈グラフである。コードベースを、正確な<code>file:line</code>範囲を持つ小さく相互リンクされた<code>graft/</code>マークダウンカードへと索引化し、誰が何を呼び出すかのコールグラフも併せて生成する。狙いは速度である。大きなモノレポを探索するエージェントは<code>graft ask "&lt;question&gt;"</code>や<code>graft callers &lt;symbol&gt;</code>を尋ねるだけで、毎ターン同じ文脈を再構築するためにgrepを繰り返しファイル全体を開く代わりに、ソース範囲が埋め込まれた順位付け済みの事前計算された回答を得られる。graftは2026-09-06からワークスペースのルートで稼働していたが、<strong>ADR-0076</strong>以前は手作業で接続されており、Claude Code専用だった。</p>

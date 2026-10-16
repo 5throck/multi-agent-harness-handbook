@@ -62,11 +62,12 @@
   <p>Si el resultado se ve bien, ejecútalo nuevamente sin <code>--dry-run</code>.</p>
   <div style="position:relative">
   <pre class="code-block">bun scripts/upgrade-project.ts &lt;project-path&gt;
-# Opciones opcionales: --variant &lt;variant&gt;  --platform claude|antigravity|codex|all
+# Opciones opcionales: --variant &lt;variant&gt;  --platform all|claude|antigravity|codex|hermes (comma list ok)
 #            --prune-removed  --rollback</pre>
   <button class="copy-btn">Copiar</button>
 </div>
-  <p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente.</p>
+  <p><code>--platform</code> sigue ADR-0100 (2026-10-10): acepta <code>all</code> (por defecto), un perfil (<code>claude</code>, <code>antigravity</code>, <code>codex</code>, <code>hermes</code>) o una lista separada por comas como <code>claude,codex</code>, y conserva la unión de los archivos de los perfiles seleccionados podando el resto. El cambio importante: un solo <code>codex</code> ya no conserva <code>CLAUDE.md</code>/<code>GEMINI.md</code>; pasa <code>codex,claude,antigravity</code> para eso (el antiguo <code>both</code> se trata como <code>all</code> con una advertencia).</p>
+<p><code>--variant</code> generalmente no es necesario ya que se lee automáticamente del valor registrado en el <code>.claude/template-version.txt</code> del proyecto. Para proyectos antiguos que carecen de este archivo, el script solicita confirmación en tiempo de ejecución y necesitarás especificar <code>--variant</code> directamente.</p>
 
   <h2 id="categories">Las categorías principales de manejo de archivos</h2>
   <p>El script trata los archivos de manera diferente según su naturaleza — no es un "sobrescribir todo con la nueva versión" indiscriminado.</p>
@@ -79,7 +80,7 @@
       <tr><td><strong>MERGE</strong></td><td>Solo se fusionan las secciones envueltas en marcadores <code>WORKSPACE-MANAGED</code>/<code>COMMON-CLAUDE</code>/<code>COMMON-GEMINI</code>/<code>COMMON-AGENTS</code>/<code>VARIANT-INJECT</code>/<code>DYNAMIC_SKILLS</code>; el resto del contenido local se conserva tal cual</td><td><code>CLAUDE.md</code>/<code>GEMINI.md</code>/<code>CODEX.md</code> (según <code>--platform</code>), <code>.gitignore</code>, <code>agents/pm.md</code></td></tr>
       <tr><td><strong>DOCS_MERGE</strong></td><td>Aplica la misma fusión por bloques marcados a los documentos — solo los documentos sin marcadores se sobrescriben por completo como excepción (añadido en v1.7.0)</td><td><code>AGENTS.md</code>, <code>docs/&lt;variant&gt;.context.md</code>, <code>docs/phase-definitions.md</code></td></tr>
       <tr><td><strong>VARIANT_DOCS_SYNC</strong></td><td>Se actualiza solo cuando la versión del pie de página inline <code>*&lt;nombre-archivo&gt; version: X.Y</code> del archivo (o el hash, si está ausente) es más antigua que la de la plantilla (añadido en v1.7.0)</td><td><code>docs/context.md</code> (desde v1.9.0), <code>docs/engagement-orchestration.md</code>, <code>docs/team-configuration-guide.md</code></td></tr>
-      <tr><td><strong>COMMANDS_SYNC</strong></td><td>Sincroniza los archivos de comandos de la plataforma con el contenido de la plantilla siempre que sus hashes difieran (añadido en v1.7.0)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.md</code></td></tr>
+      <tr><td><strong>COMMANDS_SYNC</strong></td><td>Sincroniza los archivos de comandos de la plataforma con el contenido de la plantilla siempre que sus hashes difieran (añadido en v1.7.0)</td><td><code>.claude/commands/*.md</code>, <code>.gemini/commands/*.toml</code> (generado con <code>bun scripts/render-commands.ts</code>)</td></tr>
       <tr><td><strong>SYNC_IF_NEWER</strong></td><td>Copiados solo cuando la versión de la plantilla es más reciente que la versión del proyecto</td><td><code>scripts/*.ts</code> (comentario <code>@version</code>, incluidos encabezados JSDoc), <code>agents/*.md</code> (frontmatter <code>version:</code>), <code>skills/*/SKILL.md</code></td></tr>
       <tr><td><strong>PRESERVE</strong></td><td>Solo se listan, nunca se tocan</td><td><code>README.md</code>, <code>README_ko.md</code>, <code>src/</code></td></tr>
       <tr><td><strong>PRUNE (opcional)</strong></td><td>Cuando se especifica <code>--prune-removed</code>, los archivos de scripts/agents/skills que fueron eliminados de la plantilla también se eliminan del proyecto</td><td>Los mismos directorios que los objetivos SYNC_IF_NEWER anteriores</td></tr>

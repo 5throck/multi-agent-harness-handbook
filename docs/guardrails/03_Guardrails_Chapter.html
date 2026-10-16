@@ -320,6 +320,8 @@
 
   <div class="note">한 문장으로 요약하면: 가드레일은 <strong>위험도에 따라 권한을 차등 부여(§2·§3)</strong>하고, <strong>돌이킬 수 없는 지점 앞에서는 반드시 사람이 확인(§4)</strong>하며, <strong>병렬 작업은 물리적으로 격리(§5)</strong>하고, <strong>모든 것이 실패했을 때를 대비해 기록을 남기는(§6)</strong> 네 가지 습관이다. 6장부터는 이 원칙을 실제 실습 코드 안에 적용해 가며 진행한다.</div>
 
+  <div class="note"><strong>새 소식(2026-10)</strong> — 업스트림 워크스페이스에 이 장과 함께 읽을 만한 가드레일 가이드 셋이 새로 생겼습니다. <code>docs/guides/agent-shell-hardening.md</code>(문서는 통제가 아니라 안내일 뿐 — 강제 계층은 서버 권한 &gt; 기능 플래그 &gt; 프록시 게이트 순서이며, 승인 기록은 에이전트가 닿을 수 없는 곳에 HMAC 서명·TTY 확인으로 두고, 분류되지 않은 도구는 "묻기"로 실패 닫힘), <code>docs/guides/parallel-dispatch-grants.md</code>(계획 행을 read/write로 타입화하고, 하나의 사람 승인이 한 실행을 묶으며 실행 종료 시 회수, 행별 git worktree 분리, SIGTERM &rarr; 10초 유예 &rarr; SIGKILL의 단계적 종료), <code>docs/guides/record-lifecycle-hygiene.md</code>(결정이 참조하는 레코드는 삭제 대신 보관(archive), 정리 기능은 "N개 항목이 제거됩니다"가 아니라 실행 대상 집합을 정확히 나열해야 함)입니다.</div>
+
   <div class="chapter-nav">
     <a href="../concepts/02_Concepts_Chapter.html" class="prev"><div class="dir">← 이전 장</div><div class="ttl">2장 · 하네스 엔지니어링과 멀티 에이전트팀 개념</div></a>
     <a href="../warm-up/00_Warmup_Tetris_Pacman.html" class="next"><div class="dir">다음 →</div><div class="ttl">워밍업 실습 · 테트리스에서 팩맨까지</div></a>

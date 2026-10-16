@@ -108,11 +108,11 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
     <tbody>
       <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
       <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td></tr>
-      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-4-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
+      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
     </tbody>
   </table>
   </div>
-  <p><strong>새 소식(2026-09)</strong> &mdash; 예시 모델은 현재 레지스트리(<code>AGENTS.md</code> &sect;3.6)를 따릅니다. High와 Medium은 각각 <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>로 매핑되고, Gemini 두 행은 모두 <code>gemini-3.8-flash</code>입니다. 플랫폼 패리티도 다섯 번째 디렉터리를 포함합니다 &mdash; Hermes 플랫폼과 함께 <code>.hermes/</code>가 합류했습니다(ADR-0088).</p>
+  <p><strong>새 소식(2026-09)</strong> &mdash; 예시 모델은 현재 레지스트리(<code>AGENTS.md</code> &sect;3.6)를 따릅니다. High와 Medium은 각각 <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>로 매핑되고, Gemini 두 행은 모두 <code>gemini-3.8-flash</code>입니다. 플랫폼 패리티도 다섯 번째 디렉터리를 포함합니다 &mdash; Hermes 플랫폼과 함께 <code>.hermes/</code>가 합류했습니다(ADR-0088). 2026-10에는 Low 티어 예시가 <code>claude-haiku-5-5</code>로 바뀌었고(별칭 <code>haiku</code>는 유지), 스킬은 모델 ID 리터럴을 하드코딩할 수 없게 되었습니다. 레지스트리 ID는 <code>docs/workspace-schema.json</code>(<code>models.*</code>)에만 두며, 모델 변경은 <code>model-migration</code> 스킬로 진행합니다.</p>
   <p>이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다. 기준선이 high인 에이전트(architect)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
 
   <h3>Tier Adjustment Rules — 실행 시 비용 최적화</h3>
@@ -133,6 +133,8 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <h2 id="platform-parity">플랫폼 패리티 — .claude/, .gemini/, .agents/, .codex/, .hermes/를 구조적으로 동일하게 유지하는 법</h2>
   <p>이 저장소는 다섯 플랫폼을 동시에 지원한다 — Claude Code(<code>.claude/</code>), Gemini CLI(<code>.gemini/</code>), Antigravity(<code>.agents/</code>), Codex(<code>.codex/</code>), Hermes(<code>.hermes/</code>). 플랫폼 디렉터리들이 시간이 지나면서 어긋나면(예: <code>.claude/agents/reviewer.md</code>는 있는데 <code>.gemini/agents/reviewer.md</code>는 빠져 있으면) 한쪽 도구 사용자만 특정 기능을 못 쓰게 되는 문제가 생긴다. 스킬 계층은 <code>skills/</code>가 단일 출처(SSOT)이며, <code>sync-skills.ts</code>가 이를 다섯 플랫폼 디렉터리 모두에 배포한다. 구조적 어긋남을 막는 장치가 <code>validate-templates.ts</code>의 <strong>플랫폼 패리티 검사</strong>다.</p>
   <p>다만 검사 스코프에는 미묘한 차이가 있다. <code>validate-templates.ts</code>는 커맨드 등 템플릿 구조를 <code>.claude/</code>와 <code>.gemini/</code> 두 디렉터리에 대해서만 대조하고(Antigravity용 <code>.agents/</code>와 Codex용 <code>.codex/</code> 트리는 별도 동기화 경로로 운영된다), 스킬 내용 자체는 SSOT인 <code>skills/</code>를 <code>validate-skills.ts</code>가 검사한다. 즉 "다섯 플랫폼이 같은 기능을 제공하는가"는 배포 스크립트와 SSOT 검증의 조합으로 보장된다. 13장에서 다루는 승격(promote) 파이프라인도 패리티 검사를 승격 전 필수 게이트로 포함하고 있어서, 한 플랫폼용으로만 만들고 다른 플랫폼을 깜빡한 상태로는 애초에 정식 베리언트(variant)가 될 수 없다. 다섯 플랫폼이 서로 다른 실행 방식을 쓰더라도, <strong>제공하는 기능 목록 자체는 항상 같아야 한다</strong>는 원칙을 구조 검사로 강제하는 것이다.</p>
+
+  <p><strong>새 소식(2026-10)</strong> &mdash; 명령 패리티의 Gemini 쪽은 이제 손으로 쓰지 않고 렌더링합니다. Gemini CLI는 TOML 명령만 읽으므로, <code>.gemini/commands/&lt;name&gt;.toml</code> 파일을 <code>.claude/commands/&lt;name&gt;.md</code> SSOT에서 <code>bun scripts/render-commands.ts</code>로 생성하며, <code>bun scripts/render-commands.ts --check</code>가 드리프트를 감지하면 CI가 실패합니다(구식 <code>.md</code> 사본은 템플릿에서 제거되었습니다).</p>
 
   <h2 id="graft-fleet-integration">graft — 다중 플랫폼 플릿을 위한 저장소 맥락 그래프</h2>
   <p><strong>graft</strong>(<code>@nanonets/graft</code>)는 저장소용으로 미리 만들어 두는 맥락 그래프다. 코드베이스를 정확한 <code>file:line</code> 범위를 담은 작고 서로 연결된 <code>graft/</code> 마크다운 카드들로 색인하고, 누가 무엇을 호출하는지에 대한 콜 그래프도 함께 만든다. 핵심은 속도다. 큰 모노레포를 탐색하는 에이전트가 <code>graft ask "&lt;question&gt;"</code>이나 <code>graft callers &lt;symbol&gt;</code>을 물으면, 매 턴마다 같은 맥락을 재구성하려고 grep을 반복하거나 파일 전체를 여는 대신 소스 범위가 함께 담긴 순위화된 사전 계산 답변을 받을 수 있다. graft는 2026-09-06부터 워크스페이스 루트에서 돌아가고 있었지만, <strong>ADR-0076</strong> 이전까지는 수작업으로 연결되어 있었고 Claude Code에서만 사용할 수 있었다.</p>

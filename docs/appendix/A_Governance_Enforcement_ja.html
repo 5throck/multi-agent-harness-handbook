@@ -103,10 +103,10 @@
   <h2 id="b6-platform">プラットフォーム別の強制力の違い</h2>
   <p>同じルールでもプラットフォームによって体感が違うことを正直に認めるのが、この設計の成熟した部分だ。</p>
   <ul>
-    <li><strong>Claude Code CLI / Gemini CLI</strong> — フック完全対応。機械的ブロックが機能する。</li>
+    <li><strong>Claude Code CLI / Gemini CLI</strong> — フック完全対応。機械的ブロックが機能する。2026-10からこの強制が専門エージェントのディスパッチにも及ぶ。<code>scripts/hooks/pm-dispatch-gate.ts</code> がロスター登録済みのディスパッチ(Claude Codeの <code>Agent</code> ツール、Gemini CLIの <code>invoke_subagent</code>)を横取りし、新しいPMロールマーカー(<code>pm-role-bootstrap.ts</code>、TTL 24時間)がなければClaude Codeでは人間の確認を求め、Gemini CLIでは理由付きで拒否する。</li>
     <li><strong>Claude Desktop App</strong> — フックは条件付きで発火。プロンプト層が主防御線。</li>
     <li><strong>Antigravity</strong> — フック未対応。プロンプトの指示だけが残る。ここでルールを無視しても機械的ブロックはないが、それは <strong>ガバナンス違反</strong> として記録される。</li>
-    <li><strong>Codex (CLI・Desktop App)</strong> — フック未対応。代わりに <code>CODEX.md</code> がシステムプロンプトとして直接注入されるため、プロンプト層が基本防御線になる。ここでルールを無視しても機械的ブロックはないが、同様に <strong>ガバナンス違反</strong> として記録される。</li>
+    <li><strong>Codex (CLI・Desktop App)</strong> — かつてはフック未対応だった。代わりに <code>CODEX.md</code> がシステムプロンプトとして直接注入されるため、プロンプト層が基本防御線になる。2026-10からCodex CLIにフックの仕組みができ、ワークスペースは <code>.codex/hooks.json</code> で接続する — SessionStartに <code>pm-role-bootstrap.ts</code>、UserPromptSubmitに <code>codex-user-prompt-gate.ts</code>。後者は新しいPMロールマーカーのないセッションによるスラッシュ形式の専門エージェント呼び出しを機械的にブロックする。Codexのフックはトラストゲート方式(ハッシュ固定、<code>/hooks</code> で確認するまでスキップ)で、書き込み後/QAフックスイートは引き続きClaude/Gemini専用のため、この一つのゲートの外ではプロンプト層が依然として基本防御線になる。ここでルールを無視しても機械的ブロックはないが、同様に <strong>ガバナンス違反</strong> として記録される。</li>
   </ul>
   <p>したがって「フックのないプラットフォームではルールが任意」というより「強制層が弱くなるだけで、違反の性質は同じ」と解釈するのが正確だ。</p>
 

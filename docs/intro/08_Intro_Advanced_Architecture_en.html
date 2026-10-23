@@ -98,6 +98,8 @@ tier:                          # platform-specific model alias (translated at ru
   claude: high                 #   high = claude-opus-5-5
   antigravity: high            #   high = gemini-3.1-pro
   codex: high                  #   high = gpt-5.6-sol
+  hermes: high                 #   high = claude-opus-5-5 (mirrors claude)
+  zai: high                    #   high = glm-5.3
 ---</pre>
   <button class="copy-btn">Copy</button>
 </div>
@@ -106,15 +108,15 @@ tier:                          # platform-specific model alias (translated at ru
   <h3>Tier Definitions and Model Mapping</h3>
   <div class="table-compare narrow-col-1">
   <table>
-    <thead><tr><th>Tier</th><th>Purpose</th><th>Claude-family Example</th><th>Antigravity-family Example</th><th>Codex-family Example</th></tr></thead>
+    <thead><tr><th>Tier</th><th>Purpose</th><th>Claude-family Example</th><th>Antigravity-family Example</th><th>Codex-family Example</th><th>Z.AI (GLM) Example</th></tr></thead>
     <tbody>
-      <tr><td><strong>High</strong></td><td>Complex reasoning, architecture design, planning</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
-      <tr><td><strong>Medium</strong></td><td>Code review, testing, PR review, quality gates</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td></tr>
-      <tr><td><strong>Low</strong></td><td>Fast, repetitive coding, script maintenance</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
+      <tr><td><strong>High</strong></td><td>Complex reasoning, architecture design, planning</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td><td>glm-5.3</td></tr>
+      <tr><td><strong>Medium</strong></td><td>Code review, testing, PR review, quality gates</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td><td>glm-5.3-flash</td></tr>
+      <tr><td><strong>Low</strong></td><td>Fast, repetitive coding, script maintenance</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td><td>glm-5.3-flash</td></tr>
     </tbody>
   </table>
   </div>
-  <p><strong>What's new (2026-09)</strong> &mdash; the example models follow the current registry (<code>AGENTS.md</code> &sect;3.6): High and Medium now map to <code>claude-opus-5-5</code> and <code>claude-sonnet-5-5</code>, and both Gemini rows read <code>gemini-3.8-flash</code>. Platform parity also covers a fifth directory &mdash; <code>.hermes/</code> joined with the Hermes platform (ADR-0088). As of 2026-10 the Low tier's example is <code>claude-haiku-5-5</code> (the <code>haiku</code> alias is unchanged), and skills are now barred from hardcoding model-ID literals entirely &mdash; registry IDs live only in <code>docs/workspace-schema.json</code> (<code>models.*</code>), with model changes routed through the <code>model-migration</code> skill.</p>
+  <p><strong>What's new (2026-09)</strong> &mdash; the example models follow the current registry (<code>AGENTS.md</code> &sect;3.6): High and Medium now map to <code>claude-opus-5-5</code> and <code>claude-sonnet-5-5</code>, and both Gemini rows read <code>gemini-3.8-flash</code>. Platform parity also covers a fifth directory &mdash; <code>.hermes/</code> joined with the Hermes platform (ADR-0088). As of 2026-10 the Low tier's example is <code>claude-haiku-5-5</code> (the <code>haiku</code> alias is unchanged), and skills are now barred from hardcoding model-ID literals entirely &mdash; registry IDs live only in <code>docs/workspace-schema.json</code> (<code>models.*</code>), with model changes routed through the <code>model-migration</code> skill. As of 2026-10-23 the registry spans seven platforms &mdash; Z.AI joined under the <code>zai</code> key (<code>glm-5.3</code> on High; <code>glm-5.3-flash</code> on Medium and Low; GLM models expose reasoning levels low/high/max), and <code>hermes</code> was promoted from schema-only to fully validated (it maps to the same claude model IDs).</p>
   <p>This static assignment forms the baseline, but at actual execution time the PM applies <strong>Tier Adjustment Rules</strong> to dynamically optimize cost. An agent with a high baseline (architect, pm) needs the strongest model because it must make complex design judgments. automation-engineer, on the other hand, writes standardized scripts per ADR-0036, so the low tier is sufficient — the only question that matters is whether "heavy judgment" is required.</p>
 
   <h3>Tier Adjustment Rules — Cost Optimization at Execution Time</h3>

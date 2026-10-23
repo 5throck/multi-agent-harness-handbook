@@ -103,10 +103,10 @@
   <h2 id="b6-platform">Platform Differences in Enforcement</h2>
   <p>Part of this design's maturity is honestly admitting that the same rule feels different per platform.</p>
   <ul>
-    <li><strong>Claude Code CLI / Gemini CLI</strong> — full hook support; mechanical blocking works.</li>
+    <li><strong>Claude Code CLI / Gemini CLI</strong> — full hook support; mechanical blocking works. Since 2026-10 this extends to specialist dispatch: <code>scripts/hooks/pm-dispatch-gate.ts</code> intercepts rostered dispatches (the <code>Agent</code> tool on Claude Code, <code>invoke_subagent</code> on Gemini CLI) and, without a fresh PM-role marker (<code>pm-role-bootstrap.ts</code>, 24h TTL), asks for human confirmation on Claude Code or denies with a reason on Gemini CLI.</li>
     <li><strong>Claude Desktop App</strong> — hooks fire conditionally; the prompt layer is the main line of defense.</li>
     <li><strong>Antigravity</strong> — no hook support; only prompt instructions remain. Ignoring the rule there triggers no mechanical block, but it is recorded as a <strong>governance violation</strong>.</li>
-    <li><strong>Codex (CLI · Desktop App)</strong> — no hook support. Instead, <code>CODEX.md</code> is injected directly as the system prompt, so the prompt layer is the baseline defense. Ignoring the rule there triggers no mechanical block, but likewise it is recorded as a <strong>governance violation</strong>.</li>
+    <li><strong>Codex (CLI · Desktop App)</strong> — historically no hook support: <code>CODEX.md</code> is injected directly as the system prompt, so the prompt layer is the baseline defense. As of 2026-10 Codex CLI gained a hooks surface, and the workspace wires <code>.codex/hooks.json</code> — <code>pm-role-bootstrap.ts</code> on SessionStart and <code>codex-user-prompt-gate.ts</code> on UserPromptSubmit, which mechanically blocks slash-style invocations of rostered specialists from sessions without a fresh PM-role marker. Codex hooks are trust-gated (hash-pinned, skipped until reviewed via <code>/hooks</code>), and the post-write/QA hook suite remains Claude/Gemini-only, so outside that one gate the prompt layer is still the baseline defense. Ignoring the rule there triggers no mechanical block, but likewise it is recorded as a <strong>governance violation</strong>.</li>
   </ul>
   <p>So the correct reading is not "rules are optional where hooks are missing" but "the enforcement layer weakens; the nature of the violation does not."</p>
 

@@ -96,6 +96,8 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   claude: high                 #   high = claude-opus-5-5
   antigravity: high            #   high = gemini-3.1-pro
   codex: high                  #   high = gpt-5.6-sol
+  hermes: high                 #   high = claude-opus-5-5 (mirrors claude)
+  zai: high                    #   high = glm-5.3
 ---</pre>
   <button class="copy-btn">복사</button>
 </div>
@@ -104,15 +106,15 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <h3>티어 정의와 모델 매핑</h3>
   <div class="table-compare narrow-col-1">
   <table>
-    <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th><th>Codex 계열 예시</th></tr></thead>
+    <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th><th>Codex 계열 예시</th><th>Z.AI (GLM) 예시</th></tr></thead>
     <tbody>
-      <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
-      <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td></tr>
-      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
+      <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td><td>glm-5.3</td></tr>
+      <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td><td>glm-5.3-flash</td></tr>
+      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td><td>glm-5.3-flash</td></tr>
     </tbody>
   </table>
   </div>
-  <p><strong>새 소식(2026-09)</strong> &mdash; 예시 모델은 현재 레지스트리(<code>AGENTS.md</code> &sect;3.6)를 따릅니다. High와 Medium은 각각 <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>로 매핑되고, Gemini 두 행은 모두 <code>gemini-3.8-flash</code>입니다. 플랫폼 패리티도 다섯 번째 디렉터리를 포함합니다 &mdash; Hermes 플랫폼과 함께 <code>.hermes/</code>가 합류했습니다(ADR-0088). 2026-10에는 Low 티어 예시가 <code>claude-haiku-5-5</code>로 바뀌었고(별칭 <code>haiku</code>는 유지), 스킬은 모델 ID 리터럴을 하드코딩할 수 없게 되었습니다. 레지스트리 ID는 <code>docs/workspace-schema.json</code>(<code>models.*</code>)에만 두며, 모델 변경은 <code>model-migration</code> 스킬로 진행합니다.</p>
+  <p><strong>새 소식(2026-09)</strong> &mdash; 예시 모델은 현재 레지스트리(<code>AGENTS.md</code> &sect;3.6)를 따릅니다. High와 Medium은 각각 <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>로 매핑되고, Gemini 두 행은 모두 <code>gemini-3.8-flash</code>입니다. 플랫폼 패리티도 다섯 번째 디렉터리를 포함합니다 &mdash; Hermes 플랫폼과 함께 <code>.hermes/</code>가 합류했습니다(ADR-0088). 2026-10에는 Low 티어 예시가 <code>claude-haiku-5-5</code>로 바뀌었고(별칭 <code>haiku</code>는 유지), 스킬은 모델 ID 리터럴을 하드코딩할 수 없게 되었습니다. 레지스트리 ID는 <code>docs/workspace-schema.json</code>(<code>models.*</code>)에만 두며, 모델 변경은 <code>model-migration</code> 스킬로 진행합니다. 2026-10-23부터 레지스트리는 7개 플랫폼을 다룹니다 &mdash; Z.AI가 <code>zai</code> 키로 합류했고(High는 <code>glm-5.3</code>, Medium·Low는 <code>glm-5.3-flash</code>, GLM 모델은 low/high/max 추론 레벨을 제공), <code>hermes</code>는 스키마 전용에서 완전 검증 대상으로 승격되었습니다(claude 모델 ID를 그대로 매핑합니다).</p>
   <p>이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다. 기준선이 high인 에이전트(architect)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
 
   <h3>Tier Adjustment Rules — 실행 시 비용 최적화</h3>

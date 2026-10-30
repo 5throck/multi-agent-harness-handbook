@@ -92,10 +92,8 @@
   <div style="position:relative">
   <pre class="code-block">---
 name: pm                       # pm, code-writer, automation-engineer ...
-tier:                          # プラットフォームごとのモデルエイリアス（実行時に変換される）
-  claude: high                 #   high = claude-opus-5-5
-  antigravity: high            #   high = gemini-3.1-pro
-  codex: high                  #   high = gpt-5.6-sol
+tier: high                     # 単一のスカラー宣言（ADR-0102）：コスト上限のみを宣言
+                               # モデルへのマッピングはmodelsレジストリが実行時にプラットフォーム別に解決
 ---</pre>
   <button class="copy-btn">コピー</button>
 </div>
@@ -112,6 +110,7 @@ tier:                          # プラットフォームごとのモデルエ�
     </tbody>
   </table>
   </div>
+  <p><strong>最新情報（2026-10）</strong> &mdash; 上のfrontmatter例は現在スカラー1行です（ADR-0102、2026-10-26）。エージェントファイルは<code>tier: high|medium|low</code>の1行だけでコスト上限を宣言し、プラットフォーム別のサブキーは持ちません。スキーマの<code>agent_tiers</code>ロスターは削除され、<code>docs/workspace-schema.json</code>の<code>models</code>ブロックだけが唯一のプラットフォーム&rarr;ティア&rarr;モデルマッピングです。<code>validate-model-registry.ts</code> v2は従来形式のプラットフォーム別<code>tier:</code>マップブロックに警告を出し、フリートが収束した後は失敗に変わります。</p>
   <p>この静的な割り当てが基準線（ベースライン）となるが、実際の実行時にはPMが<strong>Tier Adjustment Rules</strong>を適用して動的にコストを最適化する。基準線がhighのエージェント（architect）は複雑な設計判断を下す必要があるため、最も強力なモデルが必要となる。一方automation-engineerはADR-0036に基づく定型化されたスクリプトを書く役割であるため、lowティアで十分である — 「重い判断」が必要かどうかだけを見ればよいためだ。</p>
 
   <h3>Tier Adjustment Rules — 実行時のコスト最適化</h3>

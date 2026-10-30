@@ -94,10 +94,8 @@
   <div style="position:relative">
   <pre class="code-block">---
 name: pm                       # pm, code-writer, automation-engineer ...
-tier:                          # platform-specific model alias (translated at runtime)
-  claude: high                 #   high = claude-opus-5-5
-  antigravity: high            #   high = gemini-3.1-pro
-  codex: high                  #   high = gpt-5.6-sol
+tier: high                     # one scalar declaration (ADR-0102): the cost ceiling only
+                               # the models registry resolves tier to model per platform at dispatch
 ---</pre>
   <button class="copy-btn">Copy</button>
 </div>
@@ -115,6 +113,7 @@ tier:                          # platform-specific model alias (translated at ru
   </table>
   </div>
   <p><strong>What's new (2026-09)</strong> &mdash; the example models follow the current registry (<code>AGENTS.md</code> &sect;3.6): High and Medium now map to <code>claude-opus-5-5</code> and <code>claude-sonnet-5-5</code>, and both Gemini rows read <code>gemini-3.8-flash</code>. Platform parity also covers a fifth directory &mdash; <code>.hermes/</code> joined with the Hermes platform (ADR-0088). As of 2026-10 the Low tier's example is <code>claude-haiku-5-5</code> (the <code>haiku</code> alias is unchanged), and skills are now barred from hardcoding model-ID literals entirely &mdash; registry IDs live only in <code>docs/workspace-schema.json</code> (<code>models.*</code>), with model changes routed through the <code>model-migration</code> skill.</p>
+  <p><strong>What's new (2026-10)</strong> &mdash; the frontmatter example above is now a single scalar line (ADR-0102, 2026-10-26). An agent file declares just <code>tier: high|medium|low</code> &mdash; the author's cost-ceiling declaration &mdash; with no per-platform sub-keys. The schema's <code>agent_tiers</code> roster was removed, so the <code>models</code> block of <code>docs/workspace-schema.json</code> is the only platform&rarr;tier&rarr;model mapping; <code>validate-model-registry.ts</code> v2 warns on legacy per-platform <code>tier:</code> map blocks and fails on them once the fleet converges.</p>
   <p>This static assignment forms the baseline, but at actual execution time the PM applies <strong>Tier Adjustment Rules</strong> to dynamically optimize cost. An agent with a high baseline (architect, pm) needs the strongest model because it must make complex design judgments. automation-engineer, on the other hand, writes standardized scripts per ADR-0036, so the low tier is sufficient — the only question that matters is whether "heavy judgment" is required.</p>
 
   <h3>Tier Adjustment Rules — Cost Optimization at Execution Time</h3>

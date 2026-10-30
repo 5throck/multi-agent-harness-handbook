@@ -92,10 +92,8 @@
   <div style="position:relative">
   <pre class="code-block">---
 name: pm                       # pm, code-writer, automation-engineer ...
-tier:                          # alias de modelo específico de plataforma (traducido en tiempo de ejecución)
-  claude: high                 #   high = claude-opus-5-5
-  antigravity: high            #   high = gemini-3.1-pro
-  codex: high                  #   high = gpt-5.6-sol
+tier: high                     # declaración escalar única (ADR-0102): solo el techo de coste
+                               # el registro models resuelve tier a modelo por plataforma al despachar
 ---</pre>
   <button class="copy-btn">Copiar</button>
 </div>
@@ -112,6 +110,7 @@ tier:                          # alias de modelo específico de plataforma (trad
     </tbody>
   </table>
   </div>
+  <p><strong>Novedades (2026-10)</strong> &mdash; el ejemplo de frontmatter de arriba es ahora una única línea escalar (ADR-0102, 2026-10-26). Un archivo de agente declara solo <code>tier: high|medium|low</code> &mdash; la declaración de techo de coste del autor &mdash; sin subclaves por plataforma. El roster <code>agent_tiers</code> del esquema se eliminó, de modo que el bloque <code>models</code> de <code>docs/workspace-schema.json</code> es el único mapeo plataforma&rarr;tier&rarr;modelo; <code>validate-model-registry.ts</code> v2 avisa sobre los bloques <code>tier:</code> heredados en forma de mapa por plataforma y falla sobre ellos cuando la flota converja.</p>
   <p>Esta asignación estática forma la línea base, pero en el tiempo de ejecución real el PM aplica <strong>Reglas de Ajuste de Nivel</strong> para optimizar dinámicamente el costo. Un agente con una línea base alta (architect) necesita el modelo más fuerte porque debe hacer juicios de diseño complejos. automation-engineer, por otro lado, escribe scripts estandarizados según ADR-0036, por lo que el nivel bajo es suficiente — la única pregunta que importa es si se requiere "juicio pesado."</p>
 
   <h3>Reglas de Ajuste de Nivel — Optimización de Costos en Tiempo de Ejecución</h3>

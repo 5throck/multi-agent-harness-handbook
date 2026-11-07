@@ -693,7 +693,7 @@ codex</pre>
     <div class="card-body">
 
       <div class="situation">
-        10장에서 상세히 다루는 모델 티어(high/medium/low)가 Codex에서 실제로 어떤 체감 차이를 만드는지, 숫자로 설명 듣기 전에 직접 겪어보는 시나리오다. 같은 reviewer 역할을 모델만 바꿔가며 세 번 참조하고, 응답 속도와 결과 품질을 눈으로 비교한다. Codex의 모델 티어 이름은 Claude 계열(haiku/sonnet/opus)과 다르다는 점에 유의한다.
+        10장에서 상세히 다루는 모델 티어(high/medium/low)가 Codex에서 실제로 어떤 체감 차이를 만드는지, 숫자로 설명 듣기 전에 직접 겪어보는 시나리오다. 같은 reviewer 역할을 모델만 바꿔가며 세 번 참조하고, 응답 속도와 결과 품질을 눈으로 비교한다. Codex의 모델 티어 이름은 Claude 계열(haiku/sonnet/opus)과 다르다는 점에 유의한다. <strong>업데이트(2026-11):</strong> 이 실습의 예시 ID는 현재 레지스트리를 따른다 — codex 열이 GPT-6.x 세대로 리베이스되었다(<code>gpt-5.6-sol/terra/luna</code>가 <code>gpt-6.1-sol</code>/<code>gpt-6.1-terra</code>/<code>gpt-6-luna</code>로; Low는 6.1이 아니라 <code>gpt-6-luna</code>에 자리잡는 점 유의).
       </div>
 
       <div class="cmd-list">
@@ -712,9 +712,9 @@ codex</pre>
           <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">비용</text>
           <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">품질</text>
 
-          <!-- Row 1: gpt-5.6-luna (low) -->
+          <!-- Row 1: gpt-6-luna (low) -->
           <rect x="0" y="34" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
-          <text x="72" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent)">gpt-5.6-luna</text>
+          <text x="72" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent)">gpt-6-luna</text>
           <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
           <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">빠름</text>
           <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
@@ -724,9 +724,9 @@ codex</pre>
           <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">정형 작업</text>
           <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">오탈자 검토</text>
 
-          <!-- Row 2: gpt-5.6-terra (medium) -->
+          <!-- Row 2: gpt-6.1-terra (medium) -->
           <rect x="0" y="88" width="520" height="50" fill="var(--bg2)" stroke="var(--border)" stroke-width="0.5"/>
-          <text x="72" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-purple)">gpt-5.6-terra</text>
+          <text x="72" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-purple)">gpt-6.1-terra</text>
           <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
           <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">중간</text>
           <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
@@ -736,9 +736,9 @@ codex</pre>
           <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">일반 검토</text>
           <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="9" fill="var(--text-dim)">코드 리뷰</text>
 
-          <!-- Row 3: gpt-5.6-sol (high) -->
+          <!-- Row 3: gpt-6.1-sol (high) -->
           <rect x="0" y="142" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
-          <text x="72" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-red)">gpt-5.6-sol</text>
+          <text x="72" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-red)">gpt-6.1-sol</text>
           <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
           <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI','Noto Sans KR',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">느림</text>
           <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
@@ -767,7 +767,7 @@ codex</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>② low 티어(gpt-5.6-luna)로 검토</strong>
+              <strong>② low 티어(gpt-6-luna)로 검토</strong>
               <p>채팅창에 아래 문장을 그대로 붙여넣는다. PM이 <code>agents/reviewer.md</code>의 <code>tier.codex</code> 필드를 <code>low</code>로 바꾼 뒤 그 역할로 검토를 수행한다.</p>
               <div style="position:relative">
                 <pre class="code-block">agents/reviewer.md의 tier.codex 필드를 low로 바꿔줘. 그리고 그 reviewer 역할로 argument.txt를 검토해줘.</pre>
@@ -777,7 +777,7 @@ codex</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>③ medium 티어(gpt-5.6-terra)로 같은 요청 반복</strong>
+              <strong>③ medium 티어(gpt-6.1-terra)로 같은 요청 반복</strong>
               <p>같은 방식으로 <code>tier.codex</code>를 <code>medium</code>으로 바꾼 뒤 검토한다. 순환 논증(circular reasoning) 같은 논리적 허점을 정확히 짚어내는지 low 결과와 비교한다.</p>
               <div style="position:relative">
                 <pre class="code-block">agents/reviewer.md의 tier.codex 필드를 medium으로 바꿔줘. 그리고 그 reviewer 역할로 argument.txt를 검토해줘.</pre>
@@ -787,7 +787,7 @@ codex</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>④ high 티어(gpt-5.6-sol)로 같은 요청 반복</strong>
+              <strong>④ high 티어(gpt-6.1-sol)로 같은 요청 반복</strong>
               <p>같은 방식으로 <code>tier.codex</code>를 <code>high</code>로 바꾼 뒤 검토한다. 응답 시간과 지적의 깊이가 ②③과 어떻게 다른지 기록한다.</p>
               <div style="position:relative">
                 <pre class="code-block">agents/reviewer.md의 tier.codex 필드를 high로 바꿔줘. 그리고 그 reviewer 역할로 argument.txt를 검토해줘.</pre>
@@ -797,7 +797,7 @@ codex</pre>
           </li>
         </ol>
         <div class="flow-box">
-          간단한 오탈자 검토라면 세 티어의 결과 차이가 거의 없지만, 이번처럼 "논증 구조의 허점을 짚어야 하는" 작업에서는 티어가 낮을수록 순환 논증을 순환 논증이라고 정확히 짚지 못하고 표면적인 문장만 지적하는 경향이 뚜렷해진다. 반대로 <code>gpt-5.6-luna</code>는 셋 중 가장 빠르게 응답한다 — 7장에서 설명하는 "판단이 무거운 역할일수록 높은 티어, 정형화된 작업일수록 낮은 티어"라는 원칙이 왜 존재하는지, 속도와 깊이의 트레이드오프를 직접 겪어보면 훨씬 분명해진다.
+          간단한 오탈자 검토라면 세 티어의 결과 차이가 거의 없지만, 이번처럼 "논증 구조의 허점을 짚어야 하는" 작업에서는 티어가 낮을수록 순환 논증을 순환 논증이라고 정확히 짚지 못하고 표면적인 문장만 지적하는 경향이 뚜렷해진다. 반대로 <code>gpt-6-luna</code>는 셋 중 가장 빠르게 응답한다 — 7장에서 설명하는 "판단이 무거운 역할일수록 높은 티어, 정형화된 작업일수록 낮은 티어"라는 원칙이 왜 존재하는지, 속도와 깊이의 트레이드오프를 직접 겪어보면 훨씬 분명해진다.
         </div>
         <div class="tip-box">
           매번 Codex Desktop App에 "tier.codex 필드를 바꿔줘"라고 요청하면 된다 — 정의 파일을 직접 열 필요 없고, PM이 알아서 <code>agents/reviewer.md</code>를 수정한 뒤 그 역할로 검토를 수행한다.

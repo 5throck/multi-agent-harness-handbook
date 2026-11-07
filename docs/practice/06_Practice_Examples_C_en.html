@@ -693,7 +693,7 @@ codex</pre>
     <div class="card-body">
 
       <div class="situation">
-        This scenario lets you feel, firsthand and before being told the numbers, what real difference the model tiers (high/medium/low) covered in detail in Chapter 10 make on Codex. Reference the same reviewer role three times, changing only the model, and visually compare response speed and result quality. Note that Codex's model tier names differ from the Claude family's (haiku/sonnet/opus).
+        This scenario lets you feel, firsthand and before being told the numbers, what real difference the model tiers (high/medium/low) covered in detail in Chapter 10 make on Codex. Reference the same reviewer role three times, changing only the model, and visually compare response speed and result quality. Note that Codex's model tier names differ from the Claude family's (haiku/sonnet/opus). <strong>Update (2026-11):</strong> the example IDs in this exercise follow the current registry — the codex column was rebased to the GPT-6.x generation (<code>gpt-5.6-sol/terra/luna</code> became <code>gpt-6.1-sol</code>/<code>gpt-6.1-terra</code>/<code>gpt-6-luna</code>; note Low lands on <code>gpt-6-luna</code>, not 6.1).
       </div>
 
       <div class="cmd-list">
@@ -712,9 +712,9 @@ codex</pre>
           <text x="338" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Cost</text>
           <text x="465" y="20" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="12" font-weight="700" fill="var(--accent)">Quality</text>
 
-          <!-- Row 1: gpt-5.6-luna (low) -->
+          <!-- Row 1: gpt-6-luna (low) -->
           <rect x="0" y="34" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
-          <text x="72" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent)">gpt-5.6-luna</text>
+          <text x="72" y="63" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent)">gpt-6-luna</text>
           <rect x="110" y="46" width="135" height="16" rx="4" fill="var(--accent-green)" opacity="0.8"/>
           <text x="178" y="58" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">fast</text>
           <rect x="270" y="46" width="68" height="16" rx="4" fill="var(--accent-green)" opacity="0.6"/>
@@ -724,9 +724,9 @@ codex</pre>
           <text x="490" y="53" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">routine tasks</text>
           <text x="490" y="65" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">typo review</text>
 
-          <!-- Row 2: gpt-5.6-terra (medium) -->
+          <!-- Row 2: gpt-6.1-terra (medium) -->
           <rect x="0" y="88" width="520" height="50" fill="var(--bg2)" stroke="var(--border)" stroke-width="0.5"/>
-          <text x="72" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-purple)">gpt-5.6-terra</text>
+          <text x="72" y="117" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-purple)">gpt-6.1-terra</text>
           <rect x="110" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
           <text x="155" y="112" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">medium</text>
           <rect x="270" y="100" width="90" height="16" rx="4" fill="var(--accent-amber)" opacity="0.7"/>
@@ -736,9 +736,9 @@ codex</pre>
           <text x="490" y="107" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">general review</text>
           <text x="490" y="119" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="9" fill="var(--text-dim)">code review</text>
 
-          <!-- Row 3: gpt-5.6-sol (high) -->
+          <!-- Row 3: gpt-6.1-sol (high) -->
           <rect x="0" y="142" width="520" height="50" fill="var(--bg)" stroke="var(--border)" stroke-width="0.5"/>
-          <text x="72" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-red)">gpt-5.6-sol</text>
+          <text x="72" y="171" text-anchor="middle" font-family="'SFMono-Regular','Consolas',monospace" font-size="13" font-weight="700" fill="var(--accent-red)">gpt-6.1-sol</text>
           <rect x="110" y="154" width="45" height="16" rx="4" fill="var(--accent-red)" opacity="0.7"/>
           <text x="133" y="166" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="var(--text-inverse)">slow</text>
           <rect x="270" y="154" width="135" height="16" rx="4" fill="var(--accent-red)" opacity="0.6"/>
@@ -767,7 +767,7 @@ codex</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>② Review at the low Tier (gpt-5.6-luna)</strong>
+              <strong>② Review at the low Tier (gpt-6-luna)</strong>
               <p>Paste the text below into the chat as-is. The PM changes the <code>tier.codex</code> field in <code>agents/reviewer.md</code> to <code>low</code> and then reviews in that role.</p>
               <div style="position:relative">
                 <pre class="code-block">Change the tier.codex field in agents/reviewer.md to low. Then review argument.txt in that reviewer role.</pre>
@@ -777,7 +777,7 @@ codex</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>③ Repeat the Same Request at the medium Tier (gpt-5.6-terra)</strong>
+              <strong>③ Repeat the Same Request at the medium Tier (gpt-6.1-terra)</strong>
               <p>Change <code>tier.codex</code> to <code>medium</code> the same way and review again. Compare against the low result to see whether it pinpoints a logical gap like circular reasoning accurately.</p>
               <div style="position:relative">
                 <pre class="code-block">Change the tier.codex field in agents/reviewer.md to medium. Then review argument.txt in that reviewer role.</pre>
@@ -787,7 +787,7 @@ codex</pre>
           </li>
           <li>
             <div class="step-content">
-              <strong>④ Repeat the Same Request at the high Tier (gpt-5.6-sol)</strong>
+              <strong>④ Repeat the Same Request at the high Tier (gpt-6.1-sol)</strong>
               <p>Change <code>tier.codex</code> to <code>high</code> the same way and review again. Note how response time and depth of critique differ from ②③.</p>
               <div style="position:relative">
                 <pre class="code-block">Change the tier.codex field in agents/reviewer.md to high. Then review argument.txt in that reviewer role.</pre>
@@ -797,7 +797,7 @@ codex</pre>
           </li>
         </ol>
         <div class="flow-box">
-          For a simple typo check the three tiers barely differ, but for work like this — "spotting a flaw in an argument's structure" — the lower the tier, the more clearly it tends to miss calling out circular reasoning as circular reasoning and instead comment only on surface-level wording. Conversely, <code>gpt-5.6-luna</code> responds fastest of the three — going through the speed-versus-depth trade-off yourself makes much clearer why Chapter 7's principle exists: "heavier judgment calls for a higher tier, more routine tasks call for a lower one."
+          For a simple typo check the three tiers barely differ, but for work like this — "spotting a flaw in an argument's structure" — the lower the tier, the more clearly it tends to miss calling out circular reasoning as circular reasoning and instead comment only on surface-level wording. Conversely, <code>gpt-6-luna</code> responds fastest of the three — going through the speed-versus-depth trade-off yourself makes much clearer why Chapter 7's principle exists: "heavier judgment calls for a higher tier, more routine tasks call for a lower one."
         </div>
         <div class="tip-box">
           You can simply tell the Codex Desktop App "change the tier.codex field" each time — no need to open the definition file yourself; the PM edits <code>agents/reviewer.md</code> on its own, then reviews in that role.

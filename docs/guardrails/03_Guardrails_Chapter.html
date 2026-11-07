@@ -86,6 +86,8 @@
 
   <p>이 3단계 분류는 이 핸드북이 참고한 워크스페이스 문서의 실제 규칙과도 일치한다. 7장에서 다룬 <code>/sync</code> 파이프라인이 <code>.pem</code>·<code>.key</code>·<code>.env</code> 같은 민감 파일을 커밋 직전에 가로막는 "Sensitive File Guard"나, 강제 푸시·<code>--no-verify</code>를 명시적으로 금지하는 규칙이 바로 파괴적 작업 단계에 해당하는 가드레일이다.</p>
 
+  <div class="note"><strong>새 소식(2026-11):</strong> 파괴적 작업 단계에 명시적인 기준선이 생겼습니다. 워크스페이스 루트에서 <code>rm -rf Projects</code> 사고(L2 프로젝트 체크아웃 16개 삭제 — 모두 복구됨) 이후 워크스페이스는 "Destructive File Operations" 규칙을 고정했습니다: <code>.git</code> 자식을 포함하거나 포함할 수 있는 경로(<code>Projects/**</code>가 대표적)에는 재귀 삭제(<code>rm -r</code>, <code>rm -rf</code>, <code>rm --recursive</code>, 휴지통 명령)를 실행하지 않으며, 먼저 정확한 해결된 대상을 dry-run으로 나열합니다(<code>ls -la</code>, <code>find &lt;target&gt; -maxdepth 1</code>). 유일한 포괄 예외는 temp 디렉터리 안의 재생성 가능한 빌드 산출물(<code>node_modules</code>, <code>dist</code>, <code>.next</code>, <code>coverage</code>, <code>tmp</code>)이고, 검토된 탈출구(<code>ALLOW_RECURSIVE_DELETE=1</code>)는 스크립트화된 사전 승인 케이스 전용입니다. PreToolUse delete-guard 훅이 이 규칙을 기계적으로 강제합니다.</div>
+
   <h2 id="s3">최소 권한 원칙 — <code>tools</code> 필드</h2>
   <p>6장 §2 실습에서 만든 <code>reviewer</code> 서브에이전트의 frontmatter를 다시 떠올려 보자. <code>tools: Read, Grep</code>처럼 허용할 도구를 명시적으로 나열했다. 이것이 서브에이전트 단위의 최소 권한 원칙이다. reviewer는 애초에 <code>Write</code> 도구가 없으므로, 프롬프트가 아무리 애매하게 해석돼도 파일을 수정할 방법 자체가 없다.</p>
   <p>이 원칙을 실제 사고 시나리오로 보면 왜 중요한지 분명해진다. 만약 reviewer에게 <code>Write</code> 권한까지 습관적으로 열어 뒀다면, "이 파일을 검토하고 개선해줘"처럼 살짝 모호한 요청을 받았을 때 reviewer가 "개선"을 "직접 수정"으로 해석해 원본을 덮어쓸 수도 있다. <code>tools</code> 필드로 권한을 미리 좁혀 두면, 이런 해석 차이가 애초에 사고로 이어지지 않는다. 프롬프트 품질에 기대는 대신 구조적으로 막는 것이다.</p>

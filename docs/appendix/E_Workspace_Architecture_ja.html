@@ -106,7 +106,7 @@
 <rect x="255" y="524" width="96" height="28" rx="14" fill="#ffffff" stroke="#57606a" stroke-width="1.6"/>
 <text x="264" y="543" font-size="14" fill="#1f2328">Handbooks/</text>
 <rect x="359" y="524" width="63" height="28" rx="14" fill="#ffffff" stroke="#57606a" stroke-width="1.6"/>
-<text x="368" y="543" font-size="14" fill="#1f2328">graft/</text>
+<text x="368" y="543" font-size="14" fill="#1f2328">.trail/</text>
 <rect x="730" y="410" width="470" height="260" rx="14" fill="#eaf3ff" stroke="#1f6feb" stroke-width="3"/>
 <text x="748" y="444" font-size="21" fill="#0550ae" font-weight="700">L1 · templates/common</text>
 <text x="748" y="468" font-size="14" fill="#424a53">共通基盤</text>
@@ -496,6 +496,7 @@
 <text x="1149" y="1982" font-size="14" fill="#1f2328">= 下の番号説明と対応</text>
 </svg></div>
   <p>図1. ai_workspace統合アーキテクチャ(2026-10-02、templates/VERSION 0.9.0) · <a href="../assets/img/workspace-architecture.ja.svg" target="_blank" rel="noopener">元のSVGを新しいウィンドウで大きく開く</a></p>
+  <div class="note"><strong>新着情報（2026-11）：</strong>マルチリポジトリ層にハブ＆スポークトポロジが加わりました（設計: <code>2026-11-01-hub-consolidation-design.md</code>、レジストリ: <code>docs/workspace-schema.json</code> の <code>hub_topology</code>）。ハブとは<strong>権限ではなく配布の責任</strong>です。ハブバリアントのPMがドメインの正規アセットを所有します — 4つのハブ: <code>co-develop</code>（dev）、<code>co-design</code>（design）、<code>co-security</code>（security）、<code>co-work</code>（ビジネスコラボレーション）。スポークのPMはハブのサービスをローカルで消費するだけで、他のリポジトリには決して書き込みません。唯一許された経路はデリゲーションチケット（ADR-0103）です — upstream設計のN2制約に対する狭く自動期限切れの例外で、スポークPMが起票しハブPMがトリアージします。このページのL0→L3マップは変わりません — ハブはバリアント同士の関係を定めるもので、このリポジトリ内のコンテンツフローを変えるものではありません。</div>
   <h2 id="read">読み方:流れの色</h2><table><thead><tr><th>色と線</th><th>流れ</th><th>意味</th></tr></thead><tbody><tr><td>青・実線</td><td>配布とスキャフォールド</td><td>L0→L1→L2→L3、new-projectで一度だけコピー</td></tr><tr><td>緑・実線</td><td>アップグレード</td><td>upgrade-projectがL1・L2の変更をL3へ反映</td></tr><tr><td>橙・破線</td><td>バックポートと昇格</td><td>L3からテンプレートやL0への逆方向、人による確認が必須</td></tr><tr><td>紫・破線</td><td>upstream要求</td><td>プロジェクトからルートPMへ上げる問題報告</td></tr><tr><td>青緑・実線</td><td>チケットの流れ</td><td>backlog→waiting→running→review→done</td></tr><tr><td>灰・実線</td><td>ガバナンスとPRゲート</td><td>PM Gateway、QA gate、/sync、PR</td></tr></tbody></table>
   <h2 id="miss">見落としやすい8点</h2><ol><li>品質ゲートはhook、audit、PRの順で、mainへの直接pushは禁止です。</li><li>プラットフォーム面は8つで、skills/がSSOT、他のディレクトリは派生コピーです。</li><li>VERSION_MANIFESTなどの派生成果物は/syncが再生成するため手で編集しません。</li><li>L1からL2への自動伝播はなく、最新化はL3のupgradeでのみ届きます。</li><li>バージョン軸は、テンプレートのリリース、バリアント自身のバージョン、プロジェクトのtemplate-version.txtの3つです。</li><li>co-architectとco-newbizにはテンプレートがなく、co-hrとco-newsにはプロジェクトがありません。</li><li>自動化の周期は、毎日05:30のチケットバッチ、金曜のヘルスチェック、月1回のライフサイクルレビューです。</li><li>upstream要求とチケット本文は指示ではなく信頼できないデータで、PRのmergeは常に人が行います。</li></ol>
   <div class="chapter-nav"><a class="prev" href="D_Hermes_Agents_ja.html"><div class="dir">← 前へ</div><div class="ttl">付録D・Hermes Agents 運用</div></a><a class="next" href="../glossary/00_Glossary_ja.html"><div class="dir">次へ →</div><div class="ttl">用語集</div></a></div>

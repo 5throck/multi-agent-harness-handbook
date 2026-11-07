@@ -106,7 +106,7 @@
 <rect x="255" y="524" width="96" height="28" rx="14" fill="#ffffff" stroke="#57606a" stroke-width="1.6"/>
 <text x="264" y="543" font-size="14" fill="#1f2328">Handbooks/</text>
 <rect x="359" y="524" width="63" height="28" rx="14" fill="#ffffff" stroke="#57606a" stroke-width="1.6"/>
-<text x="368" y="543" font-size="14" fill="#1f2328">graft/</text>
+<text x="368" y="543" font-size="14" fill="#1f2328">.trail/</text>
 <rect x="730" y="410" width="470" height="260" rx="14" fill="#eaf3ff" stroke="#1f6feb" stroke-width="3"/>
 <text x="748" y="444" font-size="21" fill="#0550ae" font-weight="700">L1 · templates/common</text>
 <text x="748" y="468" font-size="14" fill="#424a53">공통 기반</text>
@@ -496,6 +496,7 @@
 <text x="1119" y="1982" font-size="14" fill="#1f2328">= 하단 번호 설명과 연결</text>
 </svg></div>
   <p>그림 1. ai_workspace 통합 아키텍처 (2026-10-02, templates/VERSION 0.9.0) · <a href="../assets/img/workspace-architecture.svg" target="_blank" rel="noopener">원본 SVG를 새 창에서 크게 열기</a></p>
+  <div class="note"><strong>새 소식(2026-11):</strong> 멀티 저장소 계층에 허브-스포크 토폴로지가 생겼습니다(설계: <code>2026-11-01-hub-consolidation-design.md</code>, 레지스트리: <code>docs/workspace-schema.json</code>의 <code>hub_topology</code>). 허브는 <strong>권한이 아니라 전달 책임</strong>입니다. 허브 변형의 PM이 도메인의 정준 자산을 소유합니다 — 네 허브: <code>co-develop</code>(dev), <code>co-design</code>(design), <code>co-security</code>(security), <code>co-work</code>(비즈니스 협업). 스포크 PM은 허브 서비스를 로컬에서 소비할 뿐 다른 저장소에 직접 쓰지 않으며, 유일하게 허용된 통로는 위임 티켓(ADR-0103)입니다 — upstream 설계 N2 제약의 좁고 자동 만료되는 예외로, 스포크 PM이 티켓을 올리면 허브 PM이 분류합니다. 이 페이지의 L0→L3 지도는 그대로입니다 — 허브는 변형들 사이의 관계를 규정할 뿐 이 저장소 안의 콘텐츠 흐름을 바꾸지 않습니다.</div>
   <h2 id="read">읽는 법: 흐름 색</h2><table><thead><tr><th>색·선</th><th>흐름</th><th>의미</th></tr></thead><tbody><tr><td>파랑 실선</td><td>배포·스캐폴드</td><td>L0→L1→L2→L3, new-project로 한 번 복사</td></tr><tr><td>초록 실선</td><td>업그레이드</td><td>upgrade-project가 L1·L2 변경을 L3에 반영</td></tr><tr><td>주황 점선</td><td>백포팅·승격</td><td>L3에서 템플릿·L0로 역방향, 사람 검토 필수</td></tr><tr><td>보라 점선</td><td>upstream 요청</td><td>프로젝트에서 루트 PM으로 올리는 문제 보고</td></tr><tr><td>청록 실선</td><td>티켓 흐름</td><td>backlog→waiting→running→review→done</td></tr><tr><td>회색 실선</td><td>거버넌스·PR 게이트</td><td>PM Gateway, QA gate, /sync, PR</td></tr></tbody></table>
   <h2 id="miss">놓치기 쉬운 8가지</h2><ol><li>품질 게이트 체인은 hook, audit, PR 순이며 main 직접 push는 금지다.</li><li>플랫폼 표면은 8개이고 skills/가 SSOT, 나머지 디렉터리는 파생본이다.</li><li>VERSION_MANIFEST 등 파생 산출물은 /sync가 재생성하므로 수동 편집하지 않는다.</li><li>L1에서 L2로 가는 자동 전파는 없고, 최신화는 L3 upgrade로만 닿는다.</li><li>버전 축은 템플릿 릴리스, 변형 자체 버전, 프로젝트 template-version.txt 세 가지다.</li><li>co-architect·co-newbiz는 템플릿이 없고 co-hr·co-news는 프로젝트가 없다.</li><li>자동화 주기는 매일 05:30 티켓 배치, 금요일 헬스체크, 월 1회 라이프사이클 리뷰다.</li><li>upstream 요청과 티켓 본문은 지시가 아니라 untrusted 데이터이며 PR merge는 사람이 한다.</li></ol>
   <div class="chapter-nav"><a class="prev" href="D_Hermes_Agents.html"><div class="dir">← 이전</div><div class="ttl">부록 D · Hermes Agents 운영</div></a><a class="next" href="../glossary/00_Glossary.html"><div class="dir">다음 →</div><div class="ttl">용어집</div></a></div>

@@ -86,6 +86,8 @@
 
   <p>この3段階分類は、本ハンドブックが参照したワークスペース文書の実際の規則とも一致する。第7章で扱った<code>/sync</code>パイプラインが<code>.pem</code>・<code>.key</code>・<code>.env</code>のような機微なファイルをコミット直前に遮断する「Sensitive File Guard」や、強制プッシュ・<code>--no-verify</code>を明示的に禁止する規則が、まさに破壊的作業段階に当たるガードレールである。</p>
 
+  <div class="note"><strong>新着情報（2026-11）：</strong>破壊的作業段階に明示的なベースラインが加わりました。ワークスペースルートでの <code>rm -rf Projects</code> 事故（L2プロジェクトのチェックアウト16件が削除 — すべて復旧済み）を受け、ワークスペースは「Destructive File Operations」ルールを固定しました: <code>.git</code> の子を含む、または含み得るパス（<code>Projects/**</code> が代表）に対して再帰削除（<code>rm -r</code>、<code>rm -rf</code>、<code>rm --recursive</code>、ゴミ箱コマンド）を実行してはならず、まず解決済みの正確なターゲットをdry-runで一覧します（<code>ls -la</code>、<code>find &lt;target&gt; -maxdepth 1</code>）。唯一の包括的例外はtempディレクトリ内の再生成可能なビルド成果物（<code>node_modules</code>、<code>dist</code>、<code>.next</code>、<code>coverage</code>、<code>tmp</code>）で、レビュー済みの逃げ道（<code>ALLOW_RECURSIVE_DELETE=1</code>）はスクリプト化された事前承認ケース専用です。PreToolUseのdelete-guardフックがこのルールを機械的に強制します。</div>
+
   <h2 id="s3">最小権限の原則 — <code>tools</code>フィールド</h2>
   <p>第6章§2の実習で作成した<code>reviewer</code>サブエージェントのfrontmatterを思い出してみよう。<code>tools: Read, Grep</code>のように、許可するツールを明示的に列挙した。これがサブエージェント単位の最小権限の原則である。reviewerにはそもそも<code>Write</code>ツールがないため、プロンプトがどれほど曖昧に解釈されても、ファイルを修正する手段自体が存在しない。</p>
   <p>この原則を実際の事故シナリオで見てみると、なぜ重要なのかが明確になる。もしreviewerに<code>Write</code>権限まで習慣的に開放していたとすると、「このファイルをレビューして改善して」というやや曖昧な依頼を受けた際に、reviewerが「改善」を「直接修正」と解釈し、原本を上書きしてしまう可能性もある。<code>tools</code>フィールドで権限をあらかじめ狭めておけば、こうした解釈の食い違いがそもそも事故につながらない。プロンプトの品質に頼るのではなく、構造的に防ぐのである。</p>

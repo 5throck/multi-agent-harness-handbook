@@ -95,7 +95,7 @@ name: pm                       # pm, code-writer, automation-engineer ...
 tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨)
   claude: high                 #   high = claude-opus-5-5
   antigravity: high            #   high = gemini-3.1-pro
-  codex: high                  #   high = gpt-5.6-sol
+  codex: high                  #   high = gpt-6.1-sol
 ---</pre>
   <button class="copy-btn">복사</button>
 </div>
@@ -106,13 +106,13 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <table>
     <thead><tr><th>티어</th><th>목적</th><th>Claude 계열 예시</th><th>Antigravity 계열 예시</th><th>Codex 계열 예시</th></tr></thead>
     <tbody>
-      <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-5.6-sol</td></tr>
-      <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-terra</td></tr>
-      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-5.6-luna</td></tr>
+      <tr><td><strong>High</strong></td><td>복잡한 추론, 아키텍처 설계, 계획 수립</td><td>claude-opus-5-5</td><td>gemini-3.1-pro</td><td>gpt-6.1-sol</td></tr>
+      <tr><td><strong>Medium</strong></td><td>코드 리뷰, 테스트, PR 리뷰, 품질 게이트</td><td>claude-sonnet-5-5</td><td>gemini-3.8-flash</td><td>gpt-6.1-terra</td></tr>
+      <tr><td><strong>Low</strong></td><td>빠르고 반복적인 코딩, 스크립트 유지보수</td><td>claude-haiku-5-5</td><td>gemini-3.8-flash</td><td>gpt-6-luna</td></tr>
     </tbody>
   </table>
   </div>
-  <p><strong>새 소식(2026-09)</strong> &mdash; 예시 모델은 현재 레지스트리(<code>AGENTS.md</code> &sect;3.6)를 따릅니다. High와 Medium은 각각 <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>로 매핑되고, Gemini 두 행은 모두 <code>gemini-3.8-flash</code>입니다. 플랫폼 패리티도 다섯 번째 디렉터리를 포함합니다 &mdash; Hermes 플랫폼과 함께 <code>.hermes/</code>가 합류했습니다(ADR-0088). 2026-10에는 Low 티어 예시가 <code>claude-haiku-5-5</code>로 바뀌었고(별칭 <code>haiku</code>는 유지), 스킬은 모델 ID 리터럴을 하드코딩할 수 없게 되었습니다. 레지스트리 ID는 <code>docs/workspace-schema.json</code>(<code>models.*</code>)에만 두며, 모델 변경은 <code>model-migration</code> 스킬로 진행합니다.</p>
+  <p><strong>새 소식(2026-09)</strong> &mdash; 예시 모델은 현재 레지스트리(<code>AGENTS.md</code> &sect;3.6)를 따릅니다. High와 Medium은 각각 <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>로 매핑되고, Gemini 두 행은 모두 <code>gemini-3.8-flash</code>입니다. 플랫폼 패리티도 다섯 번째 디렉터리를 포함합니다 &mdash; Hermes 플랫폼과 함께 <code>.hermes/</code>가 합류했습니다(ADR-0088). 2026-10에는 Low 티어 예시가 <code>claude-haiku-5-5</code>로 바뀌었고(별칭 <code>haiku</code>는 유지), 스킬은 모델 ID 리터럴을 하드코딩할 수 없게 되었습니다. 레지스트리 ID는 <code>docs/workspace-schema.json</code>(<code>models.*</code>)에만 두며, 모델 변경은 <code>model-migration</code> 스킬로 진행합니다. 2026-11에는 codex 열이 GPT-6.x 세대로 이동했습니다: <code>gpt-5.6-sol</code>은 <code>gpt-6.1-sol</code>로, <code>gpt-5.6-terra</code>는 <code>gpt-6.1-terra</code>로, <code>gpt-5.6-luna</code>는 <code>gpt-6-luna</code>로 바뀌었습니다 &mdash; Low 티어는 6.1이 아니라 <code>gpt-6-luna</code>에 자리잡습니다(2026-10-31 OpenAI 모델 문서 기준 검증; sol/terra/luna 패턴은 유지, <code>gpt-6-astra</code>는 의도적으로 미채택). 같은 레지스트리 배치에서 zai 추론 자세도 균일하게 선언되었습니다 &mdash; 모든 티어에서 워크스페이스 디스패치 추론 수준은 <code>high</code> &mdash; 그리고 <code>zcode</code>가 zai 열로 모델을 해석하는 레지스트리 전용 플랫폼으로 등록되었습니다.</p>
   <p>이 정적 배정이 기준선(baseline)이 되지만, 실제 실행 시점에서는 PM이 <strong>Tier Adjustment Rules</strong>을 적용해 동적으로 비용을 최적화한다. 기준선이 high인 에이전트(architect)는 복잡한 설계 판단을 내려야 하므로 가장 강한 모델이 필요하다. 반면 automation-engineer는 ADR-0036에 따른 정형화된 스크립트를 작성하는 역할이므로 low 티어로 충분하다 — "무거운 판단"이 필요한가만 보면 되기 때문이다.</p>
 
   <h3>Tier Adjustment Rules — 실행 시 비용 최적화</h3>
@@ -142,6 +142,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
   <p><strong>ADR-0076</strong>은 호스트별 전달 매트릭스로 이 공백을 메운다. 프로젝트 단위 설정을 지원하는 호스트에는 저장소 수준 MCP 등록을 배치하고(Claude Code의 <code>.mcp.json</code>, Gemini/Antigravity의 <code>.gemini/settings.json</code>, Codex의 <code>.codex/config.toml</code>, OpenCode의 <code>opencode.json</code>), <code>AGENTS.md</code>/<code>CLAUDE.md</code>/<code>GEMINI.md</code>에 안내 블록을 넣고, 프로젝트 스코프가 없는 호스트에는 머신 전역 등록을 사용한다(Antigravity는 <code>graft init --agents antigravity</code>를 통한 전역 레지스트리, Claude Desktop은 작업 디렉터리를 전달할 수 없어 절대 경로가 필요하므로 손으로 작성한 <code>claude_desktop_config.json</code> 항목). <code>bunx @nanonets/graft mcp</code>가 모든 플랫폼에서 공통으로 커밋되는 표준 실행기가 되며, 머신 전역 설정에서는 네이티브 바이너리도 계속 쓸 수 있다.</p>
   <p>기존 플릿으로의 전달은 10장 §2에서 다룬 정책 기반 업그레이드 엔진을 그대로 타고 이루어지며, 일회성 마이그레이션 패스가 아니다. <code>.mcp.json</code>/<code>opencode.json</code>은 <code>JSON_MERGE_FILES</code> 분류에 합류해(그래야 프로젝트 고유의 MCP 서버가 병합 후에도 살아남는다) <code>.claude/skills/graft/**</code>는 일반 플랫폼 미러링 규칙보다 먼저 동기화되도록 특별 취급되고(그 규칙은 애초에 SSOT 밖에 있는 스킬에는 닿을 수 없으므로), <code>.codex/**</code>는 <code>ADD_IF_MISSING</code>으로 시딩되어 이미 자체 <code>config.toml</code>을 가진 프로젝트는 기존 내용을 유지한다. 롤아웃 시점에 graft 스킬 자체는 SSOT로 옮기지 않고 Claude 전용으로 남겨 둔 상태였다. 즉 루트와 <code>templates/common</code> 두 곳에 바이트 단위로 동일한 사본을 손으로 유지했다 — 옮기면 <code>sync-skills.ts</code>가 이를 Gemini/Antigravity 자체 스킬 디렉터리로 미러링해 버려서, 당시 이 도구에 대해 워크스페이스가 고정한 단일 플랫폼 설계가 깨지기 때문이었다. <strong>업데이트(2026-10-01, ADR-0076 수정안 1)</strong>: 이 예외는 사라졌다 — 이제 <code>skills/graft/SKILL.md</code>가 일반 SSOT 스킬로서 <code>sync-skills.ts</code>에 의해 다섯 플랫폼 디렉터리 모두에 미러링되며, graft 전용 특수 케이스(템플릿 트리 동기화 규칙, 패리티 스위프 제외, 바이트 동일성 검사)는 제거되었다. 신선도(freshness)는 의도적으로 수동으로 남겨 둔다(graft 도구는 답하기 전에 스스로 새로고침하며, 별도의 CI나 푸시 전 신선도 게이트는 없다).</p>
 <p><strong>새 소식(2026-10)</strong> &mdash; 워크스페이스는 graft 표면을 템플릿으로 배포하는 것을 중단했습니다. <code>skills/graft</code>는 <code>mirror: false</code>, <code>l2_propagate: false</code>로 표시되고, 새 스캐폴드에는 graft 스킬 사본이 들어가지 않으며, <code>AGENTS.md</code>의 graft 블록은 도구 소유입니다(<code>graft init</code>이 생성). 저장소 맥락 그래프는 여전히 스캐폴딩 시점에 자동으로 빌드되고(<code>graft build</code> 우선, <code>bunx</code> 대체) <code>graft ask</code>는 첫날부터 동작합니다.</p>
+<p><strong>새 소식(2026-11)</strong> &mdash; 도구 이름이 바뀌었습니다: graft 0.28이 벤더 리네임으로 <strong>trail</strong>이 되었습니다(설치: <code>npm i -g @trailhq/trail-code</code>, graft 시절 패키지 <code>@nanonets/graft</code>도 여전히 설치됩니다). 이 절의 내용은 그대로 유효하고 명령어 접두사만 <code>trail</code>이 됩니다: <code>trail map</code>·<code>trail ask</code>·<code>trail grep</code>·<code>trail skeleton</code>·<code>trail callers</code>·<code>trail build</code>. MCP 도구 이름은 벤더의 graft 표기를 그대로 유지하고(<code>graft_find_code</code> 등), 그래프 디렉터리는 <code>.trail/cache/</code>로 옮겨갑니다. 저장소 단위 마이그레이션은 <code>trail init</code>(<code>trail upgrade</code> 안에서도 실행됨)가 마무리하며, 정책은 ADR-0076, 설계 문서는 <code>2026-10-31-graft-trail-migration-design.md</code>입니다. 스킬도 <code>skills/graft</code>에서 <code>skills/trail</code>로 바뀌었습니다.</p>
 
   <h2 id="universal-design-gate">유니버설 디자인 게이트 — L0~L3 전반에서 스펙 게이트를 균일하게 만들기</h2>
   <p>10장 §4는 아래 <a href="#execution-plan-templates">실행 계획 템플릿</a>에서 L0/L1 실행 계획의 디자인 게이트(0번 행)를, 그리고 이를 동기화 시 FATAL 차단 조건으로 강제하는 스펙 체크(ADR-0055 Stage 2)를 이미 소개한 바 있다. 이 절에서 다루는 두 ADR은 같은 거버넌스 개념을 서로 다른 방향으로 확장하는데, 둘을 구분해 둘 필요가 있다.</p>
@@ -158,10 +159,12 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
     <tbody>
       <tr><td>0</td><td>Create/update design doc → <code>docs/designs/&lt;spec-id&gt;-design.md</code></td><td>architect</td><td>High</td><td>[model]</td><td>NEW</td></tr>
       <tr><td>1</td><td>[task description]</td><td>[specialist]</td><td>High/Medium/Low</td><td>[model]</td><td>&lt;spec-id&gt;</td></tr>
-      <tr><td>N</td><td><code>/sync "type(scope): message"</code></td><td>pm</td><td>Medium</td><td>[model]</td><td></td></tr>
+      <tr><td>N</td><td><code>/sync "type(scope): message"</code></td><td>pm</td><td>Medium</td><td>inherit (&lt;session model alias&gt;)</td><td></td></tr>
     </tbody>
   </table>
   </div>
+
+  <div class="note"><strong>새 소식(2026-11):</strong> 템플릿의 <code>/sync</code> 행 Model 셀이 <code>inherit (&lt;세션 모델 별칭&gt;)</code>으로 바뀌었고, PM 행 규칙도 더 엄격해졌습니다. PM이 소유한 모든 단계(설계 게이트 결정, 검증, <code>/sync</code>)는 각자의 행을 가져야 하며 모든 열을 채워야 합니다 — Agent <code>pm</code>, Tier <code>Medium</code>, Model <code>inherit (&lt;세션 모델 별칭&gt;)</code>(PM 세션이 구동되는 모델의 별칭). Agent/Tier/Model을 비워 둘 수 있는(<code>—</code>) 행은 E1&ndash;E5 면제 표시 행뿐입니다.</div>
 
   <h3>Design Gate (Row 0)</h3>
   <p>Row 0은 <strong>L0(워크스페이스 루트)과 L1(공통 템플릿)에만 강제</strong>된다. architect가 설계 문서를 먼저 작성하고, PM이 이를 검증한 뒤에야 구현 단계(Row 1 이후)로 진행할 수 있다. L2 variant 프로젝트는 자체 워크플로우를 관리하므로 이 게이트가 적용되지 않는다.</p>
@@ -193,7 +196,7 @@ tier:                          # 플랫폼별 모델 별칭(실행 시 번역됨
       <tr><td>2</td><td>Update scripts/audit.ts</td><td>automation-engineer</td><td>Low</td><td>haiku</td><td>&lt;spec-id&gt;</td></tr>
       <tr><td>3</td><td>Update CLAUDE.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
       <tr><td>4</td><td>Update GEMINI.md §5</td><td>docs-writer</td><td>Medium</td><td>sonnet</td><td>&lt;spec-id&gt;</td></tr>
-      <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>sonnet</td><td></td></tr>
+      <tr><td>5</td><td><code>/sync "docs(agents): update pm.md and platform dispatch rules"</code></td><td>pm</td><td>Medium</td><td>inherit (sonnet)</td><td></td></tr>
     </tbody>
   </table>
   </div>

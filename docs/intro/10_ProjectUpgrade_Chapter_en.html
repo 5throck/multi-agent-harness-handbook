@@ -23,6 +23,7 @@
   <a href="#why">Why it's needed — the flip side of the fork model</a>
   <a href="#usage">How to use upgrade-project.ts</a>
   <a href="#categories">The main file-handling categories</a>
+  <a href="#external-deps">External dependencies (2026-11)</a>
   <a href="#safety">Safety nets — snapshots and rollback</a>
   <a href="#vs-promotion">How this differs from promotion</a>
   <div class="nav-section">Other chapters</div>
@@ -44,6 +45,7 @@
       <li>Why "upgrading" in the fork model is a command you run, not something that happens automatically</li>
       <li>Basic usage of <code>upgrade-project.ts</code> and the principle of running <code>--dry-run</code> first</li>
       <li>The main file-handling modes: LOCKED, MERGE, DOCS_MERGE, VARIANT_DOCS_SYNC, COMMANDS_SYNC, SYNC_IF_NEWER, PRESERVE, PRUNE, plus TEMPLATE TREE SYNC and ENV_SAMPLE SYNC</li>
+      <li>The external-dependency machinery (2026-11): the <code>external-deps.json</code> manifest, the scaffold fetch, the compat-gated EXTERNAL DEPS pass, and the vendoring guard</li>
       <li>The automatic git stash snapshot and the <code>--rollback</code> safety net</li>
       <li>How this is the exact opposite direction from the "promotion" covered in Chapter 13</li>
     </ul>
@@ -91,6 +93,31 @@
 <div class="note">Two 2026-10 additions ride this same engine. <strong>ADR-0101</strong> turns the numbered skeleton sections of <code>CLAUDE.md</code>/<code>GEMINI.md</code> (the content outside the marker zones) into a managed delivery surface: <code>lib/platform-skeleton-merge.ts</code> inserts a missing canonical section at a template-relative anchor and replaces a divergent body only when it contains nothing project-local (guarded, writing a <code>&lt;file&gt;.pre-skeleton.bak</code> snapshot first) &mdash; closing the 2026-09-12 "upgrade ate a heading" defect class. And the new opt-in <code>--changelog-entry</code> flag scaffolds an editable <code>chore(upgrade): template sync</code> bullet at the top of the project CHANGELOG's <code>[Unreleased]</code> section (idempotent per template version; refused under <code>--dry-run</code>).</div>
   <p>Since v1.10.x, upgrades are also country-profile aware. Before running, the script reads the <code>country=</code> line from the project's <code>.claude/template-version.txt</code> (falling back to the jurisdiction noted in <code>docs/countries/ACTIVE.md</code>) to determine the target country, and preserves that line when it rewrites the file at the end — older versions dropped the line during the rewrite, erasing the project's country provenance. In addition, after all skill-sync passes finish, a registry-driven prune pass runs once more and deletes country-scoped skills (<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>) if they were re-injected into a project whose country doesn't match — preventing upgrades from undoing the pruning done at scaffold time. Forks deliberately modified locally, however, are kept with a <code>⚠️ CONFLICT</code> warning.</p>
   <p>If a SYNC_IF_NEWER target has been edited locally but the template's version is newer, the script marks it as <code>⚠️ CONFLICT</code> but still overwrites it with the template's content in the end. Keep in mind that this is "warn and proceed," not "ask before overwriting" — which is exactly why the safety net described below matters.</p>
+
+  <h2 id="external-deps">External dependencies (2026-11)</h2>
+  <p>One more surface rides the same engine. A project can declare <strong>pinned external git dependencies</strong> in an <code>external-deps.json</code> manifest at its root, and the distribution rule is settled: <strong>never vendor external repos into template trees</strong>. External code is cloned from GitHub at a pinned release tag, at scaffold time, into a gitignored project-local directory, and upgrades move the pin only when the dependency's compatibility test passes. The first consumer is <code>ppt-master</code> v6.8.0, the conversion engine behind co-work's deck pipeline, consumed as-is behind an adapter.</p>
+  <div class="note"><strong>What's new (2026-11):</strong> the external-dependency machinery landed — a schema-versioned <code>external-deps.json</code> manifest convention (seeded empty at L1, extended per variant), a scaffold-time fetch in <code>new-project.ts</code> §7.9 with the opt-in <code>--strict-external-deps</code> hard-fail flag, a compat-gated <strong>EXTERNAL DEPS</strong> pass in <code>upgrade-project.ts</code> with <code>--external-deps-only</code>, and a vendoring guard that fails template validation if any <code>install_dir</code> content ever lands inside a template tree.</div>
+  <p>Each manifest entry records the fields below. <code>pin</code> is the contract — the advisory <code>commit</code> field exists only as a drift tripwire.</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>Stable identifier, unique within the manifest — also the merge key when a variant seed extends the common seed</td></tr>
+      <tr><td><code>repo</code></td><td>https GitHub URL, no credentials</td></tr>
+      <tr><td><code>pin</code></td><td>Release tag — the version we run; the upgrade pass compares it against upstream tags</td></tr>
+      <tr><td><code>commit</code></td><td>Resolved sha, written back at fetch/update time — advisory drift tripwire only</td></tr>
+      <tr><td><code>install</code></td><td>Clone command template with <code>{pin}</code>/<code>{repo}</code>/<code>{dir}</code> placeholders (depth 1 at the tag)</td></tr>
+      <tr><td><code>install_dir</code></td><td>Project-relative clone destination — must be gitignored; an external clone must never be committed</td></tr>
+      <tr><td><code>consumer</code></td><td>Free text naming the consuming pipeline (advisory)</td></tr>
+      <tr><td><code>compatibility_test</code></td><td>Command run from the project root; exit 0 = pass — the gate every pin move must clear</td></tr>
+      <tr><td><code>propagation</code></td><td>Enum; <code>never</code> is the only value for now — external content never crosses the template boundary</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Scaffold fetch (§7.9).</strong> After project materialization completes, <code>new-project.ts</code> installs every manifest entry into its <code>install_dir</code> and appends the matching <code>.gitignore</code> line. The posture is WARN, not fail — a network-dependent scaffold must not leave the user without a project: on fetch failure the project is still scaffolded, a WARN row lands in the run output, and the documented retry is <code>bun scripts/upgrade-project.ts &lt;project-path&gt; --external-deps-only</code> (the same update pass, fetch-only flavor). <code>--strict-external-deps</code> flips this to hard-fail for CI and provisioning contexts that must not proceed without the dependencies.</p>
+  <p><strong>The EXTERNAL DEPS upgrade pass.</strong> The pass runs after TEMPLATE TREE SYNC, per dependency: <code>git ls-remote --tags</code> resolves the newest release tag (a tag not newer than <code>pin</code> short-circuits to "current"); if a newer tag exists, <code>compatibility_test</code> runs from the project root — on pass the pin moves (manifest <code>pin</code>/<code>commit</code> updated, the clone re-fetched at the new tag), on fail the current pin is held with a WARN row and no changes. Every dependency yields a decision-log row per the unified decision-log convention, <code>--dry-run</code> reports what it would do without touching anything, and <code>--external-deps-only</code> runs just this pass. Existing projects receive the template seeds through this same pass on their next upgrade — the empty L1 manifest, plus variant entries like ppt-master, arrive without any hand-written migration.</p>
+  <p><strong>Vendoring guard.</strong> Three rules keep external code out of the governed trees. Template validation fails if any path inside a template tree matches a manifest <code>install_dir</code> (the fastest way to catch an <code>external/ppt-master/</code> accidentally committed into a template); project-to-template propagation and the template-to-project tree sync both hard-skip those paths; and <code>install_dir</code> gitignore coverage is auto-appended at scaffold and validated at upgrade. A committed external clone would defeat the whole distribution model — upstream would see our fork as a diff.</p>
+  <p>The ppt-master entry shows the shape end to end: repo <code>https://github.com/hugohe3/ppt-master</code> (MIT), pin <code>v6.8.0</code>, cloned into <code>external/ppt-master</code> behind the deck pipeline's adapter, with a contract test as its <code>compatibility_test</code>. When ppt-master publishes v6.9.0, the upgrade pass runs the contract test first — the pin moves only on pass, and otherwise holds with a report row.</p>
 
   <h2 id="safety">Safety nets — snapshots and rollback</h2>
   <p>Before running (when not in <code>--dry-run</code> mode), the script automatically runs <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code> to snapshot the current state of your working tree. If you're not happy with the upgrade result, you can revert it immediately with the following command.</p>

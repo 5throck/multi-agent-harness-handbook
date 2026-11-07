@@ -409,7 +409,30 @@
 
   <p>これら7つのフェーズは、§3のワークフロー事例と直接対応しています。例えば、「コードレビュー」事例の全体フローは、フェーズ1-2（分析）→ フェーズ4（レビュー実行）→ フェーズ6（QA）のミニチュアです。実践で新しいワークフローを設計する際、これらのフェーズを念頭に置くことで、「人間ゲートをどこに配置するか」「どのステージが並列実行に安全か」を体系的に決定しやすくなります。</p>
 
-
+  <h3 id="worktree-convention">セッションごとのworktree規約 (2026-11)</h3>
+  <p>上のディスパッチパイプラインはもうひとつの前提を置いている: 書き込みの安全な場所。ディスパッチされたセッションの書き込みサーフェス — ブランチポインタと作業ツリー — は、セッションが同時実行されるとき <strong>共有された可変状態</strong> になる。だから各書き込みセッションは <code>git worktree</code> で自分の分を持つ。</p>
+  <p><strong>隔離が発動する条件。</strong>同時実行の証拠がひとつでもあれば隔離を選ぶ: 共有ツリーが汚れている（<code>git status --porcelain</code> が空でない）、共有チェックアウトが <code>main</code> 上にない、開いているPRが存在する。PMはディスパッチ時にこれを点検して結果をタスクブリーフィングに明示し、スペシャリストは開始時に再点検する — ディスパッチと開始の間に状態が変わることがあるからだ。</p>
+  <div class="table-compare narrow-col-2">
+  <table>
+    <thead><tr><th>タスクの形</th><th>ルール</th></tr></thead>
+    <tbody>
+      <tr><td>同時実行の証拠があるマルチファイル書き込みバッチ（コードまたはdocs）</td><td><strong>worktree必須</strong> — <code>origin/main</code> から分岐</td></tr>
+      <tr><td>読み取り専用タスク（リサーチ、分析、点検）</td><td>worktree推奨</td></tr>
+      <tr><td>同時実行の証拠がある単一ファイル書き込み</td><td>worktree推奨。共有チェックアウトに留まる場合は、変更を加えるコマンドの前に必ずverify-branch-before-mutate規律が必要</td></tr>
+      <tr><td>PMの事務作業（チケット移動、memoryログのみの変更、CHANGELOG項目）</td><td><strong>決して隔離しない</strong> — 共有チェックアウトに留める。スコープ付きステージングがすでに他セッションの汚れを除外する</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>ランディング — syncスキルのWorktree Landing Variant。</strong>リポジトリツリーの外の兄弟ディレクトリとしてworktreeを作り（<code>git worktree add ../&lt;repo&gt;-worktrees/&lt;slug&gt; -b pr/&lt;YYYYMMDD&gt;-&lt;slug&gt; origin/main</code>）、その中で <code>bun install</code> とすべての書き込みを行い、PR本文は <code>$(git rev-parse --git-dir)/sync-pr-body.md</code> に書く — worktree内ではworktree専用のgitディレクトリに解決されるため、同時実行セッション同士が衝突することはない。続いてsyncパイプラインがworktreeルートからコミット・プッシュ・PR作成を行い、PRが開かれた後にworktreeを取り除き、worktreeのパス・ブランチ・観測された同時実行の証拠をタスクレポートに記録する。</p>
+  <p><strong>チェックアウト復旧 — 5ステップルール。</strong>他セッションが実行途中で共有ツリーをひっくり返したとき:</p>
+  <ol>
+    <li>強制復元しない: <code>git checkout -f</code> 禁止、<code>git reset --hard</code> 禁止、他セッションの進行中ブランチの付け替え禁止、他セッションのuntrackedファイル削除禁止。</li>
+    <li>他セッションの汚れは、必須のチェックアウトを妨げるときだけスタッシュする — スコープを決め名前を付けて（<code>git stash push -m "foreign-&lt;session&gt;-&lt;date&gt;" -- &lt;paths&gt;</code>）。それ以外は触れない。</li>
+    <li>他セッションのコミットはそのまま残す: 他セッションのブランチとコミットは、こちらがリベース・リセット・削除してよいものではない。</li>
+    <li><code>origin/main</code> から再分岐する: <code>git fetch origin &amp;&amp; git checkout -b pr/&lt;YYYYMMDD&gt;-&lt;slug&gt;-retry origin/main</code>、そのうえで自分のステージ済み作業を再適用する（または上のルールに従いworktreeへ移る）。</li>
+    <li>衝突をタスクレポートとセッションメモリブロックに報告する: 誰がひっくり返したか、いつ検知したか、何をスタッシュしたか。</li>
+  </ol>
+  <div class="note"><strong>新着情報（2026-11）：</strong>セッションごとのworktree規約が採用された（T-20261106-010、設計 <code>2026-11-07-session-worktree-convention-design.md</code>）。フックや機械ゲートではなく、手順と報告義務で強制される — 規約が共有チェックアウトへの留まりを許す場所では、既存の規律がそのまま適用される。</div>
 
   <h2 id="procedure-schema">手順スキーマ — ワークフローの宣言的SSOT (ADR-0063)</h2>
   <p>この章のパターンが「事例」なら、手順スキーマはその事例を <strong>機械が読める宣言</strong> に引き上げる装置だ。variantテンプレートの <code>procedures/&lt;name&gt;/schema.yaml</code> にワークフロー段階を <code>{id, agent_key, skill_key, output_type, description}</code> として記録し、段階間の関係は <code>follows</code>·<code>enables</code>·<code>composes_with</code> 型で宣言する(参照C参照)。</p>

@@ -162,7 +162,7 @@ tier: high                     # 単一のスカラー宣言（ADR-0102）：コ
   </table>
   </div>
 
-  <div class="note"><strong>新着情報（2026-11）：</strong>テンプレートの <code>/sync</code> 行のModelセルは <code>inherit (&lt;セッションモデル別名&gt;)</code> となり、PM行ルールはより厳格になりました。PMが所有するすべてのステップ（デザインゲートの決定、検証、<code>/sync</code>）はそれぞれの行を持ち、全列を埋める必要があります — Agent <code>pm</code>、Tier <code>Medium</code>、Model <code>inherit (&lt;セッションモデル別名&gt;)</code>（PMセッション自体が動いているモデルの別名）。Agent/Tier/Modelを空にできる（<code>—</code>）のはE1&ndash;E5免除マーカー行だけです。</div>
+  <div class="note"><strong>新着情報（2026-11）：</strong>テンプレートの <code>/sync</code> 行のModelセルは <code>inherit (&lt;セッションモデル別名&gt;)</code> となり、PM行ルールはより厳格になりました。PMが所有するすべてのステップ（デザインゲートの決定、検証、<code>/sync</code>）はそれぞれの行を持ち、全列を埋める必要があります — Agent <code>pm</code>、Tier <code>Medium</code>、Model <code>inherit (&lt;セッションモデル別名&gt;)</code>（PMセッション自体が動いているモデルの別名）。Agent/Tier/Modelを空にできる（<code>—</code>）のはE1&ndash;E5免除マーカー行だけです。さらに実行計画は必ずヘッダー行 — <code>PM running on: &lt;model&gt;</code> — で始まり、この行は現在のセッションのモデルを記録します。PM行のModelセルの括弧内の別名は、このヘッダー行と一致しなければなりません（ヘッダー <code>PM running on: sonnet</code> ↔ セル <code>inherit (sonnet)</code>）。PMティアはセッションホストエージェントの能力下限です — より高いモデルは許され、ティアより低いモデルは警告です。</div>
 
   <h3>Design Gate（Row 0）</h3>
   <p>Row 0は<strong>L0（ワークスペースルート）とL1（共通テンプレート）にのみ強制</strong>される。architectがまず設計文書を作成し、PMがこれを検証した後にのみ実装段階（Row 1以降）に進むことができる。L2 variantプロジェクトは自身のワークフローを管理するため、このゲートは適用されない。</p>
@@ -186,6 +186,7 @@ tier: high                     # 単一のスカラー宣言（ADR-0102）：コ
 
   <h3>実践例：PMが作成した実行計画</h3>
   <p>以下は「agents/pm.mdとスクリプトを更新するプラットフォームパリティ作業」の実際の実行計画例である。</p>
+  <p><code>PM running on: sonnet</code></p>
   <div class="table-plan">
   <table>
     <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>

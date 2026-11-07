@@ -163,7 +163,7 @@ tier: high                     # 단일 스칼라 선언(ADR-0102): 비용 상�
   </table>
   </div>
 
-  <div class="note"><strong>새 소식(2026-11):</strong> 템플릿의 <code>/sync</code> 행 Model 셀이 <code>inherit (&lt;세션 모델 별칭&gt;)</code>으로 바뀌었고, PM 행 규칙도 더 엄격해졌습니다. PM이 소유한 모든 단계(설계 게이트 결정, 검증, <code>/sync</code>)는 각자의 행을 가져야 하며 모든 열을 채워야 합니다 — Agent <code>pm</code>, Tier <code>Medium</code>, Model <code>inherit (&lt;세션 모델 별칭&gt;)</code>(PM 세션이 구동되는 모델의 별칭). Agent/Tier/Model을 비워 둘 수 있는(<code>—</code>) 행은 E1&ndash;E5 면제 표시 행뿐입니다.</div>
+  <div class="note"><strong>새 소식(2026-11):</strong> 템플릿의 <code>/sync</code> 행 Model 셀이 <code>inherit (&lt;세션 모델 별칭&gt;)</code>으로 바뀌었고, PM 행 규칙도 더 엄격해졌습니다. PM이 소유한 모든 단계(설계 게이트 결정, 검증, <code>/sync</code>)는 각자의 행을 가져야 하며 모든 열을 채워야 합니다 — Agent <code>pm</code>, Tier <code>Medium</code>, Model <code>inherit (&lt;세션 모델 별칭&gt;)</code>(PM 세션이 구동되는 모델의 별칭). Agent/Tier/Model을 비워 둘 수 있는(<code>—</code>) 행은 E1&ndash;E5 면제 표시 행뿐입니다. 실행 계획은 또한 한 줄의 헤더 — <code>PM running on: &lt;model&gt;</code> — 로 시작해야 하며, 이 줄은 현재 세션의 모델을 기록합니다. PM 행 Model 셀의 괄호 안 별칭은 이 헤더 줄과 일치해야 합니다(헤더 <code>PM running on: sonnet</code> ↔ 행 <code>inherit (sonnet)</code>). PM 티어는 세션 호스트 에이전트의 능력 하한선입니다 — 더 높은 모델은 허용되고, 티어보다 낮은 모델은 경고입니다.</div>
 
   <h3>Design Gate (Row 0)</h3>
   <p>Row 0은 <strong>L0(워크스페이스 루트)과 L1(공통 템플릿)에만 강제</strong>된다. architect가 설계 문서를 먼저 작성하고, PM이 이를 검증한 뒤에야 구현 단계(Row 1 이후)로 진행할 수 있다. L2 variant 프로젝트는 자체 워크플로우를 관리하므로 이 게이트가 적용되지 않는다.</p>
@@ -187,6 +187,7 @@ tier: high                     # 단일 스칼라 선언(ADR-0102): 비용 상�
 
   <h3>실전 예시: PM이 작성한 실행 계획</h3>
   <p>다음은 "agents/pm.md와 스크립트를 업데이트하는 플랫폼 패리티 작업"의 실제 실행 계획 예시다.</p>
+  <p><code>PM running on: sonnet</code></p>
   <div class="table-plan">
   <table>
     <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>

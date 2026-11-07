@@ -18,6 +18,7 @@
   <a href="#why">なぜ必要か — フォークモデルの裏側</a>
   <a href="#usage">upgrade-project.ts の使い方</a>
   <a href="#categories">主なファイル処理分類</a>
+  <a href="#external-deps">外部依存関係 (2026-11)</a>
   <a href="#safety">安全装置 — スナップショットとロールバック</a>
   <a href="#vs-promotion">昇格との方向の違い</a>
   <div class="nav-section">他の章</div>
@@ -39,6 +40,7 @@
       <li>フォークモデルにおいて「アップグレード」がなぜ自動ではなくコマンド実行を要する作業なのか</li>
       <li><code>upgrade-project.ts</code>の基本的な使い方と<code>--dry-run</code>を先に行う原則</li>
       <li>LOCKED・MERGE・DOCS_MERGE・VARIANT_DOCS_SYNC・COMMANDS_SYNC・SYNC_IF_NEWER・PRESERVE・PRUNEの8つのファイル処理方式</li>
+      <li>外部依存関係のマシナリー(2026-11): <code>external-deps.json</code>マニフェスト、スキャフォールド時のフェッチ、互換性ゲート付きEXTERNAL DEPSパス、ベンダリングガード</li>
       <li>自動のgit stashスナップショットと<code>--rollback</code>による復元という安全装置</li>
       <li>第13章で扱う「昇格」とは方向が正反対である点</li>
     </ul>
@@ -86,6 +88,31 @@
 <div class="note">2026-10には、同じエンジンに2つの追加があった。<strong>ADR-0101</strong>は<code>CLAUDE.md</code>/<code>GEMINI.md</code>の番号付きスケルトンセクション（マーカー領域の外側の内容）を管理対象の配信サーフェスにする。<code>lib/platform-skeleton-merge.ts</code>が、欠けている標準セクションをテンプレート基準のアンカーに挿入し、食い違った本文はプロジェクト固有の内容を含まない場合にだけ置換する（ガード付き、置換前に<code>&lt;file&gt;.pre-skeleton.bak</code>スナップショットを作成）&mdash; 2026-09-12に観察された「アップグレードが見出しを食う」欠陥クラスを閉じたものである。さらに新しいオプトインフラグ<code>--changelog-entry</code>は、プロジェクトCHANGELOGの<code>[Unreleased]</code>セクションの先頭に編集可能な<code>chore(upgrade): template sync</code>バレットをひな形として作成する（テンプレートバージョンごとに冪等、<code>--dry-run</code>では拒否）。</div>
   <p>v1.10.xから、アップグレードは国プロフィール(国スコープ資産)にも対応する。実行前にプロジェクトの<code>.claude/template-version.txt</code>から<code>country=</code>行を読み(なければ<code>docs/countries/ACTIVE.md</code>の管轄表記で代用)て対象国を判定し、仕上げの書き換え時にはこの行をそのまま保持する — 旧バージョンは書き換え時にこの行を消してしまい、プロジェクトの所属国情報を失わせていた。さらに、すべてのスキル同期が終わった後、レジストリ駆動のpruneがもう一度実行され、国スコープスキル(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)が該当国以外のプロジェクトに再注入されていれば削除する — スキャフォールディング時の整理結果をアップグレードのたびに取り消してしまう事態を防ぐためである。ただし、ローカルで意図的に改変されたフォークは<code>⚠️ CONFLICT</code>警告付きでそのまま保持される。</p>
   <p>SYNC_IF_NEWER対象のファイルをローカルで直接修正済みの状態で、かつテンプレート側のバージョンがより新しい場合、スクリプトは<code>⚠️ CONFLICT</code>と表示しつつも、最終的にはテンプレートの内容で上書きする。「上書き前に確認する」動作ではなく、「警告のみして進める」動作である点を覚えておく必要がある — だからこそ、以下の安全装置が重要になる。</p>
+
+  <h2 id="external-deps">外部依存関係 (2026-11)</h2>
+  <p>同じエンジンに乗るサーフェスがもう一つある。プロジェクトはルートの<code>external-deps.json</code>マニフェストに<strong>ピン留めされた外部git依存関係</strong>を宣言できる。そして配布ルールは決定済みである — <strong>外部リポジトリをテンプレートツリーにベンダリングしない</strong>。外部コードはスキャフォールディング時に、ピン留めされたリリースタグでGitHubからクローンされ、gitignoreされたプロジェクトローカルディレクトリに置かれる。アップグレードは依存関係の互換性テストが通ったときにだけピンを動かす。最初の消費者はco-workのデッキパイプラインの変換エンジンである<code>ppt-master</code> v6.8.0で、アダプターの裏でそのまま消費する。</p>
+  <div class="note"><strong>新着情報（2026-11）：</strong>外部依存関係のマシナリーが到着した — スキーマバージョン付きの<code>external-deps.json</code>マニフェスト規約（L1では空のシード、バリアントごとに拡張）、<code>new-project.ts</code> §7.9のスキャフォールド時フェッチとオプトインのハードフェイルフラグ<code>--strict-external-deps</code>、<code>upgrade-project.ts</code>の互換性ゲート付き<strong>EXTERNAL DEPS</strong>パスと<code>--external-deps-only</code>フラグ、そして<code>install_dir</code>の内容がテンプレートツリーに入り込んだらテンプレート検証を失敗させるベンダリングガード。</div>
+  <p>マニフェストのエントリはそれぞれ下のフィールドを記録する。<code>pin</code>が契約であり、参考情報の<code>commit</code>フィールドはドリフトトリップワイヤとしてだけ使われる。</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>フィールド</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>マニフェスト内で一意な安定識別子 — バリアントシードが共通シードを拡張するときのマージキーでもある</td></tr>
+      <tr><td><code>repo</code></td><td>httpsのGitHub URL、認証情報なし</td></tr>
+      <tr><td><code>pin</code></td><td>リリースタグ — 実行するバージョン。アップグレードパスはこれをupstreamタグと比較する</td></tr>
+      <tr><td><code>commit</code></td><td>解決されたsha、フェッチ/更新時に書き戻す — 参考情報のドリフトトリップワイヤにすぎない</td></tr>
+      <tr><td><code>install</code></td><td><code>{pin}</code>/<code>{repo}</code>/<code>{dir}</code>プレースホルダを埋め込むクローンコマンドテンプレート（タグでdepth 1）</td></tr>
+      <tr><td><code>install_dir</code></td><td>プロジェクト相対のクローン先 — gitignore必須。外部クローンは決してコミットしない</td></tr>
+      <tr><td><code>consumer</code></td><td>消費するパイプラインの名を書く自由テキスト（参考情報）</td></tr>
+      <tr><td><code>compatibility_test</code></td><td>プロジェクトルートから実行するコマンド、exit 0 = 合格 — ピンを動かすたびに通過しなければならない関門</td></tr>
+      <tr><td><code>propagation</code></td><td>列挙型、現時点では<code>never</code>が唯一の値 — 外部コンテンツはテンプレート境界を決して越えない</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>スキャフォールド時フェッチ（§7.9）。</strong>プロジェクトのマテリアライズが完了すると、<code>new-project.ts</code>はマニフェストの各エントリを<code>install_dir</code>にインストールし、対応する<code>.gitignore</code>行を追記する。姿勢はWARNであってフェイルではない — ネットワーク依存のスキャフォールディングがユーザーをプロジェクトなしの状態にしてはならない。フェッチが失敗してもプロジェクトはスキャフォールディングされ、実行出力にWARN行が残り、文書化されたリトライ経路は<code>bun scripts/upgrade-project.ts &lt;project-path&gt; --external-deps-only</code>（同じ更新パスのフェッチ専用版）である。依存関係なしに進めてはならないCIやプロビジョニングの文脈では、<code>--strict-external-deps</code>がこの姿勢をハードフェイルに変える。</p>
+  <p><strong>EXTERNAL DEPSアップグレードパス。</strong>このパスはTEMPLATE TREE SYNCの後で依存関係ごとに実行される。<code>git ls-remote --tags</code>で最新のリリースタグを解決し（<code>pin</code>より新しくないタグは"current"で短絡する）、より新しいタグが存在すればプロジェクトルートで<code>compatibility_test</code>を実行する — 合格ならピンを動かし（マニフェストの<code>pin</code>/<code>commit</code>を更新、クローンを新しいタグで再フェッチ）、失敗なら現在のピンを保持してWARN行だけを残す。依存関係ごとに統一決定ログ規約に従って決定ログ行が一つ生まれ、<code>--dry-run</code>は何にも触れずに予定動作を報告し、<code>--external-deps-only</code>はこのパスだけを実行する。既存プロジェクトは次のアップグレードで同じパスを通してテンプレートシードを受け取る — 空のL1マニフェストとppt-masterのようなバリアントエントリが、手書きのマイグレーションなしに届く。</p>
+  <p><strong>ベンダリングガード。</strong>3つのルールが外部コードを統治されたツリーの外に閉じ込める。テンプレートツリー内のどのパスがマニフェストの<code>install_dir</code>と一致してもテンプレート検証は失敗する（テンプレートに誤ってコミットされた<code>external/ppt-master/</code>を捕まえる最速の方法）。プロジェクト→テンプレートの伝播とテンプレート→プロジェクトのツリー同期は、どちらもその経路をハードスキップする。そして<code>install_dir</code>のgitignoreカバレッジはスキャフォールド時に自動追記され、アップグレード時に検証される。コミットされた外部クローンは配布モデル全体を無効にする — upstreamは我々のフォークをひとつのdiffとして見ることになる。</p>
+  <p>ppt-masterのエントリがこの形を端から端まで見せている。repo <code>https://github.com/hugohe3/ppt-master</code>（MIT）、pin <code>v6.8.0</code>、デッキパイプラインのアダプターの裏の<code>external/ppt-master</code>へクローン、そして<code>compatibility_test</code>としての契約テスト。ppt-masterがv6.9.0を出したら、アップグレードパスはまず契約テストを実行する — 通ったときだけピンが動き、そうでなければ報告行とともにピンを保持する。</p>
 
   <h2 id="safety">安全装置 — スナップショットとロールバック</h2>
   <p>実行前(<code>--dry-run</code>でない場合)、スクリプトは自動的に<code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code>を実行し、現在の作業ツリーの状態をスナップショットとして残す。アップグレードの結果が気に入らない場合は、次のコマンドで即座に元に戻せる。</p>

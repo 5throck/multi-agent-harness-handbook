@@ -165,7 +165,7 @@ tier: high                     # one scalar declaration (ADR-0102): the cost cei
   </table>
   </div>
 
-  <div class="note"><strong>What's new (2026-11):</strong> the template's <code>/sync</code> row Model cell now reads <code>inherit (&lt;session model alias&gt;)</code>, and the PM-row rule got stricter. Every PM-owned step (the design-gate decision, verification, <code>/sync</code>) must appear as its own row with every column filled — Agent <code>pm</code>, Tier <code>Medium</code>, Model <code>inherit (&lt;session model alias&gt;)</code> (the alias of the model the PM session itself runs on). Only E1&ndash;E5 exemption marker rows may leave Agent/Tier/Model blank (<code>—</code>).</div>
+  <div class="note"><strong>What's new (2026-11):</strong> the template's <code>/sync</code> row Model cell now reads <code>inherit (&lt;session model alias&gt;)</code>, and the PM-row rule got stricter. Every PM-owned step (the design-gate decision, verification, <code>/sync</code>) must appear as its own row with every column filled — Agent <code>pm</code>, Tier <code>Medium</code>, Model <code>inherit (&lt;session model alias&gt;)</code> (the alias of the model the PM session itself runs on). Only E1&ndash;E5 exemption marker rows may leave Agent/Tier/Model blank (<code>—</code>). Every execution plan must also open with one header line — <code>PM running on: &lt;model&gt;</code> — recording the model of the current session, and the alias in parentheses of the PM row's Model cell must match that header line (header <code>PM running on: sonnet</code> pairs with row cell <code>inherit (sonnet)</code>). The PM tier is a capability floor for a session-hosted agent — a higher model is allowed; a model below the tier is a warning.</div>
 
   <h3>Design Gate (Row 0)</h3>
   <p>Row 0 is <strong>mandatory only for L0 (workspace root) and L1 (common templates)</strong>. Architect must first write the design document, and only after the PM verifies it can implementation (Row 1 onward) proceed. L2 variant projects manage their own workflow, so this gate does not apply to them.</p>
@@ -189,6 +189,7 @@ tier: high                     # one scalar declaration (ADR-0102): the cost cei
 
   <h3>Worked Example: An Execution Plan Written by the PM</h3>
   <p>Below is an actual execution plan example for "a platform parity task updating agents/pm.md and scripts."</p>
+  <p><code>PM running on: sonnet</code></p>
   <div class="table-plan">
   <table>
     <thead><tr><th>#</th><th>Task</th><th>Agent</th><th>Tier</th><th>Model</th><th>Spec</th></tr></thead>

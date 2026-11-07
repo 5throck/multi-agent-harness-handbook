@@ -23,6 +23,7 @@
   <a href="#why">왜 필요한가 — 포크 모델의 이면</a>
   <a href="#usage">upgrade-project.ts 사용법</a>
   <a href="#categories">주요 파일 처리 분류</a>
+  <a href="#external-deps">외부 의존성 (2026-11)</a>
   <a href="#safety">안전장치 — 스냅샷과 롤백</a>
   <a href="#vs-promotion">승격과의 방향 차이</a>
   <div class="nav-section">다른 장</div>
@@ -44,6 +45,7 @@
       <li>포크 모델에서 "업그레이드"가 왜 자동이 아니라 명령을 실행해야 하는 작업인지</li>
       <li><code>upgrade-project.ts</code>의 기본 사용법과 <code>--dry-run</code> 우선 원칙</li>
       <li>LOCKED·MERGE·DOCS_MERGE·VARIANT_DOCS_SYNC·COMMANDS_SYNC·SYNC_IF_NEWER·PRESERVE·PRUNE와 TEMPLATE TREE SYNC·ENV_SAMPLE SYNC 등 주요 파일 처리 방식</li>
+      <li>외부 의존성 매커니즘(2026-11): <code>external-deps.json</code> 매니페스트, 스캐폴드 패치, 호환성 게이트를 통과해야만 핀을 옮기는 EXTERNAL DEPS 패스, 벤더링 가드</li>
       <li>자동 git stash 스냅샷과 <code>--rollback</code>으로 되돌리는 안전장치</li>
       <li>13장에서 다루는 "승격"과 방향이 정반대라는 점</li>
     </ul>
@@ -91,6 +93,31 @@
 <div class="note">2026-10에는 같은 엔진에 두 가지가 더해졌다. <strong>ADR-0101</strong>은 <code>CLAUDE.md</code>/<code>GEMINI.md</code>의 번호 매겨진 스켈레톤 섹션(마커 영역 밖의 내용)을 관리 대상 전달 표면으로 만든다. <code>lib/platform-skeleton-merge.ts</code>가 없는 표준 섹션은 템플릿 기준 앵커에 삽입하고, 어긋난 본문은 프로젝트 고유 내용이 없을 때만 교체한다(가드 적용, 교체 전에 <code>&lt;file&gt;.pre-skeleton.bak</code> 스냅샷 작성) &mdash; 2026-09-12에 관찰된 "업그레이드가 제목을 삼키는" 결함 계열을 닫은 것이다. 그리고 새로운 옵트인 플래그 <code>--changelog-entry</code>는 프로젝트 CHANGELOG의 <code>[Unreleased]</code> 섹션 맨 위에 편집 가능한 <code>chore(upgrade): template sync</code> 불릿을 만들어 준다(템플릿 버전별 멱등, <code>--dry-run</code>에서는 거부).</div>
   <p>v1.10.x부터 업그레이드는 국가 프로필(국가 스코프 자산)도 인식한다. 실행 전 프로젝트의 <code>.claude/template-version.txt</code>에서 <code>country=</code> 줄을 읽어(없으면 <code>docs/countries/ACTIVE.md</code>의 관할 표기로 대체) 대상 국가를 파악하고, 마무리 시 이 줄을 그대로 보존한다 — 구버전은 이 파일을 재작성하면서 <code>country=</code> 줄을 지워버려 국가 소속 정보를 잃게 했다. 또한 스킬 동기화가 모두 끝난 뒤 레지스트리 기반 prune가 한 번 더 실행되어, 국가 스코프 스킬(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)이 해당 국가가 아닌 프로젝트에 다시 주입됐다면 삭제한다 — 스캐폴딩 시점의 정리 결과를 매번 업그레이드가 되돌리는 사태를 막기 위함이다. 단, 로컬에서 의도적으로 고친 포크는 <code>⚠️ CONFLICT</code> 경고와 함께 그대로 보존된다.</p>
   <p>SYNC_IF_NEWER 대상 파일을 로컬에서 직접 고쳐 쓴 상태인데 템플릿 쪽 버전이 더 높으면, 스크립트는 <code>⚠️ CONFLICT</code>로 표시하면서도 결국 템플릿 내용으로 덮어쓴다. "덮어쓰기 전에 물어봐 주는" 동작이 아니라 "경고만 하고 진행하는" 동작이라는 점을 기억해야 한다 — 그래서 아래 안전장치가 중요하다.</p>
+
+  <h2 id="external-deps">외부 의존성 (2026-11)</h2>
+  <p>같은 엔진을 타는 표면이 하나 더 있다. 프로젝트는 루트의 <code>external-deps.json</code> 매니페스트에 <strong>핀으로 고정된 외부 git 의존성</strong>을 선언할 수 있고, 배포 규칙은 정해졌다. <strong>외부 저장소를 템플릿 트리 안에 벤더링하지 않는다.</strong> 외부 코드는 스캐폴딩 시점에 GitHub에서 릴리스 태그를 핀으로 고정해 클론하고, gitignore된 프로젝트 로컬 디렉터리에 둔다. 업그레이드는 의존성의 호환성 테스트가 통과할 때만 핀을 옮긴다. 첫 소비자는 co-work 덱 파이프라인의 변환 엔진인 <code>ppt-master</code> v6.8.0이며, 어댑터 뒤에서 있는 그대로 소비한다.</p>
+  <div class="note"><strong>새 소식(2026-11):</strong> 외부 의존성 매커니즘이 도착했다 — 스키마 버전이 매겨진 <code>external-deps.json</code> 매니페스트 규약(L1에서는 빈 배열 시드, variant마다 확장), <code>new-project.ts</code> §7.9의 스캐폴드 시점 패치와 옵트인 하드 실패 플래그 <code>--strict-external-deps</code>, <code>upgrade-project.ts</code>의 호환성 게이트가 걸린 <strong>EXTERNAL DEPS</strong> 패스와 <code>--external-deps-only</code> 플래그, 그리고 <code>install_dir</code> 내용이 템플릿 트리 안에 들어오면 템플릿 검증을 실패시키는 벤더링 가드.</div>
+  <p>매니페스트 항목 하나하나는 아래 필드를 기록한다. <code>pin</code>이 계약이고, 자문용 <code>commit</code> 필드는 드리프트 트립와이어로만 쓰인다.</p>
+  <div class="table-compare">
+  <table>
+    <thead><tr><th>필드</th><th>의미</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>매니페스트 안에서 유일한 안정 식별자 — variant 시드가 공통 시드를 확장할 때의 병합 키이기도 하다</td></tr>
+      <tr><td><code>repo</code></td><td>https GitHub URL, 자격 증명 없음</td></tr>
+      <tr><td><code>pin</code></td><td>릴리스 태그 — 우리가 실행하는 버전. 업그레이드 패스가 이 태그를 upstream 태그들과 비교한다</td></tr>
+      <tr><td><code>commit</code></td><td>해석된 sha, 패치/갱신 시점에 기록 — 자문용 드리프트 트립와이어일 뿐</td></tr>
+      <tr><td><code>install</code></td><td><code>{pin}</code>/<code>{repo}</code>/<code>{dir}</code> 플레이스홀더를 넣는 클론 명령 템플릿(태그 기준 depth 1)</td></tr>
+      <tr><td><code>install_dir</code></td><td>프로젝트 상대 클론 대상 — gitignore 필수. 외부 클론은 절대 커밋하지 않는다</td></tr>
+      <tr><td><code>consumer</code></td><td>소비 파이프라인 이름을 적는 자유 텍스트(자문용)</td></tr>
+      <tr><td><code>compatibility_test</code></td><td>프로젝트 루트에서 실행하는 명령, exit 0 = 통과 — 핀을 옮길 때마다 통과해야 하는 관문</td></tr>
+      <tr><td><code>propagation</code></td><td>열거형, 현재는 <code>never</code>가 유일한 값 — 외부 콘텐츠는 템플릿 경계를 절대 넘지 않는다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>스캐폴드 패치(§7.9).</strong> 프로젝트 구체화가 끝나면 <code>new-project.ts</code>가 매니페스트 항목마다 <code>install_dir</code>에 설치하고 그에 맞는 <code>.gitignore</code> 줄을 덧붙인다. 자세는 WARN이지 실패가 아니다 — 네트워크에 의존하는 스캐폴딩이 사용자를 프로젝트 없이 남겨두면 안 되기 때문이다. 패치가 실패해도 프로젝트는 여전히 스캐폴딩되고, 실행 출력에 WARN 행이 남으며, 문서화된 재시도 경로는 <code>bun scripts/upgrade-project.ts &lt;project-path&gt; --external-deps-only</code>(같은 갱신 패스의 패치 전용 형태)다. 의존성 없이는 진행하면 안 되는 CI·프로비저닝 맥락에서는 <code>--strict-external-deps</code>가 이 자세를 하드 실패로 바꾼다.</p>
+  <p><strong>EXTERNAL DEPS 업그레이드 패스.</strong> 이 패스는 TEMPLATE TREE SYNC 다음에 의존성별로 실행된다. <code>git ls-remote --tags</code>로 최신 릴리스 태그를 확인하고(<code>pin</code>보다 새롭지 않은 태그는 "current"로 짧게 끝난다), 더 새로운 태그가 있으면 프로젝트 루트에서 <code>compatibility_test</code>를 돌린다 — 통과하면 핀을 옮기고(매니페스트의 <code>pin</code>/<code>commit</code> 갱신, 클론을 새 태그로 다시 패치), 실패하면 현재 핀을 그대로 두고 WARN 행만 남긴다. 의존성마다 통합 결정 로그 규약에 따라 결정 로그 행이 하나씩 생기고, <code>--dry-run</code>은 아무것도 건드리지 않고 예정된 동작만 보고하며, <code>--external-deps-only</code>는 이 패스만 실행한다. 기존 프로젝트는 다음 업그레이드에서 같은 패스를 통해 템플릿 시드를 받는다 — 비어 있는 L1 매니페스트와 ppt-master 같은 variant 항목이 손으로 쓴 마이그레이션 없이 도착한다.</p>
+  <p><strong>벤더링 가드.</strong> 세 가지 규칙이 외부 코드를 통제된 트리 밖에 묶어 둔다. 템플릿 트리 안의 어떤 경로가 매니페스트 <code>install_dir</code>과 일치하면 템플릿 검증이 실패한다(템플릿에 실수로 커밋된 <code>external/ppt-master/</code>를 잡는 가장 빠른 방법). 프로젝트→템플릿 전파와 템플릿→프로젝트 트리 동기화는 양방향 모두 이 경로를 건너뛴다. 그리고 <code>install_dir</code>의 gitignore 커버리지는 스캐폴드 시점에 자동으로 덧붙고 업그레이드 시점에 검증된다. 커밋된 외부 클론은 배포 모델 전체를 무너뜨린다 — upstream은 우리 포크를 하나의 diff로 보게 된다.</p>
+  <p>ppt-master 항목이 이 모양을 끝까지 보여준다. repo <code>https://github.com/hugohe3/ppt-master</code>(MIT), pin <code>v6.8.0</code>, 덱 파이프라인 어댑터 뒤의 <code>external/ppt-master</code>에 클론, 그리고 <code>compatibility_test</code>로서의 계약 테스트. ppt-master가 v6.9.0을 내놓으면 업그레이드 패스는 먼저 계약 테스트를 돌린다 — 통과할 때만 핀이 움직이고, 그렇지 않으면 보고 행과 함께 핀을 유지한다.</p>
 
   <h2 id="safety">안전장치 — 스냅샷과 롤백</h2>
   <p>실행 전(<code>--dry-run</code>이 아닐 때) 스크립트는 자동으로 <code>git stash push -m pre-upgrade-snapshot-YYYYMMDD</code>를 실행해 현재 작업 트리 상태를 스냅샷으로 남긴다. 업그레이드 결과가 마음에 들지 않으면 다음 명령으로 즉시 되돌릴 수 있다.</p>

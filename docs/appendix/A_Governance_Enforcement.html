@@ -103,10 +103,10 @@
   <h2 id="b6-platform">플랫폼별 강제력 차이</h2>
   <p>같은 규칙이어도 플랫폼에 따라 체감이 다르다는 점을 정직하게 인정하는 것이 이 설계의 성숙한 부분이다.</p>
   <ul>
-    <li><strong>Claude Code CLI / Gemini CLI</strong> — 훅 완전 지원. 기계적 차단이 동작한다.</li>
+    <li><strong>Claude Code CLI / Gemini CLI</strong> — 훅 완전 지원. 기계적 차단이 동작한다. 2026-10부터 이 강제가 전문 에이전트 디스패치까지 확장됐다. <code>scripts/hooks/pm-dispatch-gate.ts</code>가 로스터에 등록된 디스패치(Claude Code의 <code>Agent</code> 도구, Gemini CLI의 <code>invoke_subagent</code>)를 가로채고, 신선한 PM 역할 마커(<code>pm-role-bootstrap.ts</code>, 24시간 TTL)가 없으면 Claude Code에서는 사람 확인을 요청하고 Gemini CLI에서는 사유와 함께 거부한다.</li>
     <li><strong>Claude Desktop App</strong> — 훅이 조건부로 발화. 프롬프트 계층이 주 방어선.</li>
     <li><strong>Antigravity</strong> — 훅 미지원. 오직 프롬프트 지시만 남는다. 여기서 규칙을 무시하면 기계적 차단은 없지만, 그것은 <strong>거버넌스 위반</strong>으로 기록된다.</li>
-    <li><strong>Codex (CLI·Desktop App)</strong> — 훅 미지원. 대신 <code>CODEX.md</code>가 시스템 프롬프트로 직접 주입되므로 프롬프트 계층이 기본 방어선이다. 규칙을 무시해도 기계적 차단은 없지만, 마찬가지로 <strong>거버넌스 위반</strong>으로 기록된다.</li>
+    <li><strong>Codex (CLI·Desktop App)</strong> — 과거에는 훅 미지원이었다. 대신 <code>CODEX.md</code>가 시스템 프롬프트로 직접 주입되므로 프롬프트 계층이 기본 방어선이다. 2026-10부터 Codex CLI에 훅 인터페이스가 생겼고 워크스페이스는 <code>.codex/hooks.json</code>으로 연결한다 — SessionStart에 <code>pm-role-bootstrap.ts</code>, UserPromptSubmit에 <code>codex-user-prompt-gate.ts</code>. 후자는 신선한 PM 역할 마커 없는 세션의 슬래시 스타일 전문 에이전트 호출을 기계적으로 차단한다. Codex 훅은 신뢰 게이트(trust-gated) 방식(해시 고정, <code>/hooks</code>로 검토 전까지 건너뜀)이고, 사후 검증/QA 훅 스위트는 여전히 Claude/Gemini 전용이므로 이 한 개의 게이트 밖에서는 프롬프트 계층이 여전히 기본 방어선이다. 규칙을 무시해도 기계적 차단은 없지만, 마찬가지로 <strong>거버넌스 위반</strong>으로 기록된다.</li>
   </ul>
   <p>따라서 "훅이 없는 플랫폼에서는 규칙이 선택 사항"이 아니라, "강제 계층이 약해질 뿐 위반의 성격은 같다"는 해석이 정확하다.</p>
 

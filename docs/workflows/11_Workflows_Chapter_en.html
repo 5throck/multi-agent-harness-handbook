@@ -409,7 +409,30 @@
 
   <p>These seven phases correspond directly to the workflow cases in §3. For example, the overall flow of the "code review" case is a miniature of Phase 1-2 (analysis) → Phase 4 (review execution) → Phase 6 (QA). Keeping these phases in mind when designing a new workflow in practice makes it easier to systematically decide "where to place the human gate" and "which stages are safe for parallel execution."</p>
 
-
+  <h3 id="worktree-convention">Per-Session Worktree Convention (2026-11)</h3>
+  <p>The dispatch pipeline above assumes one more thing: a safe place to write. A dispatched session's write surface — its branch pointer and working tree — is <strong>shared mutable state</strong> when sessions run concurrently, so each write session gets its own via <code>git worktree</code>.</p>
+  <p><strong>When isolation kicks in.</strong> Any single piece of concurrency evidence selects it: the shared tree is dirty (<code>git status --porcelain</code> non-empty), the shared checkout is not on <code>main</code>, or any open PR exists. The PM checks this at dispatch time and states the result in the task brief; the specialist re-checks at start, because state can change between dispatch and start.</p>
+  <div class="table-compare narrow-col-2">
+  <table>
+    <thead><tr><th>Task shape</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td>Multi-file write batch (code or docs) with concurrency evidence</td><td><strong>Worktree required</strong> — branch from <code>origin/main</code></td></tr>
+      <tr><td>Read-only tasks (research, analysis, inspection)</td><td>Worktree recommended</td></tr>
+      <tr><td>Single-file write with concurrency evidence</td><td>Worktree recommended; staying on the shared checkout requires the verify-branch-before-mutate discipline before every mutating command</td></tr>
+      <tr><td>PM bookkeeping (ticket moves, memory-log-only changes, CHANGELOG entries)</td><td><strong>Never isolated</strong> — stays on the shared checkout; scoped staging already excludes foreign dirt</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Landing — the sync skill's Worktree Landing Variant.</strong> Create the worktree as a sibling directory outside the repository tree (<code>git worktree add ../&lt;repo&gt;-worktrees/&lt;slug&gt; -b pr/&lt;YYYYMMDD&gt;-&lt;slug&gt; origin/main</code>), run <code>bun install</code> and perform all writes inside it, and write the PR body to <code>$(git rev-parse --git-dir)/sync-pr-body.md</code> — inside a worktree this resolves to the worktree's private git dir, so concurrent sessions never collide. The sync pipeline then commits, pushes, and opens the PR from the worktree root; remove the worktree after the PR opens, and record the worktree path, branch, and observed concurrency evidence in the task report.</p>
+  <p><strong>Checkout recovery — the 5-step rule.</strong> When the shared tree is flipped mid-flight by a foreign session:</p>
+  <ol>
+    <li>Do not force-restore: no <code>git checkout -f</code>, no <code>git reset --hard</code>, no repointing another session's in-flight branch, no deleting foreign untracked files.</li>
+    <li>Stash foreign dirt only if it blocks a required checkout — scoped and named (<code>git stash push -m "foreign-&lt;session&gt;-&lt;date&gt;" -- &lt;paths&gt;</code>); leave it untouched otherwise.</li>
+    <li>Leave foreign commits alone: another session's branch and its commits are not ours to rebase, reset, or delete.</li>
+    <li>Re-branch from <code>origin/main</code>: <code>git fetch origin &amp;&amp; git checkout -b pr/&lt;YYYYMMDD&gt;-&lt;slug&gt;-retry origin/main</code>, then re-apply your own staged work (or move to a worktree per the rule above).</li>
+    <li>Report the collision in the task report and the session memory block: who flipped, when detected, what was stashed.</li>
+  </ol>
+  <div class="note"><strong>What's new (2026-11):</strong> the per-session worktree convention was adopted (T-20261106-010; design <code>2026-11-07-session-worktree-convention-design.md</code>). It is enforced by procedure and report duty, not by a hook or machine gate — the shared checkout's discipline still applies wherever the convention allows staying there.</div>
 
   <h2 id="procedure-schema">Procedure Schema — the Declarative SSOT of Workflows (ADR-0063)</h2>
   <p>If this chapter's patterns are "cases", the procedure schema is the device that lifts those cases into <strong>machine-readable declarations</strong>. A variant template's <code>procedures/&lt;name&gt;/schema.yaml</code> records workflow steps as <code>{id, agent_key, skill_key, output_type, description}</code>, with relations between steps declared as typed <code>follows</code>·<code>enables</code>·<code>composes_with</code> (see Reference C).</p>

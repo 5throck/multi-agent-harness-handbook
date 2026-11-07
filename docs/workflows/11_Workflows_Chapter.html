@@ -409,7 +409,30 @@
 
   <p>이 7단계 페이즈는 §3의 워크플로우 사례와 직접 대응된다. 예를 들어 "코드 리뷰" 사례의 전체 흐름은 Phase 1~2(분석) → Phase 4(검토 실행) → Phase 6(QA)의 축소판이다. 실무에서 새 워크플로우를 설계할 때 이 페이즈를 염두에 두면 "어디에 인간 게이트를 둘 것인가"와 "병렬 실행이 안전한 단계는 어디인가"를 더 체계적으로 결정할 수 있다.</p>
 
-
+  <h3 id="worktree-convention">세션별 worktree 규약 (2026-11)</h3>
+  <p>위의 디스패치 파이프라인은 한 가지를 더 전제한다: 쓰기에 안전한 장소. 디스패치된 세션의 쓰기 표면 — 브랜치 포인터와 작업 트리 — 는 세션이 동시에 실행될 때 <strong>공유 가변 상태</strong>가 되므로, 쓰기 세션마다 <code>git worktree</code>로 자기 몫을 하나씩 가진다.</p>
+  <p><strong>격리가 켜지는 시점.</strong> 동시성 증거가 하나라도 있으면 격리를 선택한다: 공유 트리가 더러움(<code>git status --porcelain</code> 결과가 비어 있지 않음), 공유 체크아웃이 <code>main</code> 위에 있지 않음, 또는 열려 있는 PR이 존재. PM은 디스패치 시점에 이를 점검해 결과를 작업 브리핑에 밝히고, 전문가는 시작 시점에 다시 점검한다 — 디스패치와 시작 사이에 상태가 바뀔 수 있기 때문이다.</p>
+  <div class="table-compare narrow-col-2">
+  <table>
+    <thead><tr><th>작업 형태</th><th>규칙</th></tr></thead>
+    <tbody>
+      <tr><td>동시성 증거가 있는 멀티 파일 쓰기 배치(코드 또는 문서)</td><td><strong>worktree 필수</strong> — <code>origin/main</code>에서 분기</td></tr>
+      <tr><td>읽기 전용 작업(리서치, 분석, 점검)</td><td>worktree 권장</td></tr>
+      <tr><td>동시성 증거가 있는 단일 파일 쓰기</td><td>worktree 권장. 공유 체크아웃에 남을 경우 모든 변경 명령 전에 verify-branch-before-mutate 규율이 필요하다</td></tr>
+      <tr><td>PM 부기작업(티켓 이동, memory 로그만 변경, CHANGELOG 항목)</td><td><strong>절대 격리하지 않음</strong> — 공유 체크아웃에 남는다. 스코프 스테이징이 이미 외부 더러움을 제외한다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>랜딩 — sync 스킬의 Worktree Landing Variant.</strong> 저장소 트리 밖의 형제 디렉터리로 worktree를 만들고(<code>git worktree add ../&lt;repo&gt;-worktrees/&lt;slug&gt; -b pr/&lt;YYYYMMDD&gt;-&lt;slug&gt; origin/main</code>), 그 안에서 <code>bun install</code>과 모든 쓰기를 수행하며, PR 본문은 <code>$(git rev-parse --git-dir)/sync-pr-body.md</code>에 쓴다 — worktree 안에서는 worktree 전용 git dir로 해석되므로 동시 세션끼리 절대 충돌하지 않는다. 이어서 sync 파이프라인이 worktree 루트에서 커밋·푸시·PR 생성을 수행하고, PR이 열린 뒤 worktree를 제거하며, worktree 경로·브랜치·관찰된 동시성 증거를 작업 보고서에 기록한다.</p>
+  <p><strong>체크아웃 복구 — 5단계 규칙.</strong> 외부 세션이 실행 도중에 공유 트리를 뒤집었을 때:</p>
+  <ol>
+    <li>강제 복원하지 않는다: <code>git checkout -f</code> 금지, <code>git reset --hard</code> 금지, 다른 세션의 진행 중 브랜치 재지정 금지, 외부 untracked 파일 삭제 금지.</li>
+    <li>외부 더러움은 필수 체크아웃을 막을 때만 스태시한다 — 스코프를 정하고 이름을 붙여서(<code>git stash push -m "foreign-&lt;session&gt;-&lt;date&gt;" -- &lt;paths&gt;</code>). 그렇지 않으면 건드리지 않는다.</li>
+    <li>외부 커밋은 그대로 둔다: 다른 세션의 브랜치와 커밋은 우리가 리베이스·리셋·삭제할 것이 아니다.</li>
+    <li><code>origin/main</code>에서 다시 분기한다: <code>git fetch origin &amp;&amp; git checkout -b pr/&lt;YYYYMMDD&gt;-&lt;slug&gt;-retry origin/main</code>, 그리고 자기 스테이지 작업을 다시 적용하거나(위 규칙에 따라 worktree로 옮기거나) 한다.</li>
+    <li>충돌을 작업 보고서와 세션 메모리 블록에 보고한다: 누가 뒤집었는지, 언제 감지했는지, 무엇을 스태시했는지.</li>
+  </ol>
+  <div class="note"><strong>새 소식(2026-11):</strong> 세션별 worktree 규약이 채택되었다(T-20261106-010, 설계 <code>2026-11-07-session-worktree-convention-design.md</code>). 훅이나 기계 게이트가 아니라 절차와 보고 의무로 강제된다 — 규약이 공유 체크아웃에 남는 것을 허용하는 곳에서는 기존 규율이 그대로 적용된다.</div>
 
   <h2 id="procedure-schema">절차 스키마 — 워크플로우의 선언적 SSOT (ADR-0063)</h2>
   <p>이 장의 패턴들이 "사례"라면, 절차 스키마는 그 사례들을 <strong>기계가 읽는 선언</strong>으로 끌어올린 장치다. variant 템플릿의 <code>procedures/&lt;name&gt;/schema.yaml</code>에 워크플로우 단계를 <code>{id, agent_key, skill_key, output_type, description}</code>으로 기록하고, 단계 사이의 관계는 <code>follows</code>·<code>enables</code>·<code>composes_with</code> 타입으로 선언한다(참고 C 참조).</p>

@@ -162,7 +162,7 @@ tier: high                     # declaración escalar única (ADR-0102): solo el
   </table>
   </div>
 
-  <div class="note"><strong>Novedades (2026-11):</strong> la celda Modelo de la fila <code>/sync</code> de la plantilla ahora dice <code>inherit (&lt;alias del modelo de la sesión&gt;)</code>, y la regla de la fila del PM se volvió más estricta. Cada paso propiedad del PM (la decisión de la puerta de diseño, la verificación, <code>/sync</code>) debe aparecer como su propia fila con todas las columnas completas — Agente <code>pm</code>, Nivel <code>Medio</code>, Modelo <code>inherit (&lt;alias del modelo de la sesión&gt;)</code> (el alias del modelo en el que corre la propia sesión del PM). Solo las filas de exención E1&ndash;E5 pueden dejar Agente/Nivel/Modelo en blanco (<code>—</code>).</div>
+  <div class="note"><strong>Novedades (2026-11):</strong> la celda Modelo de la fila <code>/sync</code> de la plantilla ahora dice <code>inherit (&lt;alias del modelo de la sesión&gt;)</code>, y la regla de la fila del PM se volvió más estricta. Cada paso propiedad del PM (la decisión de la puerta de diseño, la verificación, <code>/sync</code>) debe aparecer como su propia fila con todas las columnas completas — Agente <code>pm</code>, Nivel <code>Medio</code>, Modelo <code>inherit (&lt;alias del modelo de la sesión&gt;)</code> (el alias del modelo en el que corre la propia sesión del PM). Solo las filas de exención E1&ndash;E5 pueden dejar Agente/Nivel/Modelo en blanco (<code>—</code>). Todo plan de ejecución debe abrir además con una línea de cabecera — <code>PM running on: &lt;modelo&gt;</code> — que registra el modelo de la sesión actual, y el alias entre paréntesis de la celda Modelo de la fila del PM debe coincidir con esa línea de cabecera (cabecera <code>PM running on: sonnet</code> se empareja con celda <code>inherit (sonnet)</code>). El nivel del PM es un suelo de capacidad para un agente alojado en la sesión — un modelo más alto está permitido; un modelo por debajo del nivel es una advertencia.</div>
 
   <h3>Puerta de Diseño (Fila 0)</h3>
   <p>La Fila 0 es <strong>obligatoria solo para L0 (raíz del espacio de trabajo) y L1 (plantillas comunes)</strong>. El Architect debe escribir primero el documento de diseño, y solo después de que el PM lo verifique puede proceder la implementación (Fila 1 en adelante). Los proyectos de variantes L2 gestionan su propio flujo de trabajo, por lo que esta puerta no se aplica a ellos.</p>
@@ -186,6 +186,7 @@ tier: high                     # declaración escalar única (ADR-0102): solo el
 
   <h3>Ejemplo Resuelto: Un Plan de Ejecución Escrito por el PM</h3>
   <p>A continuación se muestra un ejemplo real de plan de ejecución para "una tarea de paridad de plataformas actualizando agents/pm.md y scripts."</p>
+  <p><code>PM running on: sonnet</code></p>
   <div class="table-plan">
   <table>
     <thead><tr><th>#</th><th>Tarea</th><th>Agente</th><th>Nivel</th><th>Modelo</th><th>Espec.</th></tr></thead>

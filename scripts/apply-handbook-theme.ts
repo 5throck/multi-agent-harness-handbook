@@ -362,6 +362,13 @@ const ALIASES = {
   "--accent6": "var(--accent-dark)",
 };
 
+// Language-specific rules appended after the :root/.dark blocks (kept in sync with the committed CSS).
+const JA_CSS = `/* Japanese pages: Meiryo-first stack and slightly tighter line height */
+:root:lang(ja) { --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Meiryo, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; --line-height-body: 1.55; --line-height-compact: 1.5; }
+/* Inline diagram groups on ja pages hardcode a generic stack; defer to the page font */
+:root:lang(ja) svg g[font-family^="-apple-system"], :root:lang(ja) svg g[font-family^="system-ui"] { font-family: var(--font-family); }
+`;
+
 function generateCss(theme: ThemePalette): string {
   let css = `/* handbook-variables.css — ${theme.name} theme */\n`;
   css += `/* ${theme.desc} */\n`;
@@ -389,6 +396,8 @@ function generateCss(theme: ThemePalette): string {
     css += `  ${key}: ${value};\n`;
   }
   css += `}\n`;
+
+  css += `\n${JA_CSS}`;
 
   return css;
 }

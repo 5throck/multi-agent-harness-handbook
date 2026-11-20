@@ -138,3 +138,8 @@
   --accent4: var(--accent-purple); --accent5: var(--accent-red);
   --accent6: var(--accent-dark);
 }
+
+/* Japanese pages: Meiryo-first stack and slightly tighter line height */
+:root:lang(ja) { --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Meiryo, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; --line-height-body: 1.55; --line-height-compact: 1.5; }
+/* Inline diagram groups on ja pages hardcode a generic stack; defer to the page font */
+:root:lang(ja) svg g[font-family^="-apple-system"], :root:lang(ja) svg g[font-family^="system-ui"] { font-family: var(--font-family); }

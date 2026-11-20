@@ -1,3 +1,9 @@
+## 2026-11-20
+
+### Changed
+- Japanese pages (`lang="ja"`) and the Japanese architecture SVG now default to Meiryo (Latin system fonts first, then Meiryo, Hiragino Kaku Gothic ProN, Noto Sans JP) with slightly tighter line height; other languages are unchanged.
+
+
 ## 2026-10-02
 
 ### Added

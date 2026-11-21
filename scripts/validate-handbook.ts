@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// @version 1.1.0
 // scripts/validate-handbook.ts
 // Unified handbook validator — the single entry point of the toolkit.
 // Aggregates every read-only check so a handbook can be validated with one
@@ -8,10 +9,13 @@
 //   ① Structure  (check-structure.ts)  — tag nesting, pre/copy-btn, nested
 //     code-block, stray chars, required scripts, lang, language pairs
 //   ② Navigation (validate-nav's 4 checks) — broken links, prev/next symmetry,
-//     label↔target match, site-search DOCS sync (skipped if no site-search.js)
+//     label↔target match, search-manifest sync (skipped if no manifest)
 //   ③ Tables     (check-tables.ts)     — table column-sizing policy
-//   authoring    (check-authoring.ts)  — opt-in: AUTHORING_GUIDELINES §10-§24
-//   doctor       (handbook-doctor.ts)  — opt-in: 12 static analysis checks
+//   a11y         (check-a11y.ts)       — alt, heading hierarchy, empty links, lang
+//   spell         (check-spell.ts)      — common English misspellings
+//   lint          (check-lint.ts)       — inline styles, event handlers, deprecated tags, IDs
+//   authoring     (check-authoring.ts)  — opt-in: AUTHORING_GUIDELINES §10-§24
+//   doctor        (handbook-doctor.ts)  — opt-in: 12 static analysis checks
 //
 // Usage:
 //   bun run scripts/validate-handbook.ts --docs-dir docs
@@ -27,6 +31,9 @@ import { checkBrokenLinks } from "./check-links.ts";
 import { checkSymmetry } from "./check-symmetry.ts";
 import { checkLabels } from "./check-labels.ts";
 import { checkSearchIndex } from "./check-search.ts";
+import { checkA11y, type A11yIssue } from "./check-a11y.ts";
+import { checkSpelling, type SpellingIssue } from "./check-spell.ts";
+import { checkLint, type LintIssue } from "./check-lint.ts";
 
 interface Issue {
   file?: string;
@@ -48,9 +55,13 @@ function getArg(name: string, fallback: string): string {
 
 const docsDir = resolve(getArg("--docs-dir", "docs"));
 const checksArg = getArg("--checks", "structure,nav,tables");
-const checks = checksArg === "all"
-  ? ["structure", "nav", "tables", "authoring", "doctor"]
-  : checksArg.split(",").map((s) => s.trim()).filter(Boolean);
+const checks =
+  checksArg === "all"
+    ? ["structure", "nav", "tables", "a11y", "spell", "lint", "authoring", "doctor"]
+    : checksArg
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
 
 // Point every check at the target docs dir (nav-utils resolves lazily).
 configureDocsDir(docsDir);
@@ -74,7 +85,8 @@ if (checks.includes("nav")) {
   const navIssues: Issue[] = [];
   for (const e of checkBrokenLinks()) navIssues.push({ file: e.file, detail: `${e.href} -> missing` });
   for (const e of checkSymmetry()) navIssues.push({ file: e.fileA, detail: e.detail });
-  for (const e of checkLabels()) navIssues.push({ file: e.file, detail: `${e.href} label "${e.label}" vs target "${e.targetTitle}"` });
+  for (const e of checkLabels())
+    navIssues.push({ file: e.file, detail: `${e.href} label "${e.label}" vs target "${e.targetTitle}"` });
   for (const e of checkSearchIndex()) navIssues.push({ file: e.path, detail: e.detail });
   addReport("② Navigation", navIssues);
 }
@@ -103,14 +115,45 @@ function runSubprocess(scriptName: string, label: string): void {
   const output = `${r.stdout || ""}${r.stderr || ""}`.trim();
   if (r.status !== 0) {
     const lines = output.split("\n").filter((l) => l.trim().length > 0);
-    addReport(label, lines.length > 0 ? lines.map((l) => ({ detail: l.trim() })) : [{ detail: `${scriptName} exited ${r.status}` }]);
+    addReport(
+      label,
+      lines.length > 0 ? lines.map((l) => ({ detail: l.trim() })) : [{ detail: `${scriptName} exited ${r.status}` }],
+    );
   } else {
     addReport(label, []);
   }
 }
 
-if (checks.includes("authoring")) runSubprocess("check-authoring.ts", "④ Authoring");
-if (checks.includes("doctor")) runSubprocess("handbook-doctor.ts", "⑤ Doctor");
+if (checks.includes("authoring")) runSubprocess("check-authoring.ts", "⑥ Authoring");
+if (checks.includes("doctor")) runSubprocess("handbook-doctor.ts", "⑦ Doctor");
+
+// ④ Accessibility (in-process)
+if (checks.includes("a11y")) {
+  addReport(
+    "④ Accessibility",
+    checkA11y().map((e: A11yIssue) => ({ file: e.file, line: e.line, detail: e.detail })),
+  );
+}
+
+// ⑤ Spell check (in-process)
+if (checks.includes("spell")) {
+  addReport(
+    "⑤ Spell check",
+    checkSpelling().map((e: SpellingIssue) => ({
+      file: e.file,
+      line: e.line,
+      detail: `"${e.misspelling}" -> ${e.correction}`,
+    })),
+  );
+}
+
+// ⑥ HTML lint (in-process)
+if (checks.includes("lint")) {
+  addReport(
+    "⑥ HTML lint",
+    checkLint().map((e: LintIssue) => ({ file: e.file, line: e.line, detail: e.detail })),
+  );
+}
 
 // ---- Report ----
 let totalIssues = 0;

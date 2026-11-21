@@ -1,9 +1,18 @@
+// @version 1.0.0
 // scripts/check-labels.ts
 // Check ③: chapter-nav link labels should match the target file's title or h1.
 // Canonical source of the handbook toolkit (adapted from
 // Handbooks/multi-agent-harness-handbook/scripts/check-labels.ts).
 
-import { findAllHtmlFiles, readFile, extractChapterNav, resolveHref, extractTitle, extractH1, getDocsDir } from "./nav-utils.ts";
+import {
+  findAllHtmlFiles,
+  readFile,
+  extractChapterNav,
+  resolveHref,
+  extractTitle,
+  extractH1,
+  getDocsDir,
+} from "./nav-utils.ts";
 import { relative } from "node:path";
 
 export interface LabelError {

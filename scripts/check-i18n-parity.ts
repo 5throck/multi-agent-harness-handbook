@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// @version 1.0.0
 // scripts/check-i18n-parity.ts
 // Check ③: Cross-language content parity for localized handbook pages.
 // Groups docs/**/*.html by base name (X.html + X_en/X_ja/X_es.html) and fails on:
@@ -7,10 +8,12 @@
 // and warns on li/tr deviation >15% and numeric-token ($/€/%) multiset drift.
 // Also fails internal links inside _en/_ja/_es pages pointing at a page that
 // has a same-suffix variant on disk (wrong-language link).
-// adapted from Handbooks/multi-agent-harness-handbook/scripts/check-i18n-parity.ts.
+// Canonical source: Handbooks/multi-agent-harness-handbook/scripts/check-i18n-parity.ts
+// (vendored into the co-deck H-Stage toolkit; keep in sync when upstream changes).
 //
 // Usage:
 //   bun run scripts/check-i18n-parity.ts --docs-dir docs
+//   (or invoked as Check 13 by handbook-doctor.ts)
 
 import { existsSync } from "node:fs";
 import { relative } from "node:path";
@@ -170,7 +173,10 @@ export function checkI18nParity(): ParityIssue[] {
       }
       const diffs = multisetDiff(base.numbers, stats.numbers);
       if (diffs.length > 0) {
-        const shown = diffs.slice(0, 10).map((d) => `${d.token} (base×${d.a}, ${lang}×${d.b})`).join("; ");
+        const shown = diffs
+          .slice(0, 10)
+          .map((d) => `${d.token} (base×${d.a}, ${lang}×${d.b})`)
+          .join("; ");
         const more = diffs.length > 10 ? ` (+${diffs.length - 10} more)` : "";
         issues.push({
           type: "numeric-tokens",
@@ -192,14 +198,24 @@ export function checkI18nParity(): ParityIssue[] {
     const html = readFile(abs).replace(/<!--[\s\S]*?-->/g, "");
     const linkRe = /<a\s+(?:[^>]*?\s)?href="([^"]*)"[^>]*>/g;
     let m: RegExpExecArray | null;
-    while ((m = linkRe.exec(html)) !== null) {
+    m = linkRe.exec(html);
+    while (m !== null) {
       const href = m[1];
       const targetAbs = resolveHref(abs, href);
-      if (!targetAbs || !existsSync(targetAbs)) continue; // external/anchor/broken handled elsewhere
+      if (!targetAbs || !existsSync(targetAbs)) {
+        m = linkRe.exec(html);
+        continue;
+      } // external/anchor/broken handled elsewhere
       const targetRel = relOf(targetAbs);
-      if (/^index(?:_[a-z]{2})?\.html$/.test(targetRel)) continue; // docs home valid for every language
+      if (/^index(?:_[a-z]{2})?\.html$/.test(targetRel)) {
+        m = linkRe.exec(html);
+        continue;
+      } // docs home valid for every language
       const family = groups.get(splitRel(targetRel).key);
-      if (!family || family.variants.size === 0) continue; // target has no variants -> exempt
+      if (!family || family.variants.size === 0) {
+        m = linkRe.exec(html);
+        continue;
+      } // target has no variants -> exempt
       const expected = family.variants.get(self.lang);
       if (expected && expected !== targetAbs) {
         issues.push({
@@ -212,6 +228,7 @@ export function checkI18nParity(): ParityIssue[] {
           detail: `links to ${targetRel} but ${relOf(expected)} exists — expected same-suffix (_${self.lang}) link`,
         });
       }
+      m = linkRe.exec(html);
     }
   }
 

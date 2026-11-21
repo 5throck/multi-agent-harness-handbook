@@ -1,5 +1,10 @@
 ## 2026-11-21
 
+### Changed
+- Re-vendored the `scripts/` toolkit from the ai-workspace-standards template (`templates/common/scripts/handbook/`, ai-workspace-standards#2135), which is now the canonical source; header paths rewritten for this flat layout. `check-generated-content.ts` is now the generalized version that reads `<html lang>`. `doctor` and `apply-theme` now pass `--project .`. No page, CSS, or JS changed.
+
+## 2026-11-21
+
 ### Fixed
 - `apply-handbook-theme.ts` now emits the Japanese `:root:lang(ja)` font rules (Meiryo-first stack, tighter line height, inline SVG font override) after the `:root`/`.dark` blocks, so `bun run apply-theme` no longer drops them.
 

@@ -1,3 +1,4 @@
+// @version 2.0.0
 // scripts/check-search.ts
 // Check ④: search-manifest.json must contain all primary HTML files in docs/,
 // every manifest entry must point to an existing file, and search-data.js
@@ -41,9 +42,7 @@ export function checkSearchIndex(): SearchIndexError[] {
   const manifest = readManifest(docsDir);
   if (!manifest) return errors; // no manifest — skip
 
-  const actualFiles = new Set(
-    findAllHtmlFiles().map((f) => relative(docsDir, f).replace(/\\/g, "/"))
-  );
+  const actualFiles = new Set(findAllHtmlFiles().map((f) => relative(docsDir, f).replace(/\\/g, "/")));
 
   const manifestPaths = new Set(manifest.pages.map((p) => p.path.replace(/\\/g, "/")));
 

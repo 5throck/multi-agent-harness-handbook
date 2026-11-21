@@ -270,6 +270,8 @@
     <code>validate-skills.ts</code> は、スキルのライフサイクルにおける Test 段階の中核となるツールです。このスクリプトは単純な形式チェックだけでなく、スキル間のトリガー衝突や参照の整合性まで点検します。新しいスキルを追加したり既存のスキルを修正したりするたびに必ず実行する必要があります。エージェントの <code>agent:verify</code> と同様に、CI/CDパイプラインに組み込むことで、未検証のスキルが配備されることを自動的に防止できます。
   </div>
 
+  <div class="note"><strong>新着情報（2026-11）：</strong>ライフサイクルはスキルごとにガバナンス記録を残すようになりました（U-20261112-005）。プロジェクトに配信されるすべてのスキルは <code>docs/lifecycle/skills/&lt;name&gt;.md</code> の記録と一緒に届けられ、この記録は SKILL.md のフロントマターから <code>scripts/generate-skill-lifecycle-records.ts</code> が生成します — <code>--write</code> は記録を作成し、<code>--check</code> はバイト単位の一致を検証し、<code>--project &lt;path&gt;</code> は単一プロジェクトを対象にします。オーナーの解決はフロントマターの <code>owner:</code> を先に読み、次に <code>scripts/data/skill-owner-map.json</code> を読みます。<code>validate-templates.ts</code> の SLR チェックがこの記録を強制し（<code>scripts/skill-record-enforcement.json</code> でゲートされます）、欠落または古くなった記録は警告ではなくテンプレート検証の失敗になります。設計: <code>docs/designs/2026-11-12-skill-lifecycle-record-delivery-design.md</code>。</div>
+
   <!-- ─── スキル関係グラフ ─── -->
 
   <h2 id="s2-skill-graph">スキル関係グラフ</h2>

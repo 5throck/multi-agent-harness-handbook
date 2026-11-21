@@ -1,5 +1,8 @@
 ## 2026-11-21
 
+### Changed
+- CI: the Pages deploy gate (`deploy-pages.yml`) and PR validation (`validate-handbook.yml`) now run `bun run check-generated-content`, which was previously only part of the local `ci` chain.
+
 ### Fixed
 - `apply-handbook-theme.ts` now emits the Japanese `:root:lang(ja)` font rules (Meiryo-first stack, tighter line height, inline SVG font override) after the `:root`/`.dark` blocks, so `bun run apply-theme` no longer drops them.
 

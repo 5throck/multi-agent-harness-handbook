@@ -30,6 +30,7 @@ jobs:
       - run: bun run check-a11y
       - run: bun run check-spell
       - run: bun run check-lint
+      - run: bun run check-generated-content
       - run: bun run check-external-links
       - run: bun run check-search
       - run: bun run build-search-index

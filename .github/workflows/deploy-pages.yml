@@ -25,6 +25,7 @@ jobs:
       - run: bun run validate-handbook
       - run: bun run validate-nav
       - run: bun run check-authoring
+      - run: bun run check-generated-content
 
   build:
     runs-on: ubuntu-latest

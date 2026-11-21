@@ -1,3 +1,4 @@
+// @version 1.0.0
 /**
  * extract-copycode.ts
  *
@@ -16,8 +17,7 @@
 import { readdir, stat, readFile, writeFile } from "node:fs/promises";
 import { join, relative, dirname, posix } from "node:path";
 
-const INLINE_SCRIPT_PATTERN =
-  /<script>\s*function copyCode\(btn\) \{[\s\S]*?\}\s*<\/script>/;
+const INLINE_SCRIPT_PATTERN = /<script>\s*function copyCode\(btn\) \{[\s\S]*?\}\s*<\/script>/;
 
 async function walkDir(dir: string, ext: string): Promise<string[]> {
   const results: string[] = [];

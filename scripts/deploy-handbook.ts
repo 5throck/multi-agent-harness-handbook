@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// @version 1.1.0
 // scripts/deploy-handbook.ts
 // Deploys a handbook to GitHub Pages — automates repo creation, visibility,
 // GitHub Actions workflow generation, Pages activation, and verification.
@@ -21,10 +22,32 @@ function getArg(name: string, fallback: string): string {
   return fallback;
 }
 
+// --- Input Validation ---
+function validateRepoSlug(slug: string): boolean {
+  return /^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*\/[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*$/.test(slug);
+}
+function validateVisibility(vis: string): boolean {
+  return vis === "public" || vis === "private";
+}
+function validateOutputDir(dir: string): boolean {
+  return dir !== "" && !dir.includes("..") && !dir.startsWith("/") && !dir.includes("\0");
+}
+
 const projectDir = resolve(getArg("--project", "."));
 const outputDir = getArg("--output", "handbook");
 const repoSlug = getArg("--repo", "");
 const visibility = getArg("--visibility", "public");
+
+// Validate inputs
+if (!validateRepoSlug(repoSlug)) {
+  fatal('--repo must be "owner/name" with only alphanumeric, dot, hyphen, underscore');
+}
+if (!validateVisibility(visibility)) {
+  fatal('--visibility must be "public" or "private"');
+}
+if (!validateOutputDir(outputDir)) {
+  fatal('--output must not contain "..", start with "/", or be empty');
+}
 
 const handbookDir = join(projectDir, outputDir);
 const docsDir = join(handbookDir, "docs");
@@ -39,30 +62,27 @@ function fatal(msg: string): never {
   process.exit(1);
 }
 
-
-/**
- * Execute a command using execFileSync with an argument array — no shell
- * interpretation, so user-controlled values cannot cause injection.
- */
-function runExec(
-  cmd: string,
-  args: string[],
-  opts?: { cwd?: string; silent?: boolean },
+function runArgs(
+  bin: string,
+  argv: string[],
+  opts?: { cwd?: string; silent?: boolean; captureStderr?: boolean },
 ): string {
   const cwd = opts?.cwd ?? projectDir;
   try {
-    const result = execFileSync(cmd, args, {
+    const stdioCfg = opts?.silent ? ["ignore", "pipe", opts?.captureStderr ? "pipe" : "inherit"] : "inherit";
+    const result = execFileSync(bin, argv, {
       cwd,
       encoding: "utf-8",
-      stdio: opts?.silent ? "pipe" : "inherit",
+      stdio: stdioCfg as never,
       timeout: 60_000,
     });
     return (result || "").trim();
   } catch (e: unknown) {
-    const err = e as { stderr?: string; message?: string; status?: number };
-    throw new Error(
-      `Command failed: ${cmd} ${args.join(" ")}\n${err.stderr || err.message || String(e)}`,
-    );
+    const err = e as { stderr?: string; stdout?: string; message?: string };
+    if (opts?.captureStderr && (err.stdout !== undefined || err.stderr !== undefined)) {
+      return `${err.stdout || ""}${err.stderr || ""}`.trim();
+    }
+    throw new Error(`Argv command failed: ${bin} ${argv.join(" ")}\n${err.stderr || err.message || e}`);
   }
 }
 
@@ -91,12 +111,8 @@ function patchReadmePagesUrl(readmePath: string, url: string, title: string): bo
   const isKo = lang === "ko";
 
   // Build the expected 🌐 section (matches scaffold-handbook.ts format)
-  const sectionHeading = isKo
-    ? "## 🌐 교육 프로그램 바로가기 (웹사이트)"
-    : "## 🌐 Read the Handbook Live";
-  const linkText = isKo
-    ? `${title} 교육 사이트 보기`
-    : "Online Handbook & Educational Program";
+  const sectionHeading = isKo ? "## 🌐 교육 프로그램 바로가기 (웹사이트)" : "## 🌐 Read the Handbook Live";
+  const linkText = isKo ? `${title} 교육 사이트 보기` : "Online Handbook & Educational Program";
   const newSection = `${sectionHeading}\n👉 **[${linkText}](${url})**`;
 
   // Case 2/3: 🌐 section already exists
@@ -125,11 +141,7 @@ function patchReadmePagesUrl(readmePath: string, url: string, title: string): bo
   }
 
   // Case 1: No 🌐 section — insert before 🎯 or 📜
-  const insertBefore = content.includes("## 🎯")
-    ? "## 🎯"
-    : content.includes("## 📜")
-      ? "## 📜"
-      : null;
+  const insertBefore = content.includes("## 🎯") ? "## 🎯" : content.includes("## 📜") ? "## 📜" : null;
 
   if (insertBefore) {
     content = content.replace(insertBefore, `${newSection}\n\n${insertBefore}`);
@@ -145,22 +157,7 @@ function patchReadmePagesUrl(readmePath: string, url: string, title: string): bo
 // --- Step 0: Validate inputs ---
 log("🔍", "Pre-flight checks...");
 
-// Validate repoSlug: must match GitHub's owner/repo naming rules
-const REPO_SLUG_RE = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
-if (!repoSlug || !REPO_SLUG_RE.test(repoSlug)) {
-  fatal('--repo is required and must be "owner/name" format with only alphanumeric characters, dots, hyphens, or underscores (e.g. 5throck/my-handbook)');
-}
-
-// Validate visibility: whitelist to prevent arbitrary flag injection
-if (visibility !== "public" && visibility !== "private") {
-  fatal('--visibility must be "public" or "private"');
-}
-
-// Validate outputDir: only safe filesystem characters (no shell metacharacters)
-const SAFE_DIR_RE = /^[a-zA-Z0-9_./-]+$/;
-if (!outputDir || !SAFE_DIR_RE.test(outputDir)) {
-  fatal('--output contains unsafe characters. Use only alphanumeric, dots, hyphens, underscores, slashes, or periods.');
-}
+// repoSlug already validated above by validateRepoSlug
 
 if (!existsSync(docsDir)) {
   fatal(`docs/ directory not found at ${docsDir} — run scaffold first`);
@@ -179,7 +176,7 @@ if (!existsSync(nojekyllPath)) {
 
 // Validate gh CLI is available and authenticated
 try {
-  runExec("gh", ["auth", "status"], { silent: true });
+  runArgs("gh", ["auth", "status"], { silent: true });
 } catch {
   fatal("gh CLI not authenticated — run `gh auth login` first");
 }
@@ -187,22 +184,26 @@ try {
 // --- Step 1: Secret scan ---
 log("🔒", "Running secret scan on docs/...");
 const scanPatterns = [
-  "api_key", "apikey", "api-key",
-  "password", "passwd",
-  "secret", "secret_key",
-  "token", "access_token",
+  "api_key",
+  "apikey",
+  "api-key",
+  "password",
+  "passwd",
+  "secret",
+  "secret_key",
+  "token",
+  "access_token",
   "private_key",
   "credentials",
 ];
 try {
-  // Use grep via execFileSync for safe argument passing (no shell interpolation)
-  const grepArgs = ["-rniE", `(${scanPatterns.join("|")})\\s*[=:]\\s*['\"]?[^'\"\\s]{8,}`, "docs/"];
-  runExec("grep", grepArgs, { cwd: handbookDir, silent: true });
+  const scanPattern = `(${scanPatterns.join("|")})\\s*[=:]\\s*['\"]?[^'\"\\s]{8,}`;
+  runArgs("grep", ["-rniE", scanPattern, "docs/"], { cwd: handbookDir, silent: true });
   fatal("Potential secrets detected in docs/ — aborting deployment. Review and remove before retry.");
 } catch (e: unknown) {
-  const err = e as { message?: string; status?: number };
-  // grep returns non-zero (exit code 1) when no matches — that's what we want
-  if (err.message?.includes("Command failed") || err.message?.includes("grep") || (err.status != null && err.status !== 0)) {
+  const err = e as { message?: string };
+  // grep returns non-zero when no matches — that's what we want
+  if (err.message?.includes("command failed") || err.message?.includes("grep")) {
     log("✅", "No secrets detected");
   } else {
     fatal(`Secret scan error: ${err.message || e}`);
@@ -218,31 +219,33 @@ log("📦", `Ensuring GitHub repo: ${fullRepo} (${visibility})`);
 
 let repoExists = true;
 try {
-  runExec("gh", ["repo", "view", fullRepo], { silent: true });
+  runArgs("gh", ["repo", "view", fullRepo], { silent: true });
 } catch {
   repoExists = false;
 }
 
 if (repoExists) {
   // Check current visibility
-  const currentVis = runExec("gh", ["repo", "view", fullRepo, "--json", "isPrivate", "-q", ".isPrivate"], { silent: true });
+  const currentVis = runArgs("gh", ["repo", "view", fullRepo, "--json", "isPrivate", "-q", ".isPrivate"], {
+    silent: true,
+  });
   const isPrivate = currentVis === "true";
   const wantsPublic = visibility === "public";
 
   if (isPrivate && wantsPublic) {
     log("🔓", `Switching ${fullRepo} from private to public...`);
-    runExec("gh", ["repo", "edit", fullRepo, "--visibility", "public"]);
+    runArgs("gh", ["repo", "edit", fullRepo, "--visibility", "public"]);
     log("✅", "Repository is now public");
   } else if (!isPrivate && !wantsPublic) {
     log("🔒", `Switching ${fullRepo} from public to private...`);
-    runExec("gh", ["repo", "edit", fullRepo, "--visibility", "private"]);
+    runArgs("gh", ["repo", "edit", fullRepo, "--visibility", "private"]);
     log("✅", "Repository is now private");
   } else {
     log("✅", `Repository already ${visibility}`);
   }
 } else {
   log("🆕", `Creating repository: ${fullRepo} (${visibility})...`);
-  runExec("gh", ["repo", "create", fullRepo, `--${visibility}`, "--source=.", "--push=false"]);
+  runArgs("gh", ["repo", "create", fullRepo, `--${visibility}`, "--source=.", "--push=false"]);
   log("✅", "Repository created");
 }
 
@@ -276,13 +279,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
 
       - name: Setup Pages
-        uses: actions/configure-pages@983d7736d9b0a2b6e9657e3b9e46888349699cc4 # v5.0.0
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@5636014a3d170e597d9aa4b9929a265f96ff2c92 # v3.0.1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ${outputDir}/docs
 
@@ -295,7 +298,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@d6db901677b11abb34ba381b1b5ad937216f5e08 # v4.0.5
+        uses: actions/deploy-pages@v4
 `;
 
 const deployWorkflowPath = join(workflowsDir, "deploy-pages.yml");
@@ -306,8 +309,12 @@ log("✅", "Created .github/workflows/deploy-pages.yml");
 log("🌐", "Configuring GitHub Pages...");
 
 try {
-  // Check if Pages is already enabled
-  const pagesInfo = runExec("gh", ["api", `repos/${fullRepo}/pages`, "-q", ".source"], { silent: true });
+  // Check if Pages is already enabled (captureStderr: gh api may exit non-zero
+  // on 404 — we want the combined stdout+stderr text, not a thrown error).
+  const pagesInfo = runArgs("gh", ["api", `repos/${fullRepo}/pages`, "-q", ".source"], {
+    silent: true,
+    captureStderr: true,
+  });
 
   if (pagesInfo && !pagesInfo.includes("404")) {
     log("ℹ️", "GitHub Pages is already configured");
@@ -317,16 +324,34 @@ try {
 } catch {
   // Enable Pages via Actions deployment source
   try {
-    runExec("gh", ["api", `repos/${fullRepo}/pages`, "-X", "POST", "-f", "build_type=workflow", "-f", "source[branch]=main", "-f", "source[path]=/"], { silent: true });
+    runArgs(
+      "gh",
+      [
+        "api",
+        `repos/${fullRepo}/pages`,
+        "-X",
+        "POST",
+        "-f",
+        "build_type=workflow",
+        "-f",
+        "source[branch]=main",
+        "-f",
+        "source[path]=/",
+      ],
+      { silent: true },
+    );
     log("✅", "GitHub Pages enabled (Actions deployment)");
   } catch (e: unknown) {
     const err = e as { message?: string };
     // If Pages was just enabled by the workflow, it may conflict — try just enabling via Actions
     try {
-      runExec("gh", ["api", `repos/${fullRepo}/pages`, "-X", "POST", "-f", "build_type=workflow"], { silent: true });
+      runArgs("gh", ["api", `repos/${fullRepo}/pages`, "-X", "POST", "-f", "build_type=workflow"], { silent: true });
       log("✅", "GitHub Pages enabled (Actions deployment)");
     } catch {
-      log("⚠️", `Could not enable Pages via API. It may auto-enable on first push. Manual step: go to repo Settings → Pages → Source: GitHub Actions`);
+      log(
+        "⚠️",
+        `Could not enable Pages via API. It may auto-enable on first push. Manual step: go to repo Settings → Pages → Source: GitHub Actions`,
+      );
     }
   }
 }
@@ -336,22 +361,22 @@ log("📤", "Committing and pushing to GitHub...");
 
 // Ensure we're on main
 try {
-  runExec("git", ["rev-parse", "--abbrev-ref", "HEAD"], { silent: true });
+  runArgs("git", ["rev-parse", "--abbrev-ref", "HEAD"], { silent: true });
 } catch {
   fatal("Not inside a git repository");
 }
 
 // Stage all handbook files
-runExec("git", ["add", `${outputDir}/.github/workflows/deploy-pages.yml`, `${outputDir}/docs/.nojekyll`]);
+runArgs("git", ["add", `${outputDir}/.github/workflows/deploy-pages.yml`, `${outputDir}/docs/.nojekyll`]);
 log("✅", "Staged deploy workflow and .nojekyll");
 
 // Patch README files with GitHub Pages URL
-const readmeFiles = readdirSync(handbookDir).filter(f => f.startsWith("README") && f.endsWith(".md"));
+const readmeFiles = readdirSync(handbookDir).filter((f) => f.startsWith("README") && f.endsWith(".md"));
 for (const readmeFile of readmeFiles) {
   const readmePath = join(handbookDir, readmeFile);
   const patched = patchReadmePagesUrl(readmePath, pagesUrl, repoName);
   if (patched) {
-    runExec("git", ["add", readmePath]);
+    runArgs("git", ["add", readmePath]);
     log("📝", `Patched ${readmeFile} with GitHub Pages URL`);
   } else {
     log("ℹ️", `${readmeFile} already has correct GitHub Pages URL`);
@@ -359,10 +384,21 @@ for (const readmeFile of readmeFiles) {
 }
 
 // Check if there are changes to commit
-const readmePaths = readmeFiles.map(f => `${outputDir}/${f}`);
-const status = runExec("git", ["status", "--porcelain", "--", `${outputDir}/.github/workflows/deploy-pages.yml`, `${outputDir}/docs/.nojekyll`].concat(readmePaths), { silent: true });
+const readmeArgList = readmeFiles.map((f) => `${outputDir}/${f}`);
+const status = runArgs(
+  "git",
+  [
+    "status",
+    "--porcelain",
+    "--",
+    `${outputDir}/.github/workflows/deploy-pages.yml`,
+    `${outputDir}/docs/.nojekyll`,
+    ...readmeArgList,
+  ],
+  { silent: true },
+);
 if (status) {
-  runExec("git", ["commit", "-m", "ci(handbook): add GitHub Pages deploy workflow"]);
+  runArgs("git", ["commit", "-m", "ci(handbook): add GitHub Pages deploy workflow"]);
   log("✅", "Committed deploy workflow");
 } else {
   log("ℹ️", "No new changes to commit");
@@ -371,17 +407,17 @@ if (status) {
 // Add remote if not already present
 const remoteUrl = `https://github.com/${fullRepo}.git`;
 try {
-  runExec("git", ["remote", "get-url", "origin"], { silent: true });
+  runArgs("git", ["remote", "get-url", "origin"], { silent: true });
   // Update origin URL if different
-  runExec("git", ["remote", "set-url", "origin", remoteUrl]);
+  runArgs("git", ["remote", "set-url", "origin", remoteUrl]);
 } catch {
-  runExec("git", ["remote", "add", "origin", remoteUrl]);
+  runArgs("git", ["remote", "add", "origin", remoteUrl]);
   log("✅", `Added remote origin → ${remoteUrl}`);
 }
 
 // Push
 try {
-  runExec("git", ["push", "-u", "origin", "main"], { silent: true });
+  runArgs("git", ["push", "-u", "origin", "main"], { silent: true });
   log("✅", "Pushed to GitHub");
 } catch (e: unknown) {
   const err = e as { message?: string };

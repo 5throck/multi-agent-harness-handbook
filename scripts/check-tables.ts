@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// @version 1.0.0
 // scripts/check-tables.ts
 // Enforces the "TABLE COLUMN-SIZING POLICY" documented in
 // docs/assets/css/handbook-components.css (search for that heading).
@@ -18,14 +19,19 @@
 // Usage:
 //   bun run scripts/check-tables.ts --docs-dir docs
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { getDocsDir, configureDocsDir } from "./nav-utils.ts";
 
 export interface TableError {
   file: string;
   line: number;
-  rule: "inline-colgroup" | "inline-col-width" | "css-col-percentage" | "nowrap-first-column" | "max-width-without-width";
+  rule:
+    | "inline-colgroup"
+    | "inline-col-width"
+    | "css-col-percentage"
+    | "nowrap-first-column"
+    | "max-width-without-width";
   snippet: string;
 }
 
@@ -89,16 +95,17 @@ export function checkTables(docsDir?: string): TableError[] {
 
   const cssRelPath = "assets/css/handbook-components.css";
   const cssPath = join(dir, "assets", "css", "handbook-components.css");
-  if (!existsSync(cssPath)) {
-    console.warn(`check-tables: WARNING — CSS file not found at ${cssPath}; skipping CSS rule checks.`);
-    return errors;
-  }
   const css = readFileSync(cssPath, "utf-8");
   const cssLines = css.split("\n");
 
   for (let i = 0; i < cssLines.length; i++) {
     if (/col\.col-[\w-]+\s*\{[^}]*width\s*:\s*\d+%/.test(cssLines[i])) {
-      errors.push({ file: cssRelPath, line: i + 1, rule: "css-col-percentage", snippet: cssLines[i].trim().slice(0, 120) });
+      errors.push({
+        file: cssRelPath,
+        line: i + 1,
+        rule: "css-col-percentage",
+        snippet: cssLines[i].trim().slice(0, 120),
+      });
     }
   }
 
@@ -115,7 +122,7 @@ export function checkTables(docsDir?: string): TableError[] {
     const isExplicitOptIn = selectors.every((s) => (s.match(/\.[\w-]+/g) || []).length >= 2);
 
     const targetsFirstColumnTd = selectors.some(
-      (s) => /\btd\b/.test(s) && /:nth-child\(\s*1\s*\)|:first-child/.test(s)
+      (s) => /\btd\b/.test(s) && /:nth-child\(\s*1\s*\)|:first-child/.test(s),
     );
     if (targetsFirstColumnTd && !isExplicitOptIn && /white-space\s*:\s*nowrap/.test(rule.body)) {
       errors.push({
@@ -154,7 +161,7 @@ if (import.meta.main) {
     }
     console.error(
       "Fix: remove inline colgroup/col widths; never nowrap a table's first (translatable) column; " +
-        "pair max-width with a real width. See the TABLE COLUMN-SIZING POLICY comment in handbook-components.css."
+        "pair max-width with a real width. See the TABLE COLUMN-SIZING POLICY comment in handbook-components.css.",
     );
     process.exit(1);
   }

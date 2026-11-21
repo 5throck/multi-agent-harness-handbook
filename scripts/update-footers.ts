@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// @version 1.1.0
 // scripts/update-footers.ts
 // Syncs the localized site footer into every HTML page under docs/.
 // Vendored from Handbooks/multi-agent-harness-handbook/scripts/update-footers.ts
@@ -88,7 +89,8 @@ export function updateFooters(docsDir?: string): { updated: number; total: numbe
     } else if (cleanContent.includes('class="wrap"')) {
       const lastDivIndex = cleanContent.lastIndexOf("</div>");
       if (lastDivIndex !== -1) {
-        newContent = cleanContent.slice(0, lastDivIndex) + `${targetFooter}\n  </div>` + cleanContent.slice(lastDivIndex + 6);
+        newContent =
+          cleanContent.slice(0, lastDivIndex) + `${targetFooter}\n  </div>` + cleanContent.slice(lastDivIndex + 6);
       } else if (cleanContent.includes("</body>")) {
         newContent = cleanContent.replace("</body>", `${targetFooter}\n</body>`);
       }

@@ -1,4 +1,11 @@
 #!/usr/bin/env bun
+// @version 1.4.0
+// v1.3.0 (2026-11-07, spec docs/designs/2026-11-07-external-deps-standard-design.md
+//          §5.5, T-20261107-005): Check 11 allowlist is extended at run time
+//          with the GitHub owner/name of every external-deps.json entry that
+//          carries a recorded commit (an anonymous clone already succeeded →
+//          public). Entries without commit add nothing. Read-only; Check 11
+//          keeps its handbook link-hygiene domain.
 // scripts/check-authoring.ts
 // AUTHORING_GUIDELINES compliance checker.
 // Validates handbook HTML against the 21-section authoring guidelines + dark mode + i18n.
@@ -59,7 +66,9 @@ function checkVisualElements(html: string, file: string): AuthoringIssue[] {
   const hasVisual = visualPatterns.some((re) => re.test(html));
   if (!hasVisual) {
     issues.push({
-      file, rule: "visual-element", section: "§10",
+      file,
+      rule: "visual-element",
+      section: "§10",
       detail: "No visual element found (img, svg, table, code block, or CSS visual class)",
       severity: "warn",
     });
@@ -75,7 +84,9 @@ function checkCopyButtons(html: string, file: string): AuthoringIssue[] {
   // For reference/manual pages, code blocks should have copy buttons
   if (codeBlocks > 2 && copyButtons === 0) {
     issues.push({
-      file, rule: "copy-buttons", section: "§2",
+      file,
+      rule: "copy-buttons",
+      section: "§2",
       detail: `${codeBlocks} code blocks but no copy buttons found`,
       severity: "warn",
     });
@@ -92,12 +103,12 @@ function checkCopyButtons(html: string, file: string): AuthoringIssue[] {
 function isNonChapterPage(file: string): boolean {
   const base = relative(process.cwd(), file).replace(/\\/g, "/");
   return (
-    /(^|\/)index(_[a-z]{2})?\.html$/i.test(base) || // index.html, index_en.html, ...
-    /course[-_]overview/i.test(base) ||              // 00_Course_Overview.html
-    /(instructor|lecture)[-_]guide/i.test(base) ||   // 00_Lecture_Guide.html, instructor-guide
-    /(^|\/)faq\//.test(base) ||                      // faq/00_FAQ*.html
-    /(^|\/)glossary\//.test(base) ||                 // glossary/00_Glossary*.html
-    /(^|\/)setup\//.test(base)                       // setup/SETUP*.html (installation guides)
+    /(^|\/)index(_[a-z]{2})?\.html$/i.test(base) ||
+    /course[-_]overview/i.test(base) ||
+    /(instructor|lecture)[-_]guide/i.test(base) ||
+    /(^|\/)faq\//.test(base) ||
+    /(^|\/)glossary\//.test(base) ||
+    /(^|\/)setup\//.test(base)
   );
 }
 
@@ -105,13 +116,15 @@ function isNonChapterPage(file: string): boolean {
 function checkSidebarNav(html: string, file: string): AuthoringIssue[] {
   const issues: AuthoringIssue[] = [];
   if (isNonChapterPage(file)) return issues;
-  const hasSidebar = html.includes("class=\"sidebar\"") || html.includes("class='sidebar'") || html.includes("id=\"sidebar\"");
-  // Also accept <nav> inside .layout as a valid sidebar navigation pattern
-  const hasLayoutNav = html.includes("class=\"layout\"") && /<nav[\s>]/.test(html);
+  const hasSidebar =
+    html.includes('class="sidebar"') || html.includes("class='sidebar'") || html.includes('id="sidebar"');
+  const hasLayoutNav = html.includes('class="layout"') && /<nav[\s>]/.test(html);
   if (!hasSidebar && !hasLayoutNav) {
     issues.push({
-      file, rule: "sidebar-nav", section: "§21-1",
-      detail: "No sidebar navigation found (expected class=\"sidebar\", id=\"sidebar\", or <nav> inside class=\"layout\")",
+      file,
+      rule: "sidebar-nav",
+      section: "§21-1",
+      detail: 'No sidebar navigation found (expected class="sidebar", id="sidebar", or <nav> inside class="layout")',
       severity: "error",
     });
   }
@@ -121,11 +134,12 @@ function checkSidebarNav(html: string, file: string): AuthoringIssue[] {
 /** Check 4: §21-1 — Chapter navigation (prev/next) */
 function checkChapterNav(html: string, file: string): AuthoringIssue[] {
   const issues: AuthoringIssue[] = [];
-  // index, course-overview, instructor-guide don't need chapter-nav (§21-1)
   if (isNonChapterPage(file)) return issues;
-  if (!html.includes("class=\"chapter-nav\"") && !html.includes("class='chapter-nav'")) {
+  if (!html.includes('class="chapter-nav"') && !html.includes("class='chapter-nav'")) {
     issues.push({
-      file, rule: "chapter-nav", section: "§21-1",
+      file,
+      rule: "chapter-nav",
+      section: "§21-1",
       detail: "No chapter-nav found",
       severity: "error",
     });
@@ -137,10 +151,16 @@ function checkChapterNav(html: string, file: string): AuthoringIssue[] {
 function checkFlexMinWidth(html: string, file: string, sharedCss: string): AuthoringIssue[] {
   const issues: AuthoringIssue[] = [];
   const hasMinWidthRule = (src: string) => src.includes("min-width: 0") || src.includes("min-width:0");
-  // The rule may live inline in the page, or in a shared stylesheet the page links to.
-  if (html.includes("step-list") && html.includes("step-content") && !hasMinWidthRule(html) && !hasMinWidthRule(sharedCss)) {
+  if (
+    html.includes("step-list") &&
+    html.includes("step-content") &&
+    !hasMinWidthRule(html) &&
+    !hasMinWidthRule(sharedCss)
+  ) {
     issues.push({
-      file, rule: "flex-min-width", section: "§11-1",
+      file,
+      rule: "flex-min-width",
+      section: "§11-1",
       detail: "step-content without min-width: 0 (flex overflow risk)",
       severity: "warn",
     });
@@ -153,13 +173,17 @@ function checkMidWordStrong(html: string, file: string): AuthoringIssue[] {
   const issues: AuthoringIssue[] = [];
   const re = /<strong>([가-힣]{1,3})<\/strong>/g;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(html)) !== null) {
+  m = re.exec(html);
+  while (m !== null) {
     // Korean words shorter than 4 chars wrapped in <strong> are suspicious
     issues.push({
-      file, rule: "mid-word-strong", section: "§11",
+      file,
+      rule: "mid-word-strong",
+      section: "§11",
       detail: `Suspicious short <strong> in Korean text: "${m[1]}" — wrap natural phrases instead`,
       severity: "warn",
     });
+    m = re.exec(html);
   }
   return issues;
 }
@@ -182,7 +206,9 @@ function checkCourseOverview(html: string, file: string): AuthoringIssue[] {
   for (const item of requiredItems) {
     if (!html.includes(item)) {
       issues.push({
-        file, rule: "course-overview-items", section: "§14",
+        file,
+        rule: "course-overview-items",
+        section: "§14",
         detail: `Missing required item: "${item}"`,
         severity: "error",
       });
@@ -197,18 +223,22 @@ function checkCssVariablesOnly(html: string, file: string): AuthoringIssue[] {
   // Find hardcoded hex colors in inline styles (not in CSS variable definitions)
   const styleRe = /style="([^"]*)"/g;
   let m: RegExpExecArray | null;
-  while ((m = styleRe.exec(html)) !== null) {
+  m = styleRe.exec(html);
+  while (m !== null) {
     const style = m[1];
     const hexColors = style.match(/#[0-9a-fA-F]{3,8}\b/g);
     if (hexColors) {
       for (const color of hexColors) {
         issues.push({
-          file, rule: "hardcoded-color", section: "§22",
+          file,
+          rule: "hardcoded-color",
+          section: "§22",
           detail: `Hardcoded color ${color} in inline style — use CSS variable instead`,
           severity: "warn",
         });
       }
     }
+    m = styleRe.exec(html);
   }
   return issues;
 }
@@ -233,7 +263,9 @@ function checkLanguagePairs(htmlFiles: string[], baseDir: string): AuthoringIssu
     const suffixed = variants.filter((v) => /_[a-z]{2}\.html$/.test(v));
     if (variants.length === 1 && suffixed.length === 1) {
       issues.push({
-        file: suffixed[0], rule: "language-pair", section: "§23",
+        file: suffixed[0],
+        rule: "language-pair",
+        section: "§23",
         detail: `Language variant "${suffixed[0]}" has no base file counterpart`,
         severity: "warn",
       });
@@ -242,10 +274,169 @@ function checkLanguagePairs(htmlFiles: string[], baseDir: string): AuthoringIssu
   return issues;
 }
 
+/** Check 11: private-repository references (git clone / links) */
+// Known-public repositories a handbook is allowed to point readers at without
+// further verification. Extend this list only for repos confirmed public.
+const PUBLIC_REPO_ALLOWLIST = new Set([
+  "5throck/ai-workspace-standards",
+  // Verified public with `gh repo view`: the handbooks' own setup repo and the
+  // ppt-master pipeline they cite.
+  "5throck/setup",
+  "hugohe3/ppt-master",
+]);
+
+/**
+ * First path segments on github.com that are site features, not account names
+ * (e.g. github.com/login/device). A `github.com/<reserved>/<x>` URL is never a
+ * repository reference.
+ */
+const RESERVED_GITHUB_PATHS = new Set([
+  "login",
+  "logout",
+  "settings",
+  "orgs",
+  "apps",
+  "marketplace",
+  "features",
+  "topics",
+  "sponsors",
+  "organizations",
+  "notifications",
+  "pulls",
+  "issues",
+  "explore",
+  "search",
+  "join",
+  "signup",
+  "sessions",
+  "enterprise",
+  "pricing",
+  "about",
+  "collections",
+  "trending",
+  "events",
+  "codespaces",
+  "packages",
+]);
+
+/**
+ * Manifest-fed allowlist extension (external-deps standard §5.5,
+ * docs/designs/2026-11-07-external-deps-standard-design.md): every
+ * external-deps.json entry that carries a recorded `commit` names a GitHub repo
+ * that an anonymous https clone already succeeded against — evidence it is
+ * public. Entries without `commit` add nothing. Read-only and loose (a
+ * malformed manifest adds nothing; the external-deps verify gate owns its
+ * validity) — Check 11 stays a handbook link-hygiene check, not a license gate.
+ */
+function manifestPublicRepos(projectDir: string): Set<string> {
+  const repos = new Set<string>();
+  const p = join(projectDir, "external-deps.json");
+  if (!existsSync(p)) return repos;
+  try {
+    const doc = JSON.parse(readFileSync(p, "utf-8")) as { dependencies?: Array<Record<string, unknown>> };
+    for (const dep of Array.isArray(doc.dependencies) ? doc.dependencies : []) {
+      const repo = dep?.["repo"];
+      const commit = dep?.["commit"];
+      if (typeof repo !== "string" || typeof commit !== "string" || !/^[0-9a-f]{40}$/.test(commit)) continue;
+      const m = /^https:\/\/github\.com\/([^/\s]+)\/([^/\s]+?)(?:\.git)?\/?$/i.exec(repo);
+      if (m) repos.add(`${m[1]}/${m[2]}`);
+    }
+  } catch {
+    /* malformed manifest — contributes nothing */
+  }
+  return repos;
+}
+
+function checkNoPrivateRepoRefs(
+  html: string,
+  file: string,
+  extraPublic: ReadonlySet<string> = new Set(),
+): AuthoringIssue[] {
+  const issues: AuthoringIssue[] = [];
+  const seen = new Set<string>();
+
+  const cloneRe = /git clone\s+https:\/\/github\.com\/([^\/\s"'<]+)\/([^\/\s"'<.]+)(?:\.git)?/gi;
+  let m: RegExpExecArray | null;
+  m = cloneRe.exec(html);
+  while (m !== null) {
+    const repo = `${m[1]}/${m[2]}`;
+    if (!PUBLIC_REPO_ALLOWLIST.has(repo) && !extraPublic.has(repo) && !seen.has(repo)) {
+      seen.add(repo);
+      issues.push({
+        file,
+        rule: "private-repo-clone",
+        section: "§4a",
+        detail: `git clone targets "${repo}", not in the public-repo allowlist — verify it is public before publishing, or replace with the workspace + new-project.ts workflow`,
+        severity: "error",
+      });
+    }
+    m = cloneRe.exec(html);
+  }
+
+  // The lookbehind rejects subdomains such as cli.github.com/packages/...
+  const linkRe = /(?<![\w.-])github\.com\/([^\/\s"'<)]+)\/([^\/\s"'<).]+)/gi;
+  m = linkRe.exec(html);
+  while (m !== null) {
+    const repo = `${m[1]}/${m[2]}`;
+    if (RESERVED_GITHUB_PATHS.has(m[1].toLowerCase())) {
+      m = linkRe.exec(html);
+      continue;
+    }
+    if (!PUBLIC_REPO_ALLOWLIST.has(repo) && !extraPublic.has(repo) && !seen.has(repo)) {
+      seen.add(repo);
+      issues.push({
+        file,
+        rule: "private-repo-link",
+        section: "§4a",
+        detail: `Link/citation references "${repo}", not in the public-repo allowlist — verify it is public before publishing`,
+        severity: "warn",
+      });
+    }
+    m = linkRe.exec(html);
+  }
+  return issues;
+}
+
+/** Check 12: §21-2 — Meta block "last updated" uses month-only granularity */
+function checkMetaDateGranularity(html: string, file: string): AuthoringIssue[] {
+  const issues: AuthoringIssue[] = [];
+  const base = file.replace(/\\/g, "/");
+  if (!/(^|\/)index(_[a-z]{2})?\.html$/i.test(base)) return issues;
+
+  const metaRe = /<div\s+class="meta">([\s\S]*?)<\/div>/;
+  const metaMatch = html.match(metaRe);
+  if (!metaMatch) return issues;
+
+  const metaHtml = metaMatch[1];
+
+  // Detect day-specific date patterns inside <strong> tags within meta block.
+  // KO: "2026년 8월 17일", JA: "2026年8月17日", ES: "17 de agosto de 2026", EN: "August 17, 2026"
+  const dayPatterns = [
+    /<strong>[^<]*\d{1,2}(?:일|日)[^<]*<\/strong>/,
+    /<strong>[^<]*\d{1,2}\s+de\s+/,
+    /<strong>[^<]*\w+\s+\d{1,2},?\s+\d{4}<\/strong>/,
+  ];
+
+  for (const re of dayPatterns) {
+    if (re.test(metaHtml)) {
+      const matched = metaHtml.match(re)![0];
+      issues.push({
+        file,
+        rule: "meta-date-granularity",
+        section: "§21-2",
+        detail: `Meta block "last updated" uses day-specific date ("${matched.replace(/<\/?strong>/g, "")}") — use month-only granularity (e.g., "August 2026", "2026년 8월")`,
+        severity: "warn",
+      });
+      break; // One warning per file is enough
+    }
+  }
+  return issues;
+}
+
 /** Check 9b: §21-6 — Footer structure (consistent per language, has license + repo link) */
 function checkFooterStructure(htmlFiles: string[], baseDir: string): AuthoringIssue[] {
   const issues: AuthoringIssue[] = [];
-  const footerByLang = new Map<string, Map<string, string[]>>(); // lang -> footerText -> files[]
+  const footerByLang = new Map<string, Map<string, string[]>>();
 
   for (const f of htmlFiles) {
     const rel = relative(baseDir, f).replace(/\\/g, "/");
@@ -256,7 +447,9 @@ function checkFooterStructure(htmlFiles: string[], baseDir: string): AuthoringIs
 
     if (!footerMatch) {
       issues.push({
-        file: rel, rule: "footer-missing", section: "§21-6",
+        file: rel,
+        rule: "footer-missing",
+        section: "§21-6",
         detail: "No <footer> found",
         severity: "error",
       });
@@ -266,14 +459,18 @@ function checkFooterStructure(htmlFiles: string[], baseDir: string): AuthoringIs
     const footerText = footerMatch[1].replace(/\r\n?/g, "\n").trim(); // EOL-insensitive: group CRLF and LF footers together
     if (!/creativecommons\.org\/licenses\/by-nc-sa/.test(footerText)) {
       issues.push({
-        file: rel, rule: "footer-license", section: "§21-6",
+        file: rel,
+        rule: "footer-license",
+        section: "§21-6",
         detail: "Footer is missing the CC BY-NC-SA license line",
         severity: "error",
       });
     }
     if (!/github\.com\/[\w-]+\/ai-workspace-standards/.test(footerText)) {
       issues.push({
-        file: rel, rule: "footer-repo-link", section: "§21-6",
+        file: rel,
+        rule: "footer-repo-link",
+        section: "§21-6",
         detail: "Footer is missing the ai-workspace-standards repo link",
         severity: "warn",
       });
@@ -287,13 +484,14 @@ function checkFooterStructure(htmlFiles: string[], baseDir: string): AuthoringIs
 
   for (const [lang, byText] of footerByLang) {
     if (byText.size <= 1) continue;
-    // Majority variant is treated as canonical; everything else is flagged.
     const sorted = [...byText.entries()].sort((a, b) => b[1].length - a[1].length);
     const [, majorityFiles] = sorted[0];
-    for (const [text, files] of sorted.slice(1)) {
+    for (const [, files] of sorted.slice(1)) {
       for (const file of files) {
         issues.push({
-          file, rule: "footer-inconsistent", section: "§21-6",
+          file,
+          rule: "footer-inconsistent",
+          section: "§21-6",
           detail: `Footer text differs from the other ${majorityFiles.length} "${lang}" page(s) — every page in a language must share the exact same footer (only baseline date/tool list should change together, in sync)`,
           severity: "error",
         });
@@ -304,20 +502,17 @@ function checkFooterStructure(htmlFiles: string[], baseDir: string): AuthoringIs
   return issues;
 }
 
-/** Check 10: §24 — Instructor Guide completeness */
+/** Check 10: §20 — Instructor Guide completeness */
 function checkInstructorGuide(html: string, file: string): AuthoringIssue[] {
   const issues: AuthoringIssue[] = [];
   if (!/instructor-guide/.test(file)) return issues;
-  const requiredSections = [
-    "시간 배분",
-    "강사 노트",
-    "확인 질문",
-    "사전 준비물",
-  ];
+  const requiredSections = ["시간 배분", "강사 노트", "확인 질문", "사전 준비물"];
   for (const section of requiredSections) {
     if (!html.includes(section)) {
       issues.push({
-        file, rule: "instructor-guide-section", section: "§24",
+        file,
+        rule: "instructor-guide-section",
+        section: "§20",
         detail: `Missing required section: "${section}"`,
         severity: "warn",
       });
@@ -329,22 +524,24 @@ function checkInstructorGuide(html: string, file: string): AuthoringIssue[] {
 // --- Main ---
 
 const project = resolve(getArg("--project", "."));
-const docsDirFlag = getArg("--docs-dir", "");
 const lang = getArg("--lang", "ko");
 const examplesDir = getArg("--examples-dir", "");
 
-const docsDir = docsDirFlag ? resolve(docsDirFlag) : join(project, "docs");
-const htmlFiles = examplesDir
-  ? findAllHtmlFiles(examplesDir)
-  : findAllHtmlFiles(docsDir);
+const docsDir = join(project, "docs");
+const htmlFiles = examplesDir ? findAllHtmlFiles(examplesDir) : findAllHtmlFiles(docsDir);
 
 const baseDir = examplesDir || docsDir;
 const allIssues: AuthoringIssue[] = [];
+// Check 11 allowlist extension — manifest repos with a recorded commit (standard §5.5).
+const manifestRepos = manifestPublicRepos(project);
 
 // Concatenate all shared stylesheets so rules defined once (not repeated per page) are visible
 const cssDir = join(docsDir, "assets", "css");
 const sharedCss = existsSync(cssDir)
-  ? readdirSync(cssDir).filter((f) => f.endsWith(".css")).map((f) => readHtml(join(cssDir, f))).join("\n")
+  ? readdirSync(cssDir)
+      .filter((f) => f.endsWith(".css"))
+      .map((f) => readHtml(join(cssDir, f)))
+      .join("\n")
   : "";
 
 console.log(`\n📋 check-authoring.ts — checking ${htmlFiles.length} HTML files in ${baseDir}`);
@@ -364,11 +561,16 @@ for (const file of htmlFiles) {
   allIssues.push(...checkCourseOverview(html, rel));
   allIssues.push(...checkCssVariablesOnly(html, rel));
   allIssues.push(...checkInstructorGuide(html, rel));
+  allIssues.push(...checkNoPrivateRepoRefs(html, rel, manifestRepos));
+  allIssues.push(...checkMetaDateGranularity(html, rel));
 }
 
 // Cross-file checks
 allIssues.push(...checkLanguagePairs(htmlFiles, baseDir));
-allIssues.push(...checkFooterStructure(htmlFiles, baseDir));
+// Footer content (license/repo links) is specific to a real deployed handbook;
+// --examples-dir holds several independent demo scaffolds that aren't expected
+// to carry this project's real license/repo footer, so skip it there.
+if (!examplesDir) allIssues.push(...checkFooterStructure(htmlFiles, baseDir));
 
 // Report
 const errors = allIssues.filter((i) => i.severity === "error");

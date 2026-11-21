@@ -1,3 +1,4 @@
+// @version 1.0.0
 // scripts/check-links.ts
 // Check ①: Verify all internal a href targets resolve to existing files.
 // Canonical source of the handbook toolkit (adapted from
@@ -21,10 +22,14 @@ export function checkBrokenLinks(): LinkError[] {
     const linkRe = /<a\s+(?:[^>]*?\s)?href="([^"]*)"[^>]*>/g;
     let m: RegExpExecArray | null;
 
-    while ((m = linkRe.exec(html)) !== null) {
+    m = linkRe.exec(html);
+    while (m !== null) {
       const href = m[1];
       const absPath = resolveHref(filePath, href);
-      if (absPath === null) continue; // external, anchor, etc.
+      if (absPath === null) {
+        m = linkRe.exec(html);
+        continue;
+      } // external, anchor, etc.
 
       if (!fileExists(absPath)) {
         errors.push({
@@ -33,6 +38,7 @@ export function checkBrokenLinks(): LinkError[] {
           resolved: relative(getDocsDir(), absPath),
         });
       }
+      m = linkRe.exec(html);
     }
   }
 

@@ -270,6 +270,8 @@
     <code>validate-skills.ts</code>는 스킬 생애주기에서 Test 단계의 핵심 도구다. 이 스크립트는 단순한 형식 검사뿐 아니라, 스킬 간 트리거 충돌과 참조 무결성까지 점검한다. 새 스킬을 추가하거나 기존 스킬을 수정할 때마다 반드시 실행해야 한다. 에이전트의 <code>agent:verify</code>와 마찬가지로, CI/CD 파이프라인에 포함시키면 미검증 스킬의 배포를 자동으로 방지할 수 있다.
   </div>
 
+  <div class="note"><strong>새 소식(2026-11):</strong> 이제 라이프사이클은 스킬마다 거버넌스 기록을 남긴다(U-20261112-005). 프로젝트에 전달되는 모든 스킬은 <code>docs/lifecycle/skills/&lt;name&gt;.md</code> 기록과 함께 배송되며, 이 기록은 SKILL.md 프론트매터에서 <code>scripts/generate-skill-lifecycle-records.ts</code>가 생성한다 — <code>--write</code>는 기록을 만들고, <code>--check</code>는 바이트 동등성을 검증하며, <code>--project &lt;path&gt;</code>는 단일 프로젝트를 대상으로 한다. 소유자 결정은 프론트매터의 <code>owner:</code>를 먼저 읽고, 그다음 <code>scripts/data/skill-owner-map.json</code>을 읽는다. <code>validate-templates.ts</code>의 SLR 검사가 이 기록들을 강제한다(<code>scripts/skill-record-enforcement.json</code>으로 게이트됨), 따라서 빠졌거나 낡은 기록은 경고가 아니라 템플릿 검증 실패가 된다. 설계: <code>docs/designs/2026-11-12-skill-lifecycle-record-delivery-design.md</code>.</div>
+
   <!-- ─── 스킬 관계 그래프 ─── -->
 
   <h2 id="s2-skill-graph">스킬 관계 그래프</h2>

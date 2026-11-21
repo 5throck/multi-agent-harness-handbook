@@ -89,10 +89,12 @@
   <p>v1.10.xから、アップグレードは国プロフィール(国スコープ資産)にも対応する。実行前にプロジェクトの<code>.claude/template-version.txt</code>から<code>country=</code>行を読み(なければ<code>docs/countries/ACTIVE.md</code>の管轄表記で代用)て対象国を判定し、仕上げの書き換え時にはこの行をそのまま保持する — 旧バージョンは書き換え時にこの行を消してしまい、プロジェクトの所属国情報を失わせていた。さらに、すべてのスキル同期が終わった後、レジストリ駆動のpruneがもう一度実行され、国スコープスキル(<code>k-dart</code>/<code>k-law</code>/<code>k-kosis</code>)が該当国以外のプロジェクトに再注入されていれば削除する — スキャフォールディング時の整理結果をアップグレードのたびに取り消してしまう事態を防ぐためである。ただし、ローカルで意図的に改変されたフォークは<code>⚠️ CONFLICT</code>警告付きでそのまま保持される。</p>
   <p>SYNC_IF_NEWER対象のファイルをローカルで直接修正済みの状態で、かつテンプレート側のバージョンがより新しい場合、スクリプトは<code>⚠️ CONFLICT</code>と表示しつつも、最終的にはテンプレートの内容で上書きする。「上書き前に確認する」動作ではなく、「警告のみして進める」動作である点を覚えておく必要がある — だからこそ、以下の安全装置が重要になる。ただし、2026-11の上書き保護ウェーブ以降、これは無条件ではない。テンプレートが変わっていないままプロジェクト側だけが進化したファイルは、新しい<code>EVOLVED_PRESERVE</code>判定を受けてスキップされ（記録されたベースラインが保持される）、ファイルの<code>LOCAL-PATCH</code>マーカー数を下げる配信は、記録されたグラントがなければブロックされる。</p>
 <div class="note"><strong>新着情報（2026-11）：</strong>アップグレードエンジンに上書き保護が備わった（設計 <code>docs/designs/2026-11-11-upgrade-overwrite-protection-design.md</code>、DEC-20261111-01。upgrade-project.ts v1.102.0で着地）。エンジンは、内容を置き換えてよいかを仮定せず証明するようになった。<strong>EVOLVED_PRESERVE</strong>: テンプレートが変わっていないのにプロジェクトだけが変えたファイルはスキップされ、ベースラインが保持される — 進化の上に上書きしていたWARN行は消えた。<strong>マーカー損失ガード</strong>: すべての配信パスが<code>LOCAL-PATCH</code>マーカー数を比較し、記録されたグラントなしにマーカー数を下げる書き込みをブロックする（すべてのマーカー形式が対象: <code>LOCAL-PATCH(upstream-request: …)</code>、<code>LOCAL-PATCH (design: …)</code>、<code>LOCAL-PATCH(project-local)</code>、裸の<code>LOCAL-PATCH U-…</code>）。<strong>テンプレートヴィンテージ出所判定</strong>: テンプレート側ファイルの過去のどのリビジョンともバイトが一致すれば、プロジェクトが書いた内容ではないと見なす — バージョン番号はファイルを分類するだけで、配信の可否は内容ハッシュと出所が決め、同バージョンの腕はベースラインがクリーンまたはヴィンテージのファイルだけを復元する。<strong>バックポートゲート</strong>: プロジェクトが先行している、または<code>pendingBackport</code>パスが残るapplyは、<code>--backport-ack</code>なしでは実行を拒否し、パスごとの決定は<code>.claude/backport-decisions.json</code>に記録される。テンプレート側では、<code>validate-templates.ts</code>のCV-02チェックが、バージョンを上げずに内容だけ変えたテンプレートファイルを検証失敗にし、同バージョンのドリフトがフリートのアップグレードに届かないようにする。</div>
+<div class="note"><strong>追加（2026-11-14〜16）：</strong>国スコープエージェントのレジストリがスキーマペアに再配置され、配信前の国ガードが加わりました（upgrade-project v1.106.0 — 検出された国が一致しない場合、国スコープの共通エージェントは最初から配信されません。PR #2019、設計<code>docs/designs/2026-11-14-country-scoped-agents-registry-and-prune-design.md</code>）。<code>--disposition</code>グラントはapplyをまたいで累積し、brace globをサポートし、重ねてのapply（stacked applies）は拒否されます（PR #2046）。</div>
 
   <h2 id="external-deps">外部依存関係 (2026-11)</h2>
   <p>同じエンジンに乗るサーフェスがもう一つある。プロジェクトはルートの<code>external-deps.json</code>マニフェストに<strong>ピン留めされた外部git依存関係</strong>を宣言できる。そして配布ルールは決定済みである — <strong>外部リポジトリをテンプレートツリーにベンダリングしない</strong>。外部コードはスキャフォールディング時に、ピン留めされたリリースタグでGitHubからクローンされ、gitignoreされたプロジェクトローカルディレクトリに置かれる。アップグレードは依存関係の互換性テストが通ったときにだけピンを動かす。最初の消費者はco-workのデッキパイプラインの変換エンジンである<code>ppt-master</code> v6.8.0で、アダプターの裏でそのまま消費する。</p>
   <div class="note"><strong>新着情報（2026-11）：</strong>外部依存関係のマシナリーが到着した — スキーマバージョン付きの<code>external-deps.json</code>マニフェスト規約（L1では空のシード、バリアントごとに拡張）、<code>new-project.ts</code> §7.9のスキャフォールド時フェッチとオプトインのハードフェイルフラグ<code>--strict-external-deps</code>、<code>upgrade-project.ts</code>の互換性ゲート付き<strong>EXTERNAL DEPS</strong>パスと<code>--external-deps-only</code>フラグ、そして<code>install_dir</code>の内容がテンプレートツリーに入り込んだらテンプレート検証を失敗させるベンダリングガード。</div>
+  <div class="note"><strong>スキーマv2（2026-11）：</strong>新しいエントリの<code>install_dir</code>は正確に<code>external/&lt;id&gt;</code>でなければなりません — 違反や衝突は登録拒否（ハード失敗）です。プロジェクト側CLI<code>scripts/external-deps.ts</code>（list/install/verify/check-updates）で各プロジェクトが自分のクローンを自己検証します。<strong>更新（2026-11-17）：</strong>upgradeチャネル2cがシードID採用で既存マニフェストをv2に上げ、ドリフトワークフローは<code>templates/*/external-deps.json</code>シードをsemver認識・シグナルのみでスキャンし（DEC-20261117-02）、監査BOMスキャナはベンダリングされた<code>external/</code>をスキップします。</div>
   <p>マニフェストのエントリはそれぞれ下のフィールドを記録する。<code>pin</code>が契約であり、参考情報の<code>commit</code>フィールドはドリフトトリップワイヤとしてだけ使われる。</p>
   <div class="table-compare">
   <table>
@@ -107,6 +109,9 @@
       <tr><td><code>consumer</code></td><td>消費するパイプラインの名を書く自由テキスト（参考情報）</td></tr>
       <tr><td><code>compatibility_test</code></td><td>プロジェクトルートから実行するコマンド、exit 0 = 合格 — ピンを動かすたびに通過しなければならない関門</td></tr>
       <tr><td><code>propagation</code></td><td>列挙型、現時点では<code>never</code>が唯一の値 — 外部コンテンツはテンプレート境界を決して越えない</td></tr>
+      <tr><td><code>license</code></td><td>必須（スキーマv2）— ピン留めしたリポジトリのSPFX識別子。ポリシークラスallow/review/review-standalone/denyでゲートされ、AGPLは拒否（DEC-20261107-02）</td></tr>
+      <tr><td><code>usage</code></td><td>必須（スキーマv2）— 単一値<code>as-is</code>：読み取り専用クローン。install_dir以下は何も編集・追加・パッチしない</td></tr>
+      <tr><td><code>adapter</code></td><td>必須（スキーマv2）— プロジェクト相対の単一結合ファイル。install_dirの下に置いてはならない</td></tr>
     </tbody>
   </table>
   </div>
@@ -141,7 +146,7 @@
     <a href="../variant-advanced/13_VariantAdvanced_Chapter_ja.html" class="next"><div class="dir">次の章 →</div><div class="ttl">第13章・新規variantの作成</div></a>
   </div>
    <footer>
-    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / Hermes Agent / ai-workspace-standards main (2026-09-28) 基準 · 日本語教材<br>
+    Claude Code 2026-09 / Gemini CLI·Antigravity 2.0 / Codex CLI·Desktop App / Hermes Agent / ai-workspace-standards main (2026-11-21, b71b42ec0) 基準 · 日本語教材<br>
     公式リソース: <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> ·
     <a href="https://antigravity.google/docs/home" target="_blank">Antigravity</a> ·
     <a href="https://developers.openai.com/codex" target="_blank">Codex</a> ·
